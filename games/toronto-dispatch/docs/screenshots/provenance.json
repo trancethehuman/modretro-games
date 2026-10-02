@@ -21,12 +21,12 @@
   },
   {
     "file": "front-street.png",
-    "frame": 388,
-    "rom_sha256": "9eaec68843e2888b0aac4accb6e651270c438592719597c02f9157fc6660e793",
-    "png_sha256": "b2e29eb8e4f66211fed2a5cb429b83f12e31b0c201bcb0a2fb7ee05f3f91bb67",
-    "session_id": "9b8519078ddf49c29c6720a04f93568c",
-    "journal_event_digest": "dad5476df470a5febb1bcb1329a6f79885b362c2c339efc98f98f2cab54da3a2",
-    "journal_events": 333,
+    "frame": 676,
+    "rom_sha256": "a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59",
+    "png_sha256": "ea60b817af0bfe6e03edcf2d943959851724b4b83f79e5cd276540820ec9f5a7",
+    "session_id": "b1030b42b8b04a3f8efa77d0f98aaaf7",
+    "journal_event_digest": "27129d445158c58f1ed96e443bb18aa71d17e078275c99a80e9a9a19c961c83a",
+    "journal_events": 215,
     "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
   },
   {

@@ -2,7 +2,11 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The tested 2026-10-02 handling/save prototype is 262,144 bytes, SHA-256 `4db8413ab8ad8f7c20e9f1030632a0abcd323b9d512ddfcd29b77bb1be52e61f`. Native tests cover delivery, walking/car entry, paid ferry pause/reset recovery and saved cancellation. It is a prototype: audio, full Old Toronto and the two-hour gameplay target remain pending. A later source build must use its own new hash and test record.
+The current 2026-10-02 handling/city/audio ROM is 262,144 bytes, SHA-256 `a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59`. Its milestone identifier is `v0.2.0-prototype.2`; download available bundles from the [releases page](https://github.com/trancethehuman/modretro-games/releases). The official native build/header checks, 471 host engine checks, representative native button scenarios and a separate eight-interval PCM run for this exact ROM passed. A different build needs its own inspection and test identity.
+
+Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
+
+It remains a prototype: full Old Toronto coverage, the full campaign/two-hour gameplay target, human listening and physical cartridge behaviour are unverified. No console was connected during the latest discovery, and no cartridge write/read-back or cold boot was performed. A later source build must use its own new hash and test record.
 
 ## 1. Prepare the computer and console
 
@@ -69,7 +73,8 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Map and pause | Start → map; pan with D-pad, A centres the objective, B returns; mission time freezes while paused |
 | Transit | On foot at a station/terminal, B opens routes; choose with left/right and board with A; fare and mission time update once |
 | Saving | Use the pause menu's Save action, record cash and completed count, power off/on and confirm both persist |
-| Readability/performance/audio | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input; report expected sound for that build |
+| Audio | Start → Audio, then A cycles music + effects, effects only and silent; B returns. Check the city score, engine and braking sounds, short delivery/transit cues, and silence in silent mode. Menu/world pause stops music and engine; short interface/result cues may finish. The mode defaults on each boot |
+| Readability/performance | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input |
 
 Keep a note of the ROM SHA-256 and any problem's location/action. Do not expect old prototype saves to work across save-format changes; the current build's save version and verified behaviour are documented in BUILD/TESTING. Emulator reset persistence does not prove power-off persistence on a physical cartridge.
 

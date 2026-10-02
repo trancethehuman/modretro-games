@@ -16,7 +16,7 @@ An open-source collection of original games for ModRetro Chromatic and Game Boy 
 4. Select `games/toronto-dispatch/project/project.gbsproj` using the plugin. It is a genuine editable project created by the plugin; each additional game gets its own project folder.
 5. Build and open the same playable emulator preview during iteration. Audit assets and run gameplay checks before preparing a cartridge build.
 
-Toronto Dispatch builds with GB Studio CLI 4.3.2 / GBDK 4.5.0 and runs in PyBoy 2.7.0. It includes walking/car entry, vehicle physics, collision/roof occlusion, paid scheduled transit and saved progression. The user's revised presentation is straight top-down. The full two-hour campaign, broader Old Toronto map and physical cartridge release still require verification. See the [build instructions](games/toronto-dispatch/docs/BUILD.md), [test evidence](games/toronto-dispatch/TESTING.md), and [Old Toronto research](games/toronto-dispatch/docs/TORONTO_RESEARCH.md).
+Toronto Dispatch builds with GB Studio CLI 4.3.2 / GBDK 4.5.0 and runs in PyBoy 2.7.0. It includes walking/car entry, momentum and braking, wider roads, collision/roof occlusion, paid scheduled transit, original music/effects and saved progression. The user's revised presentation is straight top-down. The full two-hour campaign, broader Old Toronto map and physical cartridge release still require verification. See the [build instructions](games/toronto-dispatch/docs/BUILD.md), [test evidence](games/toronto-dispatch/TESTING.md), and [Old Toronto expansion plan](games/toronto-dispatch/docs/OLD_TORONTO_EXPANSION.md).
 
 ## Repository checks
 

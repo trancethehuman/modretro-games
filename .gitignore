@@ -22,3 +22,6 @@ save-states/
 
 # Local browser capture journals may contain private session bindings.
 captures/
+
+# Local emulator recording archives retain journals and machine-specific paths.
+recording-archives/

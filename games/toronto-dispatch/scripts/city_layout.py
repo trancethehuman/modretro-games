@@ -9,7 +9,7 @@ BRIDGES = [64,288,400,528,784]
 RIVER = [872,912]
 MAINLAND = [24,24,992,816]
 ISLANDS = [[336,912,600,952],[640,896,784,952],[800,880,928,928]]
-ROAD_HALF, WALK_HALF = 20, 28
+ROAD_HALF, WALK_HALF = 24, 32
 
 def interpolate(value, old, new):
     for i in range(len(old)-1):

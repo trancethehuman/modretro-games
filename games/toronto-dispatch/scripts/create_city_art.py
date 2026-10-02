@@ -1,41 +1,43 @@
 """Original, tile-aligned top-down pixel art. Requires Pillow; no downloaded art."""
 from pathlib import Path
-import json, math, uuid, hashlib
+import json, math, uuid, hashlib, sys
 from PIL import Image, ImageDraw
 from city_layout import *
 ROOT=Path(__file__).resolve().parents[1]; PROJECT=ROOT/'project'
 COLORS=['#071821','#306850','#86c06c','#e0f8cf']; TRANSPARENT='#65ff00'
 def ident(name):return str(uuid.uuid5(uuid.NAMESPACE_URL,'toronto-dispatch/topdown/'+name))
-def main():
+def main(background_only=False):
     img=Image.new('RGB',(WIDTH,HEIGHT),COLORS[2]);d=ImageDraw.Draw(img)
     attrs=[0]*(WIDTH//8)*(HEIGHT//8);blocks=[];canopies=[]
-    def attr(x,y,w,h,slot,priority=False):
+    def attr(x,y,w,h,slot,priority=False,avoid_road=False):
         for ty in range(max(0,y//8),min(HEIGHT//8,(y+h+7)//8)):
             for tx in range(max(0,x//8),min(WIDTH//8,(x+w+7)//8)):
+                if avoid_road and road(tx*8+4,ty*8+4):continue
                 attrs[ty*(WIDTH//8)+tx]=slot+(128 if priority else 0)
     def box(x,y,w,h,fill):d.rectangle((x,y,x+w-1,y+h-1),fill=COLORS[fill])
     box(24,24,968,792,3)
     for x,y,r,b in ISLANDS:box(x,y,r-x,b-y,3);box(x,y+16,r-x,8,1)
-    # Width 40 asphalt plus 8-pixel sidewalks on both sides. Aligned reusable patterns.
+    # Width 48 asphalt plus 8-pixel sidewalks on both sides. Tile-aligned boundaries.
     for v in ROWS:
         end=848 if v in (640,720) else 992
-        box(24,v-28,end-24,56,3);box(24,v-20,end-24,40,1)
-        d.line((24,v-24,end-1,v-24),fill=COLORS[0]);d.line((24,v+24,end-1,v+24),fill=COLORS[0])
+        box(24,v-WALK_HALF,end-24,WALK_HALF*2,3);box(24,v-ROAD_HALF,end-24,ROAD_HALF*2,1)
+        d.line((24,v-ROAD_HALF-4,end-1,v-ROAD_HALF-4),fill=COLORS[0]);d.line((24,v+ROAD_HALF+4,end-1,v+ROAD_HALF+4),fill=COLORS[0])
         for u in range(32,end,32):box(u,v,8,1,3)
     for u in COLS:
-        box(u-28,24,56,792,3);box(u-20,24,40,792,1)
-        d.line((u-24,24,u-24,815),fill=COLORS[0]);d.line((u+24,24,u+24,815),fill=COLORS[0])
+        box(u-WALK_HALF,24,WALK_HALF*2,792,3);box(u-ROAD_HALF,24,ROAD_HALF*2,792,1)
+        d.line((u-ROAD_HALF-4,24,u-ROAD_HALF-4,815),fill=COLORS[0]);d.line((u+ROAD_HALF+4,24,u+ROAD_HALF+4,815),fill=COLORS[0])
         for v in range(32,816,32):box(u,v,1,8,3)
     box(872,24,40,792,2)
     for v in BRIDGES:
-        box(864,v-20,56,40,1);d.line((864,v-21,919,v-21),fill=COLORS[0]);d.line((864,v+20,919,v+20),fill=COLORS[0])
+        box(864,v-WALK_HALF,56,WALK_HALF*2,3);box(864,v-ROAD_HALF,56,ROAD_HALF*2,1)
+        d.line((864,v-ROAD_HALF-1,919,v-ROAD_HALF-1),fill=COLORS[0]);d.line((864,v+ROAD_HALF,919,v+ROAD_HALF),fill=COLORS[0])
     # Crosswalks and corner signal bollards. No text baked into the map.
     for u in COLS:
         for v in ROWS:
             if u>848 and v in (640,720):continue
-            for off in range(-16,20,8):
-                box(u+off,v-24,4,4,3);box(u+off,v+20,4,4,3)
-            box(u-24,v-24,3,3,0);box(u+22,v+22,3,3,0)
+            for off in range(-ROAD_HALF+4,ROAD_HALF,8):
+                box(u+off,v-ROAD_HALF-4,4,4,3);box(u+off,v+ROAD_HALF,4,4,3)
+            box(u-WALK_HALF+4,v-WALK_HALF+4,3,3,0);box(u+WALK_HALF-6,v+WALK_HALF-6,3,3,0)
     # Train corridor west of Union: original double rails and sleepers, not drivable.
     box(32,752,528,8,0)
     for x in range(32,560,8):box(x,754,2,4,2)
@@ -44,7 +46,9 @@ def main():
     def building(x,y,w,h,style,tall=False,label=None):
         if h<32:tall=False
         if h<24:style=0
-        box(x+4,y+4,w,h,0) # shadow stays inside non-road block
+        # Preserve the existing footprints while clipping decorative shadows at asphalt.
+        d.point([(px,py) for py in range(y+4,y+h+4) for px in range(x+4,x+w+4)
+                 if not road(px+0.5,py+0.5)],fill=COLORS[0])
         roof=16 if tall else 8
         box(x,y,w,h,1);d.rectangle((x,y,x+w-1,y+h-1),outline=COLORS[0])
         box(x+2,y+2,w-4,h-roof-2,2)
@@ -69,9 +73,9 @@ def main():
             box(x+8,y+8,8,8,1)
         else: # wide warehouse: skylights and loading doors
             for wx in range(x+8,x+w-8,16):box(wx,y+8,8,8,3);box(wx,y+h-6,8,4,0)
-        attr(x,y,w+8,h+8,1+style,True)
+        attr(x,y,w+8,h+8,1+style,True,avoid_road=True)
         # Raised north roof lip over an 8-pixel footpath; correct CGB occlusion.
-        box(x,y-8,w,8,2);d.line((x,y-8,x+w-1,y-8),fill=COLORS[0]);attr(x,y-8,w,8,1+style,True)
+        box(x,y-8,w,8,2);d.line((x,y-8,x+w-1,y-8),fill=COLORS[0]);attr(x,y-8,w,8,1+style,True,avoid_road=True)
         blocks.append({'x':x,'y':y,'width':w,'depth':h,'height':roof,'style':style,'landmark':label})
     for ci in range(len(COLS)-1):
         for ri in range(len(ROWS)-1):
@@ -111,6 +115,9 @@ def main():
     content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto and Island service areas; full Old Toronto boundaries remain a release check'}
     (ROOT/'content/city_art.json').write_text(json.dumps(content,indent=2)+'\n')
     (PROJECT/'original-art/city_attributes.json').write_text(json.dumps(attrs)+'\n')
+    if background_only:
+        print(f'Authored {WIDTH}x{HEIGHT} north-up city, {len(blocks)} varied buildings; sprites unchanged.')
+        return
     # 32 vehicle headings, 8 walking frames, 4 beacon frames, open-door car frame.
     sheet=Image.new('RGB',(256,48),TRANSPARENT);sd=ImageDraw.Draw(sheet)
     for frame in range(45):
@@ -139,4 +146,4 @@ def main():
     meta={'_resourceType':'sprite','id':ident('vehicles'),'name':'Top-down vehicles and courier','symbol':'sprite_dispatch_topdown','states':states,'width':256,'height':48,'canvasOriginX':8,'canvasOriginY':8,'canvasWidth':16,'canvasHeight':16,'boundsX':2,'boundsY':2,'boundsWidth':12,'boundsHeight':12,'animSpeed':255,'numTiles':0,'filename':'dispatch_topdown.png','checksum':hashlib.sha1((PROJECT/'original-art/dispatch_topdown.png').read_bytes()).hexdigest()}
     (PROJECT/'dispatch_topdown.metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
     print(f'Authored {WIDTH}x{HEIGHT} north-up city, {len(blocks)} varied buildings, 45 vehicle/courier frames.')
-if __name__=='__main__':main()
+if __name__=='__main__':main(background_only='--background-only' in sys.argv)
