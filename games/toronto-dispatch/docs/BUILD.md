@@ -19,7 +19,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-city-atlas.gbc"` for the current atlas candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; `toronto-four-districts.gbc`, `toronto-atlas.gbc`, `toronto-districts.gbc` and `toronto-dispatch.gbc` identify separate builds and do not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-city-atlas-portable.gbc"` for the current atlas candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; `toronto-four-districts.gbc`, `toronto-atlas.gbc`, `toronto-districts.gbc` and `toronto-dispatch.gbc` identify separate builds and do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain recordings in ignored `build/`.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -91,14 +91,22 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-city-atlas.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-city-atlas-portable.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
 
-## Prototype 5 build: optimized native city atlas
+## Final Prototype 5 rebuild
+
+Current official output: `project/build/toronto-city-atlas-portable.gbc`,524,288 bytes, SHA-256 `2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311`. Build source fingerprint `efe054a611bebeb91231f37db6102e71c1c305f2f861d09010491a4340f9aea4`. Project revision/compiler/header and matching NOI/globals retain the identities in the preceding optimized build's table below; official build and actual1,024-byte minimum memory guard pass with1,456-byte reserve.
+
+The generated atlas C return was placed on a separate line to satisfy Linux GCC's strict indentation check. The rebuilt ROM differs from `e812f7ef…` only in its four-byte stock save signature and one global-checksum byte; runtime code/data, NOI and globals are byte-identical. The stock signature is separate from Toronto's custom version-6 saves. Full repository checks pass. Two fresh recordings repeat251 driving/map and153 transit ordinary input steps, verify the exact first-job/held-turn regression, frozen map/job state and all thirteen paid/wait/reset checkpoints. These are separate final-ROM recordings and are listed in [TESTING.md](../TESTING.md); predecessor timing/OAM readings remain scoped below.
+
+The milestone identifier is `v0.2.0-prototype.5`. Use the matching bundle and [loading instructions](LOADING.md), and inspect/retest any newly built file against its own identity. Full former Toronto, two measured hours of varied gameplay, human review and physical cartridge acceptance remain open.
+
+## Preceding optimized native city atlas
 
 Milestone identity: `v0.2.0-prototype.5`. Publication and its downloadable bundle are tracked on the [releases page](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.5). This candidate retains four native scenes, 88 contracts and 43 stops, and replaces the earlier local camera map with a browsable schematic of the four registered areas.
 

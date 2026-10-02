@@ -2,6 +2,8 @@
 
 Updated 2026-10-02. This milestone adds a browsable schematic of the four registered city areas to the existing paused map screen. Optimized candidate `e812f7ef…` has built through the official plugin, passed linked memory inspection and sampled ordinary-button native map/driving/transit checks. It follows unpublished intermediate `ec982d…`, whose slower redraws prompted the pattern-cache optimization. Publication, remaining native cases and physical checks are separate gates. Published Prototype 4, ROM `1da71ba5…`, contains the earlier camera-panning district map; its recordings do not verify this atlas. [TESTING.md](../TESTING.md) records evidence against each actual ROM.
 
+Final Prototype5 rebuild `2d1f6e4e…` separates the generated return statement for Linux GCC validation. Its runtime bytes and allocation are identical to `e812f7ef…`; only the stock save signature and global checksum differ. Two fresh final-ROM recordings repeat all driving/map/transit inputs and match the captured state checkpoints, including reset from a mapped paid ride. [TESTING.md](../TESTING.md) records both final journals and preserves predecessor timing/OAM evidence separately.
+
 ## Coverage and controls
 
 The atlas uses the offsets in [world.json](../content/districts/world.json), rather than district-ID order:

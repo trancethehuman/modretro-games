@@ -10,7 +10,7 @@ Unmodified Prototype5 native emulator frame; [provenance](docs/screenshots/prove
 
 ## Play
 
-Select `project/project.gbsproj` with the ModRetro Chromatic plugin, then build `build/toronto-city-atlas.gbc`. Run that exact file in the plugin's native emulator or the official browser preview. Generated ROMs are intentionally excluded from Git. See [build instructions](docs/BUILD.md).
+Select `project/project.gbsproj` with the ModRetro Chromatic plugin, then build `build/toronto-city-atlas-portable.gbc`. Run that exact file in the plugin's native emulator or the official browser preview. Generated ROMs are intentionally excluded from Git. See [build instructions](docs/BUILD.md).
 
 Prototype5 adds a [city atlas](docs/CITY_MAP.md) with job, parked-car and booked-transit-stop focus. Its exact ROM repeats the held-turn regression and verifies map pause/resume and paid-ride reset; see [test evidence](TESTING.md). Ready-made prototype bundles are on the [GitHub releases page](https://github.com/trancethehuman/modretro-games/releases). Follow the [loading instructions](docs/LOADING.md) for the supported development cartridge.
 

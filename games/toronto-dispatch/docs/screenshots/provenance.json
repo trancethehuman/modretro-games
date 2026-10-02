@@ -62,10 +62,10 @@
   {
     "file": "city-atlas.png",
     "frame": 1048,
-    "rom_sha256": "e812f7ef3bee91e13e8ee0551c936eeed74283c60cb8c497ed45518d7b15d128",
+    "rom_sha256": "2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311",
     "png_sha256": "205e9d14c25684d7bd0af80d4e105d6354e1820ccfc5edb0568a0e1df2b3a00c",
-    "session_id": "108efc5f22a34035ac9505f25eb3686a",
-    "journal_event_digest": "f1ddccf5e5f87813d068b57a99ba5a534ad456b3250112a9c98505d998bf38ed",
+    "session_id": "b508eb3d2ad84f5ca8a07b979515be96",
+    "journal_event_digest": "bce3fd09faaa0df59e6321ac491b4cd1b14bbfe6387b3e034a5dc644491e918d",
     "journal_events": 690,
     "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
   }

@@ -556,7 +556,8 @@ UBYTE td_atlas_row(UBYTE tile_x,UBYTE tile_y,UBYTE count,UWORD *patterns) BANKED
     UBYTE i;UWORD offset;
     if(!patterns||!count||count>TD_ATLAS_VIEW_WIDTH||tile_x>=TD_ATLAS_TILE_WIDTH||tile_y>=TD_ATLAS_TILE_HEIGHT||count>TD_ATLAS_TILE_WIDTH-tile_x)return FALSE;
     offset=((UWORD)tile_y<<6)+tile_x;
-    for(i=0;i<count;i++)patterns[i]=td_atlas_map[offset+i];return TRUE;
+    for(i=0;i<count;i++)patterns[i]=td_atlas_map[offset+i];
+    return TRUE;
 }
 UBYTE td_atlas_pattern(UWORD id,UBYTE *tile16) BANKED {
     if(!tile16||id>=TD_ATLAS_PATTERNS)return FALSE;

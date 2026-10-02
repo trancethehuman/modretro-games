@@ -1,6 +1,22 @@
 # Testing record
 
-## Browsable city atlas — 2026-10-02 (Prototype 5)
+## Final portable atlas build — 2026-10-02 (Prototype 5)
+
+Final official output `project/build/toronto-city-atlas-portable.gbc`: **524,288 bytes**, SHA-256 **`2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311`**. Source fingerprint `efe054a611bebeb91231f37db6102e71c1c305f2f861d09010491a4340f9aea4`; project revision, compiler, NOI `ad657f…` and globals `930e45…` match the identities below. The official build, valid CGB/MBC5+RUMBLE+RAM+BATTERY/32KiB SRAM inspection and actual-ROM memory guard pass; reserve remains1,456 bytes.
+
+GitHub's Linux GCC check rejected a generated `for` and following `return` on the same line as misleading indentation. The generator now places the return on its own line; no warning was disabled. Full `make check` passes with the same API/renderer/engine/bridge/navigation counts below. This additional build changes exactly five ROM bytes: the stock `_save_signature` at0273–0276 and the low global-checksum byte at014F. Both global checksums independently validate. All other524,283 ROM bytes, NOI and globals are identical to `e812f7ef…`; the precise serialized compiler-input difference behind the stock signature is not reconstructed. Toronto's custom save does not reference that stock signature. New byte identity still required its own native acceptance.
+
+Two fresh source-debug recordings repeated all251 driving/map and153 transit ordinary-button steps from the optimized candidate, including the normal soft reset. The first-job completion at740, held-turn full speed at864 and car re-entry at5,066 match. Full58-byte state at map980/4,228 and active-job5,090/5,410 matches the preceding captured outputs exactly. All thirteen captured transit checkpoints match, including fare/cash, closed-window WAIT, map pause, paid ride, reset HELP and King arrival at4,466 without another fare. No memory/progress was injected. Frame1,048 is an unmodified framebuffer in [screenshots/provenance.json](docs/screenshots/provenance.json).
+
+| Final recording | Frames / events | Journal digest | Archive ID |
+| --- | --- | --- | --- |
+| `atlas-portable-driving-map-20261002` |5,434 /690|`bce3fd09faaa0df59e6321ac491b4cd1b14bbfe6387b3e034a5dc644491e918d`|`6d165799-0e71-45cb-8824-f2f602dfadee`|
+| `atlas-portable-transit-20261002` |4,466 /472|`3863567274eb6fc36515dd79ca6f7fc8dc3e38cda26dc35542ca97fa35e1c259`|`3cfa3ba1-3cc0-4857-8986-3da1142671a5`|
+
+Recordings were finalized, owned workers closed and bytes reversibly archived. The detailed optimized-candidate observations below remain scoped to their original `e812f7ef…` ROM; the final rebuild separately repeats those input scenarios and state checkpoints. Timing/OAM readings below were taken on that predecessor. Neither binary establishes full Old Toronto, two hours of varied play, human review or physical cartridge acceptance.
+
+
+## Optimized city atlas candidate — 2026-10-02
 
 Final official native ROM `project/build/toronto-city-atlas.gbc`: **524,288 bytes**, SHA-256 **`e812f7ef3bee91e13e8ee0551c936eeed74283c60cb8c497ed45518d7b15d128`**. CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB SRAM; CLI build/header inspection passed. Source fingerprint `bbff1b78d37e3abf900a1b082d70bb33af235ef882228cccca2b5c6129ea5cde`; project revision `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4`; matching NOI `ad657f05786ee9230aa413bb335d2e65f7b93a91aada696693d25c65135d3a4a`, globals `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a`. Compiler warnings remain DEP0190, five TORONTO optimizer warnings and two upstream SFX unreachable-code warnings; no error.
 
