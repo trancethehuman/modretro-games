@@ -85,7 +85,7 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Correct the legacy Union arrival onto the parked car with bounded 12/18-pixel connected alighting candidates, loaded-traffic clearance and paid retry when blocked. Current engine host fixtures pass 2,857 checks; the predecessor defect remains recorded.
 - [x] Build and replay exact final ROM `23b2a7a2…`: first delivery, held turn, three Queen journeys across core/east/west, paid arrival/reset, map pause and car recovery; separately verify legacy Line 1 / 94 bus/Island ferry and safe Union alighting.
 - [x] Complete final `make check`, with 2,857 engine and 609,452 transit checks; official final build/native evidence is recorded in [TESTING.md](TESTING.md), with build/allocation identity in [BUILD.md](docs/BUILD.md).
-- [ ] Prepare/review/publish Prototype 6. Release review/publication is tracked separately from native acceptance.
+- [x] Publish [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) after real CI jobs pass; anonymously verify the exact ZIP, native ROM, member checksums, source identity and notices. [TESTING.md](TESTING.md) records its identities.
 - [ ] Validate human route-choice value, remaining platforms/arrival conditions and future visible streetcar boarding/riding. Full501, King 504, fuller TTC coverage and current detours are separate work.
 
 ## Next playable polish
