@@ -1,6 +1,6 @@
 # Third-party notices
 
-Original documentation, content specifications, and validation tooling use the root MIT licence. The native game project also contains MIT-licensed starter artwork and upstream project metadata. No third-party runtime, ROM, or geographic dataset is vendored. The original Toronto scene extension and procedural pixel artwork use the root MIT licence; `td_font.h` derives from the retained MIT Bench Mono starter glyphs.
+Original documentation, content specifications, and validation tooling use the root MIT licence. The native game project also contains MIT-licensed starter artwork and upstream project metadata. No third-party runtime source, compiled ROM, or geographic dataset is vendored. Compiled native ROMs link upstream engine/library components; their distribution notices are recorded separately. The original Toronto scene extension and procedural pixel artwork use the root MIT licence; `td_font.h` derives from the retained MIT Bench Mono starter glyphs.
 
 ## Native starter assets and metadata
 
@@ -10,7 +10,9 @@ Original documentation, content specifications, and validation tooling use the r
 
 ## Development tools
 
-- ModRetro Chromatic plugin, GB Studio, GBDK, PyBoy, Binjgb and other compiler/emulator dependencies retain their own licences. They are installed outside this repository. Exact tested versions are recorded in [BUILD.md](games/toronto-dispatch/docs/BUILD.md). Audit linked runtime and distribution notices before publishing ROM releases.
+- ModRetro Chromatic plugin, GB Studio, GBDK, PyBoy, Binjgb and other compiler/emulator dependencies retain their own licences. They are installed outside this repository. Exact tested versions are recorded in [BUILD.md](games/toronto-dispatch/docs/BUILD.md).
+- The native Toronto Dispatch ROM links GBVM (MIT, copyright 2020 Toxa) and the GBVM-pinned public-domain hUGEDriver. GBDK 4.5.0 / SDCC libraries use GPLv2 with a linking exception; the upstream guide distinguishes distributing a compiled game ROM from redistributing the toolchain. The current build's runtime/source evidence and optional library boundaries are documented in [DISTRIBUTION.md](games/toronto-dispatch/docs/DISTRIBUTION.md).
+- Include [ROM_NOTICES.txt](games/toronto-dispatch/docs/ROM_NOTICES.txt) with every downloadable native ROM bundle or loose ROM. It contains the full root, GB Studio, GBVM and starter MIT notices plus runtime credits. The native audit does not cover redistribution of a browser emulator export.
 
 ## Geographic references
 

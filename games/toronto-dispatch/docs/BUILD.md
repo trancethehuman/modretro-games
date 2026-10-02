@@ -22,7 +22,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 2. Build using `rom_build` with `outputPath: "build/toronto-dispatch.gbc"`. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`.
 3. Inspect ROM headers and digest. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain recordings in ignored `build/`.
 4. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
-5. Run `make check` from the repository root for repository/content validation. It does not compile a ROM.
+5. Run `make check` from the repository root for content/connectivity checks and host engine regressions. It needs Python 3.10+ and Clang/GCC with ASan/UBSan. It does not compile a ROM.
 
 Builds, browser save states and cartridge backups are ignored. Do not publish local preview capability URLs, personal machine paths, activation codes or saves.
 
@@ -43,7 +43,9 @@ make check
 
 `sync_city_resources.py` uses GB Studio's native byte-array RLE to write palette/background-priority attributes and the scene collision map. Native CGB attribute bit 7 marks raised roof lips/canopies. The scene extension interprets collision values 0 as road, 16 as walk-only pavement/Island ground and 15 as solid; the normal engine ladder meaning of bit 4 does not apply to this custom scene. The map has 15,616 tiles, so each tile/attribute/collision array fits one 16 KiB bank. `check_campaign.py` reads these actual native resources and proves stop connectivity, compatible road routes, ferry links and generated contract consistency.
 
-Car physics stores Q4 coordinates and smoothed velocity; GBVM actors/camera use Q5. A bounded video-frame delta advances simulation between render updates. Menus freeze the world clock. Save version 4 occupies a checksummed record at SRAM bank 3, offset 0x100; GB Studio uses banks 0–2. Older prototype saves are rejected. Emulator soft-reset persistence is verified; physical cold-boot persistence and power-loss recovery remain pending.
+Car physics stores Q4 coordinates and smoothed velocity; GBVM actors/camera use Q5. Motion catch-up is bounded independently from the full 16-bit VBlank clock; menus freeze the clock. Input edges are consumed once per render, and continuing curb contact preserves forward momentum. The UI uploads unchanged rows only once.
+
+Save version 5 alternates two CRC16-checked records in SRAM bank 3 at offsets 0x100 and 0x180; GB Studio uses banks 0–2. The new record commits its magic byte last, preserving the old checkpoint until then. Progress checkpoints every game second; waiting/boarding/cancellation is saved explicitly. Valid version-4 prototype saves retain cash/completions but retire an active contract because its route changed. Earlier formats are rejected. Host tests interrupt every real store in both slots. Native soft-reset recovery is verified; physical cold-boot persistence and actual interrupted-power behavior remain pending.
 
 Current ROM: CGB-only, 256 KiB, MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. Header validity is verified, cartridge compatibility is not. No audio is implemented yet. Follow [hardware workflow](../../../docs/HARDWARE.md) before any write.
 

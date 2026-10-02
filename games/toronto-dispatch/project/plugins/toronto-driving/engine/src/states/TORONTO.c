@@ -26,6 +26,8 @@ static UWORD td_traffic_u[6],td_traffic_v[6];
 static UBYTE td_tick,td_notice_timer,td_red_cooldown,td_turn_tick,td_entry_timer,td_entry_target,td_walk_dir,td_resume_mode;
 static WORD td_vx,td_vy;
 static UWORD td_last_frame;
+static UBYTE td_input_edge;
+static UBYTE td_save_slot=TD_NONE,td_save_seq;
 
 static UWORD td_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
 static void td_position(actor_t *a,UWORD u,UWORD v){
@@ -44,37 +46,103 @@ static UBYTE td_walkable(UWORD u,UWORD v){
     return !(tile_at(u>>3,v>>3)&15);
 }
 static UBYTE td_near_car(void){return td_distance(td.u,td.park_u)<384&&td_distance(td.v,td.park_v)<384;}
+static UBYTE td_door_path(UWORD u,UWORD v,UWORD car_u,UWORD car_v){
+    UBYTE i;WORD du=(WORD)car_u-(WORD)u,dv=(WORD)car_v-(WORD)v;
+    /* A one-pixel sample catches rails and corners between usable endpoints. */
+    for(i=0;i<=24;i++)if(!td_walkable((u+du*i/24)>>4,(v+dv*i/24)>>4))return FALSE;
+    return TRUE;
+}
 static void td_enter_exit(void){
+    UWORD door_u=td.u,door_v=td.v;UBYTE found=0,i;
     if(td.speed>2||td.speed<-2){td_message(11);return;}
     if(td.onfoot){
         if(!td_near_car()){td_message(9);return;}
+        if(!td_door_path(td.u,td.v,td.park_u,td.park_v)){td_message(15);return;}
         td_entry_target=0;
     }else{
-        td.park_u=td.u;td.park_v=td.v;td.onfoot=1;td_entry_target=1;
         // Choose a visible, walkable door side without spawning inside a building.
-        if(td_walkable(td.u>>4,(td.v>>4)+18))td.v+=288;
-        else if(td_walkable((td.u>>4)+18,td.v>>4))td.u+=288;
-        else if(td_walkable(td.u>>4,(td.v>>4)-18))td.v-=288;
-        else td.u-=288;
+        for(i=0;i<4;i++){
+            door_u=td.u;door_v=td.v;
+            if(i==0)door_v+=288;else if(i==1)door_u+=288;else if(i==2)door_v-=288;else door_u-=288;
+            if(td_door_path(td.u,td.v,door_u,door_v)){found=1;break;}
+        }
+        if(!found){td_message(15);return;}
+        td.park_u=td.u;td.park_v=td.v;td.u=door_u;td.v=door_v;td.onfoot=1;td_entry_target=1;
     }
     td.speed=0;td_vx=td_vy=0;td_entry_timer=12;td.mode=TD_ROAM;td_save();td_ui_draw();
 }
+static UWORD td_crc_byte(UWORD crc,UBYTE value){
+    UBYTE bit;crc^=(UWORD)value<<8;
+    for(bit=0;bit<8;bit++)crc=(crc&0x8000)?(crc<<1)^0x1021:crc<<1;
+    return crc;
+}
+static volatile UBYTE *td_save_address(UBYTE slot){return slot?(volatile UBYTE*)0xA180:(volatile UBYTE*)0xA100;}
+static UBYTE td_valid_state(td_state_t *s){
+    UBYTE i,bits=0,value;td_job_t job;td_stop_t stop;
+    if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP)return FALSE;
+    if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
+    if(!td_drivable(s->park_u>>4,s->park_v>>4)||!(s->onfoot?td_walkable(s->u>>4,s->v>>4):td_drivable(s->u>>4,s->v>>4)))return FALSE;
+    for(i=0;i<9;i++){value=s->complete[i];while(value){bits+=value&1;value>>=1;}}
+    if(bits!=s->done)return FALSE;
+    if(s->job!=TD_NONE){if(s->job>=TD_QUESTS)return FALSE;td_get_job(s->job,&job);if(s->stage>=job.count||!s->left||!s->health)return FALSE;}
+    if(s->mode==TD_WAIT||s->mode==TD_RIDE){
+        if(!s->onfoot||(s->transit_origin&128)||(s->transit_origin&63)>=TD_STOPS||s->transit_target>=TD_STOPS||s->transit_target==(s->transit_origin&63))return FALSE;
+        if((s->transit_origin&64)&&(s->transit_origin&63)!=16)return FALSE;
+        td_get_stop(s->transit_origin&63,&stop);if(!stop.transit)return FALSE;
+        /* Explicitly validate route membership; an unknown stop must not become index zero. */
+        value=td_service(s->transit_origin);bits=0;
+        if(value==1){for(i=0;i<7;i++)if(td_train[i]==(s->transit_origin&63))bits=1;}
+        else if(value==2){for(i=0;i<3;i++)if(td_bus[i]==(s->transit_origin&63))bits=1;}
+        else bits=(s->transit_origin&63)==10||((s->transit_origin&63)>=20&&(s->transit_origin&63)<=22);
+        if(!bits)return FALSE;
+        bits=0;
+        if(value==1){for(i=0;i<7;i++)if(td_train[i]==s->transit_target)bits=1;}
+        else if(value==2){for(i=0;i<3;i++)if(td_bus[i]==s->transit_target)bits=1;}
+        else bits=(s->transit_origin&63)==10?(s->transit_target>=20&&s->transit_target<=22):s->transit_target==10;
+        if(!bits||s->mode==TD_RIDE&&(!s->ride_left||s->ride_left>8))return FALSE;
+    }
+    return TRUE;
+}
 void td_save(void) BANKED {
-    UBYTE i,check=0;const UBYTE *src=(const UBYTE*)&td;volatile UBYTE *ram=(volatile UBYTE*)0xA100;
-    // GB Studio owns SRAM banks 0-2. This scene owns a versioned record in bank 3.
+    UBYTE i,slot=td_save_slot==0?1:0,mode=td.mode;UWORD crc=0xFFFF;
+    const UBYTE *src=(const UBYTE*)&td;volatile UBYTE *ram=td_save_address(slot);
+    /* Two records in SRAM bank 3 retain the last committed snapshot during power loss. */
+    if(mode==TD_PAUSE||mode==TD_MAP||mode==TD_HELP)td.mode=td_resume_mode;
+    if(td.mode!=TD_WAIT&&td.mode!=TD_RIDE)td.mode=TD_ROAM;
     ENABLE_RAM_MBC5;SWITCH_RAM_BANK(3,RAM_BANKS_ONLY);
-    ram[0]=0;for(i=0;i<sizeof(td);i++){ram[4+i]=src[i];check^=src[i];}
-    ram[1]=0xD7;ram[2]=4;ram[3]=check;ram[0]=0x54;
-    SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
+    ram[0]=0;ram[1]=0xD7;ram[2]=5;ram[3]=sizeof(td);ram[4]=td_save_seq+1;
+    crc=td_crc_byte(crc,ram[2]);crc=td_crc_byte(crc,ram[3]);crc=td_crc_byte(crc,ram[4]);
+    for(i=0;i<sizeof(td);i++){ram[8+i]=src[i];crc=td_crc_byte(crc,src[i]);}
+    ram[5]=crc;ram[6]=crc>>8;ram[7]=0;ram[0]=0x54;
+    td_save_slot=slot;td_save_seq=ram[4];SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);td.mode=mode;
+}
+static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq){
+    UBYTE i;UWORD crc=0xFFFF;UBYTE *dst=(UBYTE*)dest;volatile UBYTE *ram=td_save_address(slot);
+    if(ram[0]!=0x54||ram[1]!=0xD7||ram[2]!=5||ram[3]!=sizeof(td))return FALSE;
+    for(i=2;i<=4;i++)crc=td_crc_byte(crc,ram[i]);
+    for(i=0;i<sizeof(td);i++){dst[i]=ram[8+i];crc=td_crc_byte(crc,dst[i]);}
+    if(crc!=(ram[5]|(UWORD)ram[6]<<8))return FALSE;
+    *seq=ram[4];return TRUE;
 }
 static UBYTE td_restore(void){
-    UBYTE i,check=0,valid;UBYTE *dst=(UBYTE*)&td;volatile UBYTE *ram=(volatile UBYTE*)0xA100;
+    td_state_t a,b;UBYTE va,vb,sa=0,sb=0,i,check=0;volatile UBYTE *ram=td_save_address(0);
+    td_save_slot=TD_NONE;td_save_seq=0;
     ENABLE_RAM_MBC5;SWITCH_RAM_BANK(3,RAM_BANKS_ONLY);
-    valid=ram[0]==0x54&&ram[1]==0xD7&&ram[2]==4;
-    if(valid){for(i=0;i<sizeof(td);i++){dst[i]=ram[4+i];check^=dst[i];}valid=check==ram[3];}
+    va=td_read_slot(0,&a,&sa);vb=td_read_slot(1,&b,&sb);
     SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
-    if(valid && (td.vehicle>3||td.job!=TD_NONE&&td.job>=TD_QUESTS||td.done>72||td.u>16384||td.v>15616))valid=0;
-    return valid;
+    if(va)va=td_valid_state(&a);
+    if(vb)vb=td_valid_state(&b);
+    if(va||vb){
+        if(va&&(!vb||(BYTE)(sa-sb)>=0)){td=a;td_save_slot=0;td_save_seq=sa;}
+        else{td=b;td_save_slot=1;td_save_seq=sb;}return TRUE;
+    }
+    /* Version 4 used older contract routes: keep earnings/completions, retire active work. */
+    ENABLE_RAM_MBC5;SWITCH_RAM_BANK(3,RAM_BANKS_ONLY);
+    va=ram[0]==0x54&&ram[1]==0xD7&&ram[2]==4;
+    if(va){for(i=0;i<sizeof(a);i++){((UBYTE*)&a)[i]=ram[4+i];check^=((UBYTE*)&a)[i];}va=check==ram[3];}
+    SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
+    if(va){a.job=TD_NONE;a.stage=0;a.left=0;a.health=100;a.mode=TD_ROAM;a.speed=0;if(td_valid_state(&a)){td=a;td_save_slot=0;td_save();return TRUE;}}
+    return FALSE;
 }
 void td_set_target(void) BANKED {
     if(td.job!=TD_NONE)td_get_stop(td_job.route[td.stage],&td_target);
@@ -84,13 +152,22 @@ void td_set_target(void) BANKED {
 static void td_finish(UBYTE success){
     if(success){
         if(!(td.complete[td.job>>3]&(1<<(td.job&7)))){td.complete[td.job>>3]|=1<<(td.job&7);td.done++;}
-        if(td.cash<50000)td.cash+=td_job.reward+(td.left/5);
+        { UWORD reward=td_job.reward/100*td.health+(td_job.reward%100)*td.health/100+td.left/5;
+          td.cash=td.cash>60000-reward?60000:td.cash+reward; }
     }
     td.job=TD_NONE;td.speed=0;td_vx=td_vy=0;td.mode=TD_RESULT;td_save();td_ui_draw();
 }
+static void td_ready_offer(void){
+    UBYTE i;
+    for(i=0;i<TD_QUESTS;i++){
+        td_get_job(i,&td_offer);
+        if(td.done>=td_offer.min_done&&!(td.complete[i>>3]&(1<<(i&7)))){td.menu=i;return;}
+    }
+    td.menu=0;td_get_job(0,&td_offer);
+}
 static void td_interact(void){
     if(td.speed>2||td.speed<-2){td_message(1);return;}
-    if(td.job==TD_NONE){td.mode=TD_BOARD;td.menu=0;td_get_job(td.menu,&td_offer);td_ui_draw();return;}
+    if(td.job==TD_NONE){td.mode=TD_BOARD;td_ready_offer();td_ui_draw();return;}
     if(!td_near(&td_target)){td_message(6);return;}
     if(td_job.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_job.vehicle)){td_message(2);return;}
     td.stage++;
@@ -116,11 +193,12 @@ static UBYTE td_stop_index(UBYTE origin,UBYTE stop){
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED {
     UBYTE service=td_service(origin),period=service==1?18:service==2?24:30;
     UBYTE phase=td_stop_index(origin,origin&63)*(service==1?2:service==2?4:7);
-    UBYTE elapsed=(seconds+period-phase)%period;
+    UBYTE elapsed=(seconds%period+period-phase)%period;
     return elapsed<2?0:period-elapsed;
 }
 static UBYTE td_route_stop(UBYTE origin,UBYTE idx){
-    if(td_service(origin)==3)return td_ferry[idx%4];
+    /* Public Island ferries connect each dock to the mainland, not to each other. */
+    if(td_service(origin)==3)return (origin&63)==10?td_ferry[1+idx%3]:10;
     if(td_service(origin)==2)return td_bus[idx%3];
     return td_train[idx%7];
 }
@@ -136,7 +214,7 @@ static void td_pause_choose(void){
     switch(td.menu){
         case 0:td.mode=td_resume_mode;break;
         case 1:td.mode=TD_MAP;td.map_x=camera_x;td.map_y=camera_y;camera_settings=0;break;
-        case 2:td.mode=TD_BOARD;td.menu=td.job==TD_NONE?0:td.job;td_get_job(td.menu,&td_offer);break;
+        case 2:td.mode=TD_BOARD;if(td.job==TD_NONE)td_ready_offer();else{td.menu=td.job;td_get_job(td.menu,&td_offer);}break;
         case 3:td_enter_exit();return;
         case 4:
             if(td.job!=TD_NONE||td.speed>2||td.speed<-2||td.onfoot){td_message(2);return;}
@@ -148,7 +226,7 @@ static void td_pause_choose(void){
     td_ui_draw();
 }
 static void td_menu_update(void){
-    if(td.mode==TD_HELP){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=TD_ROAM;td_ui_draw();}return;}
+    if(td.mode==TD_HELP){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=td_resume_mode;td_ui_draw();}return;}
     if(td.mode==TD_MAP){
         if(INPUT_LEFT&&camera_x>160)camera_x-=48;
         if(INPUT_RIGHT&&camera_x<(image_width-80)*32)camera_x+=48;
@@ -168,50 +246,61 @@ static void td_menu_update(void){
         if(INPUT_A_PRESSED){
             if(td.job!=TD_NONE){td_message(2);return;}
             if(td.done<td_offer.min_done){td_message(3);return;}
-            if(td_offer.vehicle!=TD_NONE&&td.vehicle!=td_offer.vehicle){td_message(2);return;}
+            if(td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)){td_message(2);return;}
             td.job=td.menu;td_job=td_offer;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_set_target();td_save();td_ui_draw();return;
         }
     }else if(td.mode==TD_TRANSIT){
         if((INPUT_UP_PRESSED||INPUT_DOWN_PRESSED)&&(td.transit_origin&63)==16){
             td.transit_origin^=64;td.menu=0;td.transit_target=td_route_stop(td.transit_origin,0);td_get_stop(td.transit_target,&td_cursor);
         }
-        if(INPUT_RIGHT_PRESSED){UBYTE count=td_service(td.transit_origin)==1?7:td_service(td.transit_origin)==2?3:4;td.menu=(td.menu+1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}
-        if(INPUT_LEFT_PRESSED){UBYTE count=td_service(td.transit_origin)==1?7:td_service(td.transit_origin)==2?3:4;td.menu=(td.menu+count-1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}
+        if(INPUT_RIGHT_PRESSED){UBYTE count=td_service(td.transit_origin)==1?7:td_service(td.transit_origin)==2?3:(td.transit_origin&63)==10?3:1;td.menu=(td.menu+1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}
+        if(INPUT_LEFT_PRESSED){UBYTE count=td_service(td.transit_origin)==1?7:td_service(td.transit_origin)==2?3:(td.transit_origin&63)==10?3:1;td.menu=(td.menu+count-1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}
         if(INPUT_A_PRESSED){
             if(td.transit_target==(td.transit_origin&63))return;
-            td.mode=TD_WAIT;td.speed=0;td_ui_draw();return;
+            td.mode=TD_WAIT;td.speed=0;td_save();td_ui_draw();return;
         }
-    }else if(td.mode==TD_RESULT&&INPUT_A_PRESSED){td.mode=TD_BOARD;td.menu=0;td_get_job(0,&td_offer);}
+    }else if(td.mode==TD_RESULT&&INPUT_A_PRESSED){td.mode=TD_BOARD;td_ready_offer();}
     if(INPUT_A_PRESSED||INPUT_UP_PRESSED||INPUT_DOWN_PRESSED||INPUT_LEFT_PRESSED||INPUT_RIGHT_PRESSED)td_ui_draw();
 }
 static void td_second(void){
     UBYTE service,fare,steps; td_stop_t origin;
     td.seconds++;
-    if(td.job!=TD_NONE){if(td.left)td.left--;if(!td.left){td.health=0;td_finish(FALSE);return;}}
+    if(td.job!=TD_NONE){if(td.left)td.left--;if(!td.left){td.health=0;
+        /* A failed parcel still finishes its already-paid trip; never strand it in transit. */
+        if(td.mode==TD_RIDE){td.job=TD_NONE;td_save();}else{td_finish(FALSE);return;}
+    }}
     if(td.mode==TD_WAIT){
         td_get_stop(td.transit_origin&63,&origin);service=td_service(td.transit_origin);
         if(!td_next_departure(td.transit_origin,td.seconds)){
             fare=service==1?3:service==2?2:4;
-            if(td.cash<fare){td.mode=TD_ROAM;td_message(4);return;}
+            if(td.cash<fare){td.mode=TD_ROAM;td_save();td_message(4);return;}
             steps=td_distance(td_stop_index(td.transit_origin,td.transit_target),td_stop_index(td.transit_origin,td.transit_origin&63));
-            td.cash-=fare;td.mode=TD_RIDE;td.ride_left=service==3?8:service==2?2+steps*2:1+steps/2;
+            td.cash-=fare;td.mode=TD_RIDE;td.ride_left=service==3?8:service==2?2+steps*2:1+steps/2;td_save();
         }
     }else if(td.mode==TD_RIDE){
         if(td.ride_left)td.ride_left--;
-        if(!td.ride_left){td.u=td_cursor.u*16;td.v=td_cursor.v*16;td.safe_u=td.u;td.safe_v=td.v;td.mode=TD_ROAM;td_save();}
+        if(!td.ride_left){td.u=td_cursor.u*16;td.v=td_cursor.v*16;td.safe_u=td.u;td.safe_v=td.v;td.mode=td.health?TD_ROAM:TD_RESULT;td_save();}
     }
-    td_ui_draw();
+    td_save();td_ui_draw();
+}
+static UBYTE td_signal_stop(UWORD pos,UBYTE vertical){
+    UBYTE i,count=vertical?8:9;UWORD line;
+    for(i=0;i<count;i++){
+        line=(vertical?td_rows[i]:td_cols[i])*16-384;
+        if(pos>=line&&pos<line+8)return TRUE;
+    }
+    return FALSE;
 }
 static void td_traffic(void){
     UBYTE i,phase=td.seconds%12;UWORD u,v;
     for(i=0;i<6;i++){
         u=td_traffic_u[i];v=td_traffic_v[i];
-        if(i<4){if(phase<7||u%128<82||u%128>98)u+=8;if(u>848*16)u=40*16;}
-        else if(i==4){if(phase>=7||v%128<82||v%128>98)v+=8;if(v>792*16)v=40*16;}
+        if(i<4){if(phase<7||!td_signal_stop(u,0))u+=8;if(u>848*16)u=40*16;}
+        else if(i==4){if(phase>=7||!td_signal_stop(v,1))v+=8;if(v>792*16)v=40*16;}
         else {u=80*16+(td.seconds%24)*32*16;v=176*16;}
         td_traffic_u[i]=u;td_traffic_v[i]=v;td_position(&actors[i+2],u>>4,v>>4);
         td_frame(&actors[i+2],i==5?8:(i==4?2:0));
-        if(!td.onfoot&&td_distance(td.u,u)<180&&td_distance(td.v,v)<180&&!td.cooldown){
+        if(td.mode==TD_ROAM&&!td.onfoot&&td_distance(td.u,u)<180&&td_distance(td.v,v)<180&&!td.cooldown){
             td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=60;
             if(td.job!=TD_NONE){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);return;}}td_message(5);
         }
@@ -230,11 +319,11 @@ static void td_pedestrians(void){
         td_position(&actors[9+i],u,v);td_frame(&actors[9+i],32+dir*2+((td_tick>>3)&1));
         if(td_walkable(u,v)&&td_distance(td.u>>4,u)<112&&td_distance(td.v>>4,v)<96)actors[9+i].flags&=~ACTOR_FLAG_HIDDEN;
         else actors[9+i].flags|=ACTOR_FLAG_HIDDEN;
-        if(!td.onfoot&&!td.cooldown&&td_distance(td.u>>4,u)<10&&td_distance(td.v>>4,v)<10){td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=45;td_message(13);}
+        if(td.mode==TD_ROAM&&!(actors[9+i].flags&ACTOR_FLAG_HIDDEN)&&!td.onfoot&&!td.cooldown&&td_distance(td.u>>4,u)<10&&td_distance(td.v>>4,v)<10){td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=45;td_message(13);}
     }
 }
 static void td_drive(void){
-    WORD nu,nv,target_x,target_y;UBYTE limit,turn_period,moving=0,slide=0;UWORD u,v;
+    WORD nu,nv,target_x,target_y;UBYTE limit,turn_period,moving=0,slide=0,speed;UWORD u,v;
     if(td.cooldown)td.cooldown--;
     if(td_red_cooldown)td_red_cooldown--;
     if(td_entry_timer){
@@ -250,15 +339,18 @@ static void td_drive(void){
         if(INPUT_UP){nv-=INPUT_LEFT||INPUT_RIGHT?6:8;td_walk_dir=3;moving=1;}
         if(td_walkable(nu>>4,nv>>4)&&!(td_distance(nu,td.park_u)<144&&td_distance(nv,td.park_v)<144)){td.u=nu;td.v=nv;}
         td.speed=0;td_frame(&PLAYER,32+td_walk_dir*2+(moving?((td_tick>>3)&1):0));
-        if(INPUT_A_PRESSED&&td_near_car())td_enter_exit();
-        if(INPUT_B_PRESSED)td_transit_open();
+        if(td_input_edge&&INPUT_A_PRESSED&&td_near_car())td_enter_exit();
+        if(td_input_edge&&INPUT_B_PRESSED)td_transit_open();
         return;
     }
     limit=td.vehicle==1?20:td.vehicle==2?28:td.vehicle==3?18:24;
-    turn_period=td.speed>18?10:td.speed>8?8:5;
+    speed=td.speed<0?-td.speed:td.speed;
+    turn_period=speed>18?12:speed>8?10:8;
     if(td.vehicle==1)turn_period+=2;
     // A dedicated yaw counter keeps turns regular as speed changes.
-    if(INPUT_LEFT||INPUT_RIGHT){if(++td_turn_tick>=turn_period){td_turn_tick=0;if(INPUT_LEFT)td.heading=(td.heading+15)&15;else td.heading=(td.heading+1)&15;}}
+    if(!!INPUT_LEFT!=!!INPUT_RIGHT){if(++td_turn_tick>=turn_period){td_turn_tick=0;if(INPUT_LEFT)td.heading=(td.heading+15)&15;else td.heading=(td.heading+1)&15;
+        if(td.job!=TD_NONE&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
+    }}
     else td_turn_tick=0;
     if(INPUT_B){if(td_tick%2==0&&td.speed>-6)td.speed--;}
     else if(INPUT_A){if(td_tick%4==0&&td.speed<limit)td.speed++;}
@@ -278,9 +370,10 @@ static void td_drive(void){
         td.u=nu;td.v=nv;
     }else{
         // A glancing curb contact slides along the free axis and preserves forward speed.
-        if(td_drivable(nu>>4,td.v>>4)){td.u=nu;td_vy=0;slide=1;}
-        if(td_drivable(td.u>>4,nv>>4)){td.v=nv;td_vx=0;slide=1;}
-        if(slide){if(td.speed>8)td.speed--;}
+        if(nu!=(WORD)td.u&&td_drivable(nu>>4,td.v>>4)){td.u=nu;td_vy=0;slide=1;}
+        if(nv!=(WORD)td.v&&td_drivable(td.u>>4,nv>>4)){td.v=nv;td_vx=0;slide=1;}
+        /* Remove only blocked-axis motion. Repeated curb scrapes must not beat the throttle. */
+        if(slide){if(speed>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
         else{
             if(td.speed>8&&!td.cooldown){if(td.job!=TD_NONE){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);}
             td.speed=0;td_vx=td_vy=0;
@@ -295,7 +388,8 @@ void toronto_init(void) BANKED {
     if(!td_restore()){
         memset(&td,0,sizeof(td));td.u=560*16;td.v=720*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
     }
-    td.speed=0;td_resume_mode=TD_ROAM;td.mode=TD_HELP;td.msg=0;td.menu=0;td.safe_u=td.u;td.safe_v=td.v;
+    td.speed=0;td_resume_mode=td.mode==TD_WAIT||td.mode==TD_RIDE?td.mode:TD_ROAM;td.mode=TD_HELP;td.msg=0;td.menu=0;td.safe_u=td.u;td.safe_v=td.v;
+    if(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)td_get_stop(td.transit_target,&td_cursor);
     if(td.job!=TD_NONE){td_get_job(td.job,&td_job);if(td.stage>=td_job.count)td.job=TD_NONE;}
     actors_len=15;
     for(i=1;i<15;i++){
@@ -310,13 +404,21 @@ void toronto_init(void) BANKED {
     td_ui_init();
 }
 void toronto_update(void) BANKED {
-    UWORD now=sys_time;UBYTE elapsed=(UBYTE)(now-td_last_frame),step;td_last_frame=now;
-    if(elapsed>4)elapsed=4;
+    UWORD now=sys_time,elapsed=now-td_last_frame,seconds;UBYTE motion,step,consumed=0;td_last_frame=now;
+    motion=elapsed>4?4:elapsed;
     if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE){td_menu_update();return;}
     if(INPUT_START_PRESSED){td_resume_mode=td.mode;td.mode=TD_PAUSE;td.menu=0;td_ui_draw();return;}
+    /* A deliberate cancel wins over departure on the same input frame. */
+    if(td.mode==TD_WAIT&&INPUT_B_PRESSED){td.mode=TD_ROAM;consumed=1;td_save();td_ui_draw();}
     if(td_notice_timer){if(!--td_notice_timer){td.msg=0;td_ui_draw();}}
-    td.subsecond+=elapsed;if(td.subsecond>=60){td.subsecond-=60;td_second();}
-    if(td.mode==TD_WAIT&&INPUT_B_PRESSED){td.mode=TD_ROAM;td_ui_draw();}
-    if(td.mode==TD_ROAM){for(step=0;step<elapsed&&td.mode==TD_ROAM;step++){td_tick++;td_drive();td_traffic();}if(INPUT_SELECT_PRESSED)td_interact();td_pedestrians();}
+    /* Keep deadlines and transit tied to every VBlank, even when rendering falls behind. */
+    seconds=elapsed/60;elapsed%=60;elapsed+=td.subsecond;
+    if(elapsed>=60){elapsed-=60;seconds++;}td.subsecond=elapsed;
+    while(seconds--&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE))td_second();
+    for(step=0;step<motion&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);step++){
+        td_tick++;td_input_edge=step==0&&!consumed;if(td.mode==TD_ROAM)td_drive();td_traffic();
+    }
+    if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
+    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)td_pedestrians();
     td_position(&PLAYER,td.u>>4,td.v>>4);
 }
