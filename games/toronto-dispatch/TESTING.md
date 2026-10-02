@@ -1,5 +1,49 @@
 # Testing record
 
+## Final Queen scheduled service — sampled native acceptance, 2026-10-02
+
+Current source implements eight supplemental 501 Queen curb platforms across West, Central and East. The campaign contains 51 service points while retaining the original 43 records, all 88 contracts and the 58-byte version-6 save layout. Original signs contain no TTC logo. Service 4 uses a three-dollar game fare, a 64-second directional period, two-second boarding windows and four seconds per stop interval. Destination selection derives east/west direction; schedule phase comes from the existing world clock. [STREETCAR.md](docs/STREETCAR.md) records the researched identities and deliberate normal-corridor compression. Current construction detours, full 501/504 coverage and an adopted map era are outside this implementation.
+
+Final official output `project/build/toronto-queen-streetcar-safe.gbc`: **524,288 bytes**, SHA-256 **`23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`**. The local file size and SHA were independently read after the native tests. Source fingerprint `15ef9fbe8c74d6b1603d298fb4f0ec3d899bd279c4e220f65eb3ce8481a4873b`; matching NOI SHA `36ec47e25446b3959c9746c27a46222361150095a9ef87bd7a565c3ff51cbac5`. Official build/inspection and the following scoped native checks passed. Prototype 6 release publication is tracked separately through bundle/release metadata. [BUILD.md](docs/BUILD.md) owns the final toolchain/allocation record.
+
+Final `make check` passes **2,857 actual-engine checks**, **609,452 transit API checks**, **299,366 atlas API checks**, **8,036,093 atlas renderer checks**, **2,974 bridge checks**, **16,997 navigation/math checks**, nine memory fixtures and repository/generated-resource checks. The new [banked transit module tests](../../scripts/test_transit.py) use an independent oracle under ASan/UBSan and `-Werror`. They exercise service membership and invalid encodings, route/menu bounds, self-target rejection, fares/durations, labels and unchanged failed outputs, every valid origin/target phase, both Queen directions, clock edges and complete 16-bit clock sweeps for representative services. Engine fixtures cover paid remote arrival/reset/retry, retained parked-car districts, pause/deadline behaviour and corrected alighting. Host tests adapt native types/bank annotations; they do not prove native bank ABI, linked allocation, raster timing or cartridge behaviour. Those have separate build/native evidence, still bounded by the scenarios below.
+
+### Exact final native journeys and safe alighting
+
+Both final recordings used ordinary buttons with source/WRAM/OAM inspected read-only. No save/progression was injected. Journals were stopped, owned workers closed and bytes reversibly archived through the official plugin.
+
+| Recording scope | Session | Frames / events | Journal digest | Archive ID |
+| --- | --- | --- | --- | --- |
+| Final Queen journeys, driving/map/reset and car recovery | `22b00640f39d46dc95d5a875c1f579a9` | 10,848 / 5,732 | `dcd342feb7872634cebb0796ef8bd29f3212c98fa6f1734b95c5528e17373a9e` | `b02ee327-f7e9-44a4-8cac-0737b199b5f8` |
+| Final legacy train/bus/ferry and clear Union alighting | `f2330a06a474449f8b577a38c41567f0` | 14,214 / 7,546 | `0ce31916545301b7dc08514e3495cf0c6d519136a3b97249e31cf3fbc541b054` | `81e6fa91-1bde-499a-898d-2513abceea07` |
+
+- First delivery completes at frame 740. The exact held-acceleration turn reaches frame 864 at speed 24, preserving the previous handling regression.
+- Queen Yonge→Alton arrives in the actual East scene at frame 7,092, Alton→Parkdale in West at 9,084 and Parkdale→Yonge in Central at 10,236. Each ride charges once: cash `139→136→133→130`. The parked car stays in Central through all three journeys; A completes entry at 10,364. Free-roam guidance returns to Union depot.
+- Captured state hex is identical across map frames `2,082→2,322` in WAIT and `5,524→5,764` in paid RIDE. The booked stop remains the map objective. A normal soft reset during the paid journey restores HELP at 6,064 with world clock 76, cash 136 and 16 ride seconds left. Resuming reaches the booked destination without another fare.
+- The separate legacy sample verifies train map/reset, a 94 Wellesley bus journey arriving at Castle Frank at frame 7,280 with cash 19, and a Centre Island ferry round trip. Island arrival is frame 11,230 at `(720,920)`, cash 12, followed by walking to `(732.5,928.5)`. Mainland return is frame 13,788 at `(640,784)`, cash 8.
+- Corrected Union arrival is frame 8,495 at `(572,720)`, cash 16 and world clock 103, beside the parked car at `(560,720)`. Ordinary right input reaches `(639.5,720)` at 8,634, resolving the predecessor's trapped arrival. The later car return/entry finishes at 14,094 at `(560,720)`, world clock 195, cash 8.
+
+Bounded stationary samples advanced the update counter by 59 over 120 video frames, about 29.5 updates per second: main frames `10,728→10,848` (`148→207`) and legacy `14,094→14,214` (`120→179`). Each preceding OAM snapshot showed eight visible objects, peak four per scanline and zero over-limit scanlines. These are native emulator observations in sampled scenes, not crowded-world worst-case performance or physical display proof.
+
+### Earlier native Queen sample and retained failure
+
+The unpublished predecessor ROM was **524,288 bytes**, SHA-256 **`f56ff75e7e43ed9050f2d1da1247c0c6d9882d606f053e99dbfd257ebea530ea`**. Ordinary-button recordings were retained and archived through the plugin; no save/progression injection was used. The three Queen journeys and the later legacy failure both belong to this exact predecessor, before safe alighting was corrected.
+
+| Recording scope | Session | Frames / events | Journal digest | Archive ID |
+| --- | --- | --- | --- | --- |
+| Three Queen rides, map/reset and car recovery | `26d2a0be2816450e9e6e2f3a1a1afd04` | 10,728 / 5,696 | `5bebf5449bf039a5925be548f8b623ec61e60fd92e3fb6fc650c8499f4cabc2a` | `84390656-fc17-48e2-adce-d39fa8c57813` |
+| Legacy bus/Line 1 arrival defect; needs review | `820ac93d3aae40b3ab52ea9be81bf6c6` | 9,010 / 4,846 | `dbab6c8dc4207d0915d9db61295674f5bceca8a3f7c211684ca8a674b57f7089` | `0f95d7f4-c724-4f7d-b87a-c1b731982a6c` |
+
+- The first delivery and exact held-turn sequence reached frame 864 at speed 24, heading 4. This repeats the handling regression without asserting a broader performance result.
+- Yonge→Alton travelled Central→East with a paid map/pause and reset; the car remained in Central. Alton→Parkdale travelled East→West, then Parkdale→Yonge returned West→Central and recovered the parked car. Each journey charged three game dollars once, taking cash from 139 to 130 across the three fares. Native source/state inspection confirmed the destination scenes and car retention. This samples three journeys rather than every platform, timetable edge or failure case.
+- Separate legacy transit arrived at Union `(560,720)` on top of the player's parked car at frame 8,498. Holding right remained blocked through frame 9,010. That recording is a failure requiring review, not successful legacy acceptance. The earlier Queen sample did not expose this condition because its new platforms are on sidewalks away from that car.
+
+### Safe-alighting correction and remaining acceptance
+
+Current source keeps the destination centre if clear, otherwise checks cardinal offsets of 12 then 18 pixels. It requires bounds, destination-scene walking permission, a sampled connected path, exclusion of the player's parked car and clearance from traffic in the loaded scene. It does not compare a remote destination against the origin scene's traffic cache. If all candidates are blocked, the already-paid trip retains a retry second; deadlines and failure handling continue without another fare. Host fixtures cover these branches, including same-district and remote arrivals, blocked retries and time expiry.
+
+The corrected final ROM separately passes the sampled ordinary-button journeys and alighting cases above. It does not exercise every Queen platform, both window edges at every origin, blocked-arrival/queue failure under native execution or every mission/deadline/condition combination. Those source branches retain host coverage and need further representative native play. Earlier published Prototype 3–5 results below keep their original scope. Moving streetcar artwork, the full former-Toronto map, measured two-hour enjoyable gameplay, crowded-scene/human assessment and physical cartridge boot/save/audio remain unverified.
+
 ## Final portable atlas build — 2026-10-02 (Prototype 5)
 
 Final official output `project/build/toronto-city-atlas-portable.gbc`: **524,288 bytes**, SHA-256 **`2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311`**. Source fingerprint `efe054a611bebeb91231f37db6102e71c1c305f2f861d09010491a4340f9aea4`; project revision, compiler, NOI `ad657f…` and globals `930e45…` match the identities below. The official build, valid CGB/MBC5+RUMBLE+RAM+BATTERY/32KiB SRAM inspection and actual-ROM memory guard pass; reserve remains1,456 bytes.

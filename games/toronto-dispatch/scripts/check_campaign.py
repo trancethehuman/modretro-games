@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE_STOPS, CORE_QUESTS = 27, 72
-TOTAL_STOPS, TOTAL_QUESTS = 43, 88
+TOTAL_STOPS, TOTAL_QUESTS = 51, 88
 
 
 def decode(text):
@@ -154,7 +154,10 @@ def check():
     assert stops[CORE_STOPS:35] == west['stops'], 'Western stop fusion is stale'
     assert quests[CORE_QUESTS:80] == west['quests'], 'Western contract fusion is stale'
     east = json.loads((ROOT / 'content/districts/east_jobs.json').read_text())
-    assert stops[35:] == east['stops'] and quests[80:] == east['quests'], 'Eastern content fusion is stale'
+    assert stops[35:43] == east['stops'] and quests[80:] == east['quests'], 'Eastern content fusion is stale'
+    streetcar = json.loads((ROOT / 'content/streetcar.json').read_text())
+    assert stops[43:] == streetcar['stops'], 'Queen streetcar platform fusion is stale'
+    assert campaign['transit']['streetcar501'] == streetcar['service'], 'Queen streetcar schedule fusion is stale'
     from create_east_jobs import preserved_prefix
     preserved_prefix(campaign)
     assert campaign['status'] == 'engine-integrated' and campaign['duration_target_minutes'] >= 120

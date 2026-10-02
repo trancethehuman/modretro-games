@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "td_game.h"
+#include "td_transit.h"
 #include "td_font.h"
 #include "td_audio.h"
 #include "td_atlas.h"
@@ -176,8 +177,8 @@ void td_ui_draw(void) BANKED {
     if(td.mode==TD_ROAM || td.mode==TD_WAIT || td.mode==TD_RIDE) {
         ui_set_pos(0,120);
         if(td.mode==TD_WAIT){
-            wait=td_next_departure(td.transit_origin,td.seconds);service=td_service(td.transit_origin);
-            sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);td_row(1,service==1?"LINE 1 TRAIN":service==2?"94 WELLESLEY BUS":"ISLAND FERRY");td_row(2,"B CANCEL WAIT");return;
+            wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
+            sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);td_transit_label(td.transit_origin,td_line);td_row(1,td_line);td_row(2,"B CANCEL WAIT");return;
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         if(td.msg){
@@ -211,7 +212,12 @@ void td_ui_draw(void) BANKED {
         td_row(14,"LEFT RIGHT: BROWSE");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){
-        service=td_service(td.transit_origin);td_row(2,service==1?"LINE 1 TRAIN":service==2?"94 WELLESLEY BUS":"ISLAND FERRY");td_row(4,td_cursor.name);wait=td_next_departure(td.transit_origin,td.seconds);sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(6,td_line);td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"FERRY $4 GAME FARES");td_row(15,"UP: BUS/TRAIN AT");td_row(16,"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
+        service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);
+        td_row(5,service==4?(td.transit_target>=td.transit_origin?"STREETCAR EASTBOUND":"STREETCAR WESTBOUND"):"");
+        wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(6,td_line);
+        sprintf(td_line,"RIDE %u SEC / $%u",td_transit_duration(td.transit_origin,td.transit_target),td_transit_fare(td.transit_origin));td_row(7,td_line);
+        td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"QUEEN $3 FERRY $4");
+        td_row(15,service==4?"NORMAL QUEEN ROUTE":"UP: BUS/TRAIN AT");td_row(16,service==4?"GAME ROUTE ENDS HERE":"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
     }
     if(td.mode==TD_RESULT){
         td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(7,td_line);td_row(10,td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");td_row(12,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");

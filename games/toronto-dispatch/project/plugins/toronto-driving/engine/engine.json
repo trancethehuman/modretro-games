@@ -46,7 +46,9 @@
         "include/td_world.h",
         "src/td_world.c",
         "include/td_atlas.h",
-        "src/td_atlas.c"
+        "src/td_atlas.c",
+        "include/td_transit.h",
+        "src/td_transit.c"
       ]
     }
   ]

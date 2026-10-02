@@ -114,7 +114,7 @@ def native_fixture(game, include):
         require(type(district) is int and 0 <= district < districts and type(flags) is int and 0 <= flags <= 255 and
                 type(stop["u"]) is int and 0 <= stop["u"] < width * 8 and
                 type(stop["v"]) is int and 0 <= stop["v"] < height * 8 and
-                type(stop["transit"]) is int and 0 <= stop["transit"] <= 3 and
+                type(stop["transit"]) is int and 0 <= stop["transit"] <= 4 and
                 isinstance(stop["name"], str) and stop["name"].isascii() and len(stop["name"]) <= 18,
                 f"Stop cannot be represented by the native fixture: {stop['id']}.")
         content.append("{%d,%d,%s,%d,%d,%d}," % (
@@ -148,7 +148,8 @@ def main():
         raise SystemExit("Host C compiler unavailable; engine regressions did not run.")
     # First include the real world module's private generated arrays in this
     # shared translation unit so direct portal fixtures inspect production data.
-    original = ((ENGINE / "src/td_world.c").read_text() + '\n' +
+    original = ((ENGINE / "src/td_transit.c").read_text() + '\n' +
+                (ENGINE / "src/td_world.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +
                 (ENGINE / "src/td_routes.c").read_text())

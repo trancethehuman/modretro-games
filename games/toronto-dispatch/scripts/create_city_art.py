@@ -3,6 +3,7 @@ from pathlib import Path
 import json, math, uuid, hashlib, sys
 from PIL import Image, ImageDraw
 from city_layout import *
+from streetcar_art import paint_streetcar_stops
 ROOT=Path(__file__).resolve().parents[1]; PROJECT=ROOT/'project'
 COLORS=['#071821','#306850','#86c06c','#e0f8cf']; TRANSPARENT='#65ff00'
 def ident(name):return str(uuid.uuid5(uuid.NAMESPACE_URL,'toronto-dispatch/topdown/'+name))
@@ -112,6 +113,7 @@ def main(background_only=False):
     stops=[(288,368),(320,64),(320,112),(320,160),(320,224),(320,288),(320,336),(96,64),(416,64),(320,400),(240,520),(352,512),(432,496)]
     for old_u,old_v in stops:
         u,v=location(old_u,old_v);d.rectangle((u-4,v-4,u+3,v+3),fill=COLORS[3],outline=COLORS[0]);d.line((u-2,v,u+1,v),fill=COLORS[0])
+    paint_streetcar_stops(d,0,COLORS)
     img.save(PROJECT/'assets/backgrounds/toronto_city.png')
     content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto and Island service areas; full Old Toronto boundaries remain a release check'}
     (ROOT/'content/city_art.json').write_text(json.dumps(content,indent=2)+'\n')

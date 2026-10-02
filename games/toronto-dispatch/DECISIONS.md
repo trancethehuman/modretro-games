@@ -84,6 +84,16 @@ The renderer shares the existing 360-byte text cache, reserves CGB bank-1 ground
 
 This adds navigation to the existing four areas. Full former Toronto, waterfront and fuller Islands, at least two measured hours of varied play, human handling/audio review and physical cartridge checks remain required.
 
+## Queen 501 scheduled source milestone, 2026-10-02
+
+The user already accepted autonomous paid transit and strategic alighting. The current implementation adds eight researched representative Queen platforms across west/core/east while retaining the four existing areas, all 88 contracts,43 original client/station records and 58-byte version-6 save format. Supplemental platforms 43–50 use original curb signs and shared directional boarding points; this is compressed game design, not surveyed TTC infrastructure or an added map era.
+
+A banked transit module owns the service queries used by menus, runtime and saved-trip validation. Queen service4 costs three game dollars, repeats each direction every 64 world-clock seconds and has two-second boarding windows. Eastbound index`i` departs at `4*i`; westbound at `32+4*(7-i)`. Destination selection determines the direction, and a ride takes `4*abs(destination_index-origin_index)` seconds. Confirming in either open-window second boards immediately. Current construction diversions, full 501/504 coverage, TTC branding and real fares/timetables are outside this milestone. Research and source/compression distinctions are in [STREETCAR.md](docs/STREETCAR.md).
+
+Remote paid arrivals commit an alighted state before queuing a scene; a failed queue retains the paid ride for retry. An earlier native Queen candidate completed three cross-district rides with pause/reset/map and parked-car recovery, but separate legacy-transit play exposed Union arrival onto the player's parked car. A bounded source correction retains the exact stop centre when clear, otherwise tries connected cardinal 12/18-pixel foot points clear of that car and loaded traffic; fully blocked arrivals retry without another fare. Host regressions pass. Exact final ROM `23b2a7a2…` repeats three Queen journeys with map/reset/car recovery and separately verifies subway, 94 bus, Island ferry and safe Union alighting with subsequent walking/car entry. This is the Prototype 6 milestone; these samples do not cover every platform or blocked-arrival condition. Historical results remain tied to their own ROM in [TESTING.md](TESTING.md).
+
+Moving streetcar artwork, human feedback on strategic transit, remaining platforms/arrival conditions, full former-Toronto coverage, measured two-hour varied gameplay and physical cartridge acceptance remain open. This implementation does not adopt the proposed 2026 era.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

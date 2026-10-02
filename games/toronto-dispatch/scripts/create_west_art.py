@@ -9,6 +9,7 @@ from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 from west_layout import DISTRICTS, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
+from streetcar_art import paint_streetcar_stops
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / "project"
@@ -223,6 +224,7 @@ def generate(spec):
     for point in spec["ports"]+spec["stop_candidates"]:
         assert (point["x"]//8,point["y"]//8) in visited,(spec["slug"],"foot unreachable",point)
 
+    paint_streetcar_stops(d,spec['id'],COLORS)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
         for tx in range(TW):

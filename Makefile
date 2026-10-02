@@ -6,6 +6,8 @@ check:
 	python3 scripts/test_atlas_ui.py
 	python3 scripts/check_repository.py
 	python3 games/toronto-dispatch/scripts/check_campaign.py
+	python3 games/toronto-dispatch/scripts/check_streetcar.py
+	python3 scripts/test_transit.py
 	python3 games/toronto-dispatch/scripts/check_district_world.py
 	python3 games/toronto-dispatch/scripts/create_district_world.py --check
 	python3 games/toronto-dispatch/scripts/create_district_jobs.py --check
