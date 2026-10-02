@@ -1,0 +1,236 @@
+{
+  "status": "three-scene native smoke passed; full Old Toronto unfinished",
+  "projection": "North-up local pixels; each scene is1024 by976. Distances and seam lanes are original compression.",
+  "districts": [
+    {
+      "id": 0,
+      "name": "CENTRAL TORONTO",
+      "scene": "toronto_city",
+      "symbol": "scene_toronto_city",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 2048,
+      "atlas_y": 0
+    },
+    {
+      "id": 1,
+      "name": "WEST END",
+      "scene": "toronto_west",
+      "symbol": "scene_toronto_west",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 1024,
+      "atlas_y": 0
+    },
+    {
+      "id": 2,
+      "name": "HIGH PARK/JUNCTION",
+      "scene": "toronto_high_park",
+      "symbol": "scene_toronto_high_park",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 0,
+      "atlas_y": 0
+    }
+  ],
+  "portals": [
+    {
+      "name": "Bloor east",
+      "from": {
+        "district": 0,
+        "u": 24,
+        "v": 64
+      },
+      "to": {
+        "district": 1,
+        "u": 1000,
+        "v": 64
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "College east",
+      "from": {
+        "district": 0,
+        "u": 24,
+        "v": 288
+      },
+      "to": {
+        "district": 1,
+        "u": 1000,
+        "v": 288
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Dundas east",
+      "from": {
+        "district": 0,
+        "u": 24,
+        "v": 400
+      },
+      "to": {
+        "district": 1,
+        "u": 1000,
+        "v": 400
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Queen east",
+      "from": {
+        "district": 0,
+        "u": 24,
+        "v": 528
+      },
+      "to": {
+        "district": 1,
+        "u": 1000,
+        "v": 528
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "King east",
+      "from": {
+        "district": 0,
+        "u": 24,
+        "v": 640
+      },
+      "to": {
+        "district": 1,
+        "u": 1000,
+        "v": 640
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Dundas Junction",
+      "from": {
+        "district": 1,
+        "u": 24,
+        "v": 96
+      },
+      "to": {
+        "district": 2,
+        "u": 1000,
+        "v": 96
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Bloor west",
+      "from": {
+        "district": 1,
+        "u": 24,
+        "v": 240
+      },
+      "to": {
+        "district": 2,
+        "u": 1000,
+        "v": 240
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Howard Park",
+      "from": {
+        "district": 1,
+        "u": 24,
+        "v": 352
+      },
+      "to": {
+        "district": 2,
+        "u": 1000,
+        "v": 352
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "The Queensway",
+      "from": {
+        "district": 1,
+        "u": 24,
+        "v": 640
+      },
+      "to": {
+        "district": 2,
+        "u": 1000,
+        "v": 640
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Lake Shore",
+      "from": {
+        "district": 1,
+        "u": 24,
+        "v": 832
+      },
+      "to": {
+        "district": 2,
+        "u": 1000,
+        "v": 832
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Martin Goodman",
+      "from": {
+        "district": 1,
+        "u": 24,
+        "v": 896
+      },
+      "to": {
+        "district": 2,
+        "u": 1000,
+        "v": 896
+      },
+      "access": [
+        "foot"
+      ],
+      "modeled_crossing_pixels": 48
+    }
+  ],
+  "notice": "These three scenes expand the central prototype westward. They do not cover the full former City of Toronto. Road shapes, mission entrances, timetables and art are original game design based on separately attributed geographic facts."
+}

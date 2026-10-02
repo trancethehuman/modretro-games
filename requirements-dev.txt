@@ -1,0 +1,2 @@
+# Native source PNG/palette/tile validation; runtime ROMs do not depend on Pillow.
+Pillow==12.1.1

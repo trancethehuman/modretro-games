@@ -1,0 +1,122 @@
+# Native district transition plan
+
+Updated 2026-10-02. Three native districts, the version-6 save module and the compact pedestrian selector are compiled into candidate ROM `99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f`. Native ModRetro plugin tests confirmed boot, a first delivery with held-acceleration turning, driving from core 0 to west 1, walking from west 1 to High Park 2 and a remote soft-reset restore to High Park. Testing is continuing; these checks do not establish every portal, save-recovery path or campaign route.
+
+The inspected local GBVM revision is `bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3` (engine `4.3.0-e1`, compiler `4.3.2`). Paths below identify files inside that pinned GB Studio installation, not changes to its toolchain.
+
+## Smallest playable milestone
+
+Keep `scene_toronto_city` and its tested 1,024 × 976 pixel coordinates as district 0. The current milestone adds original west and High Park/Junction districts at the same dimensions, using the existing `TORONTO` engine extension and player sprite sheet. Prove crossing, returning, parked-car recovery, active-contract continuity and cold boot in all three scenes before expanding the atlas. The 768-pixel atlas in `OLD_TORONTO_EXPANSION.md` remains a separate proposed remapping; it is not required to prove this mechanism.
+
+Each linked scene is 128 × 122 tiles: 15,616 collision cells. Each district's collision array fits a 16 KiB ROM bank individually, but its bank must not be assumed to match its background or scene descriptor. GBVM actor positions are local unsigned Q5; native driving positions are local Q4. Keep district identity separate from position. Do not assign atlas-wide coordinates to actors, cameras or signed native motion intermediates. The candidate compiles 80 contracts and 35 stops, preserving the original 72 contract IDs and 27 stop IDs and appending eight western package jobs and eight stops. These counts do not establish gameplay duration.
+
+## Verified GBVM lifecycle
+
+| Inspected source | Relevant behavior |
+| --- | --- |
+| `gbvm/src/core/vm.c:445–452` | The actual function is `vm_raise(SCRIPT_CTX *, code, size)`, which records the executing context's bank/PC and advances past the payload. This revision has no `vm_raise_exception` API. |
+| `gbvm/src/core/vm.c:754–803` | The runner clears `vm_exception_code` before each executing VM instruction. With no contexts it returns `RUNNER_DONE`. Setting exception globals from native `state_update` cannot reliably request a transition. |
+| `gbvm/include/vm.i:529–542`, `include/macro.i:10–16` | `VM_RAISE EXCEPTION_CHANGE_SCENE, 3` followed by `IMPORT_FAR_PTR_DATA _scene_symbol` is the supported bytecode/payload format. |
+| `src/lib/compiler/scriptBuilder/scriptBuilder.ts:2440–2500` | The ordinary scene-switch event fades out, sets the player's destination pose, then emits that raise and three-byte scene pointer. |
+| `gbvm/src/core/core.c:118–133` | On the exception, the engine removes LCD handlers, resets script contexts without clearing VM variables, resets timers/input/music events, reads the far scene pointer and calls `load_scene(..., TRUE)`. |
+| `gbvm/src/core/data_manager.c:192–344` | Loading updates `current_scene`, collision pointer/bank, backgrounds/palettes, player sprite/animations/bounds, actor lists, projectiles, triggers and scroll. It queues the scene init script before returning. |
+| `gbvm/src/core/core.c:155–184` | Core installs LCD handlers, calls `player_init()` then `state_init()`, repaints scroll, activates persistent actors and renders. Default fade-in runs only if no scene-init script was queued. |
+| `gbvm/src/core/gb/states_caller.s:10–39` | `state_init()` dispatches through the compiled scene-type function table to `toronto_init`, with bank switching and restoration. |
+
+Request a transition by allocating a genuine VM context with `script_execute(bank, bytecode, NULL, 0)` from the extension. Check its return value: a full context pool must leave the player on the source map, without saving a destination that never loaded. Do not call `load_scene` directly from `toronto_update`, fabricate a `SCRIPT_CTX`, or call the private scene-stack exception helper outside its VM opcode.
+
+The implemented bridge lives in the current project plugin's `td_district.c`. It builds a persistent nine-byte WRAM buffer equivalent to this compiler-standard script:
+
+```asm
+        VM_LOCK
+        VM_FADE_OUT .UI_MODAL
+        VM_RAISE EXCEPTION_CHANGE_SCENE, 3
+        IMPORT_FAR_PTR_DATA _scene_toronto_west
+```
+
+The exact bytes are lock `25`, fade `57,01`, raise `27,03,02`, then the compiler-resolved destination's bank/low-pointer/high-pointer. Pinned `VM_STEP` reads the context PC directly (`vm.c:548–568`); WRAM bytecode and payload therefore need no ROM relocation. `ReadBankedFarPtr` also reads WRAM while preserving the selected ROM bank (`bankdata.c:102–131`), as used by the stock scene-pop helper. Context bank 1 is a valid ROM bank but does not affect these WRAM reads. The module retains the buffer until the loaded scene is observed, rejects overwriting a pending request, and exposes a boot-only reset after old VM contexts have been discarded.
+
+`VM_LOCK` prevents normal scene updates while the fade executes. The change-scene exception disposes the context, so this script does not need to unlock or return. Native `toronto_init` applies destination presentation before the engine's camera/scroll repaint. The scene resource's normal init script retains responsibility for its automatic fade-in; it runs after `toronto_init`, not before it. Save and pedestrian selection logic now reside in separate banked modules to fit the native bank budget. The candidate's official build and core-to-west driving crossing passed; host bytecode checks remain separate evidence from that real VM transition.
+
+## Compiled scene binding and extension files
+
+Keep explicit, unique `.gbsres` resource symbols (`scene_toronto_city`, `scene_toronto_west`, `scene_toronto_high_park`). Resource IDs and symbols are stable authoring identifiers; scene `_index`, ROM addresses and assigned banks are not stable bindings.
+
+The compiler emits `data/<scene_symbol>.h` with `BANKREF_EXTERN(scene_symbol)` and an `extern const scene_t` declaration (`generateGBVMData.ts:306–315,546–634`, `compileData.ts:1917–1934`). Project-local `td_district.c` includes those headers and constructs descriptors using `TO_FAR_PTR_T(scene_symbol)`. It copies the actual banked `scene_t` to a local temporary with `MemcpyBanked` to obtain dimensions and the collision far pointer. It does not maintain a second guessed collision-bank table.
+
+GBVM's `far_ptr_t` is exactly bank byte plus 16-bit pointer (`include/bankdata.h:8,37–40`), **three bytes**. GBDK's unrelated `FAR_PTR` representation is not interchangeable with the exception payload. The assembler import macro resolves the current linker bank and address; never embed a bank observed in a `.noi` file.
+
+All new helpers stay under `project/plugins/toronto-driving/engine/{src,include}` and join this scene type's `engine.json` file list. Added `td_district.h/c` bind three IDs: city 0, west 1, and High Park 2 (`scene_toronto_high_park`); all expect 128 × 122 tiles. They expose current resource identification, queued scene change, boot reset, scene pointer lookup and arbitrary-district tile/walking/full-car-footprint checks. They do not own pending arrivals, portals, saves or actor allocation. Ordinary plugin builds copy the engine plugin (`enginePlugins.ts:213–215`) and discover both C and assembly under `src/**/*.@(c|s)` (`buildMakeScript.ts:33–34`). This does not require an ejected project engine, replacement `main.c`, or edits to the installed GBVM. All enabled TORONTO scene resources are compiled; this compiler filters disabled scene types, not only script-reachable scenes (`compileData.ts:1312–1326`). The candidate's native symbols resolve all three scene descriptors and their separate collision banks.
+
+## Pedestrian cache and native WRAM guard
+
+`src/td_routes.c` owns the banked pedestrian selector. The generated `td_world_routes.h` stores three bounded route tables in ROM, with up to 128 route identities per district. The driver keeps only six route IDs and six `(u,v)` start-coordinate pairs: `td_nearby_routes[6][2]` uses **24 bytes** of WRAM. The selector preserves a slot's identity while its pedestrian remains inside the retention area, scans ROM for replacement routes on a periodic or viewport-movement refresh, and avoids assigning one route to two slots. World-clock phases determine each pedestrian's current position. A full 512-byte per-district table is never copied into WRAM.
+
+The stock compiler sets `.STACK=0xDF00` (`buildMakeScript.ts:163`, `gbvm/Makefile.common:26`). Stock `absolute.c` reserves `DF00–DF9F` for the second OAM buffer, `DFA0–DFDF` for background palettes and `DFE0–DFFF` for text tiles. The native CPU stack grows downward from `DF00`; this page is not free stack or heap space. A previous compiled integration ended its linker heap at `DF90`, overlapping OAM, audio globals and bank-call bookkeeping and failing before Toronto init. The compact selector brought first booting candidate `36119ebf…` to **DDA7**, with **345 bytes** below `.STACK`; it crossed core-to-west successfully but later failed a remote soft reset. The current eight-context candidate ends at **D90F**, leaving **1,521 bytes**, and passed the corresponding native reset replay.
+
+Run this explicit symbol check after every plugin ROM build and before emulator or device use, from the repository root:
+
+```sh
+python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
+  games/toronto-dispatch/project/build/toronto-districts.gbc.debug/symbols.noi
+```
+
+The checker rejects allocated-area/OAM collisions, allocations beyond the heap marker, missing/conflicting symbols and heap ends at or above the native stack. The command additionally requires a 1,024-byte stack reserve. That threshold is a project guard, not a measured worst-case stack requirement; the earlier 345-byte gap passed the former256-byte guard before its reset failed, motivating this higher margin. The current 1,521-byte reserve and successful reset replay provide stronger separate evidence. `make check` runs nine regression cases for the checker but does not inspect a newly built ROM automatically.
+
+The current source uses eight VM contexts through the project plugin field `VM_MAX_CONTEXTS`, `cType: define`, `file: include/vm.h`, fixed at 8. The stock compiler's `ejectBuild.ts:158–204` applies file-backed engine-field defines to the copied build headers after engine plugins are installed; the installed toolchain remains unchanged. Keep `VM_CONTEXT_STACK_SIZE=64` words and `VM_HEAP_SIZE=768` shared words. Each removed context frees its 19-byte control block and 128-byte VM stack, so reducing 16 contexts to 8 frees 1,176 bytes of WRAM. The current authored scenes have empty scene scripts and no scripted actors/triggers; native transitions and bootstrap require only a small number of contexts. Reassess this fixed pool before adding concurrent script-based entities.
+
+## Split session boot from district entry
+
+The current `toronto_init` separates session actions from per-scene entry: cold boot alone restores/creates state, resets transient handling and starts audio. Normal entry preserves handling, the active contract, clock and audio mode.
+
+A clean reset discriminator is a project engine field `td_session_live`, `cType: UBYTE`, default 0, not `runtimeOnly`, defined as a native global. Plugin fields are supported by `loadEngineSchema.ts:79–87`. Generated `script_engine_init` writes such defaults (`compileBootstrap.ts:51–98,140–144`); stock bootstrap calls it before `EXCEPTION_RESET` on cold boot and soft restart (`gbvm/src/core/gb/bootstrap.s:11–16`). The compiled native bootstrap was inspected and writes zero to the linked field. A normal change-scene exception never runs bootstrap. Keep this internal field at its zero default in project settings. Set it to 1 only after a session has been restored/created. This preserves native state on crossings while discarding old pending transitions at the session boundary. One remote foot/parked-car reset is verified; paid-trip and additional recovery cases remain separate tests.
+
+On session boot, transient transition/entry state is cleared and the newest valid save is restored once. A remote saved district queues a redirect, hides PLAYER and displays fullscreen HELP over the boot map until the matching district loads; remote positions and cloned local actors are not presented on the source map. Ordinary district entry rebuilds local actor slots, collision-dependent routes and UI VRAM while preserving money/completion/contract/stage/deadline/clock/health/vehicle/foot mode. The current init also sets the correct walking/vehicle frame and presents traffic and pedestrians before returning to core, so the first rendered fade-in does not depend on a later native update. Preserve scalar speed and velocity for a clear road crossing; a blocked destination prevents the request.
+
+Actor objects, active/inactive links, sprite base tiles and VM contexts are scene-owned. Loading resets their lists before `state_init` (`data_manager.c:270–300`); copy only gameplay values, never actor pointers, across scenes. Keep authored actor/trigger scripts empty for these districts, since the current native 15-slot allocator assumes sole ownership after PLAYER. Persistent actors in this engine mean actors retained in a scene's viewport, not automatically persistent entities across scene loads.
+
+Run `td_ui_init` on each entry because loading replaces background/window graphics and attributes. Run `td_audio_init` only on session boot: it resets the user's sound mode and restarts the score (`td_audio.c:800–809`). A regular scene change resets music events but does not reset the music driver. Preserve its channel priority/ISR ownership and test uninterrupted sound and muted mode across the seam.
+
+## Implemented transition transaction
+
+The current implementation commits a complete destination snapshot after successful VM allocation:
+
+1. After processing the current frame's clock and movement, detect a crossed authorised portal in ROAM with no car-entry animation. The lateral allowance is 18 pixels for vehicles and 28 for walking. Destination collision is checked in its own compiled scene; blocked arrival or failed VM allocation leaves source state intact.
+2. On successful allocation, update native district/local/safe coordinates and, while driving, carry the parked-vehicle fields to the new district. Save the complete destination through the ordinary dual-slot writer. Preserve heading, speed and traction velocity.
+3. Return immediately from the native update. Rendered PLAYER remains at its previous source pose for the final source frame; no remote pose is copied into that source map. The pending flag blocks further input/motion until the genuine VM exception loads the destination.
+4. Destination init observes the matching compiled resource, acknowledges the helper's queue guard, rebuilds local presentation and clears pending. A reset after a complete destination commit redirects to that destination. An interrupted write falls back to either the previous complete source record or the new complete destination record; neither contains a mixed district/pose.
+
+The 22 reciprocal portals link core/west at rows 64, 288, 400, 528 and 640, and west/High Park at rows 96, 240, 352, 640 and 832, plus a foot-only link at 896. Source/arrival x positions are 24 and 1,000. Directional motion checks prevent immediate arrival bounce while continuing forward; reversing deliberately returns through the same street. The route marker chooses the next district in the current linear 0–1–2 graph and a permitted portal, and MAP's A action focuses the displayed marker.
+
+Preserve `td_last_frame` on an ordinary crossing. The first resumed native update can charge every elapsed VBlank from the last source update through fade/load/fade-in, while retaining the existing bounded motion catch-up. Do not reset the world clock or grant a fresh mission timer on entry. Cold boot/HELP retains the current deliberate pause behavior. If product design later elects to pause deadlines during loading, make that an explicit decision and regression; accidentally discarding load time creates a repeated-portal timer exploit.
+
+## State, save migration and recovery
+
+The accepted version-6 integration uses a **58-byte** native state, expanding `complete[9]` to `complete[16]`, adding a reserved byte after the five transit fields, retaining `safe_u/safe_v/map_x/map_y`, then appending `district/park_district`. Native offsets are completion bitmap 26–41, transit fields 42–46, reserved byte 47, safe coordinates 48–51, map coordinates 52–55, and district IDs 56–57. Zero the reserved byte; the larger completion bitmap supports up to 128 contracts without changing route-ID size.
+
+Verify a version-5 CRC and length **48** in its original layout before migration. Copy original completion bytes 26–34 into the first nine new bitmap bytes, zero the additional seven, map old transit/safe/map fields to their new offsets, and set both districts to 0. With original coordinates and route IDs retained, version-5 active work and paid WAIT/RIDE can survive this milestone. Version-4 likewise needs an explicit old 48-byte decoder before its existing active-contract retirement rule; iterating the new `sizeof(td_state_t)` over either legacy record is invalid. The version-6 record grows from 56 to 66 total bytes, still within the existing 128-byte slot stride. Retain CRC/version/length validation and magic-last commit ordering.
+
+Save logic now lives in banked `src/td_save.c`, with `td_save/td_restore` declared BANKED in `td_game.h` and the driver's `td_resume_mode` exposed as a shared WRAM global. Restore reads and validates one 58-byte candidate at a time, copies only the selected valid winner to `td`, and migrates legacy tails in place. This avoids simultaneous duplicate state and legacy arrays on the native CPU stack while retaining CRC/store/migration ordering. Host tests concatenate the production modules but cannot verify their native banked call ABI or deepest stack use.
+
+`td_valid_state` checks the player's district collision map and the parked vehicle's own district map. It rejects unknown districts/reserved state, invalid local positions, inconsistent completion counts, unused bitmap bits and invalid route/timer state. WAIT/RIDE validation now also requires the saved origin stop's district to match the saved player district. The bounded district lookup reads the compiler's scene descriptor and collision bytes with `ReadBankedUBYTE`, preserving bank state and checking dimensions before indexing. It never swaps active `collision_ptr` to validate SRAM.
+
+The project start scene remains district 0. A valid remote snapshot is restored once, then redirected through the same VM bridge. Fullscreen HELP covers the source during redirect, with PLAYER hidden and no remote actor allocation. A subsequent `toronto_init` consumes that redirect rather than restoring repeatedly. If context allocation fails during this boot redirect, a pending retry is attempted on later native updates; a regular portal allocation failure keeps the source playable. An invalid save falls back to the documented district-0 start. Test both hard boot and the stock soft-restart combination, including a restart during a fade.
+
+On a driving crossing, the vehicle travels with the courier: update `park_district` and its dormant local position to the new arrival. On a walking or transit crossing, leave the parked vehicle in its previous district. Parked-car rendering, walking collision, door proximity and entry must all require `park_district == district`; matching local coordinates in another district must never permit entering a remote car. Safe player coordinates belong to the current player district.
+
+## Objectives, transit and local world
+
+Globally indexed stop records carry a district. `td_near`, origin discovery and stage completion compare district before local distance. An out-of-district objective draws the next usable portal. Existing stop IDs 0–26 and contract IDs 0–71 are retained; appended stop IDs 27–34 and contract IDs 72–79 supply western package routes, with the last-mile Lodge stop requiring walking. Generated collision paths and estimated allowances establish content feasibility, not a completed native campaign or measured duration.
+
+The present `transit_origin` uses bit 6 for the Union bus selector and masks the base stop with 63. Therefore **transit stop IDs must remain below 64** until that representation is changed, even though generic stop IDs use one byte and reserve 255. Existing paid train/bus/ferry stops remain in district 0; this expansion does not add western TTC service. Any future cross-district paid ride must finish its existing countdown and request the target district through the same pending transaction. Do not charge another fare, restart the countdown or reinterpret an expired job's arrival RESULT as a fresh free-roam trip.
+
+Current integration supplies per-district traffic waypoints, sidewalk routes and street-name lookup. Local traffic positions reset to authored route starts on every entry; off-scene traffic positions are not persisted or simulated. Pedestrian phases derive from the global clock and their six sprite slots are rebuilt for the loaded district. Within a scene, visible pedestrians retain route identity. The original core signal/fine coordinates are now gated to district 0. Validate the new waypoint and sidewalk data against its actual collision resources before claiming live district behavior. Route/position values could be persisted later; sprite pointers cannot.
+
+## Required evidence before expanding further
+
+- Host behavioral tests: outward and reciprocal crossings on foot/car; held A/braking/turn inputs across the seam; full vehicle footprint on both sides; no repeat trigger; context-pool failure; wrong-scene/missing pending recovery; district-qualified objective/door checks; remote parked-car collision validation; per-district native row/waypoint ranges.
+- Independent helper result: `scripts/test_district_bridge.py` passed 710 checks under AddressSanitizer/UndefinedBehaviorSanitizer, including allocation/guard/reset/acknowledgement, distinct scene/collision banks, bounded arbitrary-district reads, 625 geometric footprint positions, interior/horizontal/vertical rail barriers, and invalid metadata. It includes unchanged production helper source; it does not execute the real GBVM runner or establish native banking.
+- Save tests: exact 58-byte native layout and bounded 66-byte records; explicit 48-byte v5/v4 migration; v5 work and paid trip retained; unknown district with valid CRC rejected; older-slot fallback; every interrupted byte write at the crossing; district-1 cold/soft boot; reset before/during/after transition; remote parked car restored in its original district.
+- Official native plugin build: candidate `99eb430c…` resolves all three scene descriptors/collision resources and passes the explicit memory guard at `D90F/DF00` with 1,521 bytes of reserve. Its symbol file SHA-256 is `2e8fca83ec54ad8517f1b6125710bc388b6952b8b9144c0b4e24133321e50526`; source fingerprint `93038e0d626669ee1d1b6809ebd68b492997c28a931300e3e59bf9e1eb207f08` identifies the build inputs, not a Git commit.
+- Native emulator evidence: boot, first delivery/held-acceleration turn, core-to-west driving and west-to-High-Park walking passed on this candidate. After holding A+B+Start+Select for 120 frames and releasing for 180, frame 3,876 showed the actual High Park scene with the courier at `(991,638.875)` in HELP/on foot, the vehicle still in district 1 at `(953.0625,628.375)`, cash 30 and clock 55 preserved. Continue testing reciprocal/all portals, active-contract and paid-trip recovery, sound continuity and stale actors. Sample update/VBlank cadence in the expanded districts and crossing latency; the previous one-scene performance caveat still applies.
+- Physical streaming and cartridge boot/readback remain separate later checks. This candidate does not establish every portal, a complete campaign, full Old Toronto coverage or two hours of tested gameplay.

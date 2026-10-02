@@ -45,6 +45,19 @@
 
 Native driving regression evidence covers the first job, the formerly stopping Distillery turn at speed 24, and parking/re-entry. Host regressions check collision, assistance and state rules; current build identities and results belong in [TESTING.md](TESTING.md). The observed approximately 29.5 rendered updates per second is a bounded sample; performance, handheld feel, human audio review and physical SRAM behaviour remain open. These results do not establish full Old Toronto coverage or the two-hour release target.
 
+## Implemented first western expansion, 2026-10-02
+
+- Three native scenes now link compressed central Toronto, Parkdale/Roncesvalles and High Park/Swansea/Junction. Each local scene remains 1,024 × 976 pixels, with a logical 3,072 × 976 atlas. Camera scrolling is local; genuine GBVM scene changes handle the authored seams.
+- Preserve the original 80 core footprints and add 37 western and 49 High Park/Junction footprints, for 166 total. Original architectural styles, carhouse bays, Regency veranda/chimneys, Sunnyside colonnade and Junction brick detail keep the new districts distinct. Generic building/shadow priority is clipped at asphalt; core tree canopies and CN raised lips retain intentional depth occlusion on passable ground.
+- Use official City/TTC topology and original pixel compression. College ends at Dundas, Howard Park reaches Parkside without a through car road across High Park, King bends into Roncesvalles, and rail/Gardiner barriers have explicit road or foot crossings. The [western research and seam table](docs/WEST_DISTRICT.md) record source facts, City data attribution and design choices separately.
+- Eleven reciprocal seam pairs connect the three scenes, including a foot-only waterfront pair. Ordinary crossings retain local player/vehicle state, job/cargo/progression, world clock and runtime audio state. A parked car carries its own district identity; foot travel into another scene leaves it where parked. Save validation reads each district's own collision resource without changing the loaded scene.
+- The completion bitmap now has capacity for 80 contracts. Eight progression-gated western package routes and eight clients are appended after the unchanged 72-contract/27-stop prefix. The Colborne service flag requires an on-foot handoff, even when a parked car is nearby; its Queensway parking approach keeps the intended last-mile walk short. A signed-return description continues to mean an ordered return route, with no new signature system.
+- The route pool contains 358 collision-validated paths, with six nearby pedestrian actors in the loaded scene. A banked selector stores six identities and a 24-byte coordinate cache in RAM; each western scene also has six authored closed traffic loops. Rendered actors remain bounded as the world grows.
+- Version-6 alternating SRAM records store district-qualified player/parked-car positions and the larger completion bitmap. Valid version-5 state migrates into the expanded core layout; the older version-4 migration still keeps earnings/completions while retiring obsolete active work. CRC, last-byte commit and interrupted-write checks remain part of the host suite; physical cold boot/power-loss proof is pending.
+- Registered PNGs, native palette/priority bytes and collision arrays must agree. Repository checks validate actual source pixel budgets, full overlapped vehicle tiles, accepted seam lanes, western clients, traffic/NPC paths and deterministic native content/headers. These checks remain separate from ROM execution evidence.
+
+The expanded ROM boots and central-to-west driving has been verified. Remaining reciprocal crossings, western handoffs, parked-car recovery, save/transit cases and crowded-scene performance still need native tests; [TESTING.md](TESTING.md) owns exact build evidence. Full former-Toronto coverage, measured two-hour gameplay, western scheduled TTC services, a confirmed current browser preview and physical cartridge checks remain open. The 2026 era is still a proposal, and this source milestone does not establish publication of an expanded release.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.
@@ -54,12 +67,12 @@ Native driving regression evidence covers the first job, the formerly stopping D
 - Straight north-up pixel artwork and matching native collision grid, with CGB background priority for roofs and canopies.
 - Implemented controls: left/right steer the vehicle; A accelerates; B brakes and reverses near rest; Select interacts at pickup/drop-off; Start pauses. On foot, the D-pad walks, A enters the nearby parked car and B opens transit. Handheld comfort still needs human playtesting.
 - A documented baseline transit map rather than changing live detours. The map era is not yet selected.
-- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. The district layout remains a proposal and has not been implemented. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
+- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. That full layout remains a proposal; the implemented three-scene western stage is its own compressed layout. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
 
 ## Unresolved implementation questions
 
 - The native TORONTO scene extension builds and runs. Continue tuning driving, occlusion, input responsiveness and crowded-scene performance on the handheld.
-- Expanded-district ROM banking, actor/performance budgets, cross-district save/transit preservation and audio mix after listening. The current single-city dimensions, save implementation and audio driver are established prototype choices.
+- Remaining expanded-district native crossings, ROM/resource and crowded-actor performance, parked-car/save/transit recovery and audio mix after listening. Per-scene dimensions and the version-6 save layout are implemented choices; host checks and one native crossing do not complete the other acceptance gates.
 - Car handling parameters, realistic traffic-rule penalties, and mission time budgets after playtesting.
 - Exact hardware/cartridge edition and Developer Mode readiness.
 - Island delivery transport: ferry/on-foot or specifically authorised service-vehicle jobs, consistent with researched access rules.

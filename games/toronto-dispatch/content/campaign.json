@@ -1,6 +1,6 @@
 {
   "status": "engine-integrated",
-  "scope": "Compressed central Toronto prototype; broad Old Toronto map accuracy and full campaign duration remain release checks",
+  "scope": "Three linked original compressed scenes: central Toronto, western neighbourhoods and High Park/Junction. Full Old Toronto and measured duration remain release checks.",
   "duration_target_minutes": 120,
   "duration_verified": false,
   "duration_notice": "Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.",
@@ -31,168 +31,216 @@
       "u": 560,
       "v": 720,
       "name": "UNION DEPOT",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 1,
       "u": 768,
       "v": 720,
       "name": "ST LAWRENCE",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 2,
       "u": 816,
       "v": 720,
       "name": "DISTILLERY",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 3,
       "u": 560,
       "v": 528,
       "name": "CITY HALL",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 4,
       "u": 336,
       "v": 528,
       "name": "QUEEN WEST",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 5,
       "u": 336,
       "v": 400,
       "name": "AGO / GRANGE",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 6,
       "u": 480,
       "v": 64,
       "name": "ROM / BLOOR",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 7,
       "u": 208,
       "v": 400,
       "name": "KENSINGTON",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 8,
       "u": 80,
       "v": 528,
       "name": "DUFFERIN",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 9,
       "u": 944,
       "v": 528,
       "name": "RIVERSIDE",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 10,
       "u": 640,
       "v": 784,
       "name": "FERRY TERMINAL",
-      "transit": 3
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 11,
       "u": 816,
       "v": 784,
       "name": "EAST BAYFRONT",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 12,
       "u": 640,
       "v": 640,
       "name": "KING STATION",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 13,
       "u": 640,
       "v": 528,
       "name": "QUEEN STATION",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 14,
       "u": 640,
       "v": 400,
       "name": "DUNDAS STATION",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 15,
       "u": 640,
       "v": 288,
       "name": "COLLEGE STATION",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 16,
       "u": 640,
       "v": 176,
       "name": "WELLESLEY",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 17,
       "u": 640,
       "v": 64,
       "name": "BLOOR-YONGE",
-      "transit": 1
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 18,
       "u": 144,
       "v": 64,
       "name": "OSSINGTON BUS",
-      "transit": 2
+      "transit": 2,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 19,
       "u": 816,
       "v": 64,
       "name": "CASTLE FRANK",
-      "transit": 2
+      "transit": 2,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 20,
       "u": 444,
       "v": 928,
       "name": "HANLANS POINT",
-      "transit": 3
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 21,
       "u": 720,
       "v": 920,
       "name": "CENTRE ISLAND",
-      "transit": 3
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 22,
       "u": 848,
       "v": 896,
       "name": "WARDS ISLAND",
-      "transit": 3
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 23,
       "u": 336,
       "v": 720,
       "name": "CN TOWER",
-      "transit": 0
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 24,
@@ -200,7 +248,9 @@
       "v": 928,
       "name": "HANLAN SERVICE",
       "transit": 0,
-      "location_notice": "Original fictional delivery entrance on compressed Island terrain"
+      "location_notice": "Original fictional delivery entrance on compressed Island terrain",
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 25,
@@ -208,7 +258,9 @@
       "v": 944,
       "name": "CENTRE PARK POST",
       "transit": 0,
-      "location_notice": "Original fictional delivery entrance on compressed Island terrain"
+      "location_notice": "Original fictional delivery entrance on compressed Island terrain",
+      "district": 0,
+      "reserved": 0
     },
     {
       "id": 26,
@@ -216,7 +268,121 @@
       "v": 912,
       "name": "WARD COTTAGE POST",
       "transit": 0,
-      "location_notice": "Original fictional delivery entrance on compressed Island terrain"
+      "location_notice": "Original fictional delivery entrance on compressed Island terrain",
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 27,
+      "u": 976,
+      "v": 288,
+      "name": "DUFFERIN COLLEGE",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Dufferin-side College",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door",
+      "source_relation": "College west of retained core Dufferin; not a relocated Dufferin Grove park."
+    },
+    {
+      "id": 28,
+      "u": 800,
+      "v": 64,
+      "name": "LANSDOWNE BLOOR",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Lansdowne / Bloor",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door"
+    },
+    {
+      "id": 29,
+      "u": 864,
+      "v": 528,
+      "name": "PARKDALE QUEEN",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Parkdale / Queen",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door"
+    },
+    {
+      "id": 30,
+      "u": 416,
+      "v": 352,
+      "name": "RONCY HOWARD PARK",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Roncesvalles / Howard",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door"
+    },
+    {
+      "id": 31,
+      "u": 544,
+      "v": 432,
+      "name": "SORAUREN SERVICE",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Sorauren Works",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door"
+    },
+    {
+      "id": 32,
+      "u": 656,
+      "v": 272,
+      "name": "BLOOR PARK GATE",
+      "transit": 0,
+      "district": 2,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "High Park Gate",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door",
+      "source_relation": "Roadside Bloor service point, not a visitor car entrance into High Park."
+    },
+    {
+      "id": 33,
+      "u": 944,
+      "v": 608,
+      "name": "PARKSIDE SOUTH",
+      "transit": 0,
+      "district": 2,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Parkside Depot",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door"
+    },
+    {
+      "id": 34,
+      "u": 784,
+      "v": 608,
+      "name": "COLBORNE SERVICE",
+      "transit": 0,
+      "district": 2,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Colborne Service",
+      "geography_reference": "content/districts/west-research.json",
+      "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door",
+      "source_relation": "Fictional park walk from south Queensway approach; not a claim of real all-day access policy.",
+      "parking_anchor": {
+        "u": 736,
+        "v": 640
+      },
+      "access_notice": "Game requires parking and walking; this does not reproduce real seasonal vehicle-access rules"
     }
   ],
   "quests": [
@@ -2774,6 +2940,897 @@
         "modeled_road_and_foot_seconds": 16.5,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
+    },
+    {
+      "id": "contract-73",
+      "title": "WEST WINDOW RUN",
+      "brief": [
+        "WEST SHOP PARCELS",
+        "RETURN TO UNION"
+      ],
+      "chapter": "Western package routes",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        27,
+        29,
+        31,
+        0
+      ],
+      "time_limit_seconds": 230,
+      "reward": 215,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect shop parcels"
+        },
+        {
+          "stop_id": 27,
+          "district": 1,
+          "objective": "Dufferin handoff"
+        },
+        {
+          "stop_id": 29,
+          "district": 1,
+          "objective": "Parkdale shop handoff"
+        },
+        {
+          "stop_id": 31,
+          "district": 1,
+          "objective": "Sorauren handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return empty satchel"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3264,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 32.2,
+        "normalized_moving_seconds_slow": 51.2,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 27,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 1040,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "College east"
+            ]
+          },
+          {
+            "from_stop": 27,
+            "to_stop": 29,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 352,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 29,
+            "to_stop": 31,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 480,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 31,
+            "to_stop": 0,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 1392,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-74",
+      "title": "PARKDALE ART",
+      "brief": [
+        "SMALL FRAMED ART",
+        "SCOOTER CARE RUN"
+      ],
+      "chapter": "Western package routes",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 3,
+      "min_completed": 6,
+      "route": [
+        5,
+        29,
+        31,
+        5
+      ],
+      "time_limit_seconds": 190,
+      "reward": 199,
+      "stages": [
+        {
+          "stop_id": 5,
+          "district": 0,
+          "objective": "Collect framed art"
+        },
+        {
+          "stop_id": 29,
+          "district": 1,
+          "objective": "Parkdale exhibit handoff"
+        },
+        {
+          "stop_id": 31,
+          "district": 1,
+          "objective": "Sorauren frame exchange"
+        },
+        {
+          "stop_id": 5,
+          "district": 0,
+          "objective": "Return borrowed case"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 2096,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 32.9,
+        "normalized_moving_seconds_slow": 32.9,
+        "assumed_interaction_allowance_seconds": 20,
+        "legs": [
+          {
+            "from_stop": 5,
+            "to_stop": 29,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 624,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Dundas east"
+            ]
+          },
+          {
+            "from_stop": 29,
+            "to_stop": 31,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 480,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 31,
+            "to_stop": 5,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 992,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Dundas east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-75",
+      "title": "WEST RUSH FILES",
+      "brief": [
+        "MOTORCYCLE FILES",
+        "CHOOSE A CORRIDOR"
+      ],
+      "chapter": "Western package routes",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        0,
+        28,
+        32,
+        30,
+        0
+      ],
+      "time_limit_seconds": 170,
+      "reward": 265,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect urgent files"
+        },
+        {
+          "stop_id": 28,
+          "district": 1,
+          "objective": "Lansdowne office handoff"
+        },
+        {
+          "stop_id": 32,
+          "district": 2,
+          "objective": "Bloor gate handoff"
+        },
+        {
+          "stop_id": 30,
+          "district": 1,
+          "objective": "Howard Park office handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return dispatch copy"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 5264,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 52.0,
+        "normalized_moving_seconds_slow": 52.0,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 28,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 1440,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east"
+            ]
+          },
+          {
+            "from_stop": 28,
+            "to_stop": 32,
+            "from_district": 1,
+            "to_district": 2,
+            "vehicle_pixels": 1376,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor west"
+            ]
+          },
+          {
+            "from_stop": 32,
+            "to_stop": 30,
+            "from_district": 2,
+            "to_district": 1,
+            "vehicle_pixels": 864,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Howard Park"
+            ]
+          },
+          {
+            "from_stop": 30,
+            "to_stop": 0,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 1584,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Dundas east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-76",
+      "title": "WEST LOADING RUN",
+      "brief": [
+        "TRUCK SUPPLY LOAD",
+        "WIDE ROAD APPROACH"
+      ],
+      "chapter": "Western package routes",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        11,
+        27,
+        31,
+        33,
+        29,
+        0
+      ],
+      "time_limit_seconds": 270,
+      "reward": 290,
+      "stages": [
+        {
+          "stop_id": 11,
+          "district": 0,
+          "objective": "Collect boxed supplies"
+        },
+        {
+          "stop_id": 27,
+          "district": 1,
+          "objective": "Dufferin supply drop"
+        },
+        {
+          "stop_id": 31,
+          "district": 1,
+          "objective": "Sorauren loading drop"
+        },
+        {
+          "stop_id": 33,
+          "district": 2,
+          "objective": "Parkside roadside drop"
+        },
+        {
+          "stop_id": 29,
+          "district": 1,
+          "objective": "Parkdale stock drop"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return empty crates"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 4800,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 67.4,
+        "normalized_moving_seconds_slow": 67.4,
+        "assumed_interaction_allowance_seconds": 30,
+        "legs": [
+          {
+            "from_stop": 11,
+            "to_stop": 27,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 1360,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "College east"
+            ]
+          },
+          {
+            "from_stop": 27,
+            "to_stop": 31,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 576,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 31,
+            "to_stop": 33,
+            "from_district": 1,
+            "to_district": 2,
+            "vehicle_pixels": 864,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "The Queensway"
+            ]
+          },
+          {
+            "from_stop": 33,
+            "to_stop": 29,
+            "from_district": 2,
+            "to_district": 1,
+            "vehicle_pixels": 1088,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "The Queensway"
+            ]
+          },
+          {
+            "from_stop": 29,
+            "to_stop": 0,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 912,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-77",
+      "title": "WEST TRANSFER KIT",
+      "brief": [
+        "SMALL PACKAGE KIT",
+        "TRAIN BUS OR ROAD"
+      ],
+      "chapter": "Western package routes",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        17,
+        18,
+        28,
+        30,
+        0
+      ],
+      "time_limit_seconds": 255,
+      "reward": 242,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect small repair kit"
+        },
+        {
+          "stop_id": 17,
+          "district": 0,
+          "objective": "Bloor Yonge handoff"
+        },
+        {
+          "stop_id": 18,
+          "district": 0,
+          "objective": "Ossington relay handoff"
+        },
+        {
+          "stop_id": 28,
+          "district": 1,
+          "objective": "Lansdowne handoff"
+        },
+        {
+          "stop_id": 30,
+          "district": 1,
+          "objective": "Howard Park handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return reusable pouch"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3856,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 38.1,
+        "normalized_moving_seconds_slow": 60.5,
+        "assumed_interaction_allowance_seconds": 30,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 17,
+            "from_district": 0,
+            "to_district": 0,
+            "vehicle_pixels": 736,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 17,
+            "to_stop": 18,
+            "from_district": 0,
+            "to_district": 0,
+            "vehicle_pixels": 496,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 18,
+            "to_stop": 28,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 368,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor east"
+            ]
+          },
+          {
+            "from_stop": 28,
+            "to_stop": 30,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 672,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 30,
+            "to_stop": 0,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 1584,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Dundas east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-78",
+      "title": "LODGE LAST MILE",
+      "brief": [
+        "PARK THEN WALK",
+        "LODGE LAST MILE"
+      ],
+      "chapter": "Western package routes",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        29,
+        34,
+        33,
+        0
+      ],
+      "time_limit_seconds": 270,
+      "reward": 241,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect museum parcel"
+        },
+        {
+          "stop_id": 29,
+          "district": 1,
+          "objective": "Parkdale package exchange"
+        },
+        {
+          "stop_id": 34,
+          "district": 2,
+          "objective": "Walk to Lodge service"
+        },
+        {
+          "stop_id": 33,
+          "district": 2,
+          "objective": "Parkside return handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return collection box"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 4304,
+        "required_walking_pixels": 160,
+        "normalized_moving_seconds_fast": 47.8,
+        "normalized_moving_seconds_slow": 72.8,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 29,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 912,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east"
+            ]
+          },
+          {
+            "from_stop": 29,
+            "to_stop": 34,
+            "from_district": 1,
+            "to_district": 2,
+            "vehicle_pixels": 1264,
+            "required_walking_pixels": 80,
+            "shortest_modeled_seams": [
+              "The Queensway"
+            ]
+          },
+          {
+            "from_stop": 34,
+            "to_stop": 33,
+            "from_district": 2,
+            "to_district": 2,
+            "vehicle_pixels": 240,
+            "required_walking_pixels": 80,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 33,
+            "to_stop": 0,
+            "from_district": 2,
+            "to_district": 0,
+            "vehicle_pixels": 1888,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "The Queensway",
+              "King east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-79",
+      "title": "WEST RETURN PAPERS",
+      "brief": [
+        "CAR DOCUMENT ROUND",
+        "RETURN ORIGINAL"
+      ],
+      "chapter": "Western package routes",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        0,
+        31,
+        30,
+        27,
+        0
+      ],
+      "time_limit_seconds": 205,
+      "reward": 216,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect return documents"
+        },
+        {
+          "stop_id": 31,
+          "district": 1,
+          "objective": "Sorauren document exchange"
+        },
+        {
+          "stop_id": 30,
+          "district": 1,
+          "objective": "Howard Park exchange"
+        },
+        {
+          "stop_id": 27,
+          "district": 1,
+          "objective": "Dufferin return handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return original to Union"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3296,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 38.2,
+        "normalized_moving_seconds_slow": 38.2,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 31,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 1392,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "King east"
+            ]
+          },
+          {
+            "from_stop": 31,
+            "to_stop": 30,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 240,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 30,
+            "to_stop": 27,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 624,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 27,
+            "to_stop": 0,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 1040,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "College east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-80",
+      "title": "WEST CLOSING ROUND",
+      "brief": [
+        "SCOOTER SHOP ROUND",
+        "WEST TO HIGH PARK"
+      ],
+      "chapter": "Western package routes",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 3,
+      "min_completed": 18,
+      "route": [
+        0,
+        27,
+        28,
+        32,
+        33,
+        30,
+        29,
+        0
+      ],
+      "time_limit_seconds": 330,
+      "reward": 314,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect closing parcels"
+        },
+        {
+          "stop_id": 27,
+          "district": 1,
+          "objective": "Dufferin handoff"
+        },
+        {
+          "stop_id": 28,
+          "district": 1,
+          "objective": "Lansdowne shop handoff"
+        },
+        {
+          "stop_id": 32,
+          "district": 2,
+          "objective": "Bloor gate handoff"
+        },
+        {
+          "stop_id": 33,
+          "district": 2,
+          "objective": "Parkside shop handoff"
+        },
+        {
+          "stop_id": 30,
+          "district": 1,
+          "objective": "Howard Park handoff"
+        },
+        {
+          "stop_id": 29,
+          "district": 1,
+          "objective": "Parkdale final handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return shift satchel"
+        }
+      ],
+      "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 5776,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 90.6,
+        "normalized_moving_seconds_slow": 90.6,
+        "assumed_interaction_allowance_seconds": 40,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 27,
+            "from_district": 0,
+            "to_district": 1,
+            "vehicle_pixels": 1040,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "College east"
+            ]
+          },
+          {
+            "from_stop": 27,
+            "to_stop": 28,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 400,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 28,
+            "to_stop": 32,
+            "from_district": 1,
+            "to_district": 2,
+            "vehicle_pixels": 1376,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor west"
+            ]
+          },
+          {
+            "from_stop": 32,
+            "to_stop": 33,
+            "from_district": 2,
+            "to_district": 2,
+            "vehicle_pixels": 624,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 33,
+            "to_stop": 30,
+            "from_district": 2,
+            "to_district": 1,
+            "vehicle_pixels": 752,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Howard Park"
+            ]
+          },
+          {
+            "from_stop": 30,
+            "to_stop": 29,
+            "from_district": 1,
+            "to_district": 1,
+            "vehicle_pixels": 672,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 29,
+            "to_stop": 0,
+            "from_district": 1,
+            "to_district": 0,
+            "vehicle_pixels": 912,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east"
+            ]
+          }
+        ],
+        "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
       }
     }
   ],

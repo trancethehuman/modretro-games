@@ -21,6 +21,8 @@ import zipfile
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 SOURCE_URL = "https://github.com/trancethehuman/modretro-games"
+TORONTO_DATA_ATTRIBUTION = "Contains information licensed under the Open Government Licence – Toronto."
+TORONTO_DATA_LICENCE_URL = "https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/"
 SAFE_FILENAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
 MARKDOWN_LINK = re.compile(
     r'(?P<label>!?\[[^\]\n]*\])\((?P<target><[^>\n]+>|[^\s)]+)'
@@ -98,6 +100,17 @@ def pinned_toolchain(build_document: str) -> dict[str, str]:
     return {name: rows[name] for name in required}
 
 
+def validate_game_notices(game: str, notices: str) -> None:
+    """The ZIP must carry the City's credit, not rely on a source-only notice."""
+    if game == "toronto-dispatch" and (
+        TORONTO_DATA_ATTRIBUTION not in notices or TORONTO_DATA_LICENCE_URL not in notices
+    ):
+        raise ValueError(
+            "Committed Toronto ROM_NOTICES.txt must include the City OGL attribution "
+            "and official licence link; nothing was packaged"
+        )
+
+
 def output_path(value: Path) -> Path:
     if not SAFE_FILENAME.fullmatch(value.name) or value.suffix != ".zip":
         raise ValueError("--output must have a safe filename ending in .zip")
@@ -151,6 +164,7 @@ def bundle(args: argparse.Namespace) -> dict[str, object]:
     loading_path = f"{game_path}/docs/LOADING.md"
     loading = public_loading_links(committed_text(commit, loading_path), commit, loading_path)
     notices = committed_text(commit, f"{game_path}/docs/ROM_NOTICES.txt")
+    validate_game_notices(args.game, notices)
     licence = committed_text(commit, "LICENSE")
     build_document = committed_text(commit, f"{game_path}/docs/BUILD.md")
     build_info = {

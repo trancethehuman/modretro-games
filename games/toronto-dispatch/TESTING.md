@@ -1,5 +1,39 @@
 # Testing record
 
+## Linked western districts — 2026-10-02
+
+Current native ROM: `project/build/toronto-districts.gbc`, 262,144 bytes, CGB-only, valid MBC5+RUMBLE+RAM+BATTERY header with 32 KiB SRAM. Official plugin/GB Studio CLI build exited 0. SHA-256:
+
+```
+99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f
+```
+
+Build source fingerprint `93038e0d626669ee1d1b6809ebd68b492997c28a931300e3e59bf9e1eb207f08`; project revision `ca42f5fb8f7ef29e5c8c4dcfb18bf770e145257fe7acc99d54624db4d5d10f25`; matching NOI digest `2e8fca83ec54ad8517f1b6125710bc388b6952b8b9144c0b4e24133321e50526`. PyBoy 2.7.0 CGB mode, worker `6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925`. The build emitted the known Node DEP0190 warning, five SDCC conditional-flow warnings in TORONTO.c and two upstream sfx_player.h unreachable-code warnings; no build error.
+
+### Source and memory checks
+
+`make check` passes 1,212 behavioral checks around unchanged production driving/save/route C, 710 independent district-bridge checks under ASan/UBSan, nine ROM-memory guard fixtures, and all repository/campaign/district/generator checks. The three actual 128×122 native scenes have 11 reciprocal seam pairs, 35 service points, 80 contracts, 12 new swept-clear traffic loops, 358 fixed pedestrian routes and 166 buildings. Source tile patterns are core185/136, west156/133, HighPark89/75 (exact/flip-canonical). These establish source consistency, not full geographical fidelity, all native endpoints or playtime.
+
+Post-build `check_rom_memory.py --min-stack-reserve 1024` passes: heap ends at D90F, fixed stack/OAM boundary DF00, leaving 1,521 bytes. Project-local VM_MAX_CONTEXTS=8 is applied through the official compiler's file-backed engine field. Only six nearby pedestrian route starts (24 bytes) are cached in WRAM; the full tables are banked ROM. Save recovery uses one 58-byte candidate and expands legacy tails in place. This allocation margin does not measure maximum stack depth.
+
+Two failed attempts are retained privately: `districts-first-native-20261002` / d9e5eeb0… reached kernel panic with heap DF90 overlapping the DF00 OAM page; `districts-native-fixed-20261002` /36119ebf… passed ordinary district travel but exposed corrupted remote soft-reset recovery with only345 bytes of stack reserve. Their final event digests are respectively `d6517b5d1b27fb207c117c2b5cb7877a76570b3e3b5e45343ce88aab09164d44` and `f1998e2f0ecf8d3a88186ec6eeb02ba0064c31ab591ed95df3a17fcb8c06eb7b`. Neither is a release build. A separately compiled intermediate22882ba1… was not native-tested.
+
+### Exact current-ROM native recordings
+
+All inputs were ordinary held-button sets. State, scene identity and OAM were inspected read-only; no progress or memory was injected. Both clean-boot workers and recordings were closed after testing.
+
+- `districts-native-release-20261002`: 912 frames,96 events, digest `ddf3222aa18410d0a71acdcdacdf5cc2587a32d933e235d204d664d9355c38b7`. Market Start pickup/delivery completed at frame740, condition100, unique completion1, cash30→139. Holding A+right for48 frames progressed from (777.6875,720), speed8, heading0 to (803.125,744.5625), speed21, heading4. Another24 frames of A reached (803.1875,776.0625), speed24. Steering retained acceleration and movement. Braking was then applied.
+- `districts-crossings-final-20261002`: 7,366 frames,386 events, digest `e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848`. Normal driving crossed core→west, walking crossed west→HighPark, returned HighPark→west, recovered/entered the parked car and drove west→core. Plugin source debugging confirmed each actual destination scene, rather than inferring scene changes from saved district IDs.
+- At frame3576, HighPark walking position was (974,638.875), parked car (953.0625,628.375) remained in west; cash30/world second55. Soft reset with A+B+Start+Select120 frames, then neutral180, restored HighPark and HELP at frame3876, with player/parked districts2/1 and cash/world clock retained. Bootstrap guard was0100 (live/pending).
+- HighPark's local map scrolled left for400 frames and displayed HIGH PARK/JUNCTION. The world remained at second55 while MAP was open. A focused the route marker; B returned to pause/roam. This verifies the loaded district's scrollable map, not a browsable full-city atlas.
+- Car-entry samples at6578→6610 showed the approach/entry and returned to driving with onfoot0 in west. At6824 the genuine core scene was loaded, with both player and car district0. A bounded OAM sample had8 visible hardware objects, peak4/scanline and zero over-limit lines; it does not establish crowded-scene performance throughout the city.
+- A new Market Start contract was accepted before crossing back into west. At7066 the native state was job0/stage0/left118, cash30, world99/subsecond45. The same reset/release sequence restored the actual west scene at7366 with those values unchanged, speed reset0 behind HELP. HUD guidance named CENTRAL TORONTO for the remote objective.
+
+- `districts-transit-final-20261002`: 1,638 frames,123 events, digest `66fd9211937e7ee9f8da8f7a98b084ac6ddfcdfef5867b0336c6d474cf212593`. Ordinary parking/walking and route-selection inputs entered Line1 WAIT at Union. Pausing for180 frames froze the wait clock; after resuming, the autonomous second18 departure deducted3 credits once. At1638 the courier arrived at KING STATION (640,640), onfoot1, cash27, worldsecond19. No game state was injected. This is a core subway smoke, not verification of all bus/ferry services or new western routes.
+
+Native smoke covers four directed seams and two remote saved-district restarts; it does not cover every one of22 directed portals, all80 contracts, v5 migration on physical hardware or a complete campaign. Existing core-only subway/bus/ferry and audio evidence below applies to its identified earlier ROM. The following current-ROM transit regression is separate from earlier audio PCM checks. Full former City of Toronto, at least two hours of varied enjoyable gameplay, human audio/handling assessment and physical cartridge boot/save/read-back remain unverified. Read-only USB discovery on2026-10-02 succeeded with zero devices and zero unmatched USB functions. No stream, flash, firmware action or hardware cold boot was attempted. Browser recording-close acknowledgement remains UNKNOWN; the retained historical browser was not refreshed.
+
+
 ## Wider roads, corner handling, world actors and audio — 2026-10-02
 
 Latest native ROM: `project/build/toronto-dispatch.gbc`, 262,144 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB declared SRAM. The official GB Studio CLI build exited 0 and the plugin verified the logo/header. SHA-256:

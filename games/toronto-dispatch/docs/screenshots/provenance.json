@@ -38,5 +38,25 @@
     "journal_event_digest": "dad5476df470a5febb1bcb1329a6f79885b362c2c339efc98f98f2cab54da3a2",
     "journal_events": 333,
     "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  },
+  {
+    "file": "roncesvalles.png",
+    "frame": 2452,
+    "rom_sha256": "99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f",
+    "png_sha256": "d75a481e0c2bf8be141bcb7b62228e08980a6f3d61a9d9b5bcfc413d517df19a",
+    "session_id": "edb458fe24d741318e9bd640e79ef1b3",
+    "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
+    "journal_events": 386,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  },
+  {
+    "file": "high-park-map.png",
+    "frame": 4316,
+    "rom_sha256": "99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f",
+    "png_sha256": "1853035b0d483bc8bf38c534dfa7dd5cac136379b840d108bcab67f1a739226e",
+    "session_id": "edb458fe24d741318e9bd640e79ef1b3",
+    "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
+    "journal_events": 386,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
   }
 ]

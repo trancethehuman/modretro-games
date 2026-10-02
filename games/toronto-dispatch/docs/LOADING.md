@@ -2,7 +2,7 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The current 2026-10-02 handling/city/audio ROM is 262,144 bytes, SHA-256 `a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59`. Its milestone identifier is `v0.2.0-prototype.2`; download available bundles from the [releases page](https://github.com/trancethehuman/modretro-games/releases). The official native build/header checks, 471 host engine checks, representative native button scenarios and a separate eight-interval PCM run for this exact ROM passed. A different build needs its own inspection and test identity.
+The current linked-district ROM is 262,144 bytes, SHA-256 `99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f`, named `toronto-districts.gbc`. Its milestone identifier is `v0.2.0-prototype.3`; use the matching bundle from the [releases page](https://github.com/trancethehuman/modretro-games/releases). It has three linked compressed districts,80 authored contracts and35 service points. Official build/header/memory checks,1,212 host engine checks,710 bridge checks and native delivery/held-acceleration steering/district travel/saved restart smoke passed. A different build needs its own inspection and test identity.
 
 Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
 
@@ -22,22 +22,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch.gbc
+games/toronto-dispatch/project/build/toronto-districts.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-dispatch.gbc`, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-districts.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-districts.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-districts.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -76,7 +76,7 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Audio | Start → Audio, then A cycles music + effects, effects only and silent; B returns. Check the city score, engine and braking sounds, short delivery/transit cues, and silence in silent mode. Menu/world pause stops music and engine; short interface/result cues may finish. The mode defaults on each boot |
 | Readability/performance | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input |
 
-Keep a note of the ROM SHA-256 and any problem's location/action. Do not expect old prototype saves to work across save-format changes; the current build's save version and verified behaviour are documented in BUILD/TESTING. Emulator reset persistence does not prove power-off persistence on a physical cartridge.
+Keep a note of the ROM SHA-256 and any problem's location/action. Version6 includes migration for valid v5 prototype saves, retaining the original72 contract IDs. Host checks cover migration; physical cartridge migration is unverified. Other save-format changes may retire active jobs or reject earlier records. See BUILD/TESTING. Emulator reset persistence does not prove power-off persistence on a physical cartridge.
 
 ## If installation does not finish
 

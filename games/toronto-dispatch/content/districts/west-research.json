@@ -1,0 +1,1904 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-02",
+  "status": "Source research plus original authored native layout; scene integration and ROM/hardware verification owned separately.",
+  "scope": {
+    "boundary": "Former City of Toronto TORONTO polygon, final pre-amalgamation municipality; not GTA or entire present Toronto.",
+    "first_west_stage": "Preserved core plus two western scenes; incomplete former-city coverage.",
+    "district1": "West of retained Dufferin core toward Parkdale/Roncesvalles. Dufferin Grove east of the seam remains core geography.",
+    "district2": "High Park, Swansea and within-boundary Junction corridors.",
+    "era": "2026 reference review is a proposal, not a human-adopted game era. Stable corridors selected; no transient detours/current fare/schedule imported."
+  },
+  "licence": {
+    "name": "Open Government Licence - Toronto",
+    "version": "1.0",
+    "url": "https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/",
+    "dataset_portals_declare_licence": true,
+    "ckan_package_license_fields_observed": null,
+    "blank_api_fields_are_not_the_licence": "Portal declaration and licence page are the reuse evidence; blank ArcGIS copyright fields alone prove nothing.",
+    "attribution": "Contains information licensed under the Open Government Licence \u2013 Toronto.",
+    "reuse": "Allows commercial copying/adaptation/distribution subject to attribution; excludes third-party rights, personal information, official marks/logos, and does not imply endorsement.",
+    "included_here": "Selected named intersections, truncated coordinates, topology/classification facts and provenance; no raw official geometry or map imagery bundled. Original compressed pixel polylines are authored game design.",
+    "publication_action": "Keep this attribution with derived data; parent must add dataset notices to THIRD_PARTY_NOTICES.md before publishing the expanded assets."
+  },
+  "sources": [
+    {
+      "id": "city_centreline",
+      "url": "https://open.toronto.ca/dataset/toronto-centreline-tcl/",
+      "reviewed_on": "2026-10-02",
+      "supports": "Toronto Centreline; named-road junction topology and feature classes.",
+      "rights": "Open Government Licence - Toronto"
+    },
+    {
+      "id": "city_former_boundary",
+      "url": "https://open.toronto.ca/dataset/former-municipality-boundaries/",
+      "reviewed_on": "2026-10-02",
+      "supports": "Former municipality TORONTO polygon, not the present amalgamated city boundary.",
+      "rights": "Open Government Licence - Toronto"
+    },
+    {
+      "id": "city_licence",
+      "url": "https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/",
+      "reviewed_on": "2026-10-02",
+      "supports": "Version1.0 reuse, attribution, exclusions and no-endorsement terms.",
+      "rights": "Open Government Licence - Toronto"
+    },
+    {
+      "id": "college_dundas",
+      "url": "https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/torontos-cycling-infrastructure/college-dundas-intersection-improvements/",
+      "reviewed_on": "2026-10-02",
+      "supports": "College meets Dundas; road/rail crossing context.",
+      "rights": "Reference only; no text or images copied"
+    },
+    {
+      "id": "ttc_506",
+      "url": "https://www.ttc.ca/routes-and-schedules/506/0/3030",
+      "reviewed_on": "2026-10-02",
+      "supports": "Normal 506 corridor via College, Dundas, Howard Park to High Park Loop. Live detours are separate.",
+      "rights": "Reference only; no branding, timetable or geometry bundled"
+    },
+    {
+      "id": "ttc_504",
+      "url": "https://www.ttc.ca/routes-and-schedules/504/1/13874",
+      "reviewed_on": "2026-10-02",
+      "supports": "Normal 504A corridor via King, Roncesvalles and Dundas to Dundas West station.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "ttc_505",
+      "url": "https://www.ttc.ca/routes-and-schedules/505/0",
+      "reviewed_on": "2026-10-02",
+      "supports": "Normal 505 endpoint Dundas West station; not a Junction Dundas extension.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "dundas_west_station",
+      "url": "https://www.ttc.ca/subway-stations/dundas-west-station?tab=0",
+      "reviewed_on": "2026-10-02",
+      "supports": "Station entrance west of Dundas north of Bloor; routes504/505/40.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "lansdowne_station",
+      "url": "https://www.ttc.ca/subway-stations/lansdowne-station",
+      "reviewed_on": "2026-10-02",
+      "supports": "Entrance on Lansdowne north of Bloor.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "kqqr_city",
+      "url": "https://www.toronto.ca/legdocs/mmis/2020/te/bgrd/backgroundfile-146519.pdf",
+      "reviewed_on": "2026-10-02",
+      "supports": "King curves into Roncesvalles; Queen continues to Queensway; Beaty foot/cycle bridge crosses railway and Gardiner to Sunnyside. Historical planning reference, not current turn-rule authority.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "lansdowne_underpass",
+      "url": "https://www.toronto.ca/legdocs/bylaws/2010/law0828.pdf",
+      "reviewed_on": "2026-10-02",
+      "supports": "Bylaw names a railway underpass south of Dundas on Lansdowne; used only to establish persistent grade-separated topology.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "high_park",
+      "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/high-park/",
+      "reviewed_on": "2026-10-02",
+      "supports": "Entrances/road restrictions, park paths and Colborne southern approach. Bloor/High Park Avenue is not a visitor car entrance.",
+      "rights": "Reference only; policy may change"
+    },
+    {
+      "id": "colborne_lodge",
+      "url": "https://www.toronto.ca/explore-enjoy/history-art-culture/museums/colborne-lodge/",
+      "reviewed_on": "2026-10-02",
+      "supports": "11Colborne Lodge Drive, south High Park north of Queensway; Regency cottage reference.",
+      "rights": "Reference only; no photos copied"
+    },
+    {
+      "id": "sunnyside_heritage",
+      "url": "https://secure.toronto.ca/HeritagePreservation/details.do?folderRsn=2438232&propertyRsn=140400",
+      "reviewed_on": "2026-10-02",
+      "supports": "Sunnyside Bathing Pavilion at1755Lake Shore Boulevard West.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "public_gardens",
+      "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/gardens-and-horticulture/public-gardens/",
+      "reviewed_on": "2026-10-02",
+      "supports": "Sunnyside Italianate pavilion/gardens character.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "roncy_carhouse",
+      "url": "https://www.toronto.ca/legdocs/mmis/2026/fwc/bgrd/backgroundfile-285594.pdf",
+      "reviewed_on": "2026-10-02",
+      "supports": "Roncesvalles Carhouse at20The Queensway; address only, not event diversion adoption.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "junction_study",
+      "url": "https://www.toronto.ca/city-government/planning-development/planning-studies-initiatives/junction-phase-i-hcd-study/",
+      "reviewed_on": "2026-10-02",
+      "supports": "Curving Dundas main street, railway/industrial context and brick commercial character; study status not a heritage-designation claim.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "junction_brick",
+      "url": "https://www.toronto.ca/legdocs/mmis/2021/te/bgrd/backgroundfile-163406.pdf",
+      "reviewed_on": "2026-10-02",
+      "supports": "2946Dundas West brick heritage main-street architectural reference.",
+      "rights": "Reference only; original generic game facade"
+    },
+    {
+      "id": "high_park_track",
+      "url": "https://www.toronto.ca/wp-content/uploads/2020/07/9663-20ECS-TI-11SP-w4-howardpark-ttc-track-replace-road-resurface-cons-update2-jul17-20.pdf",
+      "reviewed_on": "2026-10-02",
+      "supports": "High Park Loop west of Parkside; Howard Park track corridor to Dundas.",
+      "rights": "Reference only"
+    }
+  ],
+  "live_query_evidence": {
+    "centreline": {
+      "endpoint": "https://gis.toronto.ca/arcgis/rest/services/cot_geospatial/MapServer/2/query",
+      "where_names": [
+        "Bloor St W",
+        "College St",
+        "Dundas St W",
+        "Queen St W",
+        "King St W",
+        "Roncesvalles Ave",
+        "Howard Park Ave",
+        "Parkside Dr",
+        "Keele St",
+        "Lansdowne Ave",
+        "Brock Ave",
+        "Sorauren Ave",
+        "Dufferin St",
+        "Runnymede Rd",
+        "Jane St",
+        "South Kingsway",
+        "The Queensway",
+        "Lake Shore Blvd W",
+        "Annette St",
+        "Dupont St",
+        "Colborne Lodge Dr",
+        "High Park Ave",
+        "High Park Blvd",
+        "Spring Rd",
+        "Ellis Ave",
+        "Ellis Park Rd",
+        "Windermere Ave",
+        "Dufferin St"
+      ],
+      "out_fields": [
+        "CENTRELINE_ID",
+        "LINEAR_NAME_FULL",
+        "FROM_INTERSECTION_ID",
+        "TO_INTERSECTION_ID",
+        "ONEWAY_DIR_CODE_DESC",
+        "FEATURE_CODE_DESC"
+      ],
+      "bbox_wgs84": [
+        -79.493,
+        43.62,
+        -79.427,
+        43.68
+      ],
+      "geometry_type": "esriGeometryEnvelope",
+      "spatial_relation": "esriSpatialRelIntersects",
+      "out_sr": 4326,
+      "format": "geojson",
+      "record_limit": 2000,
+      "returned_features": 842,
+      "raw_response_sha256": "b1dc0e195e9671941f54b36c01baf46ba25a5f1bb9290f4882f439cb6e16aad1",
+      "raw_payload_in_repository": false
+    },
+    "boundary": {
+      "endpoint": "https://gis.toronto.ca/arcgis/rest/services/cot_geospatial27/MapServer/6/query",
+      "where": "AREA_NAME='TORONTO'",
+      "out_fields": [
+        "AREA_NAME",
+        "AREA_DESC",
+        "OBJECTID"
+      ],
+      "out_sr": 4326,
+      "format": "geojson",
+      "objectid": 14035041,
+      "polygon_rings": 1,
+      "ring_vertices": 3656,
+      "raw_response_sha256": "e37998611b7167f2fcbf8b264ac0d537a77e3d582726c4af721817be0d0eda24",
+      "raw_payload_in_repository": false,
+      "point_test": "In-memory point-in-polygon against live TORONTO ring; informational topology check, not survey/legal advice."
+    },
+    "southern_road_check": {
+      "endpoint": "https://gis.toronto.ca/arcgis/rest/services/cot_geospatial/MapServer/2/query",
+      "names": [
+        "Morningside Ave",
+        "Runnymede Rd",
+        "Ellis Ave",
+        "Ellis Park Rd",
+        "Colborne Lodge Dr",
+        "The Queensway",
+        "Lake Shore Blvd W",
+        "Lansdowne Ave"
+      ],
+      "bbox_wgs84": [
+        -79.493,
+        43.62,
+        -79.427,
+        43.68
+      ],
+      "out_sr": 4326,
+      "format": "geojson",
+      "raw_response_sha256": "99dd51f1a97e930bdc953628a71a16d725c8385585998c41b2a98a0771cc69cb",
+      "raw_payload_in_repository": false
+    },
+    "portal_package_refreshes": {
+      "centreline": "2026-10-01T18:14:44.481401",
+      "former_boundary": "2026-02-20T19:04:51.094842"
+    },
+    "resource_urls_for_future_licensed_ingestion": {
+      "centreline": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/1d079757-377b-4564-82df-eb5638583bfb/resource/7bc94ccf-7bcf-4a7d-88b1-bdfc8ec5aaf1/download/centreline-version-2-4326.geojson",
+      "former_boundary": "https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/833937f6-e190-49a2-9835-80137cf88c41/resource/4eadc3a3-bafa-44cf-a43f-f99a7fa98eb4/download/former-municipality-boundaries-data-4326.geojson"
+    }
+  },
+  "source_intersections": [
+    {
+      "name": "Dufferin / Bloor",
+      "city_intersection_id": 13465260,
+      "longitude_latitude_truncated_6dp": [
+        -79.435327,
+        43.659861
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dufferin / College",
+      "city_intersection_id": 13466425,
+      "longitude_latitude_truncated_6dp": [
+        -79.432562,
+        43.652569
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dufferin / Dundas",
+      "city_intersection_id": 13466894,
+      "longitude_latitude_truncated_6dp": [
+        -79.431427,
+        43.649635
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dufferin / Queen",
+      "city_intersection_id": 13467983,
+      "longitude_latitude_truncated_6dp": [
+        -79.428614,
+        43.642218
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dufferin / King",
+      "city_intersection_id": 13468374,
+      "longitude_latitude_truncated_6dp": [
+        -79.427346,
+        43.638939
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "College / Dundas western terminal",
+      "city_intersection_id": 13466813,
+      "longitude_latitude_truncated_6dp": [
+        -79.44102,
+        43.650281
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dundas / Howard Park",
+      "city_intersection_id": 13466531,
+      "longitude_latitude_truncated_6dp": [
+        -79.448028,
+        43.652099
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Howard Park / Roncesvalles",
+      "city_intersection_id": 13466640,
+      "longitude_latitude_truncated_6dp": [
+        -79.45106,
+        43.651506
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dundas / Roncesvalles",
+      "city_intersection_id": 13466258,
+      "longitude_latitude_truncated_6dp": [
+        -79.451846,
+        43.653882
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dundas / Bloor",
+      "city_intersection_id": 13465876,
+      "longitude_latitude_truncated_6dp": [
+        -79.452454,
+        43.656321
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Howard Park / Parkside",
+      "city_intersection_id": 13467129,
+      "longitude_latitude_truncated_6dp": [
+        -79.457804,
+        43.648629
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Bloor / Parkside / Keele",
+      "city_intersection_id": 13466139,
+      "longitude_latitude_truncated_6dp": [
+        -79.460027,
+        43.654712
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "King / Queen / Roncesvalles / Queensway",
+      "city_intersection_id": 13468436,
+      "longitude_latitude_truncated_6dp": [
+        -79.4461,
+        43.638742
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dundas / Keele",
+      "city_intersection_id": 13464438,
+      "longitude_latitude_truncated_6dp": [
+        -79.464534,
+        43.665405
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dundas / Runnymede",
+      "city_intersection_id": 13464461,
+      "longitude_latitude_truncated_6dp": [
+        -79.482105,
+        43.665584
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Dundas / Jane",
+      "city_intersection_id": 13464451,
+      "longitude_latitude_truncated_6dp": [
+        -79.491177,
+        43.66572
+      ],
+      "inside_former_toronto_observed": false,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Annette / Jane",
+      "city_intersection_id": 13465635,
+      "longitude_latitude_truncated_6dp": [
+        -79.488122,
+        43.658268
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Bloor / High Park Avenue / Colborne",
+      "city_intersection_id": 13466332,
+      "longitude_latitude_truncated_6dp": [
+        -79.465264,
+        43.653546
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Bloor / Runnymede",
+      "city_intersection_id": 13466753,
+      "longitude_latitude_truncated_6dp": [
+        -79.476305,
+        43.651135
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Bloor / Jane",
+      "city_intersection_id": 13467077,
+      "longitude_latitude_truncated_6dp": [
+        -79.484463,
+        43.64932
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Bloor / South Kingsway",
+      "city_intersection_id": 13467247,
+      "longitude_latitude_truncated_6dp": [
+        -79.485753,
+        43.648312
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Queensway / Parkside",
+      "city_intersection_id": 13468326,
+      "longitude_latitude_truncated_6dp": [
+        -79.454055,
+        43.639703
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Queensway / Colborne",
+      "city_intersection_id": 13468360,
+      "longitude_latitude_truncated_6dp": [
+        -79.459388,
+        43.639535
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Queensway / Ellis",
+      "city_intersection_id": 13468559,
+      "longitude_latitude_truncated_6dp": [
+        -79.466452,
+        43.63777
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    },
+    {
+      "name": "Queensway / South Kingsway",
+      "city_intersection_id": 13468786,
+      "longitude_latitude_truncated_6dp": [
+        -79.473494,
+        43.635492
+      ],
+      "inside_former_toronto_observed": true,
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    }
+  ],
+  "source_topology_facts": [
+    {
+      "fact": "College ends at Dundas west of Lansdowne, aside from a small local stub; it does not continue through High Park.",
+      "city_node": 13466813,
+      "incident_centreline_ids": [
+        1145519,
+        1145532,
+        14017912
+      ],
+      "source_ids": [
+        "city_centreline",
+        "college_dundas"
+      ]
+    },
+    {
+      "fact": "Howard Park collector road meets Parkside. A selected same-name continuation is a Trail feature, not ordinary car access.",
+      "trail_centreline_id": 30010904,
+      "from_node": 13467129,
+      "to_node": 13467732,
+      "source_ids": [
+        "city_centreline",
+        "high_park_track"
+      ]
+    },
+    {
+      "fact": "Runnymede meets Morningside at its southern terminus; do not extend it straight to Queensway.",
+      "city_node": 13467604,
+      "longitude_latitude_truncated_6dp": [
+        -79.474145,
+        43.645863
+      ],
+      "incident_centreline_ids": [
+        1146396,
+        30089213,
+        7586942
+      ],
+      "source_ids": [
+        "city_centreline"
+      ]
+    },
+    {
+      "fact": "Lower Colborne Lodge Drive supplies a collector connection toward Lake Shore; northern Other-class segments do not authorize driving through the park.",
+      "collector_centreline_ids": [
+        1147046,
+        1147136,
+        1147152
+      ],
+      "other_centreline_id": 30007403,
+      "source_ids": [
+        "city_centreline",
+        "high_park"
+      ]
+    },
+    {
+      "fact": "A foot/cycle bridge at Beaty crosses rail and Gardiner to Sunnyside; no public car shortcut is inferred.",
+      "source_ids": [
+        "kqqr_city"
+      ]
+    },
+    {
+      "fact": "Lansdowne has a railway underpass south of Dundas. Historical bylaw establishes the crossing, not current parking rules.",
+      "source_ids": [
+        "lansdowne_underpass"
+      ]
+    },
+    {
+      "fact": "Dundas/Jane lies outside the selected former-Toronto polygon; Dundas/Runnymede is inside. Proposed west Junction endpoint stops at Runnymede.",
+      "source_ids": [
+        "city_centreline",
+        "city_former_boundary"
+      ]
+    }
+  ],
+  "authored_compression": {
+    "units": "Native world pixels, not longitude/latitude or measured metres.",
+    "dimensions_each": [
+      1024,
+      976
+    ],
+    "tiles_each": [
+      128,
+      122
+    ],
+    "tile_count_each": 15616,
+    "bank_assumption": "128\u00d7122 map bytes fit below16KiB; tile/palette/resources and actual bank placement still need plugin build checks.",
+    "road_width": 48,
+    "sidewalk_width_each": 8,
+    "preserve_core": true,
+    "not_a_boundary_projection": "Seams and orthogonal stepped bends are original compression. Closed edges do not reproduce every polygon segment; source point exclusions limit the authored corridors.",
+    "districts": [
+      {
+        "id": 1,
+        "slug": "west",
+        "name": "Parkdale and Roncesvalles",
+        "roads": [
+          {
+            "name": "Bloor Street West",
+            "points": [
+              [
+                1000,
+                64
+              ],
+              [
+                816,
+                64
+              ],
+              [
+                816,
+                112
+              ],
+              [
+                512,
+                112
+              ],
+              [
+                512,
+                160
+              ],
+              [
+                384,
+                160
+              ],
+              [
+                384,
+                240
+              ],
+              [
+                24,
+                240
+              ]
+            ]
+          },
+          {
+            "name": "Dundas Street West",
+            "points": [
+              [
+                1000,
+                400
+              ],
+              [
+                800,
+                400
+              ],
+              [
+                800,
+                352
+              ],
+              [
+                640,
+                352
+              ],
+              [
+                640,
+                320
+              ],
+              [
+                480,
+                320
+              ],
+              [
+                480,
+                240
+              ],
+              [
+                416,
+                240
+              ],
+              [
+                416,
+                160
+              ],
+              [
+                384,
+                160
+              ],
+              [
+                384,
+                96
+              ],
+              [
+                24,
+                96
+              ]
+            ]
+          },
+          {
+            "name": "College Street",
+            "points": [
+              [
+                1000,
+                288
+              ],
+              [
+                800,
+                288
+              ],
+              [
+                800,
+                320
+              ],
+              [
+                640,
+                320
+              ]
+            ],
+            "note": "Ends at Dundas; no extension through High Park."
+          },
+          {
+            "name": "Roncesvalles Avenue",
+            "points": [
+              [
+                416,
+                240
+              ],
+              [
+                416,
+                464
+              ],
+              [
+                512,
+                464
+              ],
+              [
+                512,
+                608
+              ],
+              [
+                640,
+                608
+              ]
+            ]
+          },
+          {
+            "name": "Howard Park Avenue",
+            "points": [
+              [
+                480,
+                320
+              ],
+              [
+                416,
+                320
+              ],
+              [
+                416,
+                352
+              ],
+              [
+                24,
+                352
+              ]
+            ]
+          },
+          {
+            "name": "Queen Street West",
+            "points": [
+              [
+                1000,
+                528
+              ],
+              [
+                800,
+                528
+              ],
+              [
+                800,
+                576
+              ],
+              [
+                640,
+                576
+              ],
+              [
+                640,
+                608
+              ]
+            ]
+          },
+          {
+            "name": "King Street West",
+            "points": [
+              [
+                1000,
+                640
+              ],
+              [
+                880,
+                640
+              ],
+              [
+                880,
+                688
+              ],
+              [
+                704,
+                688
+              ],
+              [
+                704,
+                608
+              ],
+              [
+                640,
+                608
+              ]
+            ]
+          },
+          {
+            "name": "The Queensway",
+            "points": [
+              [
+                640,
+                608
+              ],
+              [
+                512,
+                608
+              ],
+              [
+                512,
+                640
+              ],
+              [
+                24,
+                640
+              ]
+            ]
+          },
+          {
+            "name": "Lansdowne Avenue",
+            "points": [
+              [
+                800,
+                64
+              ],
+              [
+                800,
+                528
+              ]
+            ],
+            "note": "Ends at Queen; underpass south of Dundas."
+          },
+          {
+            "name": "Brock Avenue",
+            "points": [
+              [
+                912,
+                64
+              ],
+              [
+                912,
+                528
+              ]
+            ]
+          },
+          {
+            "name": "Sorauren Avenue",
+            "points": [
+              [
+                544,
+                320
+              ],
+              [
+                544,
+                464
+              ],
+              [
+                704,
+                464
+              ],
+              [
+                704,
+                576
+              ]
+            ]
+          },
+          {
+            "name": "Lake Shore Boulevard West",
+            "points": [
+              [
+                24,
+                832
+              ],
+              [
+                1000,
+                832
+              ]
+            ],
+            "note": "East end closed until a researched waterfront link is registered."
+          }
+        ],
+        "footpaths": [
+          {
+            "name": "Martin Goodman waterfront path",
+            "points": [
+              [
+                24,
+                896
+              ],
+              [
+                1000,
+                896
+              ]
+            ]
+          },
+          {
+            "name": "Beaty pedestrian bridge",
+            "points": [
+              [
+                640,
+                608
+              ],
+              [
+                608,
+                608
+              ],
+              [
+                608,
+                896
+              ]
+            ],
+            "note": "Foot-only crossing of rail/Gardiner corridor."
+          },
+          {
+            "name": "Sorauren park path",
+            "points": [
+              [
+                544,
+                464
+              ],
+              [
+                600,
+                464
+              ],
+              [
+                600,
+                424
+              ]
+            ]
+          }
+        ],
+        "ports": [
+          {
+            "edge": "east",
+            "name": "Bloor",
+            "x": 1000,
+            "y": 64,
+            "target": 0,
+            "target_x": 24,
+            "target_y": 64,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "College",
+            "x": 1000,
+            "y": 288,
+            "target": 0,
+            "target_x": 24,
+            "target_y": 288,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "Dundas",
+            "x": 1000,
+            "y": 400,
+            "target": 0,
+            "target_x": 24,
+            "target_y": 400,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "Queen",
+            "x": 1000,
+            "y": 528,
+            "target": 0,
+            "target_x": 24,
+            "target_y": 528,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "King",
+            "x": 1000,
+            "y": 640,
+            "target": 0,
+            "target_x": 24,
+            "target_y": 640,
+            "foot_only": false
+          },
+          {
+            "edge": "west",
+            "name": "Dundas",
+            "x": 24,
+            "y": 96,
+            "target": 2,
+            "target_x": 1000,
+            "target_y": 96,
+            "foot_only": false
+          },
+          {
+            "edge": "west",
+            "name": "Bloor",
+            "x": 24,
+            "y": 240,
+            "target": 2,
+            "target_x": 1000,
+            "target_y": 240,
+            "foot_only": false
+          },
+          {
+            "edge": "west",
+            "name": "Howard Park",
+            "x": 24,
+            "y": 352,
+            "target": 2,
+            "target_x": 1000,
+            "target_y": 352,
+            "foot_only": false
+          },
+          {
+            "edge": "west",
+            "name": "The Queensway",
+            "x": 24,
+            "y": 640,
+            "target": 2,
+            "target_x": 1000,
+            "target_y": 640,
+            "foot_only": false
+          },
+          {
+            "edge": "west",
+            "name": "Lake Shore",
+            "x": 24,
+            "y": 832,
+            "target": 2,
+            "target_x": 1000,
+            "target_y": 832,
+            "foot_only": false
+          },
+          {
+            "edge": "west",
+            "name": "Martin Goodman",
+            "x": 24,
+            "y": 896,
+            "target": 2,
+            "target_x": 1000,
+            "target_y": 896,
+            "foot_only": true
+          }
+        ],
+        "parks": [
+          {
+            "name": "Sorauren Park",
+            "rect": [
+              576,
+              384,
+              128,
+              96
+            ]
+          }
+        ],
+        "water": [
+          [
+            0,
+            928,
+            1024,
+            48
+          ]
+        ],
+        "rails": [
+          {
+            "name": "West Toronto rail corridor",
+            "points": [
+              [
+                512,
+                24
+              ],
+              [
+                576,
+                112
+              ],
+              [
+                560,
+                320
+              ],
+              [
+                960,
+                480
+              ],
+              [
+                1024,
+                488
+              ]
+            ]
+          },
+          {
+            "name": "Lakeshore rail corridor",
+            "points": [
+              [
+                0,
+                752
+              ],
+              [
+                1024,
+                752
+              ]
+            ]
+          }
+        ],
+        "gardiner": [
+          0,
+          784,
+          1024,
+          16
+        ],
+        "landmarks": [
+          {
+            "name": "Roncesvalles Carhouse",
+            "x": 432,
+            "y": 680,
+            "width": 112,
+            "depth": 40,
+            "style": 5,
+            "kind": "carhouse"
+          }
+        ],
+        "stop_candidates": [
+          {
+            "name": "Dufferin-side College",
+            "x": 976,
+            "y": 288,
+            "foot_only": false,
+            "fictional_service_point": true,
+            "source_relation": "College west of retained core Dufferin; not a relocated Dufferin Grove park."
+          },
+          {
+            "name": "Lansdowne / Bloor",
+            "x": 800,
+            "y": 64,
+            "foot_only": false,
+            "fictional_service_point": true
+          },
+          {
+            "name": "Parkdale / Queen",
+            "x": 864,
+            "y": 528,
+            "foot_only": false,
+            "fictional_service_point": true
+          },
+          {
+            "name": "Roncesvalles / Howard",
+            "x": 416,
+            "y": 352,
+            "foot_only": false,
+            "fictional_service_point": true
+          },
+          {
+            "name": "Sorauren Works",
+            "x": 544,
+            "y": 432,
+            "foot_only": false,
+            "fictional_service_point": true
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "slug": "high_park",
+        "name": "High Park, Swansea and Junction",
+        "roads": [
+          {
+            "name": "Bloor Street West",
+            "points": [
+              [
+                1000,
+                240
+              ],
+              [
+                944,
+                240
+              ],
+              [
+                944,
+                272
+              ],
+              [
+                656,
+                272
+              ],
+              [
+                656,
+                304
+              ],
+              [
+                432,
+                304
+              ],
+              [
+                432,
+                352
+              ],
+              [
+                96,
+                352
+              ]
+            ]
+          },
+          {
+            "name": "Dundas Street West",
+            "points": [
+              [
+                1000,
+                96
+              ],
+              [
+                848,
+                96
+              ],
+              [
+                848,
+                112
+              ],
+              [
+                432,
+                112
+              ]
+            ],
+            "note": "Western endpoint is Runnymede, before outside-boundary Dundas/Jane."
+          },
+          {
+            "name": "Keele Street",
+            "points": [
+              [
+                944,
+                240
+              ],
+              [
+                944,
+                176
+              ],
+              [
+                848,
+                176
+              ],
+              [
+                848,
+                96
+              ]
+            ]
+          },
+          {
+            "name": "Parkside Drive",
+            "points": [
+              [
+                944,
+                240
+              ],
+              [
+                944,
+                640
+              ]
+            ]
+          },
+          {
+            "name": "Howard Park Avenue",
+            "points": [
+              [
+                1000,
+                352
+              ],
+              [
+                976,
+                352
+              ],
+              [
+                976,
+                384
+              ],
+              [
+                944,
+                384
+              ]
+            ],
+            "note": "Ordinary road terminates at Parkside. TTC loop inside park is not a through car road."
+          },
+          {
+            "name": "Annette Street",
+            "points": [
+              [
+                960,
+                96
+              ],
+              [
+                960,
+                192
+              ],
+              [
+                432,
+                192
+              ],
+              [
+                432,
+                224
+              ],
+              [
+                176,
+                224
+              ],
+              [
+                176,
+                256
+              ]
+            ]
+          },
+          {
+            "name": "Runnymede Road",
+            "points": [
+              [
+                432,
+                112
+              ],
+              [
+                432,
+                496
+              ]
+            ],
+            "note": "Southern road endpoint at Morningside; not a straight link to Queensway."
+          },
+          {
+            "name": "Jane Street",
+            "points": [
+              [
+                176,
+                256
+              ],
+              [
+                176,
+                352
+              ]
+            ]
+          },
+          {
+            "name": "Morningside Avenue",
+            "points": [
+              [
+                432,
+                496
+              ],
+              [
+                576,
+                496
+              ]
+            ]
+          },
+          {
+            "name": "Ellis Avenue",
+            "points": [
+              [
+                576,
+                496
+              ],
+              [
+                576,
+                688
+              ]
+            ]
+          },
+          {
+            "name": "The Queensway",
+            "points": [
+              [
+                1000,
+                640
+              ],
+              [
+                576,
+                640
+              ],
+              [
+                576,
+                688
+              ],
+              [
+                384,
+                688
+              ],
+              [
+                384,
+                736
+              ],
+              [
+                160,
+                736
+              ],
+              [
+                160,
+                784
+              ],
+              [
+                64,
+                784
+              ]
+            ]
+          },
+          {
+            "name": "South Kingsway",
+            "points": [
+              [
+                144,
+                352
+              ],
+              [
+                256,
+                352
+              ],
+              [
+                256,
+                512
+              ],
+              [
+                384,
+                512
+              ],
+              [
+                384,
+                736
+              ]
+            ]
+          },
+          {
+            "name": "Colborne Lodge Drive south approach",
+            "points": [
+              [
+                736,
+                640
+              ],
+              [
+                736,
+                832
+              ]
+            ],
+            "note": "Represents the lower collector connection; northern park access is foot-only in this game."
+          },
+          {
+            "name": "Lake Shore Boulevard West",
+            "points": [
+              [
+                1000,
+                832
+              ],
+              [
+                384,
+                832
+              ],
+              [
+                384,
+                848
+              ],
+              [
+                64,
+                848
+              ]
+            ]
+          }
+        ],
+        "footpaths": [
+          {
+            "name": "Martin Goodman waterfront path",
+            "points": [
+              [
+                1000,
+                896
+              ],
+              [
+                64,
+                896
+              ]
+            ]
+          },
+          {
+            "name": "High Park formal spine",
+            "points": [
+              [
+                656,
+                304
+              ],
+              [
+                672,
+                304
+              ],
+              [
+                672,
+                416
+              ],
+              [
+                736,
+                416
+              ],
+              [
+                736,
+                640
+              ]
+            ]
+          },
+          {
+            "name": "High Park Boulevard park walk",
+            "points": [
+              [
+                944,
+                480
+              ],
+              [
+                736,
+                480
+              ]
+            ]
+          },
+          {
+            "name": "Spring Road park walk",
+            "points": [
+              [
+                944,
+                560
+              ],
+              [
+                864,
+                560
+              ],
+              [
+                864,
+                624
+              ],
+              [
+                736,
+                624
+              ]
+            ]
+          },
+          {
+            "name": "High Park Loop platform",
+            "points": [
+              [
+                944,
+                384
+              ],
+              [
+                896,
+                384
+              ],
+              [
+                896,
+                408
+              ],
+              [
+                920,
+                408
+              ],
+              [
+                920,
+                384
+              ],
+              [
+                944,
+                384
+              ]
+            ]
+          },
+          {
+            "name": "Colborne fictional service entrance",
+            "points": [
+              [
+                736,
+                608
+              ],
+              [
+                784,
+                608
+              ]
+            ]
+          },
+          {
+            "name": "Sunnyside pavilion approach",
+            "points": [
+              [
+                752,
+                832
+              ],
+              [
+                752,
+                896
+              ]
+            ]
+          }
+        ],
+        "ports": [
+          {
+            "edge": "east",
+            "name": "Dundas",
+            "x": 1000,
+            "y": 96,
+            "target": 1,
+            "target_x": 24,
+            "target_y": 96,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "Bloor",
+            "x": 1000,
+            "y": 240,
+            "target": 1,
+            "target_x": 24,
+            "target_y": 240,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "Howard Park",
+            "x": 1000,
+            "y": 352,
+            "target": 1,
+            "target_x": 24,
+            "target_y": 352,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "The Queensway",
+            "x": 1000,
+            "y": 640,
+            "target": 1,
+            "target_x": 24,
+            "target_y": 640,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "Lake Shore",
+            "x": 1000,
+            "y": 832,
+            "target": 1,
+            "target_x": 24,
+            "target_y": 832,
+            "foot_only": false
+          },
+          {
+            "edge": "east",
+            "name": "Martin Goodman",
+            "x": 1000,
+            "y": 896,
+            "target": 1,
+            "target_x": 24,
+            "target_y": 896,
+            "foot_only": true
+          }
+        ],
+        "parks": [
+          {
+            "name": "High Park",
+            "rect": [
+              608,
+              312,
+              352,
+              320
+            ]
+          }
+        ],
+        "water": [
+          [
+            0,
+            960,
+            1024,
+            16
+          ]
+        ],
+        "pond": [
+          [
+            608,
+            480
+          ],
+          [
+            672,
+            480
+          ],
+          [
+            704,
+            600
+          ],
+          [
+            640,
+            624
+          ],
+          [
+            608,
+            576
+          ]
+        ],
+        "rails": [
+          {
+            "name": "Junction railway barrier",
+            "points": [
+              [
+                432,
+                32
+              ],
+              [
+                1024,
+                32
+              ]
+            ]
+          },
+          {
+            "name": "Lakeshore rail corridor",
+            "points": [
+              [
+                0,
+                752
+              ],
+              [
+                1024,
+                752
+              ]
+            ]
+          }
+        ],
+        "gardiner": [
+          0,
+          784,
+          1024,
+          16
+        ],
+        "landmarks": [
+          {
+            "name": "Colborne Lodge",
+            "x": 792,
+            "y": 544,
+            "width": 48,
+            "depth": 40,
+            "style": 2,
+            "kind": "regency"
+          },
+          {
+            "name": "Sunnyside Bathing Pavilion",
+            "x": 784,
+            "y": 912,
+            "width": 128,
+            "depth": 24,
+            "style": 3,
+            "kind": "pavilion"
+          },
+          {
+            "name": "Junction heritage brick block",
+            "x": 672,
+            "y": 48,
+            "width": 112,
+            "depth": 24,
+            "style": 1,
+            "kind": "junction"
+          }
+        ],
+        "stop_candidates": [
+          {
+            "name": "High Park Gate",
+            "x": 656,
+            "y": 272,
+            "foot_only": false,
+            "fictional_service_point": true,
+            "source_relation": "Roadside Bloor service point, not a visitor car entrance into High Park."
+          },
+          {
+            "name": "Parkside Depot",
+            "x": 944,
+            "y": 608,
+            "foot_only": false,
+            "fictional_service_point": true
+          },
+          {
+            "name": "Colborne Service",
+            "x": 784,
+            "y": 608,
+            "foot_only": true,
+            "fictional_service_point": true,
+            "parking_anchor": [
+              736,
+              640
+            ],
+            "source_relation": "Fictional park walk from south Queensway approach; not a claim of real all-day access policy."
+          }
+        ]
+      }
+    ]
+  },
+  "play_and_integration_plan": [
+    "Register each background/manual palette and its matching collision bytes as a genuine native scene; do not substitute a browser implementation.",
+    "Use five core\u2192west roads and six west\u2192HighPark seams, including one foot-only waterfront path. Arrival centres24/1000 preserve approach side and tested safe lane offsets.",
+    "Preserve mission stage/cargo/vehicle, world clock, parked scene+position, completed jobs, money, fare, audio mode and scene-qualified save. Reload district resources without duplicate actors or stale scene pointers.",
+    "Keep Colborne package client foot-only, park at Queensway approach, walk a short leg; no forced idle wait.",
+    "Use alternative Bloor/Dundas/College/Queen/King routes and south park/waterfront approaches to create route choice. Do not assume Line2/501/504/505/506 are already scheduled native services.",
+    "Measure representative jobs and a full campaign before claiming120minutes. Two scenes and extra quests are coverage/content, not duration proof."
+  ],
+  "pending_gates": [
+    "Official supported native scene registration/build and actual import tile budgets",
+    "Every bidirectional seam in every vehicle and walking, including simultaneous inputs/mission transit/save",
+    "Full-footprint/swept collision and route reachability against registered native grids, not only source arrays",
+    "Native landmark palette/occlusion and crowded-frame performance",
+    "Verified researched streetcar/subway/bus schedules before those services become gameplay",
+    "Remaining OldToronto north/east/PortLands/fullIslands coverage",
+    "At least2hours measured enjoyable gameplay",
+    "Physical writable-cartridge boot, persistence and audio"
+  ]
+}

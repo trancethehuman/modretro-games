@@ -10,6 +10,7 @@ typedef uint8_t UBYTE;
 typedef int8_t BYTE;
 typedef uint16_t UWORD;
 typedef int16_t WORD;
+typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
 #define BANKED
 #define NONBANKED
 #define TRUE 1
