@@ -19,3 +19,6 @@ backups/
 save-states/
 *.gbstate
 *.gbstate.json
+
+# Local browser capture journals may contain private session bindings.
+captures/

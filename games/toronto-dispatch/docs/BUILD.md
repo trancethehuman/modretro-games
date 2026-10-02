@@ -26,8 +26,27 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 
 Builds, browser save states and cartridge backups are ignored. Do not publish local preview capability URLs, personal machine paths, activation codes or saves.
 
-## Current starter scope
+## City engine and reproducible sources
 
-The single `Development boot` scene displays two pages identifying this as a setup build, then permits basic directional movement in the supplied workshop. Its base scene uses GB Studio's TOPDOWN type. This verifies the authoring/build/play pipeline only; the accepted angled/isometric presentation and vehicle physics still need an engine feasibility milestone. No music or missions are implemented.
+The start scene uses the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`. It adds engine files without ejecting or vendoring GB Studio. `Development boot` remains a separate workshop scene.
 
-ROM is CGB-only, 64 KiB, MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. This is compiler output, not verification of the user's cartridge compatibility. Follow [hardware workflow](../../../docs/HARDWARE.md) before any write.
+From the repository root, with Python and Pillow available:
+
+```sh
+python3 games/toronto-dispatch/scripts/create_city_art.py
+python3 games/toronto-dispatch/scripts/create_campaign.py
+python3 games/toronto-dispatch/scripts/sync_city_resources.py
+make check
+```
+
+`create_city_art.py` draws original indexed-colour background and sprite source cells; the background is already registered as a native asset. The sprite generator produces an editable source/metadata pair in `original-art` / `dispatch_topdown.metadata.json`. Existing sprite PNG changes must be applied to the registered `assets/sprites/dispatch_topdown.png` as part of a deliberate sprite edit. New sprite registration uses the plugin's validated `native_metadata` import; keep the existing root and bindings when editing an established asset.
+
+`sync_city_resources.py` uses GB Studio's native byte-array RLE to write palette/background-priority attributes and the scene collision map. Native CGB attribute bit 7 marks raised roof lips/canopies. The scene extension interprets collision values 0 as road, 16 as walk-only pavement/Island ground and 15 as solid; the normal engine ladder meaning of bit 4 does not apply to this custom scene. The map has 15,616 tiles, so each tile/attribute/collision array fits one 16 KiB bank. `check_campaign.py` reads these actual native resources and proves stop connectivity, compatible road routes, ferry links and generated contract consistency.
+
+Car physics stores Q4 coordinates and smoothed velocity; GBVM actors/camera use Q5. A bounded video-frame delta advances simulation between render updates. Menus freeze the world clock. Save version 4 occupies a checksummed record at SRAM bank 3, offset 0x100; GB Studio uses banks 0–2. Older prototype saves are rejected. Emulator soft-reset persistence is verified; physical cold-boot persistence and power-loss recovery remain pending.
+
+Current ROM: CGB-only, 256 KiB, MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. Header validity is verified, cartridge compatibility is not. No audio is implemented yet. Follow [hardware workflow](../../../docs/HARDWARE.md) before any write.
+
+## Browser refresh limitation
+
+A previous official web export compiled, but refreshing the owned preview failed with `Browser recording close acknowledgement is UNKNOWN`. The listener retained unresolved closure state; its paused starter save and local recording evidence were preserved. Native gameplay testing proceeded independently. Do not arbitrarily reload or replay that unresolved close operation. Resolve the plugin's preview state before treating the current city ROM as browser-verified. The new top-down ROM has not been verified in that browser view.

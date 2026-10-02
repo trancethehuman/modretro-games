@@ -214,5 +214,17 @@
     "url": "https://www.toronto.ca/services-payments/water-environment/tap-water-in-toronto/fast-facts-about-the-citys-water-treatment-plants/",
     "reviewed": "2026-10-02",
     "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "ttc-line1-station-order",
+    "url": "https://www.ttc.ca/routes-and-schedules/1/0/15657",
+    "reviewed": "2026-10-02",
+    "scope": "Line 1 station sequence through Union, King, Queen, Dundas, College, Wellesley and Bloor-Yonge; reviewed route page, game timetable and geometry are compressed"
+  },
+  {
+    "id": "ttc-94-corridor",
+    "url": "https://www.ttc.ca/routes-and-schedules/94/1/8008",
+    "reviewed": "2026-10-02",
+    "scope": "94 Wellesley corridor between Ossington and Castle Frank via Harbord, Hoskin, Queens Park, Wellesley, Parliament and Bloor; reviewed route page, prototype uses three representative stops"
   }
 ]

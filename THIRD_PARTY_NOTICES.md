@@ -1,6 +1,6 @@
 # Third-party notices
 
-Original documentation, content specifications, and validation tooling use the root MIT licence. The native game project also contains MIT-licensed starter artwork and upstream project metadata. No third-party runtime, ROM, or geographic dataset is vendored.
+Original documentation, content specifications, and validation tooling use the root MIT licence. The native game project also contains MIT-licensed starter artwork and upstream project metadata. No third-party runtime, ROM, or geographic dataset is vendored. The original Toronto scene extension and procedural pixel artwork use the root MIT licence; `td_font.h` derives from the retained MIT Bench Mono starter glyphs.
 
 ## Native starter assets and metadata
 

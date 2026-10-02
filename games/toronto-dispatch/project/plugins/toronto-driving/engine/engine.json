@@ -1,0 +1,8 @@
+{
+  "version": "4.3.0-e1",
+  "sceneTypes": [{
+    "key": "TORONTO",
+    "label": "Toronto courier driving",
+    "files": ["include/states/TORONTO.h", "include/td_game.h", "src/states/TORONTO.c", "src/td_content.c", "src/td_ui.c"]
+  }]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "file": "centre-island.png",
+    "frame": 4717,
+    "rom_sha256": "47e9de4d986e19229d977364499f8d27be4ec5b513e14c86037673237ed1551b",
+    "png_sha256": "3eb0a8b538435ff1d89486819b1d34b189e8272fdfe21af7a6b47977a3f83784",
+    "session_id": "d52d501c497d4612b27be0898ee97954",
+    "journal_event_digest": "d694d15868edeff053a3f8a593fd8fb44ddadabdac74235362798816f6e1eb1b",
+    "journal_events": 519,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  },
+  {
+    "file": "wards-island.png",
+    "frame": 3506,
+    "rom_sha256": "f9c03d2369b282b7970c82d650ccaadbce2135ba809df852045992ae84c28f7a",
+    "png_sha256": "b8f81957aa4030211aaec94969ecb2d476bd4e0f18bbd07ad096650df789ced9",
+    "session_id": "90fd2b17c8c14745a322548620e32763",
+    "journal_event_digest": "776805dbad6f071094d53ccf46934f93c17174d9ea5cf9b951565d6d8093c306",
+    "journal_events": 589,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  },
+  {
+    "file": "front-street.png",
+    "frame": 388,
+    "rom_sha256": "9eaec68843e2888b0aac4accb6e651270c438592719597c02f9157fc6660e793",
+    "png_sha256": "b2e29eb8e4f66211fed2a5cb429b83f12e31b0c201bcb0a2fb7ee05f3f91bb67",
+    "session_id": "9b8519078ddf49c29c6720a04f93568c",
+    "journal_event_digest": "dad5476df470a5febb1bcb1329a6f79885b362c2c339efc98f98f2cab54da3a2",
+    "journal_events": 333,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  },
+  {
+    "file": "roof-occlusion.png",
+    "frame": 1374,
+    "rom_sha256": "9eaec68843e2888b0aac4accb6e651270c438592719597c02f9157fc6660e793",
+    "png_sha256": "c81b94f993d091d7fbd91c3fd260bb6c9ff53614f130aef85f125f972c165104",
+    "session_id": "9b8519078ddf49c29c6720a04f93568c",
+    "journal_event_digest": "dad5476df470a5febb1bcb1329a6f79885b362c2c339efc98f98f2cab54da3a2",
+    "journal_events": 333,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  }
+]

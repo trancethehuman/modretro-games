@@ -82,7 +82,7 @@ R.C. Harris is a public-view landmark with [restricted vehicle entry](https://ww
 ## First-map production order
 
 1. Validate a small Union–St. Lawrence–Distillery road graph, keeping the rail corridor, Gooderham wedge and pedestrian Distillery courts recognisable.
-2. Establish isometric rendering and car handling on one intersection before drawing district-scale art.
+2. Establish the user-revised north-up rendering, car handling and collision before extending district-scale art.
 3. Extend south through real rail crossings to Queens Quay, Harbourfront and ferry terminal.
 4. Extend west/central/east districts along researched street links, then add Island transitions and industrial jobs.
 5. Resolve exact historic boundary clipping and northern coverage before declaring the whole Old Toronto map complete.

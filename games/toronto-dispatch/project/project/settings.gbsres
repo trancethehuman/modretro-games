@@ -1,8 +1,8 @@
 {
   "_resourceType": "settings",
-  "startSceneId": "12f07015-0a42-504a-8d39-3f689e13ad3a",
-  "startX": 9,
-  "startY": 9,
+  "startSceneId": "38250bbe-d302-5807-8c67-bbadaf9dbe82",
+  "startX": 64,
+  "startY": 43,
   "startMoveSpeed": 1,
   "startAnimSpeed": 15,
   "startDirection": "down",
@@ -58,7 +58,8 @@
     "ADVENTURE": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
     "SHMUP": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
     "POINTNCLICK": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
-    "LOGO": "581d34d0-9591-4e6e-a609-1d94f203b0cd"
+    "LOGO": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
+    "TORONTO": "95080aab-0201-545e-be5a-f5e79b9a693e"
   },
   "musicDriver": "huge",
   "cartType": "mbc5",
@@ -102,7 +103,7 @@
   "colorMode": "color",
   "colorCorrection": "default",
   "generateDebugFilesEnabled": false,
-  "compilerPreset": 3000,
+  "compilerPreset": 50000,
   "scriptEventPresets": {},
   "scriptEventDefaultPresets": {},
   "runSceneSelectionOnly": false,
@@ -110,7 +111,8 @@
   "openBuildFolderOnExport": true,
   "showRomUsageAfterBuild": false,
   "romFilename": "",
-  "defaultSceneTypeId": "TOPDOWN",
+  "defaultSceneTypeId": "TORONTO",
   "disabledSceneTypeIds": [],
-  "autoTileFlipEnabled": true
+  "autoTileFlipEnabled": true,
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
 }

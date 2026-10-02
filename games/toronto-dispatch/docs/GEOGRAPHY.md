@@ -13,7 +13,7 @@ The goal is a recognisable compressed city, with accurate street names, intersec
 - [TTC route maps](https://www.ttc.ca/routes-and-schedules/504/0): downtown and rail/streetcar maps are linked here.
 - [501 Queen](https://www.ttc.ca/routes-and-schedules/501/1): reviewed route identity; service arrangements can change.
 
-Before art production, inspect the actual data/map, confirm each proposed district's road graph and landmark locations, and add official landmark references. Maintain north/south/east/west relationships before rotating into the isometric camera. Choose and document a baseline map era; current construction detours should not silently reshape the game.
+Before art production, inspect the actual data/map, confirm each proposed district's road graph and landmark locations, and add official landmark references. Maintain north/south/east/west relationships in the north-up top-down camera. Choose and document a baseline map era; current construction detours should not silently reshape the game.
 
 ## First-district proposals
 
