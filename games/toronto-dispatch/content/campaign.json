@@ -1,6 +1,6 @@
 {
   "status": "engine-integrated",
-  "scope": "Three linked original compressed scenes: central Toronto, western neighbourhoods and High Park/Junction. Full Old Toronto and measured duration remain release checks.",
+  "scope": "Four linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.",
   "duration_target_minutes": 120,
   "duration_verified": false,
   "duration_notice": "Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.",
@@ -383,6 +383,120 @@
         "v": 640
       },
       "access_notice": "Game requires parking and walking; this does not reproduce real seasonal vehicle-access rules"
+    },
+    {
+      "id": 35,
+      "u": 144,
+      "v": 64,
+      "name": "DANFORTH HALL",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Danforth Hall",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 36,
+      "u": 320,
+      "v": 144,
+      "name": "WITHROW POST",
+      "transit": 0,
+      "district": 3,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Withrow Parcel",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 224,
+        "v": 144
+      },
+      "access_notice": "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
+    },
+    {
+      "id": 37,
+      "u": 128,
+      "v": 528,
+      "name": "RIVERSIDE QUEEN",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Riverside Queen",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 38,
+      "u": 544,
+      "v": 288,
+      "name": "GERRARD / PAPE",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Gerrard / Pape",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 39,
+      "u": 384,
+      "v": 608,
+      "name": "CARLAW WORKS",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Carlaw Works",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 40,
+      "u": 816,
+      "v": 496,
+      "name": "LESLIE / QUEEN",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Leslie / Queen",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 41,
+      "u": 880,
+      "v": 312,
+      "name": "GREENWOOD POST",
+      "transit": 0,
+      "district": 3,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Greenwood Parcel",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 816,
+        "v": 312
+      },
+      "access_notice": "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
+    },
+    {
+      "id": 42,
+      "u": 880,
+      "v": 496,
+      "name": "ASHBRIDGE QUEEN",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Ashbridge Queen",
+      "geography_reference": "docs/EAST_DISTRICT.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
     }
   ],
   "quests": [
@@ -3831,6 +3945,948 @@
           }
         ],
         "basis": "Actual collision-grid tile-centre paths, reciprocal authored portals and integer-settled cardinal speed estimates; excludes transit, traffic, acceleration, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-81",
+      "title": "EAST FIRST ROUND",
+      "brief": [
+        "EAST SHOP PARCELS",
+        "QUEEN TO DANFORTH"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        37,
+        35,
+        0
+      ],
+      "time_limit_seconds": 205,
+      "reward": 188,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect east shop parcels"
+        },
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Riverside shop handoff"
+        },
+        {
+          "stop_id": 35,
+          "district": 3,
+          "objective": "Danforth hall handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return reusable satchel"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 2656,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 26.2,
+        "normalized_moving_seconds_slow": 41.7,
+        "assumed_interaction_allowance_seconds": 20,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 37,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 784,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          },
+          {
+            "from_stop": 37,
+            "to_stop": 35,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 608,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 35,
+            "to_stop": 0,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 1264,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor/Danforth east"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-82",
+      "title": "DANFORTH ART KIT",
+      "brief": [
+        "FRAMED PRINT KITS",
+        "BRAKE BEFORE TURNS"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        5,
+        35,
+        38,
+        37,
+        5
+      ],
+      "time_limit_seconds": 210,
+      "reward": 243,
+      "stages": [
+        {
+          "stop_id": 5,
+          "district": 0,
+          "objective": "Collect gallery print kits"
+        },
+        {
+          "stop_id": 35,
+          "district": 3,
+          "objective": "Danforth event handoff"
+        },
+        {
+          "stop_id": 38,
+          "district": 3,
+          "objective": "Gerrard print handoff"
+        },
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Riverside gallery handoff"
+        },
+        {
+          "stop_id": 5,
+          "district": 0,
+          "objective": "Return protective cases"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3392,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 39.3,
+        "normalized_moving_seconds_slow": 39.3,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 5,
+            "to_stop": 35,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 1168,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor/Danforth east"
+            ]
+          },
+          {
+            "from_stop": 35,
+            "to_stop": 38,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 624,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 38,
+            "to_stop": 37,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 656,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 37,
+            "to_stop": 5,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 944,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-83",
+      "title": "EAST FILE CUTOFF",
+      "brief": [
+        "URGENT EAST FILES",
+        "MOTORCYCLE ROUTE"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        0,
+        40,
+        42,
+        38,
+        0
+      ],
+      "time_limit_seconds": 145,
+      "reward": 222,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect timed print files"
+        },
+        {
+          "stop_id": 40,
+          "district": 3,
+          "objective": "Leslie shop handoff"
+        },
+        {
+          "stop_id": 42,
+          "district": 3,
+          "objective": "Ashbridge service handoff"
+        },
+        {
+          "stop_id": 38,
+          "district": 3,
+          "objective": "Gerrard copy-shop handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return dispatch copies"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3552,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 35.1,
+        "normalized_moving_seconds_slow": 35.1,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 40,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 1504,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          },
+          {
+            "from_stop": 40,
+            "to_stop": 42,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 64,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 42,
+            "to_stop": 38,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 544,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 38,
+            "to_stop": 0,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 1440,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Dundas east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-84",
+      "title": "CARLAW STOCK RUN",
+      "brief": [
+        "BULKY SHOP STOCK",
+        "TRUCK BRAKE EARLY"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        11,
+        39,
+        42,
+        37,
+        11
+      ],
+      "time_limit_seconds": 210,
+      "reward": 231,
+      "stages": [
+        {
+          "stop_id": 11,
+          "district": 0,
+          "objective": "Collect bayfront stock crates"
+        },
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Carlaw workshop handoff"
+        },
+        {
+          "stop_id": 42,
+          "district": 3,
+          "objective": "Ashbridge shop handoff"
+        },
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Riverside stock handoff"
+        },
+        {
+          "stop_id": 11,
+          "district": 0,
+          "objective": "Return reusable crates"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 2912,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 40.9,
+        "normalized_moving_seconds_slow": 40.9,
+        "assumed_interaction_allowance_seconds": 25,
+        "legs": [
+          {
+            "from_stop": 11,
+            "to_stop": 39,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 928,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          },
+          {
+            "from_stop": 39,
+            "to_stop": 42,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 608,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 42,
+            "to_stop": 37,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 784,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 37,
+            "to_stop": 11,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 592,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-85",
+      "title": "EAST RAIL RELAY",
+      "brief": [
+        "POCKET PARCEL KIT",
+        "PARK THEN WALK"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        17,
+        35,
+        36,
+        38,
+        12,
+        0
+      ],
+      "time_limit_seconds": 260,
+      "reward": 241,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect small relay parcels"
+        },
+        {
+          "stop_id": 17,
+          "district": 0,
+          "objective": "Bloor dispatch handoff"
+        },
+        {
+          "stop_id": 35,
+          "district": 3,
+          "objective": "Danforth hall handoff"
+        },
+        {
+          "stop_id": 36,
+          "district": 3,
+          "objective": "Withrow on-foot park handoff"
+        },
+        {
+          "stop_id": 38,
+          "district": 3,
+          "objective": "Gerrard rail-side handoff"
+        },
+        {
+          "stop_id": 12,
+          "district": 0,
+          "objective": "King dispatch handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return relay pouch"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3328,
+        "required_walking_pixels": 192,
+        "normalized_moving_seconds_fast": 39.3,
+        "normalized_moving_seconds_slow": 58.6,
+        "assumed_interaction_allowance_seconds": 35,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 17,
+            "from_district": 0,
+            "to_district": 0,
+            "vehicle_pixels": 736,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 17,
+            "to_stop": 35,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 528,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor/Danforth east"
+            ]
+          },
+          {
+            "from_stop": 35,
+            "to_stop": 36,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 160,
+            "required_walking_pixels": 96,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 36,
+            "to_stop": 38,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 464,
+            "required_walking_pixels": 96,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 38,
+            "to_stop": 12,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 1280,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Dundas east crossing"
+            ]
+          },
+          {
+            "from_stop": 12,
+            "to_stop": 0,
+            "from_district": 0,
+            "to_district": 0,
+            "vehicle_pixels": 160,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-86",
+      "title": "PARK PATH PARCELS",
+      "brief": [
+        "TWO PARK HANDOFFS",
+        "PARK THEN WALK"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        36,
+        41,
+        42,
+        39,
+        0
+      ],
+      "time_limit_seconds": 280,
+      "reward": 246,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect park supply parcels"
+        },
+        {
+          "stop_id": 36,
+          "district": 3,
+          "objective": "Withrow on-foot handoff"
+        },
+        {
+          "stop_id": 41,
+          "district": 3,
+          "objective": "Greenwood on-foot handoff"
+        },
+        {
+          "stop_id": 42,
+          "district": 3,
+          "objective": "Ashbridge supply handoff"
+        },
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Carlaw workshop handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return park delivery satchel"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 4016,
+        "required_walking_pixels": 320,
+        "normalized_moving_seconds_fast": 50.3,
+        "normalized_moving_seconds_slow": 73.7,
+        "assumed_interaction_allowance_seconds": 30,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 36,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 1264,
+            "required_walking_pixels": 96,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          },
+          {
+            "from_stop": 36,
+            "to_stop": 41,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 776,
+            "required_walking_pixels": 160,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 41,
+            "to_stop": 42,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 248,
+            "required_walking_pixels": 64,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 42,
+            "to_stop": 39,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 608,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 39,
+            "to_stop": 0,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 1120,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-87",
+      "title": "EAST RETURN PACK",
+      "brief": [
+        "SHOP RETURN PAPERS",
+        "ORIGINAL TO UNION"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        0,
+        39,
+        40,
+        42,
+        37,
+        0
+      ],
+      "time_limit_seconds": 215,
+      "reward": 228,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect return envelopes"
+        },
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Carlaw paperwork handoff"
+        },
+        {
+          "stop_id": 40,
+          "district": 3,
+          "objective": "Leslie returns handoff"
+        },
+        {
+          "stop_id": 42,
+          "district": 3,
+          "objective": "Ashbridge returns handoff"
+        },
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Riverside paperwork handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return original packet to Union"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 3296,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 38.2,
+        "normalized_moving_seconds_slow": 38.2,
+        "assumed_interaction_allowance_seconds": 30,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 39,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 1120,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          },
+          {
+            "from_stop": 39,
+            "to_stop": 40,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 544,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 40,
+            "to_stop": 42,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 64,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 42,
+            "to_stop": 37,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 784,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 37,
+            "to_stop": 0,
+            "from_district": 3,
+            "to_district": 0,
+            "vehicle_pixels": 784,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-88",
+      "title": "CROSS CITY BUNDLES",
+      "brief": [
+        "EAST TO WEST MAIL",
+        "FINAL PARK DEPOT"
+      ],
+      "chapter": "Eastern package connections",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 3,
+      "min_completed": 18,
+      "route": [
+        0,
+        35,
+        38,
+        40,
+        42,
+        39,
+        37,
+        31,
+        33,
+        0
+      ],
+      "time_limit_seconds": 405,
+      "reward": 391,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect cross-city bundles"
+        },
+        {
+          "stop_id": 35,
+          "district": 3,
+          "objective": "Danforth print handoff"
+        },
+        {
+          "stop_id": 38,
+          "district": 3,
+          "objective": "Gerrard print handoff"
+        },
+        {
+          "stop_id": 40,
+          "district": 3,
+          "objective": "Leslie shop handoff"
+        },
+        {
+          "stop_id": 42,
+          "district": 3,
+          "objective": "Ashbridge service handoff"
+        },
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Carlaw workshop handoff"
+        },
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Riverside shop handoff"
+        },
+        {
+          "stop_id": 31,
+          "district": 1,
+          "objective": "Sorauren west handoff"
+        },
+        {
+          "stop_id": 33,
+          "district": 2,
+          "objective": "Parkside depot handoff"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Return empty bundle carrier"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "vehicle_route_pixels": 7920,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 124.2,
+        "normalized_moving_seconds_slow": 124.2,
+        "assumed_interaction_allowance_seconds": 50,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 35,
+            "from_district": 0,
+            "to_district": 3,
+            "vehicle_pixels": 1264,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Bloor/Danforth east"
+            ]
+          },
+          {
+            "from_stop": 35,
+            "to_stop": 38,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 624,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 38,
+            "to_stop": 40,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 480,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 40,
+            "to_stop": 42,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 64,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 42,
+            "to_stop": 39,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 608,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 39,
+            "to_stop": 37,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 336,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 37,
+            "to_stop": 31,
+            "from_district": 3,
+            "to_district": 1,
+            "vehicle_pixels": 1792,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing",
+              "Queen east"
+            ]
+          },
+          {
+            "from_stop": 31,
+            "to_stop": 33,
+            "from_district": 1,
+            "to_district": 2,
+            "vehicle_pixels": 864,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "The Queensway"
+            ]
+          },
+          {
+            "from_stop": 33,
+            "to_stop": 0,
+            "from_district": 2,
+            "to_district": 0,
+            "vehicle_pixels": 1888,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "The Queensway",
+              "King east"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
       }
     }
   ],

@@ -1,8 +1,74 @@
 # Testing record
 
-## Linked western districts — 2026-10-02
+## Four districts and parking guidance — 2026-10-02 (Prototype 4)
 
-Current native ROM: `project/build/toronto-districts.gbc`, 262,144 bytes, CGB-only, valid MBC5+RUMBLE+RAM+BATTERY header with 32 KiB SRAM. Official plugin/GB Studio CLI build exited 0. SHA-256:
+Final official native ROM `project/build/toronto-four-districts.gbc`: **524,288 bytes**, SHA-256 **`1da71ba549aaf6b0b1fc641d4f4f9e0e317550e396bf80ffaf401f6ff7e82b2b`**. CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB SRAM; logo/header inspection and official CLI build passed. Source fingerprint `e029dac64f995a5466df744fad68ebbf4e14ef28b9d5d0df944ff0deed44a5ee`; project revision `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4`; matching NOI `24a627853b5d39766d336901b52ad871ad022b7c767afe6b14e26cb3d670f289`, globals digest `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a`. The subsequent planning-metadata regeneration did not alter the generated engine content; source-debug boot of this exact ROM still succeeded. Build warnings remain DEP0190, five TORONTO optimizer warnings and two upstream unreachable SFX warnings; no build error.
+
+`make check` passes **2,352 actual-engine checks**, **2,974 independent bridge checks**, **16,997 navigation/math checks**, nine ROM-memory fixtures, and all repository/content/artwork/generator checks. Engine and bridge fixtures run under ASan/UBSan. Actual production content getters are linked into engine fixtures, including all three road parking anchors, absent/NULL lookup behavior, original record preservation and driving-versus-foot target changes. Four registered 128×122 scenes contain 88 contracts/43 stops, 211 buildings, 486 fixed pedestrian routes, 18 non-core traffic loops and 14 reciprocal seam pairs. These counts do not establish two hours of gameplay.
+
+Native memory guard passes: heap `D934`, stack `DF00`, reserve **1,484 bytes**; eight VM contexts. Fixed-bank occupied end including initialization/startup is `3F81`, leaving 127 bytes. Banked world metadata/code and 82-byte BFS local frame were separately inspected on the preceding four-scene intermediate; that allocation is not a worst-case stack-depth proof. Current native samples below establish bounded timing and OAM observations only.
+
+Both final recordings used PyBoy 2.7.0 CGB mode, worker `6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925`. Inputs were ordinary held-button sets; coordinates, scene identity, clocks and OAM were inspected read-only. No progress/state was injected. Both journals were finalized, owned transports closed and bytes reversibly archived through the official plugin.
+
+| Recording | Frames/events | Journal digest | Archive ID |
+| --- | --- | --- | --- |
+| `four-districts-parking-progression-20261002` | 31,480 / 11,894 | `cabb314d585e6451b33e93d03ef0f27b30373cd1d6ed158fa2b527249073a505` | `efe1b627-ab0f-437f-9bd6-cc06031fb38a` |
+| `four-districts-final-transit-20261002` | 562 / 298 | `ed0f8b776016ad10af8116d8c1cdeed3d81f6acd62342b8cb1b856ae12788fac` | `fc614adf-9114-4968-8c48-53ade87b46bc` |
+
+### Driving, nine distinct contracts and all four scenes
+
+The first Market delivery completed at frame 740, condition 100, cash 139/count 1. Holding A40, A+right48 and A24 reached frame 864 at (798.75,774.25), speed 24/heading 4: the car retained acceleration and movement through the formerly stopping corner.
+
+| Completed contract | Completion frame | Unique completed count / cash | Observed scope |
+| --- | --- | --- | --- |
+| 01, 02, 03 | 3,197 after the third | 3 / 404 | Core pickup and delivery progression |
+| 81 | 6,909 | 4 / 622 | Queen car crossing to Riverside, Danforth handoff and return to core |
+| 07 | 9,742 | 5 / 761 | Core progression/unlock |
+| 04 | 10,576 | 6 / 917 | Truck contract |
+| 82 | 16,532 | 7 / 1,099 | Fragile car route; Danforth entrance/Dundas return, condition 64 after traffic collisions |
+| 83 | 22,242 | 8 / 1,120 | Motorcycle express route through Leslie/Ashbridge/Gerrard; completed under deadline, condition 4 after traffic collisions |
+| 85 | 27,405 | 9 / 1,304 | Mixed route with Withrow park-and-walk delivery, motorcycle recovery and Union finish |
+
+For contract 85, frame 23,879 showed the driving beacon at legal road anchor (224,144). Select near parked position (221.8125,140.8125) reported **PARK THEN WALK** without advancing the stage at frame 24,247. Exiting recomputed the actual client target (320,144). Ordinary walking reached (320.3125,144.8125); Select completed that leg at 24,581. Walking back and pressing A re-entered the motorcycle at 24,811. The remainder used Bain/Carlaw around the railway barrier, Dundas back into core and Union. The quest finished with condition 64 at world second 432. This covers a real foot-only handoff and return to the parked vehicle, not teleportation.
+
+After those quests, ordinary driving entered the actual western scene and walking traversed its King/Queensway dogleg into actual High Park. The parked motorcycle remained in west at (861,640.875), player in High Park at (979.5,639.375), cash 1,304/count 9/world second 486. Save followed by A+B+Start+Select120 and neutral180 restored the genuine High Park scene/HELP and those values at frame 31,272. This verifies in-worker cartridge-RAM soft reset; physical cold boot and persistence across separate emulator processes remain unverified.
+
+The local High Park map panned during frames 31,320→31,480 while the player/world clock remained frozen. Actual camera WRAM changed **31,328→23,648**, Y remained 20,960. The journal's final `stopReason` mistakenly states 31,840→27,904; those numerals are an annotation error corrected here from the retained read-only camera output. The immutable journal was preserved. This is a scrollable district map; a browsable full-city atlas remains pending.
+
+### Departure window and bounded performance
+
+The fresh transit recording reproduced the same confirmation timing as the preceding regression. Frame 314 showed **DEPARTS IN 0 SEC**, world second 1/cash 30. A8 entered RIDE at frame 322 and deducted one three-credit fare. At frame 442 the player arrived on foot at King (640,640), ROAM/world second 3/cash 27; the car stayed at Union (560,720). There was no extra clock tick that caused the displayed departure to be missed.
+
+During stationary King frames 442→562, `_game_time` was **248→51 modulo 256**, or **59 updates/120 video frames** (about 29.5 rendered updates/second). Final OAM sample: 12 visible hardware objects, peak 4/scanline, zero over-limit lines. The journal's final `stopReason` incorrectly states 88→148/60 updates/peak 6; actual read-only clock/OAM results above supersede that annotation. The retained journal is unchanged. This is one stationary core sample, not whole-city performance verification.
+
+Nine distinct completed quests took 432 game-clock seconds through the last delivery; the full test with subsequent roaming reached 486 seconds. Tool latency, paused menus, contract counts and deadline budgets are not gameplay-duration evidence. Full former City of Toronto coverage, the remaining 79 contracts, all 28 native seam endpoints, a full-city atlas, at least two measured hours of varied enjoyable gameplay, human handling/audio assessment and physical cartridge boot/save/read-back remain open. The historical browser remains unrefreshed because its recording-close acknowledgement is UNKNOWN; these native tests do not update or validate that browser.
+
+## Four-scene intermediate — 2026-10-02
+
+Official native build `project/build/toronto-four-districts.gbc`: 524,288 bytes, SHA-256 `7a299125675b7e08aeb3ba939b2382b28597bfbae584ec2a5c4255ed5abf24f0`, CGB-only/MBC5+RUMBLE+RAM+BATTERY/32 KiB SRAM, valid inspected header. Source fingerprint `e8719774b958cd9114030e0d2bda83fee963c42e745505beb588968a6856cce4`; project revision `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4`; NOI digest `67affe33b3f214f6eaa6998c277b6186f4698ba1bfe325ac276523388b0d4dca`. It precedes the subsequent parking-approach guidance fix, which requires another build/test identity. This intermediate has not been published.
+
+Source validation passed 2,273 engine, 2,974 bridge, 16,997 navigation and nine memory fixtures plus all content/artwork/generator checks. Four registered 128×122 scenes contain 88 contracts/43 stops, 211 buildings, 486 fixed pedestrian routes, 18 non-core traffic loops and 14 reciprocal seam pairs. East has 85 exact/63 flip-canonical tiles. Counts and route estimates do not measure gameplay duration.
+
+Native allocation guard passed: heap `D934`, stack `DF00`, reserve 1,484 bytes. Fixed-bank occupied end including initialized payload/startup is `3F81`, leaving 127 bytes, unchanged from Prototype 3. World code/data occupy about 4,986 bytes in bank `0F`, including 1,554 bytes of metadata; no new long-arithmetic imports or persistent world-module WRAM. BFS local frame is 82 bytes. These observations do not establish deepest stack usage or cartridge performance.
+
+All following inputs were ordinary buttons; state/scene/OAM inspection was read-only. PyBoy 2.7.0 CGB mode, worker `6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925`. Recordings were finalized, owned emulator transports closed and bytes reversibly archived through the supported plugin; original-path mappings remain.
+
+| Recording | Exact observed scope | Frames/events; final journal digest; archive ID |
+| --- | --- | --- |
+| `transit-window-before-20261002` on published `99eb430c…` | At frame 314, Line 1 selector/world second 1. Confirmation entered WAIT; frame 442 still WAIT/cash 30/world second 3/departure in 15 sec. Its stop reason incorrectly interpreted **NEXT STOP 2**, a destination ordinal, as a countdown. Read-only clock/phase and the later wait independently establish the bug. | 442/232; `351feaa6ee3d8b578c6405332083139e1a5202dfc8079dce8b75823ede1afd0e`; `af9d71d4-4715-40a4-b947-97ca5c4b49e2` |
+| `four-districts-transit-20261002-v2` | Same sequence: frame 314 **DEPARTS IN 0 SEC**; frame 322 immediate RIDE/cash 27; frame 442 King (640,640), ROAM/on foot/world second 3. One fare; parked Union car retained. | 442/234; `9b411b1cc5546dca870d25150ee8da67534a4ae8a9899a3c3c86ca7625eab96a`; `dc8f32e1-d7e3-472a-89c9-d6e1ee137881` |
+| `four-districts-driving-world-20261002` | First Market delivery: cash 139/count 1. A40, A+right48, A24 reached frame 864 at (798.75,774.25), speed 24/heading 4, continuing through the former stopping corner. Queen car core→East→core, then foot core→East with parked core car retained. Source debugger confirmed actual East scene. | 2,669/1,590; `cff77fe92ee215efe32b5baa273b8ad83ef07659b4e8b66524da330c67eba9e1`; `9d4f1eb9-8140-4357-912f-9e4a004e144e` |
+| `four-districts-remote-reset-20261002` | A fresh isolated worker did not import the previous recording's cartridge RAM; that was not cross-process persistence evidence. A new ordinary foot route and explicit Save reached East player (57.5,536), parked Union car (560,720) in core, cash 30/world second 32. In-game A+B+Start+Select120 then neutral180 restored actual East/HELP with these values retained at frame 2,546. | 2,546/1,366; `d4f211c70d4538ac3cedd268563cc04ab823da6d58b4d37cfc9aec3d4ab55c7f`; `258245d5-b850-41c6-9c29-dcfbecd2c942` |
+
+East frame 2,573 had 12 visible OAM objects, peak 6/scanline, zero over-limit lines. `_game_time` advanced 59 updates over video frames 2,453→2,573: about 29.5 rendered updates/second in one stationary Queen Street sample. This does not establish whole-city pacing.
+
+The graphics analyzer reported opaque priority attributes and unresolved palette slot 6/zero overrides. Zero overrides contradicts the seven authored palette IDs; independent same-build ROM decoding confirms East/core bind the complete palette, including slot 6 `E7DECC/B8A785/526879/172B38`, rendered in native East frames. Priority/flip bits remain. The analyzer discrepancy's cause is unproven; no valid palette was replaced.
+
+Full former Toronto coverage, eastern contract/unlock playthrough, all seam endpoints, a full-city atlas, measured two-hour campaign duration, whole-city performance, human handling/audio assessment and physical cold-boot/save/read-back remain open. The historical browser remains unrefreshed because its recording-close acknowledgement is UNKNOWN.
+
+## Linked western districts — 2026-10-02 (published Prototype 3)
+
+Published Prototype 3 native ROM: `project/build/toronto-districts.gbc`, 262,144 bytes, CGB-only, valid MBC5+RUMBLE+RAM+BATTERY header with 32 KiB SRAM. Official plugin/GB Studio CLI build exited 0. SHA-256:
 
 ```
 99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f

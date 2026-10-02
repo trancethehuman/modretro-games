@@ -27,7 +27,11 @@ def source():
     assert 24 <= len(routes) < 255
     core_routes = routes
     district_routes = [core_routes]
-    for slug in ('west', 'high_park'):
+    world = json.loads((ROOT / 'content/districts/world.json').read_text())
+    assert [d['id'] for d in world['districts']] == list(range(len(world['districts'])))
+    for district in world['districts'][1:]:
+        assert district['scene'].startswith('toronto_')
+        slug = district['scene'].removeprefix('toronto_')
         metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
         scene = json.loads((ROOT / f'project/project/scenes/toronto_{slug}/scene.gbsres').read_text())
         grid = decode(scene['collisions'])
@@ -55,8 +59,8 @@ def source():
             "#ifndef TD_WORLD_ROUTES_H\n#define TD_WORLD_ROUTES_H\n"
             f"#define TD_PEDESTRIAN_ROUTES {len(core_routes)}\n"
             "#ifdef TD_WORLD_ROUTE_DATA\n"
-            "static const UBYTE td_route_counts[3]={" + ','.join(str(len(r)) for r in district_routes) + "};\n"
-            "static const UWORD td_district_routes[3][128][2]={\n" +
+            f"static const UBYTE td_route_counts[{len(district_routes)}]={{" + ','.join(str(len(r)) for r in district_routes) + "};\n"
+            f"static const UWORD td_district_routes[{len(district_routes)}][128][2]={{\n" +
             ''.join('  {\n' + ''.join(f'    {{{x},{y}}},\n' for x,y in routes) + '  },\n' for routes in district_routes) +
             "};\n#endif\n#endif\n")
 

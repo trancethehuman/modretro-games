@@ -1,6 +1,6 @@
 # Native build and preview
 
-Updated 2026-10-02. The linked-district ROM is a candidate under native testing; the published single-scene milestone is identified separately below. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before issuing project operations. The format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`), not a hand-built interchange stub.
+Updated 2026-10-02. Prototype 4 (`1da71ba5…`) includes four scenes and the parking-anchor fix, has compiled and passes sampled native progression. Prototype 3 contains three linked scenes. The earlier `7a299125…` four-scene build and published milestones have separate identities/evidence below. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before issuing project operations. The format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`), not a hand-built interchange stub.
 
 ## Tested toolchain
 
@@ -19,7 +19,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-districts.gbc"` for the current expansion candidate. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; an older `toronto-dispatch.gbc` does not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-four-districts.gbc"` for the current expansion candidate. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; the earlier `toronto-districts.gbc` and `toronto-dispatch.gbc` do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain recordings in ignored `build/`.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -29,7 +29,7 @@ Builds, browser save states and cartridge backups are ignored. Do not publish lo
 
 ## City engine and reproducible sources
 
-Three linked 1,024 × 976 scenes use the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`: `scene_toronto_city` (district 0), `scene_toronto_west` (1) and `scene_toronto_high_park` (2). It adds engine files without ejecting or vendoring GB Studio. `Development boot` remains a separate workshop scene. [DISTRICT_ENGINE_PLAN.md](DISTRICT_ENGINE_PLAN.md) describes compiled scene binding and the genuine VM change-scene bridge.
+Four linked 1,024 × 976 scenes use the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`: `scene_toronto_city` (district 0), `scene_toronto_west` (1), `scene_toronto_high_park` (2) and `scene_toronto_east` (3). Their logical atlas is 4,096 × 976, with 211 buildings and 486 fixed pedestrian routes; only six nearby pedestrian actors are active in the loaded scene. These are compressed districts, not full former Toronto coverage. The extension adds engine files without ejecting or vendoring GB Studio. `Development boot` remains a separate workshop scene. [DISTRICT_ENGINE_PLAN.md](DISTRICT_ENGINE_PLAN.md) describes compiled scene binding and the genuine VM change-scene bridge.
 
 From the repository root, with Python and Pillow available:
 
@@ -37,8 +37,17 @@ From the repository root, with Python and Pillow available:
 python3 games/toronto-dispatch/scripts/create_city_art.py
 python3 games/toronto-dispatch/scripts/sync_city_resources.py
 python3 games/toronto-dispatch/scripts/create_west_art.py
+python3 games/toronto-dispatch/scripts/create_east_art.py
+```
+
+These commands generate original artwork/metadata and synchronize existing core resources. They do not register new scenes or apply changed west/east collision and attribute resources. Use the plugin's revision-aware native workflow to register/update those assets and scenes, preserve bindings, and apply the intended reciprocal core seams before continuing. Regenerating content against stale native geometry is not a valid build procedure. The current candidate already has all four native scenes registered.
+
+After the registered resources match the authored geometry:
+
+```sh
 python3 games/toronto-dispatch/scripts/create_district_world.py
 python3 games/toronto-dispatch/scripts/create_district_jobs.py
+python3 games/toronto-dispatch/scripts/create_east_jobs.py
 python3 games/toronto-dispatch/scripts/create_campaign.py
 python3 games/toronto-dispatch/scripts/create_world_routes.py
 python3 games/toronto-dispatch/scripts/create_audio.py
@@ -47,17 +56,21 @@ make check
 
 `create_city_art.py` draws original indexed-colour background and sprite source cells; the background is already registered as a native asset. The sprite generator produces an editable source/metadata pair in `original-art` / `dispatch_topdown.metadata.json`. Existing sprite PNG changes must be applied to the registered `assets/sprites/dispatch_topdown.png` as part of a deliberate sprite edit. New sprite registration uses the plugin's validated `native_metadata` import; keep the existing root and bindings when editing an established asset.
 
-`create_west_art.py` draws the original west/High Park backgrounds and writes placement, collision and priority metadata. It does not register or update their native scene resources. After changing their geometry, apply the new collision and attribute data through the plugin's native resource workflow before regenerating routes/contracts; the checked-in registered scenes are the input to those checks. `create_district_world.py` generates reciprocal seams and traffic loops; `create_district_jobs.py` authors eight appended package contracts from actual scene collision paths. `create_campaign.py` compiles 80 contracts and 35 stops while retaining the original IDs.
+`create_west_art.py` draws the original west/High Park backgrounds; `create_east_art.py` draws the original eastern background. Both write placement, collision and priority metadata. They do not register or update native scene resources. After geometry changes, apply collision and attributes through the plugin before regenerating routes/contracts; the checked-in registered scenes are the input to those checks. `create_district_world.py` generates 14 reciprocal seam pairs and 18 non-core traffic loops. `create_district_jobs.py` authors eight western package contracts from actual scene collision paths; `create_east_jobs.py` appends eight eastern contracts and eight service points while pinning the earlier 80-contract/35-stop prefix. `create_campaign.py` compiles 88 contracts and 43 stops while retaining the original IDs. Both art generators and the eastern job generator support `--check` for read-only freshness checks; `make check` includes the generated-source checks.
 
 `sync_city_resources.py` uses GB Studio's native byte-array RLE to write palette/background-priority attributes and the core scene collision map. Native CGB attribute bit 7 marks raised roof lips/canopies. The scene extension interprets collision values 0 as road, 16 as walk-only pavement/Island ground and 15 as solid; the normal engine ladder meaning of bit 4 does not apply to this custom scene. Each district has 15,616 tiles, so each tile/attribute/collision array fits one 16 KiB bank. `check_campaign.py` and `check_district_world.py` inspect registered resources for stop connectivity, compatible road routes, ferry links, reciprocal seams, traffic clearance and contract consistency.
 
 Car physics stores local Q4 coordinates and smoothed velocity; GBVM actors/camera use Q5. Motion catch-up is bounded independently from the full 16-bit VBlank clock; menus freeze the clock. Input edges are consumed once per render, and continuing curb contact preserves forward momentum. The UI uploads unchanged rows only once. Banked `td_routes.c` keeps the full pedestrian tables in ROM and selects six routes into a 24-byte WRAM coordinate cache; visible slots retain their route identity.
 
-Save version 6 serializes 58 bytes, including a 16-byte completion bitmap and separate player/parked-car districts. It alternates two 66-byte CRC16-checked records in SRAM bank 3 at offsets 0x100 and 0x180; GB Studio uses banks 0–2. The new record commits its magic byte last, preserving the old checkpoint until then. Progress checkpoints every game second; waiting/boarding/cancellation is saved explicitly. Version-5 saves are decoded in their original 48-byte layout, preserving original active work and paid transit in district 0. Valid version-4 prototype saves retain cash/completions but retire an active contract because its route changed. Earlier formats are rejected. Host interrupted-store tests are separate from native reset and physical persistence. The current candidate passed one remote foot/parked-car soft-reset recovery; active-contract recovery also passed in west; paid-trip reset and physical recovery remain further checks.
+The recorded four-scene build moves district names, portals, graph traversal and non-core traffic tables into `td_world.c`, linked in ROM bank 15. District routing selects feasible hops for the current car/foot mode, then approach distance; it does not solve street-level routes. The HUD/beacon cache the next district, refresh when entering/leaving the car, and show `NO ROAD ROUTE` when no driving connection exists. Local foot-only handoffs retain `PARK THEN WALK`. Six traffic samples plus the next-district byte add 37 persistent WRAM bytes compared with Prototype 3; the 24-byte pedestrian coordinate cache is unchanged. Transit choices use the same departure window as boarding and display a countdown. Confirming during the two-second window boards immediately; these changes do not add eastern TTC routes or claim real-world timetables.
+
+The final candidate's banked auxiliary getter directs drivers to legal road parking anchors for Colborne 34, Withrow 36 and Greenwood 41, then restores the actual client target immediately on foot. It changes no client record or save field. Native Withrow play verifies the marker changing from road `(224,144)` to client `(320,144)` after exit, handoff and car re-entry. Colborne/Greenwood remain separate native handoff checks. The earlier `7a299125…` binary predates this fix.
+
+Save version 6 serializes 58 bytes, including a 16-byte completion bitmap and separate player/parked-car districts. It alternates two 66-byte CRC16-checked records in SRAM bank 3 at offsets 0x100 and 0x180; GB Studio uses banks 0–2. The new record commits its magic byte last, preserving the old checkpoint until then. Progress checkpoints every game second; waiting/boarding/cancellation is saved explicitly. Version-5 saves are decoded in their original 48-byte layout, preserving original active work and paid transit in district 0. Valid version-4 prototype saves retain cash/completions but retire an active contract because its route changed. Earlier formats are rejected. Host interrupted-store tests are separate from native reset and physical persistence. Published Prototype 3 passed remote foot/parked-car, western active-contract and paid core-trip reset samples. The final four-scene candidate keeps this save schema and restores nine completions, cash/clock, a foot player in High Park and the car parked in the west after native reset. Final-candidate paid-trip recovery and physical persistence remain separate gates.
 
 `td_session_live` is an internal UBYTE engine field at default 0. Stock generated bootstrap resets it on cold/soft boot; ordinary district changes preserve it. Session restore/audio initialization therefore run once, while each loaded scene rebuilds its local actors and UI. Keep its project setting at 0.
 
-The source fixes `VM_MAX_CONTEXTS` at 8 through a project-local `cType: define` field targeting the copied `include/vm.h`. This is the stock compiler's file-backed engine-field workflow; it does not modify the installed toolchain. The shared heap remains 768 words and each context stack 64 words. Restore validates one 58-byte candidate at a time and migrates legacy tails in place to reduce native CPU-stack use. Current authored scenes have no concurrent actor/trigger scripts; reassess the fixed context pool before adding scripted entities. These changes are compiled into the candidate identified below and passed its remote reset replay.
+The source fixes `VM_MAX_CONTEXTS` at 8 through a project-local `cType: define` field targeting the copied `include/vm.h`. This is the stock compiler's file-backed engine-field workflow; it does not modify the installed toolchain. The shared heap remains 768 words and each context stack 64 words. Restore validates one 58-byte candidate at a time and migrates legacy tails in place to reduce native CPU-stack use. Current authored scenes have no concurrent actor/trigger scripts; reassess the fixed context pool before adding scripted entities. These settings remain compiled into the four-scene candidate, whose own remote High Park reset sample passes. Prototype 3's earlier recovery evidence remains scoped to its separate binary.
 
 ## Native memory guard
 
@@ -65,19 +78,73 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-districts.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-four-districts.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
-The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. The current eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed the native reset replay. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
+The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. The current four-scene build ends at **D934**, leaving **1,484 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
 
-## Linked-district candidate under test
+## Prototype 4: four scenes and sampled native acceptance
+
+| Identity | Value |
+| --- | --- |
+| Native output | `project/build/toronto-four-districts.gbc` |
+| ROM size | 524,288 bytes (512 KiB) |
+| Candidate ROM SHA-256 | `1da71ba549aaf6b0b1fc641d4f4f9e0e317550e396bf80ffaf401f6ff7e82b2b` |
+| Plugin project revision | `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4` |
+| Build source fingerprint | `e029dac64f995a5466df744fad68ebbf4e14ef28b9d5d0df944ff0deed44a5ee` |
+| Native `symbols.noi` SHA-256 | `24a627853b5d39766d336901b52ad871ad022b7c767afe6b14e26cb3d670f289` |
+| Native `globals.i` SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Native scenes / content | Core 0, west 1, High Park 2, east 3 / 88 contracts, 43 stops |
+| Save / VM contexts | Version 6, 58-byte state / 8 contexts |
+| Added persistent WRAM | 37 bytes compared with Prototype 3 (`99eb430…`) |
+| Memory guard | `D934` heap / `DF00` stack / 1,484-byte reserve |
+
+The official plugin build compiled the updated source successfully. Full `make check` passed **2,352 host engine checks, 2,974 independent bridge checks, 16,997 world-navigation checks and nine memory-guard fixtures**, plus content/registered-resource/generated-source validation. The actual ROM, NOI and globals digests above were verified, and the linked symbols pass the explicit 1,024-byte guard. Host tests, linked allocation and native execution are distinct evidence.
+
+The finalized ordinary-button native progression recording contains **31,480 frames / 11,894 events**, digest `cabb314d585e6451b33e93d03ef0f27b30373cd1d6ed158fa2b527249073a505`, retained in ignored archive `efe1b627-ab0f-437f-9bd6-cc06031fb38a`. Inspection was read-only. It completes nine distinct contracts: 01, 02, 03, 07, 81, 04 (truck), 82 (car), 83 (motorcycle) and 85 (Withrow park-and-walk relay). All four actual native scenes load; sampled travel covers the three core/east approaches, core-to-west driving and west-to-High Park walking. Withrow verifies the parking-anchor/client-marker switch, handoff and car re-entry. The repeated held-turn sequence retains speed 24 at frame 864.
+
+A remote High Park reset restores nine completions, cash 1,304, world second 486, player `(979.5,639.375)` on foot and the car parked in the west at `(861,640.875)`. The local-map camera global changes from 31,328 to 23,648 across 160 frames while player and clock stay frozen. These are recorded state values, not camera pixel coordinates; the recording's stop-reason camera numerals were inaccurate and are corrected in [TESTING.md](../TESTING.md).
+
+A separate final-ROM transit session `3b64dc833a774380a4c6814c3b85db0f` records **562 frames / 298 events**, digest `ed0f8b776016ad10af8116d8c1cdeed3d81f6acd62342b8cb1b856ae12788fac`, archived as `fc614adf-9114-4968-8c48-53ade87b46bc`. At frame 314, clock 1, the selector shows `DEPARTS IN 0` with cash 30. Eight A frames board immediately by frame 322 and charge once, leaving 27. At frame 442, the courier arrives on foot at King `(640,640)`, world second 3, with the car parked at Union `(560,720)`. This verifies boarding/arrival, not resetting during the paid ride.
+
+From frames 442→562, the UBYTE update counter changes `248→51`: modulo 256, that is **59 updates over 120 video frames**, about 29.5 updates per second. The OAM snapshot has 12 visible sprites, peak four per scanline and zero over-limit scanlines. The immutable journal's stop reason incorrectly states `88→148`, 60 updates and peak six; the actual inspected values above and [TESTING.md](../TESTING.md) correct that text. This bounded core sample does not establish crowded-scene or whole-city performance.
+
+The progression sample represents about eight minutes of purposeful native game-clock gameplay. It does not establish all 88 contracts, every seam lane, two hours of varied gameplay, human enjoyment, expanded-world frame pacing, full former Toronto coverage or physical cartridge behavior. Remaining handoffs/seams and paid-ride reset are still pending. The milestone identifier is `v0.2.0-prototype.4`; use the matching bundle from the [releases page](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.4). Exact build-specific scenarios and later acceptance results belong in [TESTING.md](../TESTING.md). No human listening or current browser/device proof is claimed.
+
+## Historical intermediate four-scene build
+
+| Identity | Value |
+| --- | --- |
+| Output path at build time | `project/build/toronto-four-districts.gbc` (now used by the final candidate) |
+| ROM size | 524,288 bytes (512 KiB) |
+| Candidate ROM SHA-256 | `7a299125675b7e08aeb3ba939b2382b28597bfbae584ec2a5c4255ed5abf24f0` |
+| Plugin project revision | `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4` |
+| Build source fingerprint | `e8719774b958cd9114030e0d2bda83fee963c42e745505beb588968a6856cce4` |
+| Native `symbols.noi` SHA-256 | `67affe33b3f214f6eaa6998c277b6186f4698ba1bfe325ac276523388b0d4dca` |
+| Native `globals.i` SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Native scenes | Core 0, west 1, High Park 2, east 3; each 1,024 × 976 |
+| Compiled content | 88 contracts / 43 stops |
+| Banked world functions | ROM bank 15 |
+| Save / VM contexts | Version 6, 58-byte state / 8 contexts |
+| Added persistent WRAM | 37 bytes compared with Prototype 3 (`99eb430…`) |
+| Memory guard | `D934` heap / `DF00` stack / 1,484-byte reserve |
+
+The official plugin build compiled all four registered scene/collision resources successfully. It reported Node `DEP0190`, an upstream unreachable sound-effect warning and five `TORONTO` optimizer warnings, with no errors. The ROM and debug-artifact sizes/digests above identify this local candidate; they do not identify a public release or a Git commit.
+
+These linked artifacts place the 4,986-byte world unit in bank `0F` (15): 3,432 bytes of code and 1,554 bytes of data. Its public functions are `BANKED`, it allocates no static world WRAM, and its route function uses an 82-byte local frame without adding 32-bit arithmetic imports. The fixed ROM bank ends at `3F81`, leaving 127 bytes, the same headroom as Prototype 3. This linked-bank accounting is separate from the WRAM guard and does not measure the deepest native call path.
+
+Before this build, full `make check` passed **2,273 host engine checks, 2,974 independent bridge checks, 16,997 world-navigation checks and nine memory-guard fixtures**, alongside source/content/registered-resource validation. Host hardware stubs and sanitizer checks do not prove native execution. The explicit memory guard also passed against this candidate's linked `symbols.noi`.
+
+Native plugin samples on this earlier ROM passed immediate transit boarding over 442 frames and first-delivery/full-speed held turning over 864 frames. Driving core 0 → east 3 → core 0 and walking core 0 → east 3 were observed. It predates the parking-anchor source fix and is superseded by `1da71ba5…`; its samples are not proof of the final candidate's paid-transit behavior. Build-specific scenarios belong in [TESTING.md](../TESTING.md); the published Prototype 3 below remains a separate binary.
+
+## Published Prototype 3: three linked scenes
 
 | Identity | Value |
 | --- | --- |
 | Native output | `project/build/toronto-districts.gbc` |
-| Candidate ROM SHA-256 | `99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f` |
+| Published ROM SHA-256 | `99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f` |
 | Build source fingerprint | `93038e0d626669ee1d1b6809ebd68b492997c28a931300e3e59bf9e1eb207f08` |
 | Native NOI SHA-256 | `2e8fca83ec54ad8517f1b6125710bc388b6952b8b9144c0b4e24133321e50526` |
 | Native scenes | Core 0, west 1, High Park 2; each 1,024 × 976 |
@@ -85,9 +152,9 @@ The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack ba
 | Save schema | Version 6; 58-byte state |
 | Memory guard | `D90F` heap / `DF00` stack / 1,521-byte reserve |
 
-This CGB-only candidate is 262,144 bytes (256 KiB). Its official build resolves all three scene and collision resources. The ModRetro plugin confirmed clean boot, first-delivery/held-acceleration turning, a driving transition from core 0 to west 1 and walking from west 1 to High Park 2. A soft reset then restored the courier on foot in the actual High Park scene while retaining the parked vehicle in district 1, cash and world clock. Native checks are continuing; this candidate has not established all portals, complete campaign progression, two hours of gameplay, full Old Toronto coverage or physical cartridge behavior. Build-specific playtest details belong in [TESTING.md](../TESTING.md).
+Published Prototype 3 is CGB-only and 262,144 bytes (256 KiB), available through the [releases page](https://github.com/trancethehuman/modretro-games/releases). Its official build resolves three scene and collision resources. The ModRetro plugin confirmed clean boot, first-delivery/held-acceleration turning, a driving transition from core 0 to west 1 and walking from west 1 to High Park 2. A soft reset restored the courier on foot in the actual High Park scene while retaining the parked vehicle in district 1, cash and world clock. Western active-job and paid core-trip reset samples also passed. These samples do not establish all portals, complete campaign progression, two hours of gameplay, full Old Toronto coverage, physical cartridge behavior or the newer four-scene binary. Build-specific details belong in [TESTING.md](../TESTING.md).
 
-`make check` passed with **1,212 host engine checks, 710 independent district bridge checks and nine memory-guard regressions**, alongside repository/content/generated-source validation. Those checks use host hardware stubs and do not replace the native scenarios above. Source fingerprints and symbol digests identify build inputs/artifacts; they are not Git commits.
+At that milestone, `make check` passed with **1,212 host engine checks, 710 independent district bridge checks and nine memory-guard regressions**, alongside repository/content/generated-source validation. Those checks use host hardware stubs and do not replace the native scenarios above. Source fingerprints and symbol digests identify build inputs/artifacts; they are not Git commits.
 
 ## Published single-scene milestone
 
@@ -104,7 +171,7 @@ The fingerprint and plugin revision identify build/project state; neither is a G
 
 At that milestone, `make check` passed with **471 host engine checks and zero failures**, including audio integration and entry/transit transitions, alongside repository/campaign/generated-source validation. These checks cover host logic with hardware stubs; they do not establish native sound, physical behaviour or cartridge performance. Native plugin checks passed for representative first-delivery, corner, car-entry, transit-pause and failed-job flows, followed by transit checks on that ROM. [TESTING.md](../TESTING.md) maps the actual scenarios to their exact build identities.
 
-Original music and engine/brake/event/transit effects are compiled into both milestones. The pause menu cycles music + effects, effects only and silent; the preference defaults per boot. A separate public PyBoy 2.7.0 PCM run of the single-scene ROM identified above passed all eight interval checks: nonzero music, acceleration, braking, effects-only acceleration and resumed music, and all-zero measured silent/menu/paused-effects-only intervals. [AUDIO.md](AUDIO.md) records sample counts, peaks, limitations and the opt-in reproduction command. Those captures do not establish sound continuity in the new districts. No human listening or physical sound check is claimed.
+Original music and engine/brake/event/transit effects are compiled into the published milestones and current candidate. The pause menu cycles music + effects, effects only and silent; the preference defaults per boot. A separate public PyBoy 2.7.0 PCM run of the single-scene ROM identified above passed all eight interval checks: nonzero music, acceleration, braking, effects-only acceleration and resumed music, and all-zero measured silent/menu/paused-effects-only intervals. [AUDIO.md](AUDIO.md) records sample counts, peaks, limitations and the opt-in reproduction command. Those captures do not establish sound continuity in the new districts. No human listening or physical sound check is claimed.
 
 No Chromatic was connected during the latest discovery; no stream, cartridge write/read-back or cold boot is verified. The full campaign, two-hour gameplay target, full Old Toronto coverage and whole-city performance remain open gates. Follow the [loading instructions](LOADING.md) and [hardware workflow](../../../docs/HARDWARE.md) before any write.
 

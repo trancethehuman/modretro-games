@@ -42,7 +42,9 @@
         "src/td_district.c",
         "src/td_save.c",
         "include/td_district_world.h",
-        "src/td_routes.c"
+        "src/td_routes.c",
+        "include/td_world.h",
+        "src/td_world.c"
       ]
     }
   ]

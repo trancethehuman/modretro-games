@@ -5,7 +5,7 @@
 #include "td_world_routes.h"
 #include "td_audio.h"
 #include "td_district.h"
-#include "td_district_world.h"
+#include "td_world.h"
 #include "actor.h"
 #include "camera.h"
 #include "scroll.h"
@@ -21,6 +21,7 @@ td_job_t td_job,td_offer;
 td_stop_t td_target,td_cursor;
 /* Registered engine field: stock bootstrap resets this on cold/soft boot. */
 UBYTE td_session_live;
+UBYTE td_route_district;
 static UBYTE td_transition_pending;
 typedef char td_serialized_state_must_be_58_bytes[(sizeof(td_state_t)==58)?1:-1];
 static const BYTE td_dx[]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
@@ -31,6 +32,7 @@ static const UBYTE td_train[]={0,12,13,14,15,16,17};
 static const UBYTE td_bus[]={18,16,19};
 static const UBYTE td_ferry[]={10,20,21,22};
 static UWORD td_traffic_u[6],td_traffic_v[6];
+static td_traffic_sample_t td_traffic_samples[6];
 static UWORD td_nearby_routes[6][2];
 static UBYTE td_traffic_leg[6],td_ped_route[6],td_ped_refresh;
 static UWORD td_ped_anchor_u,td_ped_anchor_v;
@@ -95,28 +97,21 @@ static void td_enter_exit(void){
         if(!found){td_message(15);return;}
         td.park_u=td.u;td.park_v=td.v;td.park_district=td.district;td.u=door_u;td.v=door_v;td.onfoot=1;td_entry_target=1;
     }
-    td.speed=0;td_vx=td_vy=0;td_entry_timer=12;td.mode=TD_ROAM;td_save();td_ui_draw();
+    td.speed=0;td_vx=td_vy=0;td_entry_timer=12;td.mode=TD_ROAM;td_set_target();td_save();td_ui_draw();
 }
 void td_get_district_name(UBYTE index,char *dest) BANKED {
-    if(index<TD_DISTRICT_COUNT)memcpy(dest,td_district_names[index],19);else strcpy(dest,"UNKNOWN DISTRICT");
-}
-static const td_portal_t *td_route_portal(void){
-    const td_portal_t *best=NULL,*p;UWORD score,best_score=65535;UBYTE i,next;
-    if(td_target.district==td.district)return NULL;
-    next=td.district<td_target.district?td.district+1:td.district-1;
-    for(i=0;i<TD_PORTALS;i++){
-        p=&td_portals[i];if(p->from!=td.district||p->to!=next||(!td.onfoot&&!p->vehicle))continue;
-        score=td_distance(td.v>>4,p->v)+td_distance(td_target.v,p->arrival_v);
-        if(score<best_score){best_score=score;best=p;}
-    }
-    return best;
+    if(!td_world_name(index,dest))strcpy(dest,"UNKNOWN DISTRICT");
 }
 void td_set_target(void) BANKED {
-    const td_portal_t *portal;
-    if(td.job!=TD_NONE)td_get_stop(td_job.route[td.stage],&td_target);
-    else td_get_stop(0,&td_target);
-    portal=td_route_portal();
-    td_position(&actors[1],portal?portal->u:td_target.u,(portal?portal->v:td_target.v)-12);
+    td_portal_t portal;UBYTE routed,stop=td.job!=TD_NONE?td_job.route[td.stage]:0;
+    td_get_stop(stop,&td_target);
+    /* Show the legal approach while driving, then the actual client on foot. */
+    if(!td.onfoot&&(td_target.reserved&TD_STOP_FOOT))td_get_parking(stop,&td_target.u,&td_target.v);
+    routed=td_world_route(td.district,td_target.district,td.onfoot,td.u>>4,td.v>>4,td_target.u,td_target.v,&portal);
+    td_route_district=routed?portal.to:TD_DISTRICT_NONE;
+    td_position(&actors[1],routed?portal.u:td_target.u,(routed?portal.v:td_target.v)-12);
+    if(td_target.district!=td.district&&!routed)actors[1].flags|=ACTOR_FLAG_HIDDEN;
+    else actors[1].flags&=~ACTOR_FLAG_HIDDEN;
 }
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v){
     if(td.onfoot?!td_district_walkable(district,u>>4,v>>4):!td_district_drivable(district,u>>4,v>>4))return FALSE;
@@ -125,18 +120,13 @@ static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v){
     if(!td.onfoot){td.park_district=district;td.park_u=u;td.park_v=v;}
     td_transition_pending=1;td_save();return TRUE;
 }
-static UBYTE td_cross_portal(UWORD old_u){
-    UBYTE i;WORD offset;const td_portal_t *p;
-    if(td_entry_timer||td.mode!=TD_ROAM||td.u==old_u)return FALSE;
-    for(i=0;i<TD_PORTALS;i++){
-        p=&td_portals[i];if(p->from!=td.district||(!td.onfoot&&!p->vehicle))continue;
-        if(p->u==24){if(td.u>24*16||td.u>=old_u)continue;}
-        else if(td.u<1000*16||td.u<=old_u)continue;
-        offset=(WORD)td.v-(WORD)(p->v*16);
-        if(offset<-(td.onfoot?28:18)*16||offset>(td.onfoot?28:18)*16)continue;
-        return td_change_district(p->to,p->arrival_u*16,p->arrival_v*16+offset);
-    }
-    return FALSE;
+static UBYTE td_cross_portal(UWORD old_u,UWORD old_v){
+    td_crossing_t crossing;
+    if(td_entry_timer||td.mode!=TD_ROAM||(td.u==old_u&&td.v==old_v))return FALSE;
+    /* Most motion stays away from seams and needs no ROM bank switch. */
+    if(td.u>24*16&&td.u<1000*16&&td.v>24*16&&td.v<952*16)return FALSE;
+    if(!td_world_crossing(td.district,td.onfoot,old_u,old_v,td.u,td.v,&crossing))return FALSE;
+    return td_change_district(crossing.district,crossing.u,crossing.v);
 }
 static void td_finish(UBYTE success){
     td_audio_play(success?TD_AUDIO_COMPLETE:TD_AUDIO_FAIL);
@@ -193,6 +183,17 @@ static UBYTE td_route_stop(UBYTE origin,UBYTE idx){
     if(td_service(origin)==3)return (origin&63)==10?td_ferry[1+idx%3]:10;
     if(td_service(origin)==2)return td_bus[idx%3];
     return td_train[idx%7];
+}
+static UBYTE td_board_current_window(void){
+    UBYTE service,fare,steps;
+    if(td_next_departure(td.transit_origin,td.seconds))return FALSE;
+    service=td_service(td.transit_origin);fare=service==1?3:service==2?2:4;
+    if(td.cash<fare){td.mode=TD_ROAM;td_save();td_message(4);return TRUE;}
+    steps=td_distance(td_stop_index(td.transit_origin,td.transit_target),td_stop_index(td.transit_origin,td.transit_origin&63));
+    /* A fresh free-roaming trip cannot inherit an old contract failure. */
+    if(td.job==TD_NONE)td.health=100;
+    td.cash-=fare;td.mode=TD_RIDE;td.ride_left=service==3?8:service==2?2+steps*2:1+steps/2;
+    td_audio_play(TD_AUDIO_TRANSIT);td_save();return TRUE;
 }
 static void td_transit_open(void){
     UBYTE origin;
@@ -252,28 +253,23 @@ static void td_menu_update(void){
         if(INPUT_LEFT_PRESSED){UBYTE count=td_service(td.transit_origin)==1?7:td_service(td.transit_origin)==2?3:(td.transit_origin&63)==10?3:1;td.menu=(td.menu+count-1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}
         if(INPUT_A_PRESSED){
             if(td.transit_target==(td.transit_origin&63))return;
-            td.mode=TD_WAIT;td.speed=0;td_save();td_ui_draw();return;
+            td.mode=TD_WAIT;td.speed=0;
+            /* The displayed two-second window includes the current second;
+               confirmation must not wait for another clock tick to board. */
+            if(!td_board_current_window())td_save();
+            td_ui_draw();return;
         }
     }else if(td.mode==TD_RESULT&&INPUT_A_PRESSED){td.mode=TD_BOARD;td_ready_offer();}
     if(INPUT_A_PRESSED||INPUT_UP_PRESSED||INPUT_DOWN_PRESSED||INPUT_LEFT_PRESSED||INPUT_RIGHT_PRESSED)td_ui_draw();
 }
 static void td_second(void){
-    UBYTE service,fare,steps; td_stop_t origin;
     td.seconds++;
     if(td.job!=TD_NONE){if(td.left)td.left--;if(!td.left){td.health=0;
         /* A failed parcel still finishes its already-paid trip; never strand it in transit. */
         if(td.mode==TD_RIDE){td.job=TD_NONE;td_save();}else{td_finish(FALSE);return;}
     }}
     if(td.mode==TD_WAIT){
-        td_get_stop(td.transit_origin&63,&origin);service=td_service(td.transit_origin);
-        if(!td_next_departure(td.transit_origin,td.seconds)){
-            fare=service==1?3:service==2?2:4;
-            if(td.cash<fare){td.mode=TD_ROAM;td_save();td_message(4);return;}
-            steps=td_distance(td_stop_index(td.transit_origin,td.transit_target),td_stop_index(td.transit_origin,td.transit_origin&63));
-            /* A fresh free-roaming trip cannot inherit an old contract failure. */
-            if(td.job==TD_NONE)td.health=100;
-            td.cash-=fare;td.mode=TD_RIDE;td.ride_left=service==3?8:service==2?2+steps*2:1+steps/2;td_audio_play(TD_AUDIO_TRANSIT);td_save();
-        }
+        if(td_board_current_window()&&td.mode!=TD_RIDE)return;
     }else if(td.mode==TD_RIDE){
         if(td.ride_left)td.ride_left--;
         if(!td.ride_left){td.u=td_cursor.u*16;td.v=td_cursor.v*16;td.safe_u=td.u;td.safe_v=td.v;td.mode=td.health?TD_ROAM:TD_RESULT;td_audio_play(td.health?TD_AUDIO_TRANSIT:TD_AUDIO_FAIL);td_save();}
@@ -291,11 +287,11 @@ static UBYTE td_signal_stop(UWORD pos,UBYTE vertical,UBYTE reverse){
 static void td_traffic_step(void){
     static const UWORD bus_u[]={144,208,208,640,816,816};
     static const UWORD bus_v[]={64,64,176,176,176,64};
-    UBYTE i,leg,phase=td.seconds%12,blocked;UWORD u,v,target_u,target_v;
+    UBYTE i,leg,phase=td.seconds%12,blocked,dirty=0;UWORD u,v,target_u,target_v;
     for(i=0;i<6;i++){
         u=td_traffic_u[i];v=td_traffic_v[i];leg=td_traffic_leg[i];blocked=0;
         if(td.district){
-            target_u=td_west_traffic[td.district-1][i][leg][0]*16;target_v=td_west_traffic[td.district-1][i][leg][1]*16;
+            target_u=td_traffic_samples[i].u;target_v=td_traffic_samples[i].v;
         }else if(i<4){
             target_u=(leg<2?840:48)*16;target_v=(td_rows[2+i]+(leg==0||leg==3?-8:8))*16;
             if((leg==0||leg==2)&&phase>=7)blocked=td_signal_stop(u,0,leg==2);
@@ -311,23 +307,25 @@ static void td_traffic_step(void){
             // Road users yield to a courier crossing on foot, including between catch-up steps.
             if((td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot&&td_distance(td.u,u)<208&&td_distance(td.v,v)<208)continue;
             td_traffic_u[i]=u;td_traffic_v[i]=v;
-            if(u==target_u&&v==target_v)td_traffic_leg[i]=(leg+1)%(td.district?td_west_traffic_counts[td.district-1][i]:i==5?6:4);
+            if(u==target_u&&v==target_v){
+                td_traffic_leg[i]=(leg+1)%(td.district?td_traffic_samples[i].count:i==5?6:4);
+                /* Banked targets and frames are cached between junctions. */
+                if(td.district)dirty=1;
+            }
         }
         if(td.mode==TD_ROAM&&!td.onfoot&&td_distance(td.u,u)<180&&td_distance(td.v,v)<180&&!td.cooldown){
             td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=60;
-            if(td.job!=TD_NONE){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);return;}}td_message(5);
+            if(td.job!=TD_NONE){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);break;}}td_message(5);
         }
     }
+    if(dirty)td_world_traffic_samples(td.district,td_traffic_leg,td_traffic_samples);
 }
 static void td_traffic_present(void){
-    UBYTE i,leg,previous,frame;const UWORD (*path)[2];
+    UBYTE i,leg,frame;
     for(i=0;i<6;i++){
         leg=td_traffic_leg[i];
-        if(td.district){
-            path=td_west_traffic[td.district-1][i];previous=leg?leg-1:td_west_traffic_counts[td.district-1][i]-1;
-            frame=path[leg][0]>path[previous][0]?0:path[leg][0]<path[previous][0]?4:path[leg][1]>path[previous][1]?2:6;
-            frame+=(i==5?1:i%4)*8;
-        }else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
+        if(td.district)frame=td_traffic_samples[i].frame;
+        else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
         td_position(&actors[i+2],td_traffic_u[i]>>4,td_traffic_v[i]>>4);td_frame(&actors[i+2],frame);
     }
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:td.vehicle*8+((td.heading+1)&15)/2);
@@ -380,7 +378,7 @@ static void td_drive(void){
     if(td_red_cooldown)td_red_cooldown--;
     if(td_entry_timer){
         if(!td_entry_target){td.u=(td.u*3+td.park_u)/4;td.v=(td.v*3+td.park_v)/4;}
-        if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_save();}
+        if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();}
         td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);return;
     }
     if(td.onfoot){
@@ -466,9 +464,9 @@ void toronto_init(void) BANKED {
         actors[i].next=actors_inactive_head; if(actors_inactive_head)actors_inactive_head->prev=&actors[i];actors_inactive_head=&actors[i];
         activate_actor(&actors[i]);
     }
+    if(td.district)td_world_traffic_init(td.district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
     for(i=0;i<6;i++){
-        if(td.district){td_traffic_u[i]=td_west_traffic[td.district-1][i][0][0]*16;td_traffic_v[i]=td_west_traffic[td.district-1][i][0][1]*16;td_traffic_leg[i]=1;}
-        else{td_traffic_u[i]=(i<4?80+i*120:i==4?824:144)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=i==5?1:0;}
+        if(!td.district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:144)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=i==5?1:0;}
         td_ped_route[i]=TD_NONE;
     }
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
@@ -478,7 +476,7 @@ void toronto_init(void) BANKED {
     if(cold)td_audio_init();td_ui_init();
 }
 void toronto_update(void) BANKED {
-    UWORD now,elapsed,seconds,old_u;UBYTE motion,step,consumed=0;
+    UWORD now,elapsed,seconds,old_u,old_v;UBYTE motion,step,was_entering,consumed=0;
     if(td_transition_pending){if(td_transition_pending==2&&td_district_queue(td.district))td_transition_pending=1;return;}
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
     td_corner_used=0;
@@ -494,7 +492,10 @@ void toronto_update(void) BANKED {
     while(seconds--&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE))td_second();
     for(step=0;step<motion&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);step++){
         td_tick++;td_input_edge=step==0&&!consumed;
-        if(td.mode==TD_ROAM){old_u=td.u;td_drive();if(td_cross_portal(old_u))return;}
+        if(td.mode==TD_ROAM){
+            old_u=td.u;old_v=td.v;was_entering=td_entry_timer;
+            td_drive();if(!was_entering&&td_cross_portal(old_u,old_v))return;
+        }
         td_traffic_step();
     }
     if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
