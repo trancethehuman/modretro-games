@@ -1,86 +1,338 @@
-"""Compile original contracts into native game data; no invented map coordinates hidden in ROM."""
+"""Compile original, authored courier contracts into the native game.
+
+Shortest collision-grid routes inform time allowances. These are design estimates,
+not measured campaign duration, and do not prove the two-hour release target.
+"""
+from collections import deque
+from functools import cache
 from pathlib import Path
 import json
-from city_layout import location,ROWS,COLS
+import math
+from city_layout import location
 
-ROOT=Path(__file__).resolve().parents[1]
-ENGINE=ROOT/'project/plugins/toronto-driving/engine'
+ROOT = Path(__file__).resolve().parents[1]
+ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
+KINDS = ['PARCEL ROUND', 'FRAGILE ART', 'EXPRESS FILES', 'HEAVY FREIGHT',
+         'TRANSIT RELAY', 'PASSENGER RUN', 'RETURN PAPERS', 'ISLAND POST']
+CHAPTERS = ['First shift', 'Neighbourhood connections', 'City events',
+            'Crossing the city', 'Waterfront work', 'Arts and audiences',
+            'Evening dispatch', 'Across the network', 'Master courier']
+
+# Titles and brief lines fit the native handheld UI. Every route is authored,
+# rather than rotating an unrelated pool of landmarks to inflate the job count.
+# Each row is one chapter, with the eight native rule types in KINDS order.
+CONTRACTS = [
+    [
+        ('MARKET START', ('MARKET PARCEL', 'UNION TO MARKET'), [0, 1]),
+        ('FIRST ART CRATE', ('ART CRATE FOR AGO', 'BRAKE BEFORE TURNS'), [0, 5]),
+        ('DISTILLERY FILES', ('SEALED OFFICE FILE', 'BEAT THE DEADLINE'), [0, 2]),
+        ('SHORE SUPPLIES', ('TRUCK LOADS ONLY', 'MARKET TO HARBOUR'), [0, 1, 2, 11]),
+        ('FIRST CONNECTION', ('POCKET MAIL RELAY', 'TRY TRAIN AND BUS'), [0, 17, 16, 18, 16, 19, 16, 0]),
+        ('STATION PICKUPS', ('PASSENGERS BY CAR', 'SMOOTH CITY RIDES'), [0, 1, 2, 9, 17, 6, 23, 0]),
+        ('SIGNED AND SEALED', ('COLLECT SIGNATURES', 'RETURN TO UNION'), [0, 3, 1, 0]),
+        ('CENTRE LETTERS', ('PARK THEN FERRY', 'WALK THE LAST LEG'), [10, 21, 25, 21, 10]),
+    ],
+    [
+        ('SHOPFRONT ROUND', ('SMALL SHOP PARCELS', 'LINK LOCAL STOPS'), [0, 1, 2, 11, 4, 7, 8, 0]),
+        ('GALLERY LOAN', ('FRAMED PRINTS', 'DELIVER INTACT'), [5, 6, 3, 4, 7, 5]),
+        ('CROSSING DEADLINE', ('CIVIC FILE RUN', 'CHOOSE YOUR BRIDGE'), [0, 3, 12, 2, 9, 19, 17, 0]),
+        ('STOCK THE STALLS', ('MARKET STOCK TRUCK', 'WEST TO OLD TOWN'), [11, 2, 1, 0, 23, 8, 4, 0]),
+        ('BUS CONNECTIONS', ('STATION LETTERS', 'BUS AT WELLESLEY'), [17, 15, 0, 16, 19, 16, 18, 16, 17]),
+        ('MUSEUM OUTING', ('MUSEUM VISIT RIDES', 'KEEP THE CAR CALM'), [0, 6, 17, 3, 1, 11, 23, 0]),
+        ('HARBOUR RECEIPTS', ('SIGNED CARGO SLIPS', 'BACK TO THE DEPOT'), [0, 11, 2, 1, 3, 0]),
+        ('HANLAN POST', ('HANLAN LETTERS', 'FERRY THEN FOOT'), [10, 20, 24, 20, 10]),
+    ],
+    [
+        ('MARKET TO MARKET', ('NEIGHBOURHOOD MAIL', 'WEST TO EAST ROUND'), [8, 7, 5, 4, 3, 1, 2, 11, 0]),
+        ('OPENING NIGHT ART', ('EXHIBITION CRATES', 'NO HARD IMPACTS'), [6, 5, 7, 4, 3, 1, 23, 6]),
+        ('BRIDGE DOCUMENTS', ('URGENT CITY MAIL', 'BRIDGE TO BRIDGE'), [7, 3, 14, 16, 19, 9, 2, 0]),
+        ('EVENT EQUIPMENT', ('TRUCK EVENT LOADS', 'RETURN EMPTY CASES'), [2, 11, 23, 8, 7, 4, 1, 0]),
+        ('CAMPUS ENVELOPES', ('LIGHT CAMPUS MAIL', 'COMPARE THE ROUTES'), [18, 16, 0, 12, 15, 17, 16, 19, 16, 0]),
+        ('AUDIENCE ARRIVALS', ('EVENT PASSENGERS', 'CAR TO EACH DOOR'), [17, 6, 5, 4, 23, 11, 2, 1, 0]),
+        ('PERMIT LOOP', ('SIGNED EVENT FORMS', 'RETURN TO START'), [0, 3, 5, 6, 17, 19, 9, 2, 0]),
+        ('WARD COTTAGE MAIL', ('WARD LETTER ROUND', 'LEAVE CAR MAINLAND'), [10, 22, 26, 22, 10]),
+    ],
+    [
+        ('WEST END THREAD', ('SHOP REPAIR KITS', 'STOPS IN ORDER'), [0, 23, 4, 8, 7, 5, 6, 3, 1, 0]),
+        ('GLASS ACROSS TOWN', ('GLASS NEEDS CARE', 'PLAN WIDE TURNS'), [1, 2, 9, 19, 17, 6, 5, 4, 23, 1]),
+        ('NORTH SOUTH FILES', ('OFFICE CUTOFF RUN', 'STOP AT THE BEACON'), [0, 17, 19, 9, 2, 11, 23, 3, 0]),
+        ('CITY WORK CREW', ('WORK CREW TOOLS', 'TRUCK EACH STOP'), [8, 7, 4, 23, 0, 1, 2, 11, 9, 8]),
+        ('YONGE CONNECTION', ('STATION MAIL', 'KEEP FARE MONEY'), [0, 14, 17, 15, 12, 16, 18, 16, 19, 16, 0]),
+        ('CITY TOUR RIDES', ('VISITOR RIDES', 'SMOOTH CITY TOUR'), [0, 23, 5, 6, 17, 19, 9, 2, 1, 0]),
+        ('CROSS CITY INK', ('SIGN AT EACH STOP', 'UNION GETS COPIES'), [0, 8, 7, 5, 6, 17, 19, 9, 2, 1, 0]),
+        ('WEST CENTRE POST', ('TWO ISLAND ROUNDS', 'TRANSFER MAINLAND'), [10, 20, 24, 20, 10, 21, 25, 21, 10]),
+    ],
+    [
+        ('HARBOUR SHOP MAIL', ('WATERFRONT PARCELS', 'SHORE TO CITY'), [11, 2, 1, 0, 23, 4, 7, 8, 3, 11]),
+        ('SHORE DISPLAY', ('FRAGILE DISPLAY', 'TAKE CARE AT CURBS'), [5, 4, 23, 0, 11, 2, 1, 3, 6, 5]),
+        ('DOCK OFFICE DASH', ('URGENT SHORE FILES', 'BEAT THE CLOCK'), [0, 11, 2, 9, 19, 17, 15, 3, 23, 0]),
+        ('HARBOUR LOADS', ('BULKY SHORE CARGO', 'WIDE TRUCK TURNS'), [0, 23, 11, 2, 1, 9, 8, 4, 3, 0]),
+        ('SHORE CONNECTION', ('SMALL SHORE KIT', 'TRAIN THEN WALK'), [11, 0, 17, 16, 19, 16, 18, 16, 12, 10]),
+        ('FERRY CONNECTIONS', ('RIDES TO THE SHORE', 'PARK AT DROP OFFS'), [0, 6, 17, 19, 9, 2, 11, 10, 23, 0]),
+        ('CARGO SIGNOFF', ('SIGNED DOCK PAPERS', 'BRING COPIES HOME'), [0, 11, 2, 9, 19, 17, 6, 3, 1, 0]),
+        ('CENTRE WARD POST', ('TWO ISLAND PARCELS', 'FOOTPATHS TO DOORS'), [10, 21, 25, 21, 10, 22, 26, 22, 10]),
+    ],
+    [
+        ('CULTURE PARCELS', ('BOOKS AND PROGRAMS', 'MUSEUM TO MARKET'), [6, 17, 3, 1, 2, 11, 23, 4, 7, 5, 6]),
+        ('ART EXCHANGE', ('FRAMED ART LOANS', 'KEEP CRATES WHOLE'), [5, 7, 8, 4, 23, 0, 1, 2, 3, 6, 5]),
+        ('PRINT SHOP CUTOFF', ('PRINT SHOP FILES', 'TIME THE CROSSINGS'), [7, 5, 6, 17, 19, 9, 2, 11, 3, 0]),
+        ('STAGE CASES', ('HEAVY EVENT CASES', 'TRUCK LOADING RUN'), [23, 0, 1, 2, 11, 9, 19, 6, 5, 4, 23]),
+        ('ART VIA TRANSIT', ('GALLERY MAIL', 'SMART TRANSFERS'), [5, 14, 17, 16, 18, 16, 19, 16, 12, 0, 5]),
+        ('GALLERY NIGHT', ('GALLERY CAR RIDES', 'PROTECT PASSENGERS'), [0, 5, 7, 8, 4, 23, 11, 2, 9, 6, 0]),
+        ('PROGRAM APPROVAL', ('COLLECT APPROVALS', 'RETURN ORIGINAL'), [0, 5, 7, 8, 4, 23, 11, 2, 9, 3, 0]),
+        ('WARD HANLAN POST', ('EAST AND WEST POST', 'FERRY FOOT FERRY'), [10, 22, 26, 22, 10, 20, 24, 20, 10]),
+    ],
+    [
+        ('LATE SHOP ROUND', ('LAST SHOP PARCELS', 'CITY STILL MOVES'), [0, 1, 2, 9, 19, 17, 6, 5, 7, 8, 4, 0]),
+        ('EVENING EXHIBIT', ('FINAL EXHIBIT LOAD', 'SLOW IN TURNS'), [6, 3, 1, 2, 11, 23, 4, 8, 7, 5, 6]),
+        ('LAST FILE RUN', ('URGENT FINAL FILES', 'PLAN THEN DRIVE'), [0, 8, 7, 5, 6, 17, 19, 9, 2, 3, 0]),
+        ('CLOSING STOCK', ('SHOP STOCK RETURNS', 'WIDE TURNS LOADED'), [1, 2, 11, 23, 4, 8, 7, 5, 3, 0, 1]),
+        ('NIGHT NETWORK', ('DISPATCH LETTERS', 'CATCH DEPARTURE'), [19, 16, 12, 0, 17, 15, 16, 18, 16, 14, 0]),
+        ('EVENING RIDES', ('LATE CITY RIDES', 'SAFE CAR JOURNEYS'), [0, 1, 2, 11, 23, 4, 8, 7, 5, 6, 17, 0]),
+        ('CLOSING LEDGER', ('SIGNED SHOP LEDGER', 'RETURN IT TO DEPOT'), [0, 23, 4, 8, 7, 5, 6, 17, 19, 9, 1, 0]),
+        ('THREE ISLAND POST', ('ALL THREE ISLANDS', 'WALK EACH DELIVERY'), [10, 20, 24, 20, 10, 21, 25, 21, 10, 22, 26]),
+    ],
+    [
+        ('CITY LINK PARCELS', ('CITY PARCEL ROUND', 'MANY ROUTE CHOICES'), [8, 4, 23, 11, 2, 9, 19, 17, 6, 5, 7, 0]),
+        ('FRAGILE CITY LINK', ('CITY ART HANDOFFS', 'CONDITION MATTERS'), [5, 6, 17, 19, 9, 2, 1, 11, 23, 4, 8, 5]),
+        ('NETWORK DEADLINE', ('EXPRESS FILE LINK', 'SAVE TIME LEGALLY'), [0, 23, 8, 7, 6, 17, 19, 9, 2, 11, 3, 0]),
+        ('NETWORK FREIGHT', ('LARGE CITY LOADS', 'TRUCK STOP CONTROL'), [11, 2, 1, 0, 23, 4, 8, 7, 6, 19, 9, 11]),
+        ('CITY TRANSFERS', ('POCKET CITY PAPERS', 'BUS TRAIN AND FOOT'), [18, 16, 19, 16, 17, 15, 0, 12, 14, 5, 1, 0]),
+        ('NEIGHBOUR RIDES', ('CITY RIDES', 'SMOOTH DRIVING'), [8, 7, 5, 6, 17, 19, 9, 2, 11, 1, 23, 0]),
+        ('SIGNATURE CHAIN', ('SIGNATURE CHAIN', 'FINAL STOP UNION'), [0, 1, 11, 2, 9, 19, 17, 6, 5, 7, 8, 0]),
+        ('ISLAND HANDOFFS', ('CENTRE WARD HANLAN', 'MAINLAND TRANSFERS'), [10, 21, 25, 21, 10, 22, 26, 22, 10, 20, 24]),
+    ],
+    [
+        ('MASTER PARCELS', ('FULL CITY PARCELS', 'EVERY STOP COUNTS'), [0, 8, 7, 5, 6, 17, 19, 9, 2, 11, 1, 23]),
+        ('MASTER ART ROUND', ('ART CARE ROUND', 'ARRIVE WITH CARE'), [6, 5, 8, 7, 4, 23, 0, 11, 2, 9, 19, 6]),
+        ('MASTER DEADLINE', ('FINAL EXPRESS RUN', 'CONTROL BEATS RUSH'), [0, 1, 2, 9, 19, 17, 6, 5, 8, 4, 23, 0]),
+        ('MASTER FREIGHT', ('FULL TRUCK CIRCUIT', 'BRAKE EARLY LOADED'), [0, 8, 7, 4, 23, 11, 2, 9, 19, 6, 3, 0]),
+        ('MASTER TRANSIT', ('NETWORK MAIL RELAY', 'TIME EACH TRANSFER'), [0, 17, 15, 16, 18, 16, 19, 16, 14, 5, 1, 0]),
+        ('MASTER RIDES', ('FULL CITY SHIFT', 'SMOOTH TO THE END'), [0, 23, 11, 2, 9, 19, 17, 6, 5, 7, 8, 1]),
+        ('MASTER RETURNS', ('FULL SIGNOFF RUN', 'ORIGINAL TO UNION'), [0, 8, 4, 23, 11, 2, 9, 19, 17, 6, 3, 0]),
+        ('MASTER ISLAND POST', ('WARD HANLAN CENTRE', 'FINAL FOOT ROUND'), [10, 22, 26, 22, 10, 20, 24, 20, 10, 21, 25]),
+    ],
+]
+
+
+def decode_grid(text):
+    result, pos = [], 0
+    while pos < len(text):
+        value = int(text[pos:pos + 2], 16)
+        pos += 2
+        if text[pos] == '!':
+            count, pos = 1, pos + 1
+        else:
+            end = text.index('+', pos)
+            count, pos = int(text[pos:end], 16), end + 1
+        result.extend([value] * count)
+    return result
+
+
+def shortest_routes(stops):
+    """Conservative tile-centre distances using the actual scene collision grid."""
+    scene = json.loads((ROOT / 'project/project/scenes/toronto_city/scene.gbsres').read_text())
+    width, height = scene['width'], scene['height']
+    grid = decode_grid(scene['collisions'])
+    assert len(grid) == width * height
+    points = [(s[0] // 8, s[1] // 8) for s in stops]
+
+    @cache
+    def usable(x, y, car):
+        if not (1 <= x < width - 1 and 1 <= y < height - 1):
+            return False
+        if car:
+            return all(grid[(y + dy) * width + x + dx] == 0
+                       for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+        return not (grid[y * width + x] & 15)
+
+    distances = {}
+    for car in (False, True):
+        for origin, start in enumerate(points):
+            if not usable(*start, car):
+                continue
+            queue, visited = deque([start]), {start: 0}
+            while queue:
+                x, y = queue.popleft()
+                for point in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    if point not in visited and usable(*point, car):
+                        visited[point] = visited[x, y] + 8
+                        queue.append(point)
+            for dest, point in enumerate(points):
+                distances[car, origin, dest] = visited.get(point)
+    return distances
+
+
+def route_estimate(route, kind, distances):
+    """Model generous controlling/handling allowances; never measure gameplay here."""
+    road_pixels = foot_pixels = ferry_legs = 0
+    for origin, dest in zip(route, route[1:]):
+        walk = distances.get((False, origin, dest))
+        road = distances.get((True, origin, dest))
+        if walk is None:
+            assert origin in (10, 20, 21, 22) and dest in (10, 20, 21, 22)
+            assert origin == 10 or dest == 10, 'Public ferry route needs mainland transfer'
+            ferry_legs += 1
+        elif road is None:
+            assert kind == 7, 'Only Island post uses inaccessible vehicle stops'
+            foot_pixels += walk
+        else:
+            road_pixels += road
+    # Conservative slow road vehicle is 18/16 pixels per video frame (scooter).
+    # Truck-only jobs use20/16. Handling allows braking, turns and interaction;
+    # it is a tuning hypothesis, not idle time the game imposes on the player.
+    road_speed = 75 if kind == 3 else 67.5
+    moving = road_pixels / road_speed + foot_pixels / 30
+    handling = 5 * max(0, len(route) - 1)
+    if kind == 7:
+        #28s worst phase wait plus8s ride on the fictional30s ferry schedule.
+        budget = 90 + (moving + handling) * 1.35 + ferry_legs * 36
+    elif kind == 2:
+        budget = 60 + (moving + handling) * 1.35
+    elif kind == 4:
+        #All non-Island relay routes remain feasible by road. Transit offers an
+        #alternative; choosing it does not turn waiting into a required objective.
+        budget = 90 + (moving + handling) * 1.7
+    else:
+        budget = 90 + (moving + handling) * 2.0
+    return {
+        'vehicle_route_pixels': road_pixels,
+        'island_walking_pixels': foot_pixels,
+        'required_ferry_legs': ferry_legs,
+        'fictional_ferry_fares': ferry_legs * 4,
+        'modeled_road_and_foot_seconds': round(moving, 1),
+        'modeled_control_allowance_seconds': handling,
+        'basis': 'Collision-grid shortest paths and native maximum speeds; not measured playtime',
+    }, math.ceil(budget / 5) * 5
+
 
 def main():
-    stops=[
-        (288,368,'UNION DEPOT',1),(384,368,'ST LAWRENCE',0),(416,368,'DISTILLERY',0),
-        (288,288,'CITY HALL',0),(192,288,'QUEEN WEST',0),(192,224,'AGO / GRANGE',0),
-        (256,64,'ROM / BLOOR',0),(128,224,'KENSINGTON',0),(64,288,'DUFFERIN',0),
-        (480,288,'RIVERSIDE',0),(320,400,'FERRY TERMINAL',3),(416,400,'EAST BAYFRONT',0),
-        (320,336,'KING STATION',1),(320,288,'QUEEN STATION',1),(320,224,'DUNDAS STATION',1),
-        (320,160,'COLLEGE STATION',1),(320,112,'WELLESLEY',1),(320,64,'BLOOR-YONGE',1),
-        (96,64,'OSSINGTON BUS',2),(416,64,'CASTLE FRANK',2),
-        (240,520,'HANLANS POINT',3),(352,512,'CENTRE ISLAND',3),(432,496,'WARDS ISLAND',3),
-        (192,368,'CN TOWER',0)]
-    stops=[(*location(u,v),name,transit) for u,v,name,transit in stops]
-    kinds=['PARCEL ROUND','FRAGILE ART','EXPRESS FILES','HEAVY FREIGHT','TRANSIT RELAY','PASSENGER RUN','RETURN PAPERS','ISLAND POST']
-    themes=['Market morning','Gallery opening','Office hours','Harbour cargo','Campus mail','Civic shift','Brick and glass','Night dispatch','City circuit']
-    quests=[]
-    for i in range(72):
-        kind=i%8
-        # Early contracts teach movement and parking; later rounds span the whole network.
-        count=2 if i<3 else 8+(i%3)
-        route=[0]
-        if kind==7:
-            route=[10,20+(i%3),10,20+((i+1)%3),10,20+((i+2)%3),10]
-        elif kind==4:
-            route=[0,17,15,18,16,19,14,1,23,0]
-        else:
-            pool=[1,2,3,4,5,6,7,8,9,11,23]
-            for j in range(count-1): route.append(pool[(i*3+j*5)%len(pool)])
-            if kind==6: route[-1]=0
-        if i==0: route=[0,1]
-        if i==1: route=[0,5]
-        if i==2: route=[0,2]
-        vehicle=1 if kind==3 else (0 if kind==5 else 255)
-        minimum=0 if i<3 else (3 if kind in (3,4) else 8 if kind==5 else 12 if kind==7 else 0)
-        quests.append({'id':f'contract-{i+1:02d}','title':f'{themes[i//8]} {i%8+1}','kind':kinds[kind],'kind_id':kind,'required_vehicle':vehicle,'min_completed':minimum,'route':route,'time_limit_seconds':120 if i<3 else 80+len(route)*(20 if kind==2 else 40),'reward':80+len(route)*35+i*2})
-    content={'status':'engine-integrated','scope':'Compressed central Toronto prototype; broad Old Toronto map accuracy and full campaign duration remain release checks','duration_target_minutes':120,'duration_verified':False,'quest_types':kinds,'stops':[{'id':i,'u':s[0],'v':s[1],'name':s[2],'transit':s[3]} for i,s in enumerate(stops)],'quests':quests,'transit':{'line1':{'stops':[0,12,13,14,15,16,17],'period_seconds':18,'fare':3,'source':'https://www.ttc.ca/routes-and-schedules/1/0/15657'},'bus94':{'stops':[18,16,19],'period_seconds':24,'fare':2,'source':'https://www.ttc.ca/routes-and-schedules/94/1/8008'},'ferry':{'stops':[10,20,21,22],'period_seconds':30,'fare':4,'source':'https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/'},'notice':'Fictional game timetables, fares and compression. Not a TTC trip planner.'}}
-    (ROOT/'content/campaign.json').write_text(json.dumps(content,indent=2)+'\n')
-    code=['// Generated by scripts/create_campaign.py; original content.','#pragma bank 255','#include <string.h>','#include "td_game.h"','static const td_stop_t td_stops[TD_STOPS] = {']
-    for u,v,n,t in stops: code.append(f'  {{{u},{v},"{n}",{t}}},')
-    code+=['};','static const td_job_t td_jobs[TD_QUESTS] = {']
-    for q in quests:
-        title=q['title'][:18].upper(); route=q['route']+[255]*(12-len(q['route']))
-        code.append('  {"%s",%d,%d,%d,%d,%d,%d,{%s}},'%(title,q['kind_id'],len(q['route']),q['required_vehicle'],q['min_completed'],q['time_limit_seconds'],q['reward'],','.join(map(str,route))))
-    code+=['};','void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }','void td_get_job(UBYTE i,td_job_t *d) BANKED { if(i<TD_QUESTS) memcpy(d,&td_jobs[i],sizeof(td_job_t)); }',
-    'void td_get_street(UWORD u,UWORD v,char *d) BANKED {',
-    '  const char *name="TORONTO";',
-    '  if(v>816) name="TORONTO ISLANDS";',
-    '  else if(v>768) name="QUEENS QUAY";',
-    '  else if(v>688) name="FRONT STREET";',
-    '  else if(v>608) name="KING STREET";',
-    '  else if(v>496) name="QUEEN STREET";',
-    '  else if(v>368) name="DUNDAS STREET";',
-    '  else if(v>256) name="COLLEGE / CARLTON";',
-    '  else if(v>144) name="WELLESLEY / HARBORD";',
-    '  else name="BLOOR STREET";',
-    '  { const UWORD columns[]={80,208,336,480,560,640,720,816,944};',
-    '    const char *roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};',
-    '    const UWORD rows[]={64,176,288,400,528,640,720,784};',
-    '    UWORD nearest_x=65535,nearest_y=65535,delta; UBYTE i,best=0;',
-    '    for(i=0;i<9;i++){delta=u>columns[i]?u-columns[i]:columns[i]-u;if(delta<nearest_x){nearest_x=delta;best=i;}}',
-    '    for(i=0;i<8;i++){delta=v>rows[i]?v-rows[i]:rows[i]-v;if(delta<nearest_y)nearest_y=delta;}',
-    '    if(v<816 && nearest_x<nearest_y)name=roads[best];',
-    '  } strcpy(d,name);',
-    '}']
-    (ENGINE/'src').mkdir(parents=True,exist_ok=True)
-    (ENGINE/'src/td_content.c').write_text('\n'.join(code)+'\n')
-    # Fixed-size UI cells reuse the MIT starter font, retaining its asset licence.
-    font=json.loads((ROOT/'project/original-art/native-cells.json').read_text())['font']['cells']
-    chars=' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:/.-+?<>$%#='
-    glyphs={c['character']:c['rows'] for c in font}
-    data=[]
-    for ch in chars:
-        for row in glyphs[ch]:
-            bits=sum(1<<(7-i) for i,pixel in enumerate(row) if pixel=='0')
-            data.extend((bits,bits))
-    (ENGINE/'include/td_font.h').write_text('// Derived from MIT Bench Mono glyphs; see project/ASSET_LICENSE.\nstatic const char td_chars[]="'+chars+'";\nstatic const UBYTE td_font[]={' + ','.join(map(str,data))+'};\n')
-    print('Compiled',len(quests),'contracts,',len(stops),'stops and scheduled train/bus/ferry services.')
+    original_stops = [
+        (288, 368, 'UNION DEPOT', 1), (384, 368, 'ST LAWRENCE', 0), (416, 368, 'DISTILLERY', 0),
+        (288, 288, 'CITY HALL', 0), (192, 288, 'QUEEN WEST', 0), (192, 224, 'AGO / GRANGE', 0),
+        (256, 64, 'ROM / BLOOR', 0), (128, 224, 'KENSINGTON', 0), (64, 288, 'DUFFERIN', 0),
+        (480, 288, 'RIVERSIDE', 0), (320, 400, 'FERRY TERMINAL', 3), (416, 400, 'EAST BAYFRONT', 0),
+        (320, 336, 'KING STATION', 1), (320, 288, 'QUEEN STATION', 1), (320, 224, 'DUNDAS STATION', 1),
+        (320, 160, 'COLLEGE STATION', 1), (320, 112, 'WELLESLEY', 1), (320, 64, 'BLOOR-YONGE', 1),
+        (96, 64, 'OSSINGTON BUS', 2), (416, 64, 'CASTLE FRANK', 2),
+        (240, 520, 'HANLANS POINT', 3), (352, 512, 'CENTRE ISLAND', 3), (432, 496, 'WARDS ISLAND', 3),
+        (192, 368, 'CN TOWER', 0),
+    ]
+    stops = [(*location(u, v), name, transit) for u, v, name, transit in original_stops]
+    #Fictional service entrances on existing Island walkable land, not claims
+    #about surveyed public access or exact real-world building entrances.
+    stops += [(560, 928, 'HANLAN SERVICE', 0), (760, 944, 'CENTRE PARK POST', 0),
+              (912, 912, 'WARD COTTAGE POST', 0)]
+    distances = shortest_routes(stops)
+    for i in range(len(stops)):
+        assert distances.get((False, i, i)) == 0, f'Blocked stop: {stops[i][2]}'
+    quests = []
+    for chapter, rows in enumerate(CONTRACTS):
+        assert len(rows) == len(KINDS)
+        for kind, (title, brief, route) in enumerate(rows):
+            index = len(quests)
+            assert len(title) <= 18 and all(len(line) <= 18 for line in brief), title
+            assert 2 <= len(route) <= 12 and all(a != b for a, b in zip(route, route[1:]))
+            estimate, seconds = route_estimate(route, kind, distances)
+            if index < 3:
+                seconds = 120  #Tutorials preserve time to learn the controls.
+            base_unlock = 3 if kind in (3, 4) else 8 if kind == 5 else 12 if kind == 7 else 0
+            reward = (70 + math.ceil(estimate['vehicle_route_pixels'] / 40)
+                      + (len(route) - 1) * 10 + estimate['fictional_ferry_fares']
+                      + (25 if kind in (1, 3, 5) else 15 if kind == 2 else 0)
+                      + chapter * 12)
+            quests.append({
+                'id': f'contract-{index + 1:02d}', 'title': title, 'brief': list(brief),
+                'chapter': CHAPTERS[chapter], 'kind': KINDS[kind], 'kind_id': kind,
+                'required_vehicle': 1 if kind == 3 else 0 if kind == 5 else 255,
+                'min_completed': max(base_unlock, chapter * 6), 'route': route,
+                'time_limit_seconds': seconds, 'reward': reward, 'timing_design': estimate,
+            })
+    assert len(quests) == 72 and len({tuple(q['route']) for q in quests}) == 72
+    assert len({q['title'] for q in quests}) == 72
+    #Check that gated chapters can always be reached by distinct completions.
+    completed = 0
+    while completed < len(quests):
+        available = sum(q['min_completed'] <= completed for q in quests)
+        assert available > completed, f'Unlock deadlock after {completed} completions'
+        completed = available
+    content = {
+        'status': 'engine-integrated',
+        'scope': 'Compressed central Toronto prototype; broad Old Toronto map accuracy and full campaign duration remain release checks',
+        'duration_target_minutes': 120, 'duration_verified': False,
+        'duration_notice': 'Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.',
+        'quest_types': KINDS, 'chapters': CHAPTERS,
+        'stops': [{'id': i, 'u': s[0], 'v': s[1], 'name': s[2], 'transit': s[3],
+                   **({'location_notice': 'Original fictional delivery entrance on compressed Island terrain'} if i >= 24 else {})}
+                  for i, s in enumerate(stops)],
+        'quests': quests,
+        'transit': {
+            'line1': {'stops': [0, 12, 13, 14, 15, 16, 17], 'period_seconds': 18, 'fare': 3,
+                      'source': 'https://www.ttc.ca/routes-and-schedules/1/0/15657'},
+            'bus94': {'stops': [18, 16, 19], 'period_seconds': 24, 'fare': 2,
+                      'source': 'https://www.ttc.ca/routes-and-schedules/94/1/8008'},
+            'ferry': {'stops': [10, 20, 21, 22], 'period_seconds': 30, 'fare': 4,
+                      'topology': 'Mainland terminal to each Island dock; transfer via mainland between Islands',
+                      'source': 'https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/'},
+            'notice': 'Fictional game timetables, fares and compression. Not a TTC trip planner.',
+        },
+    }
+    (ROOT / 'content/campaign.json').write_text(json.dumps(content, indent=2) + '\n')
+    code = ['//Generated by scripts/create_campaign.py; original authored content.',
+            '#pragma bank 255', '#include <string.h>', '#include "td_game.h"',
+            'static const td_stop_t td_stops[TD_STOPS] = {']
+    for u, v, name, transit in stops:
+        code.append(f'  {{{u},{v},"{name}",{transit}}},')
+    code += ['};', 'static const td_job_t td_jobs[TD_QUESTS] = {']
+    for quest in quests:
+        route = quest['route'] + [255] * (12 - len(quest['route']))
+        code.append('  {"%s",%d,%d,%d,%d,%d,%d,{%s}},' % (
+            quest['title'], quest['kind_id'], len(quest['route']), quest['required_vehicle'],
+            quest['min_completed'], quest['time_limit_seconds'], quest['reward'], ','.join(map(str, route))))
+    code += ['};', 'static const char td_briefs[TD_QUESTS][37] = {']
+    for quest in quests:
+        brief = ''.join(line.ljust(18) for line in quest['brief'])
+        code.append(f'  "{brief}",')
+    code += ['};',
+             'void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }',
+             'void td_get_job(UBYTE i,td_job_t *d) BANKED { if(i<TD_QUESTS) memcpy(d,&td_jobs[i],sizeof(td_job_t)); }',
+             'void td_get_brief(UBYTE i,char *d) BANKED { if(i<TD_QUESTS) memcpy(d,td_briefs[i],37); else d[0]=0; }',
+             'void td_get_street(UWORD u,UWORD v,char *d) BANKED {',
+             '  const char *name="TORONTO";',
+             '  if(v>816) name="TORONTO ISLANDS";',
+             '  else if(v>768) name="QUEENS QUAY";',
+             '  else if(v>688) name="FRONT STREET";',
+             '  else if(v>608) name="KING STREET";',
+             '  else if(v>496) name="QUEEN STREET";',
+             '  else if(v>368) name="DUNDAS STREET";',
+             '  else if(v>256) name="COLLEGE / CARLTON";',
+             '  else if(v>144) name="WELLESLEY / HARBORD";',
+             '  else name="BLOOR STREET";',
+             '  { const UWORD columns[]={80,208,336,480,560,640,720,816,944};',
+             '    const char *roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};',
+             '    const UWORD rows[]={64,176,288,400,528,640,720,784};',
+             '    UWORD nearest_x=65535,nearest_y=65535,delta; UBYTE i,best=0;',
+             '    for(i=0;i<9;i++){delta=u>columns[i]?u-columns[i]:columns[i]-u;if(delta<nearest_x){nearest_x=delta;best=i;}}',
+             '    for(i=0;i<8;i++){delta=v>rows[i]?v-rows[i]:rows[i]-v;if(delta<nearest_y)nearest_y=delta;}',
+             '    if(v<816 && nearest_x<nearest_y)name=roads[best];',
+             '  } strcpy(d,name);', '}']
+    (ENGINE / 'src').mkdir(parents=True, exist_ok=True)
+    (ENGINE / 'src/td_content.c').write_text('\n'.join(code) + '\n')
+    #Fixed-size UI cells reuse the MIT starter font, retaining its asset licence.
+    font = json.loads((ROOT / 'project/original-art/native-cells.json').read_text())['font']['cells']
+    chars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:/.-+?<>$%#='
+    glyphs = {cell['character']: cell['rows'] for cell in font}
+    data = []
+    for char in chars:
+        for row in glyphs[char]:
+            bits = sum(1 << (7 - i) for i, pixel in enumerate(row) if pixel == '0')
+            data.extend((bits, bits))
+    (ENGINE / 'include/td_font.h').write_text(
+        '// Derived from MIT Bench Mono glyphs; see project/ASSET_LICENSE.\n'
+        'static const char td_chars[]="' + chars + '";\n'
+        'static const UBYTE td_font[]={' + ','.join(map(str, data)) + '};\n')
+    print(f'Compiled {len(quests)} unique authored contracts, {len(stops)} stops, native briefs, and train/bus/ferry services. Duration remains unverified.')
 
-if __name__=='__main__': main()
+
+if __name__ == '__main__':
+    main()

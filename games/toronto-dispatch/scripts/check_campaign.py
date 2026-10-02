@@ -41,7 +41,9 @@ def check():
     assert locations[ferry[0]] in walk
     for island in ferry[1:]:walk.update(flood(locations[island]))
     assert all(p in walk for p in locations),'Disconnected pedestrian/ferry endpoint'
-    assert all(locations[s['id']] in car for s in stops if s['id'] not in ferry[1:]),'Disconnected vehicle endpoint'
+    island_walk=set()
+    for dock in ferry[1:]:island_walk.update(flood(locations[dock]))
+    assert all(p in car or p in island_walk for p in locations),'Endpoint is neither vehicle-accessible nor on a ferry-connected Island'
     quests=campaign['quests'];assert len(quests)==72 and len({q['id'] for q in quests})==72
     assert campaign['status']=='engine-integrated' and campaign['duration_target_minutes']>=120
     assert len({q['kind_id'] for q in quests})==8
@@ -49,7 +51,14 @@ def check():
         assert 2<=len(q['route'])<=12 and all(0<=i<len(stops) for i in q['route'])
         assert q['min_completed']<len(quests) and q['time_limit_seconds']>0 and q['reward']>0
         if q['required_vehicle']!=255:assert all(locations[i] in car for i in q['route'])
-    assert sum(q['min_completed']==0 for q in quests)>=12,'Unlock progression can deadlock'
+    assert len({q['title'] for q in quests})==72,'Repeated contract titles'
+    assert len({tuple(q['route']) for q in quests})==72,'Repeated contract routes'
+    completed=set()
+    while True:
+        available={q['id'] for q in quests if q['min_completed']<=len(completed)}
+        if available<=completed:break
+        completed|=available
+    assert len(completed)==72,'Unique-completion progression can deadlock'
     # Verify data compilation deterministically without regenerating files during CI.
     c=(ROOT/'project/plugins/toronto-driving/engine/src/td_content.c').read_text()
     for s in stops:assert f'{{{s["u"]},{s["v"]},"{s["name"]}",{s["transit"]}}}' in c
@@ -57,5 +66,7 @@ def check():
         route=q['route']+[255]*(12-len(q['route']))
         row='{'+f'"{q["title"][:18].upper()}",{q["kind_id"]},{len(q["route"])},{q["required_vehicle"]},{q["min_completed"]},{q["time_limit_seconds"]},{q["reward"]},'+'{'+','.join(map(str,route))+'}},'
         assert row in c,f'Stale native contract: {q["id"]}'
+    header=(ROOT/'project/plugins/toronto-driving/engine/include/td_game.h').read_text()
+    assert f'#define TD_STOPS {len(stops)}' in header,'Native stop capacity disagrees'
     print(f'Native campaign: {len(quests)} contracts, {len(stops)} reachable stops, {len(city["blocks"])} buildings, vehicle and pedestrian/ferry connectivity passed. Duration requires playtesting.')
 if __name__=='__main__':check()

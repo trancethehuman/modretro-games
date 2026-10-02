@@ -20,7 +20,7 @@ Traffic follows authored lanes and respects signals. Intersections have a readab
 
 Legal route choice is the environmental advantage: connected lanes, alleys that permit the selected vehicle, avoiding queues, and timing intersections. Buildings, rails, and sidewalks are not free shortcuts. Add industrial-yard access and restricted missions after geography and collision are verified.
 
-Passenger comfort, cargo damage, weather traction, fuel, police pursuit, and detailed traffic enforcement are future options, not requirements for the first milestone. Traffic rules need understandable feedback and tuning before they affect rewards.
+Cargo condition is part of the native contract rules. Traffic impacts, curb scrapes and head-on collisions reduce condition; fragile art takes a larger curb/wall penalty. Passenger jobs use condition as comfort, with an additional penalty for steering at high speed. Completion pays the base reward scaled by remaining condition, plus a remaining-time bonus. These current source rules still need tuning and verification in the new ROM. Weather traction, fuel, police pursuit and detailed traffic enforcement remain future options. Traffic rules need understandable feedback and tuning.
 
 ## Missions
 
@@ -28,9 +28,15 @@ Release target: at least two hours of varied gameplay. Build distinct job rules,
 
 State flow: **available → accepted → pickup → carrying → delivered**. Failure and cancellation return to free roaming. Time starts at acceptance and pauses with the game. Pickup and delivery require the correct location, compatible vehicle, and a nearly stopped vehicle, plus an interaction press. Do not allow delivery through a wall or automatically complete at road speed.
 
-The HUD shows the current objective, remaining time, and a destination cue. The map/dispatch screen identifies the relevant street and landmark. Keep text short enough for the handheld screen. Rewards reflect completion, remaining time, cargo condition, and eventually safe driving. No payments or real courier integration.
+The HUD shows the current objective, remaining time, and a destination cue. The map/dispatch screen identifies the relevant street and landmark. Keep text short enough for the handheld screen. Rewards reflect completion, remaining time and cargo/passenger condition, so controlled driving matters to earnings. No payments or real courier integration.
 
 The engine-integrated campaign is in `content/campaign.json`, compiled by `scripts/create_campaign.py`. The original three design samples in `content/missions.json` are historical planning material. Vehicle definitions express qualitative intended handling, not tuned simulation numbers.
+
+The authored revision has 72 distinct titles and routes across nine progressive chapters. Its eight rule types cover parcel rounds, fragile art, express files, truck freight, transit-friendly relays, passenger rides, signed returns and Island post. Two short native brief lines explain each contract. The first three routes teach the depot, market, gallery and Distillery circuit; later rounds connect related city destinations instead of repeating one random landmark sequence. Chapter and vehicle gates leave a path to every contract through distinct completions.
+
+The campaign uses 27 service points. Three original fictional Island delivery entrances lie beyond the ferry docks on collision-verified walkable terrain. Island jobs require walking to those deliveries; journeys between Islands transfer through the mainland terminal. These entrances are compressed game design, not surveyed real-world access points.
+
+Time allowances use shortest paths through the actual collision grid, native vehicle/walking speeds and allowances for pickup travel, braking and interaction. Express contracts have tighter budgets. The generator validates route/title uniqueness, handheld text limits, Island foot access and unlock closure. These checks establish content consistency and feasibility estimates; they do not measure playtime or enjoyment. The authored revision and new condition/comfort rules need a fresh native ROM build and representative playtests before their gameplay is verified. The full two-hour campaign gate remains open.
 
 ## First district
 

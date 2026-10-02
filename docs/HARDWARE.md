@@ -1,43 +1,29 @@
-# Chromatic build and cartridge workflow
+# Chromatic and writable cartridge
 
-Source: [ModRetro DevDay Edition quickstart](https://support.modretro.com/en_us/chromatic-devday-edition-quickstart-guid-By1iOlcMg), reviewed 2026-10-01.
+Toronto Dispatch is an original Game Boy Color homebrew game. The supported target is a ModRetro Chromatic with the writable cartridge supplied with the DevDay Edition. Read the game-specific [loading instructions](../games/toronto-dispatch/docs/LOADING.md) for the build to install, first route and hardware checks.
 
-## What the official guide establishes
+The [official DevDay quickstart](https://support.modretro.com/en_us/chromatic-devday-edition-quickstart-guid-By1iOlcMg) describes computer activation, emulator play, streamed demos and cartridge writing. Activation happens in the [official ModRetro Updater](https://support.modretro.com/en_us/articles/chromatic-firmware-updater-ryhoYnzCx): Cmd-I on macOS, Ctrl-I on Windows. Enter the supplied code there privately. Do not put it in Codex, a terminal, logs or this repository. Firmware setup follows the updater's own prompts. Updating console firmware and writing this game are separate actions.
 
-- The ModRetro Chromatic plugin works with GB Studio projects and builds Game Boy Color compatible games.
-- It provides a playable browser emulator and automated playtesting.
-- Live device demos run in an emulator and stream to the connected Chromatic.
-- A built homebrew ROM can be written to the supported physical cartridge.
-- The included DevDay Edition activation code enables Developer Mode on the computer through the Chromatic Firmware Updater. On macOS the guide specifies Cmd-I to open that dialog.
+## Before writing
 
-The guide starts with updating the Chromatic through the official updater. When a device is connected, inspect its state and determine what is required; do not assume that game-loading authorisation covers unrelated firmware modification. The updater/activation may require the user's interaction. Never collect or publish the activation code.
+Use the ModRetro Chromatic plugin on the computer physically connected to the console. Select this repository's native project, build a ROM, inspect that exact file and test it in the native emulator. No additional vendor driver is required on macOS. Windows and Linux have different runtime/access prerequisites; follow the installed plugin's deployment skill rather than installing an unrelated driver.
 
-## Setup record
+Power off before inserting or changing the cartridge. Connect a USB data cable, turn on the console and identify the intended device using the plugin. Discovery is not proof of activation, cartridge support or game installation. Only the intended writable ModRetro cartridge is in scope; a blank cartridge alone does not establish compatibility.
 
-Initial inspection, 2026-10-01:
+The first write erases the selected cartridge's existing game data, saves may be lost, and the plugin makes no automatic backup. The user must acknowledge this for the selected cartridge before writing. An already empty cartridge still needs to be identified. Later requested writes on that same identified device can reuse the acknowledgement; a different or ambiguous device needs a fresh choice.
 
-- `ChromaticFirmwareUpdater.app` is installed in `/Applications`.
-- The ModRetro plugin has no callable tools or supplied skills in the initial chat. Connector searches for ModRetro/Chromatic returned no match; Codex's Plugins tab may offer a different catalog.
-- Computer Use cannot control the Codex app, so plugin installation/attachment requires the user.
-- No `/dev/cu.usb*` serial node was visible. This alone does not establish the absence of every USB device.
-- Device edition, cartridge model, Developer Mode activation, and firmware version are unverified.
+## Supported deployment and recovery
 
-Plugin preparation, 2026-10-02:
+The direct plugin workflow uses `rom_inspect`, `device` discovery, optional `setup` cartridge detection, and `flash`. It does not require a working browser preview. Match the inspected path, byte count and SHA-256 when writing; retain the original operation ID and follow its status to a terminal result. Device tokens expire and are consumed by detection, streaming or flashing: rediscover after an action before the next one.
 
-- The user installed the ModRetro Chromatic plugin; version 1.0.33 is callable.
-- Setup and authoring skills were read. Official build/emulator dependencies were prepared outside the repository, with GB Studio CLI 4.3.2, GBDK 4.5.0 and PyBoy 2.7.0 verified.
-- Toronto Dispatch now has a native editable starter project, compiled ROM, retained browser preview and headless emulator evidence. See its [build instructions](../games/toronto-dispatch/docs/BUILD.md) and [test record](../games/toronto-dispatch/TESTING.md).
-- No streaming, device writing, firmware update or Developer Mode activation was attempted. Device/cartridge readiness is still unverified.
+An optional `play` demo emulates the ROM on the computer and streams to the console. It writes no cartridge. Physical USB capture shows the console's video, but does not itself identify the installed ROM or measure hardware frame rate. Keep emulator, streaming, vendor write result, read-back result and cartridge cold-boot observations as separate evidence.
 
-## Execution workflow after the plugin is attached
+For a failed or missing reply, query the original operation's status. Do not automatically retry an uncertain write, delete its journal, reset firmware or substitute another cartridge profile. Follow reported recovery: Developer Mode errors go to ModRetro Updater; connection or contact errors get their indicated checks. A generic programming error does not prove which of those caused it. Keep codes, saves, backups, device identifiers and private preview URLs out of Git.
 
-1. Read its actual setup, GB Studio, playtest, and hardware skills. Inspect installed versions and prepare missing official dependencies.
-2. Create/select the editable game project and build a homebrew ROM. Record build output and a SHA-256 digest locally.
-3. Run emulator tests: boot, controls, collision, mission transitions, pause/restart, and audio. Use the same preview during edits.
-4. When the user connects hardware, identify the console and development cartridge through supported tools. Verify Developer Mode readiness. Power off before cartridge changes, following the vendor's instructions.
-5. Stream a short demo if supported to assess screen readability, controls, and audio. Record this as streaming evidence.
-6. Write only the selected build to the identified writable development cartridge using the plugin's supported process. Follow any actual prerequisite or approval rules in its hardware skill. Keep backups, codes, and device identifiers local and ignored.
-7. Use tool-provided read-back/checksum verification if available; report if it is unavailable. Have the user boot the cartridge and try movement, braking, one complete job, pause/restart, and sound. Physical button presses cannot be claimed from software results alone.
-8. Record the build, flash result, verification method, and manual observations in the game's `TESTING.md`.
+## Evidence as of 2026-10-02
 
-If the hardware is another edition or cartridge type, establish its supported loading path before writing. Do not improvise FPGA/MCU flashing, third-party firmware, or unsupported cartridge profiles.
+The user installed plugin 1.0.33. Official authoring dependencies were prepared outside this repo: GB Studio CLI 4.3.2, GBDK 4.5.0 and PyBoy 2.7.0. Native builds and emulator tests are recorded in [BUILD.md](../games/toronto-dispatch/docs/BUILD.md) and [TESTING.md](../games/toronto-dispatch/TESTING.md).
+
+Read-only USB discovery on 2026-10-02 succeeded and returned no connected Chromatic or unmatched USB functions. No live-device demo, cartridge write, activation or firmware update has been performed for this game. Console edition, writable cartridge identity, capacity, activation and physical boot/save/audio remain unverified. A previous browser preview has an unresolved recording-close acknowledgement; preserve that state. The direct supported `flash` workflow remains separate from that preview.
+
+Workflow reference: installed ModRetro Chromatic plugin 1.0.33, `skills/chromatic-deployment/SKILL.md` and `docs/chromatic-device-testing.md`, reviewed 2026-10-02.

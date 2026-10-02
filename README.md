@@ -20,17 +20,17 @@ Toronto Dispatch builds with GB Studio CLI 4.3.2 / GBDK 4.5.0 and runs in PyBoy 
 
 ## Repository checks
 
-Python 3.10+ and Make are sufficient for scaffold validation:
+Use Python 3.10+, Make and a C compiler supporting AddressSanitizer/UBSan (Clang or GCC):
 
 ```sh
 make check
 ```
 
-This validates source references, planning content, native campaign integration, architectural variety, tile-map banking limits, roof priority flags and actual vehicle/pedestrian/ferry connectivity. It does **not** compile or playtest a ROM. GitHub Actions runs the same check.
+This validates source references, native campaign integration, architecture, tile-map banking limits, roof priority and actual route connectivity. It also runs behavioral checks against the game's real C engine with host hardware stubs, including turning, curb contact, clock gaps and interrupted saves. It does **not** compile or playtest a ROM. GitHub Actions runs the same checks.
 
 ## Playing on a cartridge
 
-See [docs/HARDWARE.md](docs/HARDWARE.md). The official workflow supports emulator preview, streaming an emulator to a connected Chromatic, and writing a built homebrew ROM to the writable development cartridge. These are separate verification steps. Developer Mode activation is required for the included DevDay cartridge; never commit or share the activation code.
+See [Toronto Dispatch loading instructions](games/toronto-dispatch/docs/LOADING.md) and [docs/HARDWARE.md](docs/HARDWARE.md). The official workflow supports emulator preview, streaming an emulator to a connected Chromatic, and writing a built homebrew ROM to the writable development cartridge. These are separate verification steps. Developer Mode activation is required for the included DevDay cartridge; never commit or share the activation code.
 
 A playable city ROM has been built and tested in the native emulator. No device stream or cartridge write has been attempted. Hardware testing will be recorded per game after the device and supported cartridge are connected.
 

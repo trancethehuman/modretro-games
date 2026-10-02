@@ -28,6 +28,18 @@
 - Buildings must block movement, roof edges/canopies must occlude sprites, and people must visibly walk, approach a car, enter it and drive.
 - Add autonomous walking NPCs. Correct overly fast turns and abrupt speed loss during steering.
 
+## Implemented handling and reliability tuning, 2026-10-02
+
+- Slower speed-dependent yaw, with reverse using the magnitude of speed; opposing steering inputs cancel.
+- Steering keeps acceleration and smoothed velocity. Glancing contact removes blocked-axis motion without draining scalar speed on every tick; only real head-on/corner impacts stop the car.
+- Hidden pedestrians cannot slow the vehicle. Traffic stop lines use the authored junction coordinates. Autonomous traffic keeps moving while the courier waits/rides.
+- Car entry/exit checks the whole door approach against the native collision grid. Pressed actions occur once across motion substeps.
+- Mission/transit time counts every VBlank independently from bounded motion catch-up.
+- Two alternating version-5 SRAM records, CRC16 and last-byte commit preserve a recovery snapshot. Boarding and cancellation are saved, and paid trips resume after resetting. Old version-4 records keep earnings/completions and retire changed active routes.
+- Authored contracts have distinct routes/briefs and chapter progression. New Island delivery points require walking, and ferry transfers go through the mainland. Condition changes base rewards; fast passenger turns reduce comfort.
+
+These are tested prototype changes; handheld feel, physical SRAM behavior and the two-hour release target remain open.
+
 ## Proposed starting choices
 
 - Working title: **Toronto Dispatch**.

@@ -3,6 +3,7 @@
   "scope": "Compressed central Toronto prototype; broad Old Toronto map accuracy and full campaign duration remain release checks",
   "duration_target_minutes": 120,
   "duration_verified": false,
+  "duration_notice": "Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.",
   "quest_types": [
     "PARCEL ROUND",
     "FRAGILE ART",
@@ -12,6 +13,17 @@
     "PASSENGER RUN",
     "RETURN PAPERS",
     "ISLAND POST"
+  ],
+  "chapters": [
+    "First shift",
+    "Neighbourhood connections",
+    "City events",
+    "Crossing the city",
+    "Waterfront work",
+    "Arts and audiences",
+    "Evening dispatch",
+    "Across the network",
+    "Master courier"
   ],
   "stops": [
     {
@@ -181,12 +193,41 @@
       "v": 720,
       "name": "CN TOWER",
       "transit": 0
+    },
+    {
+      "id": 24,
+      "u": 560,
+      "v": 928,
+      "name": "HANLAN SERVICE",
+      "transit": 0,
+      "location_notice": "Original fictional delivery entrance on compressed Island terrain"
+    },
+    {
+      "id": 25,
+      "u": 760,
+      "v": 944,
+      "name": "CENTRE PARK POST",
+      "transit": 0,
+      "location_notice": "Original fictional delivery entrance on compressed Island terrain"
+    },
+    {
+      "id": 26,
+      "u": 912,
+      "v": 912,
+      "name": "WARD COTTAGE POST",
+      "transit": 0,
+      "location_notice": "Original fictional delivery entrance on compressed Island terrain"
     }
   ],
   "quests": [
     {
       "id": "contract-01",
-      "title": "Market morning 1",
+      "title": "MARKET START",
+      "brief": [
+        "MARKET PARCEL",
+        "UNION TO MARKET"
+      ],
+      "chapter": "First shift",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
@@ -196,11 +237,25 @@
         1
       ],
       "time_limit_seconds": 120,
-      "reward": 150
+      "reward": 86,
+      "timing_design": {
+        "vehicle_route_pixels": 208,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 3.1,
+        "modeled_control_allowance_seconds": 5,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-02",
-      "title": "Market morning 2",
+      "title": "FIRST ART CRATE",
+      "brief": [
+        "ART CRATE FOR AGO",
+        "BRAKE BEFORE TURNS"
+      ],
+      "chapter": "First shift",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
@@ -210,11 +265,25 @@
         5
       ],
       "time_limit_seconds": 120,
-      "reward": 152
+      "reward": 119,
+      "timing_design": {
+        "vehicle_route_pixels": 544,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 8.1,
+        "modeled_control_allowance_seconds": 5,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-03",
-      "title": "Market morning 3",
+      "title": "DISTILLERY FILES",
+      "brief": [
+        "SEALED OFFICE FILE",
+        "BEAT THE DEADLINE"
+      ],
+      "chapter": "First shift",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
@@ -224,31 +293,55 @@
         2
       ],
       "time_limit_seconds": 120,
-      "reward": 154
+      "reward": 102,
+      "timing_design": {
+        "vehicle_route_pixels": 256,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 3.8,
+        "modeled_control_allowance_seconds": 5,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-04",
-      "title": "Market morning 4",
+      "title": "SHORE SUPPLIES",
+      "brief": [
+        "TRUCK LOADS ONLY",
+        "MARKET TO HARBOUR"
+      ],
+      "chapter": "First shift",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
       "min_completed": 3,
       "route": [
         0,
-        11,
-        4,
-        9,
-        3,
-        8,
+        1,
         2,
-        7
+        11
       ],
-      "time_limit_seconds": 400,
-      "reward": 366
+      "time_limit_seconds": 130,
+      "reward": 133,
+      "timing_design": {
+        "vehicle_route_pixels": 320,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 4.3,
+        "modeled_control_allowance_seconds": 15,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-05",
-      "title": "Market morning 5",
+      "title": "FIRST CONNECTION",
+      "brief": [
+        "POCKET MAIL RELAY",
+        "TRY TRAIN AND BUS"
+      ],
+      "chapter": "First shift",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
@@ -256,63 +349,97 @@
       "route": [
         0,
         17,
-        15,
+        16,
         18,
         16,
         19,
-        14,
-        1,
-        23,
+        16,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 438
+      "time_limit_seconds": 235,
+      "reward": 222,
+      "timing_design": {
+        "vehicle_route_pixels": 3264,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 48.4,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-06",
-      "title": "Market morning 6",
+      "title": "STATION PICKUPS",
+      "brief": [
+        "PASSENGERS BY CAR",
+        "SMOOTH CITY RIDES"
+      ],
+      "chapter": "First shift",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
       "min_completed": 8,
       "route": [
         0,
-        5,
-        11,
-        4,
-        9,
-        3,
-        8,
+        1,
         2,
-        7,
-        1
+        9,
+        17,
+        6,
+        23,
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 440
+      "time_limit_seconds": 235,
+      "reward": 229,
+      "timing_design": {
+        "vehicle_route_pixels": 2528,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-07",
-      "title": "Market morning 7",
+      "title": "SIGNED AND SEALED",
+      "brief": [
+        "COLLECT SIGNATURES",
+        "RETURN TO UNION"
+      ],
+      "chapter": "First shift",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
       "min_completed": 0,
       "route": [
         0,
-        8,
-        2,
-        7,
+        3,
         1,
-        6,
-        23,
         0
       ],
-      "time_limit_seconds": 400,
-      "reward": 372
+      "time_limit_seconds": 145,
+      "reward": 120,
+      "timing_design": {
+        "vehicle_route_pixels": 800,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 11.9,
+        "modeled_control_allowance_seconds": 15,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-08",
-      "title": "Market morning 8",
+      "title": "CENTRE LETTERS",
+      "brief": [
+        "PARK THEN FERRY",
+        "WALK THE LAST LEG"
+      ],
+      "chapter": "First shift",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
@@ -320,168 +447,265 @@
       "route": [
         10,
         21,
-        10,
-        22,
-        10,
-        20,
+        25,
+        21,
         10
       ],
-      "time_limit_seconds": 360,
-      "reward": 339
+      "time_limit_seconds": 195,
+      "reward": 118,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 128,
+        "required_ferry_legs": 2,
+        "fictional_ferry_fares": 8,
+        "modeled_road_and_foot_seconds": 4.3,
+        "modeled_control_allowance_seconds": 20,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-09",
-      "title": "Gallery opening 1",
+      "title": "SHOPFRONT ROUND",
+      "brief": [
+        "SMALL SHOP PARCELS",
+        "LINK LOCAL STOPS"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 6,
       "route": [
         0,
-        3,
-        8,
-        2,
-        7,
         1,
-        6,
-        23,
-        5,
-        11
+        2,
+        11,
+        4,
+        7,
+        8,
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 446
+      "time_limit_seconds": 230,
+      "reward": 208,
+      "timing_design": {
+        "vehicle_route_pixels": 2240,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 33.2,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-10",
-      "title": "Gallery opening 2",
+      "title": "GALLERY LOAN",
+      "brief": [
+        "FRAMED PRINTS",
+        "DELIVER INTACT"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 6,
       "route": [
-        0,
-        6,
-        23,
         5,
-        11,
+        6,
+        3,
         4,
-        9,
-        3
+        7,
+        5
       ],
-      "time_limit_seconds": 400,
-      "reward": 378
+      "time_limit_seconds": 190,
+      "reward": 198,
+      "timing_design": {
+        "vehicle_route_pixels": 1632,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 24.2,
+        "modeled_control_allowance_seconds": 25,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-11",
-      "title": "Gallery opening 3",
+      "title": "CROSSING DEADLINE",
+      "brief": [
+        "CIVIC FILE RUN",
+        "CHOOSE YOUR BRIDGE"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 6,
       "route": [
         0,
-        9,
         3,
-        8,
+        12,
         2,
-        7,
-        1,
-        6,
-        23
+        9,
+        19,
+        17,
+        0
       ],
-      "time_limit_seconds": 260,
-      "reward": 415
+      "time_limit_seconds": 160,
+      "reward": 229,
+      "timing_design": {
+        "vehicle_route_pixels": 2464,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 36.5,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-12",
-      "title": "Gallery opening 4",
+      "title": "STOCK THE STALLS",
+      "brief": [
+        "MARKET STOCK TRUCK",
+        "WEST TO OLD TOWN"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 6,
       "route": [
-        0,
-        1,
-        6,
-        23,
-        5,
         11,
+        2,
+        1,
+        0,
+        23,
+        8,
         4,
-        9,
-        3,
-        8
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 452
+      "time_limit_seconds": 205,
+      "reward": 219,
+      "timing_design": {
+        "vehicle_route_pixels": 1664,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 22.2,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-13",
-      "title": "Gallery opening 5",
+      "title": "BUS CONNECTIONS",
+      "brief": [
+        "STATION LETTERS",
+        "BUS AT WELLESLEY"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 6,
       "route": [
-        0,
         17,
         15,
-        18,
+        0,
         16,
         19,
-        14,
-        1,
-        23,
-        0
+        16,
+        18,
+        16,
+        17
       ],
-      "time_limit_seconds": 480,
-      "reward": 454
+      "time_limit_seconds": 245,
+      "reward": 244,
+      "timing_design": {
+        "vehicle_route_pixels": 3264,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 48.4,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-14",
-      "title": "Gallery opening 6",
+      "title": "MUSEUM OUTING",
+      "brief": [
+        "MUSEUM VISIT RIDES",
+        "KEEP THE CAR CALM"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
       "min_completed": 8,
       "route": [
         0,
-        7,
-        1,
         6,
-        23,
-        5,
+        17,
+        3,
+        1,
         11,
-        4,
-        9
+        23,
+        0
       ],
-      "time_limit_seconds": 440,
-      "reward": 421
+      "time_limit_seconds": 245,
+      "reward": 245,
+      "timing_design": {
+        "vehicle_route_pixels": 2720,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 40.3,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-15",
-      "title": "Gallery opening 7",
+      "title": "HARBOUR RECEIPTS",
+      "brief": [
+        "SIGNED CARGO SLIPS",
+        "BACK TO THE DEPOT"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 6,
       "route": [
         0,
         11,
-        4,
-        9,
-        3,
-        8,
         2,
-        7,
         1,
+        3,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 458
+      "time_limit_seconds": 175,
+      "reward": 158,
+      "timing_design": {
+        "vehicle_route_pixels": 1024,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 15.2,
+        "modeled_control_allowance_seconds": 25,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-16",
-      "title": "Gallery opening 8",
+      "title": "HANLAN POST",
+      "brief": [
+        "HANLAN LETTERS",
+        "FERRY THEN FOOT"
+      ],
+      "chapter": "Neighbourhood connections",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
@@ -489,165 +713,273 @@
       "route": [
         10,
         20,
-        10,
-        21,
-        10,
-        22,
+        24,
+        20,
         10
       ],
-      "time_limit_seconds": 360,
-      "reward": 355
+      "time_limit_seconds": 205,
+      "reward": 130,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 272,
+        "required_ferry_legs": 2,
+        "fictional_ferry_fares": 8,
+        "modeled_road_and_foot_seconds": 9.1,
+        "modeled_control_allowance_seconds": 20,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-17",
-      "title": "Office hours 1",
+      "title": "MARKET TO MARKET",
+      "brief": [
+        "NEIGHBOURHOOD MAIL",
+        "WEST TO EAST ROUND"
+      ],
+      "chapter": "City events",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 12,
       "route": [
-        0,
-        5,
-        11,
-        4,
-        9,
-        3,
         8,
+        7,
+        5,
+        4,
+        3,
+        1,
         2,
-        7
+        11,
+        0
       ],
-      "time_limit_seconds": 440,
-      "reward": 427
+      "time_limit_seconds": 220,
+      "reward": 214,
+      "timing_design": {
+        "vehicle_route_pixels": 1568,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 23.2,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-18",
-      "title": "Office hours 2",
+      "title": "OPENING NIGHT ART",
+      "brief": [
+        "EXHIBITION CRATES",
+        "NO HARD IMPACTS"
+      ],
+      "chapter": "City events",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 12,
       "route": [
-        0,
-        8,
-        2,
-        7,
-        1,
         6,
-        23,
         5,
-        11,
-        4
+        7,
+        4,
+        3,
+        1,
+        23,
+        6
       ],
-      "time_limit_seconds": 480,
-      "reward": 464
+      "time_limit_seconds": 245,
+      "reward": 257,
+      "timing_design": {
+        "vehicle_route_pixels": 2720,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 40.3,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-19",
-      "title": "Office hours 3",
+      "title": "BRIDGE DOCUMENTS",
+      "brief": [
+        "URGENT CITY MAIL",
+        "BRIDGE TO BRIDGE"
+      ],
+      "chapter": "City events",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 12,
       "route": [
-        0,
-        23,
-        5,
-        11,
-        4,
-        9,
+        7,
         3,
-        8
+        14,
+        16,
+        19,
+        9,
+        2,
+        0
       ],
-      "time_limit_seconds": 240,
-      "reward": 396
+      "time_limit_seconds": 155,
+      "reward": 239,
+      "timing_design": {
+        "vehicle_route_pixels": 2368,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 35.1,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-20",
-      "title": "Office hours 4",
+      "title": "EVENT EQUIPMENT",
+      "brief": [
+        "TRUCK EVENT LOADS",
+        "RETURN EMPTY CASES"
+      ],
+      "chapter": "City events",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 12,
       "route": [
-        0,
-        3,
-        8,
         2,
-        7,
-        1,
-        6,
+        11,
         23,
-        5
+        8,
+        7,
+        4,
+        1,
+        0
       ],
-      "time_limit_seconds": 440,
-      "reward": 433
+      "time_limit_seconds": 225,
+      "reward": 249,
+      "timing_design": {
+        "vehicle_route_pixels": 2400,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 32.0,
+        "modeled_control_allowance_seconds": 35,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-21",
-      "title": "Office hours 5",
+      "title": "CAMPUS ENVELOPES",
+      "brief": [
+        "LIGHT CAMPUS MAIL",
+        "COMPARE THE ROUTES"
+      ],
+      "chapter": "City events",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 12,
       "route": [
-        0,
-        17,
-        15,
         18,
         16,
+        0,
+        12,
+        15,
+        17,
+        16,
         19,
-        14,
-        1,
-        23,
+        16,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 470
+      "time_limit_seconds": 250,
+      "reward": 266,
+      "timing_design": {
+        "vehicle_route_pixels": 3280,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 48.6,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-22",
-      "title": "Office hours 6",
+      "title": "AUDIENCE ARRIVALS",
+      "brief": [
+        "EVENT PASSENGERS",
+        "CAR TO EACH DOOR"
+      ],
+      "chapter": "City events",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 12,
       "route": [
-        0,
-        9,
-        3,
-        8,
+        17,
+        6,
+        5,
+        4,
+        23,
+        11,
         2,
-        7,
         1,
-        6
+        0
       ],
-      "time_limit_seconds": 400,
-      "reward": 402
+      "time_limit_seconds": 225,
+      "reward": 245,
+      "timing_design": {
+        "vehicle_route_pixels": 1824,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 27.0,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-23",
-      "title": "Office hours 7",
+      "title": "PERMIT LOOP",
+      "brief": [
+        "SIGNED EVENT FORMS",
+        "RETURN TO START"
+      ],
+      "chapter": "City events",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 12,
       "route": [
         0,
-        1,
-        6,
-        23,
+        3,
         5,
-        11,
-        4,
+        6,
+        17,
+        19,
         9,
+        2,
         0
       ],
-      "time_limit_seconds": 440,
-      "reward": 439
+      "time_limit_seconds": 245,
+      "reward": 238,
+      "timing_design": {
+        "vehicle_route_pixels": 2528,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-24",
-      "title": "Office hours 8",
+      "title": "WARD COTTAGE MAIL",
+      "brief": [
+        "WARD LETTER ROUND",
+        "LEAVE CAR MAINLAND"
+      ],
+      "chapter": "City events",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
@@ -655,1016 +987,1794 @@
       "route": [
         10,
         22,
-        10,
-        20,
-        10,
-        21,
+        26,
+        22,
         10
       ],
-      "time_limit_seconds": 360,
-      "reward": 371
+      "time_limit_seconds": 200,
+      "reward": 142,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 160,
+        "required_ferry_legs": 2,
+        "fictional_ferry_fares": 8,
+        "modeled_road_and_foot_seconds": 5.3,
+        "modeled_control_allowance_seconds": 20,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-25",
-      "title": "Harbour cargo 1",
+      "title": "WEST END THREAD",
+      "brief": [
+        "SHOP REPAIR KITS",
+        "STOPS IN ORDER"
+      ],
+      "chapter": "Crossing the city",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 18,
       "route": [
         0,
-        7,
-        1,
-        6,
         23,
+        4,
+        8,
+        7,
         5,
-        11,
-        4
+        6,
+        3,
+        1,
+        0
       ],
-      "time_limit_seconds": 400,
-      "reward": 408
+      "time_limit_seconds": 260,
+      "reward": 264,
+      "timing_design": {
+        "vehicle_route_pixels": 2688,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 39.8,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-26",
-      "title": "Harbour cargo 2",
+      "title": "GLASS ACROSS TOWN",
+      "brief": [
+        "GLASS NEEDS CARE",
+        "PLAN WIDE TURNS"
+      ],
+      "chapter": "Crossing the city",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 18,
       "route": [
-        0,
-        11,
-        4,
-        9,
-        3,
-        8,
+        1,
         2,
-        7,
+        9,
+        19,
+        17,
+        6,
+        5,
+        4,
+        23,
         1
       ],
-      "time_limit_seconds": 440,
-      "reward": 445
+      "time_limit_seconds": 255,
+      "reward": 285,
+      "timing_design": {
+        "vehicle_route_pixels": 2528,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-27",
-      "title": "Harbour cargo 3",
+      "title": "NORTH SOUTH FILES",
+      "brief": [
+        "OFFICE CUTOFF RUN",
+        "STOP AT THE BEACON"
+      ],
+      "chapter": "Crossing the city",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 18,
       "route": [
         0,
+        17,
+        19,
+        9,
         2,
-        7,
-        1,
-        6,
-        23,
-        5,
         11,
-        4,
-        9
+        23,
+        3,
+        0
       ],
-      "time_limit_seconds": 280,
-      "reward": 482
+      "time_limit_seconds": 175,
+      "reward": 277,
+      "timing_design": {
+        "vehicle_route_pixels": 3040,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-28",
-      "title": "Harbour cargo 4",
+      "title": "CITY WORK CREW",
+      "brief": [
+        "WORK CREW TOOLS",
+        "TRUCK EACH STOP"
+      ],
+      "chapter": "Crossing the city",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 18,
       "route": [
-        0,
-        5,
-        11,
-        4,
-        9,
-        3,
         8,
-        2
+        7,
+        4,
+        23,
+        0,
+        1,
+        2,
+        11,
+        9,
+        8
       ],
-      "time_limit_seconds": 400,
-      "reward": 414
+      "time_limit_seconds": 250,
+      "reward": 284,
+      "timing_design": {
+        "vehicle_route_pixels": 2496,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 33.3,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-29",
-      "title": "Harbour cargo 5",
+      "title": "YONGE CONNECTION",
+      "brief": [
+        "STATION MAIL",
+        "KEEP FARE MONEY"
+      ],
+      "chapter": "Crossing the city",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 18,
       "route": [
         0,
+        14,
         17,
         15,
+        12,
+        16,
         18,
         16,
         19,
-        14,
-        1,
-        23,
+        16,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 486
+      "time_limit_seconds": 285,
+      "reward": 311,
+      "timing_design": {
+        "vehicle_route_pixels": 4192,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 62.1,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-30",
-      "title": "Harbour cargo 6",
+      "title": "CITY TOUR RIDES",
+      "brief": [
+        "VISITOR RIDES",
+        "SMOOTH CITY TOUR"
+      ],
+      "chapter": "Crossing the city",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 18,
       "route": [
         0,
         23,
         5,
-        11,
-        4,
+        6,
+        17,
+        19,
         9,
-        3,
-        8,
         2,
-        7
+        1,
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 488
+      "time_limit_seconds": 255,
+      "reward": 285,
+      "timing_design": {
+        "vehicle_route_pixels": 2528,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-31",
-      "title": "Harbour cargo 7",
+      "title": "CROSS CITY INK",
+      "brief": [
+        "SIGN AT EACH STOP",
+        "UNION GETS COPIES"
+      ],
+      "chapter": "Crossing the city",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 18,
       "route": [
         0,
-        3,
         8,
-        2,
         7,
-        1,
+        5,
         6,
+        17,
+        19,
+        9,
+        2,
+        1,
         0
       ],
-      "time_limit_seconds": 400,
-      "reward": 420
+      "time_limit_seconds": 285,
+      "reward": 282,
+      "timing_design": {
+        "vehicle_route_pixels": 3040,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-32",
-      "title": "Harbour cargo 8",
+      "title": "WEST CENTRE POST",
+      "brief": [
+        "TWO ISLAND ROUNDS",
+        "TRANSFER MAINLAND"
+      ],
+      "chapter": "Crossing the city",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
-      "min_completed": 12,
+      "min_completed": 18,
       "route": [
         10,
-        21,
-        10,
-        22,
-        10,
         20,
+        24,
+        20,
+        10,
+        21,
+        25,
+        21,
         10
       ],
-      "time_limit_seconds": 360,
-      "reward": 387
+      "time_limit_seconds": 310,
+      "reward": 202,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 400,
+        "required_ferry_legs": 4,
+        "fictional_ferry_fares": 16,
+        "modeled_road_and_foot_seconds": 13.3,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-33",
-      "title": "Campus mail 1",
+      "title": "HARBOUR SHOP MAIL",
+      "brief": [
+        "WATERFRONT PARCELS",
+        "SHORE TO CITY"
+      ],
+      "chapter": "Waterfront work",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 24,
       "route": [
-        0,
-        9,
-        3,
-        8,
+        11,
         2,
-        7,
         1,
-        6,
+        0,
         23,
-        5
+        4,
+        7,
+        8,
+        3,
+        11
       ],
-      "time_limit_seconds": 480,
-      "reward": 494
+      "time_limit_seconds": 250,
+      "reward": 264,
+      "timing_design": {
+        "vehicle_route_pixels": 2240,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 33.2,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-34",
-      "title": "Campus mail 2",
+      "title": "SHORE DISPLAY",
+      "brief": [
+        "FRAGILE DISPLAY",
+        "TAKE CARE AT CURBS"
+      ],
+      "chapter": "Waterfront work",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 24,
       "route": [
-        0,
-        1,
-        6,
-        23,
         5,
-        11,
         4,
-        9
+        23,
+        0,
+        11,
+        2,
+        1,
+        3,
+        6,
+        5
       ],
-      "time_limit_seconds": 400,
-      "reward": 426
+      "time_limit_seconds": 255,
+      "reward": 293,
+      "timing_design": {
+        "vehicle_route_pixels": 2400,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 35.6,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-35",
-      "title": "Campus mail 3",
+      "title": "DOCK OFFICE DASH",
+      "brief": [
+        "URGENT SHORE FILES",
+        "BEAT THE CLOCK"
+      ],
+      "chapter": "Waterfront work",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 24,
       "route": [
         0,
-        4,
-        9,
-        3,
-        8,
+        11,
         2,
-        7,
-        1,
-        6
+        9,
+        19,
+        17,
+        15,
+        3,
+        23,
+        0
       ],
-      "time_limit_seconds": 260,
-      "reward": 463
+      "time_limit_seconds": 175,
+      "reward": 290,
+      "timing_design": {
+        "vehicle_route_pixels": 2656,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 39.3,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-36",
-      "title": "Campus mail 4",
+      "title": "HARBOUR LOADS",
+      "brief": [
+        "BULKY SHORE CARGO",
+        "WIDE TRUCK TURNS"
+      ],
+      "chapter": "Waterfront work",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 24,
       "route": [
         0,
-        7,
-        1,
-        6,
         23,
-        5,
         11,
-        4,
+        2,
+        1,
         9,
-        3
+        8,
+        4,
+        3,
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 500
+      "time_limit_seconds": 255,
+      "reward": 303,
+      "timing_design": {
+        "vehicle_route_pixels": 2784,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 37.1,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-37",
-      "title": "Campus mail 5",
+      "title": "SHORE CONNECTION",
+      "brief": [
+        "SMALL SHORE KIT",
+        "TRAIN THEN WALK"
+      ],
+      "chapter": "Waterfront work",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 24,
       "route": [
+        11,
         0,
         17,
-        15,
-        18,
         16,
         19,
-        14,
-        1,
-        23,
-        0
+        16,
+        18,
+        16,
+        12,
+        10
       ],
-      "time_limit_seconds": 480,
-      "reward": 502
+      "time_limit_seconds": 260,
+      "reward": 298,
+      "timing_design": {
+        "vehicle_route_pixels": 3568,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 52.9,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-38",
-      "title": "Campus mail 6",
+      "title": "FERRY CONNECTIONS",
+      "brief": [
+        "RIDES TO THE SHORE",
+        "PARK AT DROP OFFS"
+      ],
+      "chapter": "Waterfront work",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 24,
       "route": [
         0,
-        2,
-        7,
-        1,
         6,
-        23,
-        5,
+        17,
+        19,
+        9,
+        2,
         11,
-        4
+        10,
+        23,
+        0
       ],
-      "time_limit_seconds": 440,
-      "reward": 469
+      "time_limit_seconds": 265,
+      "reward": 304,
+      "timing_design": {
+        "vehicle_route_pixels": 2816,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 41.7,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-39",
-      "title": "Campus mail 7",
+      "title": "CARGO SIGNOFF",
+      "brief": [
+        "SIGNED DOCK PAPERS",
+        "BRING COPIES HOME"
+      ],
+      "chapter": "Waterfront work",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 24,
       "route": [
         0,
-        5,
         11,
-        4,
-        9,
-        3,
-        8,
         2,
-        7,
+        9,
+        19,
+        17,
+        6,
+        3,
+        1,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 506
+      "time_limit_seconds": 265,
+      "reward": 278,
+      "timing_design": {
+        "vehicle_route_pixels": 2784,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 41.2,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-40",
-      "title": "Campus mail 8",
+      "title": "CENTRE WARD POST",
+      "brief": [
+        "TWO ISLAND PARCELS",
+        "FOOTPATHS TO DOORS"
+      ],
+      "chapter": "Waterfront work",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
-      "min_completed": 12,
+      "min_completed": 24,
       "route": [
         10,
-        20,
-        10,
+        21,
+        25,
         21,
         10,
         22,
+        26,
+        22,
         10
       ],
-      "time_limit_seconds": 360,
-      "reward": 403
+      "time_limit_seconds": 305,
+      "reward": 214,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 288,
+        "required_ferry_legs": 4,
+        "fictional_ferry_fares": 16,
+        "modeled_road_and_foot_seconds": 9.6,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-41",
-      "title": "Civic shift 1",
+      "title": "CULTURE PARCELS",
+      "brief": [
+        "BOOKS AND PROGRAMS",
+        "MUSEUM TO MARKET"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 30,
       "route": [
-        0,
-        23,
-        5,
-        11,
-        4,
-        9,
+        6,
+        17,
         3,
-        8,
-        2
+        1,
+        2,
+        11,
+        23,
+        4,
+        7,
+        5,
+        6
       ],
-      "time_limit_seconds": 440,
-      "reward": 475
+      "time_limit_seconds": 275,
+      "reward": 301,
+      "timing_design": {
+        "vehicle_route_pixels": 2816,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 41.7,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-42",
-      "title": "Civic shift 2",
+      "title": "ART EXCHANGE",
+      "brief": [
+        "FRAMED ART LOANS",
+        "KEEP CRATES WHOLE"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 30,
       "route": [
-        0,
-        3,
-        8,
-        2,
-        7,
-        1,
-        6,
-        23,
         5,
-        11
+        7,
+        8,
+        4,
+        23,
+        0,
+        1,
+        2,
+        3,
+        6,
+        5
       ],
-      "time_limit_seconds": 480,
-      "reward": 512
+      "time_limit_seconds": 275,
+      "reward": 325,
+      "timing_design": {
+        "vehicle_route_pixels": 2784,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 41.2,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-43",
-      "title": "Civic shift 3",
+      "title": "PRINT SHOP CUTOFF",
+      "brief": [
+        "PRINT SHOP FILES",
+        "TIME THE CROSSINGS"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 30,
       "route": [
-        0,
-        6,
-        23,
+        7,
         5,
-        11,
-        4,
+        6,
+        17,
+        19,
         9,
-        3
+        2,
+        11,
+        3,
+        0
       ],
-      "time_limit_seconds": 240,
-      "reward": 444
+      "time_limit_seconds": 175,
+      "reward": 301,
+      "timing_design": {
+        "vehicle_route_pixels": 2624,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 38.9,
+        "modeled_control_allowance_seconds": 45,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-44",
-      "title": "Civic shift 4",
+      "title": "STAGE CASES",
+      "brief": [
+        "HEAVY EVENT CASES",
+        "TRUCK LOADING RUN"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 30,
       "route": [
+        23,
         0,
-        9,
-        3,
-        8,
-        2,
-        7,
         1,
+        2,
+        11,
+        9,
+        19,
         6,
+        5,
+        4,
         23
       ],
-      "time_limit_seconds": 440,
-      "reward": 481
+      "time_limit_seconds": 265,
+      "reward": 322,
+      "timing_design": {
+        "vehicle_route_pixels": 2656,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 35.4,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-45",
-      "title": "Civic shift 5",
+      "title": "ART VIA TRANSIT",
+      "brief": [
+        "GALLERY MAIL",
+        "SMART TRANSFERS"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 30,
       "route": [
-        0,
+        5,
+        14,
         17,
-        15,
+        16,
         18,
         16,
         19,
-        14,
-        1,
-        23,
-        0
+        16,
+        12,
+        0,
+        5
       ],
-      "time_limit_seconds": 480,
-      "reward": 518
+      "time_limit_seconds": 270,
+      "reward": 323,
+      "timing_design": {
+        "vehicle_route_pixels": 3712,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 55.0,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-46",
-      "title": "Civic shift 6",
+      "title": "GALLERY NIGHT",
+      "brief": [
+        "GALLERY CAR RIDES",
+        "PROTECT PASSENGERS"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 30,
       "route": [
         0,
-        4,
-        9,
-        3,
-        8,
-        2,
+        5,
         7,
-        1
+        8,
+        4,
+        23,
+        11,
+        2,
+        9,
+        6,
+        0
       ],
-      "time_limit_seconds": 400,
-      "reward": 450
+      "time_limit_seconds": 310,
+      "reward": 355,
+      "timing_design": {
+        "vehicle_route_pixels": 3968,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 58.8,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-47",
-      "title": "Civic shift 7",
+      "title": "PROGRAM APPROVAL",
+      "brief": [
+        "COLLECT APPROVALS",
+        "RETURN ORIGINAL"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 30,
       "route": [
         0,
-        7,
-        1,
-        6,
-        23,
         5,
-        11,
+        7,
+        8,
         4,
+        23,
+        11,
+        2,
+        9,
+        3,
         0
       ],
-      "time_limit_seconds": 440,
-      "reward": 487
+      "time_limit_seconds": 280,
+      "reward": 302,
+      "timing_design": {
+        "vehicle_route_pixels": 2880,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 42.7,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-48",
-      "title": "Civic shift 8",
+      "title": "WARD HANLAN POST",
+      "brief": [
+        "EAST AND WEST POST",
+        "FERRY FOOT FERRY"
+      ],
+      "chapter": "Arts and audiences",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
-      "min_completed": 12,
+      "min_completed": 30,
       "route": [
         10,
         22,
+        26,
+        22,
         10,
         20,
-        10,
-        21,
+        24,
+        20,
         10
       ],
-      "time_limit_seconds": 360,
-      "reward": 419
+      "time_limit_seconds": 310,
+      "reward": 226,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 432,
+        "required_ferry_legs": 4,
+        "fictional_ferry_fares": 16,
+        "modeled_road_and_foot_seconds": 14.4,
+        "modeled_control_allowance_seconds": 40,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-49",
-      "title": "Brick and glass 1",
+      "title": "LATE SHOP ROUND",
+      "brief": [
+        "LAST SHOP PARCELS",
+        "CITY STILL MOVES"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 36,
       "route": [
         0,
-        2,
-        7,
         1,
+        2,
+        9,
+        19,
+        17,
         6,
-        23,
         5,
-        11
+        7,
+        8,
+        4,
+        0
       ],
-      "time_limit_seconds": 400,
-      "reward": 456
+      "time_limit_seconds": 295,
+      "reward": 328,
+      "timing_design": {
+        "vehicle_route_pixels": 3040,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-50",
-      "title": "Brick and glass 2",
+      "title": "EVENING EXHIBIT",
+      "brief": [
+        "FINAL EXHIBIT LOAD",
+        "SLOW IN TURNS"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 36,
       "route": [
-        0,
-        5,
-        11,
-        4,
-        9,
+        6,
         3,
-        8,
+        1,
         2,
-        7
+        11,
+        23,
+        4,
+        8,
+        7,
+        5,
+        6
       ],
-      "time_limit_seconds": 440,
-      "reward": 493
+      "time_limit_seconds": 280,
+      "reward": 340,
+      "timing_design": {
+        "vehicle_route_pixels": 2912,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 43.1,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-51",
-      "title": "Brick and glass 3",
+      "title": "LAST FILE RUN",
+      "brief": [
+        "URGENT FINAL FILES",
+        "PLAN THEN DRIVE"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 36,
       "route": [
         0,
         8,
-        2,
         7,
-        1,
-        6,
-        23,
         5,
-        11,
-        4
+        6,
+        17,
+        19,
+        9,
+        2,
+        3,
+        0
       ],
-      "time_limit_seconds": 280,
-      "reward": 530
+      "time_limit_seconds": 200,
+      "reward": 343,
+      "timing_design": {
+        "vehicle_route_pixels": 3424,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 50.7,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-52",
-      "title": "Brick and glass 4",
+      "title": "CLOSING STOCK",
+      "brief": [
+        "SHOP STOCK RETURNS",
+        "WIDE TURNS LOADED"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 36,
       "route": [
-        0,
-        23,
-        5,
+        1,
+        2,
         11,
+        23,
         4,
-        9,
+        8,
+        7,
+        5,
         3,
-        8
+        0,
+        1
       ],
-      "time_limit_seconds": 400,
-      "reward": 462
+      "time_limit_seconds": 250,
+      "reward": 323,
+      "timing_design": {
+        "vehicle_route_pixels": 2240,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 29.9,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-53",
-      "title": "Brick and glass 5",
+      "title": "NIGHT NETWORK",
+      "brief": [
+        "DISPATCH LETTERS",
+        "CATCH DEPARTURE"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 36,
       "route": [
+        19,
+        16,
+        12,
         0,
         17,
         15,
+        16,
         18,
         16,
-        19,
         14,
-        1,
-        23,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 534
+      "time_limit_seconds": 275,
+      "reward": 338,
+      "timing_design": {
+        "vehicle_route_pixels": 3824,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 56.7,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-54",
-      "title": "Brick and glass 6",
+      "title": "EVENING RIDES",
+      "brief": [
+        "LATE CITY RIDES",
+        "SAFE CAR JOURNEYS"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 36,
       "route": [
         0,
-        6,
-        23,
-        5,
+        1,
+        2,
         11,
+        23,
         4,
-        9,
-        3,
         8,
-        2
+        7,
+        5,
+        6,
+        17,
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 536
+      "time_limit_seconds": 295,
+      "reward": 354,
+      "timing_design": {
+        "vehicle_route_pixels": 3072,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 45.5,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-55",
-      "title": "Brick and glass 7",
+      "title": "CLOSING LEDGER",
+      "brief": [
+        "SIGNED SHOP LEDGER",
+        "RETURN IT TO DEPOT"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 36,
       "route": [
         0,
-        9,
-        3,
+        23,
+        4,
         8,
-        2,
         7,
+        5,
+        6,
+        17,
+        19,
+        9,
         1,
         0
       ],
-      "time_limit_seconds": 400,
-      "reward": 468
+      "time_limit_seconds": 295,
+      "reward": 328,
+      "timing_design": {
+        "vehicle_route_pixels": 3040,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-56",
-      "title": "Brick and glass 8",
+      "title": "THREE ISLAND POST",
+      "brief": [
+        "ALL THREE ISLANDS",
+        "WALK EACH DELIVERY"
+      ],
+      "chapter": "Evening dispatch",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
-      "min_completed": 12,
+      "min_completed": 36,
       "route": [
         10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25,
         21,
         10,
         22,
-        10,
-        20,
-        10
+        26
       ],
       "time_limit_seconds": 360,
-      "reward": 435
+      "reward": 262,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 480,
+        "required_ferry_legs": 5,
+        "fictional_ferry_fares": 20,
+        "modeled_road_and_foot_seconds": 16.0,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-57",
-      "title": "Night dispatch 1",
+      "title": "CITY LINK PARCELS",
+      "brief": [
+        "CITY PARCEL ROUND",
+        "MANY ROUTE CHOICES"
+      ],
+      "chapter": "Across the network",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 42,
       "route": [
-        0,
-        4,
-        9,
-        3,
         8,
+        4,
+        23,
+        11,
         2,
-        7,
-        1,
+        9,
+        19,
+        17,
         6,
-        23
+        5,
+        7,
+        0
       ],
-      "time_limit_seconds": 480,
-      "reward": 542
+      "time_limit_seconds": 310,
+      "reward": 354,
+      "timing_design": {
+        "vehicle_route_pixels": 3584,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 53.1,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-58",
-      "title": "Night dispatch 2",
+      "title": "FRAGILE CITY LINK",
+      "brief": [
+        "CITY ART HANDOFFS",
+        "CONDITION MATTERS"
+      ],
+      "chapter": "Across the network",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 42,
       "route": [
-        0,
-        7,
-        1,
-        6,
-        23,
         5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        1,
         11,
-        4
+        23,
+        4,
+        8,
+        5
       ],
-      "time_limit_seconds": 400,
-      "reward": 474
+      "time_limit_seconds": 300,
+      "reward": 371,
+      "timing_design": {
+        "vehicle_route_pixels": 3264,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 48.4,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-59",
-      "title": "Night dispatch 3",
+      "title": "NETWORK DEADLINE",
+      "brief": [
+        "EXPRESS FILE LINK",
+        "SAVE TIME LEGALLY"
+      ],
+      "chapter": "Across the network",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 42,
       "route": [
         0,
-        11,
-        4,
-        9,
-        3,
+        23,
         8,
-        2,
         7,
-        1
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        3,
+        0
       ],
-      "time_limit_seconds": 260,
-      "reward": 511
+      "time_limit_seconds": 210,
+      "reward": 368,
+      "timing_design": {
+        "vehicle_route_pixels": 3552,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 52.6,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-60",
-      "title": "Night dispatch 4",
+      "title": "NETWORK FREIGHT",
+      "brief": [
+        "LARGE CITY LOADS",
+        "TRUCK STOP CONTROL"
+      ],
+      "chapter": "Across the network",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 42,
       "route": [
-        0,
-        2,
-        7,
-        1,
-        6,
-        23,
-        5,
         11,
+        2,
+        1,
+        0,
+        23,
         4,
-        9
+        8,
+        7,
+        6,
+        19,
+        9,
+        11
       ],
-      "time_limit_seconds": 480,
-      "reward": 548
+      "time_limit_seconds": 285,
+      "reward": 369,
+      "timing_design": {
+        "vehicle_route_pixels": 3168,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 42.2,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-61",
-      "title": "Night dispatch 5",
+      "title": "CITY TRANSFERS",
+      "brief": [
+        "POCKET CITY PAPERS",
+        "BUS TRAIN AND FOOT"
+      ],
+      "chapter": "Across the network",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 42,
       "route": [
-        0,
-        17,
-        15,
         18,
         16,
         19,
+        16,
+        17,
+        15,
+        0,
+        12,
         14,
+        5,
         1,
-        23,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 550
+      "time_limit_seconds": 280,
+      "reward": 357,
+      "timing_design": {
+        "vehicle_route_pixels": 3696,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 54.8,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-62",
-      "title": "Night dispatch 6",
+      "title": "NEIGHBOUR RIDES",
+      "brief": [
+        "CITY RIDES",
+        "SMOOTH DRIVING"
+      ],
+      "chapter": "Across the network",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 42,
       "route": [
-        0,
         8,
-        2,
         7,
-        1,
-        6,
-        23,
         5,
-        11
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        1,
+        23,
+        0
       ],
-      "time_limit_seconds": 440,
-      "reward": 517
+      "time_limit_seconds": 290,
+      "reward": 363,
+      "timing_design": {
+        "vehicle_route_pixels": 2944,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 43.6,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-63",
-      "title": "Night dispatch 7",
+      "title": "SIGNATURE CHAIN",
+      "brief": [
+        "SIGNATURE CHAIN",
+        "FINAL STOP UNION"
+      ],
+      "chapter": "Across the network",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 42,
       "route": [
         0,
-        23,
-        5,
+        1,
         11,
-        4,
-        9,
-        3,
-        8,
         2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        7,
+        8,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 554
+      "time_limit_seconds": 295,
+      "reward": 344,
+      "timing_design": {
+        "vehicle_route_pixels": 3168,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 46.9,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-64",
-      "title": "Night dispatch 8",
+      "title": "ISLAND HANDOFFS",
+      "brief": [
+        "CENTRE WARD HANLAN",
+        "MAINLAND TRANSFERS"
+      ],
+      "chapter": "Across the network",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
-      "min_completed": 12,
+      "min_completed": 42,
       "route": [
         10,
-        20,
-        10,
+        21,
+        25,
         21,
         10,
         22,
-        10
+        26,
+        22,
+        10,
+        20,
+        24
       ],
       "time_limit_seconds": 360,
-      "reward": 451
+      "reward": 274,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 424,
+        "required_ferry_legs": 5,
+        "fictional_ferry_fares": 20,
+        "modeled_road_and_foot_seconds": 14.1,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-65",
-      "title": "City circuit 1",
+      "title": "MASTER PARCELS",
+      "brief": [
+        "FULL CITY PARCELS",
+        "EVERY STOP COUNTS"
+      ],
+      "chapter": "Master courier",
       "kind": "PARCEL ROUND",
       "kind_id": 0,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 48,
       "route": [
         0,
-        6,
-        23,
+        8,
+        7,
         5,
-        11,
-        4,
+        6,
+        17,
+        19,
         9,
-        3,
-        8
+        2,
+        11,
+        1,
+        23
       ],
-      "time_limit_seconds": 440,
-      "reward": 523
+      "time_limit_seconds": 305,
+      "reward": 361,
+      "timing_design": {
+        "vehicle_route_pixels": 3392,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 50.3,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-66",
-      "title": "City circuit 2",
+      "title": "MASTER ART ROUND",
+      "brief": [
+        "ART CARE ROUND",
+        "ARRIVE WITH CARE"
+      ],
+      "chapter": "Master courier",
       "kind": "FRAGILE ART",
       "kind_id": 1,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 48,
       "route": [
-        0,
-        9,
-        3,
-        8,
-        2,
-        7,
-        1,
         6,
+        5,
+        8,
+        7,
+        4,
         23,
-        5
+        0,
+        11,
+        2,
+        9,
+        19,
+        6
       ],
-      "time_limit_seconds": 480,
-      "reward": 560
+      "time_limit_seconds": 305,
+      "reward": 387,
+      "timing_design": {
+        "vehicle_route_pixels": 3424,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 50.7,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-67",
-      "title": "City circuit 3",
+      "title": "MASTER DEADLINE",
+      "brief": [
+        "FINAL EXPRESS RUN",
+        "CONTROL BEATS RUSH"
+      ],
+      "chapter": "Master courier",
       "kind": "EXPRESS FILES",
       "kind_id": 2,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 48,
       "route": [
         0,
         1,
+        2,
+        9,
+        19,
+        17,
         6,
-        23,
         5,
-        11,
+        8,
         4,
-        9
+        23,
+        0
       ],
-      "time_limit_seconds": 240,
-      "reward": 492
+      "time_limit_seconds": 200,
+      "reward": 367,
+      "timing_design": {
+        "vehicle_route_pixels": 3040,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-68",
-      "title": "City circuit 4",
+      "title": "MASTER FREIGHT",
+      "brief": [
+        "FULL TRUCK CIRCUIT",
+        "BRAKE EARLY LOADED"
+      ],
+      "chapter": "Master courier",
       "kind": "HEAVY FREIGHT",
       "kind_id": 3,
       "required_vehicle": 1,
-      "min_completed": 3,
+      "min_completed": 48,
       "route": [
         0,
-        4,
-        9,
-        3,
         8,
-        2,
         7,
-        1,
-        6
+        4,
+        23,
+        11,
+        2,
+        9,
+        19,
+        6,
+        3,
+        0
       ],
-      "time_limit_seconds": 440,
-      "reward": 529
+      "time_limit_seconds": 310,
+      "reward": 401,
+      "timing_design": {
+        "vehicle_route_pixels": 3968,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 52.9,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-69",
-      "title": "City circuit 5",
+      "title": "MASTER TRANSIT",
+      "brief": [
+        "NETWORK MAIL RELAY",
+        "TIME EACH TRANSFER"
+      ],
+      "chapter": "Master courier",
       "kind": "TRANSIT RELAY",
       "kind_id": 4,
       "required_vehicle": 255,
-      "min_completed": 3,
+      "min_completed": 48,
       "route": [
         0,
         17,
         15,
+        16,
         18,
         16,
         19,
+        16,
         14,
+        5,
         1,
-        23,
         0
       ],
-      "time_limit_seconds": 480,
-      "reward": 566
+      "time_limit_seconds": 295,
+      "reward": 385,
+      "timing_design": {
+        "vehicle_route_pixels": 4352,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 64.5,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-70",
-      "title": "City circuit 6",
+      "title": "MASTER RIDES",
+      "brief": [
+        "FULL CITY SHIFT",
+        "SMOOTH TO THE END"
+      ],
+      "chapter": "Master courier",
       "kind": "PASSENGER RUN",
       "kind_id": 5,
       "required_vehicle": 0,
-      "min_completed": 8,
+      "min_completed": 48,
       "route": [
         0,
+        23,
         11,
-        4,
-        9,
-        3,
-        8,
         2,
-        7
+        9,
+        19,
+        17,
+        6,
+        5,
+        7,
+        8,
+        1
       ],
-      "time_limit_seconds": 400,
-      "reward": 498
+      "time_limit_seconds": 315,
+      "reward": 397,
+      "timing_design": {
+        "vehicle_route_pixels": 3824,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 56.7,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-71",
-      "title": "City circuit 7",
+      "title": "MASTER RETURNS",
+      "brief": [
+        "FULL SIGNOFF RUN",
+        "ORIGINAL TO UNION"
+      ],
+      "chapter": "Master courier",
       "kind": "RETURN PAPERS",
       "kind_id": 6,
       "required_vehicle": 255,
-      "min_completed": 0,
+      "min_completed": 48,
       "route": [
         0,
-        2,
-        7,
-        1,
-        6,
+        8,
+        4,
         23,
-        5,
         11,
+        2,
+        9,
+        19,
+        17,
+        6,
+        3,
         0
       ],
-      "time_limit_seconds": 440,
-      "reward": 535
+      "time_limit_seconds": 310,
+      "reward": 369,
+      "timing_design": {
+        "vehicle_route_pixels": 3712,
+        "island_walking_pixels": 0,
+        "required_ferry_legs": 0,
+        "fictional_ferry_fares": 0,
+        "modeled_road_and_foot_seconds": 55.0,
+        "modeled_control_allowance_seconds": 55,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     },
     {
       "id": "contract-72",
-      "title": "City circuit 8",
+      "title": "MASTER ISLAND POST",
+      "brief": [
+        "WARD HANLAN CENTRE",
+        "FINAL FOOT ROUND"
+      ],
+      "chapter": "Master courier",
       "kind": "ISLAND POST",
       "kind_id": 7,
       "required_vehicle": 255,
-      "min_completed": 12,
+      "min_completed": 48,
       "route": [
         10,
         22,
+        26,
+        22,
         10,
+        20,
+        24,
         20,
         10,
         21,
-        10
+        25
       ],
       "time_limit_seconds": 360,
-      "reward": 467
+      "reward": 286,
+      "timing_design": {
+        "vehicle_route_pixels": 0,
+        "island_walking_pixels": 496,
+        "required_ferry_legs": 5,
+        "fictional_ferry_fares": 20,
+        "modeled_road_and_foot_seconds": 16.5,
+        "modeled_control_allowance_seconds": 50,
+        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+      }
     }
   ],
   "transit": {
@@ -1701,6 +2811,7 @@
       ],
       "period_seconds": 30,
       "fare": 4,
+      "topology": "Mainland terminal to each Island dock; transfer via mainland between Islands",
       "source": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/"
     },
     "notice": "Fictional game timetables, fares and compression. Not a TTC trip planner."

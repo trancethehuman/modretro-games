@@ -1,10 +1,52 @@
 # Testing record
 
+## Handling, campaign and save polish — 2026-10-02
+
+Latest native ROM: `project/build/toronto-dispatch.gbc`, 262,144 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB declared SRAM. Official GB Studio CLI build exited 0; `rom_inspect` verified logo/header. SHA-256:
+
+```
+9ed8b60ebb73bbbe106eb95e9e3dbd5d14b7f1efa98b7209c6d0c8742c1ae37e
+```
+
+Same pinned CLI/engine/GBDK/PyBoy versions as below. Build source fingerprint: `ac356fcd49d94b862e0912b084aa84b482658a6be81d8215306b66894a544ed4`. Upstream DEP0190 and four SDCC optimizer warnings remain; no compilation error. The source revision for the published bundle is recorded in its BUILDINFO.json.
+
+### Real-engine host regressions
+
+`make check` runs `scripts/test_engine.py` with Clang/GCC, AddressSanitizer and UndefinedBehaviorSanitizer. It includes the actual TORONTO.c with hardware/input/tile/UI/actor stubs; the SRAM adapter redirects literal cartridge addresses to a bounded buffer and observes actual stores. **411 checks pass**, with no host compiler warnings. An earlier 135-check subset produced 18 failures against pre-fix main, demonstrating repaired behavior.
+
+Fixtures cover held acceleration through steering on clear ground, opposing directions, continuing glancing curb contact, head-on stop/reverse recovery, brake priority, coasting/inertia, input edges across substeps, full 16-bit clock gaps/wrap/pause, passenger comfort, car entry across an actual blocked rail fixture, hidden pedestrian contact, authored traffic stop lines and world activity during transit waiting.
+
+Save fixtures interrupt after every actual byte store in both alternating records, including overwriting an older valid destination slot. They verify final-magic commit, CRC fallback, rejection when both slots are corrupt, sequence wrap, a standard CRC check vector, 23 invalid but CRC-consistent states, legacy version-4 migration, paid-trip checkpoints, expiry during a ride and cancellation on the departure tick. These establish C logic under host adapters, **not GBDK ABI, cartridge CPU timing or physical power-loss persistence**.
+
+### Retained native recordings
+
+| Recording | ROM and observed scope |
+| --- | --- |
+| `handling-before-20261002` | Prior published `9eaec688…`, 572 frames, 62 events; held A+right turning reproduced rapid yaw and repeated curb/NPC slowing |
+| `handling-after-20261002` | Intermediate `119565b4…`, 610 frames, 72 events; same steering sequence showed calmer yaw, speed reaching 24 during curb sliding, real corner impacts stopping and throttle recovery |
+| `polish-delivery-transit-save-20261002` | Intermediate `119565b4…`, 3,648 frames, 305 events; revised briefs, first delivery, next eligible job, car entry, paused waiting, paid ferry reset recovery, Centre arrival and walking to within one pixel of new service point (760,944) |
+| `polish-final-native-20261002` | Latest `9ed8b60e…`, 3,880 frames, 353 events; final delivery/entry, cancellation persisted through reset, paid-trip remaining time persisted, paused ride and Centre arrival |
+
+All native inputs were ordinary buttons; WRAM/OAM was inspected read-only, with no injected progress or fabricated frames. `_td` was at WRAM offset 502 in the polish builds. Final recording event digest: `7c2ba85cb4258500ea6e1d55f04d6f38df4b92571701d537968ff1d881931392`. Intermediate delivery/ferry recording digest: `6f9f7fd58a510aa1efaedf1b9a71041a2e43334c8fa169d9125cc594b3e2212f`.
+
+Final build observations:
+
+- First contract collected at Union, delivered near St. Lawrence with condition 100, cash 30 → 139 and unique count 1; A selected contract index 1 as the next eligible unfinished job.
+- Parking and A entry restored the parked-car position with `onfoot` 1 → 0. The courier then walked to the ferry terminal.
+- B cancelled WAIT to ROAM without reopening transit or charging a fare. A soft reset preserved that cancellation and cash 139.
+- A new Centre-bound departure deducted one fare of 4 (cash 135). At game second 32, the ride had 6 seconds remaining. Pause for 240 video frames kept the entire state identical. After soft reset and leaving help, that paid trip still had 6 seconds and cash 135; arrival was (720,920), on foot, count 1.
+- One ride sample advanced 59 engine updates during 120 video frames, approximately 29.5 rendered updates per second. This is a bounded native CPU observation, not whole-city or physical-device frame pacing certification. Motion/clock compensation handles skipped updates separately.
+- Centre Island OAM sample: 2 visible objects, peak 2 per scanline, no over-limit lines. Prior crowded and roof-occlusion samples below remain scoped to their earlier ROMs.
+
+Content checks verify 72 unique authored titles/routes, 27 reachable service points, chapter unlock closure, native content consistency and Island foot access. They do not establish every deadline or two hours of play. Physical USB discovery succeeded but found no connected devices; no stream/write/firmware action was dispatched.
+
+The owned browser preview still reports unresolved recording-close acknowledgement, with a different historical build identity. It was preserved. **The new ROM has not been refreshed or verified in that browser view.** Audio, full Old Toronto coverage, full campaign/unlocks, two-hour duration and physical cartridge boot/save tests remain pending. Loading and binary-notice instructions are in [LOADING.md](docs/LOADING.md) and [DISTRIBUTION.md](docs/DISTRIBUTION.md).
+
 ## Scaffold — 2026-10-01
 
 Repository/content checks passed on initial setup and were rerun after research updates. The validator checks structure, source references, unique content identifiers, endpoint references, vehicle compatibility, and sensible mission values. It does not verify geographic placement, map reachability, handling, or engine integration.
 
-## Game and hardware evidence
+## Bootstrap evidence (historical)
 
 | Check | Status | Evidence |
 | --- | --- | --- |
@@ -56,7 +98,7 @@ Web preview source revision: `d6f17afcdfeb6dbc1e840926cc4148f0589c116637dc91c852
 
 The user explicitly replaced isometric presentation with a perpendicular north-up view, retaining momentum/braking and requesting wider roads, larger city space, pedestrians, visible walking/car entry and proper building occlusion. The scene extension, original assets, native collision grid and runtime campaign now implement this prototype.
 
-### Current build
+### Initial published north-up build (superseded above)
 
 `project/build/toronto-dispatch.gbc`: 262,144 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB declared SRAM; logo/header checks passed. SHA-256:
 

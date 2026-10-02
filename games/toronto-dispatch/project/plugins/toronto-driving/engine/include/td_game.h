@@ -2,7 +2,7 @@
 #define TD_GAME_H
 #include <gbdk/platform.h>
 #define TD_QUESTS 72
-#define TD_STOPS 24
+#define TD_STOPS 27
 #define TD_NONE 255
 #define TD_ROAM 0
 #define TD_PAUSE 1
@@ -28,6 +28,8 @@ extern td_job_t td_job,td_offer;
 extern td_stop_t td_target,td_cursor;
 void td_get_stop(UBYTE index,td_stop_t *dest) BANKED;
 void td_get_job(UBYTE index,td_job_t *dest) BANKED;
+/* Two 18-character lines followed by a terminator; caller provides 37 bytes. */
+void td_get_brief(UBYTE index,char *dest) BANKED;
 void td_get_street(UWORD u,UWORD v,char *dest) BANKED;
 void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
