@@ -1,5 +1,28 @@
 # Testing record
 
+## Pickup condition lifecycle correction — native candidate, 2026-10-02
+
+Accepting a contract now leaves cargo/comfort at 100 until the first actual pickup. The four traffic, wall, curb and passenger-steering damage paths require an active carrying stage; collision motion, cooldowns, fines and the acceptance-time deadline are unchanged. Empty vehicles show `CRASH: BRAKE EARLY`, and an unoccupied passenger approach no longer shows a rider warning. Cold startup restores valid older active-stage-0 saves to 100 only after CRC and semantic validation; actual carried damage and no-job failure condition remain unchanged. The 58-byte version-6 save format is retained.
+
+Official candidate `project/build/toronto-pickup-condition.gbc` is **524,288 bytes**, SHA-256 **`64be19fa3da7ba4231ba8c8decec4720c409116c034f586974fd4ddce789945a`**. Source fingerprint `7a61baf9dfa688dd423be21b8444380abc1969481ee8a00286f15cae55c6ebf3`, matching NOI SHA `9e82436532668b27e9b68059dce8c9cb8696ddc06bb1a5e4b2cb854812843f18`. The official build exited 0 in 39,175 ms, header inspection passes, and actual linked allocation retains `D950` heap / `DF00` stack / **1,456 bytes** reserve. This candidate is newer than the published Prototype 6 bundle; that bundle does not include this correction.
+
+The actual-C harness first reports **3,058 checks / 14 failures** on the old engine. After correction it reports **3,058 checks / zero failures**. Cases accept actual authored parcel/fragile/passenger offers and collect through the real stopped interaction handler. They independently compare approach/carrying/no-job traffic, wall, curb and steering responses; stage-0 timeout still fails without pay. Genuine CRC-valid older saves cover core and remote recovery, preserved carried/no-job condition and earnings/clock/vehicle positions; active health 0/101 remains rejected before normalization. Full `make check` also passes the unchanged transit/atlas/bridge/navigation/memory suites. Host fixtures do not establish native rendering, CPU timing or physical persistence.
+
+Three ordinary-button native recordings preserve the defect and its replay; WRAM/OAM inspection was read-only, without injected progress. Each journal was stopped, its worker closed and the original bytes archived through the plugin.
+
+| Scope / exact ROM | Session | Frames / events | Journal digest | Archive ID |
+| --- | --- | --- | --- | --- |
+| Pre-pickup defect / published `23b2a7a2…` | `649fc667c0ae440e89baa65d837a9a09` | 998 / 262 | `b5f7cfbe52b294cbfddc58a5d212ab6cd92bb0fae9b979f11ba0f0b6c1645355` | `3e2e3089-fe58-4c77-be99-6f2579d767b7` |
+| Corrected lifecycle / `64be19fa…` | `e04b29901a75452cb97538ef27ea5900` | 3,696 / 1,014 | `a6e1459d3e26f22e56a85628104252a3f3710f74086f3ec146b3b80e6608bb55` | `11710051-0d5d-4a7d-981b-0835950972e4` |
+| Controlled delivery/turn / `64be19fa…` | `1bbb466a76bc4003a3700ef5e1d4e538` | 864 / 260 | `946c87cbfd42f1a310bff7b6da4568cd148acf40d2864f000056684997e3feb4` | `310d1669-7a6f-47f6-ada8-1c36e8b9d304` |
+
+- The defect/replay use clean boot 180, A2, neutral300, Select4, neutral4, A4, neutral4, A500. Both reach frame998 at `(842.9375,720)`, contract01 stage0, 112 seconds left; the old ROM shows condition92, the correction100. The corrected obstacle warning is generic while the vehicle still stops.
+- Ordinary reverse/return reaches an actual Union pickup at frame2,616 with condition100/stage1. Another obstacle pass reaches frame3,116 at condition92/stage1. Braking/reverse and a stopped Market handoff finish at frame3,420 with cash123/done1: the condition-scaled base79 plus remaining-time bonus14 gives the expected93 reward.
+- A separate clean boot repeats the original first-delivery/held-turn inputs and world phase: pickup502, first delivery740 with cash139/done1/condition100, then B4, neutral4, A40, A+right48, A24 reach864 at speed24/heading4 in the actual core scene. OAM at864 has four visible objects, peak four per scanline, zero over-limit lines.
+- The longer lifecycle recording also retains an exploratory B-dismiss that continued into reverse and caused a correct stop-to-park refusal at speed-4. A later turn at a different world phase encounters a visible pedestrian and slows; it is not the controlled handling regression. The separate matched-phase replay above is the handling evidence.
+
+Native coverage here is parcel lifecycle, reward and controlled driving. Passenger/fragile penalties and older damaged-stage-0 recovery have host coverage but still need native samples. Scheduled transit within contract81, full two-hour varied gameplay, the current browser preview, full former-Toronto coverage and physical cartridge acceptance remain pending.
+
 ## Final Queen scheduled service — sampled native acceptance, 2026-10-02
 
 Current source implements eight supplemental 501 Queen curb platforms across West, Central and East. The campaign contains 51 service points while retaining the original 43 records, all 88 contracts and the 58-byte version-6 save layout. Original signs contain no TTC logo. Service 4 uses a three-dollar game fare, a 64-second directional period, two-second boarding windows and four seconds per stop interval. Destination selection derives east/west direction; schedule phase comes from the existing world clock. [STREETCAR.md](docs/STREETCAR.md) records the researched identities and deliberate normal-corridor compression. Current construction detours, full 501/504 coverage and an adopted map era are outside this implementation.

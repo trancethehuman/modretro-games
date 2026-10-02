@@ -341,7 +341,7 @@ static void td_traffic_step(void){
         }
         if(td.mode==TD_ROAM&&!td.onfoot&&td_distance(td.u,u)<180&&td_distance(td.v,v)<180&&!td.cooldown){
             td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=60;
-            if(td.job!=TD_NONE){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);break;}}td_message(5);
+            if(td.job!=TD_NONE&&td.stage){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);break;}}td_message(5);
         }
     }
     if(dirty)td_world_traffic_samples(td.district,td_traffic_leg,td_traffic_samples);
@@ -426,7 +426,7 @@ static void td_drive(void){
     if(td.vehicle==1)turn_period+=2;
     // A dedicated yaw counter keeps turns regular as speed changes.
     if(!!INPUT_LEFT!=!!INPUT_RIGHT){if(++td_turn_tick>=turn_period){td_turn_tick=0;if(INPUT_LEFT)td.heading=(td.heading+15)&15;else td.heading=(td.heading+1)&15;
-        if(td.job!=TD_NONE&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
+        if(td.job!=TD_NONE&&td.stage&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
     }}
     else td_turn_tick=0;
     if(INPUT_B){if(td_tick%2==0&&td.speed>-6)td.speed--;}
@@ -451,9 +451,9 @@ static void td_drive(void){
         if(nv!=(WORD)td.v&&td_drivable(td.u>>4,nv>>4)){td.v=nv;td_vx=0;slide=1;}
         if(!slide)slide=td_corner_slide(nu,nv);
         /* Remove only blocked-axis motion. Repeated curb scrapes must not beat the throttle. */
-        if(slide){if(speed>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
+        if(slide){if(speed>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
         else{
-            if(td.speed>8&&!td.cooldown){if(td.job!=TD_NONE){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);}
+            if(td.speed>8&&!td.cooldown){if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);}
             td.speed=0;td_vx=td_vy=0;
         }
     }
@@ -469,6 +469,7 @@ void toronto_init(void) BANKED {
         if(!td_restore()){
             memset(&td,0,sizeof(td));td.u=560*16;td.v=720*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
         }
+        if(td.job!=TD_NONE&&!td.stage)td.health=100;
         td.speed=0;td_resume_mode=td.mode==TD_WAIT||td.mode==TD_RIDE?td.mode:TD_ROAM;td.mode=TD_HELP;td.msg=0;td.menu=0;
         td_session_live=1;
     }

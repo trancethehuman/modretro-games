@@ -2,9 +2,9 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The current Queen streetcar ROM is **524,288 bytes**, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`, named `toronto-queen-streetcar-safe.gbc`. Its milestone identifier is `v0.2.0-prototype.6`; use the matching [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6). It contains four linked compressed districts, 88 authored contracts, 51 service points and a browsable city map. Eight Queen platforms provide scheduled $3 streetcar trips between the west, downtown and east scenes; the timetable is fictional and moving streetcar artwork is pending. Subway, bus and Island ferry services remain available.
+The latest locally tested source candidate is **524,288 bytes**, SHA-256 `64be19fa3da7ba4231ba8c8decec4720c409116c034f586974fd4ddce789945a`, named `toronto-pickup-condition.gbc`. It corrects cargo damage before pickup and preserves damage after collection. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is the earlier `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include this later correction. Use each file's own checksum and testing record.
 
-This exact native ROM passes the first delivery and held-acceleration turn, three Queen trips loading Core/East/West, WAIT/RIDE map freezing, paid-trip reset, parked-car recovery, sampled subway/bus/ferry travel and walking on Centre Island. Union arrival now leaves the courier clear of their parked car so they can walk away. Prototype 4's nine-job/four-scene test remains separate historical evidence. Official build/header/memory, host sanitizer and generated-source checks pass; [TESTING.md](../TESTING.md) records the exact scopes. A different build needs its own inspection and test identity.
+The current source retains four linked compressed districts, 88 contracts, 51 service points, the city map and scheduled subway/bus/ferry/Queen travel. Queen's $3 timetable is fictional; moving streetcar artwork is pending. The new candidate passes a matched native pre-pickup collision replay, actual pickup/carried damage, a condition-scaled delivery and the controlled held-acceleration turn. Official build/header/memory, host sanitizer and generated-source checks pass. Prototype 6's broader transit/reset journeys and Prototype 4's nine-job/four-scene tests remain separate historical evidence; [TESTING.md](../TESTING.md) scopes each build. A different build needs its own inspection and native checks.
 
 Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
 
@@ -24,22 +24,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc
+games/toronto-dispatch/project/build/toronto-pickup-condition.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-queen-streetcar-safe.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-pickup-condition.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-pickup-condition.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-pickup-condition.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

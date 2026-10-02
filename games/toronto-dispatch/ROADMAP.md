@@ -90,6 +90,7 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 
 ## Next playable polish
 
+- [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
 - [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. A bounded sample observed about 29.5 rendered updates per second; crowded-scene performance remains pending.
 - [ ] Listen to the original score/effects and tune their mix, event distinction and physical speaker/headphone behaviour.
