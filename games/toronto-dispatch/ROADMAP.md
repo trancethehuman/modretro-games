@@ -88,14 +88,38 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Publish [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) after real CI jobs pass; anonymously verify the exact ZIP, native ROM, member checksums, source identity and notices. [TESTING.md](TESTING.md) records its identities.
 - [ ] Validate human route-choice value, remaining platforms/arrival conditions and future visible streetcar boarding/riding. Full501, King 504, fuller TTC coverage and current detours are separate work.
 
+## Moving Queen streetcar — reviewable a0e23 candidate, broader acceptance pending
+
+- [x] Draw original Queen rails and an editable eight-pose streetcar sheet; four 8×16 OAM objects per pose, 28×12 horizontal / 12×28 vertical body.
+- [x] Implement one banked cyclic unit on the fictional 64-second schedule, two-second door dwells, both offset lanes, original East bend and reciprocal scene seams.
+- [x] Validate actual-C full-body geometry and sweeps against registered grids: 3,771,783 checks pass at the pre-presentation-correction checkpoint.
+- [x] Derive paid camera/view scene while preserving the 58 saved origin bytes, booked trip and parked car until safe alighting; freeze pending scene-load catch-up and pause/map motion.
+- [x] Add rail-parking refusal, cold valid older-car recovery, swept stationary-car/foot separation, carrying-only impact damage and future-sweep traffic yielding in source.
+- [x] Write version 7 using the same 58-byte state and two CRC16 records in SRAM bank 3; validate paid blocked-arrival hold, read valid versions 6/5/4 and test interrupted writes/fallback. Older version-6 ROM rollback cannot be assumed after both slots are rewritten.
+- [x] Guard WAIT boarding at the actual origin and cancel a displaced wait without fare; bound boarding cue arithmetic. Full `make check` passed with 3,450 engine checks before the presentation corrections.
+- [x] Retain native `deb78bbd…` failure at frame 3,444 and its stopped/closed/archived journal; diagnose empty horizontal compiler metasprite frames, without an actor-size ABI claim.
+- [x] Preserve original PNG/native IDs with canvas-safe sprite metadata and correct runtime actor bounds to GBVM Q5; engine fixtures pass 3,454 checks, including every cycle pose.
+- [x] Build corrected candidate `b1cf9a37…` and pass full source checks with 3,454 engine checks before performance edits; gate compiled cardinal/door frames separately from playback.
+- [x] Sample ordinary-button horizontal approach/open doors, terminal vertical frames, Yonge 46→Parkdale 43→Alton 50 rides through West/Core/East, two single fares and East alighting; preserve the stopped/archived `needs-review` journal.
+- [x] Sample paid-map freezing of clock/fare/ride, East-objective browsing and visible-tram restoration on that exact candidate.
+- [x] Restore one-pass scalar traffic while retaining direct phase/additive range math; final full `make check` passes 110,986 engine and 3,771,783 motion checks with all other suites green.
+- [x] Record same-ROM `a0e23f03…` three paid rides, exact 58-byte paid-map freeze, paid soft reset and ordinary Union car re-entry; scoped Core pacing is 57 updates / 120 VBlanks (~28.5/s), above b1cf 45 and failed 84e5's 35.
+- [x] Repeat fresh same-ROM contract 01 delivery for cash 139/done 1/condition 100, held speeds 10→22→16 with pedestrian brake at 864, and blocked-terrain reversal/resumed 18. Preserve both closed/archived scoped-pass recordings.
+- [x] Check matching compiled frames, 1,432-byte linked reserve and 66 OBJ tiles/bank; sample four-object tram OAM without over-limit scanlines.
+- [ ] Broaden whole-city/crowded performance and actual hardware/human handling/palette assessment; this candidate does not establish universal 28.5/s or the full game's duration.
+- [ ] Resolve fully crowded `BLOCKED` contact-recovery policy; broaden native rail parking, traffic yielding, held-arrival/reset and legacy transit conditions beyond the scoped ride checks.
+- [ ] Broaden atlas cancellation and sprite/VRAM ownership coverage; test crowded scanline/frame pacing and collect human boarding/route-choice feedback.
+
+Published Prototype 6 remains the separate timetable/safe-alighting release. Corrected candidate samples do not establish an accepted final moving-tram milestone; exact evidence is in [TESTING.md](TESTING.md).
+
 ## Next playable polish
 
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
-- [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. A bounded sample observed about 29.5 rendered updates per second; crowded-scene performance remains pending.
+- [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. Historical samples and current a0e23 scoped 28.5/s have separate identities; crowded-scene/whole-city performance remains pending.
 - [ ] Listen to the original score/effects and tune their mix, event distinction and physical speaker/headphone behaviour.
 - [ ] Expand pedestrian variety, street furniture, local activity and visible transit boarding/riding.
-- [ ] Author streetcar rails and moving streetcars on researched corridors; improve the current partial bus route geometry.
+- [ ] Finish the moving-Queen native acceptance gates above; improve the current partial bus route geometry and research later streetcar corridors.
 - [ ] More distinctive Toronto landmark silhouettes, district character, industrial yards and additional navigable streets.
 
 ## Full game release

@@ -1,6 +1,6 @@
 # Native build and preview
 
-Updated 2026-10-02. The published Queen streetcar milestone (`23b2a7a2…`, Prototype 6) has compiled and passes scoped native driving, scheduled streetcar, subway, bus, ferry, map, reset and safe-alighting checks. It retains four compressed scenes and 88 contracts, and adds eight service points. Prototype 5 (`2d1f6e4e…`) is the preceding published city-atlas milestone. Earlier builds retain their separate identities and evidence below. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before issuing project operations. The format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay and physical cartridge acceptance remain open.
+Updated 2026-10-02. Moving-streetcar candidate `a0e23f03…` restores one-pass scalar traffic and passes scoped same-ROM native three-ride/map/paid-reset/car-recovery and first-delivery/driving recordings. Its bounded Core sample reaches 57 updates / 120 VBlanks, about 28.5/s. It is a reviewable candidate with crowded-contact and broader acceptance gates open, not the recommended loading artifact. Published Prototype 6 remains the separate `23b2a7a2…` timetable/safe-alighting ROM; Prototype 5 (`2d1f6e4e…`) is the preceding city-atlas milestone. Four compressed scenes, 88 contracts and 51 service points remain. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before project operations; the format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain open.
 
 ## Tested toolchain
 
@@ -52,6 +52,7 @@ python3 games/toronto-dispatch/scripts/create_campaign.py
 python3 games/toronto-dispatch/scripts/create_world_routes.py
 python3 games/toronto-dispatch/scripts/create_audio.py
 python3 games/toronto-dispatch/scripts/create_atlas.py
+python3 games/toronto-dispatch/scripts/create_streetcar_sprite.py --check
 make check
 ```
 
@@ -79,7 +80,7 @@ The recorded four-scene build moves district names, portals, graph traversal and
 
 The banked auxiliary getter directs drivers to legal road parking anchors for Colborne 34, Withrow 36 and Greenwood 41, then restores the actual client target immediately on foot. It changes no client record or save field. Prototype 4 native Withrow play verifies the marker changing from road `(224,144)` to client `(320,144)` after exit, handoff and car re-entry. The atlas candidate retains this source, but its native remote parked-car and foot-only anchor/client marker samples remain pending. Colborne/Greenwood remain separate native handoff checks. The earlier `7a299125…` binary predates this fix.
 
-Save version 6 serializes 58 bytes, including a 16-byte completion bitmap and separate player/parked-car districts. It alternates two 66-byte CRC16-checked records in SRAM bank 3 at offsets 0x100 and 0x180; GB Studio uses banks 0–2. The new record commits its magic byte last, preserving the old checkpoint until then. Progress checkpoints every game second; waiting/boarding/cancellation is saved explicitly. Version-5 saves are decoded in their original 48-byte layout, preserving original active work and paid transit in district 0. Valid version-4 prototype saves retain cash/completions but retire an active contract because its route changed. Earlier formats are rejected. Host interrupted-store tests are separate from native reset and physical persistence. Published Prototype 3 passed remote foot/parked-car, western active-contract and paid core-trip reset samples. Prototype 4 restores nine completions, cash/clock, a foot player in High Park and the car parked in the west after native reset. The atlas candidate separately verifies soft reset while its paid-trip map is open, recovery with remaining ride time and arrival without another fare. Physical persistence remains pending.
+Current source writes save version 7 with the same 58 bytes, including a 16-byte completion bitmap and separate player/parked-car districts. It alternates two 66-byte CRC16-checked records in SRAM bank 3 at offsets 0x100 and 0x180; GB Studio uses banks 0–2. The new record commits its magic byte last, preserving the old checkpoint until then. Reserved bit 0 is valid only for a blocked paid Queen arrival with one second left, keeping its destination pose stable across schedule cycles and cold restore. Version-6 records remain readable only with their formerly reserved byte zero. Version-5 saves migrate their original 48 bytes, preserving original active work and paid transit in district 0. Valid version-4 fallback keeps cash/completions but retires an obsolete active contract. Earlier formats are rejected. A version-6 ROM rejects version-7 records: after both alternating slots are rewritten, returning to that older ROM cannot be assumed to restore progress. Host interrupted-write and fallback checks establish source behavior; physical cold boot and interrupted power remain pending. Published Prototype 3–6 reset samples below describe their separate version-6 binaries, not this source candidate.
 
 `td_session_live` is an internal UBYTE engine field at default 0. Stock generated bootstrap resets it on cold/soft boot; ordinary district changes preserve it. Session restore/audio initialization therefore run once, while each loaded scene rebuilds its local actors and UI. Keep its project setting at 0.
 
@@ -97,6 +98,83 @@ python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
+
+## Current moving-Queen candidate: scoped native checks
+
+| Identity | Value |
+| --- | --- |
+| Native output / bytes | `project/build/toronto-streetcar-one-pass.gbc` / 524,288 |
+| ROM SHA-256 | `a0e23f030425ebf0f0435f5a88d6a3c17eb36564d5dedc2c2871c5e03af13eeb` |
+| NOI SHA-256 | `35d3c9ad7656768a9f9ceab79dd0bf0e3a85505bfc5ea088eda22afdcd86c266` |
+| Globals SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Build source fingerprint | `99494efe984da1354dccf2f8b3a1de6fb113b4f45bf38b67ef516570ab94ebf8` |
+| Plugin project revision | `f9c648669ddf0df7ec2d34550dad083dd613411ef3f3be4c08aad358973761c1` |
+| Save / memory guard | Version 7, 58 bytes / `D968` heap, `DF00` stack, 1,432-byte reserve |
+
+Full `make check` passes with 110,986 engine, 3,771,783 streetcar-motion and the unchanged atlas/transit/bridge/navigation suites, plus nine memory tests. Matching compiled-frame inspection passes eight four-object poses and empty frame 8; linked allocation passes the 1,024-byte minimum reserve. Static compiled descriptors show 56 courier + 10 tram OBJ tiles per bank (**66 / 128**). Native frame 5,592 samples four tram objects, peak four per scanline and no over-limit lines; neither this view nor static tile counts establishes every crowded scene or palette/handheld readability.
+
+One-pass scalar traffic is restored; direct clock-derived phases/additive ranges remain. Native recordings on this exact ROM repeat three paid Queen rides, exact 58-byte paid-map freezing, paid soft reset and ordinary Union car re-entry. The matched Core sample advances 57 updates / 120 VBlanks (~28.5/s), above b1cf's 45 and the failed 84e5's 35. A fresh same-ROM recording confirms contract 01 delivery/cash 139 and held-acceleration speeds 10→22→16; frame 864's pedestrian brake gives 16 rather than the historical 24. Reverse and steering recover from blocked terrain and reach 18. [TESTING.md](../TESTING.md) contains complete journals, observations and limits.
+
+```sh
+python3 -B scripts/check_streetcar_rom.py \
+  games/toronto-dispatch/project/build/toronto-streetcar-one-pass.gbc \
+  games/toronto-dispatch/project/build/toronto-streetcar-one-pass.gbc.debug/symbols.noi
+python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
+  games/toronto-dispatch/project/build/toronto-streetcar-one-pass.gbc.debug/symbols.noi
+```
+
+These read-only gates inspect the matching compiled frames/linked allocation, not source authenticity, complete playback or hardware. The candidate remains for review: fully crowded `BLOCKED` recovery policy, broader collision/traffic coverage, palette/crowded performance, full city, two-hour campaign and physical acceptance stay open. Published loading remains unchanged.
+
+## Historical moving-Queen candidates
+
+The newer source adds original rail pixels and a single streetcar actor with eight poses, four 8×16 OAM objects per pose and a 28×12 / 12×28-pixel body. Pure banked motion/sweep queries follow the retained 64-second fictional service cycle through West/Core/East. A banked presentation module derives the paid camera and actual viewed scene without replacing the saved origin or parked car; a held blocked arrival uses the version-7 reserved bit described above. WAIT displacement and bounded boarding-cue arithmetic have production-source regressions. Fully crowded contact recovery can return `BLOCKED`; its player-facing policy remains pending.
+
+Full `make check` passed before the native presentation corrections: 3,450 engine, 299,366 atlas API, 8,036,093 atlas UI, 609,452 transit API, 3,771,783 streetcar-motion, 2,974 bridge and 16,997 navigation checks, plus nine memory-checker tests. Those host checks do not verify compiled metasprites or native bound units. [STREETCAR.md](STREETCAR.md) describes source behavior; [TESTING.md](../TESTING.md) retains the failed replay and original journal identities.
+
+| Retained failed build | Identity |
+| --- | --- |
+| ROM SHA-256 / bytes | `deb78bbdc3f90535a787f08a60fed68afcc9477a862b61299629a453f02139ce` / 524,288 |
+| Build source fingerprint | `fac772218749cdcc8089cf6541bdd54f71dafb3ba6cc9d8652488f0956d32bb3` |
+| Plugin project revision | `81a99b21ea9687ef412ed4e2234ce4e05ccf0a8040e1d3757342a3ab0f0ba402` |
+| Matching NOI SHA-256 | `6793cc89350ae99ee12fe505b46e8200d16ed6fffdd088f01cd32b78c131fdda` |
+
+Compilation succeeded, but that native replay failed by frame 3,444 with missing tram OAM during a valid paid ride. Compiled horizontal tram frames were empty because the optimizer discarded negative editor-Y positions. The earlier PLAYER/actor-size hypotheses are withdrawn. Corrected source preserves PNG/native IDs with canvas-safe editor positions and converts runtime actor bounds to GBVM Q5. Engine fixtures pass 3,454 checks with zero failures, including all 3,840 cycle poses; full `make check` also passed at the corrected build's source checkpoint, before later performance edits.
+
+| Corrected scoped candidate | Identity |
+| --- | --- |
+| Native output | `project/build/toronto-streetcar-render-fix.gbc` |
+| ROM SHA-256 / bytes | `b1cf9a3790058b56e596d37f6e816642a8ddc18c9db855ea033d14c9ae3bdda8` / 524,288 |
+| Build source fingerprint | `2e8ad18dddf40f7f54bd0a2ab1c2da49c6b00ab8646a0362e68ecb0d26964ff7` |
+| Plugin project revision | `f9c648669ddf0df7ec2d34550dad083dd613411ef3f3be4c08aad358973761c1` |
+| Matching NOI SHA-256 | `0ac98492d2642cb1e9acbae77b7743c62b22f089eca790ec40da55fc5b2f808b` |
+
+The local bytes/digest match the table. Its ordinary-button recording shows horizontal approach/open doors, terminal vertical poses, paid Yonge 46 → Parkdale 43 followed by Parkdale 43 → Alton 50 through actual West/Core/East scenes, cash 30→27→24 and East alighting at `(880,524)`. A paid-map sample freezes clock/fare/ride and restores the visible tram after East-objective browsing. Native Q5 bound inspection agrees with the horizontal 28×12-pixel body. A paid core sample at world second 74 advances 45 game updates over 120 VBlanks, approximately 22.5 updates/second. Its journal was stopped as `needs-review` and archived; performance optimization and a later exact-ROM acceptance replay remain pending. [TESTING.md](../TESTING.md) records the full identities and limits.
+
+Inspect compiled tram frames with the ROM and NOI from the same official output:
+
+```sh
+python3 -B scripts/check_streetcar_rom.py \
+  games/toronto-dispatch/project/build/toronto-streetcar-render-fix.gbc \
+  games/toronto-dispatch/project/build/toronto-streetcar-render-fix.gbc.debug/symbols.noi
+```
+
+The bounded read-only gate prints both hashes and decodes the banked metasprite pointer table and 8×16 cells. The matching `b1cf9a37…` pair passes eight four-object cardinal/door frames plus empty startup frame 8. The retained matching `deb78bbd…` pair fails all eight poses: horizontal frames empty, vertical frames two objects. Choose the actual matching pair and compare its hashes with the build record; this layout gate does not authenticate source/build provenance, prove playback or establish hardware behavior. Native pixels/OAM and linked-memory checks remain separate.
+
+This candidate is not an accepted final moving-streetcar build or recommended loading artifact. Published Prototype 6/loading remains unchanged. Browser state is unresolved, with no claimed host restart or fresh browser verification. Hardware, full city and measured campaign duration remain unverified.
+
+### Retained performance intermediate
+
+| Identity | Value |
+| --- | --- |
+| ROM SHA-256 | `84e5fe205887586efbc27ddc9b86d4c2ef7cabb8e1921c8fcdd4851663728b0d` |
+| NOI SHA-256 | `009d7e24f108f9c8dfe4564039baad26f8a0e7ce9d63625248ffe50e5c38d5b9` |
+| Build source fingerprint | `9415894fd5d499de61fbce20f5a6068f7ab31a226a67baecfe7932827d2a85c7` |
+| Plugin project revision | `f9c648669ddf0df7ec2d34550dad083dd613411ef3f3be4c08aad358973761c1` |
+| Linked guard | `D968` heap / `DF00` stack; 1,432-byte reserve |
+
+Full `make check` passes with 418,184 engine checks and the previous other-suite counts unchanged; the matching compiled-frame gate also passes. The same fresh-boot native route repeats the two paid trips, East `(880,524)` alighting/cash 24, exact 58-byte paid-map freezing and tram restoration. However, its matched Core world-second 74 sample advances 35 game updates / 120 VBlanks (**17.5/s**), below `b1cf9a37…`'s 45 (**22.5/s**). The performance comparison fails. This stopped/archived `needs-review` intermediate is not an accepted final build or loading recommendation; [TESTING.md](../TESTING.md) retains its exact measurement and journal identities. Final optimization/replay remains pending, without browser or hardware acceptance claims.
+
+Later phase-math intermediate `815ef0b065c375a43aa294e611ba67ee94801cc17297125b15f57ef4cf3096fb` passes the same full checks, 1,432-byte guard and compiled-frame gate. Direct seconds-derived section/tick and additive ranges restore 45 updates / 120 VBlanks (**22.5/s**) with batching unchanged. It also samples a third paid Alton→Yonge ride, paused soft reset and Union car recovery. This restores the earlier pace rather than establishing final performance acceptance; its journal remains `needs-review`. [TESTING.md](../TESTING.md) retains full binary/debug/source and recording identities. Further optimization and exact-ROM acceptance remain pending; published loading stays unchanged.
 
 ## Pickup condition lifecycle: later native candidate
 
@@ -123,7 +201,7 @@ This candidate is not included in the published Prototype 6 ZIP. The browser pre
 
 The official plugin build completed in 45,861 ms. Its CGB header and matching debug digests pass inspection; linked allocation passes the explicit 1,024-byte minimum guard. The CLI reports its existing Node `DEP0190` warning and SDCC sound/optimizer warnings, with no errors. `make check` passes 299,366 atlas API, 8,036,093 atlas UI, 609,452 transit API, 2,857 engine, 2,974 bridge and 16,997 navigation checks, plus nine memory fixtures and the content/art/source checks. These checks establish distinct facts.
 
-`td_transit.c` holds pure BANKED service, selection, fare, duration and departure APIs, with no persistent WRAM. The Queen service uses eight source-referenced curb signs across West/Core/East, a fictional 64-second directional timetable, four seconds per stop and a $3 fare. It runs from the shared game clock while other scenes are loaded. Original train, bus and ferry services remain available. [STREETCAR.md](STREETCAR.md) records the compressed route and source limitations; moving streetcar artwork is pending. Original stop IDs 0–42 and all 88 compiled contract fields remain stable. `create_campaign.py` now compiles 51 stops; art fingerprints and planning metadata change with the new signs.
+`td_transit.c` holds pure BANKED service, selection, fare, duration and departure APIs, with no persistent WRAM. The Queen service uses eight source-referenced curb signs across West/Core/East, a fictional 64-second directional timetable, four seconds per stop and a $3 fare. It runs from the shared game clock while other scenes are loaded. Original train, bus and ferry services remain available. [STREETCAR.md](STREETCAR.md) records the compressed route and source limitations. Moving-streetcar art/runtime belong to the later source candidate above, not this published ROM. Original stop IDs 0–42 and all 88 compiled contract fields remain stable. `create_campaign.py` now compiles 51 stops; art fingerprints and planning metadata change with the new signs.
 
 Arrival chooses the stop centre when clear, then nearby cardinal positions at 12 or 18 pixels. It checks bounds, destination collision and a swept walking path, the player's parked car, and currently loaded traffic. An obstructed arrival retains its paid ride and retries without another fare. Remote Queen platforms are on sidewalks; future remote road stops need destination traffic checks. Completion/expiry also refreshes the depot objective before saving, fixing a stale completed-job map target.
 
