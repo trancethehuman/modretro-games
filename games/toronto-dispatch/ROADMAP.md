@@ -124,7 +124,8 @@ Published Prototype 6 remains the separate timetable/safe-alighting release. Cor
 - [x] Review three paid Queen journeys through Core/West/East, paid-map state freezing and walking into an actually loaded High Park scene with parked car retained. Preserve the auto-stopped journey journal without relabelling its unassessed outcome.
 - [x] Record a fresh delivery and genuine game-button SRAM reset restoring its saved checkpoint, then a new cosmetic flight. This is emulated checkpoint recovery, not physical persistence or paid-ride reset.
 - [x] Correct GCC misleading-indentation warnings with a whitespace-only renderer/harness edit and `-Werror` retained; full local checks and official portability rebuild `20370fea…` pass. Preserve its distinct source fingerprint and fresh scoped delivery/driving/plane/helicopter/shadow/map replay separately from `8e7af3ec…` journals.
-- [ ] Verify corrected-head GNU CI and broaden exact-portability-ROM roof/transit/all-scene/reset samples; five checksum/save-signature bytes differ, and earlier native recordings keep their original identity.
+- [x] Verify real hosted GNU `make check` steps for source-fix commit `3a1869a` in both PR/push runs.
+- [ ] Broaden exact-portability-ROM roof/transit/all-scene/reset samples; five checksum/save-signature bytes differ, and earlier native recordings keep their original identity.
 - [ ] Repeat exact-ROM paid-ride reset and remaining legacy transit/seam/arrival conditions; resolve the three contact/held-arrival/alighting branches in the next-polish list.
 - [ ] Broaden every-direction/district, crowded native ground-through-gap occlusion, scanline pressure, deepest stack and whole-city frame-pacing coverage.
 - [ ] Assess crowded-scene and handheld readability/performance. Native flyby samples do not prove full-city, two-hour or physical-cartridge acceptance.
