@@ -23,7 +23,7 @@ Record date, commit/build digest, relevant tool versions, steps, observed outcom
 
 ## Setup ROM — 2026-10-02
 
-Project: `project/project.gbsproj`, single `Development boot` scene. Final script revision after adding the boot text: `5c5745bf5c2ba784e480b95f5798028288a660f602d1466b3f7c0f7ea6572f0f`. This is the initial repository bootstrap, before its first commit.
+Project: `project/project.gbsproj`, single `Development boot` scene. Final script revision after adding the boot text: `5c5745bf5c2ba784e480b95f5798028288a660f602d1466b3f7c0f7ea6572f0f`. Built during bootstrap; native source and asset notices were committed as `20d1e08`. A final project health inspection after documentation/provenance additions also reported zero errors and warnings.
 
 Native ROM: `project/build/toronto-dispatch.gbc`, 65,536 bytes, SHA-256:
 

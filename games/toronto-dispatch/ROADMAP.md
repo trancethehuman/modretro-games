@@ -6,7 +6,7 @@
 - [x] Record the user's chosen jobs, view, handling, and city requirements.
 - [x] Seed mission/vehicle planning content and source references with a validator.
 - [x] Attach ModRetro Chromatic plugin and inspect its setup/build/playtest skills.
-- [ ] Publish the repository and verify public visibility and files.
+- [x] Publish the repository and verify public visibility, MIT detection and files: [trancethehuman/modretro-games](https://github.com/trancethehuman/modretro-games).
 
 ## 1 — Driving feasibility
 
