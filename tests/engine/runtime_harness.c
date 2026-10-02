@@ -315,7 +315,7 @@ static void test_bounded_corner_assist(void) {
         UWORD old_u=td.u,old_v=td.v;driving_tick(J_A);
         if(shift<=6) {
             expect(td.speed==16&&td.heading==4&&td.v>old_v,"small corner clearance retains heading, throttle and dominant travel");
-            expect(td.u-old_u==shift*16&&td_drivable(td.u>>4,td.v>>4),"corner assist chooses the nearest collision-valid lateral clearance");
+            expect((unsigned)(td.u-old_u)==shift*16&&td_drivable(td.u>>4,td.v>>4),"corner assist chooses the nearest collision-valid lateral clearance");
         }else expect(td.speed==0&&td.u==old_u&&td.v==old_v,"seven-pixel blocked corner exceeds assistance budget and remains solid");
     }
     const UBYTE prohibited[]={0,J_A|J_B,J_B};
