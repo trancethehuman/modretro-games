@@ -48,7 +48,12 @@
         "include/td_atlas.h",
         "src/td_atlas.c",
         "include/td_transit.h",
-        "src/td_transit.c"
+        "src/td_transit.c",
+        "include/td_aircraft.h",
+        "include/td_aircraft_render.h",
+        "src/td_aircraft.c",
+        "src/td_aircraft_render.c",
+        "src/core/actor.c"
       ]
     }
   ]

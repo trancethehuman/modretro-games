@@ -1,6 +1,6 @@
 # Third-party notices
 
-Original documentation, content specifications, and validation tooling use the root MIT licence. The native game project also contains MIT-licensed starter artwork and upstream project metadata. No third-party runtime source, compiled ROM, raw City GIS dataset, or map tiles are vendored. Selected City geographic facts and coordinates are included in the research metadata under the licence below. Compiled native ROMs link upstream engine/library components; their distribution notices are recorded separately. The original Toronto scene extension and procedural pixel artwork use the root MIT licence; `td_font.h` derives from the retained MIT Bench Mono starter glyphs.
+Original documentation, content specifications, and validation tooling use the root MIT licence. The native game project also contains MIT-licensed starter artwork and upstream project metadata. One MIT-licensed GBVM runtime source file is retained as a project-local renderer override, described below. Compiled ROMs, raw City GIS datasets and map tiles are not vendored. Selected City geographic facts and coordinates are included in the research metadata under the licence below. Compiled native ROMs link upstream engine/library components; their distribution notices are recorded separately. The original Toronto scene extension and pixel artwork use the root MIT licence; `td_font.h` derives from the retained MIT Bench Mono starter glyphs.
 
 ## Native starter assets and metadata
 
@@ -10,11 +10,15 @@ Original documentation, content specifications, and validation tooling use the r
 
 ## Development tools
 
+- The project-local [GBVM actor renderer override](games/toronto-dispatch/project/plugins/toronto-driving/engine/src/core/actor.c) derives from [`src/core/actor.c` at GBVM commit `bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3`](https://github.com/chrismaltby/gbvm/blob/bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3/src/core/actor.c), MIT copyright 2020 Toxa. The unmodified source SHA-256 is `b7360f4e84c720090e127aa047daa21f7d70517a4a2d9512d2a96f568e9ee5f5`. Local changes add aircraft restoration and rendering hooks. The complete upstream [MIT notice](games/toronto-dispatch/docs/licenses/GBVM-MIT.txt) is retained and included in `ROM_NOTICES.txt`; the root licence does not replace it.
+
 - ModRetro Chromatic plugin, GB Studio, GBDK, PyBoy, Binjgb and other compiler/emulator dependencies retain their own licences. They are installed outside this repository. Exact tested versions are recorded in [BUILD.md](games/toronto-dispatch/docs/BUILD.md).
 - The native Toronto Dispatch ROM links GBVM (MIT, copyright 2020 Toxa) and the GBVM-pinned public-domain hUGEDriver. GBDK 4.5.0 / SDCC libraries use GPLv2 with a linking exception; the upstream guide distinguishes distributing a compiled game ROM from redistributing the toolchain. The current build's runtime/source evidence and optional library boundaries are documented in [DISTRIBUTION.md](games/toronto-dispatch/docs/DISTRIBUTION.md).
 - Include [ROM_NOTICES.txt](games/toronto-dispatch/docs/ROM_NOTICES.txt) with every downloadable native ROM bundle or loose ROM. It contains the full root, GB Studio, GBVM and starter MIT notices plus runtime credits. The native audit does not cover redistribution of a browser emulator export.
 
-The four-scene native candidate `1da71ba5…` uses these same upstream runtime/starter components and original project-local engine/art. Its build and sampled native evidence are recorded in [BUILD.md](games/toronto-dispatch/docs/BUILD.md) and [TESTING.md](games/toronto-dispatch/TESTING.md); publication is pending and Prototype 3 remains the published baseline. Expansion and parking-anchor changes create no additional third-party asset licence. Include the existing runtime notices and City attribution when distributing the new package; emulator checks do not imply geographic survey accuracy or endorsement.
+Published Prototype 4 (`1da71ba5…`) uses these same upstream runtime/starter components and original project-local engine/art. Its build and sampled native evidence are recorded in [BUILD.md](games/toronto-dispatch/docs/BUILD.md) and [TESTING.md](games/toronto-dispatch/TESTING.md). Expansion and parking-anchor changes create no additional third-party asset licence. Include the runtime notices and City attribution when distributing a package; emulator checks do not imply geographic survey accuracy or endorsement. The later aircraft source additionally retains the pinned actor override described above.
+
+The [ambient aircraft sheet and generator](games/toronto-dispatch/project/original-art/ambient_aircraft_art.json) are original hand-placed pixels under the root MIT licence. The plane, helicopter, rotor and shadow artwork copies no photograph, logo or external sprite and adds no third-party asset licence. Build and acceptance evidence for this later source milestone remains separate from earlier published ROMs.
 
 ## Geographic references
 

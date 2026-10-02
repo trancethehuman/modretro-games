@@ -8,6 +8,8 @@
 #include "td_world.h"
 #include "td_transit.h"
 #include "td_streetcar_runtime.h"
+#include "td_aircraft.h"
+#include "td_aircraft_render.h"
 #include "actor.h"
 #include "camera.h"
 #include "scroll.h"
@@ -486,6 +488,9 @@ void toronto_init(void) BANKED {
     /* Scene loading/allocation is a frozen transition, never a hidden
        deadline catch-up or an instant completed paid trip on the next frame. */
     td_last_frame=sys_time;
+    /* A new scene has replaced VRAM: discard prior roof patches rather than
+       restoring old map cells into the newly loaded district. */
+    td_aircraft_render_reset();
     if(cold){
         td_district_reset();td_transition_pending=0;
         td_tick=td_notice_timer=td_red_cooldown=td_entry_timer=td_turn_tick=0;td_vx=td_vy=0;td_last_frame=sys_time;td_corner_used=0;
@@ -512,6 +517,8 @@ void toronto_init(void) BANKED {
     if(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)td_get_stop(td.transit_target,&td_cursor);
     if(td.job!=TD_NONE){td_get_job(td.job,&td_job);if(td.stage>=td_job.count)td.job=TD_NONE;}
     actors_len=TD_ACTORS;
+    td_aircraft_render_bind();
+    td_aircraft_reset((cold?0x9D27:td_aircraft.seed)^sys_time^td.u^td.v^current);
     td_streetcar_runtime_bind();
     for(i=1;i<TD_ACTORS-1;i++){
         actors[i]=PLAYER;actors[i].prev=actors[i].next=NULL;actors[i].flags=ACTOR_FLAG_PERSISTENT;actors[i].collision_group=0;actors[i].script.bank=actors[i].script_update.bank=0;
@@ -532,6 +539,8 @@ void toronto_init(void) BANKED {
 }
 void toronto_update(void) BANKED {
     UWORD now,elapsed,seconds,old_u,old_v,tram_elapsed;UBYTE motion,step,was_entering,consumed=0;
+    /* Restore the ordinary background before menus reuse its VRAM tiles. */
+    td_aircraft_render_restore();
     if(td_transition_pending){td_last_frame=sys_time;if(td_transition_pending==2&&td_district_queue(td_transition_district))td_transition_pending=1;return;}
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
     tram_elapsed=elapsed;
@@ -576,5 +585,7 @@ void toronto_update(void) BANKED {
     if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_traffic_present();td_pedestrians();}
     td_streetcar_runtime_prepare(0);
     td_position(&PLAYER,td.u>>4,td.v>>4);td_streetcar_runtime_present();
+    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)
+        td_aircraft_update(tram_elapsed,td_streetcar_focus_u>>4,td_streetcar_focus_v>>4);
     td_sound_update();
 }

@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "status": "Original source art; native acceptance separate",
+  "licence": "MIT",
+  "notice": "Original hand-placed pixels; no photo, logo or sprite copied",
+  "generator": "scripts/create_aircraft_sprite.py",
+  "native_asset_id": "48d4a3f8-a6bc-56c9-8956-6e847f0b30f1",
+  "native_symbol": "sprite_ambient_aircraft",
+  "source_png": "original-art/ambient_aircraft.png",
+  "source_metadata": "original-art/ambient_aircraft.metadata.json",
+  "destination": "assets/sprites/ambient_aircraft.png",
+  "png_sha256": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+  "metadata_sha256": "a624b9f49d9b5efa25e8928692edea79d0a7ffa173effbab21e46594c6de4822",
+  "decoded_rgb_sha256": "bc20efa4a2602f32d958b2b2294f12924fee27fee31aab1a6221da23ace3c589",
+  "palette_slot": 0,
+  "source_colours": [
+    "65ff00",
+    "e0f8cf",
+    "86c06c",
+    "071821"
+  ],
+  "unique_patterns_8x8": 96,
+  "unique_patterns_8x16": 50,
+  "poses": [
+    {
+      "frame": 0,
+      "kind": "plane",
+      "direction": "east",
+      "rotor_phase": null,
+      "source_rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        8,
+        30,
+        24
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 1,
+      "kind": "plane",
+      "direction": "south",
+      "rotor_phase": null,
+      "source_rect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        2,
+        24,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 2,
+      "kind": "plane",
+      "direction": "west",
+      "rotor_phase": null,
+      "source_rect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        8,
+        30,
+        24
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 3,
+      "kind": "plane",
+      "direction": "north",
+      "rotor_phase": null,
+      "source_rect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        2,
+        24,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 4,
+      "kind": "helicopter",
+      "direction": "east",
+      "rotor_phase": 0,
+      "source_rect": [
+        128,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        3,
+        8,
+        31,
+        24
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 5,
+      "kind": "helicopter",
+      "direction": "south",
+      "rotor_phase": 0,
+      "source_rect": [
+        160,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        3,
+        24,
+        31
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 6,
+      "kind": "helicopter",
+      "direction": "west",
+      "rotor_phase": 0,
+      "source_rect": [
+        192,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        1,
+        8,
+        29,
+        24
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 7,
+      "kind": "helicopter",
+      "direction": "north",
+      "rotor_phase": 0,
+      "source_rect": [
+        224,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        1,
+        24,
+        29
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 8,
+      "kind": "helicopter",
+      "direction": "east",
+      "rotor_phase": 1,
+      "source_rect": [
+        256,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        3,
+        8,
+        30,
+        24
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 9,
+      "kind": "helicopter",
+      "direction": "south",
+      "rotor_phase": 1,
+      "source_rect": [
+        288,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        3,
+        24,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 10,
+      "kind": "helicopter",
+      "direction": "west",
+      "rotor_phase": 1,
+      "source_rect": [
+        320,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        8,
+        29,
+        24
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 11,
+      "kind": "helicopter",
+      "direction": "north",
+      "rotor_phase": 1,
+      "source_rect": [
+        352,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        2,
+        24,
+        29
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 12,
+      "kind": "shadow",
+      "direction": null,
+      "rotor_phase": null,
+      "source_rect": [
+        384,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        8,
+        12,
+        24,
+        20
+      ],
+      "oam_objects": 2,
+      "maximum_objects_per_scanline": 2
+    }
+  ],
+  "shadow_frame": 12,
+  "hidden_frame": 13,
+  "pivot": "Aircraft share source centre (16,16), mapped to actor world position",
+  "runtime": "Direct cosmetic OAM overlay; optional shadow offset (+8,+24) with ground priority; empty startup 13 keeps the resource loader invisible",
+  "verification": "Decoded pixels, palette, OAM coverage and optimiser-safe metadata only; no import, build, runtime or hardware claim"
+}

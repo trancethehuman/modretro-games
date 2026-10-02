@@ -1,8 +1,10 @@
 # Native build and preview
 
-Updated 2026-10-02. Moving-streetcar candidate `a0e23f03…` restores one-pass scalar traffic and passes scoped same-ROM native three-ride/map/paid-reset/car-recovery and first-delivery/driving recordings. Its bounded Core sample reaches 57 updates / 120 VBlanks, about 28.5/s. It is a reviewable candidate with crowded-contact and broader acceptance gates open, not the recommended loading artifact. Published Prototype 6 remains the separate `23b2a7a2…` timetable/safe-alighting ROM; Prototype 5 (`2d1f6e4e…`) is the preceding city-atlas milestone. Four compressed scenes, 88 contracts and 51 service points remain. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before project operations; the format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain open.
+Updated 2026-10-02. Aircraft candidate `8e7af3ec…` builds successfully and passes full source/compiled/memory gates. Scoped same-ROM native samples cover flybys/rotors/shadows/roof/map, first delivery/driving, three paid Queen journeys, all four actual loaded scenes and a delivery checkpoint restored through the game's reset buttons. Exact-ROM paid-ride reset, the three contact/held-arrival/alighting branches and broader crowded performance remain pending. The earlier moving-streetcar candidate `a0e23f03…` retains its separate paid-ride evidence below. Downloadable Prototype 6 is the earlier separate `23b2a7a2…` timetable/safe-alighting ROM; Prototype 5 (`2d1f6e4e…`) is the preceding city-atlas milestone. [LOADING.md](LOADING.md) distinguishes the current source candidate from published binaries. Four compressed scenes, 88 contracts and 51 service points remain. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before project operations; the format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain open.
 
 ## Tested toolchain
+
+Final aircraft source candidate `8e7af3ec…` uses the compiled-pose cache, checks combined aircraft/shadow capacity before an aircraft-only fallback and computes roof-mask anchors once per tile. [TESTING.md](../TESTING.md) retains its scoped passed flyby/driving recordings and the earlier `9c1a9fcb…` / `4b83cfb6…` attempts. Native inactive/visible-flight samples still differ in NPC timing; compiled gates, reserve and host checks do not certify whole-city performance. Each later build needs its own identity and replay.
 
 | Component | Version / identity |
 | --- | --- |
@@ -19,7 +21,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-pickup-condition.gbc"` for the current pickup-condition candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-aircraft.gbc"` for the current aircraft candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -29,7 +31,7 @@ Builds, browser save states and cartridge backups are ignored. Do not publish lo
 
 ## City engine and reproducible sources
 
-Four linked 1,024 × 976 scenes use the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`: `scene_toronto_city` (district 0), `scene_toronto_west` (1), `scene_toronto_high_park` (2) and `scene_toronto_east` (3). Their logical atlas is 4,096 × 976, with 211 buildings and 486 fixed pedestrian routes; only six nearby pedestrian actors are active in the loaded scene. These are compressed districts, not full former Toronto coverage. The extension adds engine files without ejecting or vendoring GB Studio. `Development boot` remains a separate workshop scene. [DISTRICT_ENGINE_PLAN.md](DISTRICT_ENGINE_PLAN.md) describes compiled scene binding and the genuine VM change-scene bridge.
+Four linked 1,024 × 976 scenes use the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`: `scene_toronto_city` (district 0), `scene_toronto_west` (1), `scene_toronto_high_park` (2) and `scene_toronto_east` (3). Their logical atlas is 4,096 × 976, with 211 buildings and 486 fixed pedestrian routes; only six nearby pedestrian actors are active in the loaded scene. These are compressed districts, not full former Toronto coverage. The extension adds original engine files without ejecting GB Studio; the aircraft renderer also overrides one pinned MIT-licensed GBVM actor source, documented in DISTRIBUTION.md. `Development boot` remains a separate workshop scene. [DISTRICT_ENGINE_PLAN.md](DISTRICT_ENGINE_PLAN.md) describes compiled scene binding and the genuine VM change-scene bridge.
 
 From the repository root, with Python and Pillow available:
 
@@ -53,6 +55,7 @@ python3 games/toronto-dispatch/scripts/create_world_routes.py
 python3 games/toronto-dispatch/scripts/create_audio.py
 python3 games/toronto-dispatch/scripts/create_atlas.py
 python3 games/toronto-dispatch/scripts/create_streetcar_sprite.py --check
+python3 games/toronto-dispatch/scripts/create_aircraft_sprite.py --check
 make check
 ```
 
@@ -92,12 +95,48 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-pickup-condition.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-aircraft.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
+
+## Aircraft final candidate: scoped flyby and driving checks
+
+| Identity | Value |
+| --- | --- |
+| Native output / bytes | `project/build/toronto-aircraft.gbc` / 524,288 |
+| ROM SHA-256 | `8e7af3ec08349c4dbef473bae30ac940ca727c0524b04b9711c04817b8678258` |
+| Matching NOI SHA-256 | `cda7c22498fad7c73b30e7cf10ac778147d0eee93af105fd564ac021d8f430bb` |
+| Globals SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Build source fingerprint | `37927f56eff7941139717c22cfd8d8bae16662a36e866c4b7a3fc27751a4d4d1` |
+| Plugin project revision | `03e03e4f63cda3ece1d5732ca557e5f3f62ea88a1cf08cb92056342073519f64` |
+| Linked heap / stack base / static reserve | `DA66` / `DF00` / 1,178 bytes |
+| Renderer cache | 170 persistent bytes: two 80-byte aircraft templates, 8-byte shadow and 2 tags |
+
+The official build, CGB-only MBC5 header, aircraft/Queen compiled-frame/resource gates and memory guard pass. Local binary/debug-artifact digests were independently read. Full `make check` passes 4,501,851 flight, 40,631,157 renderer and 110,995 engine checks, alongside the retained suites. Static reserve and host checks do not establish deepest native stack use or physical behaviour.
+
+Three stopped, closed and archived ordinary-input PyBoy recordings on this exact ROM have scoped `PASSED`: plane/helicopter/rotor/shadow with exact 13-byte flight/58-byte gameplay map freezing and camera/roof/scroll/pause restoration; fresh first delivery with held steering, solid-terrain stop and braking/reverse recovery; and another delivery followed by a genuine button reset restoring its saved cash/completion/position/clock checkpoint. The separate journey recording reviews three single-fare Queen journeys through actual Core/West/East and walking into an actually loaded High Park scene, with parked-car identity retained and a High Park helicopter/shadow sample. A mistaken tool-level restart then clean-booted a new worker and automatically stopped that journal without an assessed `PASSED` label. It is preserved as such; it proves neither ROM save failure nor paid-reset recovery.
+
+[TESTING.md](../TESTING.md) preserves the exact native values and all immutable journal/archive identities. A sample reaches 47 updates / 120 VBlanks over a partly visible plane interval; separate inactive 18/60 and helicopter 15/60 samples have different NPC phases and are not a matched global benchmark. Crowded performance, the three contact/held-arrival/alighting branches and exact-ROM paid-ride reset remain pending. Published Prototype 6 remains unchanged; this candidate has no physical cartridge acceptance.
+
+## Aircraft cache intermediate: further optimization pending
+
+| Identity | Value |
+| --- | --- |
+| Native output / bytes | `project/build/toronto-aircraft-cache.gbc` / 524,288 |
+| ROM SHA-256 | `4b83cfb68cd6d9d4d769faaa1afecffb52e1c32e91a54c66110dea143263b895` |
+| Matching NOI SHA-256 | `d6b71db62352e9fd961207068db2136049fc403712ee84c970b5a0831b29037a` |
+| Globals SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Build source fingerprint | `c03f04eb3f6d108f5c9b9c4435de54ff8cea638b581579e21c1ab0fa7312b7f1` |
+| Plugin project revision | `03e03e4f63cda3ece1d5732ca557e5f3f62ea88a1cf08cb92056342073519f64` |
+| Linked heap / stack base / static reserve | `DA66` / `DF00` / 1,178 bytes |
+| Renderer cache | 170 persistent bytes: two 80-byte aircraft templates, 8-byte shadow and 2 tags |
+
+This official build is retained as an intermediate; it is not the final aircraft ROM or a recommended loading artifact. Matching compiled aircraft/Queen frame and resource gates pass, with 40,047,786 actual-source renderer host checks. Its ordinary-button PyBoy replay samples planes, a helicopter's two rotor phases, shadows, 13-byte flight/58-byte game-state map freezing, world-fixed flight paths during scrolling and priority-roof patch restoration. The recording ends at frame 10,127 with `needs-review`, then is closed/archived. [TESTING.md](../TESTING.md) retains its source-debug/worker identity, observations and immutable recording/archive digests.
+
+Scoped update samples are 40/120 VBlanks while aircraft-inactive, 14/60 during a helicopter and a later inactive 18/60; their NPC phases differ, so they are not a matched global benchmark. Further common-path optimization, another official build and exact-ROM acceptance replay remain necessary. Delivery, transit, reset and district transitions have not been accepted on this intermediate; earlier moving-tram evidence does not transfer to it. Static reserve does not establish deepest native stack use or physical cartridge behaviour. Published Prototype 6 remains unchanged.
 
 ## Current moving-Queen candidate: scoped native checks
 

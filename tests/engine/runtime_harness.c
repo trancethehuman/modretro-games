@@ -30,6 +30,10 @@ UBYTE td_test_sram[8192];
 
 static unsigned failures,checks,stop_reads,ui_draws;
 static unsigned audio_updates,audio_inits;
+/* Native compositing has its own actual-source VRAM/OAM harness. */
+void td_aircraft_render_reset(void) {}
+void td_aircraft_render_bind(void) {}
+void td_aircraft_render_restore(void) {}
 static UBYTE audio_mode,audio_active,audio_cue;
 static UBYTE stop0_here;
 static UBYTE authored_content;
@@ -203,6 +207,7 @@ static void reset_case(void) {
     for(unsigned i=0;i<6;i++) { td_traffic_u[i]=30000;td_traffic_v[i]=30000;td_traffic_leg[i]=0;td_ped_route[i]=TD_NONE; }
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_streetcar_runtime_reset();
+    td_aircraft_reset(0x9D27);
 }
 
 static void driving_tick(UBYTE held) {
@@ -1937,6 +1942,40 @@ static void test_sweep_section_scan_equivalence(void) {
     }
 }
 
+static void test_aircraft_world_freezing(void) {
+    native_case();td_aircraft_reset(1);
+    UWORD wait=td_aircraft.wait;unsigned writes=sram_writes;
+    world_tick(0,wait);
+    expect(td_aircraft.active&&td_aircraft.ticks==0,
+           "real world elapsed VBlanks start a cosmetic flight without consuming its first tick");
+    unsigned flight_writes=sram_writes-writes;
+    td_state_t flight_world=td;td_aircraft_state_t flying=td_aircraft;
+    native_case();td_aircraft_reset(1);td_aircraft.wait=1000;writes=sram_writes;
+    world_tick(0,wait);
+    expect(sram_writes-writes==flight_writes&&!memcmp(&td,&flight_world,58),
+           "a due cosmetic flight adds no save writes or persistent gameplay changes beyond ordinary clock updates");
+    td_aircraft=flying;world_tick(J_START,60);
+    expect(td.mode==TD_PAUSE&&!memcmp(&td_aircraft,&flying,sizeof(flying)),
+           "opening pause freezes aircraft on the same input update");
+    td.menu=1;world_tick(J_A,600);world_tick(J_RIGHT|J_DOWN,600);world_tick(0,600);
+    expect(td.mode==TD_MAP&&!memcmp(&td_aircraft,&flying,sizeof(flying)),
+           "opening and panning the city atlas preserves flight position, rotor phase and cooldown");
+    world_tick(J_B,600);world_tick(0,1);world_tick(J_B,600);
+    expect(td.mode==TD_ROAM&&!memcmp(&td_aircraft,&flying,sizeof(flying)),
+           "closing atlas and pause applies no aircraft catch-up");
+    world_tick(0,8);
+    expect(td_aircraft.ticks==8,"resumed flight advances only the new active-world VBlanks");
+    flying=td_aircraft;td_transition_pending=2;test_queue_fail=1;world_tick(0,600);
+    expect(!memcmp(&td_aircraft,&flying,sizeof(flying)),
+           "pending district allocation freezes the cosmetic aircraft simulation");
+    queen_runtime_case(0);td_aircraft_reset(2);
+    /* A due flight during a paid ride exercises integration without crossing
+       the scene seam during a single deliberately oversized fixture step. */
+    td_aircraft.wait=1;world_tick(0,1);
+    expect(td.mode==TD_RIDE&&td_aircraft.active,
+           "paid transit permits cosmetic flybys using its derived camera view");
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -1967,6 +2006,7 @@ int main(void) {
     test_streetcar_cue_and_blocked_contact();
     test_streetcar_native_q5_bounds();
     test_traffic_lookahead_truth();test_sweep_section_scan_equivalence();
+    test_aircraft_world_freezing();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

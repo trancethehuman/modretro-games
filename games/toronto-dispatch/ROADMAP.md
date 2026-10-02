@@ -112,8 +112,26 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 
 Published Prototype 6 remains the separate timetable/safe-alighting release. Corrected candidate samples do not establish an accepted final moving-tram milestone; exact evidence is in [TESTING.md](TESTING.md).
 
+## Ambient aircraft — scoped native samples, broader acceptance pending
+
+- [x] Record the user-requested random plane/helicopter flybys and keep them cosmetic, with original unbranded art.
+- [x] Draw the editable 416×32 sheet: four plane directions, eight two-phase helicopter poses and two-object shadow, with an empty loader frame in metadata. Check source pixels, palette, OAM coverage and compiler-safe canvas metadata.
+- [x] Implement signed-Q4 flight state, varied type/direction/lateral paths, occasional waits and rotor phase selection separately from the cartridge save.
+- [x] Integrate four-scene loaders/direct rendering; actual-source fixtures cover menu/scene-load suppression and unchanged save/collision rules, with native pause/map state freezing sampled.
+- [x] Check compiled-mask roof holes, ground-priority preservation, conditional restoration, UI/VRAM ownership and bounded OAM with 40,631,157 renderer host checks. Native samples verify roof/scroll/pause restoration; crowded ground-through-gap coverage remains below.
+- [x] Officially build exact `8e7af3ec…`; pass compiled aircraft/Queen frame/header/tile gates, full source checks and 1,178-byte linked reserve. Retain both earlier aircraft intermediates separately.
+- [x] Preserve scoped passed plane/helicopter/rotor/shadow/map/roof and first-delivery/driving recordings on this exact ROM, including solid-contact reverse recovery and bounded frame-pacing observations.
+- [x] Review three paid Queen journeys through Core/West/East, paid-map state freezing and walking into an actually loaded High Park scene with parked car retained. Preserve the auto-stopped journey journal without relabelling its unassessed outcome.
+- [x] Record a fresh delivery and genuine game-button SRAM reset restoring its saved checkpoint, then a new cosmetic flight. This is emulated checkpoint recovery, not physical persistence or paid-ride reset.
+- [ ] Repeat exact-ROM paid-ride reset and remaining legacy transit/seam/arrival conditions; resolve the three contact/held-arrival/alighting branches in the next-polish list.
+- [ ] Broaden every-direction/district, crowded native ground-through-gap occlusion, scanline pressure, deepest stack and whole-city frame-pacing coverage.
+- [ ] Assess crowded-scene and handheld readability/performance. Native flyby samples do not prove full-city, two-hour or physical-cartridge acceptance.
+
+The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) records the source design; [TESTING.md](TESTING.md) owns any later exact native evidence.
+
 ## Next playable polish
 
+- [ ] Fix confirmed crowded-contact/held-arrival branches: an overlapping yielding NPC can trap a walker, held destination doors must share occupancy with traffic queries, and alighting fallback must reject the booked tram body. Temporary actual-C probes establish branch defects; native reachability and the final policy/replays remain pending.
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
 - [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. Historical samples and current a0e23 scoped 28.5/s have separate identities; crowded-scene/whole-city performance remains pending.
