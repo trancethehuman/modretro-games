@@ -207,7 +207,7 @@ static void td_pause_choose(void){
     if((td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)&&td.menu>1&&td.menu!=8){td_message(2);return;}
     switch(td.menu){
         case 0:td.mode=td_resume_mode;break;
-        case 1:td.mode=TD_MAP;td.map_x=camera_x;td.map_y=camera_y;camera_settings=0;break;
+        case 1:td.mode=TD_MAP;td_map_open();break;
         case 2:td.mode=TD_BOARD;if(td.job==TD_NONE)td_ready_offer();else{td.menu=td.job;td_get_job(td.menu,&td_offer);}break;
         case 3:td_enter_exit();return;
         case 4:
@@ -224,14 +224,11 @@ static void td_pause_choose(void){
 static void td_menu_update(void){
     if(td.mode==TD_HELP){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=td_resume_mode;td_ui_draw();}return;}
     if(td.mode==TD_MAP){
-        if(INPUT_LEFT&&camera_x>160)camera_x-=48;
-        if(INPUT_RIGHT&&camera_x<(image_width-80)*32)camera_x+=48;
-        if(INPUT_UP&&camera_y>160)camera_y-=48;
-        if(INPUT_DOWN&&camera_y<(image_height-72)*32)camera_y+=48;
-        if(INPUT_A_PRESSED){camera_x=actors[1].pos.x;camera_y=actors[1].pos.y;}
-        if(INPUT_B_PRESSED||INPUT_START_PRESSED){camera_settings=CAMERA_LOCK_FLAG;td.mode=TD_PAUSE;td.menu=1;td_ui_draw();}return;
+        if(INPUT_B_PRESSED||INPUT_START_PRESSED){td_map_close();td.mode=TD_PAUSE;td.menu=1;td_ui_draw();}
+        else td_map_update(joy,joy_pressed);
+        return;
     }
-    if(INPUT_B_PRESSED||INPUT_START_PRESSED){td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;camera_settings=CAMERA_LOCK_FLAG;td_ui_draw();return;}
+    if(INPUT_B_PRESSED||INPUT_START_PRESSED){td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;}
     if(td.mode==TD_PAUSE){
         if(INPUT_DOWN_PRESSED)td.menu=(td.menu+1)%9;
         if(INPUT_UP_PRESSED)td.menu=(td.menu+8)%9;
@@ -457,8 +454,8 @@ void toronto_init(void) BANKED {
     td.safe_u=td.u;td.safe_v=td.v;
     if(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)td_get_stop(td.transit_target,&td_cursor);
     if(td.job!=TD_NONE){td_get_job(td.job,&td_job);if(td.stage>=td_job.count)td.job=TD_NONE;}
-    actors_len=15;
-    for(i=1;i<15;i++){
+    actors_len=TD_ACTORS;
+    for(i=1;i<TD_ACTORS;i++){
         actors[i]=PLAYER;actors[i].prev=actors[i].next=NULL;actors[i].flags=ACTOR_FLAG_PERSISTENT;actors[i].collision_group=0;actors[i].script.bank=actors[i].script_update.bank=0;
         // Place copied actors on the inactive list before activating them.
         actors[i].next=actors_inactive_head; if(actors_inactive_head)actors_inactive_head->prev=&actors[i];actors_inactive_head=&actors[i];

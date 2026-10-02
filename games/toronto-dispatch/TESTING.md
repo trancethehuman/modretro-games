@@ -1,5 +1,46 @@
 # Testing record
 
+## Browsable city atlas — 2026-10-02 (Prototype 5)
+
+Final official native ROM `project/build/toronto-city-atlas.gbc`: **524,288 bytes**, SHA-256 **`e812f7ef3bee91e13e8ee0551c936eeed74283c60cb8c497ed45518d7b15d128`**. CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB SRAM; CLI build/header inspection passed. Source fingerprint `bbff1b78d37e3abf900a1b082d70bb33af235ef882228cccca2b5c6129ea5cde`; project revision `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4`; matching NOI `ad657f05786ee9230aa413bb335d2e65f7b93a91aada696693d25c65135d3a4a`, globals `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a`. Compiler warnings remain DEP0190, five TORONTO optimizer warnings and two upstream SFX unreachable-code warnings; no error.
+
+The paused map now spans all four registered areas in their geographic order, using a 512×122 collision-derived schematic and a160×96 viewport. It marks the courier, vehicle and job, booked transit stop or Union depot. It changes no city art, collision, client, route, job, fare or version-6 save field. [CITY_MAP.md](docs/CITY_MAP.md) specifies controls, geometry and budgets. Its source-status metadata deliberately does not claim native execution; evidence is recorded here by actual ROM.
+
+Full `make check` passes **299,366 atlas API checks**, **8,036,093 actual-renderer checks**, **2,404 engine checks**, **2,974 bridge checks**, **16,997 navigation/math checks**, nine memory fixtures and all generated-resource/repository checks. API/renderer/engine/bridge fixtures use ASan/UBSan. Renderer fixtures validate decoded VRAM for all225 legal viewports, all marker overlaps, remote parked-car and road-anchor/foot-client focus, free WAIT/RIDE booked-stop focus, partial cancellation, exact camera/hidden-bit restoration and failed getters. Sparse-cache fixtures force collision chains through every possible single vacant slot and full tables; they verify termination, no eviction and correct upload. Host adapters do not establish LCDC addressing, actual bank ABI, raster timing or hardware behaviour.
+
+The exact binary's memory guard passes: heapD950 / stackDF00 / **1,456-byte reserve**, with28 new transient UI bytes and unchanged360-byte cache. Fixed-bank occupied end3F81 leaves127 bytes. Atlas code/data in bank0F occupies10,100 bytes (648 API code +9,452 data); its whole shared bank leaves6 bytes. UI bank11 hexadecimal leaves7 bytes. Bank packing needs reinspection after changes; these reserves are not deepest-stack measurements. Exact binary BG/sprite/font decoding confirms disjoint bank-1 addresses: sprites8000–837F, gameplay BG9000–907F, markers9080–90EF, atlas8800–8BBF /9100–97FF and font8C00–8F0F.
+
+Native checks used PyBoy2.7.0 CGB mode and worker `6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925`. Inputs were ordinary held-button sets; source scenes, WRAM and OAM were inspected read-only. No state/progress was injected. Recordings were stopped, owned workers closed and unchanged bytes reversibly archived through the official plugin.
+
+| Recording | Frames / events | Final journal digest | Archive ID |
+| --- | --- | --- | --- |
+| `atlas-final-driving-map-20261002` |5,434 /690|`f1ddccf5e5f87813d068b57a99ba5a534ad456b3250112a9c98505d998bf38ed`|`eea14575-c66e-42dc-ae5d-9b0b03e6cef2`|
+| `atlas-final-transit-20261002` |4,466 /472|`f6642524fcdbcdedebdaacc9607b82a432957d16b9aa2469af37482dc25e530f`|`dcc747d1-9578-4a23-8e98-96027fb388bc`|
+
+### Driving and map acceptance
+
+The final ROM repeated the original98 ordinary input steps through the former stopping corner. Market delivery finished at frame740, condition100, cash139/count1. Holding A40, A+right48 and A24 reached frame864 at(798.75,774.25), speed24/heading4. Acceleration and movement continued through the turn. Later parking, walking and entry returned to driving at frame5,066 with the car at(798.75,800.5625).
+
+The atlas rendered Central Toronto, High Park/Junction, Toronto East End and West End; the genuine source debugger confirmed the gameplay scene remained core. Frames980→4,228 preserved all58 bytes of td state while browsing, including position, cash139, world11 and subsecond32. Hardware OAM had zero visible sprites under the map. After a partial Select repaint, B returned to pause and B to the street. Camera bytes `c0634066` were restored; camera settings returned0→3. Start also closed the map; opposite directional pairs kept the viewport still. Ordinary foot play verified You/Parked Vehicle/Depot focus. Accepting contract02 then browsing retained position, cash, health, world15/subsecond11 and deadline120 across frames5,090→5,410, apart from the expected mode change.
+
+A completed-view focus sample advanced the UBYTE update counterF1→29, **56 updates over68 video frames**, with the map fully painted at the end. It is a bounded mixed redraw/steady sample, not a worst-case rate. The172-slot bounded double hash averages2.37 source-table reads per query over the225 authored viewports; this analytical count is separate from native timing. Full native coverage of every viewport, remote parked-car focus and all three parking/client marker changes remains pending; host fixtures cover those cases.
+
+### Paid transit, waiting and reset from the map
+
+- Frame314 showed an open Union Line1 departure window at world1/cash30. A8 boarded immediately, leaving cash27 and ride_left1 at322. The map showed **O STOP / TRIP: KING STATION**, froze world1/ride1 while open, then resumed. By806 the courier was on foot at King(640,640), cash27/world3, with the car parked at Union(560,720).
+- A second King→Union ride charged27→24. Map frames1,170→1,410 preserved all58 td bytes, including world3/subsecond30/ride1 and cash24. The map labelled the booked Union stop. Resuming completed that trip without another fare.
+- At world20, closed-window Union→King confirmation entered WAIT without charging: cash24. Map frames2,826→2,986 preserved all58 td bytes, including world20/subsecond48. Resuming advanced the actual schedule to world35, then boarded at36, charging once to21 and setting ride1.
+- During that paid ride, opening the map and pressing the normal A+B+Start+Select reset restored HELP at4,338 with world36/cash21/ride1, foot player and parked car still in core. Source debugging confirmed the actual core scene. A resumed the saved ride; frame4,466 arrived at King, world38/cash21. There was no duplicate fare. This is in-worker SRAM soft-reset evidence; physical cold boot and persistence across emulator processes are unverified.
+
+A stationary Union sample after the second trip advanced `_game_time`CD→07 modulo256, **58 updates/120 video frames** (~29/s). Its preceding OAM snapshot had13 visible objects, peak6/scanline and no over-limit lines. This is a bounded core sample, not crowded-world performance.
+
+### Intermediate and remaining scope
+
+Unpublished `toronto-atlas.gbc`, SHA`ec982d0c90307f3433d27704ee8fa6fee1cf8c9211ef22dbc59877cfb07e71e2`, established initial all-four map rendering, frozen state and cancellation, but exposed slow linear-cache lookup. Its9,588-frame/520-event journal digest is `989cec4029b2faaa713c2e0204cdabc4c54059a8eb45167852f6887fa8ccc8a1`, archive`91a4b86a-929c-435a-a9e9-bcbba1a5a80e`. It is superseded by the optimized binary above. Its later held-turn sample encountered traffic/curb contact and did not reproduce the exact regression sequence; that pass comes from the final recording.
+
+Prototype4's nine-job/four-loaded-scene progression below remains evidence for its separate ROM. The new ROM repeats first-job driving and adds map/transit/reset acceptance; it does not replay those nine quests or load all four gameplay scenes. Full former Toronto/waterfront/fuller Islands, remaining routes/seam endpoints, at least two measured hours of varied enjoyable gameplay, human handling/listening, crowded-scene/deepest-stack checks and physical cartridge verification remain open. The older browser is unrefreshed because its recording-close acknowledgement is UNKNOWN; native tests do not update or validate it.
+
+
 ## Four districts and parking guidance — 2026-10-02 (Prototype 4)
 
 Final official native ROM `project/build/toronto-four-districts.gbc`: **524,288 bytes**, SHA-256 **`1da71ba549aaf6b0b1fc641d4f4f9e0e317550e396bf80ffaf401f6ff7e82b2b`**. CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB SRAM; logo/header inspection and official CLI build passed. Source fingerprint `e029dac64f995a5466df744fad68ebbf4e14ef28b9d5d0df944ff0deed44a5ee`; project revision `375cff6b012a8acd6bc0fcf11fbd22fb49b9cdb085179063ecdd4929e875bec4`; matching NOI `24a627853b5d39766d336901b52ad871ad022b7c767afe6b14e26cb3d670f289`, globals digest `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a`. The subsequent planning-metadata regeneration did not alter the generated engine content; source-debug boot of this exact ROM still succeeded. Build warnings remain DEP0190, five TORONTO optimizer warnings and two upstream unreachable SFX warnings; no build error.

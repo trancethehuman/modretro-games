@@ -58,5 +58,15 @@
     "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
     "journal_events": 386,
     "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+  },
+  {
+    "file": "city-atlas.png",
+    "frame": 1048,
+    "rom_sha256": "e812f7ef3bee91e13e8ee0551c936eeed74283c60cb8c497ed45518d7b15d128",
+    "png_sha256": "205e9d14c25684d7bd0af80d4e105d6354e1820ccfc5edb0568a0e1df2b3a00c",
+    "session_id": "108efc5f22a34035ac9505f25eb3686a",
+    "journal_event_digest": "f1ddccf5e5f87813d068b57a99ba5a534ad456b3250112a9c98505d998bf38ed",
+    "journal_events": 690,
+    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
   }
 ]

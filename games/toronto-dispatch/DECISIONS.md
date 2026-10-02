@@ -74,6 +74,16 @@ Final candidate `1da71ba5…` is built and sampled in the native emulator; `7a29
 
 Prototype 4 identifies this four-scene milestone; Prototype 3 remains a separate historical release. [BUILD.md](docs/BUILD.md) records binary identity and linked memory; [TESTING.md](TESTING.md) owns exact scenarios. Remaining seam lanes/jobs and final paid-ride reset, full former-Toronto/waterfront/Islands, at least two hours of varied play, an adopted map era, new TTC services, crowded-scene performance, browser state and hardware checks remain pending.
 
+## Browsable city atlas, 2026-10-02
+
+The paused map now uses the four registered collision grids in geographic order High Park → west → core → east, with their authoritative offsets. At 1:8 scale the combined schematic is 512 × 122 pixels, padded to 64 × 16 native tiles. It shows actual road/walking ground and authored blocked water; roofs do not imply a drivable route. Its 160 × 96 viewport pans across districts without changing the loaded gameplay scene. This replaces camera panning over a single district.
+
+Player, vehicle and objective markers retain district identities. The objective uses the existing road parking anchor while driving and actual client after exiting. Free-roam points to the Union depot; paused no-job waiting/riding points to the booked transit stop. Select cycles useful focus points; A centres the objective and B/Start can leave an incomplete repaint. No fare, progress, save schema, route, client or mission rule changes.
+
+The renderer shares the existing 360-byte text cache, reserves CGB bank-1 ground tiles16–187, marker tiles8–14 and font192–240, and adds28 bytes of transient WRAM. Its172-slot double-hash dictionary avoids a linear search through every uploaded pattern; odd strides1–31 visit every slot, with bounded probing. The API/data remain autobanked. Linked budgets, host sanitizer results and native framebuffer/timing/state checks belong in [CITY_MAP.md](docs/CITY_MAP.md), [BUILD.md](docs/BUILD.md) and [TESTING.md](TESTING.md), each scoped to its exact build.
+
+This adds navigation to the existing four areas. Full former Toronto, waterfront and fuller Islands, at least two measured hours of varied play, human handling/audio review and physical cartridge checks remain required.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.
