@@ -1,10 +1,10 @@
 # Native build and preview
 
-Updated 2026-10-02. Aircraft candidate `8e7af3ec…` builds successfully and passes full source/compiled/memory gates. Scoped same-ROM native samples cover flybys/rotors/shadows/roof/map, first delivery/driving, three paid Queen journeys, all four actual loaded scenes and a delivery checkpoint restored through the game's reset buttons. Exact-ROM paid-ride reset, the three contact/held-arrival/alighting branches and broader crowded performance remain pending. The earlier moving-streetcar candidate `a0e23f03…` retains its separate paid-ride evidence below. Downloadable Prototype 6 is the earlier separate `23b2a7a2…` timetable/safe-alighting ROM; Prototype 5 (`2d1f6e4e…`) is the preceding city-atlas milestone. [LOADING.md](LOADING.md) distinguishes the current source candidate from published binaries. Four compressed scenes, 88 contracts and 51 service points remain. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before project operations; the format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain open.
+Updated 2026-10-02. Current portability candidate `20370fea…` passes the official build, full local source checks, compiled/header/memory gates and a fresh scoped delivery/driving/plane/helicopter/shadow/map replay. It corrects a GCC formatting warning with `-Werror` retained; corrected-head GNU CI is pending. Earlier `8e7af3ec…` retains its separate roof/transit/all-scene/button-reset samples below. The three contact/held-arrival/alighting branches and broader crowded performance remain pending. Downloadable Prototype 6 is the separate earlier `23b2a7a2…` timetable/safe-alighting ROM. [LOADING.md](LOADING.md) distinguishes source candidates from published binaries. Four compressed scenes, 88 contracts and 51 service points remain. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before project operations; the format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain open.
 
 ## Tested toolchain
 
-Final aircraft source candidate `8e7af3ec…` uses the compiled-pose cache, checks combined aircraft/shadow capacity before an aircraft-only fallback and computes roof-mask anchors once per tile. [TESTING.md](../TESTING.md) retains its scoped passed flyby/driving recordings and the earlier `9c1a9fcb…` / `4b83cfb6…` attempts. Native inactive/visible-flight samples still differ in NPC timing; compiled gates, reserve and host checks do not certify whole-city performance. Each later build needs its own identity and replay.
+The aircraft renderer uses the compiled-pose cache, checks combined aircraft/shadow capacity before an aircraft-only fallback and computes roof-mask anchors once per tile. [TESTING.md](../TESTING.md) retains the current portability replay and original `8e7af3ec…` recordings separately from earlier `9c1a9fcb…` / `4b83cfb6…` attempts. Native inactive/visible-flight samples still differ in NPC timing; compiled gates, reserve and host checks do not certify whole-city performance. Each later build needs its own identity and replay.
 
 | Component | Version / identity |
 | --- | --- |
@@ -21,7 +21,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-aircraft.gbc"` for the current aircraft candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-aircraft-portable.gbc"` for the current aircraft candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -95,14 +95,30 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-aircraft.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-aircraft-portable.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
 
-## Aircraft final candidate: scoped flyby and driving checks
+## Current aircraft portability candidate
+
+| Identity | Value |
+| --- | --- |
+| Native output / bytes | `project/build/toronto-aircraft-portable.gbc` / 524,288 |
+| ROM SHA-256 | `20370fea5661e2b9789bf6b1f77dc84535f06348698e2de3e6652f013a5ae189` |
+| Matching NOI SHA-256 | `cda7c22498fad7c73b30e7cf10ac778147d0eee93af105fd564ac021d8f430bb` |
+| Globals SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Rebuild source fingerprint | `8eca3164dd29a33ade067e2e4b4ecc145cc7a023c55028f3c537fae71801bc09` |
+| Plugin project revision | `03e03e4f63cda3ece1d5732ca557e5f3f62ea88a1cf08cb92056342073519f64` |
+| Linked heap / stack base / static reserve | `DA66` / `DF00` / 1,178 bytes |
+
+GCC CI at `a3b6984` rejected misleading indentation in the renderer/harness. The correction changes whitespace only and retains `-Werror`; full local source checks pass with the same counts below. Corrected-head GNU CI is pending. The official rebuild, public CGB/MBC5/32-KiB-RAM inspection and aircraft/Queen/memory gates pass; compiler, NOI and globals identities match the preceding build.
+
+Independent byte comparison finds only the global checksum byte `0x14F` and `_save_signature` bytes `0x481–0x484` changed; all other ROM bytes are identical. The old recorded source fingerprint `37927f56…` and journals remain separate from rebuild fingerprint `8eca3164…`. Fresh exact-ROM native scoped `PASSED` repeats delivery/driving, a partly clipped westbound plane, two fully visible southbound helicopter rotor poses with shadow and exact paused-map gameplay/flight freezing. [TESTING.md](../TESTING.md) records its new immutable journal/archive identity. Roof/transit/all-scene/reset scenarios were not repeated on this new ROM; their retained `8e7af3ec…` evidence below is not relabelled. Broad/hardware acceptance remains pending.
+
+## Previous aircraft candidate: retained scoped native samples
 
 | Identity | Value |
 | --- | --- |

@@ -27,18 +27,22 @@ static spritesheet_t sheet={14,frames,{8,&rom_tiles[0]},{9,&rom_tiles[1]}};
 static unsigned long checks;
 static unsigned long metadata_reads,rom_tile_bytes;
 static void require(int result,const char *message){
-    checks++;if(!result){fprintf(stderr,"FAIL after %lu checks: %s\n",checks,message);exit(1);}
+    checks++;
+    if(!result){fprintf(stderr,"FAIL after %lu checks: %s\n",checks,message);exit(1);}
 }
 UBYTE td_district_current(void){return district;}
 UBYTE td_aircraft_frame(void){return selected_frame;}
 void deactivate_actor(actor_t *actor){
     actor_t *head=actors_inactive_head;
     actor->flags&=~ACTOR_FLAG_ACTIVE;
-    actor->next=head;actor->prev=NULL;if(head)head->prev=actor;actors_inactive_head=actor;
+    actor->next=head;actor->prev=NULL;
+    if(head)head->prev=actor;
+    actors_inactive_head=actor;
 }
 void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank){
     require(bank>=7&&bank<=9,"Compiled aircraft bank changed during ROM reads");
-    if(bank==7)metadata_reads++;else if(length==32)rom_tile_bytes+=length;
+    if(bank==7)metadata_reads++;
+    else if(length==32)rom_tile_bytes+=length;
     memcpy(dest,src,length);
 }
 UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank){
@@ -123,7 +127,8 @@ static void reset(UBYTE flip){
 static UBYTE background_pixel(const UBYTE map[2][1024],WORD wx,WORD wy){
     UWORD position=(((UWORD)wy>>3)&31)*32+(((UWORD)wx>>3)&31);
     UBYTE attr=map[1][position],tile=map[0][position],x=wx&7,y=wy&7,*data;
-    if(attr&0x20)x=7-x;if(attr&0x40)y=7-y;
+    if(attr&0x20)x=7-x;
+    if(attr&0x40)y=7-y;
     data=bkg_data[(attr>>3)&1][tile];
     return ((data[y*2]>>(7-x))&1)|(((data[y*2+1]>>(7-x))&1)<<1);
 }
@@ -131,7 +136,8 @@ static UBYTE object_pixel(const OAM_item_t *object,WORD screen_x,WORD screen_y){
     WORD x=screen_x-(WORD)object->x+8,y=screen_y-(WORD)object->y+16;
     UBYTE *data;
     if(!object->y||x<0||x>=8||y<0||y>=16)return 0;
-    if(object->prop&0x20)x=7-x;if(object->prop&0x40)y=15-y;
+    if(object->prop&0x20)x=7-x;
+    if(object->prop&0x40)y=15-y;
     data=obj_data[(object->prop>>3)&1][(object->tile&0xfe)+(y>>3)];
     return ((data[(y&7)*2]>>(7-x))&1)|(((data[(y&7)*2+1]>>(7-x))&1)<<1);
 }
@@ -155,7 +161,8 @@ static void pixel_checks(WORD centre_x,WORD centre_y,UBYTE frame,UBYTE bg_flip,U
         original=0;
         for(i=0;i<4;i++){
             OAM_item_t object=shadow_OAM[i];
-            actual=object_pixel(&object,wx-draw_scroll_x,wy-draw_scroll_y);if(actual&&!original)original=actual;
+            actual=object_pixel(&object,wx-draw_scroll_x,wy-draw_scroll_y);
+            if(actual&&!original)original=actual;
         }
         require(original==air,"Loaded OBJ masks or accumulated offsets disagree with original sprite pixels");
     }
@@ -296,7 +303,8 @@ static UBYTE brute_capacity(const OAM_item_t *objects,UBYTE count,
     if((int)ground+count>40)return FALSE;
     /* Independent per-screen-row enumeration, deliberately unlike events. */
     for(row=0;row<144;row++)for(i=0;i<count;i++)if(row+16>=objects[i].y&&row<objects[i].y){
-        if(row<min)min=row;if(row>max)max=row;
+        if(row<min)min=row;
+        if(row>max)max=row;
     }
     if(max<min||max-min+1>64)return FALSE;
     for(row=min;row<=max;row++){

@@ -163,8 +163,10 @@ static UBYTE td_aircraft_clear_window(const OAM_item_t *objects,UBYTE count){
      * rectangles, plus the currently displayed hardware window, so a slide or
      * an instant position change cannot expose cosmetic sprites over text. */
     if(WX_REG&&WY_REG<144){
-        hardware_x=(WORD)WX_REG-7;if(hardware_x<0)hardware_x=0;
-        if(hardware_x<x)x=hardware_x;if(WY_REG<y)y=WY_REG;
+        hardware_x=(WORD)WX_REG-7;
+        if(hardware_x<0)hardware_x=0;
+        if(hardware_x<x)x=hardware_x;
+        if(WY_REG<y)y=WY_REG;
     }
     if(x>=160||y>=144)return TRUE;
     for(i=0;i<count;i++)if(objects[i].y&&
@@ -178,11 +180,14 @@ static UBYTE td_aircraft_capacity(const OAM_item_t *objects,UBYTE count,
     if(ground+count>40)return FALSE;
     for(i=0;i<count;i++)if(objects[i].y&&objects[i].y<160){
         top=(WORD)objects[i].y-16;bottom=top+15;
-        if(top<low)low=top;if(bottom>high)high=bottom;
+        if(top<low)low=top;
+        if(bottom>high)high=bottom;
     }
     if(high<0||low>=144)return FALSE;
-    if(low<0)low=0;if(high>143)high=143;
-    span=high-low+1;if(span>64)return FALSE;
+    if(low<0)low=0;
+    if(high>143)high=143;
+    span=high-low+1;
+    if(span>64)return FALSE;
     memset(events,0,span+1);
     /* Each item adds an interval. A prefix sum gives exact hardware Y-only
      * occupancy in O(items+height), including X-hidden ground objects. The
@@ -190,7 +195,8 @@ static UBYTE td_aircraft_capacity(const OAM_item_t *objects,UBYTE count,
     for(i=0;i<ground+count;i++){
         y=i<ground?oam[i].y:objects[i-ground].y;
         top=(WORD)y-16;bottom=top+16;
-        if(top<low)top=low;if(bottom>high+1)bottom=high+1;
+        if(top<low)top=low;
+        if(bottom>high+1)bottom=high+1;
         if(top>=bottom)continue;
         events[top-low]++;events[bottom-low]--;
     }
@@ -208,18 +214,23 @@ static UBYTE td_aircraft_roofs(const OAM_item_t *objects,const UBYTE masks[4][16
     UWORD offset;td_aircraft_patch_t *patch;
     for(i=0;i<TD_AIRCRAFT_OBJECTS;i++)if(objects[i].y){
         ox=(WORD)objects[i].x-8+draw_scroll_x;oy=(WORD)objects[i].y-16+draw_scroll_y;
-        if(ox<left)left=ox;if(oy<top)top=oy;
-        if(ox+7>right)right=ox+7;if(oy+15>bottom)bottom=oy+15;
+        if(ox<left)left=ox;
+        if(oy<top)top=oy;
+        if(ox+7>right)right=ox+7;
+        if(oy+15>bottom)bottom=oy+15;
     }
     if(right<left||bottom<top)return FALSE;
     /* The compiled cardinal poses fit 32x16 or16x32. Reject malformed art
      * instead of partially punching a larger footprint with15 scratch slots. */
     if(right-left>31||bottom-top>31||(right-left>15&&bottom-top>15))return FALSE;
-    if(left<draw_scroll_x)left=draw_scroll_x;if(top<draw_scroll_y)top=draw_scroll_y;
+    if(left<draw_scroll_x)left=draw_scroll_x;
+    if(top<draw_scroll_y)top=draw_scroll_y;
     if(right>draw_scroll_x+159)right=draw_scroll_x+159;
     if(bottom>draw_scroll_y+143)bottom=draw_scroll_y+143;
-    if(left<0)left=0;if(top<0)top=0;
-    if(right>1023)right=1023;if(bottom>975)bottom=975;
+    if(left<0)left=0;
+    if(top<0)top=0;
+    if(right>1023)right=1023;
+    if(bottom>975)bottom=975;
     if(right<left||bottom<top)return FALSE;
     td_aircraft_map=GetBkgAddr();
     for(y=top>>3;y<=bottom>>3;y++)for(x=left>>3;x<=right>>3;x++){
@@ -242,7 +253,8 @@ static UBYTE td_aircraft_roofs(const OAM_item_t *objects,const UBYTE masks[4][16
             dx=(WORD)objects[i].x-tile_screen_x;dy=tile_screen_y-(WORD)objects[i].y;
             if(dx<=-8||dx>=8||dy<=-8||dy>=16)continue;
             for(row=0;row<8;row++){
-                index=dy+row;if(index>=16)continue;
+                index=dy+row;
+                if(index>=16)continue;
                 mask=masks[i][index];mask=dx<0?mask<<(-dx):mask>>dx;
                 if(mask&(base[row*2]|base[row*2+1])){
                     base[row*2]&=~mask;base[row*2+1]&=~mask;changed=TRUE;
@@ -271,7 +283,8 @@ void td_aircraft_render(void) BANKED {
     WORD x,y;
     if(!td_aircraft_bound||!td_aircraft_same_scene()||!td_aircraft.active||
        (td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE))return;
-    frame=td_aircraft_frame();if(!td_aircraft_cache(frame))return;
+    frame=td_aircraft_frame();
+    if(!td_aircraft_cache(frame))return;
     pose=&td_aircraft_poses[frame>=8?1:0];
     x=(td_aircraft.u>>4)-draw_scroll_x;y=(td_aircraft.v>>4)-draw_scroll_y;
     td_aircraft_objects(pose->objects,objects,TD_AIRCRAFT_OBJECTS,x,y);
