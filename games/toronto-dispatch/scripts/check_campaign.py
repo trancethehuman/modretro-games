@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE_STOPS, CORE_QUESTS = 27, 72
-TOTAL_STOPS, TOTAL_QUESTS = 35, 80
+TOTAL_STOPS, TOTAL_QUESTS = 43, 88
 
 
 def decode(text):
@@ -38,6 +38,47 @@ def table(code, name):
     found = re.search(r'\b' + re.escape(name) + r'\s*\[[^;=]+\]\s*=\s*\{(.*?)\n\};', code, re.S)
     assert found, f'Missing native table: {name}'
     return found.group(1)
+
+
+def check_parking(stops, code):
+    from create_campaign import parking_code, parking_rows
+
+    expected = parking_rows(stops)
+    rows = [tuple(map(int, row)) for row in re.findall(r'\{(\d+),(\d+),(\d+)\}', table(code, 'td_parking'))]
+    native = [(stop, u, v) for u, v, stop in rows]
+    assert len({stop for stop, _, _ in native}) == len(native), 'Repeated native parking stop ID'
+    assert native == expected, 'Native parking IDs/coordinates differ from source anchors'
+    foot_ids = {stop['id'] for stop in stops if stop.get('reserved', 0) & 1}
+    assert {stop for stop, _, _ in native} == foot_ids, 'Every native foot-only client requires exactly one auxiliary parking row'
+    assert '\n'.join(parking_code(stops)) in code, 'Auxiliary parking table/getter differs from deterministic generation'
+    assert code.count('UBYTE td_get_parking(') == 1, 'Native parking getter must have one definition'
+    world = json.loads((ROOT / 'content/districts/world.json').read_text())
+    resources = {}
+    for index, u, v in native:
+        stop = stops[index]
+        district = stop.get('district', 0)
+        assert 0 <= district < len(world['districts']) and world['districts'][district]['id'] == district
+        if district not in resources:
+            name = world['districts'][district]['scene']
+            scene = json.loads((ROOT / 'project/project/scenes' / name / 'scene.gbsres').read_text())
+            grid = decode(scene['collisions'])
+            assert len(grid) == scene['width'] * scene['height'], 'Parking collision resource dimensions disagree'
+            resources[district] = (scene['width'], scene['height'], grid)
+        width, height, grid = resources[district]
+        assert all(grid[y * width + x] == 0 for y in range((v - 5) // 8, (v + 5) // 8 + 1)
+                   for x in range((u - 5) // 8, (u + 5) // 8 + 1)), f'Blocked native car parking footprint: {index}'
+        client = (stop['u'] // 8, stop['v'] // 8)
+        assert not grid[client[1] * width + client[0]] & 15, f'Blocked walking client: {index}'
+        parked = (u // 8, v // 8)
+        queue, distance = deque([parked]), {parked: 0}
+        while queue and client not in distance:
+            x, y = queue.popleft()
+            for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                if 0 <= nx < width and 0 <= ny < height and (nx, ny) not in distance and not grid[ny * width + nx] & 15:
+                    distance[nx, ny] = distance[x, y] + 8
+                    queue.append((nx, ny))
+        assert client in distance and 0 < distance[client] <= 900, f'Parking anchor needs a short connected walking approach: {index}'
+    return len(native)
 
 
 def check():
@@ -110,8 +151,12 @@ def check():
     normalized_quests = [{field: q[field] for field in preserved_fields} for q in quests[:CORE_QUESTS]]
     assert canonical_sha(normalized_stops) == west['preserved_base_stops_sha256'], 'Original core stops changed'
     assert canonical_sha(normalized_quests) == west['preserved_base_quests_sha256'], 'Original 72 native contract fields changed'
-    assert stops[CORE_STOPS:] == west['stops'], 'Western stop fusion is stale'
-    assert quests[CORE_QUESTS:] == west['quests'], 'Western contract fusion is stale'
+    assert stops[CORE_STOPS:35] == west['stops'], 'Western stop fusion is stale'
+    assert quests[CORE_QUESTS:80] == west['quests'], 'Western contract fusion is stale'
+    east = json.loads((ROOT / 'content/districts/east_jobs.json').read_text())
+    assert stops[35:] == east['stops'] and quests[80:] == east['quests'], 'Eastern content fusion is stale'
+    from create_east_jobs import preserved_prefix
+    preserved_prefix(campaign)
     assert campaign['status'] == 'engine-integrated' and campaign['duration_target_minutes'] >= 120
     assert campaign['duration_verified'] is False, 'Elapsed campaign duration requires measured play evidence'
     assert len({q['kind_id'] for q in quests}) == 8
@@ -150,12 +195,14 @@ def check():
         assert list(map(int, route.split(','))) == quest['route'] + [255] * (12 - len(quest['route']))
     native_briefs = re.findall(r'"([^"]*)"', table(code, 'td_briefs'))
     assert native_briefs == [''.join(line.ljust(18) for line in q['brief']) for q in quests], 'Native briefs differ'
+    parking_count = check_parking(stops, code)
     header = (ROOT / 'project/plugins/toronto-driving/engine/include/td_game.h').read_text()
     for macro, count in [('TD_STOPS', TOTAL_STOPS), ('TD_QUESTS', TOTAL_QUESTS)]:
         assert re.search(r'#define\s+' + macro + r'\s+' + str(count) + r'\b', header), f'{macro} differs from campaign'
     completed_bytes = int(re.search(r'#define\s+TD_COMPLETE_BYTES\s+(\d+)', header).group(1))
     assert completed_bytes * 8 >= TOTAL_QUESTS
-    print(f'Native campaign: {TOTAL_QUESTS} contracts/{TOTAL_STOPS} stops and briefs match C; preserved core/Island/ferry checks and unlock closure passed. Western scene checks are separate; duration is unmeasured.')
+    assert re.search(r'UBYTE\s+td_get_parking\s*\(\s*UBYTE\s+stop\s*,\s*UWORD\s*\*\s*u\s*,\s*UWORD\s*\*\s*v\s*\)\s+BANKED\s*;', header), 'Parking getter must retain its banked whole-pixel API'
+    print(f'Native campaign: {TOTAL_QUESTS} contracts/{TOTAL_STOPS} stops and briefs match C; {parking_count} auxiliary parking anchors match metadata and clear footprints/footpaths; preserved core/Island/ferry checks and unlock closure passed. Western scene checks are separate; duration is unmeasured.')
 
 
 if __name__ == '__main__':

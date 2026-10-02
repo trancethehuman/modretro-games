@@ -5,7 +5,19 @@
 #include <setjmp.h>
 #include "gbvm_stubs.h"
 #define TD_WORLD_ROUTE_DATA
+#define TD_WORLD_DATA
 #include "engine_under_test.c"
+#define td_get_stop td_authored_get_stop
+#define td_get_job td_authored_get_job
+#define td_get_brief td_authored_get_brief
+#define td_get_street td_authored_get_street
+#define td_get_west_street td_authored_get_west_street
+#include "content_under_test.c"
+#undef td_get_stop
+#undef td_get_job
+#undef td_get_brief
+#undef td_get_street
+#undef td_get_west_street
 #include "native_collision_fixture.h"
 
 actor_t actors[21];
@@ -70,13 +82,13 @@ void td_audio_set_mode(UBYTE mode) {audio_mode=mode;}
 UBYTE td_audio_get_mode(void) {return audio_mode;}
 void td_get_street(UWORD u,UWORD v,char *out) { (void)u;(void)v;strcpy(out,"TEST ROAD"); }
 void td_get_stop(UBYTE index,td_stop_t *out) {
-    if(authored_content){stop_reads++;if(index<TD_STOPS)*out=td_fixture_stops[index];return;}
+    if(authored_content){stop_reads++;td_authored_get_stop(index,out);return;}
     stop_reads++;memset(out,0,sizeof(*out));out->u=900;out->v=900;
     out->transit=index==0?1:0;
     if(index==0&&stop0_here) {out->u=400;out->v=450;}
 }
 void td_get_job(UBYTE index,td_job_t *out) {
-    if(authored_content){if(index<TD_QUESTS)*out=td_fixture_jobs[index];return;}
+    if(authored_content){td_authored_get_job(index,out);return;}
     (void)index;memset(out,0,sizeof(*out));out->count=2;
     out->vehicle=TD_NONE;out->seconds=120;out->reward=150;out->route[1]=1;
 }
@@ -110,6 +122,7 @@ static void reset_case(void) {
     td_entry_target=td_walk_dir=td_input_edge=0;
     td_session_live=td_transition_pending=test_current_district=test_queue_fail=0;test_queued_district=TD_DISTRICT_NONE;
     td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;
+    td_route_district=TD_DISTRICT_NONE;memset(td_traffic_samples,0,sizeof(td_traffic_samples));
     td_corner_used=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
@@ -548,7 +561,7 @@ static void test_fresh_transit_after_failure(void) {
            "an actual missed deadline produces a failed contract before free roaming");
     world_tick(J_B,1);world_tick(0,1);world_tick(J_B,1);
     expect(td.mode==TD_TRANSIT&&td.job==TD_NONE,"a failed contract permits a new free-roaming transit booking");
-    world_tick(J_RIGHT,1);world_tick(J_A,1);
+    world_tick(J_RIGHT,1);td.seconds=2;world_tick(J_A,1);
     expect(td.mode==TD_WAIT&&td.transit_target==12,"fresh trip selects a different served destination");
     td.seconds=17;td.subsecond=59;world_tick(0,1);
     expect(td.mode==TD_RIDE&&td.cash==27,"fresh free-roaming trip boards and charges exactly one fare");
@@ -559,7 +572,7 @@ static void test_fresh_transit_after_failure(void) {
     reset_case();stop0_here=1;td.onfoot=1;td.job=0;td.left=2;td_job.kind=0;
     world_tick(J_B,1);
     for(unsigned i=0;i<6;i++){world_tick(J_RIGHT,1);world_tick(0,1);}
-    world_tick(J_A,1);td.seconds=17;td.subsecond=59;world_tick(0,1);
+    td.seconds=2;world_tick(J_A,1);td.seconds=17;td.subsecond=59;world_tick(0,1);
     expect(td.mode==TD_RIDE&&td.transit_target==17&&td.cash==27&&td.job==0,
            "an active parcel boards a longer paid trip before its deadline");
     world_tick(0,60);
@@ -573,6 +586,140 @@ static void test_fresh_transit_after_failure(void) {
 static void native_case(void) {
     reset_case();geometry=NATIVE_GRID;authored_content=1;
     td.u=td.park_u=td.safe_u=560*16;td.v=td.park_v=td.safe_v=720*16;
+}
+
+/* Independently authored expectations for every boarding origin, including
+   Wellesley's bus selector and the three separate Island return routes. */
+static const struct {
+    UBYTE origin,target,phase,period,fare,duration;
+} transit_cases[]={
+    {0,12,0,18,3,1},{12,17,2,18,3,3},{13,0,4,18,3,2},
+    {14,0,6,18,3,2},{15,0,8,18,3,3},{16,0,10,18,3,3},{17,0,12,18,3,4},
+    {18,19,0,24,2,6},{80,19,4,24,2,4},{19,18,8,24,2,6},
+    {10,20,0,30,4,8},{20,10,7,30,4,8},{21,10,14,30,4,8},{22,10,21,30,4,8}
+};
+
+static void transit_menu_case(unsigned index,UWORD second) {
+    native_case();td_stop_t origin;
+    td_get_stop(transit_cases[index].origin&63,&origin);
+    td.onfoot=1;td.u=td.safe_u=origin.u*16;td.v=td.safe_v=origin.v*16;
+    td.mode=TD_TRANSIT;td.transit_origin=transit_cases[index].origin;
+    td.transit_target=transit_cases[index].target;
+    td_get_stop(td.transit_target,&td_cursor);td.seconds=second;td.subsecond=37;
+}
+
+static void test_current_transit_window(void) {
+    for(unsigned service=0;service<sizeof(transit_cases)/sizeof(transit_cases[0]);service++) {
+        for(int edge=-1;edge<=2;edge++) {
+            UWORD second=transit_cases[service].period*2+transit_cases[service].phase+edge;
+            UBYTE open=edge==0||edge==1;
+            transit_menu_case(service,second);
+            expect(td_next_departure(td.transit_origin,td.seconds)==(open?0:edge==-1?1:transit_cases[service].period-2),
+                   "countdown identifies both open seconds and their immediately adjacent closed edges");
+            world_tick(J_A,1);
+            expect(td.mode==(open?TD_RIDE:TD_WAIT),"confirmation boards in either open second and waits on either closed edge");
+            expect(td.cash==(open?30-transit_cases[service].fare:30),"current-window confirmation charges the correct service fare exactly once");
+            expect(td.seconds==second&&td.subsecond==37,"booking does not add a world second or consume contract time");
+            expect(td.ride_left==(open?transit_cases[service].duration:0),"confirmation preserves the complete ride duration without consuming its first second");
+            td_state_t booked=td;memset(&td,0,sizeof(td));
+            expect(td_restore()&&memcmp(&td,&booked,sizeof(td))==0,"confirmation saves the correct paid ride or unpaid wait with native collision fixtures");
+            world_tick(J_A,0);world_tick(0,0);world_tick(J_A,0);
+            expect(td.cash==booked.cash&&td.ride_left==booked.ride_left,"held and repeated confirm presses cannot recharge or advance an accepted trip");
+            if(!open) {
+                UWORD vblanks=(edge==-1?1:transit_cases[service].period-2)*60-37;
+                world_tick(0,vblanks);
+                expect(td.mode==TD_RIDE&&td.cash==30-transit_cases[service].fare,
+                       "closed-window wait boards once at the next genuine departure");
+                expect(td.ride_left==transit_cases[service].duration,
+                       "scheduled boarding also retains every ride second on the boarding tick");
+                booked=td;
+            }
+            UWORD arrival_u=td_cursor.u*16,arrival_v=td_cursor.v*16;
+            world_tick(0,transit_cases[service].duration*60);
+            expect(td.mode==TD_ROAM&&td.u==arrival_u&&td.v==arrival_v&&td.cash==booked.cash,
+                   "each accepted service reaches its selected destination with one fare and its authored duration");
+        }
+    }
+    transit_menu_case(0,1);td.transit_target=td.transit_origin&63;sram_writes=0;
+    world_tick(J_A,1);
+    expect(td.mode==TD_TRANSIT&&td.cash==30&&sram_writes==0,"confirming the current stop cannot buy or save an empty trip");
+}
+
+static void test_transit_funds_pause_and_deadline(void) {
+    const unsigned services[]={0,8,12};
+    for(unsigned i=0;i<3;i++) {
+        unsigned service=services[i];UWORD phase=transit_cases[service].phase;
+        transit_menu_case(service,phase+1);td.cash=transit_cases[service].fare-1;
+        world_tick(J_A,1);
+        expect(td.mode==TD_ROAM&&td.msg==4&&td.cash==transit_cases[service].fare-1&&td.ride_left==0,
+               "an open departure with insufficient funds returns to roaming without charging or boarding");
+        memset(&td,0,sizeof(td));
+        expect(td_restore()&&td.mode==TD_ROAM&&td.cash==transit_cases[service].fare-1,
+               "rejected immediate boarding saves an unpaid roaming state");
+        transit_menu_case(service,phase);td.cash=transit_cases[service].fare;
+        world_tick(J_A,1);
+        expect(td.mode==TD_RIDE&&td.cash==0,"the exact fare is sufficient for immediate boarding on each service");
+        transit_menu_case(service,phase+2);td.cash=transit_cases[service].fare-1;
+        world_tick(J_A,1);
+        expect(td.mode==TD_WAIT&&td.msg==0&&td.cash==transit_cases[service].fare-1,
+               "a closed window defers its funds check until the scheduled boarding opportunity");
+        world_tick(0,(transit_cases[service].period-2)*60-37);
+        expect(td.mode==TD_ROAM&&td.msg==4&&td.cash==transit_cases[service].fare-1,
+               "an insufficient scheduled fare uses the same unpaid rejection as immediate boarding");
+    }
+
+    transit_menu_case(6,transit_cases[6].phase+1);td.job=0;td_get_job(0,&td_job);td.left=2;
+    world_tick(J_A,1);
+    expect(td.mode==TD_RIDE&&td.left==2&&td.ride_left==4&&td.cash==27,
+           "last-window-second confirmation boards an active parcel without decrementing its deadline");
+    UWORD second=td.seconds;world_tick(J_START,300);
+    expect(td.mode==TD_PAUSE&&td_resume_mode==TD_RIDE&&td.seconds==second&&td.left==2&&td.ride_left==4,
+           "pause on the boarding frame freezes the paid ride and parcel deadline");
+    td.menu=1;world_tick(J_A,300);world_tick(0,300);
+    expect(td.mode==TD_MAP&&td.seconds==second&&td.left==2&&td.ride_left==4,
+           "map inspection preserves the paused immediate ride");
+    world_tick(J_B,1);world_tick(0,1);world_tick(J_B,1);
+    expect(td.mode==TD_RIDE&&td.cash==27&&td.ride_left==4,"leaving map and pause resumes the existing paid ride without another fare");
+    world_tick(0,23);world_tick(0,60);
+    expect(td.job==TD_NONE&&td.health==0&&td.mode==TD_RIDE&&td.ride_left==2&&td.cash==27,
+           "a deadline expiring after immediate boarding fails the parcel but keeps its already-paid trip moving");
+    UWORD arrival_u=td_cursor.u*16,arrival_v=td_cursor.v*16;world_tick(0,120);
+    expect(td.mode==TD_RESULT&&td.u==arrival_u&&td.v==arrival_v&&td.cash==27,
+           "an expired immediately-boarded parcel arrives once before showing the failure result");
+
+    transit_menu_case(0,2);td.job=0;td_get_job(0,&td_job);td.left=1;world_tick(J_A,1);world_tick(0,23);
+    expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.cash==30,
+           "a parcel deadline expiring while the departure is closed fails without charging a fare");
+}
+
+static void test_immediate_transit_interrupted_save(void) {
+    const unsigned services[]={1,8,12};
+    for(unsigned i=0;i<3;i++) {
+        unsigned service=services[i];transit_menu_case(service,transit_cases[service].phase+1);
+        td.mode=TD_ROAM;td_save();td_state_t stable=td;
+        UBYTE stable_slot=td_save_slot,stable_seq=td_save_seq;
+        UBYTE stable_image[sizeof(td_test_sram)];memcpy(stable_image,td_test_sram,sizeof(stable_image));
+        td.mode=TD_TRANSIT;td_state_t menu=td;sram_writes=0;world_tick(J_A,1);
+        td_state_t paid=td;unsigned count=sram_writes;
+        expect(paid.mode==TD_RIDE&&paid.cash==30-transit_cases[service].fare&&count==sizeof(td)+9,
+               "immediate boarding commits its fare and full ride in one actual save record");
+        for(volatile unsigned cut=1;cut<=count;cut++) {
+            memcpy(td_test_sram,stable_image,sizeof(stable_image));td=menu;
+            td_save_slot=stable_slot;td_save_seq=stable_seq;joy=joy_pressed=0;sys_time=td_last_frame=0;
+            sram_writes=0;sram_interrupt_after=cut;sram_interrupt_enabled=1;
+            if(setjmp(interrupted_save)==0){world_tick(J_A,1);expect(0,"boarding interruption must reach its configured real SRAM store");}
+            sram_interrupt_enabled=0;memset(&td,0,sizeof(td));
+            expect(td_restore(),"interruption during immediate boarding always retains a committed snapshot");
+            expect(memcmp(&td,cut==count?&paid:&stable,sizeof(td))==0,
+                   "uncommitted boarding restores an unpaid state while committed boarding restores the fare and full ride together");
+        }
+        td_session_live=0;actors_inactive_head=NULL;toronto_init();
+        expect(td.mode==TD_HELP&&td.cash==paid.cash&&td.ride_left==paid.ride_left&&td_resume_mode==TD_RIDE,
+               "cold recovery of committed immediate boarding retains the paid trip behind help");
+        world_tick(0,1);world_tick(J_A,1);world_tick(0,transit_cases[service].duration*60);
+        expect(td.mode==TD_ROAM&&td.cash==paid.cash&&td.u==td_fixture_stops[paid.transit_target].u*16&&td.v==td_fixture_stops[paid.transit_target].v*16,
+               "recovered immediate boarding reaches the original destination without a second fare");
+    }
 }
 
 static void old_word(UBYTE *old,unsigned offset,UWORD value) {
@@ -655,7 +802,14 @@ static void test_district_semantic_fallback(void) {
             case 1:bad.park_district=TD_DISTRICT_COUNT;break;
             case 2:bad.district=1;break;
             case 3:bad.park_district=1;break;
-            case 4:bad.complete[10]=1;bad.done=1;break;
+            case 4:
+#if TD_QUESTS < TD_COMPLETE_BYTES * 8
+                bad.complete[TD_QUESTS>>3]=1<<(TD_QUESTS&7);bad.done=1;
+#else
+                /* A full bitmap has no unused bit; retain count validation. */
+                bad.complete[0]=1;bad.done=0;
+#endif
+                break;
             case 5:bad.reserved=1;break;
             case 6:
                 bad.district=1;bad.u=800*16;bad.v=64*16;bad.onfoot=1;
@@ -682,12 +836,13 @@ static void test_reciprocal_portals(void) {
         td.park_u=foot?(td.park_district?736:560)*16:td.u;
         td.park_v=foot?(td.park_district?640:720)*16:td.v;
         td.job=72;td.stage=1;td.left=170;td.done=3;td.complete[0]=7;td.health=93;
-        td.cash=333;td.seconds=137;td.subsecond=21;td.heading=portal->u==24?8:0;
-        td.speed=foot?0:11;td_vx=portal->u==24?-144:144;td_vy=32;
+        UBYTE horizontal=portal->u==24||portal->u==1000,negative=(horizontal?portal->u:portal->v)==24;
+        td.cash=333;td.seconds=137;td.subsecond=21;td.heading=horizontal?(negative?8:0):(negative?12:4);
+        td.speed=foot?0:11;td_vx=horizontal?(negative?-144:144):32;td_vy=horizontal?32:(negative?-144:144);
         td_get_job(td.job,&td_job);td_set_target();
-        UWORD old_u=td.u+(portal->u==24?16:-16);td_state_t before=td;
+        UWORD old_u=td.u+(horizontal?(negative?16:-16):0),old_v=td.v+(horizontal?0:(negative?16:-16));td_state_t before=td;
         WORD old_vx=td_vx,old_vy=td_vy;audio_mode=TD_AUDIO_EFFECTS;
-        UBYTE crossed=td_cross_portal(old_u);
+        UBYTE crossed=td_cross_portal(old_u,old_v);
         if(!foot&&!portal->vehicle) {
             expect(!crossed&&!test_queue_calls&&!memcmp(&td,&before,sizeof(td)),
                    "vehicle cannot cross a foot-only portal or alter campaign state");continue;
@@ -721,11 +876,11 @@ static void test_queue_failure_and_remote_boot(void) {
     td.job=72;td.stage=1;td.left=170;td.done=3;td.complete[0]=7;td_get_job(72,&td_job);
     td.speed=11;td_vx=-144;td_vy=32;td_state_t before=td;
     test_queue_fail=1;
-    expect(!td_cross_portal(25*16)&&!memcmp(&td,&before,sizeof(td))&&!td_transition_pending&&sram_writes==0,
+    expect(!td_cross_portal(25*16,td.v)&&!memcmp(&td,&before,sizeof(td))&&!td_transition_pending&&sram_writes==0,
            "failed scene queue leaves district, vehicle, job and persistent state unchanged");
     expect(td_vx==-144&&td_vy==32,"failed allocation does not drain either velocity axis");
     test_queue_fail=0;
-    expect(td_cross_portal(25*16)&&td.district==1&&test_queue_calls==2,
+    expect(td_cross_portal(25*16,td.v)&&td.district==1&&test_queue_calls==2,
            "the same valid portal can retry after queue allocation recovers");
 
     native_case();td.district=1;td.u=800*16;td.v=64*16;td.safe_u=td.u;td.safe_v=td.v;
@@ -750,14 +905,31 @@ static void test_queue_failure_and_remote_boot(void) {
            "remote scene entry does not repeat cold restore, bridge reset or audio initialization");
 }
 
+static void test_car_entry_at_portal(void) {
+    native_case();td_session_live=1;td.onfoot=1;
+    td.u=25*16;td.v=640*16;td.park_u=24*16;td.park_v=td.v;
+    td.safe_u=td.u;td.safe_v=td.v;td.heading=8;
+    td_entry_timer=1;td_entry_target=0;
+    expect(td_door_path(td.u,td.v,td.park_u,td.park_v)&&td_drivable(24,640),
+           "last-entry seam fixture uses a genuine reachable car on the registered King road port");
+    world_tick(0,1);
+    expect(!td.onfoot&&!td_entry_timer&&td.u==24*16&&td.v==640*16&&td.district==0&&
+           !test_queue_calls&&!td_transition_pending,
+           "finishing car entry at a seam cannot mistake the animation snap for outbound driving");
+    for(unsigned i=0;i<30&&!td_transition_pending;i++)world_tick(J_A,1);
+    expect(td_transition_pending&&td.district==1&&test_queue_calls==1&&test_queued_district==1&&
+           td.park_district==1&&td.park_u==td.u&&td.park_v==td.v,
+           "intentional outward acceleration after completed seam entry still crosses and carries the car once");
+}
+
 static void test_first_frame_actors(void) {
-    const UWORD locations[3][2]={{560,720},{800,64},{736,640}};
-    for(unsigned district=0;district<3;district++) {
+    const UWORD locations[TD_DISTRICT_COUNT][2]={{560,720},{800,64},{736,640},{224,528}};
+    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++) {
         native_case();td_session_live=1;test_current_district=td.district=td.park_district=district;
         td.u=(locations[district][0]+18)*16;td.v=locations[district][1]*16;
         td.park_u=locations[district][0]*16;td.park_v=td.v;td.onfoot=1;toronto_init();
         expect(actors_len==15&&PLAYER.pos.x==(td.u>>4)*32&&PLAYER.pos.y==(td.v>>4)*32,
-               "each actual scene initializes all actors and courier coordinates before its first update");
+               "each registered district initializes all actors and courier coordinates before its first update");
         expect(actors[8].pos.x==(td.park_u>>4)*32&&actors[8].pos.y==(td.park_v>>4)*32&&!(actors[8].flags&ACTOR_FLAG_HIDDEN),
                "first scene frame shows the locally parked vehicle at its real saved position");
         int traffic=1;unsigned visible=0;
@@ -795,14 +967,62 @@ static void test_walk_pace_dispatch_and_foot_delivery(void) {
     td.onfoot=1;td_ready_offer();expect(td.menu==4&&td_offer.vehicle==TD_NONE,"walking dispatch skips vehicle-required offers without hiding compatible packages");
 
     native_case();test_current_district=td.district=2;td.job=77;td_get_job(td.job,&td_job);td.stage=2;td.left=180;
-    td_set_target();td.u=784*16;td.v=621*16;td.park_district=2;td.park_u=td.u;td.park_v=td.v;
+    td_set_target();td.u=736*16;td.v=640*16;td.park_district=2;td.park_u=td.u;td.park_v=td.v;
     expect(td_target.reserved&TD_STOP_FOOT,"authored Lodge fixture carries its actual native foot-only delivery flag");
-    expect(td_drivable(784,621)&&td_near(&td_target),"Lodge doorstep fixture is a genuine driveable car position inside the interaction radius");
+    expect(td_drivable(736,640)&&td_near(&td_target),"Lodge approach fixture is a genuine driveable parking point inside the interaction radius");
     td_interact();expect(td.stage==2&&td.job==77&&td.msg==16,"car-door proximity cannot hand off a flagged park-and-walk parcel");
-    td.onfoot=1;td.u=784*16;td.v=608*16;td_interact();
+    td.onfoot=1;td.u=784*16;td.v=608*16;td_set_target();td_interact();
     expect(td.stage==3&&td.job==77,"on-foot Lodge courier can complete the same flagged handoff");
     td.stage=2;td_set_target();td.district=1;td.u=784*16;td.v=608*16;td_interact();
     expect(td.stage==2&&td.msg==6,"equal local coordinates in the wrong district cannot complete the Lodge objective");
+}
+
+static void test_park_delivery_guidance(void) {
+    /* Expected road/client coordinates come from independent registered-grid fixtures.
+       The lookup itself runs unchanged generated native content, not a mock. */
+    const UBYTE stops[3]={34,36,41},jobs[3]={77,84,85},stages[3]={2,3,2};
+    const UWORD anchors[3][2]={{736,640},{224,144},{816,312}};
+    for(unsigned i=0;i<3;i++) {
+        native_case();td.job=jobs[i];td_get_job(td.job,&td_job);td.stage=stages[i];
+        td_stop_t client;td_get_stop(stops[i],&client);
+        expect(td_job.route[td.stage]==stops[i]&&(client.reserved&TD_STOP_FOOT),
+               "parking guidance fixture is an authored foot-only handoff in its actual contract");
+        test_current_district=td.district=td.park_district=client.district;
+        td.u=td.park_u=anchors[i][0]*16;td.v=td.park_v=anchors[i][1]*16;
+        td.left=180;td_set_target();
+        expect(td_target.u==anchors[i][0]&&td_target.v==anchors[i][1]&&
+               !strcmp(td_target.name,client.name)&&td_target.reserved==client.reserved,
+               "driver beacon uses the legal road approach while retaining client identity and foot-only restriction");
+        expect(td_drivable(anchors[i][0],anchors[i][1])&&td_near(&td_target)&&
+               actors[1].pos.x==anchors[i][0]*32&&actors[1].pos.y==(anchors[i][1]-12)*32,
+               "parking marker is displayed at a real driveable approach");
+        td_interact();expect(td.stage==stages[i]&&td.msg==16&&td.job==jobs[i],
+               "Select at the road approach explains park then walk without delivering from the car");
+        td_enter_exit();
+        expect(td.onfoot&&td_entry_timer&&td_target.u==client.u&&td_target.v==client.v,
+               "actual exit immediately moves the objective from parking approach to the client");
+        for(unsigned tick=0;tick<12;tick++)driving_tick(0);
+        td.u=anchors[i][0]*16;td.v=anchors[i][1]*16;td_interact();
+        expect(td.stage==stages[i]&&td.msg==6,"walking at the parking approach cannot hand off a parcel for the distant client");
+        td.u=client.u*16;td.v=client.v*16;td_interact();
+        expect(td.stage==stages[i]+1&&td.job==jobs[i],"walking to the true client advances exactly one park handoff");
+        td.stage=stages[i];td_set_target();td.u=td.park_u+18*16;td.v=td.park_v;
+        td_enter_exit();for(unsigned tick=0;tick<12;tick++)driving_tick(0);
+        expect(!td.onfoot&&td_target.u==anchors[i][0]&&td_target.v==anchors[i][1],
+               "re-entering the actual parked vehicle restores the road approach guidance");
+    }
+    for(unsigned stop=0;stop<=TD_STOPS;stop++) {
+        UWORD u=1234,v=5678;UBYTE found=td_get_parking(stop,&u,&v);
+        int expected=stop==34||stop==36||stop==41;
+        expect(found==expected&&(expected||(u==1234&&v==5678)),
+               "native parking getter leaves ordinary stops and invalid IDs unchanged");
+    }
+    UWORD u=1234,v=5678;
+    expect(!td_get_parking(36,NULL,&v)&&v==5678&&!td_get_parking(36,&u,NULL)&&u==1234,
+           "native parking lookup rejects missing outputs without a partial write");
+    native_case();td.job=84;td_get_job(td.job,&td_job);td.stage=3;td.district=test_current_district=1;
+    td.u=736*16;td.v=640*16;td_set_target();
+    expect(td_route_district==0,"remote eastern parking destination guides a western driver through the core graph branch");
 }
 
 int main(void) {
@@ -817,9 +1037,11 @@ int main(void) {
     test_atomic_saves();test_valid_crc_invalid_states();test_legacy_and_transit_recovery();
     test_wait_cancellation();
     test_entry_transit_exclusion();test_fresh_transit_after_failure();
+    test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
     test_v5_migration_and_interrupted_upgrade();test_district_semantic_fallback();
-    test_reciprocal_portals();test_queue_failure_and_remote_boot();test_first_frame_actors();
+    test_reciprocal_portals();test_queue_failure_and_remote_boot();test_car_entry_at_portal();test_first_frame_actors();
     test_walk_pace_dispatch_and_foot_delivery();
+    test_park_delivery_guidance();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

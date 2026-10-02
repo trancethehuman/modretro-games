@@ -1,8 +1,10 @@
 /* Generated original seam/traffic placement; create_district_world.py. */
 #ifndef TD_DISTRICT_WORLD_H
 #define TD_DISTRICT_WORLD_H
-typedef struct { UBYTE from,to; UWORD u,v,arrival_u,arrival_v; UBYTE vehicle; } td_portal_t;
-#define TD_PORTALS 22
+#include "td_world.h"
+#define TD_WORLD_GENERATED_DISTRICTS 4
+#define TD_PORTALS 28
+#ifdef TD_WORLD_DATA
 static const td_portal_t td_portals[TD_PORTALS]={
     {0,1,24,64,1000,64,1},
     {1,0,1000,64,24,64,1},
@@ -26,18 +28,25 @@ static const td_portal_t td_portals[TD_PORTALS]={
     {2,1,1000,832,24,832,1},
     {1,2,24,896,1000,896,0},
     {2,1,1000,896,24,896,0},
+    {0,3,1000,64,24,64,1},
+    {3,0,24,64,1000,64,1},
+    {0,3,1000,400,24,400,1},
+    {3,0,24,400,1000,400,1},
+    {0,3,1000,528,24,528,1},
+    {3,0,24,528,1000,528,1},
 };
-static const char td_district_names[3][19]={
+static const char td_district_names[4][19]={
     "CENTRAL TORONTO",
     "WEST END",
     "HIGH PARK/JUNCTION",
+    "TORONTO EAST END",
 };
-#define TD_TRAFFIC_POINTS 16
-static const UBYTE td_west_traffic_counts[2][6]={
+static const UBYTE td_west_traffic_counts[3][6]={
     {4,4,4,8,4,10},
     {6,6,4,10,6,4},
+    {4,4,4,4,8,4},
 };
-static const UWORD td_west_traffic[2][6][TD_TRAFFIC_POINTS][2]={
+static const UWORD td_west_traffic[3][6][TD_TRAFFIC_POINTS][2]={
   {
     {{800,64},{912,64},{912,288},{800,288}},
     {{800,288},{912,288},{912,400},{800,400}},
@@ -54,5 +63,14 @@ static const UWORD td_west_traffic[2][6][TD_TRAFFIC_POINTS][2]={
     {{960,96},{848,96},{848,176},{944,176},{944,192},{960,192}},
     {{432,352},{176,352},{176,224},{432,224}},
   },
+  {
+    {{224,64},{384,64},{384,208},{224,208}},
+    {{384,64},{544,64},{544,208},{384,208}},
+    {{224,288},{384,288},{384,400},{224,400}},
+    {{384,288},{544,288},{544,400},{384,400}},
+    {{544,400},{672,400},{672,368},{704,368},{704,496},{672,496},{672,528},{544,528}},
+    {{384,528},{544,528},{544,688},{384,688}},
+  },
 };
+#endif /* TD_WORLD_DATA */
 #endif

@@ -1,4 +1,4 @@
-"""Validate actual registered three-scene resources and compiled world data.
+"""Validate actual registered district resources and compiled world data.
 
 This is source/resource validation, not emulator, hardware, full-city coverage,
 performance or measured two-hour campaign evidence. No files are regenerated.
@@ -25,11 +25,14 @@ def check():
     campaign = read(ROOT / 'content/campaign.json')
     settings = read(ROOT / 'project/project/settings.gbsres')
     western_jobs = read(ROOT / 'content/districts/west_jobs.json')
-    assert [d['id'] for d in world['districts']] == [0, 1, 2]
+    district_count = int(re.search(r'#define TD_DISTRICT_COUNT (\d+)', (ROOT / 'project/plugins/toronto-driving/engine/include/td_district.h').read_text()).group(1))
+    assert district_count == len(world['districts']) and [d['id'] for d in world['districts']] == list(range(district_count))
     assert len(campaign['stops']) == TOTAL_STOPS and len(campaign['quests']) == TOTAL_QUESTS
     assert settings['colorMode'] == 'color', '384-tile budget requires color-only project'
     resources, budgets, metadata = {}, [], {}
-    for district, slug in zip(world['districts'], ('city', 'west', 'high_park')):
+    for district in world['districts']:
+        assert district['scene'].startswith('toronto_')
+        slug = district['scene'].removeprefix('toronto_')
         scene = read(ROOT / 'project/project/scenes' / district['scene'] / 'scene.gbsres')
         filename = f'toronto_{slug}.png'
         background_path = ROOT / 'project/assets/backgrounds' / filename
@@ -111,7 +114,7 @@ def check():
             for step in range(distance + 1):
                 yield a[0] + (step if b[0] > a[0] else -step if b[0] < a[0] else 0), a[1] + (step if b[1] > a[1] else -step if b[1] < a[1] else 0)
 
-    assert len(world['portals']) == 11
+    assert len(world['portals']) >= 11
     directed, unordered = set(), set()
     for portal in world['portals']:
         first, last = portal['from'], portal['to']
@@ -165,7 +168,7 @@ def check():
     for stop in campaign['stops'][27:]:
         district, u, v = stop['district'], stop['u'], stop['v']
         foot_only = bool(stop.get('foot_only', False))
-        assert district in (1, 2) and stop['transit'] == 0
+        assert district in resources and district > 0 and stop['transit'] == 0
         assert bool(stop.get('reserved', 0) & 1) == foot_only, 'Native foot-only flag differs'
         assert walkable(district, u, v)
         model.shortest(origin, point(district, u, v), False)
@@ -187,16 +190,16 @@ def check():
     assert create_district_world.HEADER.read_text() == create_district_world.source(), 'Compiled reciprocal seams/traffic differ'
     ped_header = create_world_routes.HEADER.read_text()
     assert ped_header == create_world_routes.source(), 'Compiled pedestrian routes differ from registered grids'
-    counts = list(map(int, re.search(r'td_route_counts\[3\]=\{([\d,]+)\}', ped_header).group(1).split(',')))
-    ped_table = re.search(r'td_district_routes\[3\]\[128\]\[2\]=\{(.*?)\n\};', ped_header, re.S).group(1)
+    counts = list(map(int, re.search(rf'td_route_counts\[{district_count}\]=\{{([\d,]+)\}}', ped_header).group(1).split(',')))
+    ped_table = re.search(rf'td_district_routes\[{district_count}\]\[128\]\[2\]=\{{(.*?)\n\}};', ped_header, re.S).group(1)
     groups = re.findall(r'^  \{\n(.*?)^  \},', ped_table, re.S | re.M)
-    assert len(groups) == 3 and all(24 <= count <= 128 for count in counts)
+    assert len(groups) == district_count and all(24 <= count <= 128 for count in counts)
     for district, (group, count) in enumerate(zip(groups, counts)):
         rows = [tuple(map(int, pair)) for pair in re.findall(r'\{(\d+),(\d+)\}', group)]
         assert len(rows) == count and len(set(rows)) == count
         assert all(walkable(district, u + offset, v) for u, v in rows for offset in range(64)), 'Compiled NPC path crosses solid terrain'
     report = ', '.join(f'{slug}:{raw} raw/{flipped} flipped tiles' for slug, raw, flipped in budgets)
-    print(f'Native district resources: 3 scenes, 11 reciprocal seam pairs, 8 western clients, 12 swept-clear traffic loops and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
+    print(f'Native district resources: {district_count} scenes, {len(world["portals"])} reciprocal seam pairs, {len(campaign["stops"])-27} expansion clients, {6*(district_count-1)} swept-clear traffic loops and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
 
 
 if __name__ == '__main__':

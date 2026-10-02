@@ -19,7 +19,7 @@ def main(background_only=False):
     for x,y,r,b in ISLANDS:box(x,y,r-x,b-y,3);box(x,y+16,r-x,8,1)
     # Width 48 asphalt plus 8-pixel sidewalks on both sides. Tile-aligned boundaries.
     for v in ROWS:
-        end=848 if v in (640,720) else 992
+        end=848 if v in (640,720) else WIDTH if v in EAST_PORTS else 992
         start=0 if v in WEST_PORTS else 24
         box(start,v-WALK_HALF,end-start,WALK_HALF*2,3);box(start,v-ROAD_HALF,end-start,ROAD_HALF*2,1)
         d.line((start,v-ROAD_HALF-4,end-1,v-ROAD_HALF-4),fill=COLORS[0]);d.line((start,v+ROAD_HALF+4,end-1,v+ROAD_HALF+4),fill=COLORS[0])

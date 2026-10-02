@@ -27,7 +27,7 @@ Native driving regression evidence covers the first job, the previously stopping
 
 Campaign duration remains unverified. Contract counts, time limits and shortest-path estimates do not establish the two-hour release target.
 
-## First western expansion — integrated, native verification in progress
+## First western expansion — published Prototype 3, broader verification pending
 
 - [x] Three genuine linked native scenes: central Toronto, Parkdale/Roncesvalles and High Park/Swansea/Junction; each 1,024 × 976 pixels in a logical 3,072 × 976 atlas.
 - [x] 166 total building footprints, original western landmark styles, readable 48-pixel asphalt/8-pixel sidewalks, rail barriers and separate waterfront foot access.
@@ -37,9 +37,29 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Eight appended progression-gated western package jobs and eight clients, producing 80 contracts/35 stops while preserving the original 72/27 prefix. Colborne service requires a short park-and-walk handoff.
 - [x] Registered PNG/attribute/collision agreement, actual source tile budgets, accepted seam lanes, western client connectivity, swept traffic routes, native headers/text and old-content preservation in `make check`.
 - [x] Build the expanded ROM, verify boot and drive from the core into the west scene. See exact evidence in [TESTING.md](TESTING.md).
+- [x] Publish Prototype 3 after sampled native western travel, parked-car recovery, district-qualified active-job reset and core paid subway checks. This does not verify every western job or crossing.
 - [ ] Verify all reciprocal crossings and foot-only waterfront access in the expanded ROM, then test parked-car recovery, job handoffs, failures and save/reset across districts.
 - [ ] Play all eight western jobs with ordinary controls and refine driving routes, foot leg, deadlines, rewards and progression from observed play.
-- [ ] Audit crowded western scenes, native occlusion and expanded-ROM performance; update the public release after its verification scope is recorded.
+- [ ] Audit crowded western scenes, native occlusion and expanded-ROM performance.
+
+## First eastern expansion — Prototype 4, broader verification pending
+
+- [x] Four registered local scenes, each 1,024 × 976 pixels, in a logical 4,096 × 976 atlas; 211 building footprints and original eastern landmarks/architecture.
+- [x] Three researched core/east seam pairs through Bloor/Danforth, Dundas and Queen, for 14 reciprocal pairs total. Conditional Gerrard stays closed; no invented King/Front/Lake Shore bridge or duplicate Broadview/Don.
+- [x] 486 fixed pedestrian routes with six nearby actors and 18 traffic loops across the three non-core scenes. Source/host checks cover registered collision, palette/priority, tile budgets, traffic and accepted seam lanes.
+- [x] Eight eastern jobs and eight fictional clients bring authored content to 88 contracts/43 stops, preserving the previous 80/35 prefix. Withrow/Greenwood deliveries require short park-and-walk legs; Pape preserves its researched pedestrian rail crossing.
+- [x] Banked world data and travel-mode graph routing, next-district beacon/HUD, marker refresh on car entry/exit and explicit missing-road-route feedback. The 37-byte traffic/next-district cache retains eight VM contexts and version-6 save format.
+- [x] Banked parking-anchor cues for Colborne, Withrow and Greenwood; driving targets the legal approach and exiting restores the client marker. Native Withrow handoff and car re-entry pass; other park handoffs still need their own samples.
+- [x] Shared two-second transit departure window, countdown in the choice screen and immediate boarding on confirmation during an open window; no additional TTC service.
+- [x] Build candidate `1da71ba5…`; load all four actual native scenes, complete first delivery, retain speed 24 through the held-turn regression, sample all three core/east approaches, drive core-to-west and walk west-to-High Park.
+- [x] Complete nine distinct contracts with ordinary buttons: 01, 02, 03, 04, 07, 81, 82, 83 and 85. This samples car/truck/motorcycle and a Withrow park-walk relay; about eight minutes of purposeful game-clock progression does not meet the two-hour target.
+- [x] Restore nine completions, cash/clock, foot player in High Park and car parked in the west after native reset; pan the loaded local map while the player/clock remain frozen.
+- [x] Full host/generated-resource checks and actual-ROM memory guard pass with 1,484-byte reserve. Host engine, bridge, navigation and memory-fixture results remain separate from native samples.
+- [x] Final-ROM immediate subway boarding, one fare deduction and arrival on foot with parked car retained. A bounded 120-frame sample advances 59 rendered updates (~29.5/s); OAM inspection sees no over-limit scanlines.
+- [ ] Verify remaining reciprocal seam lanes, Colborne/Greenwood handoffs and final-candidate paid-ride reset recovery. Exact sample scope belongs in [TESTING.md](TESTING.md).
+- [ ] Play all eight eastern jobs and remaining western routes with ordinary controls; refine deadlines, condition rewards, walking legs and unlock progression from observed play.
+- [ ] Verify crowded eastern art/actors, occlusion, deepest stack use and frame pacing.
+- [x] Prepare the Prototype 4 ROM, loading instructions, distribution notices and exact sampled verification record. Release identifier: `v0.2.0-prototype.4`; GitHub review/CI and publication are tracked with that release.
 
 ## Next playable polish
 
@@ -52,8 +72,8 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 
 ## Full game release
 
-- [ ] Extend the implemented three-scene western stage across the full historical Old Toronto footprint, waterfront and fuller Islands. The larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
-- [ ] Implement boarding, autonomous schedules and strategic alighting for researched western TTC corridors; the current western clients add no scheduled native service.
+- [ ] Extend the working four-scene stage across the full historical Old Toronto footprint, waterfront and fuller Islands. The larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
+- [ ] Implement boarding, autonomous schedules and strategic alighting for researched western/eastern TTC corridors; added district clients supply no new scheduled native service.
 - [ ] Playtest and refine the authored objectives across all eight job types, including the unlock sequence, vehicle rules and condition/comfort rewards.
 - [ ] Record representative timings and a complete campaign; validate **at least two hours of varied, enjoyable gameplay**. Quest count does not verify duration.
 - [ ] Test crowded-scene sprite/CPU limits, diagonal walking, collision corner recovery, cancellation and schedule edge cases.

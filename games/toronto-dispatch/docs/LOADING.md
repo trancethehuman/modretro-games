@@ -2,7 +2,7 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The current linked-district ROM is 262,144 bytes, SHA-256 `99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f`, named `toronto-districts.gbc`. Its milestone identifier is `v0.2.0-prototype.3`; use the matching bundle from the [releases page](https://github.com/trancethehuman/modretro-games/releases). It has three linked compressed districts,80 authored contracts and35 service points. Official build/header/memory checks,1,212 host engine checks,710 bridge checks and native delivery/held-acceleration steering/district travel/saved restart smoke passed. A different build needs its own inspection and test identity.
+The four-district ROM is 524,288 bytes, SHA-256 `1da71ba549aaf6b0b1fc641d4f4f9e0e317550e396bf80ffaf401f6ff7e82b2b`, named `toronto-four-districts.gbc`. Its milestone identifier is `v0.2.0-prototype.4`; use the matching bundle from the [releases page](https://github.com/trancethehuman/modretro-games/releases). It has four linked compressed districts,88 authored contracts and43 service points. Official build/header/memory checks,2,352 engine checks,2,974 bridge checks and16,997 navigation/math checks passed. The exact native ROM completed nine distinct contracts, including eastern deliveries and a park-and-walk quest; steering, all four loaded scenes, a paid subway departure, local map scrolling and a saved soft restart were sampled. A different build needs its own inspection and test identity.
 
 Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
 
@@ -22,22 +22,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-districts.gbc
+games/toronto-dispatch/project/build/toronto-four-districts.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-districts.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-four-districts.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-districts.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-districts.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-four-districts.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-four-districts.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

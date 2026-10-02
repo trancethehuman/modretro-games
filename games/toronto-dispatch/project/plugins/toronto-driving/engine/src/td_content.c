@@ -38,6 +38,14 @@ static const td_stop_t td_stops[TD_STOPS] = {
   {656,272,"BLOOR PARK GATE",0,2,0},
   {944,608,"PARKSIDE SOUTH",0,2,0},
   {784,608,"COLBORNE SERVICE",0,2,1},
+  {144,64,"DANFORTH HALL",0,3,0},
+  {320,144,"WITHROW POST",0,3,1},
+  {128,528,"RIVERSIDE QUEEN",0,3,0},
+  {544,288,"GERRARD / PAPE",0,3,0},
+  {384,608,"CARLAW WORKS",0,3,0},
+  {816,496,"LESLIE / QUEEN",0,3,0},
+  {880,312,"GREENWOOD POST",0,3,1},
+  {880,496,"ASHBRIDGE QUEEN",0,3,0},
 };
 static const td_job_t td_jobs[TD_QUESTS] = {
   {"MARKET START",0,2,255,0,120,86,{0,1,255,255,255,255,255,255,255,255,255,255}},
@@ -120,6 +128,14 @@ static const td_job_t td_jobs[TD_QUESTS] = {
   {"LODGE LAST MILE",0,5,255,12,270,241,{0,29,34,33,0,255,255,255,255,255,255,255}},
   {"WEST RETURN PAPERS",6,5,0,12,205,216,{0,31,30,27,0,255,255,255,255,255,255,255}},
   {"WEST CLOSING ROUND",0,8,3,18,330,314,{0,27,28,32,33,30,29,0,255,255,255,255}},
+  {"EAST FIRST ROUND",0,4,255,3,205,188,{0,37,35,0,255,255,255,255,255,255,255,255}},
+  {"DANFORTH ART KIT",1,5,0,6,210,243,{5,35,38,37,5,255,255,255,255,255,255,255}},
+  {"EAST FILE CUTOFF",2,5,2,6,145,222,{0,40,42,38,0,255,255,255,255,255,255,255}},
+  {"CARLAW STOCK RUN",3,5,1,8,210,231,{11,39,42,37,11,255,255,255,255,255,255,255}},
+  {"EAST RAIL RELAY",4,7,255,8,260,241,{0,17,35,36,38,12,0,255,255,255,255,255}},
+  {"PARK PATH PARCELS",0,6,255,12,280,246,{0,36,41,42,39,0,255,255,255,255,255,255}},
+  {"EAST RETURN PACK",6,6,0,12,215,228,{0,39,40,42,37,0,255,255,255,255,255,255}},
+  {"CROSS CITY BUNDLES",0,10,3,18,405,391,{0,35,38,40,42,39,37,31,33,0,255,255}},
 };
 static const char td_briefs[TD_QUESTS][37] = {
   "MARKET PARCEL     UNION TO MARKET   ",
@@ -202,8 +218,28 @@ static const char td_briefs[TD_QUESTS][37] = {
   "PARK THEN WALK    LODGE LAST MILE   ",
   "CAR DOCUMENT ROUNDRETURN ORIGINAL   ",
   "SCOOTER SHOP ROUNDWEST TO HIGH PARK ",
+  "EAST SHOP PARCELS QUEEN TO DANFORTH ",
+  "FRAMED PRINT KITS BRAKE BEFORE TURNS",
+  "URGENT EAST FILES MOTORCYCLE ROUTE  ",
+  "BULKY SHOP STOCK  TRUCK BRAKE EARLY ",
+  "POCKET PARCEL KIT PARK THEN WALK    ",
+  "TWO PARK HANDOFFS PARK THEN WALK    ",
+  "SHOP RETURN PAPERSORIGINAL TO UNION ",
+  "EAST TO WEST MAIL FINAL PARK DEPOT  ",
 };
-static const char td_west_street_names[30][19]={
+/* Auxiliary parking cues; client records remain unchanged. */
+typedef struct { UWORD u,v; UBYTE stop; } td_parking_t;
+static const td_parking_t td_parking[3]={
+  {736,640,34},
+  {224,144,36},
+  {816,312,41},
+};
+UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED {
+ UBYTE i;if(!u||!v)return FALSE;
+ for(i=0;i<3;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
+ return FALSE;
+}
+static const char td_west_street_names[47][19]={
   "BLOOR ST W",
   "DUNDAS ST W",
   "COLLEGE ST",
@@ -234,9 +270,26 @@ static const char td_west_street_names[30][19]={
   "HIGH PARK LOOP PLA",
   "COLBORNE WALK",
   "SUNNYSIDE PAVILION",
+  "DANFORTH AVE",
+  "GERRARD ST EAST",
+  "DUNDAS ST EAST",
+  "QUEEN ST EAST",
+  "BAIN AVE",
+  "LOGAN AVE",
+  "CARLAW AVE",
+  "PAPE AVE NORTH FRA",
+  "PAPE AVE SOUTH FRA",
+  "JONES AVE",
+  "LESLIE ST",
+  "GREENWOOD AVE",
+  "EASTERN AVE",
+  "WITHROW PARK WALK",
+  "PAPE PEDESTRIAN RA",
+  "GREENWOOD PARK WAL",
+  "CHESTER STATION AP",
 };
 typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;
-static const td_street_t td_west_streets[108]={
+static const td_street_t td_west_streets[135]={
   {816,64,1000,64,1,0},
   {816,64,816,112,1,0},
   {512,112,816,112,1,0},
@@ -345,10 +398,37 @@ static const td_street_t td_west_streets[108]={
   {920,384,944,384,2,27},
   {736,608,784,608,2,28},
   {752,832,752,896,2,29},
+  {24,64,976,64,3,30},
+  {24,288,672,288,3,31},
+  {672,256,672,288,3,31},
+  {672,256,976,256,3,31},
+  {24,400,672,400,3,32},
+  {672,368,672,400,3,32},
+  {672,368,976,368,3,32},
+  {24,528,672,528,3,33},
+  {672,496,672,528,3,33},
+  {672,496,976,496,3,33},
+  {224,208,544,208,3,34},
+  {224,64,224,720,3,35},
+  {384,64,384,720,3,36},
+  {544,64,544,208,3,37},
+  {544,288,544,688,3,38},
+  {704,64,704,496,3,39},
+  {816,256,816,656,3,40},
+  {944,64,944,496,3,41},
+  {80,720,384,720,3,42},
+  {384,688,384,720,3,42},
+  {384,688,704,688,3,42},
+  {704,656,704,688,3,42},
+  {704,656,976,656,3,42},
+  {224,144,384,144,3,43},
+  {544,208,544,288,3,44},
+  {816,312,944,312,3,45},
+  {176,32,176,64,3,46},
 };
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {
- UBYTE i,name=0;UWORD score,best=65535;const td_street_t *s;
- for(i=0;i<108;i++){s=&td_west_streets[i];if(s->district!=district)continue;
+ UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;
+ for(i=0;i<135;i++){s=&td_west_streets[i];if(s->district!=district)continue;
  score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);
  if(score<best){best=score;name=s->name;}
  }memcpy(d,td_west_street_names[name],19);
@@ -367,7 +447,8 @@ void td_get_street(UWORD u,UWORD v,char *d) BANKED {
   else if(v>368) name="DUNDAS STREET";
   else if(v>256) name="COLLEGE / CARLTON";
   else if(v>144) name="WELLESLEY / HARBORD";
-  else name="BLOOR STREET";
+  else name=u>912?"DANFORTH AVENUE":"BLOOR STREET";
+  if(v>256&&v<320&&u>=816)name="GERRARD ST EAST";
   { const UWORD columns[]={80,208,336,480,560,640,720,816,944};
     const char *roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};
     const UWORD rows[]={64,176,288,400,528,640,720,784};

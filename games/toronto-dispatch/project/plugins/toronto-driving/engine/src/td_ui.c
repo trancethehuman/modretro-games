@@ -54,7 +54,7 @@ void td_ui_draw(void) BANKED {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
-        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);if(td_target.district!=td.district){td_get_district_name(td.district<td_target.district?td.district+1:td.district-1,td_line);td_row(2,td_line);}else td_row(2,td_target.name);}
+        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);if(td_target.district!=td.district){if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);else strcpy(td_line,"NO ROAD ROUTE");td_row(2,td_line);}else td_row(2,td_target.name);}
         else {sprintf(td_line,"$%u %s %u/%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.done,TD_QUESTS);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
         return;
     }
@@ -78,7 +78,7 @@ void td_ui_draw(void) BANKED {
         td_row(14,"LEFT RIGHT: BROWSE");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){
-        service=td_service(td.transit_origin);td_row(2,service==1?"LINE 1 TRAIN":service==2?"94 WELLESLEY BUS":"ISLAND FERRY");td_row(4,td_cursor.name);sprintf(td_line,"NEXT STOP %u",td.menu+1);td_row(6,td_line);td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"FERRY $4 GAME FARES");td_row(15,"UP: BUS/TRAIN AT");td_row(16,"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
+        service=td_service(td.transit_origin);td_row(2,service==1?"LINE 1 TRAIN":service==2?"94 WELLESLEY BUS":"ISLAND FERRY");td_row(4,td_cursor.name);wait=td_next_departure(td.transit_origin,td.seconds);sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(6,td_line);td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"FERRY $4 GAME FARES");td_row(15,"UP: BUS/TRAIN AT");td_row(16,"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
     }
     if(td.mode==TD_RESULT){
         td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(7,td_line);td_row(10,td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");td_row(12,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");

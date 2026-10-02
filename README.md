@@ -6,7 +6,7 @@ An open-source collection of original games for ModRetro Chromatic and Game Boy 
 
 | Game | Idea | Status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | A top-down Toronto courier game with timed jobs, momentum, braking, pedestrians and scheduled transit | Native prototype: three linked districts, 80 contracts, 35 service points, 166 buildings and four vehicles |
+| [Toronto Dispatch](games/toronto-dispatch/) | A top-down Toronto courier game with timed jobs, momentum, braking, pedestrians and scheduled transit | Prototype 4: four districts / 88 authored contracts; nine distinct quests completed in native tests |
 
 ## Start developing
 
@@ -16,13 +16,17 @@ An open-source collection of original games for ModRetro Chromatic and Game Boy 
 4. Select `games/toronto-dispatch/project/project.gbsproj` using the plugin. It is a genuine editable project created by the plugin; each additional game gets its own project folder.
 5. Build and open the same playable emulator preview during iteration. Audit assets and run gameplay checks before preparing a cartridge build.
 
-Toronto Dispatch builds with GB Studio CLI 4.3.2 / GBDK 4.5.0 and runs in PyBoy 2.7.0. The working source links compressed central Toronto, Parkdale/Roncesvalles and High Park/Swansea/Junction. Each scene is 1,024 × 976 pixels, arranged in a logical 3,072 × 976 atlas. Walking/car entry, momentum and braking, wide roads, collision/roof occlusion, existing core paid transit, original audio and saved progression remain part of the prototype. Its 358 fixed pedestrian routes support six nearby walkers in the loaded district. Eight added western package jobs unlock through progression, including a park-and-walk delivery near Colborne Lodge.
+Toronto Dispatch builds with GB Studio CLI 4.3.2 / GBDK 4.5.0 and runs in PyBoy 2.7.0. Published Prototype 3 links compressed central Toronto, Parkdale/Roncesvalles and High Park/Swansea/Junction, with 80 contracts, 35 service points, 166 buildings and four vehicles. Walking/car entry, momentum and braking, wide roads, collision/roof occlusion, core paid transit, original audio and saved progression are part of that prototype.
 
-The current native build passes first-delivery and held-acceleration turning checks, both directions of central/west and west/HighPark travel, parked-car recovery and saved restarts into the correct district. All western contracts, remaining seam lanes, crowded-scene performance, full former-Toronto coverage, a measured two-hour campaign and physical cartridge checks remain pending. Western TTC corridors are researched but do not yet add scheduled native services. Preview/browser state also needs confirmation. See [build instructions](games/toronto-dispatch/docs/BUILD.md), [build-specific evidence](games/toronto-dispatch/TESTING.md), [western geography and original layout](games/toronto-dispatch/docs/WEST_DISTRICT.md), and the broader [Old Toronto expansion proposal](games/toronto-dispatch/docs/OLD_TORONTO_EXPANSION.md). The proposed 2026 map era has not been adopted.
+Prototype 4 adds Riverside/Riverdale/Leslieville and the western Danforth. Each scene is 1,024 × 976 pixels, in a logical 4,096 × 976 atlas. It compiles 211 buildings, 486 fixed pedestrian routes with six nearby walkers in the loaded district, 18 traffic loops across the three added scenes and 14 reciprocal seam pairs. Eight eastern jobs and eight clients bring the campaign to 88 contracts/43 service points, including short Withrow and Greenwood park handoffs. Banked world data guides the beacon toward the next district; drivers see legal parking approaches for foot-only clients, then the actual handoff point when walking. The core transit selector displays the shared departure window. The exact ROM and loading bundle are identified by [Prototype 4](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.4).
+
+On Prototype 4 (`1da71ba5…`), automated ordinary-button play completed nine distinct contracts, including car, truck, motorcycle and a Withrow park-and-walk relay. All four native scenes loaded; sampled travel covers the three core/east approaches, core-to-west driving and west-to-High Park walking. The Withrow marker changed from roadside parking to the client after exiting, car re-entry worked, a remote High Park reset restored nine completions and the parked car, and the local map scrolled while the player/clock stayed frozen. The held-acceleration turn retained speed 24. A separate paid subway sample boards immediately, charges once and arrives on foot while retaining the parked car. This is about eight minutes of purposeful native progression, not a full campaign or a human playtest.
+
+Remaining seam lanes and western/eastern jobs, Prototype 4 paid-ride reset recovery, crowded-scene performance, full former-Toronto coverage, measured two-hour gameplay and physical cartridge checks remain pending. Western/eastern TTC corridors add no scheduled native services. Preview/browser state also needs confirmation. See [build instructions](games/toronto-dispatch/docs/BUILD.md), [build-specific evidence](games/toronto-dispatch/TESTING.md), [western geography](games/toronto-dispatch/docs/WEST_DISTRICT.md), [eastern geography](games/toronto-dispatch/docs/EAST_DISTRICT.md) and the broader [Old Toronto expansion proposal](games/toronto-dispatch/docs/OLD_TORONTO_EXPANSION.md). The proposed 2026 map era has not been adopted.
 
 ![Native Roncesvalles street](games/toronto-dispatch/docs/screenshots/roncesvalles.png) ![Native High Park local map](games/toronto-dispatch/docs/screenshots/high-park-map.png)
 
-Unmodified emulator frames from the linked-district ROM; [provenance](games/toronto-dispatch/docs/screenshots/provenance.json).
+Unmodified emulator frames from published Prototype 3; [provenance](games/toronto-dispatch/docs/screenshots/provenance.json). They do not show the eastern expansion.
 
 ## Repository checks
 

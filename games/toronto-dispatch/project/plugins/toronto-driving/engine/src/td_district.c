@@ -9,11 +9,13 @@
 #include "data/scene_toronto_city.h"
 #include "data/scene_toronto_west.h"
 #include "data/scene_toronto_high_park.h"
+#include "data/scene_toronto_east.h"
 
 static const far_ptr_t td_district_scenes[TD_DISTRICT_COUNT]={
     TO_FAR_PTR_T(scene_toronto_city),
     TO_FAR_PTR_T(scene_toronto_west),
-    TO_FAR_PTR_T(scene_toronto_high_park)
+    TO_FAR_PTR_T(scene_toronto_high_park),
+    TO_FAR_PTR_T(scene_toronto_east)
 };
 
 /* This persistent WRAM buffer remains valid until core consumes the exception.
@@ -57,7 +59,7 @@ static UBYTE td_district_metadata(UBYTE district,scene_t *scene){
     far_ptr_t ref;
     if(!td_district_scene(district,&ref))return FALSE;
     MemcpyBanked(scene,ref.ptr,sizeof(*scene),ref.bank);
-    /* All three authored districts use this size. Reject a mismatched resource
+    /* All authored districts use this size. Reject a mismatched resource
      * rather than silently pairing native road bounds with different artwork. */
     return scene->width==TD_DISTRICT_TILE_WIDTH&&scene->height==TD_DISTRICT_TILE_HEIGHT&&scene->collisions.ptr!=NULL;
 }

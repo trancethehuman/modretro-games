@@ -1,6 +1,6 @@
 {
-  "status": "three-scene native smoke passed; full Old Toronto unfinished",
-  "projection": "North-up local pixels; each scene is1024 by976. Distances and seam lanes are original compression.",
+  "status": "Four scenes passed bounded native build, delivery, crossing and reset checks; see TESTING.md. Full Old Toronto and two-hour campaign unfinished.",
+  "projection": "North-up local pixels; each scene is 1024 by 976. Distances and seam lanes are original compression.",
   "districts": [
     {
       "id": 0,
@@ -30,6 +30,16 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 0,
+      "atlas_y": 0
+    },
+    {
+      "id": 3,
+      "name": "TORONTO EAST END",
+      "scene": "toronto_east",
+      "symbol": "scene_toronto_east",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 3072,
       "atlas_y": 0
     }
   ],
@@ -228,6 +238,60 @@
       },
       "access": [
         "foot"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Bloor/Danforth east",
+      "from": {
+        "district": 0,
+        "u": 1000,
+        "v": 64
+      },
+      "to": {
+        "district": 3,
+        "u": 24,
+        "v": 64
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Dundas east crossing",
+      "from": {
+        "district": 0,
+        "u": 1000,
+        "v": 400
+      },
+      "to": {
+        "district": 3,
+        "u": 24,
+        "v": 400
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Queen east crossing",
+      "from": {
+        "district": 0,
+        "u": 1000,
+        "v": 528
+      },
+      "to": {
+        "district": 3,
+        "u": 24,
+        "v": 528
+      },
+      "access": [
+        "foot",
+        "vehicle"
       ],
       "modeled_crossing_pixels": 48
     }

@@ -245,7 +245,8 @@ def author():
     campaign = read_json(ROOT / "content/campaign.json")
     world_path = ROOT / "content/districts/world.json"
     world = read_json(world_path)
-    assert [district["id"] for district in world["districts"]] == [0, 1, 2]
+    assert [district["id"] for district in world["districts"]] == list(range(len(world["districts"])))
+    assert len(world["districts"]) >= 3
     base_stops, base_jobs = campaign["stops"][:27], campaign["quests"][:72]
     assert [stop["id"] for stop in base_stops] == list(range(27))
     assert [job["id"] for job in base_jobs] == [f"contract-{index:02d}" for index in range(1, 73)]
