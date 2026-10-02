@@ -94,6 +94,13 @@ Remote paid arrivals commit an alighted state before queuing a scene; a failed q
 
 Moving streetcar artwork, human feedback on strategic transit, remaining platforms/arrival conditions, full former-Toronto coverage, measured two-hour varied gameplay and physical cartridge acceptance remain open. This implementation does not adopt the proposed 2026 era.
 
+## Implemented pickup condition lifecycle, 2026-10-02
+
+- Cargo/comfort starts at 100 on acceptance and can decline only after the first successful pickup. Traffic, walls, curbs and fast passenger steering keep their existing carried penalties; multi-stop and return legs remain carrying until the contract ends. Deadline, collision motion, braking, fines and cooldowns still apply on the approach.
+- Collision text describes braking while empty and cargo damage while carrying. Rider warnings require an occupied passenger job.
+- Cold startup normalizes valid older active-stage-0 saves to 100 after CRC/semantic validation. It preserves carried damage, retired failure state, earnings, deadlines and district-qualified positions; invalid active condition remains rejected. This changes no save bytes or version.
+- The native candidate and retained predecessor failure are scoped in [TESTING.md](TESTING.md). The published Prototype 6 bundle does not contain this later correction. Further quest/transit route-choice and hardware acceptance remain open.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

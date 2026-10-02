@@ -239,12 +239,12 @@ static void test_pressed_edge_once(void) {
 }
 
 static void test_passenger_comfort(void) {
-    reset_case();prime_car();td.job=0;td_job.kind=5;td.health=100;
+    reset_case();prime_car();td.job=0;td_job.kind=5;td.stage=1;td.health=100;
     for(unsigned i=0;i<36;i++)driving_tick(J_A|J_RIGHT);
     expect(td.health<100,"fast passenger turns reduce comfort");
     expect(td.health>0&&td.job!=TD_NONE,"a few fast turns do not instantly fail the passenger job");
 
-    reset_case();td.job=0;td_job.kind=5;td.speed=5;td_vx=80;td.health=100;
+    reset_case();td.job=0;td_job.kind=5;td.stage=1;td.speed=5;td_vx=80;td.health=100;
     for(unsigned i=0;i<36;i++)driving_tick(J_RIGHT);
     expect(td.health==100,"slow passenger turns preserve comfort");
 }
@@ -608,6 +608,112 @@ static void test_fresh_transit_after_failure(void) {
 static void native_case(void) {
     reset_case();geometry=NATIVE_GRID;authored_content=1;
     td.u=td.park_u=td.safe_u=560*16;td.v=td.park_v=td.safe_v=720*16;
+}
+
+static void test_pickup_damage_lifecycle(void) {
+    const UBYTE jobs[3]={0,1,5};
+    const char *kinds[3]={"parcel","fragile","passenger"};
+    const char *hazards[4]={"traffic impact","head-on wall","glancing curb","fast steering"};
+    /* Each carrying case starts afresh and collects through the actual
+       interaction handler, so a pre-pickup defect cannot cascade into its
+       expected post-pickup penalty. Retired cases retain stale route data. */
+    for(UBYTE kind=0;kind<3;kind++)for(UBYTE hazard=0;hazard<4;hazard++)for(UBYTE lifecycle=0;lifecycle<3;lifecycle++) {
+        native_case();td.health=37;
+        if(kind==2){td.done=8;td.complete[0]=0x4F;td.complete[10]=7;}
+        td.mode=TD_BOARD;td.menu=jobs[kind];td_get_job(td.menu,&td_offer);
+        world_tick(J_A,1);
+        expect(td.mode==TD_ROAM&&td.job==jobs[kind]&&td.stage==0&&td.health==100,
+               "actual authored offer acceptance begins an empty approach at stage0 with fresh cargo condition");
+        if(lifecycle) {
+            world_tick(0,0);world_tick(J_SELECT,1);
+            expect(td.mode==TD_ROAM&&td.job==jobs[kind]&&td.stage==1&&td.health==100,
+                   "an actual stopped Union pickup advances the accepted authored job into carrying");
+        }
+        if(lifecycle==2){td.job=TD_NONE;td.stage=9;td.health=37;}
+        td.cooldown=td_turn_tick=td_tick=0;td.speed=24;td.heading=0;
+        td_vx=384;td_vy=0;joy=joy_pressed=0;
+        td.u=400*16;td.v=450*16;td.safe_u=td.u;td.safe_v=td.v;
+        UBYTE damage=0;
+        if(hazard==0) {
+            geometry=CLEAR_GROUND;td_traffic_u[0]=td.u;td_traffic_v[0]=td.v;
+            td_traffic_step();damage=12;
+            expect(td.speed==12&&td_vx==192&&td.cooldown==60&&td.msg==5,
+                   "traffic still slows and warns an empty, carrying or retired vehicle");
+        }else if(hazard==1) {
+            geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;
+            driving_tick(0);damage=kind==1?20:8;
+            expect(td.u==394*16&&td.speed==0&&!td_vx&&!td_vy&&td.cooldown==45&&td.msg==5,
+                   "a broad wall still stops the vehicle and applies collision cooldown before and after pickup");
+        }else if(hazard==2) {
+            geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;td.heading=1;td_vy=128;
+            driving_tick(0);damage=kind==1?4:1;
+            expect(td.u==394*16&&td.v>450*16&&td.speed==24&&!td_vx&&td_vy>0&&td.cooldown==30&&td.msg==5,
+                   "glancing curb recovery keeps forward speed and its warning independently of cargo occupancy");
+        }else {
+            geometry=CLEAR_GROUND;td_turn_tick=11;driving_tick(J_RIGHT);
+            damage=kind==2?1:0;
+            expect(td.heading==1&&td.speed==24,
+                   "the same high-speed steering input turns empty, occupied and retired cars normally");
+            if(kind==2)expect(td.msg==(lifecycle==1?14:0),
+                   "rider comfort alerts belong only to an actually occupied passenger job");
+        }
+        UBYTE expected=lifecycle==2?37:lifecycle==1?100-damage:100;
+        char label[150];snprintf(label,sizeof(label),"%s %s condition after %s is%u",kinds[kind],
+            lifecycle==0?"before pickup":lifecycle==1?"after actual pickup":"without job, stale stage9",
+            hazards[hazard],expected);
+        expect(td.health==expected,label);
+        expect(td.mode==TD_ROAM&&td.job==(lifecycle==2?TD_NONE:jobs[kind])&&td.stage==(lifecycle==2?9:lifecycle),
+               "physical hazards preserve the actual lifecycle without failing an empty approach or reviving retired work");
+    }
+    /* Pickup eligibility does not defer the contract clock. */
+    for(UBYTE kind=0;kind<3;kind++) {
+        native_case();if(kind==2){td.done=8;td.complete[0]=0x4F;td.complete[10]=7;}
+        td.mode=TD_BOARD;td.menu=jobs[kind];td_get_job(td.menu,&td_offer);world_tick(J_A,1);
+        td.left=1;UWORD previous_seconds=td.seconds,previous_cash=td.cash;td_second();
+        expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.stage==0&&td.health==0&&td.left==0&&
+               td.seconds==previous_seconds+1&&td.cash==previous_cash,
+               "an accepted parcel, fragile or passenger deadline still expires before its first pickup without rewarding the approach");
+        expect(td_target.district==0&&td_target.u==560&&td_target.v==720,
+               "pre-pickup timeout clears the former objective and restores Union free-roam guidance");
+    }
+    /* Old version6 saves can contain approach damage. Validate their real
+       CRC/semantic records unchanged, then recover only acceptedstage0
+       condition on cold startup, including before a remote-scene redirect. */
+    const UBYTE old_health[5]={37,1,67,37,0};
+    for(UBYTE recovery=0;recovery<5;recovery++) {
+        native_case();td.cash=444;td.seconds=81;td.subsecond=13;
+        td.health=old_health[recovery];td.job=recovery==4?TD_NONE:1;
+        td.stage=recovery==3?1:recovery==4?7:0;td.left=recovery==4?0:110;
+        td.mode=recovery==4?TD_RESULT:TD_ROAM;
+        if(recovery==2){td.district=3;td.onfoot=1;td.u=td.safe_u=128*16;td.v=td.safe_v=528*16;}
+        td_save();td_state_t saved=td;saved.mode=TD_ROAM;memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&saved,sizeof(td)),
+               "actual version6 SRAM records validate their original approach, carried or no-job condition before cold-start normalization");
+        memset(&td,0,sizeof(td));td_session_live=0;actors_inactive_head=NULL;toronto_init();
+        expect(td.mode==TD_HELP&&td_resume_mode==TD_ROAM&&td.job==saved.job&&td.stage==saved.stage&&
+               td.health==(recovery<3?100:saved.health),
+               "cold recovery restores fresh uncollected cargo while preserving carried damage and a retired failure condition");
+        expect(td.cash==saved.cash&&td.left==saved.left&&td.seconds==saved.seconds&&td.subsecond==saved.subsecond&&
+               td.district==saved.district&&td.u==saved.u&&td.v==saved.v&&
+               td.park_district==saved.park_district&&td.park_u==saved.park_u&&td.park_v==saved.park_v,
+               "cold approach-condition recovery preserves earnings, deadline, clock, player and parked-car districts");
+        expect(recovery==2?(td_transition_pending==1&&test_queued_district==3&&test_current_district==0):
+                            (!td_transition_pending&&test_queued_district==TD_DISTRICT_NONE),
+               "remote uncollected condition is recovered before the actual destination scene is queued, without redirecting local saves");
+    }
+    /* Invalid condition must fail semantic validation before normalization.
+       Real CRC-valid newer records fall back to the older committed state. */
+    const UBYTE invalid_health[2]={0,101};
+    for(UBYTE fault=0;fault<2;fault++) {
+        native_case();td.cash=111;td_save();
+        td.job=1;td.stage=0;td.left=110;td.health=invalid_health[fault];td.cash=999;td_save();
+        UBYTE sequence;td_state_t raw;
+        expect(td_read_slot(td_save_slot,&raw,&sequence)&&raw.job==1&&raw.stage==0&&raw.health==invalid_health[fault],
+               "invalid approach-condition fixture is a genuine committed CRC-valid newer version6 record");
+        memset(&td,0,sizeof(td));td_session_live=0;actors_inactive_head=NULL;toronto_init();
+        expect(td.mode==TD_HELP&&td.job==TD_NONE&&td.health==100&&td.cash==111,
+               "zero or over100 active approach condition is rejected instead of being laundered by cold-start normalization");
+    }
 }
 
 static void test_finished_job_target(void) {
@@ -1381,6 +1487,7 @@ int main(void) {
     test_atomic_saves();test_valid_crc_invalid_states();test_legacy_and_transit_recovery();
     test_wait_cancellation();
     test_entry_transit_exclusion();test_fresh_transit_after_failure();
+    test_pickup_damage_lifecycle();
     test_finished_job_target();
     test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
     test_safe_transit_alighting();

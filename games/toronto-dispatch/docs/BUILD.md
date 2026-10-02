@@ -19,9 +19,9 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-queen-streetcar-safe.gbc"` for the current Queen candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-pickup-condition.gbc"` for the current pickup-condition candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
-4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain recordings in ignored `build/`.
+4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
 6. Run `make check` from the repository root for content/connectivity checks and host engine regressions. It needs Python 3.10+ and Clang/GCC with ASan/UBSan. It does not compile a ROM or automatically inspect an ignored native build.
 
@@ -91,12 +91,20 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-pickup-condition.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
+
+## Pickup condition lifecycle: later native candidate
+
+Official output `project/build/toronto-pickup-condition.gbc` is 524,288 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY with 32 KiB SRAM. ROM SHA-256 `64be19fa3da7ba4231ba8c8decec4720c409116c034f586974fd4ddce789945a`; source fingerprint `7a61baf9dfa688dd423be21b8444380abc1969481ee8a00286f15cae55c6ebf3`; matching NOI SHA `9e82436532668b27e9b68059dce8c9cb8696ddc06bb1a5e4b2cb854812843f18`. Project revision, compiler and globals digests retain the Prototype 6 values below. The official build exited 0 in 39,175 ms with the existing Node/SDCC warnings and no errors. Independent header and actual linked memory checks pass: `D950` heap, `DF00` stack, 1,456 bytes reserve against the 1,024-byte minimum.
+
+Four damage paths now require an active carrying stage. A fifth startup guard repairs condition on valid older uncollected-job saves after CRC/semantic validation. Empty-collision/rider text follows that lifecycle. There are no new save fields, persistent RAM allocations, contracts, stops or assets. Actual-C regressions pass 3,058 checks, including 14 failures captured on the predecessor; full `make check` passes. Native exact-input replay preserves uncollected condition100 versus the predecessor92, then verifies pickup, actual carried damage and condition-scaled delivery. A separate matched-phase first delivery and held turn retain cash139 and speed24/heading4. [TESTING.md](../TESTING.md) records immutable native identities and the limits of these samples.
+
+This candidate is not included in the published Prototype 6 ZIP. The browser preview remains unresolved, and physical persistence, the full city and the complete campaign's duration remain unverified.
 
 ## Queen streetcar and safe alighting: Prototype 6
 
