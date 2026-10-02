@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "status": "Original authored sprite; native acceptance separate",
+  "licence": "MIT",
+  "notice": "Original game artwork; no TTC logo, photo or sprite copied",
+  "generator": "scripts/create_streetcar_sprite.py",
+  "native_asset_id": "028d86c5-aef3-5752-87c9-817b5eb2a2ad",
+  "native_symbol": "sprite_queen_streetcar",
+  "source_png": "original-art/queen_streetcar.png",
+  "source_metadata": "original-art/queen_streetcar.metadata.json",
+  "destination": "assets/sprites/queen_streetcar.png",
+  "png_sha256": "66a1469bdeea84935e7ec4e000f18e0060846cd734bac7a8ef9ef80a9651c055",
+  "metadata_sha256": "18fca25ffe73ef90c6ae3b0f23e75ef195b09d8742c89f465c58bdcfa11492fb",
+  "decoded_rgb_sha256": "f95872c6b8925cce15e76711697d5bd2b31cc0a6dfe3d533f660deebe6a66e3b",
+  "palette_slot": 0,
+  "source_colours": [
+    "65ff00",
+    "e0f8cf",
+    "86c06c",
+    "071821"
+  ],
+  "reference_cells_8x8": 64,
+  "unique_patterns_8x8": 36,
+  "unique_patterns_8x16": 20,
+  "poses": [
+    {
+      "frame": 0,
+      "direction": "east",
+      "doors_open": false,
+      "source_rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        10,
+        30,
+        22
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 1,
+      "direction": "south",
+      "doors_open": false,
+      "source_rect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        10,
+        2,
+        22,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 2,
+      "direction": "west",
+      "doors_open": false,
+      "source_rect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        10,
+        30,
+        22
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 3,
+      "direction": "north",
+      "doors_open": false,
+      "source_rect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        10,
+        2,
+        22,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 4,
+      "direction": "east",
+      "doors_open": true,
+      "source_rect": [
+        128,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        10,
+        30,
+        22
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 5,
+      "direction": "south",
+      "doors_open": true,
+      "source_rect": [
+        160,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        10,
+        2,
+        22,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 6,
+      "direction": "west",
+      "doors_open": true,
+      "source_rect": [
+        192,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        2,
+        10,
+        30,
+        22
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 4
+    },
+    {
+      "frame": 7,
+      "direction": "north",
+      "doors_open": true,
+      "source_rect": [
+        224,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        10,
+        2,
+        22,
+        30
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    }
+  ],
+  "hidden_frame": 8,
+  "loader_initial_visibility": "Compiler loads authored actor inactive; runtime must set hidden/frame 8 explicitly before activation",
+  "pivot": "Actor world position is body centre; four poses share that centre",
+  "collision": "Default horizontal 28x12; runtime must select vertical 12x28 for south/north",
+  "verification": "Source pixels, metadata and OAM object counts only; no build/runtime/hardware claim"
+}

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "td_game.h"
+#include "td_streetcar_runtime.h"
 #include "td_transit.h"
 #include "td_font.h"
 #include "td_audio.h"
@@ -47,7 +48,7 @@ static const td_stop_t *td_map_destination(void){
 }
 static UBYTE td_map_point(UBYTE focus,UWORD *x,UWORD *y){
     const td_stop_t *target;
-    if(!focus)return td_atlas_position(td.district,td.u>>4,td.v>>4,x,y);
+    if(!focus)return td_streetcar_ride_view?td_atlas_position(td_streetcar_view_district,td_streetcar_focus_u>>4,td_streetcar_focus_v>>4,x,y):td_atlas_position(td.district,td.u>>4,td.v>>4,x,y);
     if(focus==1)return td_atlas_position(td.onfoot?td.park_district:td.district,
         (td.onfoot?td.park_u:td.u)>>4,(td.onfoot?td.park_v:td.v)>>4,x,y);
     target=td_map_destination();return td_atlas_position(target->district,target->u,target->v,x,y);
@@ -66,7 +67,7 @@ static void td_map_headers(void){
     if(td_atlas_district((td_map_x+10)*8,(td_map_y+6)*8,td_line))td_row(1,td_line);
     else td_row(1,"CITY EDGE");
     td_row(14,trip?"P YOU C CAR O STOP":td.job==TD_NONE?"P YOU C CAR O DEPOT":"P YOU C CAR O JOB");
-    if(!td_map_focus)td_row(15,td.onfoot?"YOU ON FOOT":"YOU DRIVING");
+    if(!td_map_focus)td_row(15,td_streetcar_ride_view?"YOU ON STREETCAR":td.onfoot?"YOU ON FOOT":"YOU DRIVING");
     else if(td_map_focus==1)td_row(15,td.onfoot?"YOUR PARKED VEHICLE":"YOUR DRIVING VEHICLE");
     else{sprintf(td_line,"%s%s",trip?"TRIP: ":td.job==TD_NONE?"DEPOT: ":"JOB: ",target->name);td_row(15,td_line);}
     td_row(16,"DPAD PAN SELECT VIEW");
@@ -182,7 +183,7 @@ void td_ui_draw(void) BANKED {
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         if(td.msg){
-            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK"};
+            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR"};
             td_row(0,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
         }else {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");

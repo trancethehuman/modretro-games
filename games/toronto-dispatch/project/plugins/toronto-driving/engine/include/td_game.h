@@ -4,7 +4,7 @@
 #define TD_QUESTS 88
 #define TD_STOPS 51
 #define TD_COMPLETE_BYTES 16
-#define TD_ACTORS 15
+#define TD_ACTORS 16
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0
@@ -16,6 +16,8 @@
 #define TD_RIDE 6
 #define TD_RESULT 7
 #define TD_HELP 8
+#define TD_SAVE_VERSION 7
+#define TD_STREETCAR_HOLD 1
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
 typedef struct {

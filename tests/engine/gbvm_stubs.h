@@ -22,13 +22,21 @@ struct actor {
     actor_t *prev,*next;
     UBYTE flags,collision_group,anim_tick,frame,frame_start,frame_end;
     struct { UBYTE bank; const void *ptr; } script,script_update;
+    UWORD hscript_update,hscript_hit;
+    UBYTE base_tile;
+    far_ptr_t sprite;
+    struct { WORD left,right,top,bottom; } bounds;
 };
+#define MAX_ACTORS 21
+typedef struct { UBYTE width,height; far_ptr_t collisions; } scene_t;
 extern actor_t actors[21];
 extern actor_t *actors_inactive_head;
 extern UBYTE actors_len;
 #define PLAYER actors[0]
-#define ACTOR_FLAG_PERSISTENT 1
-#define ACTOR_FLAG_HIDDEN 4
+#define ACTOR_FLAG_PERSISTENT 16
+#define ACTOR_FLAG_HIDDEN 2
+#define ACTOR_FLAG_ACTIVE 32
+#define ACTOR_FLAG_DISABLED 64
 #define CAMERA_LOCK_FLAG 1
 extern UWORD camera_x,camera_y,image_width,image_height,sys_time;
 extern UBYTE camera_settings;
@@ -60,5 +68,8 @@ void td_host_sram_store(volatile UBYTE *address,UBYTE value);
 UBYTE tile_at(UBYTE x,UBYTE y);
 void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end);
 void activate_actor(actor_t *actor);
+void deactivate_actor(actor_t *actor);
+void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank);
+UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank);
 
 #endif

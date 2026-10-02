@@ -8,6 +8,8 @@ check:
 	python3 games/toronto-dispatch/scripts/check_campaign.py
 	python3 games/toronto-dispatch/scripts/check_streetcar.py
 	python3 scripts/test_transit.py
+	python3 scripts/test_streetcar_motion.py
+	python3 games/toronto-dispatch/scripts/create_streetcar_sprite.py --check
 	python3 games/toronto-dispatch/scripts/check_district_world.py
 	python3 games/toronto-dispatch/scripts/create_district_world.py --check
 	python3 games/toronto-dispatch/scripts/create_district_jobs.py --check

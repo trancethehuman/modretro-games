@@ -150,6 +150,8 @@ def main():
     # shared translation unit so direct portal fixtures inspect production data.
     original = ((ENGINE / "src/td_transit.c").read_text() + '\n' +
                 (ENGINE / "src/td_world.c").read_text() + '\n' +
+                (ENGINE / "src/td_streetcar.c").read_text() + '\n' +
+                (ENGINE / "src/td_streetcar_runtime.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +
                 (ENGINE / "src/td_routes.c").read_text())
@@ -180,7 +182,7 @@ def main():
         game = ROOT / "games/toronto-dispatch"
         (work / "native_collision_fixture.h").write_text(native_fixture(game, ENGINE / "include"))
         shutil.copyfile(FIXTURES / "gbvm_stubs.h", work / "gbvm_stubs.h")
-        for name in ("actor", "camera", "scroll", "collision", "input", "data_manager", "ui", "compat", "system", "bankdata"):
+        for name in ("actor", "camera", "scroll", "collision", "input", "data_manager", "ui", "compat", "system", "bankdata", "gbs_types"):
             (work / f"{name}.h").write_text('#include "gbvm_stubs.h"\n')
         (work / "gbdk").mkdir()
         (work / "gbdk/platform.h").write_text('#include "gbvm_stubs.h"\n')

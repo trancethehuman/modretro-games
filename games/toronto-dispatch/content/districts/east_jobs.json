@@ -57,7 +57,7 @@
   "geography_metadata": [
     {
       "path": "content/districts/east_art.json",
-      "sha256": "0e804d96a973698a8c247b963de1836f2eac90fb9c7b1939ae68e98653fcfe9d",
+      "sha256": "10acefa205353d1765ddbe99edfda8df36df696d8fed97803e54eb4414a15bcc",
       "notice": "Source-derived geography and original compressed artwork; retain City attribution in metadata and distribution notices"
     }
   ],

@@ -48,7 +48,7 @@
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "fd0e39a958d7b2af256bd0f147cd6e77eeeac40f2aa0e3f8a359e0d4fb8c7445",
+      "sha256": "11bfa8552c4e70c4c90037331d334e96b995b35944aab7ede83d5607ef2d6bce",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {

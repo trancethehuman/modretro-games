@@ -15,6 +15,8 @@ td_job_t td_job,td_offer;
 td_stop_t td_target,td_cursor;
 UBYTE td_route_district;
 UBYTE td_resume_mode;
+UWORD td_streetcar_focus_u,td_streetcar_focus_v;
+UBYTE td_streetcar_view_district,td_streetcar_ride_view;
 actor_t actors[21];
 UBYTE actors_len;
 UWORD camera_x,camera_y;
