@@ -61,6 +61,19 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Verify crowded eastern art/actors, occlusion, deepest stack use and frame pacing.
 - [x] Prepare the Prototype 4 ROM, loading instructions, distribution notices and exact sampled verification record. Release identifier: `v0.2.0-prototype.4`; GitHub review/CI and publication are tracked with that release.
 
+## Browsable city map — Prototype 5
+
+- [x] Generate a512×122 native collision-ground schematic of all four registered areas in geographic order, with road/walking/water/padding distinctions.
+- [x] Scroll a160×96 viewport across areas; mark courier, car and active job/booked transit stop/free-roam depot. Preserve road-anchor versus true-foot-client targets.
+- [x] A objective focus, useful Select focus cycle, B/Start cancellation during partial painting and opposed-key neutrality.
+- [x] Banked API/data, bounded172-slot double hash, shared360-byte UI cache and28 transient runtime bytes; fixed/VRAM/actual-ROM memory allocations checked.
+- [x] Actual-source sanitizer checks across all225 viewports, all marker overlaps, remote parked-car/client semantics, sparse collision chains, every vacant-slot position and full-cache exhaustion.
+- [x] Build optimized `e812f7ef…` and final portable `2d1f6e4e…`; repeat first-delivery/held-turn regression, render allfour atlas area headers and preserve paused position/clock/cash/deadline.
+- [x] Native foot/car focus, car re-entry, partial redraw cancellation and camera/text/sprite restoration; map freezes WAIT/RIDE and resumes fare/arrival correctly.
+- [x] Reset from a mapped paid ride restores the trip and reaches King without another fare. This is in-worker SRAM evidence, not a physical cold boot.
+- [ ] Native coverage of every viewport, remote parked-car and allparking/client marker transitions; host fixtures cover these cases.
+- [ ] Full Old Toronto expansion, measured two-hour varied gameplay and hardware acceptance remain part of the full-release scope below.
+
 ## Next playable polish
 
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.

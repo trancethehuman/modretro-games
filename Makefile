@@ -1,6 +1,9 @@
 .PHONY: check
 
 check:
+	python3 games/toronto-dispatch/scripts/create_atlas.py --check
+	python3 scripts/test_atlas.py
+	python3 scripts/test_atlas_ui.py
 	python3 scripts/check_repository.py
 	python3 games/toronto-dispatch/scripts/check_campaign.py
 	python3 games/toronto-dispatch/scripts/check_district_world.py

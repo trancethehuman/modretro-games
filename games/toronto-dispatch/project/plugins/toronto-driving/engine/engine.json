@@ -44,7 +44,9 @@
         "include/td_district_world.h",
         "src/td_routes.c",
         "include/td_world.h",
-        "src/td_world.c"
+        "src/td_world.c",
+        "include/td_atlas.h",
+        "src/td_atlas.c"
       ]
     }
   ]

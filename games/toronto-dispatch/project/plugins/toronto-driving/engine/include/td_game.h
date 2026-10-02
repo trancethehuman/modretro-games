@@ -4,6 +4,7 @@
 #define TD_QUESTS 88
 #define TD_STOPS 43
 #define TD_COMPLETE_BYTES 16
+#define TD_ACTORS 15
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0
@@ -41,8 +42,12 @@ void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *dest) BANKED;
 void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED;
 void td_get_district_name(UBYTE index,char *dest) BANKED;
 extern UBYTE td_route_district; /* Rebuilt objective cue; not serialized. */
+extern UBYTE td_resume_mode;
 void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
+void td_map_open(void) BANKED;
+void td_map_update(UBYTE buttons,UBYTE pressed) BANKED;
+void td_map_close(void) BANKED;
 void td_save(void) BANKED;
 UBYTE td_restore(void) BANKED;
 void td_set_target(void) BANKED;

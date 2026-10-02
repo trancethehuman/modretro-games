@@ -35,6 +35,11 @@ static UBYTE stop0_here;
 static UBYTE authored_content;
 static UBYTE test_current_district,test_queued_district,test_queue_fail;
 static unsigned test_queue_calls,test_reset_calls;
+/* Map presentation is stubbed here; the real atlas data/API is checked by
+ * test_atlas.py. These counters verify the actual driver/UI handoff only. */
+static unsigned test_map_opens,test_map_updates,test_map_closes;
+static UBYTE test_map_active,test_map_buttons,test_map_pressed,test_map_camera_settings;
+static UWORD test_map_camera_x,test_map_camera_y;
 static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER } geometry;
 static jmp_buf interrupted_save;
 static unsigned sram_writes,sram_interrupt_after;
@@ -73,6 +78,19 @@ void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end) {
 void activate_actor(actor_t *actor) { (void)actor; }
 void td_ui_init(void) { ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
+void td_map_open(void) {
+    test_map_opens++;test_map_active=1;
+    test_map_camera_x=camera_x;test_map_camera_y=camera_y;test_map_camera_settings=camera_settings;
+    camera_settings=0;
+}
+void td_map_update(UBYTE buttons,UBYTE pressed) {
+    test_map_updates++;test_map_buttons=buttons;test_map_pressed=pressed;
+}
+void td_map_close(void) {
+    test_map_closes++;
+    if(test_map_active){camera_x=test_map_camera_x;camera_y=test_map_camera_y;camera_settings=test_map_camera_settings;}
+    test_map_active=0;
+}
 void td_audio_init(void) {audio_inits++;audio_mode=TD_AUDIO_FULL;audio_active=0;audio_cue=255;}
 void td_audio_update(WORD speed,UBYTE vehicle,UBYTE onfoot,UBYTE braking,UBYTE active) {
     (void)speed;(void)vehicle;(void)onfoot;(void)braking;audio_updates++;audio_active=active;
@@ -127,6 +145,9 @@ static void reset_case(void) {
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
     stop0_here=authored_content=0;test_queue_calls=test_reset_calls=0;
+    test_map_opens=test_map_updates=test_map_closes=0;
+    test_map_active=test_map_buttons=test_map_pressed=test_map_camera_settings=0;
+    test_map_camera_x=test_map_camera_y=0;
     td_save_slot=TD_NONE;td_save_seq=0;actors_inactive_head=NULL;
     sram_writes=sram_interrupt_after=0;sram_interrupt_enabled=0;
     geometry=CLEAR_GROUND;
@@ -1025,6 +1046,68 @@ static void test_park_delivery_guidance(void) {
     expect(td_route_district==0,"remote eastern parking destination guides a western driver through the core graph branch");
 }
 
+static void test_atlas_driver_handoff_and_freeze(void) {
+    for(UBYTE district=0;district<TD_DISTRICT_COUNT;district++) {
+        native_case();test_current_district=td.district=district;
+        td.onfoot=district&1;td.park_district=(district+1)%TD_DISTRICT_COUNT;
+        td.park_u=400*16;td.park_v=528*16;td.speed=0;
+        td.job=80;td_get_job(td.job,&td_job);td.stage=1;td.left=199;td.seconds=100;
+        td.map_x=43210;td.map_y=32109;td_set_target();
+        camera_x=12000+district*16;camera_y=8000+district*16;camera_settings=0x5A;
+        UWORD original_camera_x=camera_x,original_camera_y=camera_y;
+        world_tick(J_START,300);
+        expect(td.mode==TD_PAUSE&&td_resume_mode==TD_ROAM&&td.seconds==100&&td.left==199,
+               "opening pause for the atlas preserves the active cross-district contract clock");
+        td.menu=1;world_tick(J_A,300);
+        expect(td.mode==TD_MAP&&test_map_opens==1&&test_map_active&&camera_settings==0,
+               "actual pause choice opens the dedicated atlas UI exactly once");
+        expect(td.map_x==43210&&td.map_y==32109,
+               "atlas browsing does not reuse serialized legacy camera fields");
+        td_state_t frozen=td;td_job_t frozen_job=td_job;
+        td_stop_t frozen_target=td_target,frozen_cursor=td_cursor;
+        actor_t frozen_actors[21];memcpy(frozen_actors,actors,sizeof(actors));
+        UWORD frozen_traffic_u[6],frozen_traffic_v[6];UBYTE frozen_traffic_leg[6],frozen_ped_route[6];
+        memcpy(frozen_traffic_u,td_traffic_u,sizeof(frozen_traffic_u));
+        memcpy(frozen_traffic_v,td_traffic_v,sizeof(frozen_traffic_v));
+        memcpy(frozen_traffic_leg,td_traffic_leg,sizeof(frozen_traffic_leg));
+        memcpy(frozen_ped_route,td_ped_route,sizeof(frozen_ped_route));
+        unsigned updates=test_map_updates;
+        world_tick(J_RIGHT|J_DOWN,600);
+        expect(test_map_updates==updates+1&&test_map_buttons==(J_RIGHT|J_DOWN)&&test_map_pressed==(J_RIGHT|J_DOWN),
+               "actual map handler forwards held and first-pressed atlas pan inputs once per render");
+        world_tick(J_RIGHT|J_DOWN,600);
+        expect(test_map_updates==updates+2&&test_map_buttons==(J_RIGHT|J_DOWN)&&test_map_pressed==0,
+               "held atlas pan forwards no repeated press edge");
+        world_tick(J_A,600);
+        expect(test_map_updates==updates+3&&test_map_buttons==J_A&&test_map_pressed==J_A,
+               "atlas objective focus is delegated to its dedicated map UI");
+        expect(!memcmp(&td,&frozen,sizeof(td))&&!memcmp(&td_job,&frozen_job,sizeof(td_job))&&
+               !memcmp(&td_target,&frozen_target,sizeof(td_target))&&!memcmp(&td_cursor,&frozen_cursor,sizeof(td_cursor)),
+               "atlas inputs preserve every mission, transit, pose, save field and target across all registered scenes");
+        expect(!memcmp(actors,frozen_actors,sizeof(actors))&&
+               !memcmp(td_traffic_u,frozen_traffic_u,sizeof(frozen_traffic_u))&&
+               !memcmp(td_traffic_v,frozen_traffic_v,sizeof(frozen_traffic_v))&&
+               !memcmp(td_traffic_leg,frozen_traffic_leg,sizeof(frozen_traffic_leg))&&
+               !memcmp(td_ped_route,frozen_ped_route,sizeof(frozen_ped_route)),
+               "atlas browsing freezes actors, autonomous traffic and persistent pedestrian identities");
+        expect(test_current_district==district&&!test_queue_calls&&
+               camera_x==original_camera_x&&camera_y==original_camera_y,
+               "atlas pan/focus does not load another scene or pan the native gameplay camera");
+        updates=test_map_updates;
+        UBYTE exit=district&1?J_START:J_B;world_tick(exit,600);
+        expect(td.mode==TD_PAUSE&&td.menu==1&&test_map_closes==1&&!test_map_active&&test_map_updates==updates,
+               "B and Start close the atlas once without also forwarding an update");
+        expect(camera_x==original_camera_x&&camera_y==original_camera_y&&camera_settings==0x5A,
+               "closing the atlas restores the captured native camera through the UI close contract");
+        world_tick(0,1);world_tick(J_B,600);
+        expect(td.mode==TD_ROAM&&td.seconds==100&&td.left==199&&td.park_district==(district+1)%TD_DISTRICT_COUNT,
+               "leaving atlas and pause preserves the suspended contract and remotely parked car");
+        world_tick(0,60);
+        expect(td.seconds==101&&td.left==198,
+               "the game resumes one real second rather than catching up paused atlas inspection time");
+    }
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -1042,6 +1125,7 @@ int main(void) {
     test_reciprocal_portals();test_queue_failure_and_remote_boot();test_car_entry_at_portal();test_first_frame_actors();
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
+    test_atlas_driver_handoff_and_freeze();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }
