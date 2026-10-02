@@ -1,0 +1,13 @@
+{
+  "status":"proposal-not-engine-integrated",
+  "locations":[
+    {"id":"union-depot","label":"Fictional depot near Union Station","placement":"proposed-unverified"},
+    {"id":"market-stop","label":"St. Lawrence Market delivery stop","placement":"proposed-unverified"},
+    {"id":"distillery-stop","label":"Distillery District delivery stop","placement":"proposed-unverified"}
+  ],
+  "missions":[
+    {"id":"market-envelope","title":"Market envelope","kind":"package","pickup":"union-depot","dropoff":"market-stop","allowed_vehicles":["car","motorcycle","scooter"],"cargo_units":1,"time_limit_seconds":180,"reward":100},
+    {"id":"distillery-parcel","title":"Distillery parcel","kind":"package","pickup":"market-stop","dropoff":"distillery-stop","allowed_vehicles":["car","truck"],"cargo_units":2,"time_limit_seconds":240,"reward":160},
+    {"id":"return-run","title":"Depot return run","kind":"package","pickup":"distillery-stop","dropoff":"union-depot","allowed_vehicles":["car","truck","motorcycle","scooter"],"cargo_units":1,"time_limit_seconds":300,"reward":180}
+  ]
+}

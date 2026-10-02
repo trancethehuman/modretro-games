@@ -1,0 +1,55 @@
+{
+  "source": "https://github.com/OpenAI-Partners/ModRetro-Chromatic-Plugin-for-Codex",
+  "plugin_version": "1.0.33",
+  "reviewed": "2026-10-02",
+  "scope": "Only native starter assets and portable editable pixel sources are copied; other sample games and binaries are excluded.",
+  "asset_license": "ASSET_LICENSE",
+  "metadata_license": "LICENSE",
+  "source_attribution": {
+    "newArtwork": "Room, player, dialogue frame/cursor, and remaining font glyphs were authored as explicit cell rows for this release; no upstream bitmap pixels were sampled.",
+    "originalTitleGlyphs": {
+      "repositoryPath": "scripts/dogfood-assets.mjs",
+      "commit": "5929961b938260ad112b87fc57145b7b23c7a196",
+      "glyphs": "AEGILNOPRST"
+    }
+  },
+  "assets": [
+    {
+      "path": "assets/backgrounds/workshop.png",
+      "upstream_path": "examples/starter/assets/backgrounds/workshop.png",
+      "sha256": "62b4c3e9d7a3aefad8c1eb8f91e0c24ab2e148e4526845dc2810ad00a805ef21"
+    },
+    {
+      "path": "assets/sprites/workshop_player.png",
+      "upstream_path": "examples/starter/assets/sprites/workshop_player.png",
+      "sha256": "51c5a0374686531ae8e35ebeb4dc63f5c0b0f666e6d6abcdb5b8e52776e8766b"
+    },
+    {
+      "path": "assets/fonts/bench-mono.png",
+      "upstream_path": "examples/starter/assets/fonts/bench-mono.png",
+      "sha256": "5ef84106e16f70e7843ccaea5ee6b1a6b96e6c833067fa11c8c596431e0c8c7d"
+    },
+    {
+      "path": "assets/ui/frame.png",
+      "upstream_path": "examples/starter/assets/ui/frame.png",
+      "sha256": "cdebcc3e1a3a6827db29d6cd74a19d785980a5bef18a87589f8eb878457e311c"
+    },
+    {
+      "path": "assets/ui/cursor.png",
+      "upstream_path": "examples/starter/assets/ui/cursor.png",
+      "sha256": "a1cd08f8a5dc8a0a19c74f9fc36ef3d1e77c25be0746c9de0dc4c7dc5d044b5f"
+    }
+  ],
+  "editable_sources": [
+    {
+      "path": "original-art/native-cells.json",
+      "upstream_path": "examples/original-art/native-cells.json",
+      "sha256": "854e238f42839764f10bc6046af26336c66db0c241f4c869e15f209ca52abfa1"
+    },
+    {
+      "path": "original-art/recipes.mjs",
+      "upstream_path": "examples/original-art/recipes.mjs",
+      "sha256": "94c792a276434db59f02e30c4d967e673600e2343fba75f3858f31fd18aa1ca3"
+    }
+  ]
+}

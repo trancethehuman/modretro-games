@@ -1,0 +1,218 @@
+[
+  {
+    "id": "modretro-guide",
+    "url": "https://support.modretro.com/en_us/chromatic-devday-edition-quickstart-guid-By1iOlcMg",
+    "reviewed": "2026-10-01",
+    "scope": "Official plugin setup, GB Studio creation, emulator, streaming, Developer Mode and cartridge workflow; reviewed guide only"
+  },
+  {
+    "id": "toronto-centreline",
+    "url": "https://open.toronto.ca/dataset/toronto-centreline-tcl/",
+    "reviewed": "2026-10-01",
+    "scope": "Street topology research source; portal reviewed, geometry not imported"
+  },
+  {
+    "id": "toronto-neighbourhoods",
+    "url": "https://open.toronto.ca/dataset/neighbourhoods/",
+    "reviewed": "2026-10-01",
+    "scope": "Administrative neighbourhood research source; portal reviewed, boundaries not imported"
+  },
+  {
+    "id": "ttc-maps",
+    "url": "https://www.ttc.ca/routes-and-schedules/504/0",
+    "reviewed": "2026-10-01",
+    "scope": "Official linked system, downtown, subway and streetcar maps; route geometry not imported"
+  },
+  {
+    "id": "ttc-501",
+    "url": "https://www.ttc.ca/routes-and-schedules/501/1",
+    "reviewed": "2026-10-01",
+    "scope": "501 Queen route identity; current operating details require rechecking before adoption"
+  },
+  {
+    "id": "reference-former-toronto-zoning-key",
+    "url": "https://www.toronto.ca/city-government/planning-development/zoning-by-law-preliminary-zoning-reviews/zoning-bylaws/former-city-of-toronto-zoning-information/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-neighbourhood-map",
+    "url": "https://www.toronto.ca/wp-content/uploads/2022/04/964e-New-158-Neighbourhoods-with-Streets-and-List-Table.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official map visually inspected; factual reference only, no artwork or geometry imported"
+  },
+  {
+    "id": "reference-ttc-downtown-map",
+    "url": "https://cdn.ttc.ca/-/media/Project/TTC/DevProto/Images/Home/Routes-and-Schedules/Landing-page-pdfs/TTC_DowntownMap.pdf?rev=bae64f7e21bb4370b91cd5938956c2c8",
+    "reviewed": "2026-10-02",
+    "scope": "Official map visually inspected; factual reference only, no artwork or geometry imported"
+  },
+  {
+    "id": "reference-waterfront-bia-map",
+    "url": "https://www.toronto.ca/wp-content/uploads/2021/10/97b2-edc-Waterfront-BIA-map2021-accessible.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official map visually inspected; factual reference only, no artwork or geometry imported"
+  },
+  {
+    "id": "reference-island-park-master-plan",
+    "url": "https://www.toronto.ca/legdocs/mmis/2024/cc/bgrd/backgroundfile-247910.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official map visually inspected; factual reference only, no artwork or geometry imported"
+  },
+  {
+    "id": "reference-biidaasige-park-map",
+    "url": "https://www.waterfrontoronto.ca/sites/default/files/2025-08/Biidaasige_Park_Map_August_7%2C_2025_FINAL-ua.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official map visually inspected; factual reference only, no artwork or geometry imported"
+  },
+  {
+    "id": "reference-explains-that-statistical-neighbourhoods-do-not-fully-describe-historical-and-cultural-neighbourhoods",
+    "url": "https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/neighbourhood-profiles/about-toronto-neighbourhoods/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-centre",
+    "url": "https://www.destinationtoronto.com/neighbourhoods/city-centre/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-old-town",
+    "url": "https://www.destinationtoronto.com/neighbourhoods/old-town/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-midtown",
+    "url": "https://www.destinationtoronto.com/neighbourhoods/midtown/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-eastside",
+    "url": "https://www.destinationtoronto.com/neighbourhoods/eastside/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-high-park-area",
+    "url": "https://www.destinationtoronto.com/neighbourhoods/high-park/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-tower-history",
+    "url": "https://www.cntower.ca/history",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-venue-reference",
+    "url": "https://www.mlb.com/bluejays/ballpark/information/history",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-address",
+    "url": "https://www.toronto.ca/services-payments/venues-facilities-bookings/booking-city-facilities/union-station/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-architecture",
+    "url": "https://www.toronto.ca/services-payments/venues-facilities-bookings/booking-city-facilities/union-station/history-of-union-station/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-heritage-description",
+    "url": "https://www.toronto.ca/legdocs/pre1998bylaws/toronto%20-%20former%20city%20of/1991-0147.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-view-protection-reference",
+    "url": "https://www.toronto.ca/wp-content/uploads/2018/03/9712-City-Planning-Downtown-Tall-Building-Web.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-heritage-record",
+    "url": "https://secure.toronto.ca/HeritagePreservation/details.do?folderRsn=2437345&propertyRsn=211418",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-market-address-reference",
+    "url": "https://www.stlawrencemarket.com/events/event_detail/784/Public%20Markets%20Week%20Tour",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-district-description",
+    "url": "https://www.thedistillerydistrict.com/about/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-study",
+    "url": "https://www.toronto.ca/legdocs/mmis/2016/pb/bgrd/backgroundfile-98819.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-rom-architecture",
+    "url": "https://www.rom.on.ca/about-rom",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-location",
+    "url": "https://www.rom.on.ca/visit/location-parking",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-ago-architectural-description",
+    "url": "https://ago.ca/around-block-audio-description-tour",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-ocad-reference",
+    "url": "https://www.ocadu.ca/events-and-exhibitions/exan-visiting-artist-series-graeme-patterson",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-official-venue",
+    "url": "https://casaloma.ca/project/the-rooms/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-designation",
+    "url": "https://www.toronto.ca/legdocs/bylaws/1998/law0303.htm",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-island-guide",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/things-to-do-on-toronto-island/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-city-access-guidance",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  },
+  {
+    "id": "reference-restricted-vehicle-entry",
+    "url": "https://www.toronto.ca/services-payments/water-environment/tap-water-in-toronto/fast-facts-about-the-citys-water-treatment-plants/",
+    "reviewed": "2026-10-02",
+    "scope": "Official geography, venue, architecture or access reference reviewed for Old Toronto research; no artwork or geometry imported"
+  }
+]

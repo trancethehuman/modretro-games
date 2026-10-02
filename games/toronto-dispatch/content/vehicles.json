@@ -1,0 +1,6 @@
+[
+  {"id":"car","label":"Car","cargo_capacity":2,"passenger_capacity":3,"handling":"Balanced acceleration and braking; first prototype vehicle"},
+  {"id":"truck","label":"Truck","cargo_capacity":6,"passenger_capacity":1,"handling":"Heavy momentum, long braking distance, wide turns"},
+  {"id":"motorcycle","label":"Motorcycle","cargo_capacity":1,"passenger_capacity":0,"handling":"Fast acceleration, compact footprint, vulnerable cargo"},
+  {"id":"scooter","label":"Scooter","cargo_capacity":1,"passenger_capacity":0,"handling":"Low top speed, nimble turns, compact footprint"}
+]
