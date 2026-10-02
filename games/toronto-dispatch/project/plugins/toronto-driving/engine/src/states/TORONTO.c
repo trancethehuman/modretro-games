@@ -94,7 +94,8 @@ static UBYTE td_valid_state(td_state_t *s){
         if(value==1){for(i=0;i<7;i++)if(td_train[i]==(s->transit_origin&63))bits=1;}
         else if(value==2){for(i=0;i<3;i++)if(td_bus[i]==(s->transit_origin&63))bits=1;}
         else bits=(s->transit_origin&63)==10||((s->transit_origin&63)>=20&&(s->transit_origin&63)<=22);
-        if(!bits)return FALSE;bits=0;
+        if(!bits)return FALSE;
+        bits=0;
         if(value==1){for(i=0;i<7;i++)if(td_train[i]==s->transit_target)bits=1;}
         else if(value==2){for(i=0;i<3;i++)if(td_bus[i]==s->transit_target)bits=1;}
         else bits=(s->transit_origin&63)==10?(s->transit_target>=20&&s->transit_target<=22):s->transit_target==10;
@@ -129,7 +130,8 @@ static UBYTE td_restore(void){
     ENABLE_RAM_MBC5;SWITCH_RAM_BANK(3,RAM_BANKS_ONLY);
     va=td_read_slot(0,&a,&sa);vb=td_read_slot(1,&b,&sb);
     SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
-    if(va)va=td_valid_state(&a);if(vb)vb=td_valid_state(&b);
+    if(va)va=td_valid_state(&a);
+    if(vb)vb=td_valid_state(&b);
     if(va||vb){
         if(va&&(!vb||(BYTE)(sa-sb)>=0)){td=a;td_save_slot=0;td_save_seq=sa;}
         else{td=b;td_save_slot=1;td_save_seq=sb;}return TRUE;

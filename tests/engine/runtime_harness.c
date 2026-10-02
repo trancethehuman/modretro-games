@@ -259,7 +259,7 @@ static void test_atomic_saves(void) {
         expect(sram_offsets[count-1]==sram_offsets[0]&&sram_values[count-1]==0x54,
                "save commits its magic byte after every payload and checksum store");
         /* Interrupt after every real store, not a fabricated serializer or image prefix. */
-        for(unsigned cut=1;cut<=count;cut++) {
+        for(volatile unsigned cut=1;cut<=count;cut++) {
             memcpy(td_test_sram,old_image,sizeof(old_image));td=candidate;
             td_save_slot=stable_slot;td_save_seq=stable_seq;
             sram_writes=0;sram_interrupt_after=cut;sram_interrupt_enabled=1;

@@ -2,7 +2,7 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The tested 2026-10-02 handling/save prototype is 262,144 bytes, SHA-256 `9ed8b60ebb73bbbe106eb95e9e3dbd5d14b7f1efa98b7209c6d0c8742c1ae37e`. Native tests cover delivery, walking/car entry, paid ferry pause/reset recovery and saved cancellation. It is a prototype: audio, full Old Toronto and the two-hour gameplay target remain pending. A later source build must use its own new hash and test record.
+The tested 2026-10-02 handling/save prototype is 262,144 bytes, SHA-256 `4db8413ab8ad8f7c20e9f1030632a0abcd323b9d512ddfcd29b77bb1be52e61f`. Native tests cover delivery, walking/car entry, paid ferry pause/reset recovery and saved cancellation. It is a prototype: audio, full Old Toronto and the two-hour gameplay target remain pending. A later source build must use its own new hash and test record.
 
 ## 1. Prepare the computer and console
 
