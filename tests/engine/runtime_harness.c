@@ -29,7 +29,7 @@ BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 UBYTE td_test_sram[8192];
 
 static unsigned failures,checks,stop_reads,ui_draws;
-static unsigned audio_updates,audio_inits;
+static unsigned audio_updates,audio_inits,audio_impacts;
 /* Native compositing has its own actual-source VRAM/OAM harness. */
 void td_aircraft_render_reset(void) {}
 void td_aircraft_render_bind(void) {}
@@ -139,7 +139,7 @@ void td_audio_init(void) {audio_inits++;audio_mode=TD_AUDIO_FULL;audio_active=0;
 void td_audio_update(WORD speed,UBYTE vehicle,UBYTE onfoot,UBYTE braking,UBYTE active) {
     (void)speed;(void)vehicle;(void)onfoot;(void)braking;audio_updates++;audio_active=active;
 }
-void td_audio_play(UBYTE cue) {if(audio_mode!=TD_AUDIO_SILENT)audio_cue=cue;}
+void td_audio_play(UBYTE cue) {if(audio_mode!=TD_AUDIO_SILENT){audio_cue=cue;if(cue==TD_AUDIO_IMPACT)audio_impacts++;}}
 void td_audio_set_mode(UBYTE mode) {audio_mode=mode;}
 UBYTE td_audio_get_mode(void) {return audio_mode;}
 void td_get_street(UWORD u,UWORD v,char *out) { (void)u;(void)v;strcpy(out,"TEST ROAD"); }
@@ -193,7 +193,7 @@ static void reset_case(void) {
     td_session_live=td_transition_pending=test_current_district=test_queue_fail=0;test_queued_district=TD_DISTRICT_NONE;
     td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;
     td_route_district=TD_DISTRICT_NONE;memset(td_traffic_samples,0,sizeof(td_traffic_samples));
-    td_corner_used=0;
+    td_corner_used=td_contact_episode=td_traffic_retreat_mask=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
     stop0_here=authored_content=0;test_queue_calls=test_reset_calls=0;
@@ -203,7 +203,7 @@ static void reset_case(void) {
     td_save_slot=TD_NONE;td_save_seq=0;actors_inactive_head=test_actors_active_head=NULL;actors_len=0;
     sram_writes=sram_interrupt_after=0;sram_interrupt_enabled=0;
     geometry=CLEAR_GROUND;
-    td_audio_init();audio_updates=audio_inits=0;
+    td_audio_init();audio_updates=audio_inits=audio_impacts=0;
     for(unsigned i=0;i<6;i++) { td_traffic_u[i]=30000;td_traffic_v[i]=30000;td_traffic_leg[i]=0;td_ped_route[i]=TD_NONE; }
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_streetcar_runtime_reset();
@@ -1854,6 +1854,275 @@ static void test_streetcar_cue_and_blocked_contact(void) {
            "fully obstructed contact reports BLOCKED and preserves state instead of inventing an unvalidated escape");
 }
 
+static void contact_blocked_case(UBYTE foot) {
+    native_case();td.onfoot=foot;td.job=0;td_get_job(0,&td_job);td.stage=1;td.left=120;
+    td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=12;
+    td_traffic_u[0]=td.u;td_traffic_v[0]=td.v;td_traffic_leg[0]=0;
+    td_traffic_present();
+}
+static void test_contact_episode_and_invalid(void) {
+    for(UBYTE foot=0;foot<2;foot++){
+        contact_blocked_case(foot);td_state_t before=td;
+        for(unsigned frame=0;frame<180;frame++){
+            /* Hold the body pose fixed to isolate a contact episode from
+               timetable departure; real update/motion/cooldown still run. */
+            td.seconds=12;td.subsecond=0;world_tick(foot?J_DOWN:J_A,1);
+        }
+        expect(td.u==before.u&&td.v==before.v&&td.safe_u==before.safe_u&&td.safe_v==before.safe_v&&
+               td.cash==before.cash&&td.left==before.left&&td.stage==before.stage,
+               "persistent genuine BLOCKED contact never teleports or changes fare, deadline or cargo stage");
+        expect(td.health==(foot?100:88)&&audio_impacts==(foot?0:1)&&td_contact_episode,
+               "persistent blocked tram contact gives occupied cargo one impact episode despite expired cooldown");
+        expect(td.msg==(foot?18:5)&&td_traffic_u[0]==before.u&&td_traffic_v[0]==before.v,
+               "blocked cues remain visible and an off-route Queen NPC cannot invent a retreat segment");
+        expect(td.park_u==before.park_u&&td.park_v==before.park_v,
+               "a failed contact separation cannot relocate the parked vehicle");
+        td.u=600*16;td.v=556*16;world_tick(0,1);
+        expect(!td_contact_episode,"only a valid clear contact result releases the impact episode latch");
+        td.u=before.u;td.v=before.v;td.seconds=12;td.subsecond=0;td.cooldown=0;world_tick(0,1);
+        expect(td.health==(foot?100:76)&&audio_impacts==(foot?0:2),
+               "a later independently reacquired blocked contact starts exactly one fresh impact episode");
+    }
+    contact_blocked_case(0);td.u=1;td.safe_u=1;td_traffic_u[0]=1;
+    td_state_t invalid=td;unsigned writes=sram_writes;world_tick(J_A,1);
+    expect(td.health==invalid.health&&!audio_impacts&&sram_writes==writes&&
+           td.u==invalid.u&&td.v==invalid.v&&td_traffic_u[0]==1&&!td_contact_episode,
+           "invalid contact geometry fails closed without inventing cargo damage, save writes or traffic movement");
+    expect(td_streetcar_runtime_recover_contact(2)==TD_STREETCAR_CONTACT_INVALID&&
+           td_streetcar_runtime_recover_contact(1)==TD_STREETCAR_CONTACT_INVALID,
+           "invalid or mismatched contact arguments are distinct from a proven obstructed collision");
+    contact_blocked_case(1);td.mode=TD_WAIT;td.transit_origin=46;td.transit_target=48;
+    td.u=td.safe_u=676*16;td.v=td.safe_v=543*16;td_traffic_v[0]=td.v;td_traffic_present();
+    td_state_t waiting=td;world_tick(0,1);
+    expect(td.mode==TD_WAIT&&td.msg==18&&td.cash==waiting.cash&&td.u==waiting.u&&td.v==waiting.v&&
+           td.transit_origin==waiting.transit_origin&&td.transit_target==waiting.transit_target,
+           "a genuine blocked contact at a valid waiting platform shows its cue without moving, charging or changing the booking");
+    world_tick(J_B,1);
+    expect(td.mode==TD_ROAM&&td.cash==waiting.cash&&!td.ride_left,
+           "a blocked contact cue never prevents deliberate uncharged WAIT cancellation");
+}
+
+static void reverse_retreat_case(void) {
+    native_case();td.onfoot=1;td.u=824*16;td.v=537*16;td.seconds=14;td.subsecond=58;
+    td_traffic_u[4]=824*16;td_traffic_v[4]=536*16;td_traffic_leg[4]=0;
+    td_streetcar_runtime_prepare(0);td_traffic_present();
+}
+static void test_banked_traffic_segments(void) {
+    const UWORD core[6][6][2]={
+        {{840,280},{840,296},{48,296},{48,280}},
+        {{840,392},{840,408},{48,408},{48,392}},
+        {{840,168},{840,184},{48,184},{48,168}},
+        {{840,632},{840,648},{48,648},{48,632}},
+        {{824,792},{808,792},{808,48},{824,48}},
+        {{144,64},{208,64},{208,176},{640,176},{816,176},{816,64}}
+    };
+    native_case();UBYTE legs[6]={0};UWORD from_u,from_v;
+    for(UBYTE slot=0;slot<6;slot++)for(UBYTE leg=0;leg<(slot==5?6:4);leg++){
+        UBYTE count=slot==5?6:4,previous=leg?leg-1:count-1;legs[slot]=leg;
+        UWORD u=core[slot][previous][0]*16,v=core[slot][previous][1]*16;
+        UWORD target_u=core[slot][leg][0]*16,target_v=core[slot][leg][1]*16;
+        UBYTE before[6];memcpy(before,legs,6);td_state_t saved=td;
+        expect(td_streetcar_runtime_traffic_segment(0,slot,count,legs,u,v,target_u,target_v,&from_u,&from_v)&&
+               from_u==u&&from_v==v,
+               "the banked query preserves every authored Core vehicle and bus segment endpoint");
+        expect(td_streetcar_runtime_traffic_segment(0,slot,count,legs,(u+target_u)/2,(v+target_v)/2,
+               target_u,target_v,&from_u,&from_v),"the banked segment query accepts bounded interior route points");
+        expect(!td_streetcar_runtime_traffic_segment(0,slot,count,legs,(u+target_u)/2+16,(v+target_v)/2+16,
+               target_u,target_v,&from_u,&from_v),"a diagonal off-route offset cannot acquire a reverse segment");
+        expect(!memcmp(before,legs,6)&&!memcmp(&td,&saved,58),"banked Core segment queries preserve all caller legs and saved bytes");
+    }
+    for(UBYTE district=1;district<TD_DISTRICT_COUNT;district++){
+        UWORD start_u[6],start_v[6];td_traffic_sample_t target[6],prior[6];
+        expect(td_world_traffic_init(district,start_u,start_v,legs,target),"segment fixture reads real registered district traffic");
+        for(UBYTE slot=0;slot<6;slot++){
+            UBYTE count=target[slot].count;
+            for(UBYTE leg=0;leg<count;leg++){
+                legs[slot]=leg;expect(td_world_traffic_samples(district,legs,target),"segment target comes from actual district route metadata");
+                UBYTE previous_legs[6];memcpy(previous_legs,legs,6);previous_legs[slot]=leg?leg-1:count-1;
+                expect(td_world_traffic_samples(district,previous_legs,prior),"segment predecessor comes from actual route metadata");
+                UBYTE before[6];memcpy(before,legs,6);td_state_t saved=td;
+                expect(td_streetcar_runtime_traffic_segment(district,slot,count,legs,prior[slot].u,prior[slot].v,
+                       target[slot].u,target[slot].v,&from_u,&from_v)&&from_u==prior[slot].u&&from_v==prior[slot].v,
+                       "banked route validation retains actual West, High Park and East predecessor endpoints");
+                expect(!memcmp(before,legs,6)&&!memcmp(&td,&saved,58),"banked district route queries preserve WRAM inputs and saved state");
+            }
+        }
+    }
+    memset(legs,0,6);
+    expect(!td_streetcar_runtime_traffic_segment(TD_DISTRICT_COUNT,0,4,legs,48*16,280*16,840*16,280*16,&from_u,&from_v)&&
+           !td_streetcar_runtime_traffic_segment(0,6,4,legs,48*16,280*16,840*16,280*16,&from_u,&from_v)&&
+           !td_streetcar_runtime_traffic_segment(0,0,2,legs,48*16,280*16,840*16,280*16,&from_u,&from_v),
+           "unknown banked route districts, slots and incompatible Core counts fail closed");
+    expect(!td_streetcar_runtime_traffic_segment(0,0,4,NULL,48*16,280*16,840*16,280*16,&from_u,&from_v)&&
+           !td_streetcar_runtime_traffic_segment(0,0,4,legs,48*16,280*16,840*16,280*16,NULL,&from_v)&&
+           !td_streetcar_runtime_traffic_segment(0,0,4,legs,48*16,280*16,840*16,280*16,&from_u,NULL),
+           "null banked route input/output pointers fail closed");
+}
+static void test_connected_traffic_retreat(void) {
+    /* Native ordinary save/reset reproduced this exact valid cold slot4
+       obstruction without debugger writes: courier824,238; NPC824,240. */
+    native_case();td.onfoot=1;td.u=824*16;td.v=238*16;td.seconds=34;td.subsecond=30;
+    td_traffic_u[4]=824*16;td_traffic_v[4]=240*16;td_traffic_leg[4]=0;td_traffic_present();
+    td_state_t reset_overlap=td;
+    for(unsigned frame=0;frame<120;frame++)world_tick(J_DOWN,1);
+    expect(td.v>reset_overlap.v&&td.u==reset_overlap.u&&td.cash==reset_overlap.cash&&td.health==100&&
+           td_traffic_v[4]>240*16&&td_traffic_leg[4]==0,
+           "the ordinary native cold-reset overlap releases through forward route motion while held walking resumes");
+
+    reverse_retreat_case();td_state_t courier=td;UWORD start=td_traffic_v[4];
+    td_streetcar_pose_t pose;td_streetcar_box_t tram;
+    expect(td_streetcar_pose(td.seconds,td.subsecond,&pose)&&td_streetcar_bounds(&pose,&tram)&&
+           tram.district==0&&tram.left<=824*16+80&&tram.right>=824*16-80,
+           "coherent Core slot4 leg0 meets the actual moving Queen tram at14 seconds58 ticks");
+    expect(!td_streetcar_runtime_traffic_clear(0,824*16,536*16-8),
+           "ordinary future yield alone forbids a still-overlapping half-pixel retreat");
+    td_traffic_step();
+    expect(td_traffic_v[4]==start-8&&td_traffic_u[4]==824*16&&td_traffic_leg[4]==0,
+           "a courier behind a real vertical-route NPC selects a bounded reverse step that separates from both bodies");
+    UWORD previous=td_traffic_v[4];
+    for(unsigned step=0;step<40;step++){
+        td_traffic_step();
+        expect(td_traffic_v[4]<=previous&&previous-td_traffic_v[4]<=8,
+               "a connected retreat never accelerates, oscillates, or leaves its authored segment");
+        previous=td_traffic_v[4];
+    }
+    td_traffic_present();
+    expect(!td_traffic_retreat_mask&&td_traffic_free(td.u,td.v)&&td_distance(td.v,actors[6].pos.y>>1)>=180&&
+           td_traffic_leg[4]==0&&actors[6].frame_start==2&&actors[6].pos.x==824*32,
+           "retreat clears both cached walking and rounded actor recovery margins without changing route leg or facing");
+    expect(td_streetcar_runtime_recover_contact(1)==TD_STREETCAR_PARK_MOVED&&
+           td_streetcar_runtime_foot_clear(td.u,td.v)&&td.cash==courier.cash&&td.health==courier.health,
+           "after the coherent NPC retreats the real connected contact solver releases the walker safely");
+
+    native_case();td.onfoot=1;td.u=409*16;td.v=280*16;
+    td_traffic_u[0]=400*16;td_traffic_v[0]=280*16;td_traffic_leg[0]=0;
+    expect(td_distance(td.u,td_traffic_u[0])==144&&!td_traffic_free(td.u,td.v),
+           "a9px courier offset exceeds an8.5px visible-body margin but remains inside the actual10.5px walking exclusion");
+    for(unsigned step=0;step<40;step++)td_traffic_step();
+    expect(td_traffic_u[0]<400*16&&td_traffic_free(td.u,td.v)&&!td_traffic_retreat_mask,
+           "a9px existing obstruction retreats until usable walking space clears instead of requiring visual overlap");
+    UWORD walker=td.u;driving_tick(J_RIGHT);
+    expect(td.u>walker,"walking resumes after an ordinary connected NPC retreat");
+
+    for(UBYTE obstacle=0;obstacle<4;obstacle++){
+        reverse_retreat_case();start=td_traffic_v[4];
+        if(obstacle==0){td.park_u=824*16;td.park_v=535*16;}
+        if(obstacle==1){td_traffic_u[0]=824*16;td_traffic_v[0]=535*16;}
+        if(obstacle==2){actors[9].pos.x=824*32;actors[9].pos.y=535*32;}
+        if(obstacle==3)geometry=EAST_WALL;
+        td_traffic_step();
+        expect(td_traffic_v[4]==start,"retreat retains parked-car, other-vehicle, visible pedestrian and full-road guards");
+    }
+    native_case();td.onfoot=1;td.u=57*16;td.v=280*16;
+    td_traffic_u[0]=48*16;td_traffic_v[0]=280*16;td_traffic_step();
+    expect(td_traffic_u[0]==48*16,"a reverse retreat cannot drive beyond its authored segment endpoint");
+    native_case();td.onfoot=1;td.u=545*16;td.v=280*16;td.seconds=7;
+    td_traffic_u[0]=536*16;td_traffic_v[0]=280*16;td_traffic_step();
+    expect(td_traffic_u[0]==536*16,"an overlapping courier does not waive an existing red-signal stop guard");
+    reverse_retreat_case();td.u=824*16;td.v=549*16;start=td_traffic_v[4];td_traffic_step();
+    expect(td_traffic_v[4]==start&&!td_traffic_retreat_mask,
+           "incoming traffic inside13px but outside the actual walking exclusion still yields without an escape exception");
+    expect(!td_streetcar_runtime_traffic_retreat(0,824*16,536*16,824*16+8,536*16+8)&&
+           !td_streetcar_runtime_traffic_retreat(0,824*16,536*16,824*16,536*16-9)&&
+           !td_streetcar_runtime_traffic_retreat(0,65535,536*16,65527,536*16),
+           "diagonal, oversized and invalid-geometry traffic retreat requests fail closed");
+}
+
+static int retreat_future_oracle(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v) {
+    for(unsigned ticks=0;ticks<=60;ticks++){
+        unsigned phase=td.subsecond+ticks;td_streetcar_pose_t pose;
+        if(!td_streetcar_pose((UWORD)(td.seconds+phase/60),phase%60,&pose))return 0;
+        if(pose.district!=district)continue;
+        if((u>old_u&&old_u<pose.u)||(u<old_u&&old_u>pose.u)||
+           (v>old_v&&old_v<pose.v)||(v<old_v&&old_v>pose.v))return 0;
+        long old_distance=labs((long)old_u-pose.u)+labs((long)old_v-pose.v);
+        long new_distance=labs((long)u-pose.u)+labs((long)v-pose.v);
+        if(new_distance<=old_distance)return 0;
+        long hx=(pose.heading&4?6:14)*16,hy=(pose.heading&4?14:6)*16;
+        int old_hit=(long)old_u+80>=pose.u-hx&&(long)old_u-80<=pose.u+hx-1&&
+                    (long)old_v+80>=pose.v-hy&&(long)old_v-80<=pose.v+hy-1;
+        int new_hit=(long)u+80>=pose.u-hx&&(long)u-80<=pose.u+hx-1&&
+                    (long)v+80>=pose.v-hy&&(long)v-80<=pose.v+hy-1;
+        if(new_hit&&!old_hit)return 0;
+    }
+    return 1;
+}
+static void test_retreat_future_truth(void) {
+    const WORD offsets[3][2]={{0,0},{64,-64},{-64,64}};
+    native_case();unsigned allowed=0,rejected=0;
+    for(unsigned phase=0;phase<3840;phase++){
+        td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;td_streetcar_pose_t current;
+        expect(td_streetcar_pose(td.seconds,td.subsecond,&current),"retreat oracle spans every native route pose through rollover");
+        for(unsigned offset=0;offset<3;offset++)for(unsigned direction=0;direction<4;direction++){
+            UWORD old_u=current.u+offsets[offset][0],old_v=current.v+offsets[offset][1];
+            UWORD u=old_u+(direction==0?8:direction==1?-8:0),v=old_v+(direction==2?8:direction==3?-8:0);
+            td_state_t before=td;int expected=retreat_future_oracle(current.district,old_u,old_v,u,v);
+            UBYTE actual=td_streetcar_runtime_traffic_retreat(current.district,old_u,old_v,u,v);
+            expect(actual==expected,"optimized band proof and bend fallback match independent wide-arithmetic future-body retreat truth");
+            expect(!memcmp(&td,&before,58),"rare traffic depenetration queries do not modify saved gameplay state");
+            if(actual)allowed++;else rejected++;
+        }
+    }
+    expect(allowed&&rejected,"future retreat oracle exercises accepted separation and refused approaching directions");
+}
+
+static int landing_body_oracle(UBYTE district,UWORD u,UWORD v,const td_streetcar_pose_t *pose) {
+    if(district>=TD_DISTRICT_COUNT||u<48||v<48||u+48>=1024*16||v+48>=976*16)return 0;
+    for(unsigned y=((v>>4)-3)>>3;y<=((v>>4)+3)>>3;y++)
+        for(unsigned x=((u>>4)-3)>>3;x<=((u>>4)+3)>>3;x++)if(district_tile(district,x,y)&15)return 0;
+    if(district!=pose->district)return 1;
+    unsigned hx=(pose->heading&4?6:14)*16,hy=(pose->heading&4?14:6)*16;
+    return u+48<pose->u-hx||u-48>pose->u+hx-1||v+48<pose->v-hy||v-48>pose->v+hy-1;
+}
+static void test_booked_landing_and_held_occupancy(void) {
+    const WORD du[9]={0,192,-192,0,0,288,-288,0,0};
+    const WORD dv[9]={0,0,0,192,-192,0,0,288,-288};
+    for(UBYTE target=43;target<51;target++)for(UBYTE direction=0;direction<2;direction++){
+        if((target==43&&!direction)||(target==50&&direction))continue;
+        native_case();td.onfoot=1;td.mode=TD_RIDE;td.transit_origin=direction?50:43;td.transit_target=target;
+        td.ride_left=0;td.cash=27;td_get_stop(target,&td_cursor);td_streetcar_pose_t booked;
+        expect(td_streetcar_destination(td.transit_origin,target,&booked),"every legal endpoint direction derives explicit booked doors");
+        for(unsigned point=0;point<9;point++){
+            UWORD u=td_cursor.u*16+du[point],v=td_cursor.v*16+dv[point];td_state_t before=td;
+            expect(td_streetcar_runtime_landing_clear(td_cursor.district,u,v)==landing_body_oracle(td_cursor.district,u,v,&booked),
+                   "first-arrival landing tests full native foot terrain and explicit directional tram body before HOLD/prepare");
+            expect(!memcmp(&td,&before,58),"booked landing queries leave every paid-origin and save byte unchanged");
+        }
+        td.reserved=TD_STREETCAR_HOLD;td.ride_left=1;
+        for(unsigned phase=0;phase<3840;phase++){
+            td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;
+            td_state_t before=td;
+            expect(!td_streetcar_runtime_traffic_clear(booked.district,booked.u,booked.v),
+                   "a held paid tram occupies exactly its booked destination body throughout timetable and16-bit clock rollover");
+            expect(td_streetcar_runtime_traffic_clear(booked.district,booked.u,booked.v+20*16),
+                   "held traffic is clear20px beside booked doors without a phantom autonomous tram");
+            td_streetcar_pose_t autonomous;
+            expect(td_streetcar_pose(td.seconds,td.subsecond,&autonomous),"held occupancy fixture retains the independent autonomous clock");
+            int overlaps_booked=autonomous.district==booked.district&&autonomous.u+80>=booked.u-224&&
+                autonomous.u-80<=booked.u+223&&autonomous.v+80>=booked.v-96&&autonomous.v-80<=booked.v+95;
+            expect(td_streetcar_runtime_traffic_clear(autonomous.district,autonomous.u,autonomous.v)==!overlaps_booked,
+                   "the autonomous phase never adds a second phantom traffic body during a booked destination hold");
+            expect(!memcmp(&td,&before,58),"held occupancy queries preserve fare, origin, clock, cargo and serialized layout");
+        }
+        for(UBYTE menu=0;menu<3;menu++){
+            td.mode=menu==0?TD_HELP:menu==1?TD_PAUSE:TD_MAP;td_resume_mode=TD_RIDE;
+            expect(!td_streetcar_runtime_traffic_clear(booked.district,booked.u,booked.v),
+                   "restored HELP, PAUSE and MAP held rides retain booked body occupancy through effective resumeRIDE");
+        }
+    }
+    queen_runtime_case(0);advance_queen_to_east_view();apply_queued_scene();td.ride_left=1;
+    const UWORD blockers[4][2]={{128,556},{140,556},{116,556},{128,568}};
+    for(unsigned i=0;i<4;i++){td_traffic_u[i]=blockers[i][0]*16;td_traffic_v[i]=blockers[i][1]*16;}
+    td_state_t paid=td;td_second();
+    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.reserved==TD_STREETCAR_HOLD&&td.cash==paid.cash&&
+           td.u==paid.u&&td.v==paid.v&&td.district==paid.district,
+           "when other endpoints are occupied the north12/18px fallback cannot put the courier inside booked Saulter tram doors");
+    for(unsigned i=0;i<6;i++)td_traffic_u[i]=td_traffic_v[i]=30000;
+    td_second();
+    expect(td.mode==TD_ROAM&&td.district==3&&td.u==128*16&&td.v==556*16&&!td.reserved&&td.cash==paid.cash,
+           "a blocked first arrival commits one safe landing after clearance without charging the paid fare again");
+}
+
 static void test_streetcar_native_q5_bounds(void) {
     native_case();td_streetcar_bound=td_streetcar_valid=1;
     unsigned bad_pose=0,bad_size=0,bad_scaled=0,bad_state=0;UBYTE headings=0;
@@ -2004,6 +2273,7 @@ int main(void) {
     test_queen_hold_v7_recovery_and_invalid_flags();
     test_displaced_streetcar_wait();
     test_streetcar_cue_and_blocked_contact();
+    test_contact_episode_and_invalid();test_banked_traffic_segments();test_connected_traffic_retreat();test_retreat_future_truth();test_booked_landing_and_held_occupancy();
     test_streetcar_native_q5_bounds();
     test_traffic_lookahead_truth();test_sweep_section_scan_equivalence();
     test_aircraft_world_freezing();

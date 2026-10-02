@@ -125,6 +125,16 @@ These are source implementation decisions within the accepted autonomous-transit
 - Four gameplay scenes carry an empty aircraft resource loader. Core, west and east use stock actor slot 2; High Park uses slot 1 because it has no Queen loader. Cache and remove the loader before ordinary actor clones; retain the 16-slot Toronto actor pool.
 - A project-local override of pinned GBVM `src/core/actor.c` adds restore-entry/render-exit hooks. Preserve its upstream MIT notice and source provenance alongside the original renderer. Check combined aircraft/shadow capacity first, falling back to aircraft alone when the shadow cannot fit; compute roof-mask screen anchors once per priority tile. Compiled budgets, scoped native flyby/roof/map, delivery, transit, scene and reset evidence belong in [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md). Crowded performance, human readability and physical cartridge acceptance remain pending.
 
+## Contact and booked-arrival correction policy, 2026-10-02
+
+This is an engineering correction within the accepted traffic/transit design. The source passes host checks and the official native build. Ordinary-control recordings on `14005662…` verify a reachable save-load walker recovery, three paid Queen journeys with paid reset/map freezing, flybys and a delivery/driving sample. Native forced-HOLD/blocked-alighting and crowded performance remain separate pending gates.
+
+- Derive the booked Queen destination body directly for every alighting candidate, including the first failed arrival before its HOLD flag exists. Check the courier's full foot body and retain connected ground, parked-car and loaded-traffic checks. If no landing is safe, retain the paid ride without another fare or an unchecked teleport.
+- A paid HOLD must use the same booked tram body for traffic occupancy as its visible destination doors. Ordinary autonomous traffic retains its future-sweep guard.
+- Handle both successful and blocked contact recovery with a visible warning and one impact episode until the contact clears. Preserve occupied cargo penalties, checkpoint/fare semantics and WAIT proximity checks; a displaced wait cancels before charging.
+- Permit only small, validated retreat steps for traffic already overlapping the courier's conservative walking exclusion. Keep actor positions, cached positions and authored route segments coherent. Require increasing separation and road, parked-car, other-actor and tram clearance; any exception for an existing tram overlap must itself prove monotonic escape. Incoming traffic still yields. Invalid/off-route geometry fails closed.
+- Source fixtures must use actual registered routes and coherent actor/cache/leg state. An arbitrary obstruction proves a fail-closed branch, not ordinary native reachability. Native replays use ordinary controls on the exact corrected ROM.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

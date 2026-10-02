@@ -186,6 +186,84 @@ static void read_window_text(unsigned y,char out[21]) {
     out[20]=0;
 }
 
+static void expect_window_text(unsigned row,const char *text,const char *name) {
+    char actual[21],expected[21];size_t length=strlen(text);
+    expect(row<18&&length<=20,"HUD fixture text fits its native twenty-column row");
+    if(row>=18||length>20)return;
+    memset(expected,' ',20);memcpy(expected,text,length);expected[20]=0;
+    read_window_text(row,actual);expect(!strcmp(actual,expected),name);
+}
+
+static void test_wait_contact_hud_and_map_restore(void) {
+    /* Fixed output examples exercise the shared WAIT layout, not another
+     * timetable oracle. Transit arithmetic has its own independent suite. */
+    const struct {UBYTE origin,target,wait;UWORD seconds;const char *service;} cases[]={
+        {46,48,62,14,"501 QUEEN"},
+        {46,44,62,50,"501 QUEEN"},
+        {0,12,16,2,"LINE 1 TRAIN"},
+        {80,19,22,6,"94 WELLESLEY BUS"},
+        {10,20,28,2,"ISLAND FERRY"}
+    };
+    for(unsigned fixture=0;fixture<sizeof(cases)/sizeof(cases[0]);fixture++) {
+        reset_case();td.mode=td_resume_mode=TD_WAIT;td.transit_origin=cases[fixture].origin;
+        td.transit_target=cases[fixture].target;td.seconds=cases[fixture].seconds;
+        td.ride_left=0;td.msg=0;strcpy(td_cursor.name,"BOOKED DESTINATION");
+        game_snapshot_t before=snapshot_game();char countdown[21];
+        td_ui_draw();
+        sprintf(countdown,"DEPARTS IN %u SEC",cases[fixture].wait);
+        expect_window_text(0,countdown,"ordinary WAIT retains its actual departure countdown");
+        expect_window_text(1,cases[fixture].service,"ordinary WAIT identifies its booked service");
+        expect_window_text(2,"B CANCEL WAIT","ordinary WAIT retains its cancellation action");
+        expect_game_unchanged(&before);
+
+        td.msg=18;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,countdown,"contact cue leaves the departure countdown visible in row0");
+        expect_window_text(1,"TRAM: STEP CLEAR","blocked WAIT visibly gives the complete contact cue in row1");
+        expect_window_text(2,"B CANCEL WAIT","contact cue preserves B cancellation in row2");
+        expect(window_x==0&&window_y==120,"WAIT contact keeps the native three-row lower HUD");
+        UBYTE bounded=1;
+        for(unsigned row=0;row<3;row++)for(unsigned column=0;column<20;column++)
+            if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+               window_tiles[1][row][column]!=15)bounded=0;
+        expect(bounded,"WAIT contact rows use bounded font tiles and the existing native palette/bank");
+        expect_game_unchanged(&before);
+
+        /* A contact message must not make the countdown stale as the caller
+         * advances the world clock, or mutate the unpaid booking itself. */
+        td.seconds++;before=snapshot_game();td_ui_draw();
+        sprintf(countdown,"DEPARTS IN %u SEC",cases[fixture].wait-1);
+        expect_window_text(0,countdown,"departure countdown refreshes while contact cue remains visible");
+        expect_window_text(1,"TRAM: STEP CLEAR","countdown refresh cannot erase the outstanding contact cue");
+        expect_game_unchanged(&before);
+
+        if(fixture==0) {
+            UBYTE original_hud[2][3][20];
+            memcpy(original_hud[0],window_tiles[0],sizeof(original_hud[0]));
+            memcpy(original_hud[1],window_tiles[1],sizeof(original_hud[1]));
+            game_snapshot_t waiting=snapshot_game();
+            UWORD saved_x=camera_x,saved_y=camera_y;UBYTE settings=camera_settings;
+            td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();expect_game_unchanged(&before);
+            td.mode=TD_MAP;before=snapshot_game();td_map_open();td_ui_draw();td_map_update(0,0);
+            expect_game_unchanged(&before);
+            td_map_close();
+            expect(camera_x==saved_x&&camera_y==saved_y&&camera_settings==settings,
+                   "paused WAIT map restores its actual captured gameplay camera");
+            td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();expect_game_unchanged(&before);
+            td.mode=TD_WAIT;td_ui_draw();
+            expect(!memcmp(original_hud[0],window_tiles[0],sizeof(original_hud[0]))&&
+                   !memcmp(original_hud[1],window_tiles[1],sizeof(original_hud[1])),
+                   "return from a partial atlas repaint restores the exact countdown/contact/cancel HUD");
+            expect_game_unchanged(&waiting);
+        }
+
+        td.msg=0;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,countdown,"clearing contact preserves the current departure countdown");
+        expect_window_text(1,cases[fixture].service,"clearing contact restores service identity without stale cue pixels");
+        expect_window_text(2,"B CANCEL WAIT","cleared WAIT still exposes its cancellation action");
+        expect_game_unchanged(&before);
+    }
+}
+
 static void test_every_viewport(void) {
     reset_case();open_case();game_snapshot_t before=snapshot_game();unsigned viewports=0;
     verify_marker_patterns();
@@ -442,6 +520,7 @@ int main(void) {
     test_paid_transit_objective_context();test_interrupt_restore_and_idempotence();
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();
     test_sparse_table_full_and_single_holes();
+    test_wait_contact_hud_and_map_restore();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

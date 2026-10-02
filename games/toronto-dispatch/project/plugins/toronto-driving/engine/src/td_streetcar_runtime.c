@@ -5,6 +5,7 @@
 #include "td_game.h"
 #include "td_transit.h"
 #include "td_district.h"
+#include "td_world.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "gbs_types.h"
@@ -62,6 +63,13 @@ static UBYTE td_streetcar_runtime_clear(UWORD u,UWORD v,UWORD half,UBYTE distric
     if(td.subsecond>=60||!td_streetcar_runtime_box(u,v,half,half,district,&box))return FALSE;
     return !td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(td.seconds,td.subsecond,elapsed,&box)==TD_STREETCAR_CLEAR;
+}
+static UBYTE td_streetcar_runtime_held(void){
+    return td_streetcar_runtime_mode()==TD_RIDE&&(td.reserved&TD_STREETCAR_HOLD);
+}
+static UBYTE td_streetcar_runtime_held_body(td_streetcar_pose_t *pose,td_streetcar_box_t *body){
+    return td_streetcar_destination(td.transit_origin,td.transit_target,pose)&&
+        td_streetcar_bounds(pose,body);
 }
 
 void td_streetcar_runtime_reset(void) BANKED {
@@ -174,12 +182,100 @@ UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v) BA
         td_streetcar_sweep(td.seconds,td.subsecond,td_streetcar_elapsed,&box)==TD_STREETCAR_CLEAR);
 }
 UBYTE td_streetcar_runtime_traffic_clear(UBYTE district,UWORD u,UWORD v) BANKED {
-    td_streetcar_box_t box;UWORD future=td.seconds+1;
+    td_streetcar_box_t box,body;td_streetcar_pose_t pose;UWORD future=td.seconds+1;
     if(td.subsecond>=60||!td_streetcar_runtime_box(u,v,5*16,5*16,district,&box))return FALSE;
+    if(td_streetcar_runtime_held())return td_streetcar_runtime_held_body(&pose,&body)&&
+        !td_streetcar_runtime_overlap(&box,&body);
     /* Yield before entering the rails, not only after the tram swept past.
      * The one-second future interval remains exact across clock rollover. */
     return !td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(future,td.subsecond,60,&box)==TD_STREETCAR_CLEAR;
+}
+UBYTE td_streetcar_runtime_traffic_segment(UBYTE district,UBYTE slot,UBYTE count,
+    const UBYTE *current_legs,UWORD u,UWORD v,UWORD target_u,UWORD target_v,
+    UWORD *from_u,UWORD *from_v) BANKED {
+    static const UWORD core_rows[]={288,400,176,640};
+    static const UWORD bus_u[]={144,208,208,640,816,816};
+    static const UWORD bus_v[]={64,64,176,176,176,64};
+    UBYTE previous,leg,legs[6];td_traffic_sample_t samples[6];
+    if(district>=TD_DISTRICT_COUNT||slot>=6||!current_legs||!from_u||!from_v||count<2)return FALSE;
+    leg=current_legs[slot];if(leg>=count)return FALSE;
+    previous=leg?leg-1:count-1;
+    if(district){
+        memcpy(legs,current_legs,sizeof(legs));legs[slot]=previous;
+        if(!td_world_traffic_samples(district,legs,samples))return FALSE;
+        if(samples[slot].count!=count)return FALSE;
+        *from_u=samples[slot].u;*from_v=samples[slot].v;
+    }else if(slot<4){
+        if(count!=4)return FALSE;
+        *from_u=(previous<2?840:48)*16;
+        *from_v=(core_rows[slot]+(previous==0||previous==3?-8:8))*16;
+    }else if(slot==4){
+        if(count!=4)return FALSE;
+        *from_u=(previous==0||previous==3?824:808)*16;*from_v=(previous<2?792:48)*16;
+    }else{
+        if(count!=6)return FALSE;
+        *from_u=bus_u[previous]*16;*from_v=bus_v[previous]*16;
+    }
+    /* Off-route coordinates never acquire a new escape route. A reverse
+       step remains on this segment without changing its cached leg/frame. */
+    if(*from_u==target_u)return u==target_u&&
+        v>=(*from_v<target_v?*from_v:target_v)&&v<=(*from_v>target_v?*from_v:target_v);
+    if(*from_v==target_v)return v==target_v&&
+        u>=(*from_u<target_u?*from_u:target_u)&&u<=(*from_u>target_u?*from_u:target_u);
+    return FALSE;
+}
+UBYTE td_streetcar_runtime_traffic_retreat(UBYTE district,UWORD old_u,UWORD old_v,
+                                        UWORD u,UWORD v) BANKED {
+    td_streetcar_box_t old_box,box,body,guard;td_streetcar_pose_t pose;
+    UBYTE held=td_streetcar_runtime_held(),tick,sub;UWORD second,old_distance,new_distance;
+    if(td.subsecond>=60||!td_streetcar_runtime_box(old_u,old_v,80,80,district,&old_box)||
+       !td_streetcar_runtime_box(u,v,80,80,district,&box)||
+       !((old_u==u&&old_v!=v&&td_streetcar_runtime_distance(old_v,v)<=8)||
+         (old_v==v&&old_u!=u&&td_streetcar_runtime_distance(old_u,u)<=8)))return FALSE;
+    if(td_streetcar_runtime_traffic_clear(district,u,v))return TRUE;
+    if(held){if(!td_streetcar_runtime_held_body(&pose,&body))return FALSE;}
+    else if(!td_streetcar_pose(td.seconds,td.subsecond,&pose)||!td_streetcar_bounds(&pose,&body))return FALSE;
+    /* Incoming traffic never receives this exception. Only an actual,
+       validated old-body overlap can escape the normal future rail guard. */
+    if(!td_streetcar_runtime_overlap(&old_box,&body))return FALSE;
+    if(u>old_u?old_u<pose.u:u<old_u?old_u>pose.u:v>old_v?old_v<pose.v:old_v>pose.v)return FALSE;
+    old_distance=td_streetcar_runtime_distance(old_u,pose.u)+td_streetcar_runtime_distance(old_v,pose.v);
+    new_distance=td_streetcar_runtime_distance(u,pose.u)+td_streetcar_runtime_distance(v,pose.v);
+    if(new_distance<=old_distance)return FALSE;
+    if(held)return TRUE;
+    /* The usual cross-street retreat is perpendicular to a straight tram.
+       Two exact swept half-plane queries prove the entire future body stays
+       in its current band. Moving outward then increases separation from
+       every intermediate pose and cannot introduce a new tram overlap.
+       This avoids61 banked pose samples on that native common path. */
+    guard.left=guard.top=0;guard.right=1024*16-1;guard.bottom=976*16-1;guard.district=district;
+    if(old_u==u&&!(pose.heading&4)){
+        guard.bottom=body.top-1;
+        if(td_streetcar_sweep((UWORD)(td.seconds+1),td.subsecond,60,&guard)==TD_STREETCAR_CLEAR){
+            guard.top=body.bottom+1;guard.bottom=976*16-1;
+            if(td_streetcar_sweep((UWORD)(td.seconds+1),td.subsecond,60,&guard)==TD_STREETCAR_CLEAR)return TRUE;
+        }
+    }else if(old_v==v&&(pose.heading&4)){
+        guard.right=body.left-1;
+        if(td_streetcar_sweep((UWORD)(td.seconds+1),td.subsecond,60,&guard)==TD_STREETCAR_CLEAR){
+            guard.left=body.right+1;guard.right=1024*16-1;
+            if(td_streetcar_sweep((UWORD)(td.seconds+1),td.subsecond,60,&guard)==TD_STREETCAR_CLEAR)return TRUE;
+        }
+    }
+    second=td.seconds;sub=td.subsecond;
+    for(tick=0;tick<=60;tick++){
+        if(!held&&(!td_streetcar_pose(second,sub,&pose)||!td_streetcar_bounds(&pose,&body)))return FALSE;
+        if(pose.district==district){
+            if(u>old_u?old_u<pose.u:u<old_u?old_u>pose.u:v>old_v?old_v<pose.v:old_v>pose.v)return FALSE;
+            old_distance=td_streetcar_runtime_distance(old_u,pose.u)+td_streetcar_runtime_distance(old_v,pose.v);
+            new_distance=td_streetcar_runtime_distance(u,pose.u)+td_streetcar_runtime_distance(v,pose.v);
+            if(new_distance<=old_distance)return FALSE;
+            if(td_streetcar_runtime_overlap(&box,&body)&&!td_streetcar_runtime_overlap(&old_box,&body))return FALSE;
+        }
+        if(++sub==60){sub=0;second++;}
+    }
+    return TRUE;
 }
 UBYTE td_streetcar_runtime_parking_allowed(UBYTE district,UWORD u,UWORD v) BANKED {
     return td_streetcar_runtime_clear(u,v,5*16,district,TD_STREETCAR_PERIOD_TICKS);
@@ -208,6 +304,14 @@ static UBYTE td_streetcar_runtime_scene(UBYTE district,scene_t *scene){
     if(!td_district_scene(district,&ref))return FALSE;
     MemcpyBanked(scene,ref.ptr,sizeof(*scene),ref.bank);
     return scene->width==128&&scene->height==122&&scene->collisions.ptr!=NULL;
+}
+UBYTE td_streetcar_runtime_landing_clear(UBYTE district,UWORD u,UWORD v) BANKED {
+    scene_t scene;td_streetcar_box_t box,body;td_streetcar_pose_t pose;
+    if(!td_streetcar_runtime_box(u,v,48,48,district,&box)||
+       !td_streetcar_runtime_scene(district,&scene)||!td_streetcar_runtime_terrain(&scene,u,v,1))return FALSE;
+    if(td.transit_origin<TD_TRANSIT_QUEEN_FIRST||
+       td.transit_origin>=TD_TRANSIT_QUEEN_FIRST+TD_TRANSIT_QUEEN_COUNT)return TRUE;
+    return td_streetcar_runtime_held_body(&pose,&body)&&!td_streetcar_runtime_overlap(&box,&body);
 }
 static UBYTE td_streetcar_runtime_others(UBYTE district,UWORD u,UWORD v,UBYTE foot){
     UBYTE i;UWORD radius;
@@ -299,12 +403,12 @@ static UBYTE td_streetcar_runtime_separate(const scene_t *scene,const td_streetc
 UBYTE td_streetcar_runtime_recover_contact(UBYTE onfoot) BANKED {
     scene_t scene;td_streetcar_pose_t pose;td_streetcar_box_t tram,body;
     WORD radius,dx,dy;UWORD u,v;
-    if(onfoot>1||onfoot!=td.onfoot)return TD_STREETCAR_PARK_BLOCKED;
+    if(onfoot>1||onfoot!=td.onfoot)return TD_STREETCAR_CONTACT_INVALID;
     if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT)return TD_STREETCAR_PARK_UNCHANGED;
     if(!td_streetcar_pose(td.seconds,td.subsecond,&pose)||!td_streetcar_bounds(&pose,&tram)||
-       !td_streetcar_runtime_box(td.u,td.v,onfoot?3*16:5*16,onfoot?3*16:5*16,td.district,&body))return TD_STREETCAR_PARK_BLOCKED;
+       !td_streetcar_runtime_box(td.u,td.v,onfoot?3*16:5*16,onfoot?3*16:5*16,td.district,&body))return TD_STREETCAR_CONTACT_INVALID;
     if(!td_streetcar_runtime_overlap(&tram,&body))return TD_STREETCAR_PARK_UNCHANGED;
-    if(!td_streetcar_runtime_scene(td.district,&scene))return TD_STREETCAR_PARK_BLOCKED;
+    if(!td_streetcar_runtime_scene(td.district,&scene))return TD_STREETCAR_CONTACT_INVALID;
     /* Manhattan rings visit the nearest connected4px-grid escape first.
      * Four axes are included; mixed candidates handle a blocked corner. */
     for(radius=4;radius<=48;radius+=4)for(dx=-radius;dx<=radius;dx+=4){

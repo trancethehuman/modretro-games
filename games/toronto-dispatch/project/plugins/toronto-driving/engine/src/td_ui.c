@@ -179,7 +179,10 @@ void td_ui_draw(void) BANKED {
         ui_set_pos(0,120);
         if(td.mode==TD_WAIT){
             wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
-            sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);td_transit_label(td.transit_origin,td_line);td_row(1,td_line);td_row(2,"B CANCEL WAIT");return;
+            sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);
+            if(td.msg==18)td_row(1,"TRAM: STEP CLEAR");
+            else{td_transit_label(td.transit_origin,td_line);td_row(1,td_line);}
+            td_row(2,"B CANCEL WAIT");return;
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         if(td.msg){

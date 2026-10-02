@@ -2,9 +2,9 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The latest locally tested source candidate is **524,288 bytes**, SHA-256 `20370fea5661e2b9789bf6b1f77dc84535f06348698e2de3e6652f013a5ae189`, named `toronto-aircraft-portable.gbc`. It includes the pickup-condition correction, moving Queen streetcar and occasional planes/helicopters. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is the earlier `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include these later changes. Use each file's own checksum and testing record.
+The latest locally tested source candidate is **524,288 bytes**, SHA-256 `1400566247fddfa9a1acd5ef42e5f90bb19db9caa43a51fab0ce82400caa137f`, named `toronto-contact-recovery.gbc`. It includes the pickup-condition correction, moving Queen streetcar, occasional planes/helicopters and the traffic/arrival correction. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is the earlier `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include these later changes. Use each file's own checksum and testing record.
 
-The current source retains four linked compressed districts, 88 contracts, 51 service points, the city map and scheduled subway/bus/ferry/Queen travel. Queen's $3 timetable is fictional. This candidate has fresh native samples of a plane, both helicopter rotor poses, separated shadows, exact paused-map freezing, a delivery and positive-speed steering with reverse recovery. The preceding `8e7af3ec…` candidate retains its separate roof restoration, three paid Queen trips, all four loaded scenes and game-button delivery-save recovery samples. The portability rebuild differs only in four stock save-signature bytes and one global-checksum byte; its source identity and replay remain separately recorded. Official build/header/memory, sanitizer and generated-source checks pass. Native flybys still add some rendering cost, and crowded-scene performance needs further work. Earlier cargo-damage, paid-reset and legacy train/bus/ferry results retain their own build identities in [TESTING.md](../TESTING.md).
+The current source retains four linked compressed districts, 88 contracts, 51 service points, the city map and scheduled subway/bus/ferry/Queen travel. Queen's $3 timetable is fictional. Three fresh scoped native passes cover an ordinary save-load walker overlap recovering without lost cash/condition, three paid Queen trips with a genuine paid-ride reset and exact map freezing, plane/helicopter rotor poses and shadows, plus first delivery/steering/braking/reverse recovery. Official build/header/compiled frames and a 1,176-byte static reserve pass, alongside sanitizer/content checks. The preceding `20370fea…` aircraft candidate has a newly reproduced walker trap and remains historical. Earlier roof, legacy-service, all-scene and other tests keep their own identities in [TESTING.md](../TESTING.md). Booked HOLD and blocked-alighting corrections have host coverage; forced native cases and crowded CPU/handheld acceptance remain open.
 
 The new candidate uses save version 7 with the same 58-byte state and reads valid older checkpoints. Prototype 6 uses version 6 and cannot read rewritten version-7 records once both saved slots have been replaced. Preserve existing cartridge saves through the supported backup workflow before testing a newer build.
 
@@ -26,22 +26,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-aircraft-portable.gbc
+games/toronto-dispatch/project/build/toronto-contact-recovery.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-aircraft-portable.gbc` with matching debug artifacts, run the documented native memory and compiled-frame guards, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-contact-recovery.gbc` with matching debug artifacts, run the documented native memory and compiled-frame guards, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-aircraft-portable.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-aircraft-portable.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-contact-recovery.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-contact-recovery.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

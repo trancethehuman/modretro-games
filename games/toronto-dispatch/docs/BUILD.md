@@ -1,6 +1,6 @@
 # Native build and preview
 
-Updated 2026-10-02. Current portability candidate `20370fea…` passes the official build, full local source checks, compiled/header/memory gates and a fresh scoped delivery/driving/plane/helicopter/shadow/map replay. It corrects a GCC formatting warning with `-Werror` retained; hosted GNU CI passes at source-fix commit `3a1869a`. Earlier `8e7af3ec…` retains its separate roof/transit/all-scene/button-reset samples below. The three contact/held-arrival/alighting branches and broader crowded performance remain pending. Downloadable Prototype 6 is the separate earlier `23b2a7a2…` timetable/safe-alighting ROM. [LOADING.md](LOADING.md) distinguishes source candidates from published binaries. Four compressed scenes, 88 contracts and 51 service points remain. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before project operations; the format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain open.
+Updated 2026-10-02. Current contact-corrected candidate `14005662…` passes the official native build, full local source checks and compiled/header/memory gates. Three fresh scoped native recordings cover reachable save-load walker recovery, paid Queen travel/reset/map freezing, actual plane/helicopter poses and first-delivery/driving. Booked HOLD occupancy and blocked-alighting corrections have host coverage; forced native cases and crowded CPU/human acceptance remain pending. Earlier `20370fea…` retains its aircraft passes and a newly recorded walker deadlock. Downloadable Prototype 6 is the separate `23b2a7a2…` timetable ROM. [LOADING.md](LOADING.md) distinguishes source candidates from published binaries. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro plugin before project operations. Four compressed scenes, full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain separate.
 
 ## Tested toolchain
 
@@ -21,7 +21,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-aircraft-portable.gbc"` for the current aircraft candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-contact-recovery.gbc"` for the current contact-corrected candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -95,14 +95,32 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-aircraft-portable.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-contact-recovery.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
 
-## Current aircraft portability candidate
+## Current contact-corrected candidate
+
+| Identity | Value |
+| --- | --- |
+| Native output / bytes | `project/build/toronto-contact-recovery.gbc` / 524,288 |
+| ROM SHA-256 | `1400566247fddfa9a1acd5ef42e5f90bb19db9caa43a51fab0ce82400caa137f` |
+| Matching NOI SHA-256 | `6f8b6d662fe3d080a8a0a00f5d398521a35e4ddc62dcfddec5125b942264ea68` |
+| Globals SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Build source fingerprint | `e6bafd235ddb547928f8c760672c20d4f55518f99f24d519e3758142d6a253dd` |
+| Plugin project revision | `03e03e4f63cda3ece1d5732ca557e5f3f62ea88a1cf08cb92056342073519f64` |
+| Linked heap / stack base / static reserve | `DA68` / `DF00` / 1,176 bytes |
+
+The first build rejected `TORONTO.o` at 16,750 bytes against the 16,384-byte bank limit. Moving the pure authored-route segment query into the existing banked streetcar runtime resolves this allocation without reducing checks or changing saved state. Two transient WRAM bytes track traffic retreat and tram impact episodes; save v7 remains 58 bytes. Public inspection verifies CGB-only MBC5+rumble+RAM+battery, 32-KiB SRAM and valid header/logo. Aircraft/Queen compiled frame, tile and scene allocation gates pass. The 1,024-byte static-reserve guard passes, without proving deepest runtime stack use.
+
+Full `make check` passes 476,667 actual-C engine and 8,036,664 atlas/UI checks, together with 4,501,851 flight, 40,631,157 renderer and the retained content/transit/bridge/navigation/memory suites. Host assertions cover coherent forward/reverse retreat, one tram penalty under persistent blocked acceleration, invalid no-motion behavior and explicit booked first-arrival/HOLD bodies. Native scoped passes separately verify an ordinary save-reset overlap recovering, three Queen fares/journeys with a paid reset and exact map freeze, plane/helicopter rotor/shadow samples and first delivery/driving. [TESTING.md](../TESTING.md) preserves all three closed/archive journal identities and the old failure.
+
+Forced blocked-arrival/HOLD and rare rail-retreat native scenarios, remaining legacy services/seams, corrected-ROM roof restoration, crowded CPU/deepest stack, full campaign/city and physical hardware remain open. Earlier hosted GNU CI results below belong to earlier commits; verify the new source commit's jobs separately.
+
+## Previous aircraft portability candidate
 
 | Identity | Value |
 | --- | --- |

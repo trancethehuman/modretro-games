@@ -107,7 +107,7 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Repeat fresh same-ROM contract 01 delivery for cash 139/done 1/condition 100, held speeds 10→22→16 with pedestrian brake at 864, and blocked-terrain reversal/resumed 18. Preserve both closed/archived scoped-pass recordings.
 - [x] Check matching compiled frames, 1,432-byte linked reserve and 66 OBJ tiles/bank; sample four-object tram OAM without over-limit scanlines.
 - [ ] Broaden whole-city/crowded performance and actual hardware/human handling/palette assessment; this candidate does not establish universal 28.5/s or the full game's duration.
-- [ ] Resolve fully crowded `BLOCKED` contact-recovery policy; broaden native rail parking, traffic yielding, held-arrival/reset and legacy transit conditions beyond the scoped ride checks.
+- [ ] Natively verify the fully crowded `BLOCKED` contact policy; broaden rail parking, traffic yielding, forced held arrivals and legacy transit conditions beyond the scoped ride checks.
 - [ ] Broaden atlas cancellation and sprite/VRAM ownership coverage; test crowded scanline/frame pacing and collect human boarding/route-choice feedback.
 
 Published Prototype 6 remains the separate timetable/safe-alighting release. Corrected candidate samples do not establish an accepted final moving-tram milestone; exact evidence is in [TESTING.md](TESTING.md).
@@ -126,7 +126,8 @@ Published Prototype 6 remains the separate timetable/safe-alighting release. Cor
 - [x] Correct GCC misleading-indentation warnings with a whitespace-only renderer/harness edit and `-Werror` retained; full local checks and official portability rebuild `20370fea…` pass. Preserve its distinct source fingerprint and fresh scoped delivery/driving/plane/helicopter/shadow/map replay separately from `8e7af3ec…` journals.
 - [x] Verify real hosted GNU `make check` steps for source-fix commit `3a1869a` in both PR/push runs.
 - [ ] Broaden exact-portability-ROM roof/transit/all-scene/reset samples; five checksum/save-signature bytes differ, and earlier native recordings keep their original identity.
-- [ ] Repeat exact-ROM paid-ride reset and remaining legacy transit/seam/arrival conditions; resolve the three contact/held-arrival/alighting branches in the next-polish list.
+- [x] Repeat paid-ride reset/map freezing and three Queen journeys on corrected `14005662…`, plus actual plane/helicopter poses and delivery/driving. Retain this ROM's three distinct closed scoped-pass journals.
+- [ ] Broaden remaining legacy transit/seam/arrival conditions and exact corrected-ROM roof restoration; earlier builds retain their own evidence.
 - [ ] Broaden every-direction/district, crowded native ground-through-gap occlusion, scanline pressure, deepest stack and whole-city frame-pacing coverage.
 - [ ] Assess crowded-scene and handheld readability/performance. Native flyby samples do not prove full-city, two-hour or physical-cartridge acceptance.
 
@@ -134,7 +135,9 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 
 ## Next playable polish
 
-- [ ] Fix confirmed crowded-contact/held-arrival branches: an overlapping yielding NPC can trap a walker, held destination doors must share occupancy with traffic queries, and alighting fallback must reject the booked tram body. Temporary actual-C probes establish branch defects; native reachability and the final policy/replays remain pending.
+- [x] Correct route-consistent overlapping traffic retreat, explicit booked-tram HOLD occupancy and full-foot/body alighting endpoints. Preserve a real ordinary-button save-reset walker deadlock on `20370fea…`; corrected `14005662…` permits walking and all four directions without changing cash, condition or the parked car. Actual-C/UI regressions pass 476,667 / 8,036,664 checks; a pure banked route query resolves the native 16-KiB code limit. Save v7 remains 58 bytes.
+- [ ] Natively reproduce rare rail retreat, persistent crowded BLOCKED contact and paid blocked-arrival/HOLD retries through ordinary controls. Host regressions cover their source behavior; independent NPC/terrain cooldowns, native CPU cost and hardware remain separate gates.
+- [ ] Before changing transit landing geometry, strengthen or recheck fallback paths across the full foot footprint. Current actual-grid audit finds no mismatch at all 21 transit nodes/eight cardinal candidates/19 samples; centre-only path connectivity is a future-map limitation.
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
 - [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. Historical samples and current a0e23 scoped 28.5/s have separate identities; crowded-scene/whole-city performance remains pending.

@@ -6,6 +6,7 @@
 #define TD_STREETCAR_PARK_UNCHANGED 0
 #define TD_STREETCAR_PARK_MOVED 1
 #define TD_STREETCAR_PARK_BLOCKED 2
+#define TD_STREETCAR_CONTACT_INVALID 3
 
 /* Presentation-only Q4 coordinates. A paid Queen ride leaves all 58 saved
  * bytes at its origin until the caller commits safe alighting. The view can
@@ -36,6 +37,21 @@ UBYTE td_streetcar_runtime_foot_clear(UWORD u,UWORD v) BANKED;
 UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,
                                    UWORD u,UWORD v) BANKED;
 UBYTE td_streetcar_runtime_traffic_clear(UBYTE district,UWORD u,UWORD v) BANKED;
+/* Rare route-segment query kept in a separate ROM bank from the driver.
+ * Legs and output endpoints must be WRAM pointers. Count/target/current
+ * coordinates are the caller's existing cache; no actor/cache state is
+ * changed. TRUE validates the current position on its authored segment. */
+UBYTE td_streetcar_runtime_traffic_segment(UBYTE district,UBYTE slot,UBYTE count,
+    const UBYTE *current_legs,UWORD u,UWORD v,UWORD target_u,UWORD target_v,
+    UWORD *from_u,UWORD *from_v) BANKED;
+/* Rare connected traffic retreat: at most half a pixel on one axis. A
+ * current tram overlap may separate monotonically, never approach any pose
+ * in the next second. The caller still validates its road/other road users. */
+UBYTE td_streetcar_runtime_traffic_retreat(UBYTE district,UWORD old_u,UWORD old_v,
+                                        UWORD u,UWORD v) BANKED;
+/* Full foot terrain/body endpoint at the explicitly booked Queen doors,
+ * including first arrival before prepare() or the HOLD bit is set. */
+UBYTE td_streetcar_runtime_landing_clear(UBYTE district,UWORD u,UWORD v) BANKED;
 UBYTE td_streetcar_runtime_parking_allowed(UBYTE district,UWORD u,UWORD v) BANKED;
 /* Cold old-save recovery for an on-foot courier's parked car only. A bounded
  * authored cross-street search verifies the entire11px car path/footprint,
@@ -45,6 +61,7 @@ UBYTE td_streetcar_runtime_recover_park(void) BANKED;
 /* Resolve a current body overlap while ROAM/WAIT by the nearest connected
  *4px-grid separation within48px, then an authored cross-street approach
  * within256px. A successful move preserves cash/job/deadline; caller owns
- * crash impulse/damage/checkpoint. BLOCKED leaves position unchanged. */
+ * crash impulse/damage/checkpoint. BLOCKED proves an actual overlap and
+ * leaves position unchanged. INVALID fails closed without proving impact. */
 UBYTE td_streetcar_runtime_recover_contact(UBYTE onfoot) BANKED;
 #endif
