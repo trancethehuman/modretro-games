@@ -244,9 +244,23 @@ def render():
     return png,attrs,metadata
 
 
+def same_png_artwork(expected, actual):
+    """Compare decoded artwork; platform zlib versions can encode it differently."""
+    with Image.open(io.BytesIO(expected)) as a, Image.open(io.BytesIO(actual)) as b:
+        return (a.format == b.format == "PNG" and a.mode == b.mode and
+                a.size == b.size and a.getpalette() == b.getpalette() and
+                a.info == b.info and a.tobytes() == b.tobytes())
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument("--check",action="store_true");args=parser.parse_args()
     png,attrs,metadata=render()
+    if args.check:
+        # Keep the committed asset's binary identity after confirming its pixels.
+        # The registered copy and metadata must still match those exact bytes.
+        canonical=(ART/"toronto_east.png").read_bytes()
+        assert same_png_artwork(png,canonical),"Eastern source pixels/palette differ"
+        png=canonical;metadata["background_sha256"]=hashlib.sha256(png).hexdigest()
     files={ART/"toronto_east.png":png,ROOT/"project/assets/backgrounds/toronto_east.png":png,ART/"east_attributes.json":(json.dumps(attrs)+"\n").encode(),ROOT/"content/districts/east_art.json":(json.dumps(metadata,indent=2)+"\n").encode()}
     for filename,data in files.items():
         if args.check:assert filename.read_bytes()==data,f"Eastern source differs: {filename}"
