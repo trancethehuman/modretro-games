@@ -36,6 +36,8 @@ From the repository root, with Python and Pillow available:
 python3 games/toronto-dispatch/scripts/create_city_art.py
 python3 games/toronto-dispatch/scripts/create_campaign.py
 python3 games/toronto-dispatch/scripts/sync_city_resources.py
+python3 games/toronto-dispatch/scripts/create_world_routes.py
+python3 games/toronto-dispatch/scripts/create_audio.py
 make check
 ```
 
@@ -47,7 +49,24 @@ Car physics stores Q4 coordinates and smoothed velocity; GBVM actors/camera use 
 
 Save version 5 alternates two CRC16-checked records in SRAM bank 3 at offsets 0x100 and 0x180; GB Studio uses banks 0–2. The new record commits its magic byte last, preserving the old checkpoint until then. Progress checkpoints every game second; waiting/boarding/cancellation is saved explicitly. Valid version-4 prototype saves retain cash/completions but retire an active contract because its route changed. Earlier formats are rejected. Host tests interrupt every real store in both slots. Native soft-reset recovery is verified; physical cold-boot persistence and actual interrupted-power behavior remain pending.
 
-Current ROM: CGB-only, 256 KiB, MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. Header validity is verified, cartridge compatibility is not. No audio is implemented yet. Follow [hardware workflow](../../../docs/HARDWARE.md) before any write.
+## Current milestone identity and evidence
+
+Milestone identifier: `v0.2.0-prototype.2`. The current ROM includes the car-entry/transit transition fixes. It is CGB-only, 262,144 bytes (256 KiB), MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. Official build/header checks passed; physical cartridge compatibility remains unverified. Download available bundles from the [releases page](https://github.com/trancethehuman/modretro-games/releases).
+
+| Identity | Value |
+| --- | --- |
+| Native output | `project/build/toronto-dispatch.gbc` |
+| ROM SHA-256 | `a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59` |
+| Build source fingerprint | `439c22c598c9b82687ee3c8eb19560456948afd37e4184749dfe2e79397c9d33` |
+| Plugin project revision | `483aa222d1a1785bdfca3df6674e0232c13b2a0a544879ce76ced3f2bd315c3e` |
+
+The fingerprint and plugin revision identify build/project state; neither is a Git commit. A ROM bundle's `BUILDINFO.json` records its separate source commit, pinned tool versions and binary digest. A later build must be inspected and tested under its own identity.
+
+`make check` passed with **471 host engine checks and zero failures**, including audio integration and entry/transit transitions, alongside repository/campaign/generated-source validation. These checks cover host logic with hardware stubs; they do not establish native sound, physical behaviour or cartridge performance. Native plugin checks passed for representative first-delivery, corner, car-entry, transit-pause and failed-job flows, followed by transit checks on this new ROM. [TESTING.md](../TESTING.md) maps the actual scenarios to their exact build identities.
+
+Original music and engine/brake/event/transit effects are now compiled into the native ROM. The pause menu cycles music + effects, effects only and silent; the preference defaults per boot. A separate public PyBoy 2.7.0 PCM run of this exact ROM passed all eight interval checks: nonzero music, acceleration, braking, effects-only acceleration and resumed music, and all-zero measured silent/menu/paused-effects-only intervals. [AUDIO.md](AUDIO.md) records sample counts, peaks, limitations and the opt-in reproduction command. No human listening or physical sound check is claimed.
+
+No Chromatic was connected during the latest discovery; no stream, cartridge write/read-back or cold boot is verified. The full campaign, two-hour gameplay target, full Old Toronto coverage and whole-city performance remain open gates. Follow the [loading instructions](LOADING.md) and [hardware workflow](../../../docs/HARDWARE.md) before any write.
 
 ## Browser refresh limitation
 

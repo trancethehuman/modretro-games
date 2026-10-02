@@ -3,6 +3,6 @@
   "sceneTypes": [{
     "key": "TORONTO",
     "label": "Toronto courier driving",
-    "files": ["include/states/TORONTO.h", "include/td_game.h", "src/states/TORONTO.c", "src/td_content.c", "src/td_ui.c"]
+    "files": ["include/states/TORONTO.h", "include/td_game.h", "include/td_world_routes.h", "include/td_audio.h", "src/states/TORONTO.c", "src/td_content.c", "src/td_ui.c", "src/td_audio.c"]
   }]
 }

@@ -4,15 +4,18 @@
 
 - [x] Public MIT collection repository, one folder per game, README, AGENTS.md and workflow skills.
 - [x] Genuine editable GB Studio project and original project-local scene engine.
-- [x] User-revised north-up presentation, 1,024 × 976 scrollable city, 80 buildings and six architecture types.
-- [x] Four road vehicles; momentum, traction, braking/reverse, speed-dependent yaw and glancing curb recovery.
+- [x] User-revised north-up presentation, 1,024 × 976 scrollable central-city prototype, 48-pixel asphalt with 8-pixel sidewalks, 80 unchanged building footprints and six architecture types.
+- [x] Four road vehicles; momentum, traction, braking/reverse, speed-dependent yaw, glancing curb recovery and bounded 1–6 pixel corner correction with swept clearance.
 - [x] Native building/water/rail collision, roof/canopy priority, walking animation and visible car entry/exit.
-- [x] Autonomous pedestrians and bounded road traffic.
+- [x] Separate continuous traffic motion/presentation and a bus proxy; 102 fixed world pedestrian routes with six active nearby actors.
 - [x] Native dispatch, collection/delivery, completion records, progression, cargo damage, vehicle constraints and timeout/retry in the playable prototype.
 - [x] Fictional repeating schedules and paid travel on researched Line 1, 94 bus and Island ferry service points.
 - [x] Pause/map freeze the clock; transit resumes correctly after pausing.
 - [x] Native collision connectivity and contract/source consistency in repository CI.
 - [x] Native emulator delivery/transit/map/entry/collision/save checks. See exact build scopes in TESTING.md.
+- [x] Original native music, vehicle/braking ambience, event cues and music + effects / effects only / silent modes; actual PCM output and mode checks.
+
+Native driving regression evidence covers the first job, the previously stopping Distillery turn at speed 24, and parking/re-entry. Host collision/assistance regressions and native audio mode captures provide separate checks; [TESTING.md](TESTING.md) records exact build scopes. Audio capture verifies output, not human listening or physical speaker quality.
 
 ## Authored campaign revision — content checks passed
 
@@ -27,15 +30,15 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 ## Next playable polish
 
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
-- [ ] Tune steering, lane width, traffic spacing and frame pacing from handheld/human feedback.
-- [ ] Add sound effects, original music and volume options.
+- [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. A bounded sample observed about 29.5 rendered updates per second; crowded-scene performance remains pending.
+- [ ] Listen to the original score/effects and tune their mix, event distinction and physical speaker/headphone behaviour.
 - [ ] Expand pedestrian variety, street furniture, local activity and visible transit boarding/riding.
 - [ ] Author streetcar rails and moving streetcars on researched corridors; improve the current partial bus route geometry.
 - [ ] More distinctive Toronto landmark silhouettes, district character, industrial yards and additional navigable streets.
 
 ## Full game release
 
-- [ ] Expand beyond the compressed central map to the historical Old Toronto footprint, preserving researched topology and Islands.
+- [ ] Expand beyond the compressed central map through linked native districts, covering the historical Old Toronto footprint, waterfront and fuller Islands. The [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
 - [ ] Playtest and refine the authored objectives across all eight job types, including the unlock sequence, vehicle rules and condition/comfort rewards.
 - [ ] Record representative timings and a complete campaign; validate **at least two hours of varied, enjoyable gameplay**. Quest count does not verify duration.
 - [ ] Test crowded-scene sprite/CPU limits, diagonal walking, collision corner recovery, cancellation and schedule edge cases.

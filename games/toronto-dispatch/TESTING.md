@@ -1,8 +1,75 @@
 # Testing record
 
-## Handling, campaign and save polish — 2026-10-02
+## Wider roads, corner handling, world actors and audio — 2026-10-02
 
-Latest native ROM: `project/build/toronto-dispatch.gbc`, 262,144 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB declared SRAM. Official GB Studio CLI build exited 0; `rom_inspect` verified logo/header. SHA-256:
+Latest native ROM: `project/build/toronto-dispatch.gbc`, 262,144 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB declared SRAM. The official GB Studio CLI build exited 0 and the plugin verified the logo/header. SHA-256:
+
+```
+a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59
+```
+
+Build source fingerprint: `439c22c598c9b82687ee3c8eb19560456948afd37e4184749dfe2e79397c9d33`. Project revision: `483aa222d1a1785bdfca3df6674e0232c13b2a0a544879ce76ced3f2bd315c3e`. Tool versions remain pinned as below. Upstream DEP0190, four SDCC optimizer warnings and two inline `sfx_player.h` unreachable-code warnings remain; compilation succeeded. BUILDINFO.json in a distribution bundle records its source commit.
+
+### Host logic and authored assets
+
+`make check` passes **471 real-engine host checks** under AddressSanitizer/UndefinedBehaviorSanitizer, plus repository/content and generated audio/route consistency checks. The hardware/SRAM adapters and limits described in the previous milestone still apply. New fixtures cover every tile overlapped by the car footprint, thin rail rejection, a swept 1–6-pixel corner adjustment, broad walls, boundaries, reverse/braking, opposing walking inputs, occupied car doors and traffic yielding while waiting on foot. The corner adjustment is limited to once per rendered update, including catch-up substeps. A seven-pixel clearance requirement is rejected.
+
+Four checks failed against the pre-transition-fix runtime: simultaneous car-entry/transit inputs or paused-entry transit could suspend entry, and an old failed job could cause a new free-roaming transit arrival to reopen RESULT. Entry now excludes transit until it finishes; fresh no-job boarding clears the prior failure condition. A genuine deadline expiring during an already-paid trip still reaches its destination and shows failure. All 471 checks pass after correction.
+
+Traffic motion is separate from sprite presentation. A 12,000-tick host fixture checks continuous vehicle loops, usable road coordinates and a bus step bounded to half a pixel per tick, including world-clock wrap. Pedestrian routes are fixed in the world, retain visible identities and are generated from actual native walkable cells. There are 102 route spans and six active pedestrian sprites. Host audio stubs establish cue dispatch and mode handling only; actual sound evidence is below.
+
+Regenerated original artwork and collision retain all 80 building footprints. Roads are 48 pixels wide with 8-pixel sidewalks. Shadows and roof priority are clipped at asphalt edges. Plugin background analysis counted 185 exact / 136 flip-canonical patterns, below the CGB 384-pattern budget. The 128 × 122 map has 15,616 cells, within one 16 KiB array bank. The analyzer reports opaque tile-color attributes for native priority bytes; these are not a claim that roof priority or all sprite budgets were analyzed successfully. Sprite art remains unchanged.
+
+### Exact-ROM native regression
+
+`city-life-release-final-20261002` ended at frame **1,528**, **215 journal events**, digest `27129d445158c58f1ed96e443bb18aa71d17e078275c99a80e9a9a19c961c83a`. It intentionally repeats the comparable input sequence on the rebuilt final ROM. All inputs were ordinary buttons. WRAM/OAM was inspected read-only; no progression was injected. The native emulator and recording were closed after testing.
+
+- Boot/help, first Union → St. Lawrence delivery: condition 100, cash 30 → 139, unique completion count 1.
+- After the first delivery and audio-menu checks, the previous stopping sequence held A for 40 frames, A+right for 48, then A for 24. At frame 1,160 the car was at (797.125,771.5625), speed 24, heading 4. It continued through the corner while acceleration stayed held.
+- Braking, parking, completing the exit animation and pressing A near the car changed `onfoot` 1 → 0 and restored the parked position (797.125,789.4375).
+- Pause-menu audio cycled full → effects only → silent → full without advancing the mission clock. Actual PCM mode evidence is below.
+- `_game_time` advanced 59 updates during frames 1,408 → 1,528: approximately 29.5 rendered updates per second in this bounded stationary waterfront sample. This does **not** establish improved whole-city frame pacing. Performance work remains open.
+- Final OAM sample: four visible hardware objects, peak two on a scanline, zero over-limit lines. An earlier audio/world-actor build had a crowded sample peaking at four. These are bounded observations, not a whole-city sprite/performance certification.
+
+The latest Front Street screenshot is an unmodified frame 676 from this ROM. Its digest and recording provenance are in `docs/screenshots/provenance.json`. Retained review images are sampled; they do not establish every intervening animation frame.
+
+Two further exact-ROM recordings verify the transition fixes:
+
+- `city-life-entry-transit-final-20261002`: 424 frames, 117 events, digest `ea42c063e39e2cb0f163193f1804fb2021ac9e9abe77ab401092d03f0145852f`. After parking and walking within 13 pixels of the Union car/station, simultaneous A+B retained ROAM and entry. Pausing mid-entry and choosing Transit retained PAUSE; resuming completed entry at (560,720), `onfoot=0`.
+- `city-life-failed-job-transit-final-20261002`: 8,848 frames, 158 events, digest `cb5a437110181e6f211c948df5f86afaee53da7f122837a397b262e7df4515ba`. Ordinary neutral frames let the first job time out at Union: RESULT, no active job, condition 0. Free roaming, parking and a new Line 1 booking then reached **King station** (640,640), ROAM, condition 100, cash 30 → 27, on foot. The recording's stop-reason text mistakenly calls this destination Queen; the authored stop, framebuffer and read-only state establish King. Genuine mid-ride deadline expiry remains covered by the host fixture and historical native scope separately.
+
+The pre-transition-fix `city-life-corner-guarded-20261002` ROM `038f1561…` also passed the corner/delivery/entry sequence at 1,528 frames and 215 events, digest `8b8078448e8af57d81e6591a6f42ddaef1f55c6fa7fec7a85148db1870d2c780`. It does not verify the later transition fixes.
+
+Earlier recordings remain separate evidence: `city-life-native-20261002` (`9d7e1fcf…`, 1,368 frames, 231 events, digest `ca0756f7a10e9c92e603e779bb29579d8ccab25d2778c4835924b1c5d668a4f2`) verified first delivery/audio modes/walking but still stopped during the turn. Its stop-reason text overstated car entry: A was pressed before the exit animation finished. Re-entry is established by the final recording above. `city-life-wide-roads-20261002` (`bba90831…`, 1,160 frames, 151 events, digest `033323e0c123865b3bef2792643000ab51d4936772bb081df68e28082258d1a9`) showed wider roads alone still stopped the same turn. These results led to the swept corner adjustment; they are not passes for the final behavior.
+
+Older recordings were archived unchanged through the plugin's supported operation after closing the emulator, releasing recording admission reservations while retaining their bytes and original-path mappings. `handling-before-20261002` is retained under archive `3e855334-d14c-49af-b9e3-12c2860050b2`; `city-life-native-20261002` under `2c5ab980-e5ef-4d97-95c8-e47f66b2b38d`; `city-life-wide-roads-20261002` under `519c34f9-9b0f-4780-913c-1b8e1c77ebb9`; and `city-life-corner-guarded-20261002` under `7aa6d1b5-d863-4fdb-805e-95c9e93ea5e6`. Each is in `project/artifacts/recording-archives/<id>/recording`. Archives and capture journals remain excluded from Git and distribution bundles.
+
+### Actual emulator audio
+
+The opt-in public PyBoy 2.7.0 capture script ran against verified final ROM bytes `a2f00db4…`, with no injected memory/save writes or adjacent save autoload. It copies the public signed-byte buffer through its byte head after each frame. Eight 48 kHz stereo WAVs and their manifest are retained locally in ignored `project/build/audio-evidence/native-a2f00db4-modes/`. The separately captured pre-transition-fix `038f1561…` measurements produced the same WAV digests; its manifest remains bound to its own binary. Capture and reproduction details are in [AUDIO.md](docs/AUDIO.md).
+
+| Scenario | Captured stereo samples | Absolute PCM peak |
+| --- | ---: | ---: |
+| City music | 480,000 (10 seconds) | 2,304 |
+| Held acceleration / engine | 96,000 | 3,072 |
+| Braking | 38,400 | 2,560 |
+| Paused, effects only | 96,000 | 0 |
+| Driving, effects only | 96,000 | 768 |
+| Silent menu | 96,000 | 0 |
+| Silent driving | 96,000 | 0 |
+| Resumed city music | 480,000 (10 seconds) | 4,352 |
+
+This proves actual emulated sound output and mode silence in these scenarios. It does not establish human listening quality, all event sounds, or physical speaker/headphone behavior.
+
+### Remaining acceptance gates
+
+The browser preview still has an unresolved recording-close acknowledgement and an older build identity. The new ROM has not been refreshed or verified there. Its state was preserved under the plugin authoring rule to resolve unknown outcomes before reload/replay. Native tests continued independently.
+
+Full Old Toronto districts, dedicated TTC vehicle art and matching visible boarding schedules, a representative full campaign/unlock playthrough, measured two-hour duration, whole-city frame pacing, human listening, streaming, cartridge write/read-back and physical cold-boot/save tests remain open. No connected device or physical write is established. [OLD_TORONTO_EXPANSION.md](docs/OLD_TORONTO_EXPANSION.md) describes proposed district work, not implemented map coverage.
+
+## Handling, campaign and save polish — 2026-10-02 (historical)
+
+This milestone's native ROM was 262,144 bytes, CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB declared SRAM. Official GB Studio CLI build exited 0; `rom_inspect` verified logo/header. SHA-256:
 
 ```
 4db8413ab8ad8f7c20e9f1030632a0abcd323b9d512ddfcd29b77bb1be52e61f

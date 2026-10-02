@@ -31,29 +31,35 @@
 ## Implemented handling and reliability tuning, 2026-10-02
 
 - Slower speed-dependent yaw, with reverse using the magnitude of speed; opposing steering inputs cancel.
-- Steering keeps acceleration and smoothed velocity. Glancing contact removes blocked-axis motion without draining scalar speed on every tick; only real head-on/corner impacts stop the car.
+- Steering keeps acceleration and smoothed velocity. Glancing contact removes blocked-axis motion without draining scalar speed on every tick. Asphalt is now 48 pixels wide with 8-pixel sidewalks; all 80 building footprints remain unchanged, and building shadows/priority regions are clipped at the road edge.
+- Collision checks every tile overlapped by the car footprint, including narrow rails. A small corner correction searches 1–6 pixels of clear lateral space only with acceleration held, no brake and forward speed at least 3. It validates bounds, candidate footprint and swept lateral clearance, with at most one correction per rendered update. Broad head-on walls remain solid and stop the car.
 - Hidden pedestrians cannot slow the vehicle. Traffic stop lines use the authored junction coordinates. Autonomous traffic keeps moving while the courier waits/rides.
+- Traffic motion and screen presentation are separate. Road loops and a bus proxy run continuously; six nearby pedestrian actors follow 102 fixed, collision-validated world routes and retain their routes while visible. Full TTC route geometry and moving streetcars remain future work.
 - Car entry/exit checks the whole door approach against the native collision grid. Pressed actions occur once across motion substeps.
+- Transit cannot interrupt an active car entry/exit. If successful A entry and B transit inputs coincide, entry takes priority and its animation finishes without opening transit.
+- Starting a fresh trip with no active job clears the previous job's failure condition. An actual job deadline expiring during a paid ride still causes failure, shown after arrival at the booked destination.
 - Mission/transit time counts every VBlank independently from bounded motion catch-up.
 - Two alternating version-5 SRAM records, CRC16 and last-byte commit preserve a recovery snapshot. Boarding and cancellation are saved, and paid trips resume after resetting. Old version-4 records keep earnings/completions and retire changed active routes.
 - Authored contracts have distinct routes/briefs and chapter progression. New Island delivery points require walking, and ferry transfers go through the mainland. Condition changes base rewards; fast passenger turns reduce comfort.
+- Original City Shift music, vehicle/braking ambience and event cues use the native audio driver. The pause menu exposes music + effects, effects only and silent; the preference resets on boot. Native PCM confirms output and mode behaviour, while human listening and physical audio checks remain pending.
 
-These are tested prototype changes; handheld feel, physical SRAM behavior and the two-hour release target remain open.
+Native driving regression evidence covers the first job, the formerly stopping Distillery turn at speed 24, and parking/re-entry. Host regressions check collision, assistance and state rules; current build identities and results belong in [TESTING.md](TESTING.md). The observed approximately 29.5 rendered updates per second is a bounded sample; performance, handheld feel, human audio review and physical SRAM behaviour remain open. These results do not establish full Old Toronto coverage or the two-hour release target.
 
-## Proposed starting choices
+## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.
 - First district: a compressed downtown area connecting Union Station, St. Lawrence Market, and the Distillery District.
 - Fictional dispatch company, fictional pickup businesses, and original landmark artwork.
 - One car and three package jobs for the first playable milestone, followed by the other vehicles and passenger jobs.
 - Straight north-up pixel artwork and matching native collision grid, with CGB background priority for roofs and canopies.
-- Controls: D-pad steers toward a compass direction; A accelerates; B brakes and reverses near rest; Select interacts at pickup/drop-off; Start pauses. This mapping needs a handheld playtest.
+- Implemented controls: left/right steer the vehicle; A accelerates; B brakes and reverses near rest; Select interacts at pickup/drop-off; Start pauses. On foot, the D-pad walks, A enters the nearby parked car and B opens transit. Handheld comfort still needs human playtesting.
 - A documented baseline transit map rather than changing live detours. The map era is not yet selected.
+- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. The district layout remains a proposal and has not been implemented. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
 
 ## Unresolved implementation questions
 
 - The native TORONTO scene extension builds and runs. Continue tuning driving, occlusion, input responsiveness and crowded-scene performance on the handheld.
-- First-district dimensions, ROM banking, active-traffic budget, save system, and audio driver.
+- Expanded-district ROM banking, actor/performance budgets, cross-district save/transit preservation and audio mix after listening. The current single-city dimensions, save implementation and audio driver are established prototype choices.
 - Car handling parameters, realistic traffic-rule penalties, and mission time budgets after playtesting.
 - Exact hardware/cartridge edition and Developer Mode readiness.
 - Island delivery transport: ferry/on-foot or specifically authorised service-vehicle jobs, consistent with researched access rules.
