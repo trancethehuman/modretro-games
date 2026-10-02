@@ -1,0 +1,1708 @@
+{
+  "status": "engine-integrated",
+  "scope": "Compressed central Toronto prototype; broad Old Toronto map accuracy and full campaign duration remain release checks",
+  "duration_target_minutes": 120,
+  "duration_verified": false,
+  "quest_types": [
+    "PARCEL ROUND",
+    "FRAGILE ART",
+    "EXPRESS FILES",
+    "HEAVY FREIGHT",
+    "TRANSIT RELAY",
+    "PASSENGER RUN",
+    "RETURN PAPERS",
+    "ISLAND POST"
+  ],
+  "stops": [
+    {
+      "id": 0,
+      "u": 560,
+      "v": 720,
+      "name": "UNION DEPOT",
+      "transit": 1
+    },
+    {
+      "id": 1,
+      "u": 768,
+      "v": 720,
+      "name": "ST LAWRENCE",
+      "transit": 0
+    },
+    {
+      "id": 2,
+      "u": 816,
+      "v": 720,
+      "name": "DISTILLERY",
+      "transit": 0
+    },
+    {
+      "id": 3,
+      "u": 560,
+      "v": 528,
+      "name": "CITY HALL",
+      "transit": 0
+    },
+    {
+      "id": 4,
+      "u": 336,
+      "v": 528,
+      "name": "QUEEN WEST",
+      "transit": 0
+    },
+    {
+      "id": 5,
+      "u": 336,
+      "v": 400,
+      "name": "AGO / GRANGE",
+      "transit": 0
+    },
+    {
+      "id": 6,
+      "u": 480,
+      "v": 64,
+      "name": "ROM / BLOOR",
+      "transit": 0
+    },
+    {
+      "id": 7,
+      "u": 208,
+      "v": 400,
+      "name": "KENSINGTON",
+      "transit": 0
+    },
+    {
+      "id": 8,
+      "u": 80,
+      "v": 528,
+      "name": "DUFFERIN",
+      "transit": 0
+    },
+    {
+      "id": 9,
+      "u": 944,
+      "v": 528,
+      "name": "RIVERSIDE",
+      "transit": 0
+    },
+    {
+      "id": 10,
+      "u": 640,
+      "v": 784,
+      "name": "FERRY TERMINAL",
+      "transit": 3
+    },
+    {
+      "id": 11,
+      "u": 816,
+      "v": 784,
+      "name": "EAST BAYFRONT",
+      "transit": 0
+    },
+    {
+      "id": 12,
+      "u": 640,
+      "v": 640,
+      "name": "KING STATION",
+      "transit": 1
+    },
+    {
+      "id": 13,
+      "u": 640,
+      "v": 528,
+      "name": "QUEEN STATION",
+      "transit": 1
+    },
+    {
+      "id": 14,
+      "u": 640,
+      "v": 400,
+      "name": "DUNDAS STATION",
+      "transit": 1
+    },
+    {
+      "id": 15,
+      "u": 640,
+      "v": 288,
+      "name": "COLLEGE STATION",
+      "transit": 1
+    },
+    {
+      "id": 16,
+      "u": 640,
+      "v": 176,
+      "name": "WELLESLEY",
+      "transit": 1
+    },
+    {
+      "id": 17,
+      "u": 640,
+      "v": 64,
+      "name": "BLOOR-YONGE",
+      "transit": 1
+    },
+    {
+      "id": 18,
+      "u": 144,
+      "v": 64,
+      "name": "OSSINGTON BUS",
+      "transit": 2
+    },
+    {
+      "id": 19,
+      "u": 816,
+      "v": 64,
+      "name": "CASTLE FRANK",
+      "transit": 2
+    },
+    {
+      "id": 20,
+      "u": 444,
+      "v": 928,
+      "name": "HANLANS POINT",
+      "transit": 3
+    },
+    {
+      "id": 21,
+      "u": 720,
+      "v": 920,
+      "name": "CENTRE ISLAND",
+      "transit": 3
+    },
+    {
+      "id": 22,
+      "u": 848,
+      "v": 896,
+      "name": "WARDS ISLAND",
+      "transit": 3
+    },
+    {
+      "id": 23,
+      "u": 336,
+      "v": 720,
+      "name": "CN TOWER",
+      "transit": 0
+    }
+  ],
+  "quests": [
+    {
+      "id": "contract-01",
+      "title": "Market morning 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        1
+      ],
+      "time_limit_seconds": 120,
+      "reward": 150
+    },
+    {
+      "id": "contract-02",
+      "title": "Market morning 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        5
+      ],
+      "time_limit_seconds": 120,
+      "reward": 152
+    },
+    {
+      "id": "contract-03",
+      "title": "Market morning 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        2
+      ],
+      "time_limit_seconds": 120,
+      "reward": 154
+    },
+    {
+      "id": "contract-04",
+      "title": "Market morning 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7
+      ],
+      "time_limit_seconds": 400,
+      "reward": 366
+    },
+    {
+      "id": "contract-05",
+      "title": "Market morning 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 438
+    },
+    {
+      "id": "contract-06",
+      "title": "Market morning 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1
+      ],
+      "time_limit_seconds": 480,
+      "reward": 440
+    },
+    {
+      "id": "contract-07",
+      "title": "Market morning 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        0
+      ],
+      "time_limit_seconds": 400,
+      "reward": 372
+    },
+    {
+      "id": "contract-08",
+      "title": "Market morning 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        21,
+        10,
+        22,
+        10,
+        20,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 339
+    },
+    {
+      "id": "contract-09",
+      "title": "Gallery opening 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11
+      ],
+      "time_limit_seconds": 480,
+      "reward": 446
+    },
+    {
+      "id": "contract-10",
+      "title": "Gallery opening 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3
+      ],
+      "time_limit_seconds": 400,
+      "reward": 378
+    },
+    {
+      "id": "contract-11",
+      "title": "Gallery opening 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23
+      ],
+      "time_limit_seconds": 260,
+      "reward": 415
+    },
+    {
+      "id": "contract-12",
+      "title": "Gallery opening 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8
+      ],
+      "time_limit_seconds": 480,
+      "reward": 452
+    },
+    {
+      "id": "contract-13",
+      "title": "Gallery opening 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 454
+    },
+    {
+      "id": "contract-14",
+      "title": "Gallery opening 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9
+      ],
+      "time_limit_seconds": 440,
+      "reward": 421
+    },
+    {
+      "id": "contract-15",
+      "title": "Gallery opening 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 458
+    },
+    {
+      "id": "contract-16",
+      "title": "Gallery opening 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        20,
+        10,
+        21,
+        10,
+        22,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 355
+    },
+    {
+      "id": "contract-17",
+      "title": "Office hours 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7
+      ],
+      "time_limit_seconds": 440,
+      "reward": 427
+    },
+    {
+      "id": "contract-18",
+      "title": "Office hours 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4
+      ],
+      "time_limit_seconds": 480,
+      "reward": 464
+    },
+    {
+      "id": "contract-19",
+      "title": "Office hours 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8
+      ],
+      "time_limit_seconds": 240,
+      "reward": 396
+    },
+    {
+      "id": "contract-20",
+      "title": "Office hours 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5
+      ],
+      "time_limit_seconds": 440,
+      "reward": 433
+    },
+    {
+      "id": "contract-21",
+      "title": "Office hours 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 470
+    },
+    {
+      "id": "contract-22",
+      "title": "Office hours 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6
+      ],
+      "time_limit_seconds": 400,
+      "reward": 402
+    },
+    {
+      "id": "contract-23",
+      "title": "Office hours 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        0
+      ],
+      "time_limit_seconds": 440,
+      "reward": 439
+    },
+    {
+      "id": "contract-24",
+      "title": "Office hours 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        22,
+        10,
+        20,
+        10,
+        21,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 371
+    },
+    {
+      "id": "contract-25",
+      "title": "Harbour cargo 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4
+      ],
+      "time_limit_seconds": 400,
+      "reward": 408
+    },
+    {
+      "id": "contract-26",
+      "title": "Harbour cargo 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1
+      ],
+      "time_limit_seconds": 440,
+      "reward": 445
+    },
+    {
+      "id": "contract-27",
+      "title": "Harbour cargo 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9
+      ],
+      "time_limit_seconds": 280,
+      "reward": 482
+    },
+    {
+      "id": "contract-28",
+      "title": "Harbour cargo 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2
+      ],
+      "time_limit_seconds": 400,
+      "reward": 414
+    },
+    {
+      "id": "contract-29",
+      "title": "Harbour cargo 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 486
+    },
+    {
+      "id": "contract-30",
+      "title": "Harbour cargo 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7
+      ],
+      "time_limit_seconds": 480,
+      "reward": 488
+    },
+    {
+      "id": "contract-31",
+      "title": "Harbour cargo 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        0
+      ],
+      "time_limit_seconds": 400,
+      "reward": 420
+    },
+    {
+      "id": "contract-32",
+      "title": "Harbour cargo 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        21,
+        10,
+        22,
+        10,
+        20,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 387
+    },
+    {
+      "id": "contract-33",
+      "title": "Campus mail 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5
+      ],
+      "time_limit_seconds": 480,
+      "reward": 494
+    },
+    {
+      "id": "contract-34",
+      "title": "Campus mail 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9
+      ],
+      "time_limit_seconds": 400,
+      "reward": 426
+    },
+    {
+      "id": "contract-35",
+      "title": "Campus mail 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6
+      ],
+      "time_limit_seconds": 260,
+      "reward": 463
+    },
+    {
+      "id": "contract-36",
+      "title": "Campus mail 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3
+      ],
+      "time_limit_seconds": 480,
+      "reward": 500
+    },
+    {
+      "id": "contract-37",
+      "title": "Campus mail 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 502
+    },
+    {
+      "id": "contract-38",
+      "title": "Campus mail 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4
+      ],
+      "time_limit_seconds": 440,
+      "reward": 469
+    },
+    {
+      "id": "contract-39",
+      "title": "Campus mail 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 506
+    },
+    {
+      "id": "contract-40",
+      "title": "Campus mail 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        20,
+        10,
+        21,
+        10,
+        22,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 403
+    },
+    {
+      "id": "contract-41",
+      "title": "Civic shift 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2
+      ],
+      "time_limit_seconds": 440,
+      "reward": 475
+    },
+    {
+      "id": "contract-42",
+      "title": "Civic shift 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11
+      ],
+      "time_limit_seconds": 480,
+      "reward": 512
+    },
+    {
+      "id": "contract-43",
+      "title": "Civic shift 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3
+      ],
+      "time_limit_seconds": 240,
+      "reward": 444
+    },
+    {
+      "id": "contract-44",
+      "title": "Civic shift 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23
+      ],
+      "time_limit_seconds": 440,
+      "reward": 481
+    },
+    {
+      "id": "contract-45",
+      "title": "Civic shift 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 518
+    },
+    {
+      "id": "contract-46",
+      "title": "Civic shift 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1
+      ],
+      "time_limit_seconds": 400,
+      "reward": 450
+    },
+    {
+      "id": "contract-47",
+      "title": "Civic shift 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        0
+      ],
+      "time_limit_seconds": 440,
+      "reward": 487
+    },
+    {
+      "id": "contract-48",
+      "title": "Civic shift 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        22,
+        10,
+        20,
+        10,
+        21,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 419
+    },
+    {
+      "id": "contract-49",
+      "title": "Brick and glass 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11
+      ],
+      "time_limit_seconds": 400,
+      "reward": 456
+    },
+    {
+      "id": "contract-50",
+      "title": "Brick and glass 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7
+      ],
+      "time_limit_seconds": 440,
+      "reward": 493
+    },
+    {
+      "id": "contract-51",
+      "title": "Brick and glass 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4
+      ],
+      "time_limit_seconds": 280,
+      "reward": 530
+    },
+    {
+      "id": "contract-52",
+      "title": "Brick and glass 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8
+      ],
+      "time_limit_seconds": 400,
+      "reward": 462
+    },
+    {
+      "id": "contract-53",
+      "title": "Brick and glass 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 534
+    },
+    {
+      "id": "contract-54",
+      "title": "Brick and glass 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2
+      ],
+      "time_limit_seconds": 480,
+      "reward": 536
+    },
+    {
+      "id": "contract-55",
+      "title": "Brick and glass 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        0
+      ],
+      "time_limit_seconds": 400,
+      "reward": 468
+    },
+    {
+      "id": "contract-56",
+      "title": "Brick and glass 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        21,
+        10,
+        22,
+        10,
+        20,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 435
+    },
+    {
+      "id": "contract-57",
+      "title": "Night dispatch 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23
+      ],
+      "time_limit_seconds": 480,
+      "reward": 542
+    },
+    {
+      "id": "contract-58",
+      "title": "Night dispatch 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4
+      ],
+      "time_limit_seconds": 400,
+      "reward": 474
+    },
+    {
+      "id": "contract-59",
+      "title": "Night dispatch 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1
+      ],
+      "time_limit_seconds": 260,
+      "reward": 511
+    },
+    {
+      "id": "contract-60",
+      "title": "Night dispatch 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9
+      ],
+      "time_limit_seconds": 480,
+      "reward": 548
+    },
+    {
+      "id": "contract-61",
+      "title": "Night dispatch 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 550
+    },
+    {
+      "id": "contract-62",
+      "title": "Night dispatch 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11
+      ],
+      "time_limit_seconds": 440,
+      "reward": 517
+    },
+    {
+      "id": "contract-63",
+      "title": "Night dispatch 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 554
+    },
+    {
+      "id": "contract-64",
+      "title": "Night dispatch 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        20,
+        10,
+        21,
+        10,
+        22,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 451
+    },
+    {
+      "id": "contract-65",
+      "title": "City circuit 1",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9,
+        3,
+        8
+      ],
+      "time_limit_seconds": 440,
+      "reward": 523
+    },
+    {
+      "id": "contract-66",
+      "title": "City circuit 2",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5
+      ],
+      "time_limit_seconds": 480,
+      "reward": 560
+    },
+    {
+      "id": "contract-67",
+      "title": "City circuit 3",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        1,
+        6,
+        23,
+        5,
+        11,
+        4,
+        9
+      ],
+      "time_limit_seconds": 240,
+      "reward": 492
+    },
+    {
+      "id": "contract-68",
+      "title": "City circuit 4",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7,
+        1,
+        6
+      ],
+      "time_limit_seconds": 440,
+      "reward": 529
+    },
+    {
+      "id": "contract-69",
+      "title": "City circuit 5",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        15,
+        18,
+        16,
+        19,
+        14,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 480,
+      "reward": 566
+    },
+    {
+      "id": "contract-70",
+      "title": "City circuit 6",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        11,
+        4,
+        9,
+        3,
+        8,
+        2,
+        7
+      ],
+      "time_limit_seconds": 400,
+      "reward": 498
+    },
+    {
+      "id": "contract-71",
+      "title": "City circuit 7",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        2,
+        7,
+        1,
+        6,
+        23,
+        5,
+        11,
+        0
+      ],
+      "time_limit_seconds": 440,
+      "reward": 535
+    },
+    {
+      "id": "contract-72",
+      "title": "City circuit 8",
+      "kind": "ISLAND POST",
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        22,
+        10,
+        20,
+        10,
+        21,
+        10
+      ],
+      "time_limit_seconds": 360,
+      "reward": 467
+    }
+  ],
+  "transit": {
+    "line1": {
+      "stops": [
+        0,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "period_seconds": 18,
+      "fare": 3,
+      "source": "https://www.ttc.ca/routes-and-schedules/1/0/15657"
+    },
+    "bus94": {
+      "stops": [
+        18,
+        16,
+        19
+      ],
+      "period_seconds": 24,
+      "fare": 2,
+      "source": "https://www.ttc.ca/routes-and-schedules/94/1/8008"
+    },
+    "ferry": {
+      "stops": [
+        10,
+        20,
+        21,
+        22
+      ],
+      "period_seconds": 30,
+      "fare": 4,
+      "source": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/"
+    },
+    "notice": "Fictional game timetables, fares and compression. Not a TTC trip planner."
+  }
+}

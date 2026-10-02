@@ -1,0 +1,894 @@
+{
+  "projection": "orthogonal north-up; x=u, y=v",
+  "dimensions": [
+    1024,
+    976
+  ],
+  "rows": [
+    64,
+    176,
+    288,
+    400,
+    528,
+    640,
+    720,
+    784
+  ],
+  "columns": [
+    80,
+    208,
+    336,
+    480,
+    560,
+    640,
+    720,
+    816,
+    944
+  ],
+  "road_half_width": 20,
+  "walk_half_width": 28,
+  "river": [
+    872,
+    912
+  ],
+  "bridges": [
+    64,
+    288,
+    400,
+    528,
+    784
+  ],
+  "mainland": [
+    24,
+    24,
+    992,
+    816
+  ],
+  "islands": [
+    [
+      336,
+      912,
+      600,
+      952
+    ],
+    [
+      640,
+      896,
+      784,
+      952
+    ],
+    [
+      800,
+      880,
+      928,
+      928
+    ]
+  ],
+  "blocks": [
+    {
+      "x": 112,
+      "y": 96,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 96,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 112,
+      "y": 208,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 208,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 112,
+      "y": 320,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 320,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 112,
+      "y": 432,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 432,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 112,
+      "y": 464,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 464,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 112,
+      "y": 560,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 560,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 112,
+      "y": 672,
+      "width": 24,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 144,
+      "y": 672,
+      "width": 24,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 96,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 96,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 208,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 208,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 320,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 5,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 320,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 5,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 432,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 432,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 464,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 464,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 560,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 560,
+      "width": 24,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 240,
+      "y": 672,
+      "width": 24,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 272,
+      "y": 672,
+      "width": 24,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 96,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 96,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 208,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 208,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 320,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 320,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 432,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 432,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 464,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 464,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 560,
+      "width": 32,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 560,
+      "width": 32,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 672,
+      "width": 32,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 408,
+      "y": 672,
+      "width": 32,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 96,
+      "width": 16,
+      "depth": 40,
+      "height": 16,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 208,
+      "width": 16,
+      "depth": 40,
+      "height": 16,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 320,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 432,
+      "width": 16,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 464,
+      "width": 16,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 560,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 512,
+      "y": 672,
+      "width": 16,
+      "depth": 16,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 96,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 208,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 320,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 432,
+      "width": 16,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 464,
+      "width": 16,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 560,
+      "width": 16,
+      "depth": 40,
+      "height": 16,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 592,
+      "y": 672,
+      "width": 16,
+      "depth": 16,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 96,
+      "width": 16,
+      "depth": 40,
+      "height": 16,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 208,
+      "width": 16,
+      "depth": 40,
+      "height": 16,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 320,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 432,
+      "width": 16,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 464,
+      "width": 16,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 560,
+      "width": 16,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 672,
+      "y": 672,
+      "width": 16,
+      "depth": 16,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 96,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 208,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 1,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 320,
+      "width": 32,
+      "depth": 40,
+      "height": 8,
+      "style": 2,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 432,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 464,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 560,
+      "width": 32,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": null
+    },
+    {
+      "x": 752,
+      "y": 672,
+      "width": 32,
+      "depth": 16,
+      "height": 8,
+      "style": 0,
+      "landmark": null
+    },
+    {
+      "x": 368,
+      "y": 672,
+      "width": 80,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": "Union Station colonnade"
+    },
+    {
+      "x": 752,
+      "y": 672,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 1,
+      "landmark": "St Lawrence Market"
+    },
+    {
+      "x": 848,
+      "y": 672,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 5,
+      "landmark": "Distillery warehouses"
+    },
+    {
+      "x": 512,
+      "y": 440,
+      "width": 24,
+      "depth": 40,
+      "height": 16,
+      "style": 3,
+      "landmark": "City Hall civic block"
+    },
+    {
+      "x": 400,
+      "y": 96,
+      "width": 48,
+      "depth": 40,
+      "height": 16,
+      "style": 4,
+      "landmark": "Royal Ontario Museum"
+    },
+    {
+      "x": 368,
+      "y": 432,
+      "width": 48,
+      "depth": 56,
+      "height": 16,
+      "style": 3,
+      "landmark": "Art Gallery of Ontario"
+    },
+    {
+      "x": 744,
+      "y": 584,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 1,
+      "landmark": "Gooderham Flatiron"
+    },
+    {
+      "x": 480,
+      "y": 928,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 3,
+      "landmark": "Hanlans service pavilion"
+    },
+    {
+      "x": 664,
+      "y": 904,
+      "width": 32,
+      "depth": 24,
+      "height": 8,
+      "style": 0,
+      "landmark": "Centre Island pavilion"
+    },
+    {
+      "x": 872,
+      "y": 888,
+      "width": 24,
+      "depth": 24,
+      "height": 8,
+      "style": 2,
+      "landmark": "Wards Island cottages"
+    }
+  ],
+  "canopies": [
+    [
+      112,
+      112,
+      16,
+      16
+    ],
+    [
+      152,
+      448,
+      16,
+      16
+    ],
+    [
+      248,
+      336,
+      16,
+      16
+    ],
+    [
+      360,
+      568,
+      16,
+      16
+    ],
+    [
+      488,
+      224,
+      16,
+      16
+    ],
+    [
+      584,
+      336,
+      16,
+      16
+    ],
+    [
+      744,
+      208,
+      16,
+      16
+    ],
+    [
+      832,
+      448,
+      16,
+      16
+    ],
+    [
+      960,
+      336,
+      16,
+      16
+    ],
+    [
+      352,
+      936,
+      16,
+      16
+    ],
+    [
+      656,
+      936,
+      16,
+      16
+    ],
+    [
+      816,
+      904,
+      16,
+      16
+    ],
+    [
+      664,
+      680,
+      16,
+      16
+    ],
+    [
+      664,
+      568,
+      16,
+      16
+    ],
+    [
+      360,
+      448,
+      16,
+      16
+    ],
+    [
+      504,
+      336,
+      16,
+      16
+    ],
+    [
+      584,
+      208,
+      16,
+      16
+    ]
+  ],
+  "scope": "Compressed central Toronto and Island service areas; full Old Toronto boundaries remain a release check"
+}

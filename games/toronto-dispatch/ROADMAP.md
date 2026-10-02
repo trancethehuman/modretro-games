@@ -1,47 +1,41 @@
 # Roadmap
 
-## 0 — Repository and decisions
+## Playable prototype — implemented
 
-- [x] Separate local Git repository, MIT licence, collection README, agent instructions, and skills.
-- [x] Record the user's chosen jobs, view, handling, and city requirements.
-- [x] Seed mission/vehicle planning content and source references with a validator.
-- [x] Attach ModRetro Chromatic plugin and inspect its setup/build/playtest skills.
-- [x] Publish the repository and verify public visibility, MIT detection and files: [trancethehuman/modretro-games](https://github.com/trancethehuman/modretro-games).
+- [x] Public MIT collection repository, one folder per game, README, AGENTS.md and workflow skills.
+- [x] Genuine editable GB Studio project and original project-local scene engine.
+- [x] User-revised north-up presentation, 1,024 × 976 scrollable city, 80 buildings and six architecture types.
+- [x] Four road vehicles; momentum, traction, braking/reverse, speed-dependent yaw and glancing curb recovery.
+- [x] Native building/water/rail collision, roof/canopy priority, walking animation and visible car entry/exit.
+- [x] Autonomous pedestrians and bounded road traffic.
+- [x] 72 compiled contracts, dispatch, collection/delivery, progression, cargo damage, vehicle constraints and timeout/retry.
+- [x] Fictional repeating schedules and paid travel on researched Line 1, 94 bus and Island ferry service points.
+- [x] Pause/map freeze the clock; transit resumes correctly after pausing.
+- [x] Native collision connectivity and contract/source consistency in repository CI.
+- [x] Native emulator delivery/transit/map/entry/collision/save checks. See exact build scopes in TESTING.md.
 
-## 1 — Driving feasibility
+## Next playable polish
 
-- [x] Create a valid editable GB Studio project through the plugin.
-- [x] Compile and boot a labelled starter room before implementing gameplay.
-- Build an original angled test intersection with a car, wall collision, and depth ordering.
-- Implement acceleration, coasting, braking, reverse, and speed-dependent turning.
-- Build a valid ROM and open its playable emulator preview.
-- Acceptance: no instant velocity changes; equal intended diagonal/cardinal speeds; braking before reversal; no wall penetration or permanent collision trap; compass/input readable on handheld.
+- [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
+- [ ] Tune steering, lane width, traffic spacing and frame pacing from handheld/human feedback.
+- [ ] Add sound effects, original music and volume options.
+- [ ] Expand pedestrian variety, street furniture, local activity and visible transit boarding/riding.
+- [ ] Author streetcar rails and moving streetcars on researched corridors; improve the current partial bus route geometry.
+- [ ] More distinctive Toronto landmark silhouettes, district character, industrial yards and additional navigable streets.
 
-## 2 — First complete delivery
+## Full game release
 
-- Research and draw a compressed connected downtown map with one depot and three distinct destination landmarks.
-- Add acceptance, pickup, carrying, delivery, timeout, cancellation, and retry states.
-- Add a signal-controlled intersection, bounded traffic, and a streetcar obstacle on a researched corridor.
-- Acceptance: all three jobs have reachable endpoints; stopped interaction is required; vehicle compatibility enforced; pause freezes simulation/time; deadline and reward tuned from actual route runs; roaming works without a job.
+- [ ] Expand beyond the compressed central map to the historical Old Toronto footprint, preserving researched topology and Islands.
+- [ ] Refine contract writing/objectives and sample all eight job types, including the unlock sequence and vehicle rules.
+- [ ] Record representative timings and a complete campaign; validate **at least two hours of varied, enjoyable gameplay**. Quest count does not verify duration.
+- [ ] Test crowded-scene sprite/CPU limits, diagonal walking, collision corner recovery, cancellation and schedule edge cases.
+- [ ] Test SRAM cold boot, interrupted saves and safe recovery from interrupted transit.
+- [ ] Audit linked runtime/distribution notices before publishing ROM releases.
 
-## 3 — Device milestone
+## Device milestone
 
-- Establish the actual console, cartridge, and Developer Mode readiness.
-- Stream the tested build if supported, then load the identified writable cartridge.
-- Acceptance: verified write/read-back where available, manual cold boot, movement/braking, one complete job, pause/restart, and audio. Record results without private device details.
+- [ ] Identify the connected Chromatic and supported writable cartridge; establish Developer Mode readiness.
+- [ ] Stream if supported, then load the user's identified writable development cartridge through the official workflow.
+- [ ] Verify write/read-back where available, manual cold boot, driving/braking, a full delivery, transit, save recovery and audio.
 
-## 4 — Vehicles and shift progression
-
-- Add truck, motorcycle, and scooter with distinct handling and vehicle-specific jobs.
-- Add a simple dispatch selection screen, shift score, and passenger pickup/drop-off with comfort feedback.
-- Evaluate save support and test persistence before adding saved progression.
-
-## 5 — Larger Toronto
-
-- Add researched neighbourhood districts, landmarks, street/transit labels, and industrial areas.
-- Verify map connections, mission continuity, memory/performance budgets, and district transitions.
-- Add environmental variations only after the core route/traffic loop is enjoyable.
-
-## Release evidence
-
-Each release needs editable sources, attribution, actual build/toolchain versions, emulator checks, and a digest of the released ROM. Publish only original homebrew outputs. Hardware results must state the tested device/cartridge class and distinguish manual observations from tool reports.
+No physical streaming or cartridge write has been attempted. Record device observations separately from emulator results without private activation or device details.
