@@ -2,9 +2,11 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The latest locally tested source candidate is **524,288 bytes**, SHA-256 `1400566247fddfa9a1acd5ef42e5f90bb19db9caa43a51fab0ce82400caa137f`, named `toronto-contact-recovery.gbc`. It includes the pickup-condition correction, moving Queen streetcar, occasional planes/helicopters and the traffic/arrival correction. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is the earlier `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include these later changes. Use each file's own checksum and testing record.
+The latest locally tested source candidate is **524,288 bytes**, SHA-256 `a212dd9ed479310a98e58b701416f8af88aaa09174f186747dca678ff4c164f4`, named `toronto-port-lands-labels.gbc`. It includes five linked compressed districts, the Port Lands industrial area and Cherry Beach, occasional planes/helicopters, a vertically scrollable city atlas and the previous moving Queen streetcar/traffic corrections. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the earlier four-district `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include these later changes. This source candidate has not been published as a new release.
 
-The current source retains four linked compressed districts, 88 contracts, 51 service points, the city map and scheduled subway/bus/ferry/Queen travel. Queen's $3 timetable is fictional. Three fresh scoped native passes cover an ordinary save-load walker overlap recovering without lost cash/condition, three paid Queen trips with a genuine paid-ride reset and exact map freezing, plane/helicopter rotor poses and shadows, plus first delivery/steering/braking/reverse recovery. Official build/header/compiled frames and a 1,176-byte static reserve pass, alongside sanitizer/content checks. The preceding `20370fea…` aircraft candidate has a newly reproduced walker trap and remains historical. Earlier roof, legacy-service, all-scene and other tests keep their own identities in [TESTING.md](../TESTING.md). Booked HOLD and blocked-alighting corrections have host coverage; forced native cases and crowded CPU/handheld acceptance remain open.
+The campaign remains 88 contracts and 51 service points; Port Lands currently adds free roaming. Three fresh scoped native passes cover paid Queen 46→49 and the reciprocal Leslie connection, industrial streets/Unwin bridge/Cherry Beach, exact map pause, a real button reset restoring a saved Port Lands checkpoint with its car still in Core, rendered plane/helicopter rotor poses and shadows, first delivery/steering/braking/reverse, and Front Street loop measurements. Official build/header/compiled frames and a 1,176-byte static reserve pass, alongside the full sanitizer/content suite. [TESTING.md](../TESTING.md) and [PERFORMANCE.md](PERFORMANCE.md) retain each ROM's own evidence. Static reserve and sampled sprite counts do not prove deepest stack usage or whole-city pacing.
+
+Earlier walker-contact, booked-tram HOLD, legacy-service and roof checks remain attached to their actual older ROMs. All vehicles/bridges/seams, the full campaign and two-hour target, full Old Toronto/Islands, browser recovery and physical execution remain open. No cartridge write/read-back, streaming or physical cold boot is recorded for this candidate.
 
 The new candidate uses save version 7 with the same 58-byte state and reads valid older checkpoints. Prototype 6 uses version 6 and cannot read rewritten version-7 records once both saved slots have been replaced. Preserve existing cartridge saves through the supported backup workflow before testing a newer build.
 
@@ -26,22 +28,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-contact-recovery.gbc
+games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-contact-recovery.gbc` with matching debug artifacts, run the documented native memory and compiled-frame guards, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-port-lands-labels.gbc` with matching debug artifacts, run the documented native memory and compiled-frame guards, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-contact-recovery.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-contact-recovery.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

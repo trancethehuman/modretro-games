@@ -241,6 +241,49 @@ def route_estimate(route, kind, distances):
     }, math.ceil(budget / 5) * 5
 
 
+def district_street_code():
+    street_names, street_segments = [], []
+    aliases = {'Colborne Lodge Drive south approach':'COLBORNE LODGE DR',
+               'Martin Goodman waterfront path':'MARTIN GOODMAN TRL',
+               'High Park formal spine':'HIGH PARK WALK',
+               'Colborne fictional service entrance':'COLBORNE WALK',
+               'Lake Shore Boulevard East':'LAKE SHORE BLVD E',
+               'Fictional Turning Basin service drive':'COURIER YARD DR',
+               'Villiers west bank fragment':'VILLIERS ST WEST',
+               'Villiers east bank fragment':'VILLIERS ST EAST',
+               'Carlaw Avenue southern approach':'CARLAW AVENUE',
+               'Fire Hall community walk':'FIRE HALL WALK',
+               'West park promenade walk':'WEST PARK WALK',
+               'South riverbank walk':'RIVERBANK WALK',
+               'Cherry Beach last mile':'CHERRY BEACH WALK'}
+    world = json.loads((ROOT / 'content/districts/world.json').read_text())
+    for entry in world['districts'][1:]:
+        district = entry['id']
+        slug = entry['scene'].removeprefix('toronto_')
+        metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
+        for road in metadata['roads'] + metadata['footpaths']:
+            name = aliases.get(road['name'], road['name'].upper().replace(' STREET WEST',' ST W').replace(' STREET',' ST').replace(' AVENUE',' AVE').replace(' BOULEVARD WEST',' BLVD W').replace(' BOULEVARD',' BLVD').replace(' ROAD',' RD').replace(' DRIVE',' DR'))[:18]
+            if name not in street_names:
+                street_names.append(name)
+            index = street_names.index(name)
+            for a, b in zip(road['points'], road['points'][1:]):
+                street_segments.append((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]), district, index))
+    code = [f'static const char td_west_street_names[{len(street_names)}][19]={{']
+    code += [f'  "{name}",' for name in street_names]
+    code += ['};','typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;',
+             f'static const td_street_t td_west_streets[{len(street_segments)}]={{']
+    code += ['  {' + ','.join(map(str, segment)) + '},' for segment in street_segments]
+    code += ['};',
+             'void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {',
+             ' UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;',
+             f' for(i=0;i<{len(street_segments)};i++){{s=&td_west_streets[i];if(s->district!=district)continue;',
+             ' score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);',
+             ' if(score<best){best=score;name=s->name;}',
+             ' }memcpy(d,td_west_street_names[name],19);',
+             '}']
+    return code
+
+
 def main():
     original_stops = [
         (288, 368, 'UNION DEPOT', 1), (384, 368, 'ST LAWRENCE', 0), (416, 368, 'DISTILLERY', 0),
@@ -325,7 +368,7 @@ def main():
     assert [q['id'] for q in eastern['quests']] == [f'contract-{i:02d}' for i in range(81, 89)]
     content['stops'].extend(eastern['stops'])
     quests.extend(eastern['quests'])
-    content['scope'] = 'Four linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.'
+    content['scope'] = 'Five linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction, eastern Riverdale/Leslieville and Port Lands. The fifth is free roaming; campaign clients remain in the first four scenes. Full Old Toronto and measured duration remain release checks.'
     assert len(quests) == 88 and len(content['stops']) == 43
     streetcar = json.loads((ROOT / 'content/streetcar.json').read_text())
     assert [s['id'] for s in streetcar['stops']] == list(range(43, 51))
@@ -350,37 +393,8 @@ def main():
         code.append(f'  "{brief}",')
     code += ['};']
     code += parking_code(content['stops'])
-    street_names, street_segments = [], []
-    aliases = {'Colborne Lodge Drive south approach':'COLBORNE LODGE DR',
-               'Martin Goodman waterfront path':'MARTIN GOODMAN TRL',
-               'High Park formal spine':'HIGH PARK WALK',
-               'Colborne fictional service entrance':'COLBORNE WALK'}
-    world = json.loads((ROOT / 'content/districts/world.json').read_text())
-    for entry in world['districts'][1:]:
-        district = entry['id']
-        slug = entry['scene'].removeprefix('toronto_')
-        metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
-        for road in metadata['roads'] + metadata['footpaths']:
-            name = aliases.get(road['name'], road['name'].upper().replace(' STREET WEST',' ST W').replace(' STREET',' ST').replace(' AVENUE',' AVE').replace(' BOULEVARD WEST',' BLVD W').replace(' BOULEVARD',' BLVD').replace(' ROAD',' RD').replace(' DRIVE',' DR'))[:18]
-            if name not in street_names:
-                street_names.append(name)
-            index = street_names.index(name)
-            for a, b in zip(road['points'], road['points'][1:]):
-                street_segments.append((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]), district, index))
-    code += [f'static const char td_west_street_names[{len(street_names)}][19]={{']
-    code += [f'  "{name}",' for name in street_names]
-    code += ['};','typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;',
-             f'static const td_street_t td_west_streets[{len(street_segments)}]={{']
-    code += ['  {' + ','.join(map(str, segment)) + '},' for segment in street_segments]
-    code += ['};',
-             'void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {',
-             ' UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;',
-             f' for(i=0;i<{len(street_segments)};i++){{s=&td_west_streets[i];if(s->district!=district)continue;',
-             ' score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);',
-             ' if(score<best){best=score;name=s->name;}',
-             ' }memcpy(d,td_west_street_names[name],19);',
-             '}',
-             'void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }',
+    code += district_street_code()
+    code += ['void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }',
              'void td_get_job(UBYTE i,td_job_t *d) BANKED { if(i<TD_QUESTS) memcpy(d,&td_jobs[i],sizeof(td_job_t)); }',
              'void td_get_brief(UBYTE i,char *d) BANKED { if(i<TD_QUESTS) memcpy(d,td_briefs[i],37); else d[0]=0; }',
              'void td_get_street(UWORD u,UWORD v,char *d) BANKED {',
@@ -423,4 +437,12 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    if sys.argv[1:] == ['--check-streets']:
+        expected = '\n'.join(district_street_code()) + '\n'
+        actual = (ENGINE / 'src/td_content.c').read_text()
+        assert expected in actual, 'District street labels are stale; regenerate create_campaign.py and verify existing campaign fields are preserved'
+        print('Native district street labels match every registered authored road/path')
+    else:
+        assert not sys.argv[1:], 'Use no arguments to regenerate, or --check-streets to verify without writes'
+        main()

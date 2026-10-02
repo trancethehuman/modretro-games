@@ -327,6 +327,32 @@ static void test_hidden_pedestrian(void) {
     expect(actors[9].flags&ACTOR_FLAG_HIDDEN,"distant fixed-route pedestrian is hidden");
     expect(td.speed==20&&td_vx==320,"hidden pedestrian does not slow a nearby vehicle");
 }
+static void native_case(void);
+static void test_pedestrian_phase_reuse(void) {
+    /* Recorded triangle positions/directions, including exact turnaround,
+       clock rollover and the highest route identity in each district. */
+    const struct {UWORD seconds;UBYTE subsecond,route,offset,direction;} cases[]={
+        {0,0,0,0,0},{0,0,1,37,0},{0,0,2,53,2},{0,0,3,16,2},
+        {1,59,0,23,0},{31,59,0,0,2},{32,0,0,0,0},
+        {65535,59,0,0,2},{65535,59,101,24,0},{65535,59,127,37,2}
+    };
+    for(UBYTE district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned point=0;point<sizeof(cases)/sizeof(cases[0]);point++){
+        UBYTE route=cases[point].route;if(route>=td_route_counts[district])continue;
+        native_case();td.onfoot=1;td.district=test_current_district=district;
+        td.seconds=cases[point].seconds;td.subsecond=cases[point].subsecond;td_tick=24;
+        td_ped_refresh=2;td_ped_route[0]=route;
+        td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
+        td_nearby_routes[0][0]=td_district_routes[district][route][0];
+        td_nearby_routes[0][1]=td_district_routes[district][route][1];
+        td_state_t before=td;td_pedestrians();
+        UWORD u=td_nearby_routes[0][0]+cases[point].offset,v=td_nearby_routes[0][1];
+        expect(actors[9].pos.x==u*32&&actors[9].pos.y==v*32&&
+               actors[9].frame_start==33+cases[point].direction&&td_ped_route[0]==route,
+               "reused phase preserves recorded native pedestrian position, turnaround direction and animation");
+        expect(!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!(td_distance(td.u>>4,u)<112&&td_distance(td.v>>4,v)<96)&&
+               !memcmp(&td,&before,58),"pedestrian phase reuse preserves visibility and every saved field");
+    }
+}
 
 static void test_signal_and_autonomous_traffic(void) {
     reset_case();td.onfoot=1;td.seconds=8;
@@ -1383,11 +1409,18 @@ static void test_car_entry_at_portal(void) {
 }
 
 static void test_first_frame_actors(void) {
-    const UWORD locations[TD_DISTRICT_COUNT][2]={{560,720},{800,64},{736,640},{224,528}};
+    /* Port Lands: Leslie's clear road at128, with authored sidewalk route
+       (864,92) near the courier at(930,128), rather than the zero-filled
+       origin of an omitted fifth initializer. */
+    const UWORD locations[][2]={{560,720},{800,64},{736,640},{224,528},{912,128}};
+    _Static_assert(sizeof(locations)/sizeof(locations[0])==TD_DISTRICT_COUNT,
+                   "Every registered district needs an explicit first-frame neighborhood fixture");
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++) {
         native_case();td_session_live=1;test_current_district=td.district=td.park_district=district;
         td.u=(locations[district][0]+18)*16;td.v=locations[district][1]*16;
         td.park_u=locations[district][0]*16;td.park_v=td.v;td.onfoot=1;toronto_init();
+        expect(td_drivable(locations[district][0],locations[district][1])&&td_walkable(td.u>>4,td.v>>4),
+               "each first-frame neighborhood fixture parks on an actual clear road and places the courier on walking terrain");
         expect(actors_len==TD_ACTORS&&PLAYER.pos.x==(td.u>>4)*32&&PLAYER.pos.y==(td.v>>4)*32,
                "each registered district initializes all actors and courier coordinates before its first update");
         expect(actors[8].pos.x==(td.park_u>>4)*32&&actors[8].pos.y==(td.park_v>>4)*32&&!(actors[8].flags&ACTOR_FLAG_HIDDEN),
@@ -1567,21 +1600,22 @@ static void advance_queen_to_east_view(void) {
 
 static void test_streetcar_loader_binding(void) {
     for(UBYTE district=0;district<TD_DISTRICT_COUNT;district++)for(UBYTE active=0;active<2;active++){
+        UBYTE has_tram=district==0||district==1||district==3;
         native_case();test_current_district=district;load_authored_scene_fixture();
-        if(active&&district!=2)activate_actor(&actors[1]);
+        if(active&&has_tram)activate_actor(&actors[1]);
         actors[1].script.bank=7;actors[1].script_update.bank=8;
         actors[1].hscript_hit=111;actors[1].hscript_update=222;
         UBYTE bound=td_streetcar_runtime_bind();actor_t *tram=&actors[15];
-        expect(bound==(district!=2)&&tram->sprite.ptr==(district==2?&test_player_sprite:&test_tram_sprite)&&
-               tram->base_tile==(district==2?4:96),
-               "binding captures the genuine preloaded authored sheet before the caller reuses slot1; High Park has no tram loader");
+        expect(bound==has_tram&&tram->sprite.ptr==(has_tram?&test_tram_sprite:&test_player_sprite)&&
+               tram->base_tile==(has_tram?96:4),
+               "binding captures the authored sheet only in the three registered Queen districts");
         expect((tram->flags&(ACTOR_FLAG_ACTIVE|ACTOR_FLAG_PERSISTENT|ACTOR_FLAG_HIDDEN))==
                (ACTOR_FLAG_ACTIVE|ACTOR_FLAG_PERSISTENT|ACTOR_FLAG_HIDDEN)&&
                !tram->collision_group&&!tram->script.bank&&!tram->script_update.bank&&
-               !tram->hscript_hit&&!tram->hscript_update&&(district==2||tram->frame==8),
+               !tram->hscript_hit&&!tram->hscript_update&&(!has_tram||tram->frame==8),
                "bound tram is initially hidden and linked once without the loader's scripts, collision or animation handles");
         expect(test_actors_active_head==tram&&!tram->prev&&!tram->next&&
-               (district==2||(!actors[1].prev&&!actors[1].next))&&actors_inactive_head==NULL,
+               (!has_tram||(!actors[1].prev&&!actors[1].next))&&actors_inactive_head==NULL,
                "inactive and active authored loaders are detached cleanly before custom tram activation");
     }
 }
@@ -2150,16 +2184,93 @@ static void test_streetcar_native_q5_bounds(void) {
     expect(!bad_scaled,"every Q5 actor endpoint agrees with the actual Q4 physical body including the last half-subpixel");
     expect(!bad_state,"all autonomous Q5-bound presentations preserve the serialized game state");
 }
+static void test_contact_corridor_coverage(void) {
+    const UWORD clear_points[][3][2]={
+        {{560,720},{824,240},{500,128}},{{800,480},{512,536},{840,720}},
+        {{560,528},{824,240},{500,128}},{{944,504},{400,720},{400,128}},
+        /* Clear Leslie/Lake Shore road, service drive and Cherry South
+           bridge. Queen-like local y coordinates must not invent service. */
+        {{912,128},{672,536},{192,536}}
+    };
+    _Static_assert(sizeof(clear_points)/sizeof(clear_points[0])==TD_DISTRICT_COUNT,
+                   "Every registered district needs explicit off-corridor contact fixtures");
+    native_case();
+    const td_streetcar_box_t port_lands={0,0,1024*16-1,976*16-1,TD_DISTRICT_PORT_LANDS};
+    expect(!td_streetcar_runtime_near(&port_lands),
+           "the entire Port Lands district has no Queen contact corridor despite overlap with other districts' local coordinates");
+    for(UBYTE point=0;point<3;point++){
+        expect(td_district_drivable(TD_DISTRICT_PORT_LANDS,clear_points[TD_DISTRICT_PORT_LANDS][point][0],
+                                   clear_points[TD_DISTRICT_PORT_LANDS][point][1]),
+               "Port Lands off-corridor fixtures use actual clear eleven-pixel native road footprints");
+    }
+    for(unsigned phase=0;phase<3840;phase++){
+        td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;
+        td_streetcar_pose_t pose;td_streetcar_box_t tram;
+        expect(td_streetcar_pose(td.seconds,td.subsecond,&pose)&&td_streetcar_bounds(&pose,&tram),
+               "corridor coverage samples all current bodies at bends, seams and turnarounds through clock rollover");
+        expect(pose.district!=TD_DISTRICT_PORT_LANDS,
+               "the full autonomous Queen cycle never produces a Port Lands tram body");
+        for(UBYTE corner=0;corner<4;corner++){
+            UWORD x=corner&1?tram.right:tram.left,y=corner&2?tram.bottom:tram.top;
+            td_streetcar_box_t point={x,y,x,y,tram.district};
+            expect(td_streetcar_runtime_near(&point),
+                   "every exact tram rectangle corner lies inside its district's conservative contact corridor");
+            for(UBYTE foot=0;foot<2;foot++){
+                UWORD half=foot?48:80;td_streetcar_box_t player;
+                UWORD u=corner&1?x+half:x-half,v=corner&2?y+half:y-half;
+                expect(td_streetcar_runtime_box(u,v,half,half,tram.district,&player)&&
+                       td_streetcar_runtime_overlap(&tram,&player)&&td_streetcar_runtime_near(&player),
+                       "a valid foot/car box touching just one outer tram corner cannot be rejected by the coarse early-out");
+            }
+        }
+        for(UBYTE district=0;district<TD_DISTRICT_COUNT;district++)for(UBYTE foot=0;foot<2;foot++){
+            td.district=district;td.onfoot=foot;td.mode=foot?TD_WAIT:TD_ROAM;
+            for(UBYTE point=0;point<3;point++){
+                td.u=clear_points[district][point][0]*16;td.v=clear_points[district][point][1]*16;
+                td_streetcar_box_t player;td_state_t before=td;
+                expect(td_streetcar_runtime_box(td.u,td.v,foot?48:80,foot?48:80,district,&player)&&
+                       !td_streetcar_runtime_near(&player)&&!td_streetcar_runtime_overlap(&tram,&player)&&
+                       td_streetcar_runtime_recover_contact(foot)==TD_STREETCAR_PARK_UNCHANGED&&
+                       !memcmp(&td,&before,58),
+                       "every valid off-corridor ROAM/WAIT box remains unchanged for the entire autonomous timetable");
+                if(district==TD_DISTRICT_PORT_LANDS)
+                    expect(td_streetcar_runtime_foot_clear(td.u,td.v)&&
+                           td_streetcar_runtime_car_clear(td.u,td.v,td.u,td.v)&&
+                           td_streetcar_runtime_traffic_clear(district,td.u,td.v)&&!memcmp(&td,&before,58),
+                           "Port Lands foot, car and future traffic queries add no phantom Queen occupancy across clock rollover");
+            }
+        }
+    }
+    for(UBYTE foot=0;foot<2;foot++){
+        native_case();td.onfoot=foot;td.u=560*16;td.v=720*16;td.subsecond=60;
+        expect(td_streetcar_runtime_recover_contact(foot)==TD_STREETCAR_CONTACT_INVALID,
+               "off-corridor optimization cannot bypass invalid subsecond validation");
+        td.subsecond=0;td.u=foot?47:79;
+        expect(td_streetcar_runtime_recover_contact(foot)==TD_STREETCAR_CONTACT_INVALID,
+               "off-corridor optimization cannot bypass the actual player footprint boundary");
+        td.u=560*16;td.district=TD_DISTRICT_COUNT;
+        expect(td_streetcar_runtime_recover_contact(foot)==TD_STREETCAR_CONTACT_INVALID,
+               "unknown district player geometry remains invalid before the coarse early-out");
+        td.mode=TD_PAUSE;td.subsecond=60;td.u=65535;
+        expect(td_streetcar_runtime_recover_contact(foot)==TD_STREETCAR_PARK_UNCHANGED,
+               "valid menu-mode calls retain their previous no-contact-query behavior before geometry validation");
+        expect(td_streetcar_runtime_recover_contact(!foot)==TD_STREETCAR_CONTACT_INVALID,
+               "even menu-mode calls preserve the original on-foot argument mismatch validation");
+    }
+}
 
 /* Deliberately include the East bend's empty interior, each seam, the
    turnaround lane and ordinary off-corridor traffic; none are generated
    from the production path table. */
-static const UWORD traffic_probe_points[4][6][2]={
+static const UWORD traffic_probe_points[][6][2]={
     {{740*16,536*16},{740*16,520*16},{24*16,536*16},{1000*16,520*16},{640*16,528*16},{560*16,720*16}},
     {{836*16,536*16},{836*16,520*16},{912*16,528*16},{1000*16,536*16},{800*16,480*16},{512*16,536*16}},
     {{740*16,536*16},{740*16,520*16},{24*16,536*16},{1000*16,520*16},{640*16,528*16},{560*16,720*16}},
-    {{680*16,536*16},{680*16,504*16},{664*16,488*16},{664*16,520*16},{400*16,504*16},{24*16,536*16}}
+    {{680*16,536*16},{680*16,504*16},{664*16,488*16},{664*16,520*16},{400*16,504*16},{24*16,536*16}},
+    {{192*16,536*16},{672*16,536*16},{912*16,536*16},{912*16,128*16},{352*16,824*16},{736*16,128*16}}
 };
+_Static_assert(sizeof(traffic_probe_points)/sizeof(traffic_probe_points[0])==TD_DISTRICT_COUNT,
+               "Every registered district needs explicit traffic lookahead probes");
 static void traffic_probe_boxes(UBYTE district,td_streetcar_box_t boxes[6]) {
     for(unsigned i=0;i<6;i++){
         UWORD u=traffic_probe_points[district][i][0],v=traffic_probe_points[district][i][1];
@@ -2169,7 +2280,7 @@ static void traffic_probe_boxes(UBYTE district,td_streetcar_box_t boxes[6]) {
 }
 static void test_traffic_lookahead_truth(void) {
     native_case();
-    for(UBYTE district=0;district<4;district++){
+    for(UBYTE district=0;district<TD_DISTRICT_COUNT;district++){
         td_streetcar_box_t boxes[6];traffic_probe_boxes(district,boxes);
         for(unsigned phase=0;phase<64*60;phase++){
             td.seconds=65472+phase/60;td.subsecond=phase%60;td_state_t before=td;
@@ -2249,7 +2360,7 @@ int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
     test_momentum_and_coasting();test_pressed_edge_once();test_clock();
-    test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();
+    test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();test_pedestrian_phase_reuse();
     test_signal_and_autonomous_traffic();
     test_city_routes_and_walking();
     test_audio_event_integration();
@@ -2274,7 +2385,7 @@ int main(void) {
     test_displaced_streetcar_wait();
     test_streetcar_cue_and_blocked_contact();
     test_contact_episode_and_invalid();test_banked_traffic_segments();test_connected_traffic_retreat();test_retreat_future_truth();test_booked_landing_and_held_occupancy();
-    test_streetcar_native_q5_bounds();
+    test_streetcar_native_q5_bounds();test_contact_corridor_coverage();
     test_traffic_lookahead_truth();test_sweep_section_scan_equivalence();
     test_aircraft_world_freezing();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);

@@ -51,7 +51,7 @@ static UBYTE td_streetcar_runtime_overlap(const td_streetcar_box_t *a,const td_s
 }
 static UBYTE td_streetcar_runtime_near(const td_streetcar_box_t *box){
     UWORD min_v,max_v,min_u,max_u;
-    if(box->district==2)return FALSE;
+    if(box->district!=0&&box->district!=1&&box->district!=3)return FALSE;
     min_u=10*16;max_u=1014*16;
     if(box->district==1){min_u=822*16;min_v=506*16;max_v=550*16;}
     else if(box->district==0){min_v=514*16;max_v=542*16;}
@@ -405,8 +405,13 @@ UBYTE td_streetcar_runtime_recover_contact(UBYTE onfoot) BANKED {
     WORD radius,dx,dy;UWORD u,v;
     if(onfoot>1||onfoot!=td.onfoot)return TD_STREETCAR_CONTACT_INVALID;
     if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT)return TD_STREETCAR_PARK_UNCHANGED;
-    if(!td_streetcar_pose(td.seconds,td.subsecond,&pose)||!td_streetcar_bounds(&pose,&tram)||
-       !td_streetcar_runtime_box(td.u,td.v,onfoot?3*16:5*16,onfoot?3*16:5*16,td.district,&body))return TD_STREETCAR_CONTACT_INVALID;
+    if(td.subsecond>=60||!td_streetcar_runtime_box(td.u,td.v,onfoot?3*16:5*16,
+       onfoot?3*16:5*16,td.district,&body))return TD_STREETCAR_CONTACT_INVALID;
+    /* This conservative corridor contains every authored current tram body,
+       including the East bend and endpoint turnarounds. A valid player box
+       outside it cannot contact the tram; avoid two nested banked queries. */
+    if(!td_streetcar_runtime_near(&body))return TD_STREETCAR_PARK_UNCHANGED;
+    if(!td_streetcar_pose(td.seconds,td.subsecond,&pose)||!td_streetcar_bounds(&pose,&tram))return TD_STREETCAR_CONTACT_INVALID;
     if(!td_streetcar_runtime_overlap(&tram,&body))return TD_STREETCAR_PARK_UNCHANGED;
     if(!td_streetcar_runtime_scene(td.district,&scene))return TD_STREETCAR_CONTACT_INVALID;
     /* Manhattan rings visit the nearest connected4px-grid escape first.

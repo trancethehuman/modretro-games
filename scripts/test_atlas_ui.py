@@ -42,7 +42,10 @@ void ui_set_pos(UBYTE x,UBYTE y);
         subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
                         "-Wno-unknown-pragmas", "-Wno-deprecated-declarations", "-fsanitize=address,undefined",
                         "-I", str(work), "-I", str(ENGINE / "include"),
-                        str(FIXTURES / "atlas_ui_harness.c"), str(work / "transit_under_test.c"), "-o", str(binary)], check=True)
+                        str(FIXTURES / "atlas_ui_harness.c"), str(work / "transit_under_test.c"),
+                        *map(str, sorted(ENGINE.glob('src/td_atlas_patterns_*.c'))),
+                        *map(str, sorted(ENGINE.glob('src/td_atlas_rows_*.c'))),
+                        "-o", str(binary)], check=True)
         raise SystemExit(subprocess.run([str(binary)], check=False).returncode)
 
 

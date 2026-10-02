@@ -247,7 +247,7 @@ UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED {
  for(i=0;i<3;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
  return FALSE;
 }
-static const char td_west_street_names[47][19]={
+static const char td_west_street_names[63][19]={
   "BLOOR ST W",
   "DUNDAS ST W",
   "COLLEGE ST",
@@ -295,9 +295,25 @@ static const char td_west_street_names[47][19]={
   "PAPE PEDESTRIAN RA",
   "GREENWOOD PARK WAL",
   "CHESTER STATION AP",
+  "LAKE SHORE BLVD E",
+  "CHERRY ST",
+  "COMMISSIONERS ST",
+  "OOKWEMIN ST",
+  "VILLIERS ST WEST",
+  "VILLIERS ST EAST",
+  "DON RDWAY",
+  "CARLAW AVENUE",
+  "POLSON ST",
+  "UNWIN AVE",
+  "REGATTA RD",
+  "COURIER YARD DR",
+  "FIRE HALL WALK",
+  "WEST PARK WALK",
+  "RIVERBANK WALK",
+  "CHERRY BEACH WALK",
 };
 typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;
-static const td_street_t td_west_streets[135]={
+static const td_street_t td_west_streets[166]={
   {816,64,1000,64,1,0},
   {816,64,816,112,1,0},
   {512,112,816,112,1,0},
@@ -422,7 +438,7 @@ static const td_street_t td_west_streets[135]={
   {544,64,544,208,3,37},
   {544,288,544,688,3,38},
   {704,64,704,496,3,39},
-  {816,256,816,656,3,40},
+  {816,256,816,952,3,40},
   {944,64,944,496,3,41},
   {80,720,384,720,3,42},
   {384,688,384,720,3,42},
@@ -433,10 +449,41 @@ static const td_street_t td_west_streets[135]={
   {544,208,544,288,3,44},
   {816,312,944,312,3,45},
   {176,32,176,64,3,46},
+  {24,128,672,128,4,47},
+  {672,64,672,128,4,47},
+  {672,64,976,64,4,47},
+  {192,24,192,832,4,48},
+  {192,352,336,352,4,49},
+  {336,288,336,352,4,49},
+  {336,288,592,288,4,49},
+  {592,224,592,288,4,49},
+  {592,224,912,224,4,49},
+  {272,256,272,352,4,50},
+  {272,256,400,256,4,51},
+  {512,192,544,192,4,52},
+  {544,128,544,288,4,53},
+  {736,24,736,224,4,54},
+  {912,24,912,768,4,40},
+  {128,576,192,576,4,55},
+  {192,824,864,824,4,56},
+  {864,768,864,824,4,56},
+  {864,768,912,768,4,56},
+  {352,824,352,864,4,57},
+  {672,224,672,576,4,58},
+  {672,576,704,576,4,58},
+  {304,352,328,352,4,59},
+  {328,352,328,432,4,59},
+  {312,432,328,432,4,59},
+  {144,352,192,352,4,60},
+  {144,352,144,432,4,60},
+  {192,552,352,552,4,61},
+  {352,552,352,592,4,61},
+  {352,864,352,888,4,62},
+  {352,888,432,888,4,62},
 };
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {
  UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;
- for(i=0;i<135;i++){s=&td_west_streets[i];if(s->district!=district)continue;
+ for(i=0;i<166;i++){s=&td_west_streets[i];if(s->district!=district)continue;
  score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);
  if(score<best){best=score;name=s->name;}
  }memcpy(d,td_west_street_names[name],19);

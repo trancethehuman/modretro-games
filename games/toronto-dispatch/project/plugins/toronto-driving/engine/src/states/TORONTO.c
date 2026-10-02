@@ -414,10 +414,6 @@ static void td_traffic_present(void){
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:td.vehicle*8+((td.heading+1)&15)/2);
     if(td.onfoot&&td.park_district==td_streetcar_view_district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
 }
-static UWORD td_pedestrian_u(UBYTE slot){
-    UBYTE phase=(td.seconds*12+td.subsecond/5+td_ped_route[slot]*37)&127;
-    return td_nearby_routes[slot][0]+(phase<64?phase:127-phase);
-}
 static void td_pedestrians(void){
     UBYTE i,route,phase,refresh;UWORD u,v,player_u=(td_streetcar_ride_view?td_streetcar_focus_u:td.u)>>4,player_v=(td_streetcar_ride_view?td_streetcar_focus_v:td.v)>>4;
     refresh=!--td_ped_refresh||td_distance(player_u,td_ped_anchor_u)>64||td_distance(player_v,td_ped_anchor_v)>64;
@@ -427,7 +423,8 @@ static void td_pedestrians(void){
     }
     for(i=0;i<6;i++){
         route=td_ped_route[i];if(route==TD_NONE){actors[9+i].flags|=ACTOR_FLAG_HIDDEN;continue;}
-        phase=(td.seconds*12+td.subsecond/5+route*37)&127;u=td_pedestrian_u(i);v=td_nearby_routes[i][1];
+        phase=(td.seconds*12+td.subsecond/5+route*37)&127;
+        u=td_nearby_routes[i][0]+(phase<64?phase:127-phase);v=td_nearby_routes[i][1];
         td_position(&actors[9+i],u,v);td_frame(&actors[9+i],32+(phase<64?0:2)+((td_tick>>3)&1));
         if(td_distance(player_u,u)<112&&td_distance(player_v,v)<96)actors[9+i].flags&=~ACTOR_FLAG_HIDDEN;
         else actors[9+i].flags|=ACTOR_FLAG_HIDDEN;

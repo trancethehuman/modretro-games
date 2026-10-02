@@ -281,11 +281,12 @@ static void test_every_viewport(void) {
                    "map header redraws never overwrite the shared active pattern dictionary cache");
             td_map_update(0,0);
         }
-        expect(td_map_row==12&&!td_map_error,"all225legal viewports finish real cached rendering");
+        expect(td_map_row==12&&!td_map_error,"every legal viewport finishes real cached rendering");
         expect(ground_uploads-uploads_before==td_map_count,"each viewport uploads each distinct ground pattern exactly once");
         verify_viewport();viewports++;
     }
-    expect(viewports==225,"fixture renders every actual legal twenty-by-twelve atlas viewport");
+    expect(viewports==(TD_ATLAS_TILE_WIDTH-19)*(TD_ATLAS_TILE_HEIGHT-11),
+           "fixture renders every actual legal twenty-by-twelve atlas viewport");
     expect_game_unchanged(&before);td_map_close();
     for(unsigned i=0;i<sizeof(td_ui_cache);i++)
         expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the360-byte text/pattern union cache");
@@ -345,21 +346,48 @@ static void test_panning_and_bounds(void) {
     UBYTE x=td_map_x,y=td_map_y;
     td_map_update(J_LEFT|J_RIGHT|J_UP|J_DOWN,0);
     expect(td_map_x==x&&td_map_y==y&&td_map_row==12,"opposing held pan directions cancel on both axes");
-    for(unsigned i=0;i<50;i++){td_map_update(J_LEFT|J_UP,0);finish_paint();}
+    unsigned pan_steps=TD_ATLAS_TILE_WIDTH>100?(TD_ATLAS_TILE_WIDTH+1)/2:50;
+    if(pan_steps<TD_ATLAS_TILE_HEIGHT)pan_steps=TD_ATLAS_TILE_HEIGHT;
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_LEFT|J_UP,0);finish_paint();}
     expect(td_map_x==0&&td_map_y==0,"repeated diagonal panning clamps exactly at the northwest atlas bounds");
     verify_viewport();
-    for(unsigned i=0;i<50;i++){td_map_update(J_RIGHT|J_DOWN,0);finish_paint();}
-    expect(td_map_x==44&&td_map_y==4,"repeated diagonal panning clamps exactly at the southeast padded atlas bounds");
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_RIGHT|J_DOWN,0);finish_paint();}
+    expect(td_map_x==TD_ATLAS_TILE_WIDTH-20&&td_map_y==TD_ATLAS_TILE_HEIGHT-12,
+           "repeated diagonal panning clamps exactly at the southeast padded atlas bounds");
     verify_viewport();
-    for(unsigned i=0;i<50;i++){td_map_update(J_LEFT|J_DOWN,0);finish_paint();}
-    expect(td_map_x==0&&td_map_y==4,"horizontal motion never underflows the atlas while bottom edge remains clamped");
-    for(unsigned i=0;i<50;i++){td_map_update(J_RIGHT|J_UP,0);finish_paint();}
-    expect(td_map_x==44&&td_map_y==0,"horizontal motion never overflows the atlas while top edge remains clamped");
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_LEFT|J_DOWN,0);finish_paint();}
+    expect(td_map_x==0&&td_map_y==TD_ATLAS_TILE_HEIGHT-12,
+           "horizontal motion never underflows the atlas while bottom edge remains clamped");
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_RIGHT|J_UP,0);finish_paint();}
+    expect(td_map_x==TD_ATLAS_TILE_WIDTH-20&&td_map_y==0,
+           "horizontal motion never overflows the atlas while top edge remains clamped");
     td_map_update(J_A,J_A);x=td_map_x;y=td_map_y;
     expect(td_map_row==1,"focus begins a genuine partial paint for held-input gating");
     td_map_update(J_LEFT|J_UP,0);
     expect(td_map_x==x&&td_map_y==y&&td_map_row==2,"held panning waits until the current atlas viewport has fully painted");
     finish_paint();verify_viewport();expect_game_unchanged(&before);td_map_close();
+}
+
+static void test_appended_district_focus_and_holes(void) {
+    if(TD_DISTRICT_COUNT==4)return;
+    for(UBYTE district=4;district<TD_DISTRICT_COUNT;district++) {
+        reset_case();td.district=district;td.u=480*16;td.v=700*16;
+        td_target.district=district;td_target.u=512;td_target.v=512;
+        open_case();game_snapshot_t before=snapshot_game();finish_paint();verify_viewport();
+        expect_focus(0,district,480,700,"appended scene centres and renders its player marker without shifting earlier districts");
+        td_map_update(J_A,J_A);finish_paint();verify_viewport();
+        expect_focus(2,district,512,512,"appended scene objective focus uses its actual two-dimensional atlas origin");
+        expect_game_unchanged(&before);td_map_close();
+    }
+    for(unsigned y=0;y+12<=TD_ATLAS_TILE_HEIGHT;y++)for(unsigned x=0;x+20<=TD_ATLAS_TILE_WIDTH;x++) {
+        char district_name[19];
+        if(td_atlas_district((x+10)*8,(y+6)*8,district_name))continue;
+        reset_case();open_case();game_snapshot_t before=snapshot_game();
+        td_map_x=x;td_map_y=y;td_map_begin();td_map_headers();finish_paint();verify_viewport();
+        char text[21];read_window_text(1,text);
+        expect(strstr(text,"CITY EDGE")!=NULL,"a sparse atlas hole renders the visible city-edge header");
+        expect_game_unchanged(&before);td_map_close();return;
+    }
 }
 
 static void test_paid_transit_objective_context(void) {
@@ -488,7 +516,7 @@ static void test_sparse_table_full_and_single_holes(void) {
             /* Deliberately force congestion with synthetic occupied IDs that
              * cannot match any actual pattern. No hash/home/stride calculation
              * is mirrored: each possible sole empty slot must be reachable. */
-            for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=1000+i;
+            for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=TD_ATLAS_PATTERNS+i;
             td_ui_cache.patterns[hole]=65535;
             game_snapshot_t before=snapshot_game();unsigned uploads=ground_uploads;
             td_map_paint_row();
@@ -497,14 +525,14 @@ static void test_sparse_table_full_and_single_holes(void) {
             expect(ground_uploads==uploads+1&&!memcmp(vram[1][16+hole],pattern,16),
                    "single-hole insertion uploads the correct real pattern exactly once to its stable bounded slot");
             for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)if(i!=hole)
-                expect(td_ui_cache.patterns[i]==1000+i,"collision probing never overwrites an occupied cache slot");
+                expect(td_ui_cache.patterns[i]==TD_ATLAS_PATTERNS+i,"collision probing never overwrites an occupied cache slot");
             if(distinct)expect(td_map_error&&td_map_row==12,"a second distinct row pattern terminates safely when the table has become full");
             else expect(!td_map_error,"an already inserted row pattern remains retrievable after the table becomes full");
             expect_game_unchanged(&before);td_map_close();
         }
         reset_case();open_case();td_map_x=cases[fixture][0];td_map_y=cases[fixture][1];td_map_row=cases[fixture][2];
         td_map_count=TD_ATLAS_VISIBLE_LIMIT;
-        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=1000+i;
+        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=TD_ATLAS_PATTERNS+i;
         UWORD before[TD_ATLAS_VISIBLE_LIMIT];memcpy(before,td_ui_cache.patterns,sizeof(before));
         unsigned uploads=ground_uploads;td_map_paint_row();
         expect(td_map_error&&td_map_row==12&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
@@ -521,6 +549,7 @@ int main(void) {
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();
     test_sparse_table_full_and_single_holes();
     test_wait_contact_hud_and_map_restore();
+    test_appended_district_focus_and_holes();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

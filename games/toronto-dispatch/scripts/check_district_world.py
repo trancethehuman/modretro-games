@@ -20,6 +20,91 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def native_tile(resources, district, x, y):
+    width, height, grid, _ = resources[district]
+    return grid[y * width + x] if 0 <= x < width and 0 <= y < height else 15
+
+
+def native_footprint(resources, district, u, v, half=5):
+    # Match td_district_drivable's centre bounds and every overlapped tile.
+    if u < 8 or v < 8 or u > 1016 or v > 968:
+        return False
+    return all(native_tile(resources, district, x, y) == 0
+               for y in range((v - half) // 8, (v + half) // 8 + 1)
+               for x in range((u - half) // 8, (u + half) // 8 + 1))
+
+
+def native_walkable(resources, district, u, v):
+    return not (native_tile(resources, district, u // 8, v // 8) & 15)
+
+
+def check_seams(world, resources):
+    """Check reciprocal native inset lanes and adjacent atlas rectangles.
+
+    Compression may give the two ends different lateral coordinates. Native
+    crossings preserve their offset from each end's own centre, not a global
+    lateral coordinate. N/S uses v as its crossing axis; E/W uses u.
+    """
+    districts = {district['id']: district for district in world['districts']}
+
+    def endpoint(value):
+        assert all(type(value[key]) is int for key in ('district', 'u', 'v')), 'Non-integer seam endpoint'
+        assert value['district'] in districts and value['district'] in resources, 'Unregistered seam district'
+        district = districts[value['district']]
+        assert (district['width_pixels'], district['height_pixels']) == (1024, 976)
+        u, v = value['u'], value['v']
+        if u in (24, 1000):
+            assert 32 <= v < 944, 'Horizontal seam lateral coordinate outside native bounds'
+            return 'horizontal'
+        assert v in (24, 952) and 32 <= u < 992, 'Vertical seam outside native inset/lateral bounds'
+        return 'vertical'
+
+    directed, unordered = set(), set()
+    for portal in world['portals']:
+        first, last = portal['from'], portal['to']
+        assert first['district'] != last['district'] and set(portal['access']) <= {'foot', 'vehicle'}
+        assert 'foot' in portal['access']
+        axis = endpoint(first)
+        assert endpoint(last) == axis, 'Mixed seam axes'
+        horizontal = axis == 'horizontal'
+        normal, lateral = ('u', 'v') if horizontal else ('v', 'u')
+        extent = 1024 if horizontal else 976
+        assert last[normal] == extent - first[normal], 'Seam insets must be opposite'
+        a, b = districts[first['district']], districts[last['district']]
+        atlas_normal, atlas_lateral = ('atlas_x', 'atlas_y') if horizontal else ('atlas_y', 'atlas_x')
+        lateral_extent = 976 if horizontal else 1024
+        delta = extent if first[normal] != 24 else -extent
+        assert b[atlas_normal] == a[atlas_normal] + delta, 'Seam atlas edges are not adjacent'
+        assert max(a[atlas_lateral], b[atlas_lateral]) < min(a[atlas_lateral], b[atlas_lateral]) + lateral_extent, 'Seam atlas edges do not overlap'
+        assert type(portal['modeled_crossing_pixels']) is int and portal['modeled_crossing_pixels'] > 0
+        endpoints = tuple(sorted((tuple(first[k] for k in ('district', 'u', 'v')), tuple(last[k] for k in ('district', 'u', 'v')))))
+        assert endpoints not in unordered, 'Duplicate seam pair'
+        unordered.add(endpoints)
+        vehicle = int('vehicle' in portal['access'])
+        for origin, destination in ((first, last), (last, first)):
+            directed.add((origin['district'], origin['u'], origin['v'], destination['district'], destination['u'], destination['v'], vehicle))
+
+            def position(coordinate, offset):
+                return (coordinate, origin[lateral] + offset) if horizontal else (origin[lateral] + offset, coordinate)
+
+            # Walking queues at the inset trigger, before the outer fence.
+            # Four pixels of overshoot also covers the road-motion approach.
+            inset = origin[normal]
+            for coordinate in range(inset - 4, inset + 5):
+                for offset in range(-28, 29):
+                    assert native_walkable(resources, origin['district'], *position(coordinate, offset)), f"Blocked foot seam lane: {portal['name']}"
+            if vehicle:
+                approach = range(8, 25) if inset == 24 else range(extent - 24, extent - 7)
+                for coordinate in approach:
+                    for offset in range(-18, 19):
+                        assert native_footprint(resources, origin['district'], *position(coordinate, offset)), f"Blocked native car seam lane: {portal['name']}"
+                for offset in (-12, 0, 12):
+                    assert native_footprint(resources, origin['district'], *position(inset, offset), half=8), f"Blocked centred car seam footprint: {portal['name']}"
+            else:
+                assert not native_footprint(resources, origin['district'], origin['u'], origin['v']), 'Foot-only seam admits a car'
+    return directed
+
+
 def check():
     world = read(ROOT / 'content/districts/world.json')
     campaign = read(ROOT / 'content/campaign.json')
@@ -92,19 +177,13 @@ def check():
             assert all(grid[y * width + x] == 15 for y in range(top, bottom + 1) for x in range(left, right + 1)), f'{slug}: building footprint is passable'
 
     def tile(district, x, y):
-        width, height, grid, _ = resources[district]
-        return grid[y * width + x] if 0 <= x < width and 0 <= y < height else 15
+        return native_tile(resources, district, x, y)
 
     def footprint(district, u, v, half=5):
-        # Exact native half5 bounds and every overlapped tile, not four corners.
-        if u < 8 or v < 8 or u > 1016 or v > 968:
-            return False
-        return all(tile(district, x, y) == 0
-                   for y in range((v - half) // 8, (v + half) // 8 + 1)
-                   for x in range((u - half) // 8, (u + half) // 8 + 1))
+        return native_footprint(resources, district, u, v, half)
 
     def walkable(district, u, v):
-        return not (tile(district, u // 8, v // 8) & 15)
+        return native_walkable(resources, district, u, v)
 
     def cardinal_points(points, closed=False):
         segments = zip(points, points[1:] + points[:1] if closed else points[1:])
@@ -115,38 +194,7 @@ def check():
                 yield a[0] + (step if b[0] > a[0] else -step if b[0] < a[0] else 0), a[1] + (step if b[1] > a[1] else -step if b[1] < a[1] else 0)
 
     assert len(world['portals']) >= 11
-    directed, unordered = set(), set()
-    for portal in world['portals']:
-        first, last = portal['from'], portal['to']
-        assert first['district'] != last['district'] and set(portal['access']) <= {'foot', 'vehicle'}
-        assert 'foot' in portal['access']
-        assert first['u'] in (24, 1000) and last['u'] == 1024 - first['u']
-        assert isinstance(portal['modeled_crossing_pixels'], int) and portal['modeled_crossing_pixels'] > 0
-        endpoints = tuple(sorted((tuple(first[k] for k in ('district', 'u', 'v')), tuple(last[k] for k in ('district', 'u', 'v')))))
-        assert endpoints not in unordered, 'Duplicate seam pair'
-        unordered.add(endpoints)
-        vehicle = int('vehicle' in portal['access'])
-        for origin, destination in ((first, last), (last, first)):
-            directed.add((origin['district'], origin['u'], origin['v'], destination['district'], destination['u'], destination['v'], vehicle))
-            # Validate every accepted native lateral offset, and the whole
-            # pre-transition approach. Arrival side preserves the offset.
-            # Walking queues at the inset trigger, before the outer fence;
-            # a half-pixel step cannot visit x8/1016 after crossing x24/1000.
-            # Four pixels of overshoot is also conservative for road motion.
-            foot_us = range(20, 29) if origin['u'] == 24 else range(996, 1005)
-            for u in foot_us:
-                for offset in range(-28, 29):
-                    assert walkable(origin['district'], u, origin['v'] + offset), f"Blocked foot seam lane: {portal['name']}"
-            if vehicle:
-                car_us = range(8, 25) if origin['u'] == 24 else range(1000, 1017)
-                for u in car_us:
-                    for offset in range(-18, 19):
-                        assert footprint(origin['district'], u, origin['v'] + offset), f"Blocked native car seam lane: {portal['name']}"
-            if vehicle:
-                for offset in (-12, 0, 12):
-                    assert footprint(origin['district'], origin['u'], origin['v'] + offset, 8)
-            else:
-                assert not footprint(origin['district'], origin['u'], origin['v']), 'Foot-only seam admits a car'
+    directed = check_seams(world, resources)
     for district, meta in metadata.items():
         expected = {(district, p['x'], p['y'], p['target'], p['target_x'], p['target_y'], int(not p['foot_only'])) for p in meta['ports']}
         assert expected == {p for p in directed if p[0] == district}, f'{district}: native seams differ from original ports'

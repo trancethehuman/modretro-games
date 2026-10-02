@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 from pathlib import Path
 import sys
 
@@ -17,8 +18,9 @@ from check_rom_memory import read_symbols
 AIRCRAFT = "_sprite_ambient_aircraft"
 COURIER = "_sprite_top_down_vehicles_and_courier"
 QUEEN = "_sprite_queen_streetcar"
-SCENES = ("_scene_toronto_city", "_scene_toronto_west",
-          "_scene_toronto_high_park", "_scene_toronto_east")
+WORLD = Path(__file__).resolve().parents[1] / "games/toronto-dispatch/content/districts/world.json"
+SCENES = tuple("_" + district["symbol"] for district in json.loads(WORLD.read_text())["districts"])
+QUEEN_SCENES = {"_scene_toronto_city", "_scene_toronto_west", "_scene_toronto_east"}
 
 
 def rom_offset(symbol: int, size: int) -> int:
@@ -130,7 +132,7 @@ def inspect_details(rom: bytes, symbols: dict[str, int]) -> tuple[list[str], lis
             extra = [far(rows[index:index + 3]) for index in range(0, len(rows), 3)]
         scene_assets = [player] + extra
         wanted = {symbols[COURIER], symbols[AIRCRAFT]}
-        if name != "_scene_toronto_high_park":
+        if name in QUEEN_SCENES:
             wanted.add(symbols[QUEEN])
         if set(scene_assets) != wanted or len(scene_assets) != len(wanted):
             errors.append(f"{name}: expected one compiled instance of each city sprite asset")
@@ -203,7 +205,7 @@ def self_test() -> int:
     background = bytearray(14);background[5:8] = fp(bkg1)
     background_pointer = put(background)
     for name in SCENES:
-        sprites = [symbols[AIRCRAFT]] if "high_park" in name else [symbols[QUEEN], symbols[AIRCRAFT]]
+        sprites = [symbols[QUEEN], symbols[AIRCRAFT]] if name in QUEEN_SCENES else [symbols[AIRCRAFT]]
         list_pointer = put(b"".join(fp(p) for p in sprites))
         scene = bytearray(35);scene[6] = len(sprites)
         scene[8:11], scene[11:14], scene[29:32] = fp(symbols[COURIER]), fp(background_pointer), fp(list_pointer)

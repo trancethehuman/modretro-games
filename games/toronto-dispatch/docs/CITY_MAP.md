@@ -1,6 +1,6 @@
 # Native city atlas
 
-Updated 2026-10-02. This milestone adds a browsable schematic of the four registered city areas to the existing paused map screen. Optimized candidate `e812f7ef…` has built through the official plugin, passed linked memory inspection and sampled ordinary-button native map/driving/transit checks. It follows unpublished intermediate `ec982d…`, whose slower redraws prompted the pattern-cache optimization. Publication, remaining native cases and physical checks are separate gates. Published Prototype 4, ROM `1da71ba5…`, contains the earlier camera-panning district map; its recordings do not verify this atlas. [TESTING.md](../TESTING.md) records evidence against each actual ROM.
+Updated 2026-10-02. Current source includes five registered city areas, with Port Lands below East; its implementation and pending native acceptance are recorded in the appendix below. The original four-area milestone sections retain their own source/ROM identities and budgets. Optimized candidate `e812f7ef…` built through the official plugin, passed linked memory inspection and sampled ordinary-button native map/driving/transit checks. It follows unpublished intermediate `ec982d…`, whose slower redraws prompted the pattern-cache optimization. Published Prototype 4, ROM `1da71ba5…`, contains the earlier camera-panning district map; its recordings do not verify this atlas. [TESTING.md](../TESTING.md) records evidence against each actual ROM.
 
 Final Prototype5 rebuild `2d1f6e4e…` separates the generated return statement for Linux GCC validation. Its runtime bytes and allocation are identical to `e812f7ef…`; only the stock save signature and global checksum differ. Two fresh final-ROM recordings repeat all driving/map/transit inputs and match the captured state checkpoints, including reset from a mapped paid ride. [TESTING.md](../TESTING.md) records both final journals and preserves predecessor timing/OAM evidence separately.
 
@@ -33,7 +33,7 @@ Each native tile contributes one map pixel: **0 solid/other**, **1 road** from c
 
 The generator validates contiguous registered IDs, actual native scene identity/dimensions, metadata agreement, non-overlap, coordinate bounds, water geometry and native array limits. It verifies the dictionary reconstructs every schematic pixel, including padding, and checks **every one of the 225 possible 20 × 12 viewports**.
 
-| Current generated budget | Value |
+| Historical four-area generated budget | Value |
 | --- | --- |
 | Distinct 8 × 8 patterns | 457 |
 | 2bpp dictionary | 7,312 bytes |
@@ -55,7 +55,7 @@ python3 -B scripts/test_atlas.py
 python3 -B scripts/test_atlas_ui.py
 ```
 
-`--check` recomputes the source hashes, pixels and budgets and compares deterministic JSON/header/C output without writes. [test_atlas.py](../../../scripts/test_atlas.py) compiles the unchanged BANKED API through [atlas_harness.c](../../../tests/engine/atlas_harness.c) using host type/bank adapters. Its independent collision/water oracle covers all 65,536 padded raster pixels, row slices, placement/quantisation, names, viewport budgets, invalid/null inputs and unchanged failed outputs. The current source passed 299,366 ASan/UBSan checks. Host checks do not establish native ABI, upload timing, framebuffer appearance or hardware behaviour.
+`--check` recomputes the source hashes, pixels and budgets and compares deterministic JSON/header/C output without writes. [test_atlas.py](../../../scripts/test_atlas.py) compiles the BANKED API through [atlas_harness.c](../../../tests/engine/atlas_harness.c) using host type/bank adapters. Its historical four-area collision/water oracle covers all 65,536 padded raster pixels, row slices, placement/quantisation, names, viewport budgets, invalid/null inputs and unchanged failed outputs. That source passed 299,366 ASan/UBSan checks. Host checks do not establish native ABI, upload timing, framebuffer appearance or hardware behaviour.
 
 [test_atlas_ui.py](../../../scripts/test_atlas_ui.py) compiles the actual renderer and atlas API through [atlas_ui_harness.c](../../../tests/engine/atlas_ui_harness.c), with host VRAM/window adapters. The optimized renderer passed **8,036,093 ASan/UBSan checks**, including all 225 viewport renders, frozen world/player/job/transit state, VRAM tile/font ownership, P/C/O combinations, focus changes, cancellation during redraw and bounded pattern-cache lookup. The preceding renderer's 7,568,628-check result is historical. Host coverage of all 225 viewports does not mean all were executed natively; native timing and state samples are scoped below.
 
@@ -67,7 +67,7 @@ The [renderer in td_ui.c](../project/plugins/toronto-driving/engine/src/td_ui.c)
 
 Read-only inspection of the exact Prototype 4 ROM confirmed the original ownership of these ranges: its bank-1 background sets use eight core/five West patterns at IDs 0–7, while the 56 bank-1 courier sprite tiles occupy the separate sprite region. The optimized candidate adds linked inspection and sampled native map/font restoration. Future assets or additional city areas must revalidate VRAM ownership, regenerate the atlas, and pass every visible pattern budget before a new build.
 
-Browsing updates only transient UI view/focus/redraw state. It keeps the active gameplay scene loaded, saves/restores camera coordinates/settings and every current actor's hidden bit, and uses the existing paused update path to freeze movement, world clock, job deadlines and transit ride time. It does not write progress or alter district-qualified player/car positions, cash, cargo or fare state. The source retains the 58-byte version-6 save layout.
+Browsing updates only transient UI view/focus/redraw state. It keeps the active gameplay scene loaded, saves/restores camera coordinates/settings and every current actor's hidden bit, and uses the existing paused update path to freeze movement, world clock, job deadlines and transit ride time. It does not write progress or alter district-qualified player/car positions, cash, cargo or fare state. The original atlas milestone retained the 58-byte version-6 save layout; current moving-tram/five-scene source uses version 7 in the same 58 bytes.
 
 ## Optimized candidate: sampled native evidence
 
@@ -83,3 +83,36 @@ The driving recording repeats first delivery at frame 740 and held-acceleration 
 With no active job, the transit recording shows paused RIDE/WAIT maps using the booked **KING/UNION STOP**, with the TRIP label. WAIT frames **2,826→2,986** retain all 58 state bytes, including world second 20, cash 24 and subsecond 48. Later boarding reaches a paid ride at world second 36/cash 21. A soft reset while its map is paused reaches HELP at frame **4,338**, restoring that paid RIDE with world second 36, cash 21 and ride remainder 1. At frame **4,466**, the courier arrives at King, world second 38/cash 21, with no extra fare.
 
 The earlier unpublished `ec982d…` rendered all four areas and retained frozen state through cancellation but exposed slower redraws; its linear lookup and recording do not substitute for the optimized candidate. Native checks above are sampled cases. Remote parked-car atlas focus, native parking-anchor/client switching, every viewport/focus combination, crowded-scene performance and remaining campaign cases still need coverage. Full former Toronto/waterfront/Islands, two measured hours of enjoyable gameplay, human handheld/audio review and physical cartridge boot/save/read-back remain pending. Record later acceptance and publication under their own identities in [TESTING.md](../TESTING.md).
+
+## Five-scene Port Lands appendix — current source, final native acceptance pending
+
+The generated [atlas.json](../content/atlas.json) now includes appended district **4, PORT LANDS**, at logical world offset `(3072,976)` and map-pixel offset `(384,122)`. The first four cells preserve their IDs, positions and 128 × 122 extents; the East cell's ground reflects its newly opened Leslie approach. Adding the second row moves no existing local scene coordinates. Only the reciprocal East Leslie `(816,952)` ↔ Port Lands `(912,24)` seam is registered. Core Cherry and Carlaw gateways remain withheld.
+
+The unpadded atlas is **512 × 244 pixels**, padded to **512 × 248 / 64 × 31 tiles**. The final four rows are solid padding. The lower-left three unregistered cells are also **SOLID**, with no district name; `td_atlas_district()` rejects those holes and leaves its output unchanged. There is no invented district or route across the blank area. The renderer checks **900 legal 20 × 12 viewports**, from 45 horizontal origins and 20 vertical origins, including those crossing the boundary between rows.
+
+| Current five-scene generated budget | Value |
+| --- | --- |
+| Distinct 8 × 8 patterns | 589 |
+| 2bpp dictionary | 9,424 bytes |
+| 1,984 UWORD map indices | 3,968 bytes |
+| Five district origins and names | 115 bytes |
+| Total ROM data | **13,507 bytes** |
+| Bounded data units | Two pattern units + one index unit |
+| Pattern-unit data | 8,192 bytes and 1,232 bytes |
+| Largest permitted data unit | 8,192 bytes, with separate code reserve |
+| Most patterns in a visible viewport | **164 of 172 reserved slots** |
+| Additional persistent WRAM in atlas data/API | 0 bytes |
+
+[atlas_banks.py](../scripts/atlas_banks.py) emits independent BANKED units: [td_atlas_patterns_0.c](../project/plugins/toronto-driving/engine/src/td_atlas_patterns_0.c), [td_atlas_patterns_1.c](../project/plugins/toronto-driving/engine/src/td_atlas_patterns_1.c) and [td_atlas_rows_0.c](../project/plugins/toronto-driving/engine/src/td_atlas_rows_0.c), with their private declarations in [td_atlas_data.h](../project/plugins/toronto-driving/engine/include/td_atlas_data.h). The public API copies into caller-supplied WRAM buffers rather than returning pointers into another ROM bank. Pattern units hold at most 512 patterns; index units hold at most 4,096 indices, and row reads can split at an index-unit boundary. The existing 360-byte UI cache, 172-slot lookup and marker/font ownership remain in use; the expanded dictionary is ROM data, not a new persistent world cache. Actual linked allocation/bank placement still needs inspection against the final five-scene ROM.
+
+Source ground derives from registered collisions and authored water masks. Port Lands contributes the harbour, Keating, Don mouth, Ship Channel, Turning Basin and circulation-channel shapes; road/foot permissions reopen only its supported decks. No water or land is imported from a reference image. Dictionary IDs may change during regeneration; unchanged cell positions do not imply unchanged dictionary indices.
+
+Current host runs pass **1,475,876 atlas API** and **24,151,786 UI sanitizer checks**, covering all 126,976 padded raster pixels and all 900 viewports, marker/focus/cancellation/state preservation and VRAM ownership. [test_atlas_banks.py](../../../scripts/test_atlas_banks.py) passes two independent synthetic banking fixtures with roughly 6.28 million checks each, exercising dictionaries beyond 512 patterns and indices beyond 4,096. It also rejects twelve invalid data/append-policy cases. [test_district_seams.py](../../../scripts/test_district_seams.py) passes 38 synthetic horizontal/vertical geometry and full-footprint cases. These establish host/generated-source behavior; annotations and fixtures do not prove real Game Boy bank switching or native speed.
+
+Ordinary-control exploration on candidate `6a8a…` observed paid Queen 46→49 travel followed by Leslie entry into the actual Port Lands scene. Its lower-left blank-area and lower-right Port Lands map pans preserved all 58 game-state bytes. That journal remains **needs-review** because exploration found the wrong street HUD label; it is not relabelled as a final passed record. The corrected ROM is building, so final five-scene native atlas/travel acceptance remains pending. Earlier `e812f7ef…`/`2d1f6e4e…` recordings above retain their own identities and do not certify this expanded atlas. Final ROM identity, linked budgets and scoped native results belong in [TESTING.md](../TESTING.md) and [BUILD.md](BUILD.md).
+
+Eight Port Lands clients/contracts and a researched bus connection remain proposals, outside the current **88 contracts / 51 service records**. This five-scene schematic is not full 17-district/former-Toronto or fuller-Islands coverage, two-hour campaign measurement, human fun/readability acceptance or physical cartridge evidence.
+
+## Corrected native Port Lands acceptance
+
+Street-label candidate `a212dd9ed479310a98e58b701416f8af88aaa09174f186747dca678ff4c164f4` repeats actual five-scene travel and the banked map after fixing the exploratory HUD issue. Native frames 13,976→16,076 pan into the lower empty area and back to Port Lands while every gameplay/flight byte remains unchanged. A saved Cherry Beach checkpoint survives the same-worker button reset, and the courier returns through Leslie to the actual East scene. This is sampled native map/scene acceptance, not every viewport or physical cartridge proof. Exact observations, matching source/NOI and immutable recording identities are in [NATIVE_PORT_LANDS_SAMPLES.json](NATIVE_PORT_LANDS_SAMPLES.json) and [TESTING.md](../TESTING.md). The unmodified frame-16,076 atlas image has provenance in [screenshots/provenance.json](screenshots/provenance.json).

@@ -25,7 +25,7 @@ static metasprite_t poses[14][5];
 static const metasprite_t *frames[14];
 static spritesheet_t sheet={14,frames,{8,&rom_tiles[0]},{9,&rom_tiles[1]}};
 static unsigned long checks;
-static unsigned long metadata_reads,rom_tile_bytes;
+static unsigned long metadata_reads,rom_tile_bytes,bkg_tile_reads;
 static void require(int result,const char *message){
     checks++;
     if(!result){fprintf(stderr,"FAIL after %lu checks: %s\n",checks,message);exit(1);}
@@ -58,7 +58,8 @@ void set_vram_byte(UBYTE *addr,UBYTE value){
     require(index>=0&&index<1024&&VBK_REG<2,"VRAM map write out of bounds");maps[VBK_REG][index]=value;
 }
 void get_bkg_data(UBYTE first,UBYTE count,UBYTE *data){
-    require(count==1&&VBK_REG<2,"BKG read outside one complete tile");memcpy(data,bkg_data[VBK_REG][first],16);
+    require(count==1&&VBK_REG<2,"BKG read outside one complete tile");bkg_tile_reads++;
+    memcpy(data,bkg_data[VBK_REG][first],16);
 }
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *data){
     require(count==1&&VBK_REG==1&&first>=32&&first<=46,"BKG scratch allocation crossed native ownership");
@@ -141,15 +142,29 @@ static UBYTE object_pixel(const OAM_item_t *object,WORD screen_x,WORD screen_y){
     data=obj_data[(object->prop>>3)&1][(object->tile&0xfe)+(y>>3)];
     return ((data[(y&7)*2]>>(7-x))&1)|(((data[(y&7)*2+1]>>(7-x))&1)<<1);
 }
+/* Count distinct priority cells covered by original PNG pixels. This oracle
+ * knows neither native object splits nor the renderer's shifted row masks. */
+static UBYTE opaque_priority_cells(WORD centre_x,WORD centre_y,UBYTE frame){
+    UBYTE covered[1024]={0},x,y,count=0;
+    UWORD cell;WORD wx,wy;
+    for(y=0;y<32;y++)for(x=0;x<32;x++)if(original_pixels[frame][y][x]){
+        wx=centre_x-16+x;wy=centre_y-16+y;
+        cell=(((UWORD)wy>>3)&31)*32+(((UWORD)wx>>3)&31);
+        if(!covered[cell]&&(base_maps[1][cell]&0x80)){covered[cell]=1;count++;}
+    }
+    return count;
+}
 static void pixel_checks(WORD centre_x,WORD centre_y,UBYTE frame,UBYTE bg_flip,UBYTE obj_flip){
     WORD wx,wy;UBYTE original,actual,air,i,original_attr,actual_attr;
-    UWORD cell;
+    UWORD cell;unsigned long previous_reads;
     reset(obj_flip);selected_frame=frame;td_aircraft.u=centre_x*16;td_aircraft.v=centre_y*16;
     for(cell=0;cell<1024;cell++)maps[1][cell]|=bg_flip<<5;
-    memcpy(base_maps,maps,sizeof(maps));VBK_REG=1;td_aircraft_render();
+    memcpy(base_maps,maps,sizeof(maps));previous_reads=bkg_tile_reads;VBK_REG=1;td_aircraft_render();
     require(VBK_REG==1,"Renderer failed to preserve incoming VRAM bank");
     require(allocated_hardware_sprites==6,"Uncrowded flight must preserve optional two-object shadow");
     require(td_aircraft_patch_count<=15,"Flyby exhausted bounded roof scratch tiles");
+    require(bkg_tile_reads-previous_reads==opaque_priority_cells(centre_x,centre_y,frame),
+            "Roof pixels were read beneath transparent aircraft coverage or skipped beneath opaque coverage");
     for(i=0;i<6;i++)require(!(shadow_OAM[i].prop&0x80),"Flyby/shadow OBJ priority hides it on nonzero road pixels");
     for(wy=centre_y-16;wy<centre_y+16;wy++)for(wx=centre_x-16;wx<centre_x+16;wx++){
         air=original_pixels[frame][wy-centre_y+16][wx-centre_x+16];
@@ -170,6 +185,50 @@ static void pixel_checks(WORD centre_x,WORD centre_y,UBYTE frame,UBYTE bg_flip,U
     require(VBK_REG==1&&!memcmp(base_maps,maps,sizeof(maps)),"Roof restore did not recover exact original map and attributes");
 }
 
+static void sparse_pixel_checks(void){
+    UBYTE frame,obj_flip,bg_flip,bank,tile,row,x,value,air,original,actual,covered[1024],changed[1024],expected;
+    UWORD cell;WORD centre_x,centre_y,wx,wy;unsigned long previous_reads;
+    for(frame=0;frame<12;frame++)for(obj_flip=0;obj_flip<4;obj_flip++)for(bg_flip=0;bg_flip<4;bg_flip++){
+        reset(obj_flip);selected_frame=frame;centre_x=324+bg_flip;centre_y=324+obj_flip;
+        draw_scroll_x=draw_scroll_y=248;td_aircraft.u=centre_x*16;td_aircraft.v=centre_y*16;
+        memset(covered,0,sizeof(covered));memset(changed,0,sizeof(changed));expected=0;
+        for(bank=0;bank<2;bank++)for(tile=0;tile<32;tile++)for(row=0;row<8;row++){
+            bkg_data[bank][tile][row*2]=bkg_data[bank][tile][row*2+1]=0;
+            for(x=0;x<8;x++){
+                value=(bank*3+tile*5+row+x*3)%4;
+                if(value&1)bkg_data[bank][tile][row*2]|=1<<(7-x);
+                if(value&2)bkg_data[bank][tile][row*2+1]|=1<<(7-x);
+            }
+        }
+        for(cell=0;cell<1024;cell++)maps[1][cell]=(cell%3?0x80:0)|((cell&1)<<3)|((cell>>2)&7)|(bg_flip<<5);
+        memcpy(base_maps,maps,sizeof(maps));previous_reads=bkg_tile_reads;VBK_REG=1;td_aircraft_render();
+        require(VBK_REG==1&&allocated_hardware_sprites==6,"Sparse roof fixture changed bank/OAM output");
+        require(bkg_tile_reads-previous_reads==opaque_priority_cells(centre_x,centre_y,frame),
+                "Sparse priority roof fetched a tile without an opaque aircraft pixel");
+        for(wy=centre_y-16;wy<centre_y+16;wy++)for(wx=centre_x-16;wx<centre_x+16;wx++){
+            air=original_pixels[frame][wy-centre_y+16][wx-centre_x+16];
+            cell=(((UWORD)wy>>3)&31)*32+(((UWORD)wx>>3)&31);
+            original=background_pixel(base_maps,wx,wy);actual=background_pixel(maps,wx,wy);
+            require(actual==((air&&(base_maps[1][cell]&0x80))?0:original),
+                    "Aggregated sparse roof mask changed transparent/nonpriority pixels or missed opaque pixels");
+            require((maps[1][cell]&0x87)==(base_maps[1][cell]&0x87),"Sparse roof changed palette/priority bits");
+            if(air&&(base_maps[1][cell]&0x80)){
+                covered[cell]=1;
+                if(original)changed[cell]=1;
+            }
+        }
+        for(cell=0;cell<1024;cell++){
+            expected+=changed[cell];
+            if(!changed[cell])require(maps[0][cell]==base_maps[0][cell]&&maps[1][cell]==base_maps[1][cell],
+                                      "Transparent or colour-zero-only roof allocated/referenced a scratch tile");
+            if(!covered[cell])require(maps[0][cell]==base_maps[0][cell],"Uncovered cell changed its tile reference");
+        }
+        require(td_aircraft_patch_count==expected,"Sparse roof must patch exactly the cells whose opaque pixels changed");
+        td_aircraft_render_restore();
+        require(VBK_REG==1&&!memcmp(base_maps,maps,sizeof(maps)),"Sparse roof failed exact conditional restoration");
+    }
+}
+
 static void restoration_checks(void){
     UWORD offset;UBYTE index;
     reset(0);td_aircraft.u=264*16;td_aircraft.v=264*16;memcpy(base_maps,maps,sizeof(maps));
@@ -187,10 +246,19 @@ static void restoration_checks(void){
 }
 
 static void binding_checks(void){
-    reset(0);td_aircraft_render_reset();district=2;actors_len=2;
-    actors[1].sprite=actors[2].sprite;actors[1].base_tile=16;actors[1].flags=ACTOR_FLAG_ACTIVE;
-    actors_inactive_head=NULL;actors[1].next=actors[1].prev=NULL;
-    td_aircraft_render_bind();require(td_aircraft_bound&&actors_inactive_head==NULL,"Active High Park loader was not removed from slot1");
+    UBYTE current,index;far_ptr_t sprite;
+    for(current=0;current<TD_DISTRICT_COUNT;current++){
+        reset(0);td_aircraft_render_reset();district=current;
+        index=(current==0||current==1||current==3)?2:1;actors_len=index+1;
+        sprite=actors[2].sprite;memset(actors,0,sizeof(actors));
+        actors[index].sprite=sprite;actors[index].base_tile=16+current*2;actors[index].flags=ACTOR_FLAG_ACTIVE;
+        actors_inactive_head=NULL;td_aircraft_render_bind();
+        require(td_aircraft_bound&&actors_inactive_head==NULL,"District loader was not removed from the authored slot");
+        require(td_aircraft_base==16+current*2&&td_aircraft_sprite.ptr==sprite.ptr&&td_aircraft_sprite.bank==sprite.bank,
+                "District loader binding captured the wrong sprite/base tile");
+        require(actors[index].flags==ACTOR_FLAG_HIDDEN&&!actors[index].prev&&!actors[index].next,
+                "District loader remains active or linked after binding");
+    }
     district=255;td_aircraft_render_bind();require(!td_aircraft_bound,"Unknown scene must not bind a flight loader");
 }
 
@@ -407,7 +475,7 @@ int main(void){
     UBYTE x,y,frame,flip,obj_flip;
     for(frame=0;frame<12;frame++)for(flip=0;flip<4;flip++)for(obj_flip=0;obj_flip<4;obj_flip++)
         for(y=0;y<8;y++)for(x=0;x<8;x++)pixel_checks(260+x,260+y,frame,flip,obj_flip);
-    restoration_checks();binding_checks();capacity_checks();edge_checks();window_checks();untouched_ground_checks();
+    sparse_pixel_checks();restoration_checks();binding_checks();capacity_checks();edge_checks();window_checks();untouched_ground_checks();
     cache_checks();capacity_differential_checks();final_outcome_checks();
     printf("Aircraft renderer: %lu checks, 0 failures (host VRAM/OAM adapters, no timing claim)\n",checks);
     return 0;

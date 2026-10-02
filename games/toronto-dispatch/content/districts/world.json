@@ -1,5 +1,5 @@
 {
-  "status": "Four scenes passed bounded native build, delivery, crossing and reset checks; see TESTING.md. Full Old Toronto and two-hour campaign unfinished.",
+  "status": "Five authored native scenes; corrected a212dd9e candidate passes scoped native Port Lands foot entry/roaming/map/reset/aircraft/return and core delivery/driving. All-city, all-vehicle, campaign-duration and hardware acceptance remain pending; earlier evidence retains its own ROM identities.",
   "projection": "North-up local pixels; each scene is 1024 by 976. Distances and seam lanes are original compression.",
   "districts": [
     {
@@ -41,6 +41,16 @@
       "height_pixels": 976,
       "atlas_x": 3072,
       "atlas_y": 0
+    },
+    {
+      "id": 4,
+      "name": "PORT LANDS",
+      "scene": "toronto_port_lands",
+      "symbol": "scene_toronto_port_lands",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 3072,
+      "atlas_y": 976
     }
   ],
   "portals": [
@@ -294,7 +304,25 @@
         "vehicle"
       ],
       "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Leslie / Port Lands",
+      "from": {
+        "district": 3,
+        "u": 816,
+        "v": 952
+      },
+      "to": {
+        "district": 4,
+        "u": 912,
+        "v": 24
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
     }
   ],
-  "notice": "These three scenes expand the central prototype westward. They do not cover the full former City of Toronto. Road shapes, mission entrances, timetables and art are original game design based on separately attributed geographic facts."
+  "notice": "Original compressed districts within former Toronto. The appended Port Lands is reached via Leslie; Core Cherry and Carlaw approaches remain withheld. This is not full former-Toronto or Island coverage. Distances, clients, traffic, schedules and art are original game design based on separately attributed facts."
 }

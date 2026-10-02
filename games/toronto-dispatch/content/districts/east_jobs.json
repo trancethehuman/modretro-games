@@ -31,7 +31,7 @@
     "time_limit_seconds",
     "reward"
   ],
-  "world_sha256": "626de8b9a745e87bbedfd6722488f51d82c62777ef8ff44de130fec1ea93866a",
+  "world_sha256": "e5bcb035a69daf71ffee8289a4740acf9e707d8ea373b5c5e5cf364bc3457d45",
   "collision_resources": [
     {
       "district": 0,
@@ -51,13 +51,18 @@
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "collision_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71"
+      "collision_sha256": "c70340500318d89e5301a3cc94d51e96f534b0fcd6f33ab1ffb73c012e7e1764"
+    },
+    {
+      "district": 4,
+      "scene": "project/project/scenes/toronto_port_lands/scene.gbsres",
+      "collision_sha256": "5d20e96673670728837a481462b0f7e30d76e354579b1ea0427bc73545f73d1d"
     }
   ],
   "geography_metadata": [
     {
       "path": "content/districts/east_art.json",
-      "sha256": "10acefa205353d1765ddbe99edfda8df36df696d8fed97803e54eb4414a15bcc",
+      "sha256": "52c28a8b9da79bb5ef2bc6223d55ea671d5113740c79ba6a5a292c80b2a2fed4",
       "notice": "Source-derived geography and original compressed artwork; retain City attribution in metadata and distribution notices"
     }
   ],

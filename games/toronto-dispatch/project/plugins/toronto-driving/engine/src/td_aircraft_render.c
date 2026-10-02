@@ -51,7 +51,7 @@ void td_aircraft_render_reset(void) BANKED {
 }
 
 void td_aircraft_render_bind(void) BANKED {
-    UBYTE district=td_district_current(),index=district==2?1:2;
+    UBYTE district=td_district_current(),index=(district==0||district==1||district==3)?2:1;
     actor_t *loader=&actors[index];
     td_aircraft_cache_ready=0;
     td_aircraft_bound=district<TD_DISTRICT_COUNT&&actors_len>index&&
@@ -209,7 +209,7 @@ static UBYTE td_aircraft_capacity(const OAM_item_t *objects,UBYTE count,
 
 #ifdef CGB
 static UBYTE td_aircraft_roofs(const OAM_item_t *objects,const UBYTE masks[4][16]){
-    UBYTE base[16],tile,attr,x,y,i,row,index,mask,changed;
+    UBYTE base[16],opaque[8],tile,attr,x,y,i,row,index,mask,changed;
     WORD left=32767,top=32767,right=-32767,bottom=-32767,ox,oy,dx,dy,tile_screen_x,tile_screen_y;
     UWORD offset;td_aircraft_patch_t *patch;
     for(i=0;i<TD_AIRCRAFT_OBJECTS;i++)if(objects[i].y){
@@ -239,6 +239,21 @@ static UBYTE td_aircraft_roofs(const OAM_item_t *objects,const UBYTE masks[4][16
         if(!(attr&0x80))continue;
         tile_screen_x=(WORD)x*8-draw_scroll_x+8;
         tile_screen_y=(WORD)y*8-draw_scroll_y+16;
+        /* Combine actual compiled OBJ coverage before fetching roof pixels.
+           Transparent parts of the bounding box need no tile read or flips;
+           covered background rows are cleared once after normalization. */
+        memset(opaque,0,sizeof(opaque));changed=FALSE;
+        for(i=0;i<TD_AIRCRAFT_OBJECTS;i++)if(objects[i].y){
+            dx=(WORD)objects[i].x-tile_screen_x;dy=tile_screen_y-(WORD)objects[i].y;
+            if(dx<=-8||dx>=8||dy<=-8||dy>=16)continue;
+            for(row=0;row<8;row++){
+                index=dy+row;
+                if(index>=16)continue;
+                mask=masks[i][index];mask=dx<0?mask<<(-dx):mask>>dx;
+                opaque[row]|=mask;changed|=mask;
+            }
+        }
+        if(!changed)continue;
         VBK_REG=0;tile=get_vram_byte(td_aircraft_map+offset);
         VBK_REG=(attr>>3)&1;get_bkg_data(tile,1,base);
         /* Normalize CGB tile flips before replacing with unflipped scratch.
@@ -249,16 +264,10 @@ static UBYTE td_aircraft_roofs(const OAM_item_t *objects,const UBYTE masks[4][16
         }
         if(attr&0x20)for(row=0;row<16;row++)base[row]=td_aircraft_reverse(base[row]);
         changed=FALSE;
-        for(i=0;i<TD_AIRCRAFT_OBJECTS;i++)if(objects[i].y){
-            dx=(WORD)objects[i].x-tile_screen_x;dy=tile_screen_y-(WORD)objects[i].y;
-            if(dx<=-8||dx>=8||dy<=-8||dy>=16)continue;
-            for(row=0;row<8;row++){
-                index=dy+row;
-                if(index>=16)continue;
-                mask=masks[i][index];mask=dx<0?mask<<(-dx):mask>>dx;
-                if(mask&(base[row*2]|base[row*2+1])){
-                    base[row*2]&=~mask;base[row*2+1]&=~mask;changed=TRUE;
-                }
+        for(row=0;row<8;row++){
+            mask=opaque[row];
+            if(mask&(base[row*2]|base[row*2+1])){
+                base[row*2]&=~mask;base[row*2+1]&=~mask;changed=TRUE;
             }
         }
         if(!changed)continue;

@@ -133,6 +133,20 @@ Published Prototype 6 remains the separate timetable/safe-alighting release. Cor
 
 The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) records the source design; [TESTING.md](TESTING.md) owns any later exact native evidence.
 
+## Port Lands fifth-scene milestone — scoped native acceptance passed
+
+- [x] Research official Port Lands streets, separate river/channel bridges, parks and industry; record source dates/licences, actual former-Toronto boundary checks and original compressed generation in [PORT_LANDS_PLAN.md](docs/PORT_LANDS_PLAN.md). Representative contemporary corridors are a working default; no 2026 era adoption or copied reference art.
+- [x] Generate original 1,024 × 976 art/collision and register genuine district 4 / scene `f9f8ee05-b372-5338-91a7-f1f7a0cda44e`. Port Lands has 26 buildings, 117 raw / 98 flip-canonical patterns, 79 full-footprint-safe pedestrian routes and six swept-clear traffic loops, with water blocked outside six supported decks.
+- [x] Extend East Leslie and register its sole reciprocal Port Lands seam for foot/car travel, yielding 15 pairs. Preserve existing IDs/local coordinates; withhold Core Cherry and Carlaw gateways. East now has 43 buildings; the five-scene source totals 235 buildings, 565 routes and 24 non-core traffic loops.
+- [x] Generate the five-scene 512 × 244 atlas: 589 patterns, 13,507 bytes in bounded banked units and no added persistent WRAM. Host atlas checks pass with at most 164 visible patterns under the 172-slot limit.
+- [x] Complete adapted five-entry runtime fixtures/full host suite and official exact ROM `a212dd9e…`; header, compiled aircraft allocations/Queen frames and 1,176-byte reserve pass, including bank-1 background ≤32 before aircraft scratch tiles 32–46.
+- [x] Record ordinary paid Queen 46→49, Leslie foot entry into actual Port Lands and return to East, Cherry Beach/Unwin walking and blocked shore. A genuine reset restores the saved Beach checkpoint and parked Core car. Keep earlier four-scene recordings attached to their original ROMs.
+- [x] Sample second-row map pans with all 58 game and 13 flight bytes frozen; separately sample plane/helicopter/rotor/shadow OAM at peak ten per scanline without overflow.
+- [x] Repeat fresh final-ROM contract 01 completion, held-turn/continued acceleration, reverse, steering recovery and coast-to-stop. Preserve its separate scoped journal.
+- [ ] Verify Port Lands car travel/Leslie driving lanes, remaining bridge/vehicle/water cases, roof/crane occlusion, exact-ROM unplayed scenes and crowded traffic/aircraft pacing; samples above do not complete these cases.
+- [ ] Broaden second-row marker/focus/cancellation/VRAM combinations and native coverage beyond sampled pans; host fixtures cover all 900 viewports.
+- [ ] Append and play the eight proposed Port Lands clients/contracts and a researched bus connection after travel gates pass. Current campaign remains 88 contracts/51 service points; no new Port Lands jobs or TTC service are registered.
+
 ## Next playable polish
 
 - [x] Correct route-consistent overlapping traffic retreat, explicit booked-tram HOLD occupancy and full-foot/body alighting endpoints. Preserve a real ordinary-button save-reset walker deadlock on `20370fea…`; corrected `14005662…` permits walking and all four directions without changing cash, condition or the parked car. Actual-C/UI regressions pass 476,667 / 8,036,664 checks; a pure banked route query resolves the native 16-KiB code limit. Save v7 remains 58 bytes.
@@ -148,7 +162,7 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 
 ## Full game release
 
-- [ ] Extend the working four-scene stage across the full historical Old Toronto footprint, waterfront and fuller Islands. The larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
+- [ ] Extend the five-scene milestone across the full historical Old Toronto footprint, waterfront and fuller Islands, verifying each playable milestone. Port Lands broader acceptance remains above; the larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) and proposed 2026 era remain unadopted proposals.
 - [ ] Extend researched western/eastern TTC coverage beyond the representative Queen game service, including King504 and Line2; preserve original fictional timing and distinguish the adopted map baseline from live detours.
 - [ ] Playtest and refine the authored objectives across all eight job types, including the unlock sequence, vehicle rules and condition/comfort rewards.
 - [ ] Record representative timings and a complete campaign; validate **at least two hours of varied, enjoyable gameplay**. Quest count does not verify duration.

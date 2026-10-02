@@ -1,10 +1,10 @@
 # Native build and preview
 
-Updated 2026-10-02. Current contact-corrected candidate `14005662…` passes the official native build, full local source checks and compiled/header/memory gates. Three fresh scoped native recordings cover reachable save-load walker recovery, paid Queen travel/reset/map freezing, actual plane/helicopter poses and first-delivery/driving. Booked HOLD occupancy and blocked-alighting corrections have host coverage; forced native cases and crowded CPU/human acceptance remain pending. Earlier `20370fea…` retains its aircraft passes and a newly recorded walker deadlock. Downloadable Prototype 6 is the separate `23b2a7a2…` timetable ROM. [LOADING.md](LOADING.md) distinguishes source candidates from published binaries. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro plugin before project operations. Four compressed scenes, full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain separate.
+Updated 2026-10-02. Current five-scene candidate `a212dd9e…` passes the official native build, full local source checks and compiled/header/memory gates. Scoped native recordings verify paid Queen travel followed by Port Lands entry on foot, Cherry Beach and the Unwin crossing, second-row map freezing, Beach checkpoint reset/recovery, return to East, aircraft/rotor/shadow rendering and first-delivery/driving. Car travel through the new district, remaining bridges, crowded CPU/human acceptance and the campaign remain pending. Earlier candidates retain their own results below. Downloadable Prototype 6 is the separate four-scene `23b2a7a2…` timetable ROM. [LOADING.md](LOADING.md) distinguishes source candidates from published binaries. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro plugin before project operations. Full former Toronto, two measured hours of varied gameplay, browser refresh and physical cartridge acceptance remain separate.
 
 ## Tested toolchain
 
-The aircraft renderer uses the compiled-pose cache, checks combined aircraft/shadow capacity before an aircraft-only fallback and computes roof-mask anchors once per tile. [TESTING.md](../TESTING.md) retains the current portability replay and original `8e7af3ec…` recordings separately from earlier `9c1a9fcb…` / `4b83cfb6…` attempts. Native inactive/visible-flight samples still differ in NPC timing; compiled gates, reserve and host checks do not certify whole-city performance. Each later build needs its own identity and replay.
+The aircraft renderer uses the compiled-pose cache, checks combined aircraft/shadow capacity before an aircraft-only fallback and computes roof-mask anchors once per tile. [TESTING.md](../TESTING.md) retains the earlier portability replay and original `8e7af3ec…` recordings separately from `9c1a9fcb…` / `4b83cfb6…` attempts. Native inactive/visible-flight samples still differ in NPC timing; compiled gates, reserve and host checks do not certify whole-city performance. Each later build needs its own identity and replay.
 
 | Component | Version / identity |
 | --- | --- |
@@ -21,7 +21,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build using `rom_build` with `outputPath: "build/toronto-contact-recovery.gbc"` for the current contact-corrected candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
+2. Build using `rom_build` with `outputPath: "build/toronto-port-lands-labels.gbc"` for the current five-scene candidate, and `captureDebugArtifacts: true` for authenticated same-build symbols. Paths are relative to the selected project's directory. The plugin invokes GB Studio CLI `make:rom`. Track each output's identity; earlier output paths identify separate builds and do not establish this candidate's behavior.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -31,7 +31,7 @@ Builds, browser save states and cartridge backups are ignored. Do not publish lo
 
 ## City engine and reproducible sources
 
-Four linked 1,024 × 976 scenes use the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`: `scene_toronto_city` (district 0), `scene_toronto_west` (1), `scene_toronto_high_park` (2) and `scene_toronto_east` (3). Their logical atlas is 4,096 × 976, with 211 buildings and 486 fixed pedestrian routes; only six nearby pedestrian actors are active in the loaded scene. These are compressed districts, not full former Toronto coverage. The extension adds original engine files without ejecting GB Studio; the aircraft renderer also overrides one pinned MIT-licensed GBVM actor source, documented in DISTRIBUTION.md. `Development boot` remains a separate workshop scene. [DISTRICT_ENGINE_PLAN.md](DISTRICT_ENGINE_PLAN.md) describes compiled scene binding and the genuine VM change-scene bridge.
+Five linked 1,024 × 976 scenes use the original project-local `TORONTO` scene extension, compatible with GBVM `4.3.0-e1`: `scene_toronto_city` (district 0), `scene_toronto_west` (1), `scene_toronto_high_park` (2), `scene_toronto_east` (3) and `scene_toronto_port_lands` (4). Their logical atlas is 4,096 × 1,952, with Port Lands below East; existing local coordinate systems are preserved. Source totals are 235 buildings, 565 fixed pedestrian routes, 24 non-core traffic loops and 15 reciprocal seam pairs; only six nearby pedestrian actors are active in the loaded scene. Port Lands connects solely through Leslie; Core Cherry and Carlaw gateways remain withheld. These are compressed districts, not full former Toronto coverage. The extension adds original engine files without ejecting GB Studio; the aircraft renderer also overrides one pinned MIT-licensed GBVM actor source, documented in DISTRIBUTION.md. `Development boot` remains a separate workshop scene. [DISTRICT_ENGINE_PLAN.md](DISTRICT_ENGINE_PLAN.md) describes compiled scene binding and the genuine VM change-scene bridge; [PORT_LANDS_PLAN.md](PORT_LANDS_PLAN.md) records the new district's original generation and official factual references.
 
 From the repository root, with Python and Pillow available:
 
@@ -40,9 +40,10 @@ python3 games/toronto-dispatch/scripts/create_city_art.py
 python3 games/toronto-dispatch/scripts/sync_city_resources.py
 python3 games/toronto-dispatch/scripts/create_west_art.py
 python3 games/toronto-dispatch/scripts/create_east_art.py
+python3 games/toronto-dispatch/scripts/create_port_lands_art.py
 ```
 
-These commands generate original artwork/metadata and synchronize existing core resources. They do not register new scenes or apply changed west/east collision and attribute resources. Use the plugin's revision-aware native workflow to register/update those assets and scenes, preserve bindings, and apply the intended reciprocal core seams before continuing. Regenerating content against stale native geometry is not a valid build procedure. The current candidate already has all four native scenes registered.
+These commands generate original artwork/metadata and synchronize existing core resources. They do not register new scenes or apply changed west/east/Port Lands collision and attribute resources. Use the plugin's revision-aware native workflow to register/update those assets and scenes, preserve bindings, and apply the intended reciprocal seams before continuing. Regenerating content against stale native geometry is not a valid build procedure. The current candidate already has all five native scenes registered.
 
 After the registered resources match the authored geometry:
 
@@ -61,13 +62,13 @@ make check
 
 `create_city_art.py` draws original indexed-colour background and sprite source cells; the background is already registered as a native asset. The sprite generator produces an editable source/metadata pair in `original-art` / `dispatch_topdown.metadata.json`. Existing sprite PNG changes must be applied to the registered `assets/sprites/dispatch_topdown.png` as part of a deliberate sprite edit. New sprite registration uses the plugin's validated `native_metadata` import; keep the existing root and bindings when editing an established asset.
 
-`create_west_art.py` draws the original west/High Park backgrounds; `create_east_art.py` draws the original eastern background. Both write placement, collision and priority metadata. They do not register or update native scene resources. After geometry changes, apply collision and attributes through the plugin before regenerating routes/contracts; the checked-in registered scenes are the input to those checks. `create_district_world.py` generates 14 reciprocal seam pairs and 18 non-core traffic loops. `create_district_jobs.py` authors eight western package contracts from actual scene collision paths; `create_east_jobs.py` appends eight eastern contracts and eight service points while pinning the earlier 80-contract/35-stop prefix. `create_campaign.py` compiles 88 contracts and 51 stops while retaining the original IDs; supplemental Queen platforms use `content/streetcar.json`. Both art generators and the eastern job generator support `--check` for read-only freshness checks; `make check` includes the generated-source checks.
+`create_west_art.py` draws the original west/High Park backgrounds; `create_east_art.py` draws the original eastern background, including the Leslie southern approach; `create_port_lands_art.py` draws original industrial, park, beach and supported-bridge art. They write placement, collision and priority metadata without registering/updating native scene resources. Port Lands source uses 117 raw / 98 flip-canonical patterns, 26 buildings, six swept-clear traffic loops and 79 foot routes; East has 43 buildings after opening Leslie. After geometry changes, apply collision and attributes through the plugin before regenerating routes/contracts; the checked-in registered scenes are the input to those checks. `create_district_world.py` generates 15 reciprocal seam pairs and 24 non-core traffic loops. `create_district_jobs.py` authors eight western package contracts from actual scene collision paths; `create_east_jobs.py` appends eight eastern contracts and eight service points while pinning the earlier 80-contract/35-stop prefix. `create_campaign.py` compiles 88 contracts and 51 stops while retaining the original IDs; supplemental Queen platforms use `content/streetcar.json`. The eight proposed Port Lands clients/contracts and bus connection are not registered campaign/transit content. The added-district art and eastern job generators support `--check` for read-only freshness checks; Port Lands also supports an in-memory `--dry-run`. `make check` includes generated-source checks.
 
 `sync_city_resources.py` uses GB Studio's native byte-array RLE to write palette/background-priority attributes and the core scene collision map. Native CGB attribute bit 7 marks raised roof lips/canopies. The scene extension interprets collision values 0 as road, 16 as walk-only pavement/Island ground and 15 as solid; the normal engine ladder meaning of bit 4 does not apply to this custom scene. Each district has 15,616 tiles, so each tile/attribute/collision array fits one 16 KiB bank. `check_campaign.py` and `check_district_world.py` inspect registered resources for stop connectivity, compatible road routes, ferry links, reciprocal seams, traffic clearance and contract consistency.
 
 Car physics stores local Q4 coordinates and smoothed velocity; GBVM actors/camera use Q5. Motion catch-up is bounded independently from the full 16-bit VBlank clock; menus freeze the clock. Input edges are consumed once per render, and continuing curb contact preserves forward momentum. The text UI caches unchanged rows. Banked `td_routes.c` keeps the full pedestrian tables in ROM and selects six routes into a 24-byte WRAM coordinate cache; visible slots retain their route identity.
 
-`create_atlas.py` reads the four registered collision grids, authoritative district offsets and authored water masks, then writes `content/atlas.json` and the BANKED `td_atlas.h` / `td_atlas.c` API. It changes no scene or collision resource. The 512 × 122 schematic uses one map pixel per native 8 × 8 collision tile; its 20 × 12-tile viewport browses the four areas without changing the loaded gameplay scene. Generated source checks prove all 225 possible viewports fit the 172-slot ground cache. The renderer shares the existing 360-byte text cache, uses bounded double-hash pattern lookup and adds 28 transient WRAM bytes for view/actor/camera restoration. These runtime fields are absent from the unchanged 58-byte save schema. [CITY_MAP.md](CITY_MAP.md) documents coordinate units, focus controls and original water interpretation.
+`create_atlas.py` reads the five registered collision grids, authoritative district offsets and authored water masks, then writes `content/atlas.json`, the BANKED `td_atlas.h` / `td_atlas.c` API and independent units generated by `atlas_banks.py`. It changes no scene or collision resource. The 512 × 244 schematic, padded to 512 × 248, uses one map pixel per native 8 × 8 collision tile; its 20 × 12-tile viewport browses five areas without changing the loaded gameplay scene. All 900 viewports fit the 172-slot cache, at worst 164 distinct patterns. The 589-pattern dictionary, 1,984 indices and five names/origins use 13,507 ROM bytes split across two pattern units and one index unit, with no new persistent atlas WRAM. Lower-left unregistered cells are solid and unnamed. The renderer shares the existing 360-byte text cache, uses bounded double-hash pattern lookup and retains 28 transient WRAM bytes for view/actor/camera restoration. These fields are absent from the 58-byte save schema. [CITY_MAP.md](CITY_MAP.md) documents coordinate units, focus controls and original water interpretation.
 
 For bounded source/API/renderer checks without a ROM build:
 
@@ -75,6 +76,8 @@ For bounded source/API/renderer checks without a ROM build:
 python3 -B games/toronto-dispatch/scripts/create_atlas.py --check
 python3 -B scripts/test_atlas.py
 python3 -B scripts/test_atlas_ui.py
+python3 -B scripts/test_atlas_banks.py
+python3 -B scripts/test_district_seams.py
 ```
 
 The API and renderer fixtures compile unchanged production C with host adapters and sanitizers. They do not establish native redraw timing, human readability or physical behaviour; actual build-specific samples appear below.
@@ -95,14 +98,34 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-contact-recovery.gbc.debug/symbols.noi
+  games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
 
-## Current contact-corrected candidate
+## Current five-scene Port Lands candidate
+
+| Identity | Value |
+| --- | --- |
+| Native output / bytes | `project/build/toronto-port-lands-labels.gbc` / 524,288 |
+| ROM SHA-256 | `a212dd9ed479310a98e58b701416f8af88aaa09174f186747dca678ff4c164f4` |
+| Matching NOI SHA-256 | `b4a500d607a73fff08d1f4764b543ff3798d556aca302e9ead4b56c7f3d9649f` |
+| Globals SHA-256 | `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a` |
+| Build source fingerprint | `025edad8ffaa318a4739c0c1f4aee3b539789a8808dd1c11a20a1d9943dab98b` |
+| Plugin project revision | `151a988b2b77e3312da36ee82d0f376b8fc15369fe21bbee0780b7d47b8682cc` |
+| Linked heap / stack base / static reserve | `DA68` / `DF00` / 1,176 bytes |
+
+The official build and full `make check` pass. Public CGB/MBC5/32-KiB-SRAM header inspection, compiled aircraft allocations in all five scenes, Queen frames and the actual-ROM 1,024-byte minimum reserve guard pass. In particular, bank-1 backgrounds remain below aircraft scratch IDs 32–46. The atlas API/UI host suites pass 1,475,876 / 24,151,786 sanitizer checks, with independent banking and horizontal/vertical seam fixtures. Static reserve and host adapters do not prove deepest runtime stack, universal frame pacing or physical bank switching.
+
+The final travel recording spans 26,734 video frames / 2,181 events. It boards Queen 46→49 once for cash `30→27`, enters the actual Port Lands scene on foot at frame 7,640, reaches Cherry Beach at 13,636, walks the Unwin crossing and stops at blocked shore `(432,919.5)`. Map frames `13,976→16,076` preserve all 58 game and 13 cosmetic flight bytes. A genuine game-button reset restores the saved Beach checkpoint, car parked in Core `(560,720)`, cash 27 and world second 227. Both four-object plane and helicopter poses, rotor change and separated shadows appear with sampled peak 10 objects per scanline and no over-limit scanlines. The courier returns from district 4 to actual East district 3 at frame 26,554. This is foot/scene/checkpoint evidence; it does not verify car travel through Port Lands or every bridge/arrival.
+
+A separate fresh 1,204-frame / 165-event recording repeats contract 01 for cash 139, one completion and condition 100. The held turn reaches speed 20, continued A reaches 24, reverse reaches −6, steering/acceleration recovers `6→18`, and neutral input coasts to zero. A third bounded timing sample reads 132 updates over 360 VBlanks; it does not establish whole-city/crowded performance. All three scoped final recordings are closed/archived under their own exact-ROM identities in [TESTING.md](../TESTING.md). The earlier `6a8a…` Port Lands exploration remains `needs-review` after the wrong street HUD label; the corrected final journals do not overwrite it.
+
+Full campaign/two-hour/human fun acceptance, all seam/vehicle/bridge cases, forced HOLD/contact recovery, crowded CPU/occlusion/deepest stack, browser refresh and physical hardware remain open. No Port Lands clients/jobs or new bus service are appended yet; 88 contracts / 51 service records remain. Published Prototype 6 is still the separate downloadable four-scene timetable/safe-alighting ROM.
+
+## Previous contact-corrected candidate
 
 | Identity | Value |
 | --- | --- |
@@ -172,7 +195,7 @@ This official build is retained as an intermediate; it is not the final aircraft
 
 Scoped update samples are 40/120 VBlanks while aircraft-inactive, 14/60 during a helicopter and a later inactive 18/60; their NPC phases differ, so they are not a matched global benchmark. Further common-path optimization, another official build and exact-ROM acceptance replay remain necessary. Delivery, transit, reset and district transitions have not been accepted on this intermediate; earlier moving-tram evidence does not transfer to it. Static reserve does not establish deepest native stack use or physical cartridge behaviour. Published Prototype 6 remains unchanged.
 
-## Current moving-Queen candidate: scoped native checks
+## Previous moving-Queen candidate: scoped native checks
 
 | Identity | Value |
 | --- | --- |
