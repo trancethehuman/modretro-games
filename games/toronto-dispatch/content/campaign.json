@@ -497,6 +497,277 @@
       "reference_label": "Ashbridge Queen",
       "geography_reference": "docs/EAST_DISTRICT.md",
       "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 43,
+      "u": 836,
+      "v": 556,
+      "name": "QUEEN PARKDALE",
+      "transit": 4,
+      "district": 1,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 6840,
+          "intersection": "Queen / Jameson"
+        },
+        "westbound": {
+          "stop_number": 6842,
+          "intersection": "Queen / Lansdowne"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Parkdale consolidates different Jameson eastbound and Lansdowne westbound stop identities; it is not an eastbound Lansdowne stop.",
+      "walking_approach": {
+        "road_point": [
+          864,
+          528
+        ],
+        "client_stop_id": 29,
+        "shortest_tile_steps": 7,
+        "estimated_pixels": 56,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 44,
+      "u": 116,
+      "v": 556,
+      "name": "QUEEN DUFFERIN",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 6834,
+          "intersection": "Queen / Dufferin"
+        },
+        "westbound": {
+          "stop_number": 16849,
+          "intersection": "Queen / Dufferin"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "walking_approach": {
+        "road_point": [
+          80,
+          528
+        ],
+        "client_stop_id": 8,
+        "shortest_tile_steps": 7,
+        "estimated_pixels": 56,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 45,
+      "u": 372,
+      "v": 556,
+      "name": "QUEEN SPADINA",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 6853,
+          "intersection": "Queen / Spadina"
+        },
+        "westbound": {
+          "stop_number": 3088,
+          "intersection": "Queen / Spadina"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "walking_approach": {
+        "road_point": [
+          336,
+          528
+        ],
+        "client_stop_id": 4,
+        "shortest_tile_steps": 7,
+        "estimated_pixels": 56,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 46,
+      "u": 676,
+      "v": 556,
+      "name": "QUEEN YONGE",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-queen-yonge-reference-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 6861,
+          "intersection": "Queen / Yonge"
+        },
+        "westbound": {
+          "stop_number": 3079,
+          "intersection": "Queen / Yonge"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Normal Queen/Yonge identities are retained for the game; current 501 uses Adelaide/Richmond downtown.",
+      "walking_approach": {
+        "road_point": [
+          640,
+          528
+        ],
+        "client_stop_id": 13,
+        "shortest_tile_steps": 7,
+        "estimated_pixels": 56,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 47,
+      "u": 980,
+      "v": 556,
+      "name": "QUEEN BROADVIEW",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 3032,
+          "intersection": "Queen / Broadview"
+        },
+        "westbound": {
+          "stop_number": 3033,
+          "intersection": "Queen / Broadview"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "walking_approach": {
+        "road_point": [
+          944,
+          528
+        ],
+        "client_stop_id": null,
+        "shortest_tile_steps": 7,
+        "estimated_pixels": 56,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 48,
+      "u": 128,
+      "v": 556,
+      "name": "QUEEN SAULTER",
+      "transit": 4,
+      "district": 3,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 3072,
+          "intersection": "Queen / Saulter east side"
+        },
+        "westbound": {
+          "stop_number": 3031,
+          "intersection": "Queen / Boulton"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Saulter eastbound and Boulton westbound are consolidated; De Grassi is not claimed to be a TTC stop or drawn street here.",
+      "walking_approach": {
+        "road_point": [
+          128,
+          528
+        ],
+        "client_stop_id": 37,
+        "shortest_tile_steps": 3,
+        "estimated_pixels": 24,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 49,
+      "u": 780,
+      "v": 524,
+      "name": "QUEEN LESLIE",
+      "transit": 4,
+      "district": 3,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 3056,
+          "intersection": "Queen / Leslie"
+        },
+        "westbound": {
+          "stop_number": 3057,
+          "intersection": "Queen / Leslie"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "walking_approach": {
+        "road_point": [
+          816,
+          496
+        ],
+        "client_stop_id": 40,
+        "shortest_tile_steps": 8,
+        "estimated_pixels": 64,
+        "planning_only": true
+      }
+    },
+    {
+      "id": 50,
+      "u": 880,
+      "v": 524,
+      "name": "QUEEN ALTON",
+      "transit": 4,
+      "district": 3,
+      "reserved": 0,
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002"
+      ],
+      "reference_pairs": {
+        "eastbound": {
+          "stop_number": 15699,
+          "intersection": "Queen / Alton"
+        },
+        "westbound": {
+          "stop_number": 3029,
+          "intersection": "Queen / Alton"
+        }
+      },
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Alton is west of Greenwood and fits the existing Ashbridge service point. Real Woodfield stops lie east of Greenwood and are not moved here.",
+      "walking_approach": {
+        "road_point": [
+          880,
+          496
+        ],
+        "client_stop_id": 42,
+        "shortest_tile_steps": 3,
+        "estimated_pixels": 24,
+        "planning_only": true
+      }
     }
   ],
   "quests": [
@@ -4927,6 +5198,48 @@
       "topology": "Mainland terminal to each Island dock; transfer via mainland between Islands",
       "source": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/"
     },
-    "notice": "Fictional game timetables, fares and compression. Not a TTC trip planner."
+    "notice": "Fictional game timetables, fares and compression. Not a TTC trip planner.",
+    "streetcar501": {
+      "stops": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ],
+      "period_seconds": 64,
+      "boarding_window_seconds": 2,
+      "segment_seconds": 4,
+      "fare": 3,
+      "eastbound_phases": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28
+      ],
+      "westbound_phases": [
+        60,
+        56,
+        52,
+        48,
+        44,
+        40,
+        36,
+        32
+      ],
+      "notice": "Normal-corridor fictional game operation; shared directional platforms, original fare and schedule; current construction detours omitted, era unadopted.",
+      "source_refs": [
+        "ttc-501-east-stops-20261002",
+        "ttc-501-west-stops-20261002",
+        "ttc-queen-yonge-reference-20261002"
+      ]
+    }
   }
 }

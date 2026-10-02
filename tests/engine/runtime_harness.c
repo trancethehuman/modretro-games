@@ -40,7 +40,7 @@ static unsigned test_queue_calls,test_reset_calls;
 static unsigned test_map_opens,test_map_updates,test_map_closes;
 static UBYTE test_map_active,test_map_buttons,test_map_pressed,test_map_camera_settings;
 static UWORD test_map_camera_x,test_map_camera_y;
-static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER } geometry;
+static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER } geometry;
 static jmp_buf interrupted_save;
 static unsigned sram_writes,sram_interrupt_after;
 static int sram_interrupt_enabled;
@@ -67,7 +67,8 @@ static UBYTE district_tile(UBYTE district,UBYTE x,UBYTE y) {
     if (geometry==EAST_WALL && x>=50) return 15;
     if (geometry==SOUTH_CURB && y>=50) return 15;
     if (geometry==SOUTHWEST_CORNER && y>=50 && x<50) return 15;
-    if (geometry==NATIVE_GRID) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
+    if (geometry==ALIGHT_BARRIER&&x==71&&y==90) return 15;
+    if (geometry==NATIVE_GRID||geometry==ALIGHT_BARRIER) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
     if (geometry==HIDDEN_NPC_TILE && x==48 && y==53) return 15;
     return 0;
 }
@@ -609,6 +610,38 @@ static void native_case(void) {
     td.u=td.park_u=td.safe_u=560*16;td.v=td.park_v=td.safe_v=720*16;
 }
 
+static void test_finished_job_target(void) {
+    for(UBYTE success=0;success<2;success++) {
+        td_stop_t depot,old_target;
+        native_case();td_get_stop(0,&depot);
+        td.job=success?0:80;td_get_job(td.job,&td_job);td.stage=1;
+        td.health=100;td.left=success?99:1;td.mode=TD_ROAM;td_set_target();
+        old_target=td_target;
+        expect(old_target.district!=depot.district||old_target.u!=depot.u||old_target.v!=depot.v,
+               "finished-job fixture begins with an actual non-depot client objective");
+        if(success) {
+            td.u=old_target.u*16;td.v=old_target.v*16;td.speed=0;
+            td_interact();
+        } else td_second();
+        expect(td.mode==TD_RESULT&&td.job==TD_NONE,
+               "actual delivery and deadline failure both retain the result screen after retiring the job");
+        expect(td_target.district==depot.district&&td_target.u==depot.u&&td_target.v==depot.v&&
+               !strcmp(td_target.name,depot.name),
+               "delivery and failure immediately replace the old objective with the authored Union depot");
+        expect(actors[1].pos.x==depot.u*32&&actors[1].pos.y==(depot.v-12)*32&&
+               !(actors[1].flags&ACTOR_FLAG_HIDDEN)&&td_route_district==TD_DISTRICT_NONE,
+               "retiring a core job restores the visible Union beacon rather than the former client or seam");
+        /* The discarded job/stage remains in RAM; it must not select a client. */
+        td.stage=11;td_job.route[11]=42;
+        world_tick(J_B,120);
+        expect(td.mode==TD_ROAM&&td.job==TD_NONE&&td.stage==11,
+               "B leaves the real result handler for free roam without changing the retired stage");
+        expect(td_target.district==depot.district&&td_target.u==depot.u&&td_target.v==depot.v&&
+               actors[1].pos.x==depot.u*32&&actors[1].pos.y==(depot.v-12)*32,
+               "free-roam objective and beacon remain Union despite stale active-job route data");
+    }
+}
+
 /* Independently authored expectations for every boarding origin, including
    Wellesley's bus selector and the three separate Island return routes. */
 static const struct {
@@ -623,6 +656,7 @@ static const struct {
 static void transit_menu_case(unsigned index,UWORD second) {
     native_case();td_stop_t origin;
     td_get_stop(transit_cases[index].origin&63,&origin);
+    test_current_district=td.district=origin.district;
     td.onfoot=1;td.u=td.safe_u=origin.u*16;td.v=td.safe_v=origin.v*16;
     td.mode=TD_TRANSIT;td.transit_origin=transit_cases[index].origin;
     td.transit_target=transit_cases[index].target;
@@ -655,7 +689,7 @@ static void test_current_transit_window(void) {
                        "scheduled boarding also retains every ride second on the boarding tick");
                 booked=td;
             }
-            UWORD arrival_u=td_cursor.u*16,arrival_v=td_cursor.v*16;
+            UWORD arrival_u=td_cursor.u*16+(td.transit_target==0?12*16:0),arrival_v=td_cursor.v*16;
             world_tick(0,transit_cases[service].duration*60);
             expect(td.mode==TD_ROAM&&td.u==arrival_u&&td.v==arrival_v&&td.cash==booked.cash,
                    "each accepted service reaches its selected destination with one fare and its authored duration");
@@ -704,7 +738,7 @@ static void test_transit_funds_pause_and_deadline(void) {
     world_tick(0,23);world_tick(0,60);
     expect(td.job==TD_NONE&&td.health==0&&td.mode==TD_RIDE&&td.ride_left==2&&td.cash==27,
            "a deadline expiring after immediate boarding fails the parcel but keeps its already-paid trip moving");
-    UWORD arrival_u=td_cursor.u*16,arrival_v=td_cursor.v*16;world_tick(0,120);
+    UWORD arrival_u=(td_cursor.u+12)*16,arrival_v=td_cursor.v*16;world_tick(0,120);
     expect(td.mode==TD_RESULT&&td.u==arrival_u&&td.v==arrival_v&&td.cash==27,
            "an expired immediately-boarded parcel arrives once before showing the failure result");
 
@@ -846,6 +880,233 @@ static void apply_queued_scene(void) {
     expect(test_queued_district<TD_DISTRICT_COUNT,"scene fixture applies a genuinely queued district");
     test_current_district=test_queued_district;test_queued_district=TD_DISTRICT_NONE;
     memset(actors,0,sizeof(actors));actors_inactive_head=NULL;toronto_init();
+}
+
+static void test_safe_transit_alighting(void) {
+    /* Bloor->Union reproduces the real return onto the parked car. Add a
+       second obstruction case to force the opposite safe walking side. */
+    for(UBYTE traffic=0;traffic<2;traffic++) {
+        transit_menu_case(6,12);td.subsecond=0;
+        td_stop_t depot;td_get_stop(0,&depot);
+        if(traffic) {
+            td.park_u=640*16;td.park_v=640*16;
+            td_traffic_u[0]=560*16;td_traffic_v[0]=720*16;
+            td_traffic_u[1]=572*16;td_traffic_v[1]=720*16;
+        }
+        world_tick(J_A,1);world_tick(0,240);
+        UWORD expected_u=(traffic?548:572)*16;
+        expect(td.mode==TD_ROAM&&td.onfoot&&td.cash==27&&td.u==expected_u&&td.v==720*16&&
+               td.safe_u==td.u&&td.safe_v==td.v&&td_foot_free(td.u,td.v)&&td_near(&depot),
+               "Union returns alight beside the actual parked car or loaded traffic at a clear reachable stop-side point");
+        td_state_t arrived=td;memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&arrived,sizeof(td)),
+               "safe Union alighting commits its actual clear foot position and single paid fare");
+        world_tick(traffic?J_LEFT:J_RIGHT,1);
+        expect(td.u==expected_u+(traffic?-8:8)&&td.v==720*16&&td.onfoot&&td.cash==27,
+               "the first ordinary walking step escapes the alighting obstacle instead of trapping the courier inside it");
+    }
+
+    /* Four close traffic centres reject all12px points but leave the18px
+       fallback usable. The courier can walk back into handoff range. */
+    transit_menu_case(6,12);td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
+    td_traffic_u[0]=563*16;td_traffic_v[0]=720*16;
+    td_traffic_u[1]=557*16;td_traffic_v[1]=720*16;
+    td_traffic_u[2]=560*16;td_traffic_v[2]=723*16;
+    td_traffic_u[3]=560*16;td_traffic_v[3]=717*16;
+    td_second();
+    expect(td.mode==TD_ROAM&&td.u==578*16&&td.v==720*16&&td_foot_free(td.u,td.v),
+           "blocked12px landings fall back to an actual clear18px position rather than the vehicle centre");
+    for(unsigned i=0;i<8;i++)driving_tick(J_LEFT);
+    td_stop_t depot;td_get_stop(0,&depot);
+    expect(td.u==574*16&&td_near(&depot)&&td_foot_free(td.u,td.v),
+           "the18px fallback can approach the real stop into interaction range without entering the parked-car or traffic boxes");
+
+    /* A temporary crowd covers the centre and every12/18px endpoint. The
+       paid trip remains saved at Bloor while its parcel genuinely expires. */
+    transit_menu_case(6,12);td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
+    td.park_u=640*16;td.park_v=640*16;
+    td.job=0;td_get_job(0,&td_job);td.stage=1;td.left=2;td_set_target();
+    const WORD blocked_u[5]={560,578,542,560,560},blocked_v[5]={720,720,720,738,702};
+    for(unsigned i=0;i<5;i++){td_traffic_u[i]=blocked_u[i]*16;td_traffic_v[i]=blocked_v[i]*16;}
+    UWORD origin_u=td.u,origin_v=td.v;td_second();
+    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.u==origin_u&&td.v==origin_v&&
+           td.job==0&&td.left==1&&!td_transition_pending,
+           "all blocked landings retain the paid origin ride for retry without moving the courier or charging again");
+    td_state_t retry=td;memset(&td,0,sizeof(td));
+    expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
+           "a fully blocked alighting attempt remains a valid recoverable paid origin save");
+    td_second();
+    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.job==TD_NONE&&td.health==0&&
+           td.u==origin_u&&td.v==origin_v&&td_target.district==0&&td_target.u==560&&td_target.v==720,
+           "deadline expiry while alighting is obstructed clears the job and objective while preserving the paid retry");
+    retry=td;memset(&td,0,sizeof(td));
+    expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
+           "the expired paid retry restores with failure condition instead of losing its ride or charging another fare");
+    for(unsigned i=0;i<6;i++){td_traffic_u[i]=30000;td_traffic_v[i]=30000;}
+    td_second();
+    expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.health==0&&td.cash==27&&td.u==560*16&&td.v==720*16&&
+           td.safe_u==td.u&&td.safe_v==td.v&&td_near(&depot),
+           "removing the obstruction completes the expired paid journey once at its clear destination before showing failure");
+    td_state_t failed=td;memset(&td,0,sizeof(td));
+    expect(td_restore()&&td.mode==TD_ROAM&&td.job==TD_NONE&&td.health==0&&td.cash==27&&
+           td.u==failed.u&&td.v==failed.v,
+           "a failed but safely alighted destination remains a valid persistent free-roam state");
+    td=failed;world_tick(J_B,1);world_tick(J_RIGHT,1);
+    expect(td.mode==TD_ROAM&&td.u==560*16+8&&td.v==720*16&&td.cash==27,
+           "dismissed expired-trip results allow the first walking step from the clear destination");
+
+    /* Keep the registered grid except one synthetic solid tile between
+       Union and the east18px endpoint. Clear endpoints cannot bypass it. */
+    transit_menu_case(6,12);geometry=ALIGHT_BARRIER;td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
+    td_traffic_u[0]=542*16;td_traffic_v[0]=720*16;
+    td_traffic_u[1]=560*16;td_traffic_v[1]=738*16;
+    td_traffic_u[2]=560*16;td_traffic_v[2]=702*16;
+    expect(td_district_walkable(0,578,720)&&!td_district_walkable(0,572,720),
+           "alighting barrier fixture has a clear distant endpoint with a real intervening collision tile");
+    td_second();
+    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.u!=578*16,
+           "alighting rejects a clear18px endpoint when its swept walking path crosses solid collision");
+    geometry=NATIVE_GRID;td_second();
+    expect(td.mode==TD_ROAM&&td.u==572*16&&td.v==720*16&&td.cash==27,
+           "removing the collision barrier lets the same paid trip retry its nearest safe landing");
+
+    /* Synthetic left-boundary stop: both west offsets underflow, while
+       traffic covers every in-bounds cardinal point. No wrapped landing. */
+    reset_case();td.onfoot=1;td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
+    td.transit_origin=0;td.transit_target=12;td_cursor.u=8;td_cursor.v=450;
+    td.park_u=8*16;td.park_v=450*16;
+    td_traffic_u[0]=26*16;td_traffic_v[0]=450*16;
+    td_traffic_u[1]=8*16;td_traffic_v[1]=468*16;
+    td_traffic_u[2]=8*16;td_traffic_v[2]=432*16;
+    td_second();
+    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.u==400*16&&td.v==450*16&&td.cash==27,
+           "blocked boundary alighting retries instead of wrapping negative cardinal offsets across the map");
+    retry=td;memset(&td,0,sizeof(td));
+    expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
+           "the boundary retry retains a semantically valid paid origin save");
+    td_traffic_u[0]=td_traffic_v[0]=30000;td_second();
+    expect(td.mode==TD_ROAM&&td.u==20*16&&td.v==450*16&&td.cash==27&&td_foot_free(td.u,td.v),
+           "a boundary retry alights at the newly clear in-bounds stop-side point without another fare");
+
+    /* A remote Queen platform ignores the old scene's vehicle cache but
+       still respects a genuinely parked vehicle in its destination scene. */
+    for(UBYTE parked_remote=0;parked_remote<2;parked_remote++) {
+        native_case();td_stop_t origin,destination;td_get_stop(45,&origin);td_get_stop(50,&destination);
+        td_session_live=1;test_current_district=td.district=origin.district;td.onfoot=1;
+        td.u=td.safe_u=origin.u*16;td.v=td.safe_v=origin.v*16;
+        td.mode=TD_RIDE;td.cash=27;td.ride_left=1;td.transit_origin=45;td.transit_target=50;td_cursor=destination;
+        td_traffic_u[0]=destination.u*16;td_traffic_v[0]=destination.v*16;
+        if(parked_remote){td.park_district=3;td.park_u=880*16;td.park_v=514*16;}
+        expect(td_district_drivable(td.park_district,td.park_u>>4,td.park_v>>4),
+               "remote parked-car alighting fixture uses an actual legal road footprint beside the Queen sidewalk");
+        td_second();UWORD expected_u=(880+(parked_remote?12:0))*16;
+        expect(td_transition_pending==1&&td.mode==TD_ROAM&&td.district==3&&td.u==expected_u&&td.v==524*16&&td.cash==27,
+               "remote Queen alighting ignores origin traffic coordinates but chooses a safe side beside its remote parked car");
+        td_state_t arrived=td;memset(&td,0,sizeof(td));
+        expect(td_restore()&&td.mode==TD_ROAM&&td.district==3&&td.u==expected_u&&td.v==524*16&&td.cash==27,
+               "remote Queen safe landing saves the actual destination point rather than a paid ride at the wrong origin");
+        td=arrived;apply_queued_scene();
+        expect(td_near(&destination)&&td_foot_free(td.u,td.v),
+               "the loaded remote Queen landing remains close to its real platform and outside loaded traffic or the parked car");
+        world_tick(J_RIGHT,1);
+        expect(td.u==expected_u+8&&td.v==524*16&&td.onfoot&&td.cash==27,
+               "the first ordinary walking step leaves either remote Queen landing freely");
+    }
+}
+
+/* Real registered stops, independent Queen timetable expectations, and the
+   production driver/save code. Map rendering itself is covered by test_atlas. */
+static void test_cross_district_streetcar(void) {
+    for(UBYTE index=0;index<8;index++)for(UBYTE scenario=0;scenario<3;scenario++) {
+        UBYTE origin_id=43+index,target_id=origin_id<48?50:43;
+        UBYTE phase=target_id>origin_id?index*4:32+(7-index)*4;
+        UBYTE duration=(target_id>origin_id?target_id-origin_id:origin_id-target_id)*4;
+        UBYTE waiting=scenario==1,failing=scenario==2;
+        td_stop_t origin,destination,depot;
+        native_case();td_get_stop(origin_id,&origin);td_get_stop(target_id,&destination);td_get_stop(0,&depot);
+        test_current_district=td.district=origin.district;td_session_live=1;td.onfoot=1;
+        td.u=td.safe_u=origin.u*16;td.v=td.safe_v=origin.v*16;
+        td.mode=TD_TRANSIT;td.transit_origin=origin_id;td.transit_target=target_id;
+        td_cursor=destination;td.seconds=64*2+phase+(waiting?2:0);td.subsecond=13;
+        if(failing){td.job=0;td_get_job(td.job,&td_job);td.stage=1;td.left=2;td_set_target();}
+        expect(origin.transit==4&&destination.transit==4&&origin.district!=destination.district&&
+               td_district_walkable(origin.district,origin.u,origin.v)&&
+               td_district_walkable(destination.district,destination.u,destination.v),
+               "all eight Queen boarding fixtures use actual walkable stops across registered districts");
+        world_tick(J_A,1);
+        expect(td.mode==(waiting?TD_WAIT:TD_RIDE)&&td.cash==(waiting?30:27)&&
+               td.ride_left==(waiting?0:duration),
+               "Queen confirmation waits when closed or immediately pays one fare for the full cross-district journey");
+        td_state_t booked=td;
+        UWORD second=td.seconds;UBYTE subsecond=td.subsecond,ride_left=td.ride_left;
+        world_tick(J_START,300);td.menu=1;world_tick(J_A,300);
+        td_state_t frozen=td;world_tick(J_RIGHT,300);world_tick(0,300);
+        expect(td.mode==TD_MAP&&!memcmp(&td,&frozen,sizeof(td))&&td.seconds==second&&
+               td.subsecond==subsecond&&td.ride_left==ride_left,
+               "Queen unpaid waits and paid rides freeze all persistent state while browsing the paused atlas");
+        world_tick(J_B,300);world_tick(0,0);world_tick(J_B,300);world_tick(0,0);
+        expect(td.mode==(waiting?TD_WAIT:TD_RIDE)&&td.seconds==second&&td.subsecond==subsecond&&
+               td.cash==(waiting?30:27)&&td.ride_left==ride_left,
+               "closing Queen map and pause resumes the same origin trip without time advancement or another fare");
+        if(waiting)world_tick(0,62*60-td.subsecond);
+        expect(td.mode==TD_RIDE&&td.cash==27&&td.ride_left==duration&&td.district==origin.district,
+               "scheduled Queen boarding commits one fare while keeping the paid rider in the origin district");
+        /* Atlas navigation changes the unsaved menu selection. The paid
+           record belongs to immediate confirmation or later WAIT boarding. */
+        td_state_t paid=waiting?td:booked;memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&paid,sizeof(td)),
+               "native semantic validation accepts every Queen paid ride at its actual origin and remote target");
+        td_session_live=0;actors_inactive_head=NULL;toronto_init();
+        expect(td.mode==TD_HELP&&td_resume_mode==TD_RIDE&&td.district==origin.district&&
+               td.cash==27&&td.ride_left==duration&&td.seconds==paid.seconds&&
+               td.u==origin.u*16&&td.v==origin.v*16&&!test_queue_calls&&
+               td_cursor.district==destination.district&&td_cursor.u==destination.u&&td_cursor.v==destination.v,
+               "cold Queen recovery preserves its paid origin state and restores the remote alighting stop behind help");
+        world_tick(J_A,1);world_tick(0,0);
+        expect(td.mode==TD_RIDE&&td.cash==27&&td.ride_left==duration,
+               "leaving recovered Queen help resumes the paid ride without charging again");
+        if(failing) {
+            world_tick(0,120-td.subsecond);
+            expect(td.mode==TD_RIDE&&td.job==TD_NONE&&td.health==0&&td.cash==27&&
+                   td.ride_left==duration-2&&td.district==origin.district,
+                   "an actual parcel deadline expiring during Queen travel retires the job but continues the paid origin ride");
+            expect(td_target.district==depot.district&&td_target.u==depot.u&&td_target.v==depot.v,
+                   "Queen deadline expiry immediately clears the former client objective to Union");
+        }
+        test_queue_fail=1;
+        world_tick(0,td.ride_left*60-td.subsecond);
+        expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.district==origin.district&&
+               td.u==origin.u*16&&td.v==origin.v*16&&!td_transition_pending&&test_queue_calls==1&&
+               test_queued_district==TD_DISTRICT_NONE,
+               "failed Queen scene allocation retains the paid rider at the origin with one retry second");
+        td_state_t retry=td;memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
+               "failed Queen arrival commits a recoverable origin ride rather than an invalid remote paid state");
+        actor_t old_actors[21];UWORD old_traffic_u[6],old_traffic_v[6];
+        memcpy(old_actors,actors,sizeof(actors));memcpy(old_traffic_u,td_traffic_u,sizeof(td_traffic_u));
+        memcpy(old_traffic_v,td_traffic_v,sizeof(td_traffic_v));
+        UBYTE old_tick=td_tick;UWORD old_second=td.seconds;
+        test_queue_fail=0;world_tick(J_RIGHT,180);
+        expect(td_transition_pending==1&&test_queue_calls==2&&test_queued_district==destination.district&&
+               td.district==destination.district&&td.u==destination.u*16&&td.v==destination.v*16&&
+               td.safe_u==td.u&&td.safe_v==td.v&&td.mode==(failing?TD_RESULT:TD_ROAM)&&td.cash==27,
+               "Queen arrival retries the queue once and commits the selected destination with success or failure result");
+        expect(td.seconds==old_second+1&&td_tick==old_tick&&!memcmp(actors,old_actors,sizeof(actors))&&
+               !memcmp(td_traffic_u,old_traffic_u,sizeof(td_traffic_u))&&
+               !memcmp(td_traffic_v,old_traffic_v,sizeof(td_traffic_v)),
+               "queued Queen arrival stops subsequent clock and motion catchup before moving old-scene actors or traffic");
+        td_state_t arrived=td;memset(&td,0,sizeof(td));
+        expect(td_restore()&&td.mode==TD_ROAM&&td.district==destination.district&&td.cash==27&&
+               td.u==arrived.u&&td.v==arrived.v&&td.health==arrived.health&&td.job==arrived.job,
+               "alighted Queen saves validate at the actual destination, including a retired failed parcel");
+        td=arrived;apply_queued_scene();
+        expect(!td_transition_pending&&test_current_district==destination.district&&
+               td.mode==(failing?TD_RESULT:TD_ROAM)&&td.cash==27&&td.onfoot&&
+               PLAYER.pos.x==destination.u*32&&PLAYER.pos.y==destination.v*32,
+               "loaded Queen destination presents the courier on foot and retains its intended arrival mode");
+        expect(td.park_district==0&&td.park_u==560*16&&td.park_v==720*16,
+               "cross-district Queen travel never teleports the car parked at Union");
+    }
 }
 
 static void test_reciprocal_portals(void) {
@@ -1120,7 +1381,10 @@ int main(void) {
     test_atomic_saves();test_valid_crc_invalid_states();test_legacy_and_transit_recovery();
     test_wait_cancellation();
     test_entry_transit_exclusion();test_fresh_transit_after_failure();
+    test_finished_job_target();
     test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
+    test_safe_transit_alighting();
+    test_cross_district_streetcar();
     test_v5_migration_and_interrupted_upgrade();test_district_semantic_fallback();
     test_reciprocal_portals();test_queue_failure_and_remote_boot();test_car_entry_at_portal();test_first_frame_actors();
     test_walk_pace_dispatch_and_foot_delivery();

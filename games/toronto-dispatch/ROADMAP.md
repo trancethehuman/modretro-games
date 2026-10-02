@@ -74,6 +74,20 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Native coverage of every viewport, remote parked-car and allparking/client marker transitions; host fixtures cover these cases.
 - [ ] Full Old Toronto expansion, measured two-hour varied gameplay and hardware acceptance remain part of the full-release scope below.
 
+## Queen scheduled streetcar — Prototype 6 milestone, sampled native acceptance passed
+
+- [x] Research representative 501 Queen stop identities and the normal corridor; distinguish current construction diversions and preserve the unadopted era in [STREETCAR.md](docs/STREETCAR.md).
+- [x] Append eight sidewalk platforms 43–50 across west/core/east, for 51 service points; preserve the original 43 records, all 88 contracts and 58-byte version-6 save format.
+- [x] Add original seven-pixel curb signs without a TTC logo; check native sidewalk clearance, non-overlapping interaction areas, source references and walking connectivity.
+- [x] Integrate banked route/fare/timetable queries, destination-derived east/west labels, three-dollar fare, 64-second period, two-second windows and four-second rides per stop interval.
+- [x] Validate production transit C against an independent oracle: 609,452 sanitizer checks, including both Queen directions, invalid encodings, preserved subway/bus/ferry semantics and clock bounds.
+- [x] Sample the earlier `f56ff75e…` native candidate with three paid Queen journeys across core/east/west, paid pause/map/reset and parked-car recovery; retain its exact evidence in [TESTING.md](TESTING.md).
+- [x] Correct the legacy Union arrival onto the parked car with bounded 12/18-pixel connected alighting candidates, loaded-traffic clearance and paid retry when blocked. Current engine host fixtures pass 2,857 checks; the predecessor defect remains recorded.
+- [x] Build and replay exact final ROM `23b2a7a2…`: first delivery, held turn, three Queen journeys across core/east/west, paid arrival/reset, map pause and car recovery; separately verify legacy Line 1 / 94 bus/Island ferry and safe Union alighting.
+- [x] Complete final `make check`, with 2,857 engine and 609,452 transit checks; official final build/native evidence is recorded in [TESTING.md](TESTING.md), with build/allocation identity in [BUILD.md](docs/BUILD.md).
+- [ ] Prepare/review/publish Prototype 6. Release review/publication is tracked separately from native acceptance.
+- [ ] Validate human route-choice value, remaining platforms/arrival conditions and future visible streetcar boarding/riding. Full501, King 504, fuller TTC coverage and current detours are separate work.
+
 ## Next playable polish
 
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
@@ -86,7 +100,7 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 ## Full game release
 
 - [ ] Extend the working four-scene stage across the full historical Old Toronto footprint, waterfront and fuller Islands. The larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
-- [ ] Implement boarding, autonomous schedules and strategic alighting for researched western/eastern TTC corridors; added district clients supply no new scheduled native service.
+- [ ] Extend researched western/eastern TTC coverage beyond the representative Queen game service, including King504 and Line2; preserve original fictional timing and distinguish the adopted map baseline from live detours.
 - [ ] Playtest and refine the authored objectives across all eight job types, including the unlock sequence, vehicle rules and condition/comfort rewards.
 - [ ] Record representative timings and a complete campaign; validate **at least two hours of varied, enjoyable gameplay**. Quest count does not verify duration.
 - [ ] Test crowded-scene sprite/CPU limits, diagonal walking, collision corner recovery, cancellation and schedule edge cases.

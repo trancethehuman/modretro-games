@@ -2,10 +2,9 @@
 #include <string.h>
 #include "td_game.h"
 #include "td_district.h"
+#include "td_transit.h"
 #include "compat.h"
 #include "system.h"
-static const UBYTE td_saved_train[]={0,12,13,14,15,16,17};
-static const UBYTE td_saved_bus[]={18,16,19};
 static UBYTE td_save_slot=TD_NONE,td_save_seq;
 extern UBYTE td_resume_mode;
 
@@ -33,19 +32,9 @@ static UBYTE td_valid_state(td_state_t *s){
     if(s->job!=TD_NONE){if(s->job>=TD_QUESTS)return FALSE;td_get_job(s->job,&job);if(s->stage>=job.count||!s->left||!s->health)return FALSE;}
     if(s->mode==TD_WAIT||s->mode==TD_RIDE){
         if(!s->onfoot||(s->transit_origin&128)||(s->transit_origin&63)>=TD_STOPS||s->transit_target>=TD_STOPS||s->transit_target==(s->transit_origin&63))return FALSE;
-        if((s->transit_origin&64)&&(s->transit_origin&63)!=16)return FALSE;
         td_get_stop(s->transit_origin&63,&stop);if(!stop.transit||stop.district!=s->district)return FALSE;
-        /* Explicitly validate route membership; an unknown stop must not become index zero. */
-        value=td_service(s->transit_origin);bits=0;
-        if(value==1){for(i=0;i<7;i++)if(td_saved_train[i]==(s->transit_origin&63))bits=1;}
-        else if(value==2){for(i=0;i<3;i++)if(td_saved_bus[i]==(s->transit_origin&63))bits=1;}
-        else bits=(s->transit_origin&63)==10||((s->transit_origin&63)>=20&&(s->transit_origin&63)<=22);
-        if(!bits)return FALSE;
-        bits=0;
-        if(value==1){for(i=0;i<7;i++)if(td_saved_train[i]==s->transit_target)bits=1;}
-        else if(value==2){for(i=0;i<3;i++)if(td_saved_bus[i]==s->transit_target)bits=1;}
-        else bits=(s->transit_origin&63)==10?(s->transit_target>=20&&s->transit_target<=22):s->transit_target==10;
-        if(!bits||s->mode==TD_RIDE&&(!s->ride_left||s->ride_left>8))return FALSE;
+        if(!td_transit_valid(s->transit_origin,s->transit_target))return FALSE;
+        if(s->mode==TD_RIDE&&(!s->ride_left||s->ride_left>(td_transit_service(s->transit_origin)==4?28:8)))return FALSE;
     }
     return TRUE;
 }

@@ -11,6 +11,7 @@ from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 from east_layout import EAST, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
+from streetcar_art import paint_streetcar_stops
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "project/original-art"
@@ -226,6 +227,7 @@ def render():
     if len(peds)>128:peds=[peds[i*len(peds)//128] for i in range(128)]
     for x,y in peds:sweep([[x,y],[x+63,y]],half=2,car=False)
 
+    paint_streetcar_stops(d,EAST['id'],COLORS)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
         for tx in range(TW):

@@ -2,7 +2,9 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The current city-atlas ROM is **524,288 bytes**, SHA-256 `2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311`, named `toronto-city-atlas-portable.gbc`. Its milestone identifier is `v0.2.0-prototype.5`; use the matching bundle from the [releases page](https://github.com/trancethehuman/modretro-games/releases). It retains four linked compressed districts,88 authored contracts and43 service points, and adds a browsable city map with courier, vehicle and objective markers. Its exact native ROM passes the first delivery/held-acceleration turn, all-four atlas rendering, walking/car entry, paused job/WAIT/RIDE state, paid subway arrival and reset during a mapped paid ride. Prototype4's nine-job/four-loaded-scene test remains separate historical evidence. Official build/header/memory, host sanitizer and generated-source checks passed; [TESTING.md](../TESTING.md) gives exact scopes. A different build needs its own inspection and test identity.
+The current Queen streetcar ROM is **524,288 bytes**, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`, named `toronto-queen-streetcar-safe.gbc`. Its milestone identifier is `v0.2.0-prototype.6`; use the matching bundle when available from the [releases page](https://github.com/trancethehuman/modretro-games/releases). It contains four linked compressed districts, 88 authored contracts, 51 service points and a browsable city map. Eight Queen platforms provide scheduled $3 streetcar trips between the west, downtown and east scenes; the timetable is fictional and moving streetcar artwork is pending. Subway, bus and Island ferry services remain available.
+
+This exact native ROM passes the first delivery and held-acceleration turn, three Queen trips loading Core/East/West, WAIT/RIDE map freezing, paid-trip reset, parked-car recovery, sampled subway/bus/ferry travel and walking on Centre Island. Union arrival now leaves the courier clear of their parked car so they can walk away. Prototype 4's nine-job/four-scene test remains separate historical evidence. Official build/header/memory, host sanitizer and generated-source checks pass; [TESTING.md](../TESTING.md) records the exact scopes. A different build needs its own inspection and test identity.
 
 Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
 
@@ -22,22 +24,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-city-atlas-portable.gbc
+games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-city-atlas-portable.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-queen-streetcar-safe.gbc` with matching debug artifacts, run the documented native memory guard, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-city-atlas-portable.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-city-atlas-portable.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-queen-streetcar-safe.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -71,7 +73,7 @@ After a successful write, power off and disconnect USB, then power on with the s
 | First delivery | Select opens dispatch; accept the first Union-to-St. Lawrence job with A, Select collects at Union, drive east on Front Street, brake and Select delivers at the marker |
 | Walking and car entry | Stop, Start → Park / recover car; walk with D-pad, approach the parked car and press A to enter |
 | Map and pause | Start → Scroll City Map; D-pad pans across areas, A centres the job/booked stop/depot, Select changes focus, B returns; mission time freezes |
-| Transit | On foot at a station/terminal, B opens routes; choose with left/right and board with A; fare and mission time update once |
+| Transit | On foot at a station, Queen curb sign or ferry terminal, B opens routes; choose with left/right and board with A. At Wellesley, up changes train/bus. Check direction, wait and ride time before boarding; fare is charged once and mission time continues |
 | Saving | Use the pause menu's Save action, record cash and completed count, power off/on and confirm both persist |
 | Audio | Start → Audio, then A cycles music + effects, effects only and silent; B returns. Check the city score, engine and braking sounds, short delivery/transit cues, and silence in silent mode. Menu/world pause stops music and engine; short interface/result cues may finish. The mode defaults on each boot |
 | Readability/performance | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input |

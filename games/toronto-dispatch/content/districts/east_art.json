@@ -16772,7 +16772,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "03505e3f6718d810d5d7feae29b8359faad7d89009826ba00857d62edb9d489e",
+  "background_sha256": "90ab5aced3628ff6805d5703bcaced8101bcb9fda2b2cabd2d686a424cc40b74",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -17989,8 +17989,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 85,
-    "flip_canonical_unique_tiles": 63,
+    "raw_unique_tiles": 88,
+    "flip_canonical_unique_tiles": 66,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

@@ -226,5 +226,61 @@
     "url": "https://www.ttc.ca/routes-and-schedules/94/1/8008",
     "reviewed": "2026-10-02",
     "scope": "94 Wellesley corridor between Ossington and Castle Frank via Harbord, Hoskin, Queens Park, Wellesley, Parliament and Bloor; reviewed route page, prototype uses three representative stops"
+  },
+  {
+    "id": "ttc-501-east-stops-20261002",
+    "url": "https://www.ttc.ca/routes-and-schedules/501/0/5157",
+    "reviewed": "2026-10-02",
+    "scope": "Official eastbound 501 Queen representative stop identities and current York/Adelaide/Church detour; stop numbers are factual references, not imported schedules or route geometry. Game operation uses a normal-corridor abstraction.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-501-west-stops-20261002",
+    "url": "https://www.ttc.ca/routes-and-schedules/501/1",
+    "reviewed": "2026-10-02",
+    "scope": "Official westbound 501 Queen representative stop identities and current Church/Richmond/York detour. Lansdowne, Boulton and Alton identities distinguish actual stops from the fictional shared game platforms.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-queen-yonge-reference-20261002",
+    "url": "https://www.ttc.ca/wheel-trans/family-of-services/Family-of-Services-Stops-and-Routes",
+    "reviewed": "2026-10-02",
+    "scope": "TTC list identifies 501 Queen/Yonge eastbound 6861 and westbound 3079. These establish normal-corridor stop identities; current diverted 501 uses Adelaide/Richmond and this list does not establish active October 2026 Queen/Yonge service.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-501-hydro-detour-20261002",
+    "url": "https://www.ttc.ca/service-advisories/Service-Changes/501-301-Temporary-route-change-due-to-Toronto-Hydro-work",
+    "reviewed": "2026-10-02",
+    "scope": "September 21, 2026 21:00 to October 15, 2026 04:00 advisory diverts 501/301 via King/Shaw and adds Queen replacement buses. Evidence that normal-corridor game service is not a reproduction of current operations; detour not adopted.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-501-ontario-line-detour-20261002",
+    "url": "https://www.ttc.ca/news/2023/April/TTC-streetcar-and-bus-service-changes-begin-May-1-to-accommodate-Ontario-Line-construction",
+    "reviewed": "2026-10-02",
+    "scope": "Dated April 27, 2023 announcement explains Ontario Line Queen closure and planned Richmond westbound/Adelaide eastbound diversion. Present route pages confirm that downtown pattern; historical notice is not a live timetable.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-504-branches-east-20261002",
+    "url": "https://www.ttc.ca/routes-and-schedules/504/0/6052",
+    "reviewed": "2026-10-02",
+    "scope": "Official 504A Dundas West to Distillery via Roncesvalles/King/Sumach/Cherry and 504B Dufferin Gate to Broadview via King/Queen/Broadview. Stop identities inform a future service only; no 504 native route or timetable is added.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-504-branches-west-20261002",
+    "url": "https://www.ttc.ca/routes-and-schedules/504/1/6842",
+    "reviewed": "2026-10-02",
+    "scope": "Official westbound 504 branch descriptions and stop identities: Roncesvalles/Howard Park, Queen/Broadview, King/Yonge and King/Spadina. A missing core King-to-Queen connection prevents assuming a collision-faithful full native 504 route.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "ttc-site-rights-20261002",
+    "url": "https://www.ttc.ca/transparency-and-accountability/policies/web-site-terms-and-conditions-of-use",
+    "reviewed": "2026-10-02",
+    "scope": "TTC terms reserve website material and trademarks and restrict republication of substantial material. Research retains selected factual identities and citations only; no maps, logos, live data, timetable text or route geometry are imported.",
+    "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
   }
 ]

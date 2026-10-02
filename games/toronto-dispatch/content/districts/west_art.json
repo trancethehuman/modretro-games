@@ -16787,11 +16787,11 @@
     "solid": 15
   },
   "background_filename": "toronto_west.png",
-  "background_sha256": "3c5d69e7d32d6a5b3262ffaf8337645e92c85c660fc8a8eaca6e35a26c7c9128",
+  "background_sha256": "5c012fe2453846fdbca15316262f6865feb4d43fa358972abaaa636e3aad29a1",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 156,
-    "flip_canonical_unique_tiles": 133,
+    "raw_unique_tiles": 157,
+    "flip_canonical_unique_tiles": 134,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
     "traffic_swept_all_overlapped_tiles_clear": true,
