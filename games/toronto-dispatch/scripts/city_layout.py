@@ -10,6 +10,7 @@ RIVER = [872,912]
 MAINLAND = [24,24,992,816]
 ISLANDS = [[336,912,600,952],[640,896,784,952],[800,880,928,928]]
 ROAD_HALF, WALK_HALF = 24, 32
+WEST_PORTS = [64,288,400,528,640]
 
 def interpolate(value, old, new):
     for i in range(len(old)-1):
@@ -21,6 +22,7 @@ def location(u,v):
     return interpolate(u,OLD_COLS,COLS),interpolate(v,OLD_ROWS,NEW_ROWS)
 
 def road(u,v,half=ROAD_HALF):
+    if 0<=u<24 and any(abs(v-r)<half for r in WEST_PORTS):return True
     if not(24<=u<=992 and 24<=v<=808):return False
     if RIVER[0]<=u<=RIVER[1] and not any(abs(v-r)<half for r in BRIDGES):return False
     return any(abs(v-r)<half and not(r in (640,720) and u>848) for r in ROWS) or any(abs(u-c)<half for c in COLS)

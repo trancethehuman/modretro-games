@@ -17,6 +17,29 @@ relicensing this game under the GPL. The compiler/toolchain is not bundled.
 https://github.com/gbdk-2020/gbdk-2020/blob/4.5.0/LICENSE
 
 ========================================================================
+City of Toronto geographic information
+========================================================================
+
+Contains information licensed under the Open Government Licence – Toronto.
+
+Official licence, version 1.0:
+https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/
+
+Information provider: City of Toronto.
+Source datasets, reviewed 2026-10-02:
+Toronto Centreline:
+https://open.toronto.ca/dataset/toronto-centreline-tcl/
+Former Municipality Boundaries:
+https://open.toronto.ca/dataset/former-municipality-boundaries/
+
+Selected intersection identifiers, truncated coordinates and road/boundary
+facts inform the original compressed game layouts. Raw GIS datasets, the
+full official boundary polygon, map tiles and official imagery are not
+bundled. Game artwork and fictional delivery entrances are original design.
+The root MIT licence does not replace the City licence for its information.
+The City does not endorse this game or its use of the information.
+
+========================================================================
 Original Toronto Dispatch work
 ========================================================================
 

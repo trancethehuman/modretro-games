@@ -20,8 +20,9 @@ def main(background_only=False):
     # Width 48 asphalt plus 8-pixel sidewalks on both sides. Tile-aligned boundaries.
     for v in ROWS:
         end=848 if v in (640,720) else 992
-        box(24,v-WALK_HALF,end-24,WALK_HALF*2,3);box(24,v-ROAD_HALF,end-24,ROAD_HALF*2,1)
-        d.line((24,v-ROAD_HALF-4,end-1,v-ROAD_HALF-4),fill=COLORS[0]);d.line((24,v+ROAD_HALF+4,end-1,v+ROAD_HALF+4),fill=COLORS[0])
+        start=0 if v in WEST_PORTS else 24
+        box(start,v-WALK_HALF,end-start,WALK_HALF*2,3);box(start,v-ROAD_HALF,end-start,ROAD_HALF*2,1)
+        d.line((start,v-ROAD_HALF-4,end-1,v-ROAD_HALF-4),fill=COLORS[0]);d.line((start,v+ROAD_HALF+4,end-1,v+ROAD_HALF+4),fill=COLORS[0])
         for u in range(32,end,32):box(u,v,8,1,3)
     for u in COLS:
         box(u-WALK_HALF,24,WALK_HALF*2,792,3);box(u-ROAD_HALF,24,ROAD_HALF*2,792,1)

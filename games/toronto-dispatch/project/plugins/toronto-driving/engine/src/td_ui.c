@@ -41,21 +41,21 @@ void td_ui_draw(void) BANKED {
     text_drawn=TRUE;
     if(td.mode==TD_ROAM || td.mode==TD_WAIT || td.mode==TD_RIDE || td.mode==TD_MAP) {
         ui_set_pos(0,120);
-        if(td.mode==TD_MAP) {td_row(0,"MAP: DPAD SCROLL");td_row(1,"A TARGET  B BACK");td_row(2,td.job==TD_NONE?"FREE CITY":td_target.name);return;}
+        if(td.mode==TD_MAP) {td_get_district_name(td.district,td_line);td_row(0,td_line);td_row(1,"DPAD MAP A ROUTE B");td_row(2,td.job==TD_NONE?"FREE CITY":td_target.name);return;}
         if(td.mode==TD_WAIT){
             wait=td_next_departure(td.transit_origin,td.seconds);service=td_service(td.transit_origin);
             sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);td_row(1,service==1?"LINE 1 TRAIN":service==2?"94 WELLESLEY BUS":"ISLAND FERRY");td_row(2,"B CANCEL WAIT");return;
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         if(td.msg){
-            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED"};
+            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK"};
             td_row(0,m[td.msg]);
         }else {
-            if(u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
+            if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
-        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);td_row(2,td_target.name);}
-        else {sprintf(td_line,"$%u %s %u/72",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.done);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
+        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);if(td_target.district!=td.district){td_get_district_name(td.district<td_target.district?td.district+1:td.district-1,td_line);td_row(2,td_line);}else td_row(2,td_target.name);}
+        else {sprintf(td_line,"$%u %s %u/%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.done,TD_QUESTS);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
         return;
     }
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
@@ -64,13 +64,13 @@ void td_ui_draw(void) BANKED {
         td_row(2,"A GAS / B BRAKE");td_row(3,"LEFT RIGHT STEERING");td_row(4,"B HELD: REVERSE");td_row(6,"SELECT: DELIVER/JOBS");td_row(7,"START: PAUSE MENU");td_row(8,"STOP NEAR THE BEACON");td_row(10,"PARK TO WALK / TTC");td_row(12,"ON FOOT: A ENTER CAR");td_row(13,"B TTC AT A STATION");td_row(11,"FARES + TIMETABLES");td_row(15,"A OR B: ENTER CITY");return;
     }
     if(td.mode==TD_PAUSE){
-        sprintf(td_line,"$%u  DONE %u/72",td.cash,td.done);td_row(2,td_line);
+        sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);
         td_row(4,td.menu==0?"> RESUME":"  RESUME");td_row(5,td.menu==1?"> SCROLL CITY MAP":"  SCROLL CITY MAP");td_row(6,td.menu==2?"> DISPATCH JOBS":"  DISPATCH JOBS");td_row(7,td.menu==3?"> PARK / RECOVER CAR":"  PARK / RECOVER CAR");td_row(8,td.menu==4?"> CHANGE VEHICLE":"  CHANGE VEHICLE");td_row(9,td.menu==5?"> TRANSIT TIMETABLE":"  TRANSIT TIMETABLE");td_row(10,td.menu==6?"> SAVE PROGRESS":"  SAVE PROGRESS");td_row(11,td.menu==7?"> CANCEL ACTIVE JOB":"  CANCEL ACTIVE JOB");
         sprintf(td_line,"%c AUDIO: %s",td.menu==8?'>':' ',td_audio_get_mode()==TD_AUDIO_FULL?"MUSIC+SFX":td_audio_get_mode()==TD_AUDIO_EFFECTS?"SFX ONLY":"SILENT");td_row(12,td_line);
         td_row(14,"UP DOWN / A CHOOSE");td_row(15,td_vehicles[td.vehicle]);td_row(17,"B BACK");return;
     }
     if(td.mode==TD_BOARD){
-        sprintf(td_line,"CONTRACT %02u/72",td.menu+1);td_row(2,td_line);td_row(4,td_offer.title);
+        sprintf(td_line,"CONTRACT %02u/%u",td.menu+1,TD_QUESTS);td_row(2,td_line);td_row(4,td_offer.title);
         td_get_brief(td.menu,td_line);td_row(6,td_line+18);td_line[18]=0;td_row(5,td_line);td_row(7,td_kinds[td_offer.kind]);
         sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"PAYS $%u",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
         td_get_stop(td_offer.route[0],&td_cursor);td_row(11,td_cursor.name);
@@ -81,6 +81,6 @@ void td_ui_draw(void) BANKED {
         service=td_service(td.transit_origin);td_row(2,service==1?"LINE 1 TRAIN":service==2?"94 WELLESLEY BUS":"ISLAND FERRY");td_row(4,td_cursor.name);sprintf(td_line,"NEXT STOP %u",td.menu+1);td_row(6,td_line);td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"FERRY $4 GAME FARES");td_row(15,"UP: BUS/TRAIN AT");td_row(16,"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
     }
     if(td.mode==TD_RESULT){
-        td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");sprintf(td_line,"$%u  DONE %u/72",td.cash,td.done);td_row(7,td_line);td_row(10,td.done==72?"CITY COURIER MASTER":"MORE ROUTES AWAIT");td_row(12,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
+        td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(7,td_line);td_row(10,td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");td_row(12,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
     }
 }
