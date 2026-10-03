@@ -20,7 +20,16 @@ TRANSPARENT=(101,255,0)
 COLOURS=(TRANSPARENT,(224,248,207),(134,192,108),(7,24,33))
 def ident(key):return str(uuid.uuid5(uuid.NAMESPACE_URL,'toronto-dispatch.boats.'+key))
 
-def model():
+def same_png(left,right):
+    # PNG compression varies across Pillow/zlib builds. Preserve native colour
+    # indices and transparency instead of normalizing either image to RGB.
+    with Image.open(io.BytesIO(left)) as a,Image.open(io.BytesIO(right)) as b:
+        return a.format==b.format=='PNG' and a.mode==b.mode and a.size==b.size and \
+            a.tobytes()==b.tobytes() and a.getpalette()==b.getpalette() and \
+            (a.palette.mode if a.palette else None)==(b.palette.mode if b.palette else None) and \
+            a.info.get('transparency')==b.info.get('transparency')
+
+def model(png_checksum=None):
     image=Image.new('RGB',(32,16),TRANSPARENT);draw=ImageDraw.Draw(image)
     # Original civilian launch: pointed bow, bright gunwale, compact cabin,
     # dark stern. Southbound reverses this source in the renderer.
@@ -43,7 +52,8 @@ def model():
     png=io.BytesIO();image.save(png,format='PNG');blob=png.getvalue()
     meta={'_resourceType':'sprite','id':ident('editable-source-sprite'),'name':'Ambient boat',
         'symbol':'sprite_ambient_boat','filename':'ambient_boat.png','width':32,'height':16,
-        'checksum':hashlib.sha1(blob).hexdigest(),'numTiles':4,'canvasOriginX':8,'canvasOriginY':8,
+        'checksum':hashlib.sha1(blob).hexdigest() if png_checksum is None else png_checksum,
+        'numTiles':4,'canvasOriginX':8,'canvasOriginY':8,
         'canvasWidth':16,'canvasHeight':16,'boundsX':0,'boundsY':0,'boundsWidth':8,'boundsHeight':16,
         'animSpeed':255,'states':[{'id':ident('state'),'name':'','animationType':'fixed',
         'flipLeft':False,'animations':animations}]}
@@ -89,9 +99,16 @@ def validate_routes():
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check',action='store_true');parser.add_argument('--dry-run',action='store_true')
-    args=parser.parse_args();files=model()
+    args=parser.parse_args()
+    # Exact metadata still identifies the committed source file, independent
+    # of how this platform compresses the equivalent regenerated PNG.
+    checksum=hashlib.sha1((ART/'ambient_boat.png').read_bytes()).hexdigest() if args.check else None
+    files=model(checksum)
     if args.check:
-        for name,value in files.items():assert (ART/name).read_bytes()==value,f'Stale boat source: {name}'
+        for name,value in files.items():
+            existing=(ART/name).read_bytes()
+            assert same_png(existing,value) if name.endswith('.png') else existing==value, \
+                f'Stale boat source: {name}'
     elif not args.dry_run:
         for name,value in files.items():(ART/name).write_bytes(value)
     print('Original boat: one8x16 object,4 raw tiles,3 frames;54,528 full-hull water/deck samples; native unverified.')
