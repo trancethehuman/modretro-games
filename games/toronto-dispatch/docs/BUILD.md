@@ -1,6 +1,10 @@
 # Native build and preview
 
-Current verified local candidate is `toronto-dispatch-bus-lanes.gbc`, SHA-256 **`d58bc338f6dceb2b208bf855112cc9b93f0d72fdf254ac0ccdbd17ec1ff357b8`**, 524,288 bytes. It preserves six scenes, 96 contracts / 59 stops, seven parking anchors and save v9 / 58 bytes. Exact Q4 pedestrian/vehicle-body clearance and a corrected six-vertex Core bus loop remove the reproduced lane standstill. Official build/header/compiled guards and full `make check` pass, including 800,394 engine and 2,421,337 pedestrian checks on source commit `ef066ab6a3336c347297cd0d096324bc7ea4b61b`.
+Current verified local candidate is **`toronto-dispatch-result-controls.gbc`**, 524,288 bytes, SHA-256 **`a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634`**. Source `371641…` consumes RESULT B until release, preventing immediate reverse after closing the receipt while the world continues. Fresh first-delivery/control/truck/reverse/genuine-reset evidence is in [the portable record](NATIVE_RESULT_CONTROLS_SAMPLES.json); four earlier `d58…` scopes remain historical and are not inherited.
+
+Official build takes 57,439 ms; fingerprint `3d984b75e841f6e5db821a37124e8e18e95a0ac604abc00639c2d6ca629ec380`, NOI `007e4aaf4de8b67ddcd6fb1b0b34a0498e81a43fad6e39a89bb3949942c63ae1`. Full checks pass with 800,554 engine cases; independent compiled audit passes 514 checks. Header/scene/table guards pass, save v9 remains 58 bytes, and the new one-byte transient release latch leaves 1,096 static bytes (`DAB8`→`DF00`). Deepest stack, wider new-ROM campaign/transit/heat/pacing, two enjoyable human hours, browser and hardware remain unverified. [LOADING.md](LOADING.md) selects this ROM; the loading bundle is `toronto-dispatch-result-controls.zip`.
+
+Retained local candidate is `toronto-dispatch-bus-lanes.gbc`, SHA-256 **`d58bc338f6dceb2b208bf855112cc9b93f0d72fdf254ac0ccdbd17ec1ff357b8`**, 524,288 bytes. It preserves six scenes, 96 contracts / 59 stops, seven parking anchors and save v9 / 58 bytes. Exact Q4 pedestrian/vehicle-body clearance and a corrected six-vertex Core bus loop remove the reproduced lane standstill. Official build/header/compiled guards and full `make check` pass, including 800,394 engine and 2,421,337 pedestrian checks on source commit `ef066ab6a3336c347297cd0d096324bc7ea4b61b`.
 
 Build takes 60,113 ms; matching NOI SHA-256 is `dd4f20696e74688b18fcb6b07692ca631caae754ae8257e0e4e8f0e15fe70b63`, source fingerprint `b2dd5754c3f2e010690d28abfd90fef754c7e1ca843e32094843ac61c5f307c8`. Static reserve stays 1,097 bytes, OBJ allocations 116/116/106/116/106/106, and the unchanged 1,484-byte tram tables remain in bank `0x18` (24). Actual compiled target/recovery/direction tables, cold spawn, precise fleet presentation and earlier parked-flags/selector guards pass read-only inspection. No persistent RAM or save bytes are added; deepest stack remains unmeasured.
 
@@ -62,7 +66,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build source using `rom_build`, a distinct `outputPath` under `build/`, and `captureDebugArtifacts: true` for authenticated matching symbols. Current measured output is `build/toronto-dispatch-bus-lanes.gbc`; preserve it and use a new name after later changes. Paths are relative to the selected project; each ROM needs its own NOI/source identity and replay. The plugin invokes GB Studio CLI `make:rom`.
+2. Build source using `rom_build`, a distinct `outputPath` under `build/`, and `captureDebugArtifacts: true` for authenticated matching symbols. Current measured output is `build/toronto-dispatch-result-controls.gbc`; preserve it and use a new name after later changes. Paths are relative to the selected project; each ROM needs its own NOI/source identity and replay. The plugin invokes GB Studio CLI `make:rom`.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.
@@ -152,14 +156,14 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  "games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc.debug/symbols.noi"
+  "games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc.debug/symbols.noi"
 ```
 
-This command inspects the current bus lane artifact. For a later source build, substitute its own matching NOI/output/inspection. Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. Require 1,024 bytes of static reserve and current compiled aircraft/Queen/fleet/civilian/boat allocation/isolation gates; the threshold does not measure deepest native call paths or crowded pacing.
+This command inspects the current RESULT-control artifact. For a later source build, substitute its own matching NOI/output/inspection. Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. Require 1,024 bytes of static reserve and current compiled aircraft/Queen/fleet/civilian/boat allocation/isolation gates; the threshold does not measure deepest native call paths or crowded pacing.
 
 The first booting expanded candidate `36119ebf…` had heap end `DDA7`, stack base `DF00` and **345 bytes** of reserve. An earlier full-table cache ended at `DF90` and corrupted the reserved OAM page before Toronto initialized. Keeping only six coordinate pairs removed that allocation overlap, but the first booting candidate later failed a remote soft reset. Published Prototype 3's eight-context build ends at **D90F**, leaving **1,521 bytes** below `DF00`, and passed native reset samples. Prototype 4 ends at **D934**, leaving **1,484 bytes**. The optimized atlas candidate ends at **D950**, leaving **1,456 bytes** below `DF00`; its actual linked symbols pass the 1,024-byte guard. The renderer adds 28 bytes compared with Prototype 4, and its lookup optimization adds no further WRAM compared with `ec982d0c…`. Allocation checks and reset evidence remain separate: neither establishes physical persistence or every deepest call path. `make check` runs checker regressions, while the explicit command inspects the actual newly linked ROM.
 
-## Current Port campaign and clock candidate — scoped first new-job evidence
+## Retained Port campaign and clock candidate — scoped first new-job evidence
 
 | Identity | Value |
 | --- | --- |

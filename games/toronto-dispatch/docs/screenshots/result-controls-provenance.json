@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "sourceCommit": "371641fefae975654eb1fe43f9fb09dbb6d34140",
+  "romSha256": "a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634",
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+  "branchId": "branch-0001",
+  "archiveId": "45990b90-749f-4bcf-9b3c-6d1b0d933f43",
+  "archiveManifestSha256": "748b922188c0f2f99a2b7b0f26444095fbabf3de06f7ceebc61a8c49b0fac369",
+  "frames": [
+    {
+      "file": "front-street-result-controls.png",
+      "frame": 632,
+      "width": 160,
+      "height": 144,
+      "pngSha256": "287a9afe44e9115264d2ccd5d156d28c9bd865ad2105b1131ac623ce24c7fa5e",
+      "rgbaSha256": "5708dd76b9a09a22203d70558d1efae1ddea200d1fbe36487381a4dc19d5f59b",
+      "sampledButtons": [
+        "b"
+      ],
+      "unchangedFromNativeArchive": true
+    },
+    {
+      "file": "delivery-result-controls.png",
+      "frame": 560,
+      "width": 160,
+      "height": 144,
+      "pngSha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+      "rgbaSha256": "9fa1fcb188aebd11dce628b1ba769499fe054606effa58294f16183e4268b1e8",
+      "sampledButtons": [
+        "select"
+      ],
+      "unchangedFromNativeArchive": true
+    }
+  ],
+  "scope": "Unmodified actual emulator frames from the separate a0bd first-delivery and RESULT-control regression. These are sampled Core frames, not a hardware or full-city performance proof."
+}

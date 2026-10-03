@@ -231,6 +231,13 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [ ] Verify H2 moving-car capture, active/higher-heat escapes, other patrol-return routes/districts and every paid-mode suppression branch; keep new-job SRAM reset, wider human-impact/crowd/performance and full campaign gates open.
 - [ ] Broaden native pedestrian wait/resume, crowded lane/junction and performance coverage; full campaign, eight remaining Island jobs, native older-save imports, two measured enjoyable hours, human handling, browser recovery and hardware remain pending.
 
+## RESULT B release handling — current scoped native pass
+
+- [x] Consume RESULT-closing B until release without freezing the active world or altering ordinary fresh braking/reverse; add one transient byte, preserving v9 / 58-byte saves and all campaign fields.
+- [x] Build current `a0bd…` (`toronto-dispatch-result-controls.gbc`), with full checks / 800,554 engine cases, independent 514-check compiled audit and 1,096-byte static reserve.
+- [x] Close a fresh 55-interval native first-delivery/held-B stop/truck/fresh-reverse/genuine-reset record; distinguish later automatic saved pose from live SAVE A inspection and blank early boot from visible HELP. [Portable evidence](docs/NATIVE_RESULT_CONTROLS_SAMPLES.json) preserves the save-only final checkpoint.
+- [ ] Broaden this exact ROM's campaign/transit/heat/district/pacing evidence. Keep four older `d58…` records separate; all 96 jobs, remaining Islands, two measured enjoyable human hours, native older-save imports, browser and hardware remain pending.
+
 ## Device milestone
 
 - [ ] Identify the connected Chromatic and supported writable cartridge; establish Developer Mode readiness.

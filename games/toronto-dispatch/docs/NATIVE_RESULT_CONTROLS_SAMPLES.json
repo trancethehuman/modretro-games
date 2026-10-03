@@ -1,0 +1,5310 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Fresh exact-ROM RESULT B consumption, release/reverse, truck selection and genuine game-button SRAM reset; no imported campaign or opaque checkpoint publication.",
+  "sourceCommit": "371641fefae975654eb1fe43f9fb09dbb6d34140",
+  "recordedAgainstCommittedDocs": "c7d7e8bdc56db6d59ab436e5465cb999d33b4855",
+  "rom": {
+    "path": "project/build/toronto-dispatch-result-controls.gbc",
+    "sha256": "a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634",
+    "sizeBytes": 524288
+  },
+  "build": {
+    "success": true,
+    "builder": "gb-studio-cli",
+    "exitCode": 0,
+    "durationMs": 57439,
+    "warnings": [
+      {
+        "code": "DEP0190",
+        "category": "node-deprecation",
+        "source": "gb-studio-cli-process",
+        "message": "Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated."
+      }
+    ],
+    "noiPath": "project/build/toronto-dispatch-result-controls.gbc.debug/symbols.noi",
+    "noiSha256": "007e4aaf4de8b67ddcd6fb1b0b34a0498e81a43fad6e39a89bb3949942c63ae1",
+    "sourceFingerprint": "3d984b75e841f6e5db821a37124e8e18e95a0ac604abc00639c2d6ca629ec380",
+    "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+    "engineAbi": {
+      "layout": "gbvm-farptr3-uword16-v1",
+      "sha256": "4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "staticReserveBytes": 1096,
+    "heapEnd": "0xdab8",
+    "stackBase": "0xdf00",
+    "deepestStackMeasured": false,
+    "hostEngineChecks": 800554,
+    "fullMakeCheckPassed": true,
+    "independentCompiledChecks": 514,
+    "header": {
+      "title": "TORONTODISPATCH",
+      "colorMode": "gbc-only",
+      "colorFlag": 192,
+      "cartridgeType": 30,
+      "cartridgeTypeName": "MBC5+RUMBLE+RAM+BATTERY",
+      "mapper": "MBC5",
+      "romSizeCode": 4,
+      "declaredRomSizeBytes": 524288,
+      "ramSizeCode": 3,
+      "declaredRamSizeBytes": 32768,
+      "nintendoLogoValid": true,
+      "headerChecksum": 233,
+      "computedHeaderChecksum": 233,
+      "headerChecksumValid": true,
+      "valid": true
+    }
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "inspection": {
+    "method": "55 continuous ordinary held-button intervals from fresh boot, with 54 inert received inspections; no injected memory/progression, checkpoint import, browser or device action.",
+    "debugMode": "source",
+    "gameplayAddress": "0xc1f6",
+    "stateBytes": 58,
+    "counts": {
+      "completedPublicIntervals": 55,
+      "journalStepActions": 82,
+      "journalButtonChanges": 52,
+      "journalFrameEvents": 85,
+      "primary256ByteReads": 18,
+      "input4ByteReads": 17,
+      "scene3ByteReads": 17,
+      "motion15ByteReads": 1,
+      "validOamSnapshots": 1,
+      "validSnapshots": 54,
+      "referencedStepPngSamples": 75,
+      "archivePngFiles": 55,
+      "distinctReferencedPngFrames": 75,
+      "uniqueReferencedPngSha256": 52
+    },
+    "pngHashVerification": "All 75 public step references match actual archived PNG and decoded RGBA hashes; 75 distinct sampled frames reference 52 unique PNG hashes. The archive contains 55 actual PNG files.",
+    "rawPrefix": {
+      "path": "project/build/result-controls-native-prefix.json",
+      "sha256": "6c9b9d0c9831cd9d6ba58b7cd1906ce1e0e3916a3e5d692e3268c5aacafa3a99",
+      "bytes": 479095,
+      "published": false
+    },
+    "fieldMeaning": "Each original read request and structured payload is retained. The new bank-1 input/current_scene addresses shift by one byte; older-ROM addresses are not reused."
+  },
+  "outcome": "passed-scoped",
+  "scope": [
+    "Full-condition Market Start pays 109 to cash 139 / done 1. RESULT B held 120 VBlanks closes to ROAM without reversing: pose (758,720) and speed 0 persist while clock/fleet progress.",
+    "Normal pause/truck selection works; after release, a fresh B reaches reverse speed -6.",
+    "SAVE A resumes the world/slight acceleration. Actual four-button reset restores later autosaved (746.125,720), cash 139 / done 1 / truck, seconds 10 / subsecond 1; latest-live full-58 equality and hardware persistence are not claimed.",
+    "Early reset memory is HELP while images are blank; released-chord follow-up at 1,396 shows visible HELP/neutral input. Final emulator checkpoint is save-only."
+  ],
+  "checks": {
+    "resultBHold": {
+      "frames": [
+        572,
+        692
+      ],
+      "heldFrames": 120,
+      "u": 758,
+      "v": 720,
+      "speed": 0,
+      "worldSeconds": [
+        5,
+        7
+      ],
+      "worldSubseconds": [
+        49,
+        47
+      ],
+      "cash": 139,
+      "done": 1
+    },
+    "freshReverse": {
+      "frame": 828,
+      "speed": -6,
+      "u": 753.5625,
+      "v": 720,
+      "vehicle": 1
+    },
+    "savedReset": {
+      "liveSaveAfterAFrame": 1000,
+      "livePose": [
+        745.8125,
+        720
+      ],
+      "beforeResetFrame": 1024,
+      "beforeResetSubsecond": 11,
+      "restoredVisibleFrame": 1396,
+      "restoredPose": [
+        746.125,
+        720
+      ],
+      "restoredSeconds": 10,
+      "restoredSubsecond": 1,
+      "cash": 139,
+      "done": 1,
+      "vehicle": 1,
+      "full58EqualityClaimed": false
+    },
+    "finalCheckpoint": {
+      "checkpointId": "checkpoint-f551683d5fdb468a9df0507fd2828064",
+      "frame": 1396,
+      "branchId": "branch-0001",
+      "romSha256": "a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634",
+      "stateSha256": "ba683f5e80cffd211e93850cb685cbabe594ab959c8217a122dad69a1508ded2",
+      "automaticAdvance": 0,
+      "opaqueStatePublished": false,
+      "restoredInThisRecord": false
+    },
+    "oam": {
+      "frame": 1396,
+      "returnedVisibleObjects": 13,
+      "toolReportedPeakObjects": 8,
+      "hardwareLimit": 10,
+      "overLimitScanlines": 0
+    },
+    "pauseRelease": {
+      "frames": [
+        704,
+        716
+      ],
+      "gameBytes": 58,
+      "identical": true
+    },
+    "finalMotion": {
+      "frame": 1396,
+      "rawHex": "000000000000000000000000002e05",
+      "velocityAndTimersZero": true,
+      "lastFrameWord": "0x052e",
+      "entireSpanZero": false
+    }
+  },
+  "snapshots": [
+    {
+      "label": "firstResult",
+      "frame": 572,
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 5,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 7,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 49,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "602f002d0023002d8b000500740000000000000700ff0264013101000000000000000000000000000000000000000000602f002d000000000000",
+      "inputHex": "00000000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "heldResultB",
+      "frame": 692,
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "602f002d0023002d8b000700740000000000000000ff0264012f01000000000000000000000000000000000000000000602f002d000000000000",
+      "inputHex": "20200000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "pauseStopped",
+      "frame": 704,
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "602f002d0023002d8b000700740000000000000100ff0264012f01000000000000000000000000000000000000000000602f002d000000000000",
+      "inputHex": "a0a00000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "pauseRelease",
+      "frame": 716,
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "602f002d0023002d8b000700740000000000000100ff0264012f01000000000000000000000000000000000000000000602f002d000000000000",
+      "inputHex": "00000000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "truckChange",
+      "frame": 776,
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "602f002d0023002d8b000700740000000001000104ff0264012f01000000000000000000000000000000000000000000602f002d000000000000",
+      "inputHex": "10100000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "reverseBaseline",
+      "frame": 804,
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 8,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 4,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "602f002d0023002d8b000800740000000001000004ff0264010401000000000000000000000000000000000000000000602f002d000000000000",
+      "inputHex": "00000000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "normalReverse",
+      "frame": 828,
+      "state": {
+        "u": 753.5625,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 753.5625,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 8,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": -6,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 29,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "192f002d0023002d8b0008007400faff0001000004ff0264011d01000000000000000000000000000000000000000000192f002d000000000000",
+      "inputHex": "20200000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "reverseSettled",
+      "frame": 892,
+      "state": {
+        "u": 745.4375,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 745.4375,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 9,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 33,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "972e002d0023002d8b000900740000000001000004ff0264012101000000000000000000000000000000000000000000972e002d000000000000",
+      "inputHex": "00000000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "savedStateLiveAfterA",
+      "frame": 1000,
+      "state": {
+        "u": 745.8125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 745.8125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 9,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 1,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 12,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "9d2e002d0023002d8b000900740001000001000006ff0264012f01000000000000000000000000000000000000000c009d2e002d000000000000",
+      "inputHex": "00100000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "beforeReset",
+      "frame": 1024,
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 11,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 12,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "a22e002d0023002d8b000a00740000000001000006ff0264010b01000000000000000000000000000000000000000c00a22e002d000000000000",
+      "inputHex": "00000000",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "resetHelpPreDisplay",
+      "frame": 1204,
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 1,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "a22e002d0023002d8b000a00740000000001000800ff0264010101000000000000000000000000000000000000000000a22e002d000000000000",
+      "inputHex": "000000f0",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "resetNeutralPreDisplay",
+      "frame": 1216,
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 1,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "a22e002d0023002d8b000a00740000000001000800ff0264010101000000000000000000000000000000000000000000a22e002d000000000000",
+      "inputHex": "000000f0",
+      "currentSceneHex": "14a47f"
+    },
+    {
+      "label": "visibleResetHelp",
+      "frame": 1396,
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 1,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      },
+      "rawStateHex": "a22e002d0023002d8b000a00740000000001000800ff0264010101000000000000000000000000000000000000000000a22e002d000000000000",
+      "inputHex": "00000000",
+      "currentSceneHex": "14a47f"
+    }
+  ],
+  "steps": [
+    {
+      "label": "Fresh native Help A and controls",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 180,
+      "frame": 200,
+      "advancedFrames": 20,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 0,
+        "toActionIndex": 3,
+        "fromFrame": 180,
+        "toFrame": 200,
+        "fromPrefixPin": {
+          "eventCount": 5,
+          "eventDigest": "41eb6e4b3e465a156ea6a7734e05903d84c344de5c0c030916455fefd2003bf3",
+          "byteLength": 2751,
+          "sha256": "945f76c862d09ac08e416231bc9a72d1ff6ef7b67e516ca779bb2fec987965d9"
+        },
+        "prefixPin": {
+          "eventCount": 11,
+          "eventDigest": "4fe46636e9075cff6629b8b9203105073053bcf761079154d48c8736d92e1416",
+          "byteLength": 5062,
+          "sha256": "b8cc8a6222b4b7f4438b1e23704f1626c8d4854978ffa185a3fc64ba59257cb2"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 190,
+          "width": 160,
+          "height": 144,
+          "sha256": "344f3b11a010eebba41e1b0a162a2017aa9031b872093f472ba6cf198410ed31",
+          "rgbaSha256": "eeeea2d80d0e134202ae8ec4ed634c2cf31f453cec23def4f658a9262db71702",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/344f3b11a010eebba41e1b0a162a2017aa9031b872093f472ba6cf198410ed31.png"
+        },
+        {
+          "frame": 200,
+          "width": 160,
+          "height": 144,
+          "sha256": "5929eae805d77046797ba1655520be816264d8c1f48f6119fd24ea377efcfb22",
+          "rgbaSha256": "8d22a6e263e34b1efc95ff879c53514c51e5b828e5e0b6c1f0051aeb44d5fc8d",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/5929eae805d77046797ba1655520be816264d8c1f48f6119fd24ea377efcfb22.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Help A",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 200,
+      "frame": 208,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 3,
+        "toActionIndex": 5,
+        "fromFrame": 200,
+        "toFrame": 208,
+        "fromPrefixPin": {
+          "eventCount": 11,
+          "eventDigest": "4fe46636e9075cff6629b8b9203105073053bcf761079154d48c8736d92e1416",
+          "byteLength": 5062,
+          "sha256": "b8cc8a6222b4b7f4438b1e23704f1626c8d4854978ffa185a3fc64ba59257cb2"
+        },
+        "prefixPin": {
+          "eventCount": 15,
+          "eventDigest": "9080c45c2c0ef35edd8f3bb6ab1351515ba5a83394596b8bda96f1db9e862c3b",
+          "byteLength": 6523,
+          "sha256": "2353a71f1e2dbcb20c40a964caf5a8c7e0ea17201b500aa4e381c1db4992047f"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 208,
+          "width": 160,
+          "height": 144,
+          "sha256": "bbb962faa3f66aa766ad81617b5e3ff4e659d73a7e748632dfe93ad690c8362d",
+          "rgbaSha256": "76518eb9d55fff2f012e49fef5d321046ddb8d4e4f3c72ec3978c5dc3aff21b5",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/bbb962faa3f66aa766ad81617b5e3ff4e659d73a7e748632dfe93ad690c8362d.png"
+        }
+      ]
+    },
+    {
+      "label": "Open dispatch board",
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "startFrame": 208,
+      "frame": 220,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 5,
+        "toActionIndex": 7,
+        "fromFrame": 208,
+        "toFrame": 220,
+        "fromPrefixPin": {
+          "eventCount": 15,
+          "eventDigest": "9080c45c2c0ef35edd8f3bb6ab1351515ba5a83394596b8bda96f1db9e862c3b",
+          "byteLength": 6523,
+          "sha256": "2353a71f1e2dbcb20c40a964caf5a8c7e0ea17201b500aa4e381c1db4992047f"
+        },
+        "prefixPin": {
+          "eventCount": 19,
+          "eventDigest": "13982e5b9bfa8a939ba46a40237aeda1a0b03f72d608323b2fae38671afa4ae6",
+          "byteLength": 8006,
+          "sha256": "5a9e97c7c39dcf03f68f16905b7edb06337902829b8394e6d4e218906e1173e8"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 220,
+          "width": 160,
+          "height": 144,
+          "sha256": "93a3fe1006284c1fe7fbf37b0289fc6079ce27c22cf730e2646d9df8d4121808",
+          "rgbaSha256": "5adc5dc57b3aad0212893d53cc55c1b437525e4ecdccd4446d23aaa21e95886c",
+          "sampledButtons": [
+            "select"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/93a3fe1006284c1fe7fbf37b0289fc6079ce27c22cf730e2646d9df8d4121808.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Select",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 220,
+      "frame": 228,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 7,
+        "toActionIndex": 9,
+        "fromFrame": 220,
+        "toFrame": 228,
+        "fromPrefixPin": {
+          "eventCount": 19,
+          "eventDigest": "13982e5b9bfa8a939ba46a40237aeda1a0b03f72d608323b2fae38671afa4ae6",
+          "byteLength": 8006,
+          "sha256": "5a9e97c7c39dcf03f68f16905b7edb06337902829b8394e6d4e218906e1173e8"
+        },
+        "prefixPin": {
+          "eventCount": 23,
+          "eventDigest": "328b4b1e1526b04f6d431b6e0b63165273975463f2cf3abb0d19725cf4b2c9a2",
+          "byteLength": 9472,
+          "sha256": "f22fd90e7d05d5f4b966300aac17189b011785dbcad1a1a28e862152d9394289"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 228,
+          "width": 160,
+          "height": 144,
+          "sha256": "46dd9bbaf04bb84590c032c50335f1851805e484828361c5e0b7aa86c088912a",
+          "rgbaSha256": "7a11044f6b26ff892e12ce5c0af617fb9ea7df12ccb495275c9cacb4ead95560",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/46dd9bbaf04bb84590c032c50335f1851805e484828361c5e0b7aa86c088912a.png"
+        }
+      ]
+    },
+    {
+      "label": "Accept Market Start",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 228,
+      "frame": 240,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 9,
+        "toActionIndex": 11,
+        "fromFrame": 228,
+        "toFrame": 240,
+        "fromPrefixPin": {
+          "eventCount": 23,
+          "eventDigest": "328b4b1e1526b04f6d431b6e0b63165273975463f2cf3abb0d19725cf4b2c9a2",
+          "byteLength": 9472,
+          "sha256": "f22fd90e7d05d5f4b966300aac17189b011785dbcad1a1a28e862152d9394289"
+        },
+        "prefixPin": {
+          "eventCount": 27,
+          "eventDigest": "e9aa98c13afd951706c85cefb74b8458f5b68fd14f30d3429911f787f8beded6",
+          "byteLength": 10943,
+          "sha256": "74d87fcd906427aeff7a4e44863ec268f37bb4ddac6fe5c7630292bbcd7a9c6d"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 240,
+          "width": 160,
+          "height": 144,
+          "sha256": "5dc3b5d5f198dc61f741f5d644c1262e75956e12cf7e8090fc4b6236e4e7d0e0",
+          "rgbaSha256": "dd1d1f4ff66234db85ca1c2dc96072d9ed4acea09121fe3aa5ac9b9ba70426dc",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/5dc3b5d5f198dc61f741f5d644c1262e75956e12cf7e8090fc4b6236e4e7d0e0.png"
+        }
+      ]
+    },
+    {
+      "label": "Release acceptance",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 240,
+      "frame": 248,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 11,
+        "toActionIndex": 13,
+        "fromFrame": 240,
+        "toFrame": 248,
+        "fromPrefixPin": {
+          "eventCount": 27,
+          "eventDigest": "e9aa98c13afd951706c85cefb74b8458f5b68fd14f30d3429911f787f8beded6",
+          "byteLength": 10943,
+          "sha256": "74d87fcd906427aeff7a4e44863ec268f37bb4ddac6fe5c7630292bbcd7a9c6d"
+        },
+        "prefixPin": {
+          "eventCount": 31,
+          "eventDigest": "6f509b20fbf2789ee40ef8249dbe34cd11d5a24a57e708143517b8b54653544a",
+          "byteLength": 12407,
+          "sha256": "44383f99af1cc3bea53009f4e20e567afdf9bc4045ebe6abbe8170a45bf4bd7f"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 248,
+          "width": 160,
+          "height": 144,
+          "sha256": "0d5d6525d986f824083166f9df448e09042701e1c981cbce1604e1d59b11069b",
+          "rgbaSha256": "fd87cc4149f161ff5bbe87f74f7311c748b70a15b226716887b48a6f74724cf9",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/0d5d6525d986f824083166f9df448e09042701e1c981cbce1604e1d59b11069b.png"
+        }
+      ]
+    },
+    {
+      "label": "Collect at Union",
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "startFrame": 248,
+      "frame": 260,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 13,
+        "toActionIndex": 15,
+        "fromFrame": 248,
+        "toFrame": 260,
+        "fromPrefixPin": {
+          "eventCount": 31,
+          "eventDigest": "6f509b20fbf2789ee40ef8249dbe34cd11d5a24a57e708143517b8b54653544a",
+          "byteLength": 12407,
+          "sha256": "44383f99af1cc3bea53009f4e20e567afdf9bc4045ebe6abbe8170a45bf4bd7f"
+        },
+        "prefixPin": {
+          "eventCount": 35,
+          "eventDigest": "d707bd7a18516b5e1a01433f0d4195b3a7b9cce0a8cc71139667cd1b9b6a5b79",
+          "byteLength": 13893,
+          "sha256": "e4e414cb6d9432634a890df7d48dafcb8f306bc5662d4a2fc1d565bcf39ac7e5"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 260,
+          "width": 160,
+          "height": 144,
+          "sha256": "8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2",
+          "rgbaSha256": "106bd94fb6cd693489635654a521d817f2f2162d4915647a58952fce03f900d5",
+          "sampledButtons": [
+            "select"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2.png"
+        }
+      ]
+    },
+    {
+      "label": "Release dispatch Select",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 260,
+      "frame": 272,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 15,
+        "toActionIndex": 17,
+        "fromFrame": 260,
+        "toFrame": 272,
+        "fromPrefixPin": {
+          "eventCount": 35,
+          "eventDigest": "d707bd7a18516b5e1a01433f0d4195b3a7b9cce0a8cc71139667cd1b9b6a5b79",
+          "byteLength": 13893,
+          "sha256": "e4e414cb6d9432634a890df7d48dafcb8f306bc5662d4a2fc1d565bcf39ac7e5"
+        },
+        "prefixPin": {
+          "eventCount": 39,
+          "eventDigest": "24249e84ec53b688b1ab05291e25e99de6c7a1c8d391e81bd07a4c836f85a1f8",
+          "byteLength": 15363,
+          "sha256": "ee91ea56f6525a671824b7c849b3880d578c0a0a619cd7192149fe178d38267b"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 272,
+          "width": 160,
+          "height": 144,
+          "sha256": "8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2",
+          "rgbaSha256": "106bd94fb6cd693489635654a521d817f2f2162d4915647a58952fce03f900d5",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2.png"
+        }
+      ]
+    },
+    {
+      "label": "Confirm actual open Market Start board",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 272,
+      "frame": 284,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 17,
+        "toActionIndex": 19,
+        "fromFrame": 272,
+        "toFrame": 284,
+        "fromPrefixPin": {
+          "eventCount": 39,
+          "eventDigest": "24249e84ec53b688b1ab05291e25e99de6c7a1c8d391e81bd07a4c836f85a1f8",
+          "byteLength": 15363,
+          "sha256": "ee91ea56f6525a671824b7c849b3880d578c0a0a619cd7192149fe178d38267b"
+        },
+        "prefixPin": {
+          "eventCount": 43,
+          "eventDigest": "e460eb263d8e646404ea75118a7cc65371e71938619f65867952b1ea3f9c0d31",
+          "byteLength": 16834,
+          "sha256": "45e86133144281db1f99018e0e6dfc4191e8d40372befb74529946fa5a25c7c2"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 284,
+          "width": 160,
+          "height": 144,
+          "sha256": "fd4f6f817d96894b552cd5d69e4ce5309948bc85a8e5d57e54d5618fd9c9b16c",
+          "rgbaSha256": "1bd4ef4dbbfdf1e173320d8dcdea1e11453f7b28bc407d91e5a31d3a6dc218b3",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/fd4f6f817d96894b552cd5d69e4ce5309948bc85a8e5d57e54d5618fd9c9b16c.png"
+        }
+      ]
+    },
+    {
+      "label": "Release job confirmation",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 284,
+      "frame": 296,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 19,
+        "toActionIndex": 21,
+        "fromFrame": 284,
+        "toFrame": 296,
+        "fromPrefixPin": {
+          "eventCount": 43,
+          "eventDigest": "e460eb263d8e646404ea75118a7cc65371e71938619f65867952b1ea3f9c0d31",
+          "byteLength": 16834,
+          "sha256": "45e86133144281db1f99018e0e6dfc4191e8d40372befb74529946fa5a25c7c2"
+        },
+        "prefixPin": {
+          "eventCount": 47,
+          "eventDigest": "85bc9f3b005aeace8456ef70d1e59d049d1346bd0875970088212a66c236ede5",
+          "byteLength": 18299,
+          "sha256": "69dd072041468486b667b8b15d22bd8660b83297590b2b9ddd2cc4c385708835"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 296,
+          "width": 160,
+          "height": 144,
+          "sha256": "a13943d17b53c48cbe7920ed22093554ef75ac678bf9e07cbe557c672b00abeb",
+          "rgbaSha256": "ef2ac974651e30ee4442cd4b72c2013e97e9802266417002b4833af79c539029",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/a13943d17b53c48cbe7920ed22093554ef75ac678bf9e07cbe557c672b00abeb.png"
+        }
+      ]
+    },
+    {
+      "label": "Pick up at actual nearby Union",
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "startFrame": 296,
+      "frame": 308,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 21,
+        "toActionIndex": 23,
+        "fromFrame": 296,
+        "toFrame": 308,
+        "fromPrefixPin": {
+          "eventCount": 47,
+          "eventDigest": "85bc9f3b005aeace8456ef70d1e59d049d1346bd0875970088212a66c236ede5",
+          "byteLength": 18299,
+          "sha256": "69dd072041468486b667b8b15d22bd8660b83297590b2b9ddd2cc4c385708835"
+        },
+        "prefixPin": {
+          "eventCount": 51,
+          "eventDigest": "005322c36e35f38621f26ceed83716b04e298b8477b06e078eeee971d3409f5c",
+          "byteLength": 19785,
+          "sha256": "ab5e2534a8da96681ac542956d45cb602ae438c2f3ae3b075830bd55efda1d58"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 308,
+          "width": 160,
+          "height": 144,
+          "sha256": "ded60f20560f4d2b7d397c945b6bc91468d5182ce2f807f0be02e28857e121aa",
+          "rgbaSha256": "08f0a1e1ca5049b5320ebd6e94d7159a000185b41b8b029fe840c48b3ad60e58",
+          "sampledButtons": [
+            "select"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/ded60f20560f4d2b7d397c945b6bc91468d5182ce2f807f0be02e28857e121aa.png"
+        }
+      ]
+    },
+    {
+      "label": "Release pickup",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 308,
+      "frame": 320,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 23,
+        "toActionIndex": 25,
+        "fromFrame": 308,
+        "toFrame": 320,
+        "fromPrefixPin": {
+          "eventCount": 51,
+          "eventDigest": "005322c36e35f38621f26ceed83716b04e298b8477b06e078eeee971d3409f5c",
+          "byteLength": 19785,
+          "sha256": "ab5e2534a8da96681ac542956d45cb602ae438c2f3ae3b075830bd55efda1d58"
+        },
+        "prefixPin": {
+          "eventCount": 55,
+          "eventDigest": "65e1ecf6b7277cc340bce47adaf4c6673152920456f43e24b389eb397331815b",
+          "byteLength": 21255,
+          "sha256": "f7c761eae9b5f424def3da42061531f48e0c54f3ca1784c688c41e91c0cc8758"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 320,
+          "width": 160,
+          "height": 144,
+          "sha256": "e0b870ba3b822fc39ef0937f0afae37f6f6e4dbe9c9348eb9c22caf19d3e6c93",
+          "rgbaSha256": "62ffc87f69e7898a1bf17ca57085ad98f1cfd258d3754f001bb53d6026d87be1",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/e0b870ba3b822fc39ef0937f0afae37f6f6e4dbe9c9348eb9c22caf19d3e6c93.png"
+        }
+      ]
+    },
+    {
+      "label": "First delivery east on Front Street",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 320,
+      "frame": 440,
+      "advancedFrames": 120,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 3
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 25,
+        "toActionIndex": 29,
+        "fromFrame": 320,
+        "toFrame": 440,
+        "fromPrefixPin": {
+          "eventCount": 55,
+          "eventDigest": "65e1ecf6b7277cc340bce47adaf4c6673152920456f43e24b389eb397331815b",
+          "byteLength": 21255,
+          "sha256": "f7c761eae9b5f424def3da42061531f48e0c54f3ca1784c688c41e91c0cc8758"
+        },
+        "prefixPin": {
+          "eventCount": 63,
+          "eventDigest": "40f537609ee78d82b756bd0f66c10ec8946d847ab9d6be0b3f49566671ceba3a",
+          "byteLength": 24424,
+          "sha256": "92fd7f559f1ff0ce744e6661b3649507dd14da84c618f8c2070659ba1e1ca528"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 360,
+          "width": 160,
+          "height": 144,
+          "sha256": "401dd1959077168ca45e6e867169940a64ab0bd22360a660478dc0f28dd0eb19",
+          "rgbaSha256": "930213e30e70deacf7cbf9e649f4040a520beea4297cee7781968492655ddcbb",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/401dd1959077168ca45e6e867169940a64ab0bd22360a660478dc0f28dd0eb19.png"
+        },
+        {
+          "frame": 400,
+          "width": 160,
+          "height": 144,
+          "sha256": "974dffe6f40f586560c078b34fbba9cc556a292a32f5507b074b79f439acdd4a",
+          "rgbaSha256": "c6216e0df6246c795b61d209e59693bc56d8f9689c539fd0434002f1a29c661a",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/974dffe6f40f586560c078b34fbba9cc556a292a32f5507b074b79f439acdd4a.png"
+        },
+        {
+          "frame": 440,
+          "width": 160,
+          "height": 144,
+          "sha256": "9f5ac20651f6a1391dc9f3f3d6da533daec9ed77fa502b8f30ec16ab12d1324a",
+          "rgbaSha256": "16c4fdd124fb6532f5384ccbcd629dd66ddd4ae0c229b138e244baad9fdd1e68",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/9f5ac20651f6a1391dc9f3f3d6da533daec9ed77fa502b8f30ec16ab12d1324a.png"
+        }
+      ]
+    },
+    {
+      "label": "Continue east before Market braking",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 440,
+      "frame": 488,
+      "advancedFrames": 48,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 29,
+        "toActionIndex": 32,
+        "fromFrame": 440,
+        "toFrame": 488,
+        "fromPrefixPin": {
+          "eventCount": 63,
+          "eventDigest": "40f537609ee78d82b756bd0f66c10ec8946d847ab9d6be0b3f49566671ceba3a",
+          "byteLength": 24424,
+          "sha256": "92fd7f559f1ff0ce744e6661b3649507dd14da84c618f8c2070659ba1e1ca528"
+        },
+        "prefixPin": {
+          "eventCount": 69,
+          "eventDigest": "907e16204f03afb1e1416e60fcdb6260991f1c7b775082c693d906a9ee1d2f7e",
+          "byteLength": 26970,
+          "sha256": "7fd9c05999fadee85c1b6bb13e3aebaabc496907e68277af2df6d14bc41ba3e9"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 464,
+          "width": 160,
+          "height": 144,
+          "sha256": "5488be49c009d04fd14359517bba883969a03190563fe200413ba7ef82d77d67",
+          "rgbaSha256": "7cb7106e28d946247f402c4f3b47c98e466db347291db0a40d798b04bd330a64",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/5488be49c009d04fd14359517bba883969a03190563fe200413ba7ef82d77d67.png"
+        },
+        {
+          "frame": 488,
+          "width": 160,
+          "height": 144,
+          "sha256": "3e2280c71946456c7b49160dbd25a7dcdf193f0393f69676efe595c6cb83a123",
+          "rgbaSha256": "948b0228c026b14a8796ff2fafbd0572399046a48c5ae46776e4b9c59052a01d",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/3e2280c71946456c7b49160dbd25a7dcdf193f0393f69676efe595c6cb83a123.png"
+        }
+      ]
+    },
+    {
+      "label": "Brake into Market handoff",
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "startFrame": 488,
+      "frame": 536,
+      "advancedFrames": 48,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 3
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 32,
+        "toActionIndex": 36,
+        "fromFrame": 488,
+        "toFrame": 536,
+        "fromPrefixPin": {
+          "eventCount": 69,
+          "eventDigest": "907e16204f03afb1e1416e60fcdb6260991f1c7b775082c693d906a9ee1d2f7e",
+          "byteLength": 26970,
+          "sha256": "7fd9c05999fadee85c1b6bb13e3aebaabc496907e68277af2df6d14bc41ba3e9"
+        },
+        "prefixPin": {
+          "eventCount": 77,
+          "eventDigest": "7d90cd47924f46666ed9d74a6e6baa660377058da4a279a1ab3e13e661ef2ea8",
+          "byteLength": 30142,
+          "sha256": "e6ec98255f8f5695b143e7986b01ecdac852bf5a25e9e975a66d0b8440717cda"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 504,
+          "width": 160,
+          "height": 144,
+          "sha256": "bb65656d8f3657bdab9c932bb245cf3517c48c8d3f633bae5ac493b5c49dd60c",
+          "rgbaSha256": "c6c92c3771be9a9916c2d55573cb74678e268c6b15ca7e01ac97bf5cba80935a",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/bb65656d8f3657bdab9c932bb245cf3517c48c8d3f633bae5ac493b5c49dd60c.png"
+        },
+        {
+          "frame": 520,
+          "width": 160,
+          "height": 144,
+          "sha256": "b3bf03595b0b3cdf25f817cb3f4ca8080c498da9d2103cde6b8257fbfa9c635f",
+          "rgbaSha256": "99390d246409960168e623a98f9046bc8167cb467fbad84883f34e62568bee52",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/b3bf03595b0b3cdf25f817cb3f4ca8080c498da9d2103cde6b8257fbfa9c635f.png"
+        },
+        {
+          "frame": 536,
+          "width": 160,
+          "height": 144,
+          "sha256": "ea76ee4dc59eeecb789f288b99c6dd6dd148f1d306fe2a6e728d7f3e77d10d1a",
+          "rgbaSha256": "165082632f7afa05dc8bf9fe6b1b09a1065f221226ca954de2bde2c723b24117",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/ea76ee4dc59eeecb789f288b99c6dd6dd148f1d306fe2a6e728d7f3e77d10d1a.png"
+        }
+      ]
+    },
+    {
+      "label": "Settle car at Market",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 536,
+      "frame": 548,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 36,
+        "toActionIndex": 38,
+        "fromFrame": 536,
+        "toFrame": 548,
+        "fromPrefixPin": {
+          "eventCount": 77,
+          "eventDigest": "7d90cd47924f46666ed9d74a6e6baa660377058da4a279a1ab3e13e661ef2ea8",
+          "byteLength": 30142,
+          "sha256": "e6ec98255f8f5695b143e7986b01ecdac852bf5a25e9e975a66d0b8440717cda"
+        },
+        "prefixPin": {
+          "eventCount": 81,
+          "eventDigest": "24ebd8b0cde3619c4e91311af600b3cb7b1c6a65db97b8911a8cc214021ff577",
+          "byteLength": 31607,
+          "sha256": "d353375cc405db65f765e194ec7180cb79b4e61e47501eaa596b24e3e6ead5eb"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 548,
+          "width": 160,
+          "height": 144,
+          "sha256": "9e9e4d6ae3f2b6d3eb248f526dae6680a4a70aaa7f66ac742595b07e3a2fc09e",
+          "rgbaSha256": "73a407c84112da298da5da743dabf873d9bf82ad58aeeb1ed1e890363c1699e9",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/9e9e4d6ae3f2b6d3eb248f526dae6680a4a70aaa7f66ac742595b07e3a2fc09e.png"
+        }
+      ]
+    },
+    {
+      "label": "Deliver first Market package on new ROM",
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "startFrame": 548,
+      "frame": 560,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 38,
+        "toActionIndex": 41,
+        "fromFrame": 548,
+        "toFrame": 560,
+        "fromPrefixPin": {
+          "eventCount": 81,
+          "eventDigest": "24ebd8b0cde3619c4e91311af600b3cb7b1c6a65db97b8911a8cc214021ff577",
+          "byteLength": 31607,
+          "sha256": "d353375cc405db65f765e194ec7180cb79b4e61e47501eaa596b24e3e6ead5eb"
+        },
+        "prefixPin": {
+          "eventCount": 87,
+          "eventDigest": "3cd699e65283bd7fcf31a2f9602ccf0fe64fb99b86b653df745f250e61a90267",
+          "byteLength": 33940,
+          "sha256": "9eb36e8b971c5a1c77da6ef110745e3b433f9b15b4c3aeb77c242cd7df66e67e"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 554,
+          "width": 160,
+          "height": 144,
+          "sha256": "5972b4b85770cb86c4e27f3c96874054eecfae9df24fbacc13aa73ec7a57ab67",
+          "rgbaSha256": "27c1520eeda1a2cfba39edcb4840721815c84cc8eefbe9d679f75f436987f701",
+          "sampledButtons": [
+            "select"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/5972b4b85770cb86c4e27f3c96874054eecfae9df24fbacc13aa73ec7a57ab67.png"
+        },
+        {
+          "frame": 560,
+          "width": 160,
+          "height": 144,
+          "sha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+          "rgbaSha256": "9fa1fcb188aebd11dce628b1ba769499fe054606effa58294f16183e4268b1e8",
+          "sampledButtons": [
+            "select"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6.png"
+        }
+      ]
+    },
+    {
+      "label": "Neutral first success RESULT",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 560,
+      "frame": 572,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 41,
+        "toActionIndex": 43,
+        "fromFrame": 560,
+        "toFrame": 572,
+        "fromPrefixPin": {
+          "eventCount": 87,
+          "eventDigest": "3cd699e65283bd7fcf31a2f9602ccf0fe64fb99b86b653df745f250e61a90267",
+          "byteLength": 33940,
+          "sha256": "9eb36e8b971c5a1c77da6ef110745e3b433f9b15b4c3aeb77c242cd7df66e67e"
+        },
+        "prefixPin": {
+          "eventCount": 91,
+          "eventDigest": "37da97b0d493b8bcf5a9e1c06343e5734752e97d4e1d1828290433b774962072",
+          "byteLength": 35410,
+          "sha256": "87c9ba2d9ae9730aab5d4d80a1e016f5b4f5b9e0d0c6fc4ae7197a11c8e3f480"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 572,
+          "width": 160,
+          "height": 144,
+          "sha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+          "rgbaSha256": "9fa1fcb188aebd11dce628b1ba769499fe054606effa58294f16183e4268b1e8",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6.png"
+        }
+      ]
+    },
+    {
+      "label": "Hold result-closing B for 120 native frames",
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "startFrame": 572,
+      "frame": 692,
+      "advancedFrames": 120,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 4
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 43,
+        "toActionIndex": 49,
+        "fromFrame": 572,
+        "toFrame": 692,
+        "fromPrefixPin": {
+          "eventCount": 91,
+          "eventDigest": "37da97b0d493b8bcf5a9e1c06343e5734752e97d4e1d1828290433b774962072",
+          "byteLength": 35410,
+          "sha256": "87c9ba2d9ae9730aab5d4d80a1e016f5b4f5b9e0d0c6fc4ae7197a11c8e3f480"
+        },
+        "prefixPin": {
+          "eventCount": 103,
+          "eventDigest": "6309f22ec451be1492443ba7cde7537a13bbe06dfa01e72f671c9ebfce4e706e",
+          "byteLength": 40280,
+          "sha256": "928bbe4246dd7e8b660737a3eb33a46108e31096505cb56c1926047cc4ff70bc"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 602,
+          "width": 160,
+          "height": 144,
+          "sha256": "e8f9b7a701b9417438b116d1978d00d786e1af193925339bac4bf0aa72bd266e",
+          "rgbaSha256": "077f5895c297d8ee22d93fe69d3435f3023a701f24b55a1ac12ec98c4871ef94",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/e8f9b7a701b9417438b116d1978d00d786e1af193925339bac4bf0aa72bd266e.png"
+        },
+        {
+          "frame": 632,
+          "width": 160,
+          "height": 144,
+          "sha256": "287a9afe44e9115264d2ccd5d156d28c9bd865ad2105b1131ac623ce24c7fa5e",
+          "rgbaSha256": "5708dd76b9a09a22203d70558d1efae1ddea200d1fbe36487381a4dc19d5f59b",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/287a9afe44e9115264d2ccd5d156d28c9bd865ad2105b1131ac623ce24c7fa5e.png"
+        },
+        {
+          "frame": 662,
+          "width": 160,
+          "height": 144,
+          "sha256": "803c237f51263a3a61b5e09a1bc8fb440226bb0909fb1171be0d83490f304e48",
+          "rgbaSha256": "0b242a159aced4ae0ef2ca1eed040d32d75d491b2022f616aec1c5af2fd611c9",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/803c237f51263a3a61b5e09a1bc8fb440226bb0909fb1171be0d83490f304e48.png"
+        },
+        {
+          "frame": 692,
+          "width": 160,
+          "height": 144,
+          "sha256": "9e0885b60ee1761f6c83c4b1e9bcfad1eb6b339f744704d9b0fc02c46338b055",
+          "rgbaSha256": "703dfa6c10703c5f9b2412511ab3b79f265b8493d0f8bc11e0f155143efae90e",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/9e0885b60ee1761f6c83c4b1e9bcfad1eb6b339f744704d9b0fc02c46338b055.png"
+        }
+      ]
+    },
+    {
+      "label": "Pause while result-closing B remains held",
+      "buttons": [
+        "b",
+        "start"
+      ],
+      "execution": "completed",
+      "startFrame": 692,
+      "frame": 704,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 49,
+        "toActionIndex": 52,
+        "fromFrame": 692,
+        "toFrame": 704,
+        "fromPrefixPin": {
+          "eventCount": 103,
+          "eventDigest": "6309f22ec451be1492443ba7cde7537a13bbe06dfa01e72f671c9ebfce4e706e",
+          "byteLength": 40280,
+          "sha256": "928bbe4246dd7e8b660737a3eb33a46108e31096505cb56c1926047cc4ff70bc"
+        },
+        "prefixPin": {
+          "eventCount": 109,
+          "eventDigest": "b6a15e432f5a4e11e7b1fe84c00949e3c59c53de0f3e8063e3e6e0d42fbee625",
+          "byteLength": 42624,
+          "sha256": "558857f6fd926bafb61ebd7c0bfd9d658bbeb75474ee53c974110808b456a70f"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 698,
+          "width": 160,
+          "height": 144,
+          "sha256": "a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67",
+          "rgbaSha256": "c79d8a1d04b16012c8b83eaf180afd508b305f55dfb94458b4e8caa1e717197f",
+          "sampledButtons": [
+            "b",
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67.png"
+        },
+        {
+          "frame": 704,
+          "width": 160,
+          "height": 144,
+          "sha256": "a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67",
+          "rgbaSha256": "c79d8a1d04b16012c8b83eaf180afd508b305f55dfb94458b4e8caa1e717197f",
+          "sampledButtons": [
+            "b",
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67.png"
+        }
+      ]
+    },
+    {
+      "label": "Release B during paused menu",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 704,
+      "frame": 716,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 52,
+        "toActionIndex": 54,
+        "fromFrame": 704,
+        "toFrame": 716,
+        "fromPrefixPin": {
+          "eventCount": 109,
+          "eventDigest": "b6a15e432f5a4e11e7b1fe84c00949e3c59c53de0f3e8063e3e6e0d42fbee625",
+          "byteLength": 42624,
+          "sha256": "558857f6fd926bafb61ebd7c0bfd9d658bbeb75474ee53c974110808b456a70f"
+        },
+        "prefixPin": {
+          "eventCount": 113,
+          "eventDigest": "b7a36c5c8c0f5d7cc5461f1c7f7e63bdd9000887a68dd16e4ac95ade831fbaa5",
+          "byteLength": 44101,
+          "sha256": "3dd6ab29bdf40795a71e2056d8bff6785165b31686888d47de7eed0ab3c0b511"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 716,
+          "width": 160,
+          "height": 144,
+          "sha256": "a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67",
+          "rgbaSha256": "c79d8a1d04b16012c8b83eaf180afd508b305f55dfb94458b4e8caa1e717197f",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67.png"
+        }
+      ]
+    },
+    {
+      "label": "Select Change Vehicle menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 716,
+      "frame": 724,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 54,
+        "toActionIndex": 57,
+        "fromFrame": 716,
+        "toFrame": 724,
+        "fromPrefixPin": {
+          "eventCount": 113,
+          "eventDigest": "b7a36c5c8c0f5d7cc5461f1c7f7e63bdd9000887a68dd16e4ac95ade831fbaa5",
+          "byteLength": 44101,
+          "sha256": "3dd6ab29bdf40795a71e2056d8bff6785165b31686888d47de7eed0ab3c0b511"
+        },
+        "prefixPin": {
+          "eventCount": 119,
+          "eventDigest": "a342c1538195ba76df55da6009203f63c9a90158af33f7bf913c04721d1e5f3d",
+          "byteLength": 46434,
+          "sha256": "461eb5ff278531a225ceab417e07bdc470ab6c3d5920aaee0691ac958b82fd7a"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 724,
+          "width": 160,
+          "height": 144,
+          "sha256": "8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a",
+          "rgbaSha256": "2f1ce245da07a6e1019acde791988b05206c550e6a84d34705221f14dc2cd266",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a.png"
+        }
+      ]
+    },
+    {
+      "label": "Release menu Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 724,
+      "frame": 728,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 57,
+        "toActionIndex": 59,
+        "fromFrame": 724,
+        "toFrame": 728,
+        "fromPrefixPin": {
+          "eventCount": 119,
+          "eventDigest": "a342c1538195ba76df55da6009203f63c9a90158af33f7bf913c04721d1e5f3d",
+          "byteLength": 46434,
+          "sha256": "461eb5ff278531a225ceab417e07bdc470ab6c3d5920aaee0691ac958b82fd7a"
+        },
+        "prefixPin": {
+          "eventCount": 123,
+          "eventDigest": "41c439ccaf4e95f224e7256e27295e6c445f169bb8e78955bae74b5d5062a216",
+          "byteLength": 47905,
+          "sha256": "28649c08c184b7ae81cfe4efe53db4db1b507783bc3ee78ae41bfa9982d8f316"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 728,
+          "width": 160,
+          "height": 144,
+          "sha256": "8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a",
+          "rgbaSha256": "2f1ce245da07a6e1019acde791988b05206c550e6a84d34705221f14dc2cd266",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a.png"
+        }
+      ]
+    },
+    {
+      "label": "Select Change Vehicle menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 728,
+      "frame": 736,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 59,
+        "toActionIndex": 61,
+        "fromFrame": 728,
+        "toFrame": 736,
+        "fromPrefixPin": {
+          "eventCount": 123,
+          "eventDigest": "41c439ccaf4e95f224e7256e27295e6c445f169bb8e78955bae74b5d5062a216",
+          "byteLength": 47905,
+          "sha256": "28649c08c184b7ae81cfe4efe53db4db1b507783bc3ee78ae41bfa9982d8f316"
+        },
+        "prefixPin": {
+          "eventCount": 127,
+          "eventDigest": "9535ab6be84f77d565882ee566df84b612654c734091863962f6e4268432e1cf",
+          "byteLength": 49388,
+          "sha256": "0885bcfdda2f6dae80fd6932973fc9bd442f108ebaa6788388caafa9c8e14ba2"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 736,
+          "width": 160,
+          "height": 144,
+          "sha256": "da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c",
+          "rgbaSha256": "7efa390592105e2f80d4804018c89300cfb8b61837188cf8b4a16e9b34c401f2",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c.png"
+        }
+      ]
+    },
+    {
+      "label": "Release menu Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 736,
+      "frame": 740,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 61,
+        "toActionIndex": 63,
+        "fromFrame": 736,
+        "toFrame": 740,
+        "fromPrefixPin": {
+          "eventCount": 127,
+          "eventDigest": "9535ab6be84f77d565882ee566df84b612654c734091863962f6e4268432e1cf",
+          "byteLength": 49388,
+          "sha256": "0885bcfdda2f6dae80fd6932973fc9bd442f108ebaa6788388caafa9c8e14ba2"
+        },
+        "prefixPin": {
+          "eventCount": 131,
+          "eventDigest": "cdcc9dfc8fb1fae33dd0028310284447566ecafa03226bcb962e0f84a66fbb00",
+          "byteLength": 50859,
+          "sha256": "d08116b337190981314aad9d1a665a11feaabc81ecbe17af71f06fc6d6aa29d5"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 740,
+          "width": 160,
+          "height": 144,
+          "sha256": "da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c",
+          "rgbaSha256": "7efa390592105e2f80d4804018c89300cfb8b61837188cf8b4a16e9b34c401f2",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c.png"
+        }
+      ]
+    },
+    {
+      "label": "Select Change Vehicle menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 740,
+      "frame": 748,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 63,
+        "toActionIndex": 65,
+        "fromFrame": 740,
+        "toFrame": 748,
+        "fromPrefixPin": {
+          "eventCount": 131,
+          "eventDigest": "cdcc9dfc8fb1fae33dd0028310284447566ecafa03226bcb962e0f84a66fbb00",
+          "byteLength": 50859,
+          "sha256": "d08116b337190981314aad9d1a665a11feaabc81ecbe17af71f06fc6d6aa29d5"
+        },
+        "prefixPin": {
+          "eventCount": 135,
+          "eventDigest": "857bfbf7f6ef3a0b23f19f8183c49e0b6de4d9452667da7b589780e08ab2879f",
+          "byteLength": 52342,
+          "sha256": "a463251312f37c8b50f3efbb29cdd06fdcdcdb67206eabc30a820a4587265b09"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 748,
+          "width": 160,
+          "height": 144,
+          "sha256": "2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d",
+          "rgbaSha256": "caf66e8d4f575e4444adeb365b6a657a2294613fe745de28a0b47fb3b274af43",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d.png"
+        }
+      ]
+    },
+    {
+      "label": "Release menu Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 748,
+      "frame": 752,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 65,
+        "toActionIndex": 67,
+        "fromFrame": 748,
+        "toFrame": 752,
+        "fromPrefixPin": {
+          "eventCount": 135,
+          "eventDigest": "857bfbf7f6ef3a0b23f19f8183c49e0b6de4d9452667da7b589780e08ab2879f",
+          "byteLength": 52342,
+          "sha256": "a463251312f37c8b50f3efbb29cdd06fdcdcdb67206eabc30a820a4587265b09"
+        },
+        "prefixPin": {
+          "eventCount": 139,
+          "eventDigest": "5f6723b1272526c0e1307abb5597bde0272f2ea5922c97de73dc68d4a0bf0db0",
+          "byteLength": 53813,
+          "sha256": "984a23f04ddb78ba5e119d7d03878153deb3a7cbd8fed11a54a9ef1068abc516"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 752,
+          "width": 160,
+          "height": 144,
+          "sha256": "2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d",
+          "rgbaSha256": "caf66e8d4f575e4444adeb365b6a657a2294613fe745de28a0b47fb3b274af43",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d.png"
+        }
+      ]
+    },
+    {
+      "label": "Select Change Vehicle menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 752,
+      "frame": 760,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 67,
+        "toActionIndex": 69,
+        "fromFrame": 752,
+        "toFrame": 760,
+        "fromPrefixPin": {
+          "eventCount": 139,
+          "eventDigest": "5f6723b1272526c0e1307abb5597bde0272f2ea5922c97de73dc68d4a0bf0db0",
+          "byteLength": 53813,
+          "sha256": "984a23f04ddb78ba5e119d7d03878153deb3a7cbd8fed11a54a9ef1068abc516"
+        },
+        "prefixPin": {
+          "eventCount": 143,
+          "eventDigest": "3609c122c1a3e1a569bf2e15cf0fe789c6d0cc6ae38cfe311332ae1a0e48d07e",
+          "byteLength": 55296,
+          "sha256": "7723f549444ef11d56f644aa53544634700140149753ddfa079b2133562c713f"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 760,
+          "width": 160,
+          "height": 144,
+          "sha256": "f527883f036d9a9fd6e1d51eb7539ec1b491b19027046d7dbd197142e17b1730",
+          "rgbaSha256": "ff4b5007954c8062e72c8f5bcc468f7280eee47df82ac64193257a9cd5bfa9ef",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/f527883f036d9a9fd6e1d51eb7539ec1b491b19027046d7dbd197142e17b1730.png"
+        }
+      ]
+    },
+    {
+      "label": "Release menu Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 760,
+      "frame": 764,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 69,
+        "toActionIndex": 71,
+        "fromFrame": 760,
+        "toFrame": 764,
+        "fromPrefixPin": {
+          "eventCount": 143,
+          "eventDigest": "3609c122c1a3e1a569bf2e15cf0fe789c6d0cc6ae38cfe311332ae1a0e48d07e",
+          "byteLength": 55296,
+          "sha256": "7723f549444ef11d56f644aa53544634700140149753ddfa079b2133562c713f"
+        },
+        "prefixPin": {
+          "eventCount": 147,
+          "eventDigest": "a5e82cad604b2b556be9b2ac439b4eff9ec8205d1be2473e602057cb350836a0",
+          "byteLength": 56767,
+          "sha256": "a1388d3acd2e5e08b55b0dd87e9c3ea2f25251fb30ef4cd7996abbfe257ba361"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 764,
+          "width": 160,
+          "height": 144,
+          "sha256": "f527883f036d9a9fd6e1d51eb7539ec1b491b19027046d7dbd197142e17b1730",
+          "rgbaSha256": "ff4b5007954c8062e72c8f5bcc468f7280eee47df82ac64193257a9cd5bfa9ef",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/f527883f036d9a9fd6e1d51eb7539ec1b491b19027046d7dbd197142e17b1730.png"
+        }
+      ]
+    },
+    {
+      "label": "Stopped native vehicle change to truck",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 764,
+      "frame": 776,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 71,
+        "toActionIndex": 74,
+        "fromFrame": 764,
+        "toFrame": 776,
+        "fromPrefixPin": {
+          "eventCount": 147,
+          "eventDigest": "a5e82cad604b2b556be9b2ac439b4eff9ec8205d1be2473e602057cb350836a0",
+          "byteLength": 56767,
+          "sha256": "a1388d3acd2e5e08b55b0dd87e9c3ea2f25251fb30ef4cd7996abbfe257ba361"
+        },
+        "prefixPin": {
+          "eventCount": 153,
+          "eventDigest": "51844755988eb82de0a3a98ddd82fb1dae643f8ea3bb618e1325dec3e4f02aa9",
+          "byteLength": 59091,
+          "sha256": "ea13a397f3eff05f49a6209be73120947a8fb0e6a05a4a70ed04412bbc28bd43"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 770,
+          "width": 160,
+          "height": 144,
+          "sha256": "6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221",
+          "rgbaSha256": "693e03ed551b4c7e96153150a43a7abc59a9b022f0c5a5deb94ec18d6172e366",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221.png"
+        },
+        {
+          "frame": 776,
+          "width": 160,
+          "height": 144,
+          "sha256": "6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221",
+          "rgbaSha256": "693e03ed551b4c7e96153150a43a7abc59a9b022f0c5a5deb94ec18d6172e366",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221.png"
+        }
+      ]
+    },
+    {
+      "label": "Release vehicle change A",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 776,
+      "frame": 784,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 74,
+        "toActionIndex": 76,
+        "fromFrame": 776,
+        "toFrame": 784,
+        "fromPrefixPin": {
+          "eventCount": 153,
+          "eventDigest": "51844755988eb82de0a3a98ddd82fb1dae643f8ea3bb618e1325dec3e4f02aa9",
+          "byteLength": 59091,
+          "sha256": "ea13a397f3eff05f49a6209be73120947a8fb0e6a05a4a70ed04412bbc28bd43"
+        },
+        "prefixPin": {
+          "eventCount": 157,
+          "eventDigest": "3fef607c6361dbadda55fe24f77bb43a51c3166c4ef8b53f1a2b8b95eda1260c",
+          "byteLength": 60559,
+          "sha256": "b719c77324c6fef2f07d29318adf55e1d2842264f7e2fb8094f38ae83f12a946"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 784,
+          "width": 160,
+          "height": 144,
+          "sha256": "6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221",
+          "rgbaSha256": "693e03ed551b4c7e96153150a43a7abc59a9b022f0c5a5deb94ec18d6172e366",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221.png"
+        }
+      ]
+    },
+    {
+      "label": "Resume stopped truck without brake input",
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "startFrame": 784,
+      "frame": 796,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 76,
+        "toActionIndex": 78,
+        "fromFrame": 784,
+        "toFrame": 796,
+        "fromPrefixPin": {
+          "eventCount": 157,
+          "eventDigest": "3fef607c6361dbadda55fe24f77bb43a51c3166c4ef8b53f1a2b8b95eda1260c",
+          "byteLength": 60559,
+          "sha256": "b719c77324c6fef2f07d29318adf55e1d2842264f7e2fb8094f38ae83f12a946"
+        },
+        "prefixPin": {
+          "eventCount": 161,
+          "eventDigest": "c970fccfcd4e9e566cec5a34801a92b8c7d7865ab09a7affb5f3eb2b106d5daa",
+          "byteLength": 62046,
+          "sha256": "7caa02fa6f064fbdc612f632bc67e4c69f94b2824daccdc67017c714c40fba69"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 796,
+          "width": 160,
+          "height": 144,
+          "sha256": "48b8cc658b2c8c5190931354901b86a1f13b7a57cc991286b46f72775cfc8d9d",
+          "rgbaSha256": "6e1dbd6832adf8320ea3e49e9d6071f55bee4b19d6501459471e3e7a9f3b3613",
+          "sampledButtons": [
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/48b8cc658b2c8c5190931354901b86a1f13b7a57cc991286b46f72775cfc8d9d.png"
+        }
+      ]
+    },
+    {
+      "label": "Neutral before deliberate reverse",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 796,
+      "frame": 804,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 78,
+        "toActionIndex": 80,
+        "fromFrame": 796,
+        "toFrame": 804,
+        "fromPrefixPin": {
+          "eventCount": 161,
+          "eventDigest": "c970fccfcd4e9e566cec5a34801a92b8c7d7865ab09a7affb5f3eb2b106d5daa",
+          "byteLength": 62046,
+          "sha256": "7caa02fa6f064fbdc612f632bc67e4c69f94b2824daccdc67017c714c40fba69"
+        },
+        "prefixPin": {
+          "eventCount": 165,
+          "eventDigest": "2dc4bc00e4da86daaead3c10aba2e178e3a81f80c2eb0429d7afacc967ca90c4",
+          "byteLength": 63518,
+          "sha256": "1686746aa6c945970c79d8509fcca74397c5e6ac397748e43085639c4c5623d5"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 804,
+          "width": 160,
+          "height": 144,
+          "sha256": "12ef5bf9d670746485044a1c5d61b3dd21a26ec7fc672b458ac711ab84bdd016",
+          "rgbaSha256": "53866a26d0e8493eb583544f38fa11c3a0c299f93ed6d215ff5ac785f5ea1ae4",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/12ef5bf9d670746485044a1c5d61b3dd21a26ec7fc672b458ac711ab84bdd016.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh released-and-pressed B still reverses",
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "startFrame": 804,
+      "frame": 828,
+      "advancedFrames": 24,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 3
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 80,
+        "toActionIndex": 84,
+        "fromFrame": 804,
+        "toFrame": 828,
+        "fromPrefixPin": {
+          "eventCount": 165,
+          "eventDigest": "2dc4bc00e4da86daaead3c10aba2e178e3a81f80c2eb0429d7afacc967ca90c4",
+          "byteLength": 63518,
+          "sha256": "1686746aa6c945970c79d8509fcca74397c5e6ac397748e43085639c4c5623d5"
+        },
+        "prefixPin": {
+          "eventCount": 173,
+          "eventDigest": "c0797c25e3716bd0288b199e305822b37180da2827b1a6f6eccc50c0382c4c1c",
+          "byteLength": 66692,
+          "sha256": "17332da8b9ca42fa5e8f3cb11ac17e6bbd109e92da01e5be406f194cb88683e2"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 812,
+          "width": 160,
+          "height": 144,
+          "sha256": "6d8c32f81bcea2257b99a05adbd27e8af8ecc6809d0501aa3d2c922f6f9ffe24",
+          "rgbaSha256": "d00ab6f5cd240f6371bbf632b6dcb2eadb32de57d6e64f16954163cda64159f8",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6d8c32f81bcea2257b99a05adbd27e8af8ecc6809d0501aa3d2c922f6f9ffe24.png"
+        },
+        {
+          "frame": 820,
+          "width": 160,
+          "height": 144,
+          "sha256": "6de3659a2826c27b1df4c6f2976f554207436ccf625b405d4c14300446d369b7",
+          "rgbaSha256": "0fe130d49cedb734ff28716387396a932bc5ce573e2fa4010a07b8030b2b9162",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6de3659a2826c27b1df4c6f2976f554207436ccf625b405d4c14300446d369b7.png"
+        },
+        {
+          "frame": 828,
+          "width": 160,
+          "height": 144,
+          "sha256": "edf7e5ad9390b5562ebbbbe42d40c549931a32c8c3da7f0f32e2b51b0bc06e77",
+          "rgbaSha256": "11e3a260f07c14059840cd1bf017c5b2bb9198154387d21acf8fb2b6347cf675",
+          "sampledButtons": [
+            "b"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/edf7e5ad9390b5562ebbbbe42d40c549931a32c8c3da7f0f32e2b51b0bc06e77.png"
+        }
+      ]
+    },
+    {
+      "label": "Coast deliberate reverse to rest",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 828,
+      "frame": 892,
+      "advancedFrames": 64,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 84,
+        "toActionIndex": 88,
+        "fromFrame": 828,
+        "toFrame": 892,
+        "fromPrefixPin": {
+          "eventCount": 173,
+          "eventDigest": "c0797c25e3716bd0288b199e305822b37180da2827b1a6f6eccc50c0382c4c1c",
+          "byteLength": 66692,
+          "sha256": "17332da8b9ca42fa5e8f3cb11ac17e6bbd109e92da01e5be406f194cb88683e2"
+        },
+        "prefixPin": {
+          "eventCount": 181,
+          "eventDigest": "33948d616d20ea4fdc56430bff91847d4684ea625dc3ddb8792533a7403494e8",
+          "byteLength": 69863,
+          "sha256": "dc2b2beca669775f5cb8e23bf28c7705066d78393cb521d3f3ac5ae82ce1adc3"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 860,
+          "width": 160,
+          "height": 144,
+          "sha256": "f9e24e60a684ddc73b96f3b041b10928dc64c5130207d84ccb78a1b9614a0665",
+          "rgbaSha256": "4563f9903f67c5f9bbc2a21ecf6772c288f0890551de9781ab395781454f285d",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/f9e24e60a684ddc73b96f3b041b10928dc64c5130207d84ccb78a1b9614a0665.png"
+        },
+        {
+          "frame": 892,
+          "width": 160,
+          "height": 144,
+          "sha256": "88c11c041a42c543af19ef26ecc7aea00d7445aae84e58c74ef79d535eaee92f",
+          "rgbaSha256": "fece0ed592477e1fd75f0488612b441f44bdd3785e9b611585f974119521b9a4",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/88c11c041a42c543af19ef26ecc7aea00d7445aae84e58c74ef79d535eaee92f.png"
+        }
+      ]
+    },
+    {
+      "label": "Open pause for ordinary progress save",
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "startFrame": 892,
+      "frame": 904,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 88,
+        "toActionIndex": 90,
+        "fromFrame": 892,
+        "toFrame": 904,
+        "fromPrefixPin": {
+          "eventCount": 181,
+          "eventDigest": "33948d616d20ea4fdc56430bff91847d4684ea625dc3ddb8792533a7403494e8",
+          "byteLength": 69863,
+          "sha256": "dc2b2beca669775f5cb8e23bf28c7705066d78393cb521d3f3ac5ae82ce1adc3"
+        },
+        "prefixPin": {
+          "eventCount": 185,
+          "eventDigest": "dae113d4b4a5cc52b617e2f2c430e6ce9a9e13d7f562b51576693ab57f521bee",
+          "byteLength": 71350,
+          "sha256": "eba2230ea6b7371b6229b54c93db9b138823625cac9c2830c497e70d523d7f5b"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 904,
+          "width": 160,
+          "height": 144,
+          "sha256": "ba2aab83d582cec80265672d0fc933e22083019aeb394078be0c39d8c34c5a24",
+          "rgbaSha256": "d480a93452f215fae84fc8a251d0bbcb4160a6aeb9ba7fa62a845dc2ead81b30",
+          "sampledButtons": [
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/ba2aab83d582cec80265672d0fc933e22083019aeb394078be0c39d8c34c5a24.png"
+        }
+      ]
+    },
+    {
+      "label": "Release pause Start",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 904,
+      "frame": 912,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 90,
+        "toActionIndex": 92,
+        "fromFrame": 904,
+        "toFrame": 912,
+        "fromPrefixPin": {
+          "eventCount": 185,
+          "eventDigest": "dae113d4b4a5cc52b617e2f2c430e6ce9a9e13d7f562b51576693ab57f521bee",
+          "byteLength": 71350,
+          "sha256": "eba2230ea6b7371b6229b54c93db9b138823625cac9c2830c497e70d523d7f5b"
+        },
+        "prefixPin": {
+          "eventCount": 189,
+          "eventDigest": "6bca9dff32584db6f83271434331508950e78716d50f85099169e4f72b5b1559",
+          "byteLength": 72822,
+          "sha256": "f2a6d5c3c8b184aed5a8dbe9b96da34a4b90e763d56e2ebbaadccd4871797b9b"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 912,
+          "width": 160,
+          "height": 144,
+          "sha256": "ba2aab83d582cec80265672d0fc933e22083019aeb394078be0c39d8c34c5a24",
+          "rgbaSha256": "d480a93452f215fae84fc8a251d0bbcb4160a6aeb9ba7fa62a845dc2ead81b30",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/ba2aab83d582cec80265672d0fc933e22083019aeb394078be0c39d8c34c5a24.png"
+        }
+      ]
+    },
+    {
+      "label": "Choose Save Progress menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 912,
+      "frame": 920,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 92,
+        "toActionIndex": 94,
+        "fromFrame": 912,
+        "toFrame": 920,
+        "fromPrefixPin": {
+          "eventCount": 189,
+          "eventDigest": "6bca9dff32584db6f83271434331508950e78716d50f85099169e4f72b5b1559",
+          "byteLength": 72822,
+          "sha256": "f2a6d5c3c8b184aed5a8dbe9b96da34a4b90e763d56e2ebbaadccd4871797b9b"
+        },
+        "prefixPin": {
+          "eventCount": 193,
+          "eventDigest": "f9c788d4a25a8faca9cf8b3047ce6b3a69f9c2a43daf63e359d08925fbcc16bc",
+          "byteLength": 74305,
+          "sha256": "92e46c16396abd4a418c618b277670cfe7fd929f37cd7f53e30efcb0315f0e83"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 920,
+          "width": 160,
+          "height": 144,
+          "sha256": "82c916f0bce269de8d6adb4e4c8af998ff8588bc30daaaf6bf093b7020158d39",
+          "rgbaSha256": "52bef0e3270097a0f577732eb0e2c7d5d2b0044270a0aa32b6273a3d91cbf218",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/82c916f0bce269de8d6adb4e4c8af998ff8588bc30daaaf6bf093b7020158d39.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Save row Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 920,
+      "frame": 924,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 94,
+        "toActionIndex": 96,
+        "fromFrame": 920,
+        "toFrame": 924,
+        "fromPrefixPin": {
+          "eventCount": 193,
+          "eventDigest": "f9c788d4a25a8faca9cf8b3047ce6b3a69f9c2a43daf63e359d08925fbcc16bc",
+          "byteLength": 74305,
+          "sha256": "92e46c16396abd4a418c618b277670cfe7fd929f37cd7f53e30efcb0315f0e83"
+        },
+        "prefixPin": {
+          "eventCount": 197,
+          "eventDigest": "af3e6e88b38795cd06df772f10822c788564b14fad8bb671dc4cbf6033b7c161",
+          "byteLength": 75776,
+          "sha256": "066de3a4e7b967d25bf9baea6804654975bf7d9dff5e4b1bd580f4fe83e7ca70"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 924,
+          "width": 160,
+          "height": 144,
+          "sha256": "82c916f0bce269de8d6adb4e4c8af998ff8588bc30daaaf6bf093b7020158d39",
+          "rgbaSha256": "52bef0e3270097a0f577732eb0e2c7d5d2b0044270a0aa32b6273a3d91cbf218",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/82c916f0bce269de8d6adb4e4c8af998ff8588bc30daaaf6bf093b7020158d39.png"
+        }
+      ]
+    },
+    {
+      "label": "Choose Save Progress menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 924,
+      "frame": 932,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 96,
+        "toActionIndex": 98,
+        "fromFrame": 924,
+        "toFrame": 932,
+        "fromPrefixPin": {
+          "eventCount": 197,
+          "eventDigest": "af3e6e88b38795cd06df772f10822c788564b14fad8bb671dc4cbf6033b7c161",
+          "byteLength": 75776,
+          "sha256": "066de3a4e7b967d25bf9baea6804654975bf7d9dff5e4b1bd580f4fe83e7ca70"
+        },
+        "prefixPin": {
+          "eventCount": 201,
+          "eventDigest": "725de472abc68f16b07e4c93beda269c6d8107987e6ca3ea70e492ad00526966",
+          "byteLength": 77259,
+          "sha256": "9ad742cbca89c16fa2a8913c633ae4eb830b1648e72ae0b9b045bd725e134321"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 932,
+          "width": 160,
+          "height": 144,
+          "sha256": "973e6bd86d06d1c50a21768de12a65df5510a363f138ea546f571fd7d3803a4f",
+          "rgbaSha256": "d865055dbed30a285e6e530e88741d25aebd6564eaa029763da5fee38eda9178",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/973e6bd86d06d1c50a21768de12a65df5510a363f138ea546f571fd7d3803a4f.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Save row Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 932,
+      "frame": 936,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 98,
+        "toActionIndex": 100,
+        "fromFrame": 932,
+        "toFrame": 936,
+        "fromPrefixPin": {
+          "eventCount": 201,
+          "eventDigest": "725de472abc68f16b07e4c93beda269c6d8107987e6ca3ea70e492ad00526966",
+          "byteLength": 77259,
+          "sha256": "9ad742cbca89c16fa2a8913c633ae4eb830b1648e72ae0b9b045bd725e134321"
+        },
+        "prefixPin": {
+          "eventCount": 205,
+          "eventDigest": "e021967c14c9684de7b2531d2878190dac16d9bc0b5a6b7bf0d0a696bab10cc1",
+          "byteLength": 78732,
+          "sha256": "fbecc9479ff51221b8ef1b8afefeecbd6f652c74afa3575ecba7db92246ef965"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 936,
+          "width": 160,
+          "height": 144,
+          "sha256": "973e6bd86d06d1c50a21768de12a65df5510a363f138ea546f571fd7d3803a4f",
+          "rgbaSha256": "d865055dbed30a285e6e530e88741d25aebd6564eaa029763da5fee38eda9178",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/973e6bd86d06d1c50a21768de12a65df5510a363f138ea546f571fd7d3803a4f.png"
+        }
+      ]
+    },
+    {
+      "label": "Choose Save Progress menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 936,
+      "frame": 944,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 100,
+        "toActionIndex": 102,
+        "fromFrame": 936,
+        "toFrame": 944,
+        "fromPrefixPin": {
+          "eventCount": 205,
+          "eventDigest": "e021967c14c9684de7b2531d2878190dac16d9bc0b5a6b7bf0d0a696bab10cc1",
+          "byteLength": 78732,
+          "sha256": "fbecc9479ff51221b8ef1b8afefeecbd6f652c74afa3575ecba7db92246ef965"
+        },
+        "prefixPin": {
+          "eventCount": 209,
+          "eventDigest": "1746aa7f5b8bef77b19a761404360045a6528fecf25e99ab8eb3ce6539ccad21",
+          "byteLength": 80218,
+          "sha256": "4bc4723371dcba26d81c85928bfa2a4442359953690cdad56679563ae7e2aa20"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 944,
+          "width": 160,
+          "height": 144,
+          "sha256": "2098ad35c11a605f777f19fff648bcb5296a64da87280afa5e85e1f0edd46d74",
+          "rgbaSha256": "12a6d19efc221f2b29d03b1d482ea85487e35575cbc20410acc600f59a56cdae",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/2098ad35c11a605f777f19fff648bcb5296a64da87280afa5e85e1f0edd46d74.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Save row Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 944,
+      "frame": 948,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 102,
+        "toActionIndex": 104,
+        "fromFrame": 944,
+        "toFrame": 948,
+        "fromPrefixPin": {
+          "eventCount": 209,
+          "eventDigest": "1746aa7f5b8bef77b19a761404360045a6528fecf25e99ab8eb3ce6539ccad21",
+          "byteLength": 80218,
+          "sha256": "4bc4723371dcba26d81c85928bfa2a4442359953690cdad56679563ae7e2aa20"
+        },
+        "prefixPin": {
+          "eventCount": 213,
+          "eventDigest": "d6e4026cd96ded3f6e74b2c4afb960474ddf0ea240bead110e0b336ff5fb9339",
+          "byteLength": 81692,
+          "sha256": "90b0f6620cdf919e2e21f460237011fa8b9d914db356bf541461a248c0e3f39b"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 948,
+          "width": 160,
+          "height": 144,
+          "sha256": "2098ad35c11a605f777f19fff648bcb5296a64da87280afa5e85e1f0edd46d74",
+          "rgbaSha256": "12a6d19efc221f2b29d03b1d482ea85487e35575cbc20410acc600f59a56cdae",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/2098ad35c11a605f777f19fff648bcb5296a64da87280afa5e85e1f0edd46d74.png"
+        }
+      ]
+    },
+    {
+      "label": "Choose Save Progress menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 948,
+      "frame": 956,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 104,
+        "toActionIndex": 106,
+        "fromFrame": 948,
+        "toFrame": 956,
+        "fromPrefixPin": {
+          "eventCount": 213,
+          "eventDigest": "d6e4026cd96ded3f6e74b2c4afb960474ddf0ea240bead110e0b336ff5fb9339",
+          "byteLength": 81692,
+          "sha256": "90b0f6620cdf919e2e21f460237011fa8b9d914db356bf541461a248c0e3f39b"
+        },
+        "prefixPin": {
+          "eventCount": 217,
+          "eventDigest": "f458e4c2babe9463520f2fc8b2e70184df0d1e1c150bb348b3803d7a5ba21b75",
+          "byteLength": 83178,
+          "sha256": "7739da37dee0adcc59970e8fb4c4cf7a32cca99a886305951711aac996b3a2c9"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 956,
+          "width": 160,
+          "height": 144,
+          "sha256": "6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221",
+          "rgbaSha256": "693e03ed551b4c7e96153150a43a7abc59a9b022f0c5a5deb94ec18d6172e366",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Save row Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 956,
+      "frame": 960,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 106,
+        "toActionIndex": 108,
+        "fromFrame": 956,
+        "toFrame": 960,
+        "fromPrefixPin": {
+          "eventCount": 217,
+          "eventDigest": "f458e4c2babe9463520f2fc8b2e70184df0d1e1c150bb348b3803d7a5ba21b75",
+          "byteLength": 83178,
+          "sha256": "7739da37dee0adcc59970e8fb4c4cf7a32cca99a886305951711aac996b3a2c9"
+        },
+        "prefixPin": {
+          "eventCount": 221,
+          "eventDigest": "b24439fdbbb13be049b4aa34acf7de839d08bcda2f3ee7935a8edaef5f646310",
+          "byteLength": 84652,
+          "sha256": "53bd24128390385794720ab39c440a2f2af8a51d22cbfcb97f14f564c8c14bb3"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 960,
+          "width": 160,
+          "height": 144,
+          "sha256": "6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221",
+          "rgbaSha256": "693e03ed551b4c7e96153150a43a7abc59a9b022f0c5a5deb94ec18d6172e366",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/6607f768c976a5ee266bb80b286a6137c835d0706baa27b5be95c2ed831b0221.png"
+        }
+      ]
+    },
+    {
+      "label": "Choose Save Progress menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 960,
+      "frame": 968,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 108,
+        "toActionIndex": 110,
+        "fromFrame": 960,
+        "toFrame": 968,
+        "fromPrefixPin": {
+          "eventCount": 221,
+          "eventDigest": "b24439fdbbb13be049b4aa34acf7de839d08bcda2f3ee7935a8edaef5f646310",
+          "byteLength": 84652,
+          "sha256": "53bd24128390385794720ab39c440a2f2af8a51d22cbfcb97f14f564c8c14bb3"
+        },
+        "prefixPin": {
+          "eventCount": 225,
+          "eventDigest": "de0b819f19e8f5191bdcbb7a60a464c9252894829d22e0b14cc33797d7bacb13",
+          "byteLength": 86138,
+          "sha256": "1f6cf5875e5afba6df7dd3dc22b785b0abec161bab43f4e9035945dd75b07ae3"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 968,
+          "width": 160,
+          "height": 144,
+          "sha256": "7efab851b134ae09c9d1c12d5f5e4f0e326d3e810cb9b90735c20513e54dc6c2",
+          "rgbaSha256": "d1fca7e6c63bfe657ede5f8fbae15ec9dd168ec1b6cefc38360d3d5553ad36e6",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/7efab851b134ae09c9d1c12d5f5e4f0e326d3e810cb9b90735c20513e54dc6c2.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Save row Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 968,
+      "frame": 972,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 110,
+        "toActionIndex": 112,
+        "fromFrame": 968,
+        "toFrame": 972,
+        "fromPrefixPin": {
+          "eventCount": 225,
+          "eventDigest": "de0b819f19e8f5191bdcbb7a60a464c9252894829d22e0b14cc33797d7bacb13",
+          "byteLength": 86138,
+          "sha256": "1f6cf5875e5afba6df7dd3dc22b785b0abec161bab43f4e9035945dd75b07ae3"
+        },
+        "prefixPin": {
+          "eventCount": 229,
+          "eventDigest": "1f810c86157c515057fac665e19081f29c8b063064449c3816b2e29c2a66f00c",
+          "byteLength": 87612,
+          "sha256": "42046f0da184925442b58920c16da47bd2431d1109d2a85783a4c845c734b9f0"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 972,
+          "width": 160,
+          "height": 144,
+          "sha256": "7efab851b134ae09c9d1c12d5f5e4f0e326d3e810cb9b90735c20513e54dc6c2",
+          "rgbaSha256": "d1fca7e6c63bfe657ede5f8fbae15ec9dd168ec1b6cefc38360d3d5553ad36e6",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/7efab851b134ae09c9d1c12d5f5e4f0e326d3e810cb9b90735c20513e54dc6c2.png"
+        }
+      ]
+    },
+    {
+      "label": "Choose Save Progress menu row",
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "startFrame": 972,
+      "frame": 980,
+      "advancedFrames": 8,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 112,
+        "toActionIndex": 114,
+        "fromFrame": 972,
+        "toFrame": 980,
+        "fromPrefixPin": {
+          "eventCount": 229,
+          "eventDigest": "1f810c86157c515057fac665e19081f29c8b063064449c3816b2e29c2a66f00c",
+          "byteLength": 87612,
+          "sha256": "42046f0da184925442b58920c16da47bd2431d1109d2a85783a4c845c734b9f0"
+        },
+        "prefixPin": {
+          "eventCount": 233,
+          "eventDigest": "15e0d312e266c78c905f17edc4a36ac4aed7d870d4a8a2f4f2ce94467e0e1684",
+          "byteLength": 89098,
+          "sha256": "44c03ce3e05fec5f6f8b731a736ef55700885185ccb9e4341c29baffd52c8679"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 980,
+          "width": 160,
+          "height": 144,
+          "sha256": "8b8212fe3f508523e269dd2af436874425fea0bb28aedf6a6ece1e507f7c9843",
+          "rgbaSha256": "d5803bece9e53315327649c0b48e284b38a2dc26e91bbc0f74bba7aeacc682fe",
+          "sampledButtons": [
+            "down"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/8b8212fe3f508523e269dd2af436874425fea0bb28aedf6a6ece1e507f7c9843.png"
+        }
+      ]
+    },
+    {
+      "label": "Release Save row Down",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 980,
+      "frame": 984,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 114,
+        "toActionIndex": 116,
+        "fromFrame": 980,
+        "toFrame": 984,
+        "fromPrefixPin": {
+          "eventCount": 233,
+          "eventDigest": "15e0d312e266c78c905f17edc4a36ac4aed7d870d4a8a2f4f2ce94467e0e1684",
+          "byteLength": 89098,
+          "sha256": "44c03ce3e05fec5f6f8b731a736ef55700885185ccb9e4341c29baffd52c8679"
+        },
+        "prefixPin": {
+          "eventCount": 237,
+          "eventDigest": "25666fe8c78f70fa22f82f6944f416250a28177a8d341d579e0e4cc70a12a69b",
+          "byteLength": 90572,
+          "sha256": "bec2aa23fbbf6ce6ea0d8736faffe54ec9361d7b0c4aea6503c950fc5d009905"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 984,
+          "width": 160,
+          "height": 144,
+          "sha256": "8b8212fe3f508523e269dd2af436874425fea0bb28aedf6a6ece1e507f7c9843",
+          "rgbaSha256": "d5803bece9e53315327649c0b48e284b38a2dc26e91bbc0f74bba7aeacc682fe",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/8b8212fe3f508523e269dd2af436874425fea0bb28aedf6a6ece1e507f7c9843.png"
+        }
+      ]
+    },
+    {
+      "label": "Save new-ROM completion and stopped truck",
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "startFrame": 984,
+      "frame": 996,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 2
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 116,
+        "toActionIndex": 119,
+        "fromFrame": 984,
+        "toFrame": 996,
+        "fromPrefixPin": {
+          "eventCount": 237,
+          "eventDigest": "25666fe8c78f70fa22f82f6944f416250a28177a8d341d579e0e4cc70a12a69b",
+          "byteLength": 90572,
+          "sha256": "bec2aa23fbbf6ce6ea0d8736faffe54ec9361d7b0c4aea6503c950fc5d009905"
+        },
+        "prefixPin": {
+          "eventCount": 243,
+          "eventDigest": "6d9b191f479defa369ab8517dae8204fdbbf3aae4f2a94f64f331903e49bba75",
+          "byteLength": 92901,
+          "sha256": "1acfaa3478c8897c35024fdf21ebaf6c53335881270d35c21b5f8d08274ec79b"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 990,
+          "width": 160,
+          "height": 144,
+          "sha256": "925ad71c2a471b4baedf58568a069f12c8c90c3d1ae76e47f084478a020b40cf",
+          "rgbaSha256": "2ff93425fd251bee35f5c6c897a0ee727c4e88822d319b9391abb63dd6416453",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/925ad71c2a471b4baedf58568a069f12c8c90c3d1ae76e47f084478a020b40cf.png"
+        },
+        {
+          "frame": 996,
+          "width": 160,
+          "height": 144,
+          "sha256": "13177394834911477c666340d6f33a95f0203fdac6f6eb1d4311af63303af794",
+          "rgbaSha256": "dfac19be251fbffbaf743ba359ea73ac3a5eb18223cd4908b7b9ebe5a03f7246",
+          "sampledButtons": [
+            "a"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/13177394834911477c666340d6f33a95f0203fdac6f6eb1d4311af63303af794.png"
+        }
+      ]
+    },
+    {
+      "label": "Neutral after progress save",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 996,
+      "frame": 1000,
+      "advancedFrames": 4,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 119,
+        "toActionIndex": 121,
+        "fromFrame": 996,
+        "toFrame": 1000,
+        "fromPrefixPin": {
+          "eventCount": 243,
+          "eventDigest": "6d9b191f479defa369ab8517dae8204fdbbf3aae4f2a94f64f331903e49bba75",
+          "byteLength": 92901,
+          "sha256": "1acfaa3478c8897c35024fdf21ebaf6c53335881270d35c21b5f8d08274ec79b"
+        },
+        "prefixPin": {
+          "eventCount": 247,
+          "eventDigest": "628c18467423ea2b4f4cee0c16d88693335969bc1a1ca54bba4dd215a4f73030",
+          "byteLength": 94374,
+          "sha256": "478b7e74677c4000612360dbae5f7d1df54d9d032ecd17f291b80c309e2ea2de"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 1000,
+          "width": 160,
+          "height": 144,
+          "sha256": "c2c7866e77b0a3f402ba591d14ff835d28f4743990fa5704d1b7d48d8538207e",
+          "rgbaSha256": "40c99011ae4c26e0a8b5c6953b9105710721b536071507f029548379331318f6",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/c2c7866e77b0a3f402ba591d14ff835d28f4743990fa5704d1b7d48d8538207e.png"
+        }
+      ]
+    },
+    {
+      "label": "Release and settle post-save A before reset",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 1000,
+      "frame": 1024,
+      "advancedFrames": 24,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 121,
+        "toActionIndex": 122,
+        "fromFrame": 1000,
+        "toFrame": 1024,
+        "fromPrefixPin": {
+          "eventCount": 247,
+          "eventDigest": "628c18467423ea2b4f4cee0c16d88693335969bc1a1ca54bba4dd215a4f73030",
+          "byteLength": 94374,
+          "sha256": "478b7e74677c4000612360dbae5f7d1df54d9d032ecd17f291b80c309e2ea2de"
+        },
+        "prefixPin": {
+          "eventCount": 249,
+          "eventDigest": "7f97949cba321ecec86dab3ca2c378e5d3b6f477729f814536df92879a920ece",
+          "byteLength": 95230,
+          "sha256": "56318fcf8c833f05fe7a72da442c1da57f73d2f46e1554c7aa0d4e2d680c3c85"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 1024,
+          "width": 160,
+          "height": 144,
+          "sha256": "c99f427779dd688ef9724ad882bbe7772c91d473eb988dadb655db530e773cd8",
+          "rgbaSha256": "cd8bbe55984799275138fa6debc7d084cd3e522e7a8c8efb6ae3c50cf79cd757",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/c99f427779dd688ef9724ad882bbe7772c91d473eb988dadb655db530e773cd8.png"
+        }
+      ]
+    },
+    {
+      "label": "Genuine in-game four-button SRAM reset",
+      "buttons": [
+        "a",
+        "b",
+        "start",
+        "select"
+      ],
+      "execution": "completed",
+      "startFrame": 1024,
+      "frame": 1204,
+      "advancedFrames": 180,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 3
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 122,
+        "toActionIndex": 128,
+        "fromFrame": 1024,
+        "toFrame": 1204,
+        "fromPrefixPin": {
+          "eventCount": 249,
+          "eventDigest": "7f97949cba321ecec86dab3ca2c378e5d3b6f477729f814536df92879a920ece",
+          "byteLength": 95230,
+          "sha256": "56318fcf8c833f05fe7a72da442c1da57f73d2f46e1554c7aa0d4e2d680c3c85"
+        },
+        "prefixPin": {
+          "eventCount": 261,
+          "eventDigest": "6a1e1cb1b1d06ed03fffce09fcc37f9c65b351c67cfa9c70403aeaef342dfbd3",
+          "byteLength": 100199,
+          "sha256": "e6fc3d2bdaf5bd0993ef0d3de175d1cb0bc1c99119696d9b9617c32b48f52ad3"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 1084,
+          "width": 160,
+          "height": 144,
+          "sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304",
+          "rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914",
+          "sampledButtons": [
+            "a",
+            "b",
+            "select",
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"
+        },
+        {
+          "frame": 1144,
+          "width": 160,
+          "height": 144,
+          "sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304",
+          "rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914",
+          "sampledButtons": [
+            "a",
+            "b",
+            "select",
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"
+        },
+        {
+          "frame": 1204,
+          "width": 160,
+          "height": 144,
+          "sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304",
+          "rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914",
+          "sampledButtons": [
+            "a",
+            "b",
+            "select",
+            "start"
+          ],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"
+        }
+      ]
+    },
+    {
+      "label": "Release reset chord on HELP",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 1204,
+      "frame": 1216,
+      "advancedFrames": 12,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "omitted",
+        "sampleCount": 1
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 128,
+        "toActionIndex": 130,
+        "fromFrame": 1204,
+        "toFrame": 1216,
+        "fromPrefixPin": {
+          "eventCount": 261,
+          "eventDigest": "6a1e1cb1b1d06ed03fffce09fcc37f9c65b351c67cfa9c70403aeaef342dfbd3",
+          "byteLength": 100199,
+          "sha256": "e6fc3d2bdaf5bd0993ef0d3de175d1cb0bc1c99119696d9b9617c32b48f52ad3"
+        },
+        "prefixPin": {
+          "eventCount": 265,
+          "eventDigest": "4f5ba9c4e150d9babb363236bfc9b446cc33cd381364ec37bcb568242c0e572d",
+          "byteLength": 101698,
+          "sha256": "9f64bfd15135e11b005109e3b8411a878bf62be2e2299a48e995bfecfa96fa9b"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 1216,
+          "width": 160,
+          "height": 144,
+          "sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304",
+          "rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"
+        }
+      ]
+    },
+    {
+      "label": "Allow released reset chord to finish cold boot",
+      "buttons": [],
+      "execution": "completed",
+      "startFrame": 1216,
+      "frame": 1396,
+      "advancedFrames": 180,
+      "genuineEmulatorFrames": true,
+      "imageDelivery": {
+        "status": "available",
+        "sampleCount": 3
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+        "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+        "branchId": "branch-0001",
+        "fromActionIndex": 130,
+        "toActionIndex": 134,
+        "fromFrame": 1216,
+        "toFrame": 1396,
+        "fromPrefixPin": {
+          "eventCount": 265,
+          "eventDigest": "4f5ba9c4e150d9babb363236bfc9b446cc33cd381364ec37bcb568242c0e572d",
+          "byteLength": 101698,
+          "sha256": "9f64bfd15135e11b005109e3b8411a878bf62be2e2299a48e995bfecfa96fa9b"
+        },
+        "prefixPin": {
+          "eventCount": 273,
+          "eventDigest": "422af34b9530641b05870e49f83e589447aeeecc20e9debfb8276efd5adb7ad2",
+          "byteLength": 105122,
+          "sha256": "e5a016d7305ae2fb7030e08d6d98a80cde3c018d501793e8b233371ed748c4cc"
+        },
+        "emptyInterval": false
+      },
+      "samples": [
+        {
+          "frame": 1276,
+          "width": 160,
+          "height": 144,
+          "sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+          "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"
+        },
+        {
+          "frame": 1336,
+          "width": 160,
+          "height": 144,
+          "sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+          "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"
+        },
+        {
+          "frame": 1396,
+          "width": 160,
+          "height": 144,
+          "sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+          "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+          "sampledButtons": [],
+          "path": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "label": "Fresh result-control candidate state",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 180,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "0023002d0023002d1e000000000000000000000800ff00640000000000000000000000000000000000000000000000000023002d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003002d002554e494f4e204445504f540000000000000000010000000000000000000000000000000000000000000000000000000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 560.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 560.0,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 0,
+        "left": 0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 0,
+        "health": 100,
+        "done": 0,
+        "subsecond": 0,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "00000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "First delivery accepted and collected",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 260,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "7223002d0023002d1e000100000001000000000200ff0064000c000000000000000000000000000000000000000001007223002d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000007800e0016801d8033800d80118018800a80278010800600000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 567.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 567.125,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 1,
+        "left": 0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 1,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 2,
+        "menu": 0,
+        "job": 255,
+        "stage": 0,
+        "health": 100,
+        "done": 0,
+        "subsecond": 12,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 1,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "00000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "First delivery accepted and collected",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 260,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "40400000",
+      "bank": 1
+    },
+    {
+      "label": "First delivery accepted and collected",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 260,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Actual accepted job and collected package",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 320,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "9923002d0023002d1e000100780000000000000000000164003a000000000000000000000000000000000000000001009923002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff00008008800f0017801e8033800d80118018800a80278010800700000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 569.5625,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 569.5625,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 1,
+        "left": 120,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 58,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 1,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "00000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Actual accepted job and collected package",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 320,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Actual accepted job and collected package",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 320,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Front Street eastbound momentum",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 440,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "cf28002d0023002d1e000300760018000000000000000164003700000000000000000000000000000000000000000100cf28002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff0000000c8013001b80228033800d80118018800a80278010800900000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 652.9375,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 652.9375,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 3,
+        "left": 118,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 24,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 55,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 1,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "00000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Front Street eastbound momentum",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 440,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "10100000",
+      "bank": 1
+    },
+    {
+      "label": "Front Street eastbound momentum",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 440,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Stopped Market handoff approach",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 548,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d1e000500740000000000000000000164002f00000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff0000000f8016001e80258033800d80118018800a80278010800900000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 5,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "00000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Stopped Market handoff approach",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 548,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Stopped Market handoff approach",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 548,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Result-control regression baseline",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 572,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d8b000500740000000000000700ff0264013101000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000000f8016001e80258033800d80118018800a80278010800900000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 5,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 7,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 49,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Result-control regression baseline",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 572,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Result-control regression baseline",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 572,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Consumed result B stays stopped while world runs",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 692,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d8b000700740000000000000000ff0264012f01000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008012001a802100298033000e80118018800a80270012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Consumed result B stays stopped while world runs",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 692,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "20200000",
+      "bank": 1
+    },
+    {
+      "label": "Consumed result B stays stopped while world runs",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 692,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Held close does not freeze a reverse speed in pause",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 704,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d8b000700740000000000000100ff0264012f01000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008012001a802100298033000e80118018800a80270012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Held close does not freeze a reverse speed in pause",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 704,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "a0a00000",
+      "bank": 1
+    },
+    {
+      "label": "Held close does not freeze a reverse speed in pause",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 704,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Sampled neutral release in pause",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 716,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d8b000700740000000000000100ff0264012f01000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008012001a802100298033000e80118018800a80270012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Sampled neutral release in pause",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 716,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Sampled neutral release in pause",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 716,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Change vehicle succeeds after result close",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 776,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d8b000700740000000001000104ff0264012f01000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008012001a802100298033000e80118018800a80270012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 7,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Change vehicle succeeds after result close",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 776,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "10100000",
+      "bank": 1
+    },
+    {
+      "label": "Change vehicle succeeds after result close",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 776,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Neutral truck before fresh B press",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 804,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "602f002d0023002d8b000800740000000001000004ff0264010401000000000000000000000000000000000000000000602f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000013801a802180298033800e80118018800a80278012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 758.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 758.0,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 8,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 4,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Neutral truck before fresh B press",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 804,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Neutral truck before fresh B press",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 804,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Actual reverse restored after release",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 828,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "192f002d0023002d8b0008007400faff0001000004ff0264011d01000000000000000000000000000000000000000000192f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008013001b8021002a8033000f80118018800a80270013800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 753.5625,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 753.5625,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 8,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": -6,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 29,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Actual reverse restored after release",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 828,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "20200000",
+      "bank": 1
+    },
+    {
+      "label": "Actual reverse restored after release",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 828,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Reverse settles normally",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 892,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "972e002d0023002d8b000900740000000001000004ff0264012101000000000000000000000000000000000000000000972e002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008013801c8021802b8033001180118018800a80270015800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 745.4375,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 745.4375,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 9,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 33,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Reverse settles normally",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 892,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Reverse settles normally",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 892,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Ordinary saved campaign and truck state",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 1000,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "9d2e002d0023002d8b000900740001000001000006ff0264012f01000000000000000000000000000000000000000c009d2e002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008013801c8021802b8033801180118018800a80278015800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 745.8125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 745.8125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 9,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 1,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 12,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Ordinary saved campaign and truck state",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 1000,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00100000",
+      "bank": 1
+    },
+    {
+      "label": "Ordinary saved campaign and truck state",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 1000,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Later live position separate from saved position",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 1024,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "a22e002d0023002d8b000a00740000000001000006ff0264010b01000000000000000000000000000000000000000c00a22e002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008013801c8021802b8033001280118018800a80270016800a00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 11,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 12,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Later live position separate from saved position",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 1024,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Later live position separate from saved position",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 1024,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Fresh help restores saved completion and truck",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 1204,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "a22e002d0023002d8b000a00740000000001000800ff0264010101000000000000000000000000000000000000000000a22e002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000000ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 1,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Fresh help restores saved completion and truck",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 1204,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "000000f0",
+      "bank": 1
+    },
+    {
+      "label": "Fresh help restores saved completion and truck",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 1204,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Neutral controls after genuine reset",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 1216,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "a22e002d0023002d8b000a00740000000001000800ff0264010101000000000000000000000000000000000000000000a22e002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 1,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Neutral controls after genuine reset",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 1216,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "000000f0",
+      "bank": 1
+    },
+    {
+      "label": "Neutral controls after genuine reset",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 1216,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Visible cold-boot restored HELP",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "view": "memory",
+      "frame": 1396,
+      "region": "wram",
+      "offset": 502,
+      "length": 256,
+      "address": "0xc1f6",
+      "hex": "a22e002d0023002d8b000a00740000000001000800ff0264010101000000000000000000000000000000000000000000a22e002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "state": {
+        "u": 746.125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 746.125,
+        "safeV": 720.0,
+        "cash": 139,
+        "seconds": 10,
+        "left": 116,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 1,
+        "onfoot": 0,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 1,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "completionBitmap": "01000000000000000000000000000000"
+      }
+    },
+    {
+      "label": "Visible cold-boot restored HELP",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2541,
+        "length": 4
+      },
+      "view": "memory",
+      "frame": 1396,
+      "region": "wram",
+      "offset": 2541,
+      "length": 4,
+      "address": "0xd9ed",
+      "hex": "00000000",
+      "bank": 1
+    },
+    {
+      "label": "Visible cold-boot restored HELP",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "view": "memory",
+      "frame": 1396,
+      "region": "wram",
+      "offset": 1450,
+      "length": 3,
+      "address": "0xd5aa",
+      "hex": "14a47f",
+      "bank": 1
+    },
+    {
+      "label": "Stopped cold-boot private motion",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 760,
+        "length": 15
+      },
+      "view": "memory",
+      "frame": 1396,
+      "region": "wram",
+      "offset": 760,
+      "length": 15,
+      "address": "0xc2f8",
+      "hex": "000000000000000000000000002e05"
+    },
+    {
+      "label": "Post-reset HELP OAM scope",
+      "request": {
+        "view": "oam",
+        "visibleOnly": true,
+        "limit": 40,
+        "includeScanlineSummary": true
+      },
+      "view": "oam",
+      "frame": 1396,
+      "totalObjects": 40,
+      "visibleObjects": 13,
+      "matchedObjects": 13,
+      "returnedObjects": 13,
+      "truncated": false,
+      "objects": [
+        {
+          "index": 0,
+          "x": 80,
+          "y": 40,
+          "tile": 20,
+          "attributes": 0,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 1,
+          "x": 72,
+          "y": 40,
+          "tile": 22,
+          "attributes": 0,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 2,
+          "x": 49,
+          "y": 76,
+          "tile": 110,
+          "attributes": 33,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 3,
+          "x": 41,
+          "y": 76,
+          "tile": 108,
+          "attributes": 33,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 4,
+          "x": 18,
+          "y": 12,
+          "tile": 108,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 5,
+          "x": 10,
+          "y": 12,
+          "tile": 110,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 6,
+          "x": 140,
+          "y": 76,
+          "tile": 110,
+          "attributes": 34,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 7,
+          "x": 132,
+          "y": 76,
+          "tile": 108,
+          "attributes": 34,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 8,
+          "x": 149,
+          "y": 68,
+          "tile": 108,
+          "attributes": 2,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 9,
+          "x": 141,
+          "y": 68,
+          "tile": 110,
+          "attributes": 2,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 10,
+          "x": 126,
+          "y": -12,
+          "tile": 108,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 11,
+          "x": 118,
+          "y": -12,
+          "tile": 110,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 12,
+          "x": -5,
+          "y": 68,
+          "tile": 110,
+          "attributes": 33,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        }
+      ],
+      "scanlineSummary": {
+        "peakObjects": 8,
+        "hardwareLimit": 10,
+        "overLimitScanlines": 0,
+        "peakScanlines": [
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83
+        ]
+      }
+    }
+  ],
+  "sourceDebug": {
+    "mode": "source",
+    "identity": {
+      "romSha256": "a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "3d984b75e841f6e5db821a37124e8e18e95a0ac604abc00639c2d6ca629ec380",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "frame": 1396,
+    "scene": {
+      "id": "38250bbe-d302-5807-8c67-bbadaf9dbe82",
+      "sceneId": "38250bbe-d302-5807-8c67-bbadaf9dbe82",
+      "name": "Toronto north-up city",
+      "symbol": "scene_toronto_city",
+      "resourcePath": "project/scenes/toronto_city/scene.gbsres",
+      "type": "TORONTO",
+      "width": 128,
+      "height": 122
+    },
+    "variables": [],
+    "variablesTruncated": false,
+    "unavailableVariables": [],
+    "unavailableVariableCount": 0,
+    "references": [],
+    "referencesTruncated": false,
+    "limitations": [
+      "Authored collision grids and event references describe source, not the currently executing VM instruction or dynamically modified collision state."
+    ]
+  },
+  "recording": {
+    "sessionId": "8e3ff985b4204da291d35910b6085e4e",
+    "branchId": "branch-0001",
+    "status": "stopped",
+    "outcome": "passed",
+    "frame": 1396,
+    "totalFrames": 1396,
+    "eventCount": 276,
+    "eventDigest": "c5618112359bf3fae50b403413afdefaefb178ddef9745747df09c2764c91f23",
+    "reason": "Fresh a0bd ordinary controls complete Market Start; held RESULT B stays stopped for120 VBlanks while clock/fleet progress; sampled pause/vehicle change, release/reverse and genuine in-game SRAM reset retain credit139/done1/truck. This is scoped emulator proof, not inherited d58 campaign/heat/transit or physical hardware.",
+    "originalSessionId": "session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+    "originalPath": "project/artifacts/playtests/session-7333dfb3-d7d2-4306-b3e9-0e36e6d5da19",
+    "eventsSha256": "d74374917397479d6e1b8dc833c4508d4a7377690e6ca56791b8351ab422aadf",
+    "journalEventKinds": {
+      "header": 1,
+      "frame": 85,
+      "boot_complete": 1,
+      "action": 134,
+      "controller": 52,
+      "checkpoint_saved": 1,
+      "pause": 1,
+      "finish": 1
+    },
+    "journalActionTypes": {
+      "set_buttons": 52,
+      "step": 82
+    },
+    "closed": true,
+    "archiveId": "45990b90-749f-4bcf-9b3c-6d1b0d933f43",
+    "archivePath": "project/artifacts/recording-archives/45990b90-749f-4bcf-9b3c-6d1b0d933f43/recording",
+    "manifestSha256": "748b922188c0f2f99a2b7b0f26444095fbabf3de06f7ceebc61a8c49b0fac369",
+    "inventory": {
+      "digest": "b6c5ca51650542f12b5a00128a15c7d4d76692c672dd16e7cb182527328d6d7e",
+      "bytes": 415716,
+      "entries": 65
+    },
+    "retrievedOriginalVerified": true
+  },
+  "historicalComparison": {
+    "previousRomSha256": "d58bc338f6dceb2b208bf855112cc9b93f0d72fdf254ac0ccdbd17ec1ff357b8",
+    "records": [
+      "docs/NATIVE_CORE_BUS_LANES_SAMPLES.json",
+      "docs/NATIVE_COURIER_HEAT_SAMPLES.json",
+      "docs/NATIVE_LOWER_HEAT_PATROL_SAMPLES.json",
+      "docs/NATIVE_SIX_JOB_CONTINUATION_SAMPLES.json"
+    ],
+    "scope": "Four previous d58 native records remain historical; they are not acceptance on a0bd."
+  },
+  "limitations": [
+    "This new-ROM fresh run is separate from the four d58 campaign/heat/bus records; it does not inherit their native acceptance.",
+    "The selected SAVE A interval resumes ROAM and slightly accelerates while A remains held; live post-save position is distinguished from subsequent automatic saves.",
+    "The four-button reset restores the latest genuinely auto-saved Core position746.125/720, cash139/done1/truck, seconds10/sub1; it is not proof of physical cartridge persistence.",
+    "The initial four-button reset samples are blank while restarting; released-chord180-frame follow-up shows actual HELP and neutral input.",
+    "Final emulator checkpoint is saved only and not restored.",
+    "No injected memory/progression, old-ROM checkpoint import, browser or device action.",
+    "Full96-quest progression, two enjoyable human hours, broader new-ROM transit/heat/district/native performance remain pending."
+  ]
+}

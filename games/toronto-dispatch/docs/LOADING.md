@@ -1,24 +1,8 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
+Select **`toronto-dispatch-result-controls.gbc`**, **524,288 bytes**, SHA-256 **`a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634`**. Its source contains six compressed districts, 96 contracts, 59 service points and save v9 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
 
-The verified local loading candidate is `toronto-dispatch-bus-lanes.gbc`, **524,288 bytes**, SHA-256 `d58bc338f6dceb2b208bf855112cc9b93f0d72fdf254ac0ccdbd17ec1ff357b8`. It contains six compressed Toronto districts, 96 contracts, 59 service points, seven mainland parking anchors and save v9 / 58 bytes. Official build/header, compiled resource/table/body guards, 1,097-byte static reserve and the complete source suite pass. [Its scoped native replay](NATIVE_CORE_BUS_LANES_SAMPLES.json) covers a full-condition first delivery, paid Line 1 fare once, exact map freezing, genuine paid reset/arrival, two bus passes past opposing police, all six loop legs and sampled northbound human clearance. The corrected visible bus uses fictional compressed lanes; the precise nine-pixel human wait/resume case remains host-only evidence.
-
-A [supplemental replay](NATIVE_COURIER_HEAT_SAMPLES.json) on that unchanged ROM completes three unique contracts, including a damaged-condition payout and First Art entirely on foot with normal car recovery. It also verifies escalating $20/$40/$60 human-impact charges, H3 game/person/fleet map freeze, genuine saved-attention reset and the funded $225 H3 capture (cash 272→47 / heat cleared / car stopped), followed by another reset. That replay does not verify lower-heat capture or patrol return; the earlier bus-loop replay is separate.
-
-A [third separate replay](NATIVE_LOWER_HEAT_PATROL_SAMPLES.json) adds funded Core on-foot H1/H2 stops: $25 takes 243→218 and $100 takes 158→58, clearing heat. Sampled police endpoints and actual leg 2→0 show a same-scene driven patrol rejoin after the courier clears its lane, without reset or scene replacement. Two genuine full-condition jobs fund the run; its final neutral checkpoint retains done 2 / cash 58 and is saved without restoration during that run. The selected ROM and `toronto-dispatch-bus-lanes.zip` name are unchanged.
-
-A [closed continuation](NATIVE_SIX_JOB_CONTINUATION_SAMPLES.json) officially restores that genuine done-2 emulator checkpoint and adds four new unique jobs, reaching done 6 / bitmap `5F…` / cash 626 on the same selected ROM. Fragile art, ordered signature return, required-truck freight and the relay pay 138/132/140/257; two trains and four buses cost $14 with a walked Bloor→Wellesley transfer. After braking, a stationary H1 countdown clears; a funded H1 car-capture interval costs $25, and positive-H1 Line 1 samples show police turning west. The final released-input six-job checkpoint is saved only. These are scoped emulator observations, not six fresh jobs, all paid modes, a new SRAM reset test or hardware persistence.
-
-Retained `5ae4…` Queen travel and `7b2…` Island/13-job campaign records keep their original ROM identities in [TESTING.md](../TESTING.md). The intermediate `cf2f…` [bus lane failure](NATIVE_CORE_BUS_LANE_FAILURE.json) remains needs-review and is not the selected file. The current pass does not inherit those older campaign/Queen results.
-
-The earlier `8a96…` six-scene build has a [retained pause/audio-map failure](NATIVE_ISLAND_MAP_FAILURE.json) and must not be selected. The older five-scene `4343…` itinerary/payout, `ff5d…` preparation and `c625…` Port-job recordings keep their own scopes in [TESTING.md](../TESTING.md). The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the separate four-district `23b2…` release; no newer GitHub release or physical installation is claimed here.
-
-Current source preserves all contract IDs/fields and completion bits, relocating only six Island stop geometries. Version 9 reads valid older v4–v8 records, validates frozen old Island terrain and legitimate ferry bookings before relocation, and preserves cash and the mainland car. Normal v5–v8 restore keeps the older committed slot until the next alternating v9 write; v4 has its separate upgrade. Older ROMs cannot read both rewritten v9 slots. Preserve existing cartridge saves through the supported backup workflow before testing a newer build. Host migration checks and emulator resets do not prove native old-save imports or physical power-off persistence.
-
-This is still a prototype. Full Old Toronto, all played contracts/balanced deadlines, two measured enjoyable hours, wider vehicle/traffic/pacing/stack checks, human handling/audio feedback, browser recovery and cartridge write/read-back/cold boot remain open. [BUILD.md](BUILD.md), [TESTING.md](../TESTING.md) and [AUDIO.md](AUDIO.md) distinguish the available evidence. A later source change needs its own ROM identity and replay.
-
-A [separate campaign replay](NATIVE_ISLAND_CAMPAIGN_SAMPLES.json) completes 13 unique quests on retained `7b2af59c…` (`toronto-dispatch-islands-safe.gbc`), covering all eight job kinds. Centre Letters finishes its 195-second limit at full condition with 136 seconds left. Active-job map freezing, carried and paid-ferry resets, cancellation and a deliberate paid-crossing timeout pass. Island arrivals require **Select at each ordered dock/client** before moving to the next objective. The remaining eight Island jobs and the broader acceptance checks above remain pending.
+Official build/header/compiled/source checks and scoped native first-delivery/RESULT-control/reset checks pass. No physical installation has been attempted. All 96 played contracts, two measured enjoyable human hours, browser recovery and cartridge cold-boot/save persistence remain pending. Follow the device steps below; detailed [build](BUILD.md) and [test evidence](../TESTING.md) are separate from physical verification.
 
 ## 1. Prepare the computer and console
 
@@ -34,24 +18,24 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The local review bundle is `toronto-dispatch-bus-lanes.zip`. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the committed source and instructions. Published Prototype 6 remains the separate release linked above.
+The local loading bundle is `toronto-dispatch-result-controls.zip`. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the committed source and instructions. Published Prototype 6 remains the separate older release linked under Evidence and older builds below.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-bus-lanes.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-result-controls.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -83,6 +67,7 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Cold boot | Toronto Dispatch's title/help/start flow appears and enters the city; no blank screen, corrupt tiles or reset loop |
 | Driving | A accelerates, left/right steer, B brakes and reverses near rest; corners retain momentum |
 | First delivery | Select opens dispatch; accept the first Union-to-St. Lawrence job with A, Select collects at Union, drive east on Front Street, brake and Select delivers at the marker |
+| Delivery result controls | B closes the result without reversing while held; release and press again for normal braking/reverse. A opens dispatch |
 | Quest planning and payment | Dispatch left/right selects jobs; up/down browses stops, districts and walking/return cues. Check condition/base/time/credited pay after delivery, and zero payment after timeout |
 | Walking and car entry | Stop, Start → Park / recover car; walk with D-pad, approach the parked car and press A to enter |
 | Map and pause | Start → Scroll City Map; D-pad pans across areas, A centres the job/booked stop/depot, Select changes focus, B returns; mission time freezes |
@@ -105,3 +90,11 @@ Keep a note of the ROM SHA-256 and any problem's location/action. Current save v
 A host-streamed `play` demo is optional and never writes the cartridge. It can help assess the screen/buttons, but it cannot replace the cold-boot and save checks above.
 
 Reviewed 2026-10-02 against official ModRetro support and installed plugin 1.0.33 deployment documentation. No activation code, device token or private preview URL is required in these instructions.
+
+## Evidence and older builds
+
+The current [fresh native record](NATIVE_RESULT_CONTROLS_SAMPLES.json) verifies first delivery, held RESULT B without reversing while clock/traffic continue, truck selection, fresh reverse after release and a genuine reset restoring the later automatic save. SAVE A can resume and slightly accelerate while held; the reset does not claim byte identity with the later live inspection. Its final emulator checkpoint is saved only.
+
+Four older `d58…` bus/courier/heat/patrol/campaign records, `5ae4…` Queen travel and `7b2…` Island/13-job evidence retain their original hashes in [TESTING.md](../TESTING.md). They are not native acceptance on this new ROM. The failed `8a96…` and `cf2f…` candidates must not be selected. Downloadable [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
+
+Full Old Toronto, remaining Island jobs, all contracts/balance, two enjoyable human hours, wider vehicle/crowd/pacing/stack checks, native older-save imports, human handling/audio, browser recovery and hardware remain open. Host migration checks and emulator resets do not establish physical power-off persistence.
