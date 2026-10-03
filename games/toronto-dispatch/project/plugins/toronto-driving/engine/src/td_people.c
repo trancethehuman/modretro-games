@@ -29,6 +29,15 @@ static UBYTE td_person_road_clear(UWORD u,UWORD v){
     return td_streetcar_runtime_pedestrian_clear(td_streetcar_view_district,pu,pv);
 }
 
+/* Only a proposed walking step yields to the physically occupied local car.
+ * Keep the original road-only fallback for an already visible/recovering
+ * human; a driver causing an overlap must not erase that human's history. */
+static UBYTE td_person_courier_blocks(UWORD u,UWORD v){
+    return !td.onfoot&&!td_streetcar_ride_view&&td.district==td_streetcar_view_district&&
+        td_people_distance(u*16,td.u)<160&&
+        td_people_distance(v*16,td.v)<160;
+}
+
 void td_people_reset(void) BANKED {
     UBYTE i;memset(td_people,0,sizeof(td_people));
     for(i=0;i<6;i++)td_ped_route[i]=td_people[i].route=TD_NONE;
@@ -91,7 +100,7 @@ UBYTE td_people_present(UBYTE tick) BANKED {
         if(person->recover){person->lag=(raw-person->phase)&127;person->recover=0;}
         phase=person->stun?person->phase:(raw-person->lag)&127;
         u=td_nearby_routes[i][0]+(phase<64?phase:127-phase);v=td_nearby_routes[i][1];
-        if(!person->stun&&!td_person_road_clear(u,v)){
+        if(!person->stun&&(!td_person_road_clear(u,v)||td_person_courier_blocks(u,v))){
             phase=person->phase;person->lag=(raw-phase)&127;
             u=td_nearby_routes[i][0]+(phase<64?phase:127-phase);
             if(!td_person_road_clear(u,v)){actors[9+i].flags|=ACTOR_FLAG_HIDDEN;continue;}

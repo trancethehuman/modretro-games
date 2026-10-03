@@ -4,13 +4,13 @@ A north-up, top-down pixel-art courier sandbox for ModRetro Chromatic / Game Boy
 
 ## Play and install
 
-The current local candidate is `project/build/toronto-dispatch-pedestrian-admission.gbc`, **524,288 bytes**, SHA-256 **`964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a`**. Follow the [Chromatic loading guide](docs/LOADING.md); generated ROMs stay out of Git. Use the ModRetro Chromatic plugin's native emulator or official preview to play the exact inspected build. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
+The current local candidate is `project/build/toronto-dispatch-courier-clearance.gbc`, **524,288 bytes**, SHA-256 **`e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f`**. Follow the [Chromatic loading guide](docs/LOADING.md); generated ROMs stay out of Git. Use the ModRetro Chromatic plugin's native emulator to play the exact inspected build. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
 
 | Action | Controls |
 | --- | --- |
 | Drive | A accelerates; left/right steer; B brakes and then reverses near rest |
 | Close delivery result | B returns to the city without reversing while held. Release B, then press it again for normal braking/reverse. A opens dispatch |
-| Plan a quest | Select opens dispatch; left/right selects jobs, up/down browses ordered stops; A accepts, B returns |
+| Plan a quest | Select opens dispatch; Select on the board jumps to the next eight-job chapter, left/right selects jobs, up/down browses ordered stops; A accepts, B returns |
 | Collect / hand off | Select at each ordered marker; finish returning jobs at their final stop |
 | Walk / enter car | Pause → Park / recover car; D-pad walks, A enters near the parked car |
 | Vehicle | Pause → Change vehicle, while stopped and permitted by the job |
@@ -26,15 +26,15 @@ Source contains **241 buildings, 595 fixed pedestrian routes, 96 contracts, 59 s
 
 Jobs include packages, fragile art, freight, signatures/returns and transit relays. Port Lands uses legal Leslie access and authored collision-backed bridges; Islands use ferry/public walking paths. Civilian impacts cause non-graphic recovery, condition loss on carried jobs, escalating fines and local police pursuit. Six road vehicle kinds obey fictional signals; planes/helicopters and under-deck boats are cosmetic. Visible road traffic and paid transit schedules are separate game abstractions.
 
-![Visible street impact](docs/screenshots/pedestrian-admission-visible-impact.png) ![Delivery result](docs/screenshots/pedestrian-admission-market-result.png)
+![Visible street impact](docs/screenshots/courier-clearance-visible-impact.png) ![Delivery result](docs/screenshots/courier-clearance-market-result.png)
 
-Unmodified sampled Core frames 1,152 and 564 on current `964f…`; [provenance](docs/screenshots/pedestrian-admission-provenance.json).
+Unmodified sampled Core frames on current `e797…`; [provenance](docs/screenshots/courier-clearance-provenance.json) records exact frames and hashes.
 
 ## Verified scope
 
-Current `964f…` passes official/header/compiled guards and full repository checks, with a 1,096-byte static reserve. Its [fresh native replay](docs/NATIVE_PEDESTRIAN_ADMISSION_SAMPLES.json) completes Market Start, keeps the car stopped during held RESULT B while the world runs, confirms a continuously visible pedestrian impact, freezes game/person/fleet state on the map and restores saved cash/progression/attention through a genuine game-button reset. The specific first-appearance correction has host/compiled evidence; the native impact is a different case. The final emulator checkpoint is saved only.
+Current `e797…` passes official/header/compiled guards and full repository checks, with a 1,096-byte static reserve. Its [native records](docs/NATIVE_COURIER_CLEARANCE_SAMPLES.json) cover all twelve chapter starts and held-input rules, Market Start, held RESULT B, a visible walker waiting then resuming after reverse clearance, a genuine forward pedestrian impact and map simulation freeze. A separate record imports its genuine same-ROM checkpoint and verifies saved cash/progression/attention through the game's reset. Fresh plugin workers deliberately start with empty save RAM; physical persistence remains unverified.
 
-Earlier `a0bd…` matched transit/driving trials, four `d58…` bus/heat/patrol/campaign records and older Queen/13-job Island records retain their own hashes in [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md). Their wider acceptance is not inherited by this ROM.
+The retained `964f…` five-job chain, earlier matched transit/driving trials and older Queen/13-job Island records retain their own hashes in [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md). Their wider acceptance is not inherited by this ROM. The failed `c4fa…` speed-gated clearance candidate remains documented separately.
 
 All 96 played contracts/balance, eight remaining Island jobs, full Old Toronto, two measured enjoyable human hours, wider new-ROM transit/heat/district/pacing/stack, native older-save imports, browser recovery, human handling/audio and physical cartridge execution remain pending.
 

@@ -255,6 +255,11 @@ static void td_menu_update(void){
         if(INPUT_UP_PRESSED)td.menu=(td.menu+8)%9;
         if(INPUT_A_PRESSED){td_pause_choose();return;}
     }else if(td.mode==TD_BOARD){
+        if(INPUT_SELECT_PRESSED){
+            td.menu=(td.menu&0xf8)+8;
+            if(td.menu>=TD_QUESTS)td.menu=0;
+            td_get_job(td.menu,&td_offer);td_board_route=0;td_ui_draw();return;
+        }
         if(INPUT_RIGHT_PRESSED){td.menu=(td.menu+1)%TD_QUESTS;td_get_job(td.menu,&td_offer);td_board_route=0;}
         if(INPUT_LEFT_PRESSED){td.menu=(td.menu+TD_QUESTS-1)%TD_QUESTS;td_get_job(td.menu,&td_offer);td_board_route=0;}
         if(td_offer.count){

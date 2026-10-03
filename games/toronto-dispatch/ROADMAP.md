@@ -240,13 +240,21 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Compare First Connection from the exact same done-3 neutral checkpoint in independent transit/walking and conservative cardinal-driving branches; each reaches done 4. Retain actual four fares/$10, Castle wait-versus-walk, credits 254/252, nine whole seconds of deadline difference and $3 cash difference as a single-phase observation. [Selected native evidence](docs/NATIVE_MATCHED_TRANSIT_SAMPLES.json) keeps both branches and imported completions explicit.
 - [ ] Broaden this exact ROM's campaign/transit/heat/district/pacing evidence. Keep four older `d58…` records separate; all 96 jobs, remaining Islands, two measured enjoyable human hours, native older-save imports, browser and hardware remain pending.
 
-## Pedestrian admission correction — current compiled and scoped native pass
+## Pedestrian admission correction — retained 964f scope
 
 - [x] Reproduce the Core route-19/bus first-appearance overlap in a host fixture and defer newly selected/hidden people near the occupied courier's current body or preceding bounded sweep. Use strict ten-pixel admission clearance and loaded-view applicability; preserve continuously visible eight-pixel impacts, six-second recovery and all penalties.
 - [x] Pass strict host compilation and ASan/UBSan pedestrian checks (2,423,750) plus the actual-engine gate (800,555). Establish prior visibility in the retained-impact engine fixture; add no persistent/history/save bytes, routes, art or cadence changes.
 - [x] Build `964f…` and pass 580 matching compiled checks, including flags destination/context and admission/impact radii. Retain save v9/58 bytes and 1,096-byte linked reserve; local frame 27→28 does not establish deepest-stack or performance behavior.
 - [x] Close a fresh native delivery/held-B live-world/continuously visible route-83 impact/map-freeze/pan/saved-progress reset replay; retain its one OAM frame and save-only checkpoint scope. [Curated evidence](docs/NATIVE_PEDESTRIAN_ADMISSION_SAMPLES.json) discloses two unretained diagnostic responses.
+- [x] Continue the same `964f…` from a disclosed genuine done-1 checkpoint: four new unique jobs 1/2/3/6 reach done 5 / bitmap `4F…` / cash 472, with fragile condition-80 pay 116, full-condition express/truck pays 124/156 and ordered condition-78 return pay 116. Retain natural route-83 reset admission, clamped H3 car capture and moving H1 cooldown as their sampled scopes, distinct from host route 19 and general escape. [Curated chain evidence](docs/NATIVE_COURIER_CHAIN_SAMPLES.json) pins the closed journal and save-only final checkpoint.
 - [ ] Natively reproduce the specific first-appearance case and broaden crowd/vehicle/transit/heat/pacing checks. The host/compiled case does not diagnose prior Bay impacts, and older `a0bd…` matched-route/campaign scopes are not assigned to `964f…`. All 96 jobs, remaining Islands, two enjoyable human hours, browser and hardware remain pending.
+
+## Courier clearance and quest discovery
+
+- [x] Add readable captions and Select navigation through all twelve existing eight-offer groups, retaining per-offer locks/vehicles and individual offer/itinerary controls. Actual-engine tests cover all 96 starts and input chords; the separate `c4fa…` native record samples all twelve starts, wrap and lock/exit/held controls.
+- [x] Preserve the [failed c4fa driveaway record](docs/NATIVE_IDLE_DRIVEAWAY_FAILURE.json). The same-route walker waits safely at rest but walks into the initial reverse after the speed-limited yield expires. Reproduce its exact route/clock/lag in actual people and whole-engine fixtures.
+- [x] Build corrected `e797…` and pass full source checks / 1,242 compiled checks with all-speed proposed-step clearance, retained genuine impact/recovery and unchanged save layout/resources. Close a fresh chapter/one-delivery/visible-wait/reverse/clearance/resumed-walk/genuine-forward-impact/map record and a separate disclosed checkpoint-import/in-worker SRAM-reset record. [Curated evidence](docs/NATIVE_COURIER_CLEARANCE_SAMPLES.json) keeps the adapted trajectory and committed-versus-live save pose explicit.
+- [ ] Broaden corrected-ROM campaign, vehicle/crowd/district/pacing and save-import checks; retain failed c4fa and earlier 964f scopes separately. All 96 contracts, remaining Island jobs/full Old Toronto, two enjoyable measured human hours, browser and physical cartridge acceptance remain pending.
 
 ## Device milestone
 

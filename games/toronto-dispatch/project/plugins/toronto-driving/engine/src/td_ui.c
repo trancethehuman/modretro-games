@@ -29,6 +29,21 @@ static UWORD td_map_camera_x,td_map_camera_y;
 static UBYTE td_ui_mode=255;
 static char td_line[40];
 static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
+static const char * const td_chapters[]={
+    "01/12 FIRST SHIFT",
+    "02/12 NEIGHBOURHOODS",
+    "03/12 CITY EVENTS",
+    "04/12 CROSS THE CITY",
+    "05/12 WATERFRONT",
+    "06/12 ARTS/AUDIENCES",
+    "07/12 EVENING",
+    "08/12 NETWORK",
+    "09/12 MASTER COURIER",
+    "10/12 WEST ROUTES",
+    "11/12 EAST ROUTES",
+    "12/12 PORT LANDS",
+};
+typedef char td_chapter_offer_count[(TD_QUESTS==8*(sizeof(td_chapters)/sizeof(td_chapters[0])))?1:-1];
 static const char *td_kinds[]={"PARCEL ROUND","FRAGILE: NO CRASH","EXPRESS DEADLINE","TRUCK FREIGHT","TRANSIT FRIENDLY","PASSENGER: SMOOTH","RETURN DOCUMENTS","ISLAND FERRY POST"};
 static UBYTE td_glyph(char c) {
     if(c>='a'&&c<='z')c-=32;
@@ -226,6 +241,8 @@ void td_ui_draw(void) BANKED {
         td_row(14,"UP DOWN / A CHOOSE");td_row(15,td_vehicles[td.vehicle]);td_row(17,"B BACK");return;
     }
     if(td.mode==TD_BOARD){
+        td_row(1,td.menu<TD_QUESTS?td_chapters[td.menu>>3]:"DISPATCH CHAPTER");
+        td_row(3,"SELECT NEXT CHAPTER");
         sprintf(td_line,"CONTRACT %02u/%u",td.menu+1,TD_QUESTS);td_row(2,td_line);td_row(4,td_offer.title);
         td_get_brief(td.menu,td_line);td_row(6,td_line+18);td_line[18]=0;td_row(5,td_line);td_row(7,td_kinds[td_offer.kind]);
         sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"BASE $%u + TIME",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
@@ -239,7 +256,7 @@ void td_ui_draw(void) BANKED {
             td_row(11,td_line);td_row(12,td_cursor.name);
             td_get_district_name(td_cursor.district,td_line);td_row(13,td_line);
         }else{td_row(11,"NO ROUTE");td_row(12,"");td_row(13,"");}
-        if(td.complete[td.menu>>3]&(1<<(td.menu&7)))td_row(16,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}else td_row(16,"READY TO ACCEPT");
+        if(td.menu<TD_QUESTS&&(td.complete[td.menu>>3]&(1<<(td.menu&7))))td_row(16,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}else td_row(16,"READY TO ACCEPT");
         td_row(14,"L/R JOB U/D STOPS");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){

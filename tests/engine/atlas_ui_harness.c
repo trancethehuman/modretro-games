@@ -301,6 +301,8 @@ static void test_dispatch_board_itineraries(void) {
             districts|=1u<<stop->district;if(stop->reserved&TD_STOP_FOOT)saw_foot=1;
             if(page+1==offer->count){if(offer->route[page]==offer->route[0])saw_return=1;else saw_delivery=1;}
             if(!page) {
+                expect_window_text(1,host_ui_chapters[job/8],"each actual offer displays its authored chapter and position within twelve groups");
+                expect_window_text(3,"SELECT NEXT CHAPTER","board exposes the chapter shortcut without hiding the individual offer and itinerary controls");
                 sprintf(expected,"CONTRACT %02u/%u",job+1,TD_QUESTS);expect_window_text(2,expected,"board displays its actual contract ID and expanded count");
                 expect_window_text(4,offer->title,"board retains the exact authored contract title");
                 memcpy(brief,host_ui_briefs[job],18);brief[18]=0;expect_window_text(5,brief,"first brief line remains visible above itinerary");
@@ -342,12 +344,23 @@ static void test_dispatch_board_itineraries(void) {
     reset_case();td.mode=TD_BOARD;td.menu=93;td_get_job(93,&td_offer);td_board_route=1;td_ui_draw();
     expect_window_text(12,"RIVERBANK PARCEL","stale-row fixture begins with a real long Port client name");
     td.menu=0;td_get_job(0,&td_offer);td_board_route=1;td_ui_draw();
+    expect_window_text(1,host_ui_chapters[0],"shorter chapter captions clear the previous Port Lands row through the actual cache");
     expect_board_stop(0,1);expect_text_screen_safe();
     td_offer.count=0;game_snapshot_t before=snapshot_game();td_ui_draw();
     expect_window_text(11,"NO ROUTE","empty itinerary visibly rejects a stale route");
     expect_window_text(12,"","empty itinerary clears the previous client row");
     expect_window_text(13,"","empty itinerary clears the previous district row");
     expect_game_unchanged(&before);
+
+    td.mode=TD_RESULT;td_ui_draw();
+    expect_window_text(1,"","leaving dispatch clears the chapter caption rather than leaking it onto the result");
+    expect_window_text(3,"","leaving dispatch clears the chapter shortcut caption");
+    for(unsigned invalid=TD_QUESTS;invalid<=255;invalid++){
+        td.mode=TD_BOARD;td.menu=invalid;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"DISPATCH CHAPTER","every invalid transient menu uses a bounded fallback without indexing the chapter table");
+        expect_window_text(16,"READY TO ACCEPT","invalid menu never reads or invents a completed-offer bit outside the actual campaign");
+        expect_game_unchanged(&before);expect_text_screen_safe();
+    }
 }
 
 static void result_fixture(unsigned job,UBYTE condition,UWORD left,UWORD previous,UBYTE done) {

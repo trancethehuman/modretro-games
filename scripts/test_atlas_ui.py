@@ -49,6 +49,33 @@ def content_oracle():
         rows.append(quote("".join(line.ljust(18) for line in job["brief"])) + ",")
     rows.append("};\nstatic const char host_ui_districts[][19]={")
     rows.extend(quote(entry["name"]) + "," for entry in districts)
+    rows.append("};\nstatic const char host_ui_chapters[][21]={")
+    # Compact authored captions are UI requirements. Validate their groups
+    # against editable quest metadata instead of reading the renderer table.
+    captions = {
+        "First shift": "FIRST SHIFT",
+        "Neighbourhood connections": "NEIGHBOURHOODS",
+        "City events": "CITY EVENTS",
+        "Crossing the city": "CROSS THE CITY",
+        "Waterfront work": "WATERFRONT",
+        "Arts and audiences": "ARTS/AUDIENCES",
+        "Evening dispatch": "EVENING",
+        "Across the network": "NETWORK",
+        "Master courier": "MASTER COURIER",
+        "Western package routes": "WEST ROUTES",
+        "Eastern package connections": "EAST ROUTES",
+        "Port Lands loading and park rounds": "PORT LANDS",
+    }
+    if len(jobs) != 96:
+        raise ValueError("Review the twelve authored dispatch groups after campaign changes")
+    for start in range(0, len(jobs), 8):
+        chapter = jobs[start]["chapter"]
+        if chapter not in captions or any(job["chapter"] != chapter for job in jobs[start:start + 8]):
+            raise ValueError("Dispatch group differs from authored eight-offer chapter metadata")
+        caption = f"{start // 8 + 1:02}/12 {captions[chapter]}"
+        if len(caption) > 20:
+            raise ValueError("Chapter caption exceeds the native twenty-column row")
+        rows.append(quote(caption) + ",")
     rows.append("};\n")
     return "\n".join(rows)
 

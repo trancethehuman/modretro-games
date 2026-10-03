@@ -3004,6 +3004,15 @@ static void test_human_impacts_and_police(void){
     expect(!td_people[0].stun&&actors[9].pos.x==human_u&&actors[9].pos.y==human_v,
            "a human visibly resumes from the impact position after six active-world seconds");
     td.seconds++;td_pedestrians();
+    expect(actors[9].pos.x==human_u&&actors[9].pos.y==human_v&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
+           td.cash==charged.cash&&td.wanted==charged.wanted,
+           "a recovered visible human waits before stepping into the stopped courier without another penalty");
+    /* Return to the independently drivable position validated above. Clear
+       the courier body before expecting ordinary forward walking again. */
+    td.u=(u-10)*16;td_pedestrians();
+    expect(!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&actors[9].pos.x==human_u,
+           "clearing the courier preserves the recovered human's visible phase without a new admission delay");
+    td.seconds++;td_pedestrians();
     expect(actors[9].pos.x!=human_u&&actors[9].pos.y==human_v,
            "recovered humans return to normal walking along the same sidewalk route");
     td.wanted=3;td.wanted_left=30;td.cash=500;td_save();
@@ -3023,6 +3032,55 @@ static void test_human_impacts_and_police(void){
     old[2]=7;old[8+52]=0xff;old[8+53]=0xff;old[8+54]=0xff;old[8+55]=0xff;refresh_record_crc(old);
     memset(&td,0,sizeof(td));expect(td_restore()&&td.cash==123&&!td.wanted&&!td.wanted_left,
            "a real CRC-valid version7 record migrates obsolete cursors without inventing police attention");
+}
+
+static UBYTE route83_slot(void){
+    for(UBYTE i=0;i<6;i++)if(td_people[i].route==83)return i;
+    return TD_NONE;
+}
+static void test_visible_human_reverse_start(void){
+    static const UWORD cu[6]={80,200,320,440,824,216};
+    static const UWORD cv[6]={280,392,168,632,240,72};
+    native_case();td.u=td.safe_u=566*16;td.v=td.safe_v=695*16+3;
+    td.heading=12;td.cash=138;td.done=1;td.complete[0]=1;td.stage=2;td.left=111;
+    td.seconds=24;td.subsecond=22;
+    /* Use the native endpoint's odd initial motion parity and actual input
+     * updates, rather than assigning a reverse displacement. */
+    td_tick=1;
+    for(UBYTE i=0;i<6;i++){
+        td_traffic_u[i]=cu[i]*16;td_traffic_v[i]=cv[i]*16;td_traffic_leg[i]=i==5?2:0;
+    }
+    td_people_reset();world_tick(0,0);UBYTE slot=route83_slot();
+    expect(slot!=TD_NONE,"the actual loaded selector registers native Bay route83 near the courier");
+    if(slot==TD_NONE)return;
+    expect(td_people[slot].phase==35&&actors[9+slot].pos.x==555*32&&!(actors[9+slot].flags&ACTOR_FLAG_HIDDEN),
+           "the native24:22 route83 approach is visible before any reverse-start input");
+    world_tick(0,3);
+    for(unsigned frame=0;frame<95;frame++)world_tick(0,1);
+    slot=route83_slot();expect(slot!=TD_NONE,"ordinary refreshes retain the physically visible route83 identity");
+    if(slot==TD_NONE)return;
+    expect(td.seconds==26&&!td.subsecond&&td.u==566*16&&td.v==695*16+3&&!td.speed&&
+           td_people[slot].phase==36&&td_people[slot].lag==19&&actors[9+slot].pos.x==556*32,
+           "actual world updates reproduce native26:00 phase36/lag19 waiting beside the stationary car");
+    for(unsigned update=0;update<4;update++)world_tick(J_B,4);
+    slot=route83_slot();expect(slot!=TD_NONE,"ordinary16-VBlank reversing does not unload the existing human");
+    if(slot==TD_NONE)return;
+    if(td.cash!=138||td_people[slot].stun)fprintf(stderr,
+      "engine reverse diagnostic: car=%u/%u speed=%d clock=%u:%u human=%u/%u phase=%u lag=%u stun=%u cash=%u H=%u\n",
+      td.u,td.v,td.speed,td.seconds,td.subsecond,actors[9+slot].pos.x>>5,actors[9+slot].pos.y>>5,
+      td_people[slot].phase,td_people[slot].lag,td_people[slot].stun,td.cash,td.wanted);
+    expect(td.u==566*16&&td.v==697*16+12&&td.speed==-6&&td.seconds==26&&td.subsecond==16,
+           "four actual held-B updates produce the native2.5625px reverse-start endpoint and speed minus6");
+    expect(td_people[slot].phase==36&&actors[9+slot].pos.x==556*32&&!td_people[slot].stun&&
+           !(actors[9+slot].flags&ACTOR_FLAG_HIDDEN)&&td.cash==138&&!td.wanted&&!td.cooldown&&td.msg!=19,
+           "a human stays visible at its safe old position instead of advancing into the reversing car and charging20dollars");
+    for(unsigned update=0;update<7;update++)world_tick(J_B,4);
+    slot=route83_slot();expect(slot!=TD_NONE,"continued ordinary reverse travel retains the same visible human route");
+    if(slot==TD_NONE)return;
+    expect(td.v>=702*16&&td_people[slot].phase>36&&actors[9+slot].pos.x>556*32&&
+           !(actors[9+slot].flags&ACTOR_FLAG_HIDDEN)&&!td_people[slot].stun&&
+           td.cash==138&&!td.wanted&&!td.cooldown,
+           "the walker resumes its ordinary route after actual reverse motion clears the full occupied body");
 }
 
 static void test_road_police_pursuit(void){
@@ -3125,6 +3183,121 @@ static void test_dispatch_itinerary_inputs(void) {
     expect(td_board_route==1,"an invalid transient page is normalized before Down selects the second ordered stop");
     dispatch_offer(95);td_board_route=255;dispatch_edge(J_UP);
     expect(td_board_route==td_fixture_jobs[95].count-1,"an invalid transient page is normalized before Up wraps to the actual return");
+}
+
+/* Explicit chapter-start oracles, independent of the production bitmask. */
+static const UBYTE dispatch_next_chapters[12]={8,16,24,32,40,48,56,64,72,80,88,0};
+static const UBYTE dispatch_previous_chapters[12]={88,0,8,16,24,32,40,48,56,64,72,80};
+static int dispatch_offer_matches(UBYTE job) {
+    const td_job_t *expected=&td_fixture_jobs[job];
+    return !strcmp(td_offer.title,expected->title)&&td_offer.kind==expected->kind&&
+        td_offer.count==expected->count&&td_offer.vehicle==expected->vehicle&&
+        td_offer.min_done==expected->min_done&&td_offer.seconds==expected->seconds&&
+        td_offer.reward==expected->reward&&!memcmp(td_offer.route,expected->route,12);
+}
+static void dispatch_chapter_offer(UBYTE job) {
+    dispatch_offer(dispatch_previous_chapters[job/8]);
+    dispatch_edge(J_SELECT);
+    for(UBYTE i=0;i<job%8;i++)dispatch_edge(J_RIGHT);
+    expect(td.mode==TD_BOARD&&td.menu==job&&!td_board_route&&dispatch_offer_matches(job),
+           "a chapter jump followed by ordinary Right edges reaches the actual requested offer");
+}
+static void test_dispatch_chapter_inputs(void) {
+    static const UBYTE chords[]={0,J_A,J_LEFT,J_RIGHT,J_UP,J_DOWN,J_A|J_LEFT|J_RIGHT|J_UP|J_DOWN};
+    static const UBYTE exits[]={J_B,J_START,J_B|J_START};
+    expect(TD_QUESTS==96,"the chapter shortcut fixture covers the stable96-offer campaign");
+    for(UBYTE job=0;job<TD_QUESTS;job++) {
+        UBYTE next=dispatch_next_chapters[job/8];
+        const td_job_t *next_offer=&td_fixture_jobs[next];
+        for(unsigned chord=0;chord<sizeof(chords)/sizeof(chords[0]);chord++) {
+            dispatch_offer(job);td.vehicle=next_offer->vehicle==TD_NONE?0:next_offer->vehicle;
+            td_board_route=td_offer.count-1;td.seconds=65535;td.subsecond=59;
+            td.left=217;td.health=37;td.cash=913;td_set_target();
+            td_state_t expected=td;expected.menu=next;
+            td_stop_t objective=td_target;td_job_t carried=td_job;
+            unsigned stores=sram_writes,draws=ui_draws;
+            dispatch_edge(J_SELECT|chords[chord]);
+            expect(td.menu==next&&!td_board_route&&dispatch_offer_matches(next),
+                   "Select from every actual offer reaches the explicit next chapter start and resets itinerary");
+            expect(!memcmp(&td,&expected,58)&&!memcmp(&td_job,&carried,sizeof(carried))&&
+                   !memcmp(&td_target,&objective,sizeof(objective))&&sram_writes==stores,
+                   "Select plus accept/navigation consumes only the chapter change without altering cash, time, completion or job");
+            expect(ui_draws==draws+1,"the chapter change requests its own immediate board redraw");
+            world_tick(J_SELECT|chords[chord],255);world_tick(J_SELECT|chords[chord],1025);
+            expect(!memcmp(&td,&expected,58)&&!td_board_route&&dispatch_offer_matches(next)&&
+                   !memcmp(&td_target,&objective,sizeof(objective))&&sram_writes==stores&&ui_draws==draws+1,
+                   "held Select/chords do not repeat navigation, accept work, redraw or advance the paused world");
+            dispatch_edge(J_SELECT);expected.menu=dispatch_next_chapters[next/8];
+            expect(!memcmp(&td,&expected,58)&&!td_board_route&&dispatch_offer_matches(expected.menu)&&sram_writes==stores,
+                   "a released then fresh Select edge advances exactly one more chapter");
+        }
+        for(unsigned exit=0;exit<sizeof(exits)/sizeof(exits[0]);exit++) {
+            dispatch_offer(job);td_board_route=td_offer.count-1;
+            td_state_t expected=td;expected.mode=TD_ROAM;
+            unsigned stores=sram_writes;UBYTE page=td_board_route;
+            dispatch_edge(J_SELECT|J_A|J_LEFT|J_RIGHT|J_UP|J_DOWN|exits[exit]);
+            expect(!memcmp(&td,&expected,58)&&td_board_route==page&&dispatch_offer_matches(job)&&sram_writes==stores,
+                   "B and Start retain board-exit priority over chapter jumps and all simultaneous accept/navigation edges");
+        }
+    }
+    dispatch_offer(61);td_board_route=255;dispatch_edge(J_SELECT);
+    expect(td.menu==64&&!td_board_route&&dispatch_offer_matches(64),
+           "a chapter jump discards a stale itinerary page before previewing the next actual pickup");
+}
+static void test_dispatch_chapter_eligibility(void) {
+    for(UBYTE job=0;job<TD_QUESTS;job++) {
+        const td_job_t *expected=&td_fixture_jobs[job];
+        dispatch_chapter_offer(job);td.vehicle=expected->vehicle==TD_NONE?0:expected->vehicle;
+        td.health=37;td.cash=913;td_board_route=expected->count-1;
+        dispatch_edge(J_A);
+        expect(td.mode==TD_ROAM&&td.job==job&&!td.stage&&td.health==100&&td.left==expected->seconds&&td.cash==913&&
+               td_job.reward==expected->reward&&!memcmp(td_job.route,expected->route,12),
+               "a fresh A after chapter browsing accepts the compatible actual offer at pickup under its original rules");
+        if(expected->min_done) {
+            dispatch_chapter_offer(job);memset(td.complete,0,sizeof(td.complete));td.done=0;
+            td.vehicle=expected->vehicle==TD_NONE?0:expected->vehicle;td_board_route=expected->count-1;
+            td_state_t before=td;before.msg=3;unsigned stores=sram_writes;
+            dispatch_edge(J_A);
+            expect(!memcmp(&td,&before,58)&&sram_writes==stores,
+                   "chapter browsing cannot bypass any actual offer's individual completion lock");
+        }
+        if(expected->vehicle!=TD_NONE)for(UBYTE foot=0;foot<2;foot++) {
+            dispatch_chapter_offer(job);td.vehicle=foot?expected->vehicle:(expected->vehicle+1)&3;td.onfoot=foot;
+            td_board_route=expected->count-1;td_state_t before=td;before.msg=2;
+            unsigned stores=sram_writes;dispatch_edge(J_A);
+            expect(!memcmp(&td,&before,58)&&sram_writes==stores,
+                   "chapter browsing retains wrong-vehicle and on-foot denial for every vehicle-required offer");
+        }
+        if(expected->vehicle==TD_NONE) {
+            dispatch_chapter_offer(job);td.onfoot=1;dispatch_edge(J_A);
+            expect(td.mode==TD_ROAM&&td.job==job&&!td.stage&&td.onfoot&&td.left==expected->seconds,
+                   "vehicle-independent offers remain available to walkers after chapter browsing");
+        }
+    }
+    /* Region groups have individual unlocks, not one shared chapter tier. */
+    dispatch_offer(80);memset(td.complete,0,sizeof(td.complete));td.complete[0]=7;td.done=3;
+    td.vehicle=1;dispatch_edge(J_SELECT);
+    expect(td.menu==88&&td_offer.min_done==8,"Select previews the actual locked first Port contract without skipping it");
+    unsigned stores=sram_writes;dispatch_edge(J_A);
+    expect(td.mode==TD_BOARD&&td.job==TD_NONE&&td.msg==3&&td.done==3&&td.cash==30&&sram_writes==stores,
+           "the first Port chapter offer keeps its own eight-completion lock");
+    dispatch_edge(J_RIGHT);
+    expect(td.menu==89&&td_offer.min_done==3,"Right still reaches the neighboring three-completion Port offer");
+    dispatch_edge(J_A);
+    expect(td.mode==TD_ROAM&&td.job==89&&!td.stage&&td.done==3&&td.complete[0]==7&&td.cash==30,
+           "an earlier-unlocked neighbor can be accepted without inventing chapter-wide progression");
+
+    dispatch_offer(95);td.vehicle=0;dispatch_edge(J_A);td.stage=2;td.left=73;td.health=67;td_set_target();
+    dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
+    td_state_t before=td;td_job_t carried=td_job;td_stop_t target=td_target;
+    stores=sram_writes;td_board_route=3;dispatch_edge(J_SELECT);before.menu=0;
+    expect(!memcmp(&td,&before,58)&&!td_board_route&&!memcmp(&td_job,&carried,sizeof(carried))&&
+           !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores,
+           "chapter browsing while carrying work preserves the active ordered job and its current handoff");
+    dispatch_edge(J_A);before.msg=2;
+    expect(!memcmp(&td,&before,58)&&!memcmp(&td_job,&carried,sizeof(carried))&&
+           !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores,
+           "A after an active-job chapter jump still rejects replacing the carried contract");
 }
 
 static void test_dispatch_acceptance_and_reentry(void) {
@@ -3433,9 +3606,9 @@ int main(void) {
     test_streetcar_native_q5_bounds();test_contact_corridor_coverage();
     test_traffic_lookahead_truth();test_sweep_section_scan_equivalence();
     test_aircraft_world_freezing();
-    test_human_impacts_and_police();
+    test_human_impacts_and_police();test_visible_human_reverse_start();
     test_road_police_pursuit();
-    test_dispatch_itinerary_inputs();test_dispatch_acceptance_and_reentry();
+    test_dispatch_itinerary_inputs();test_dispatch_chapter_inputs();test_dispatch_chapter_eligibility();test_dispatch_acceptance_and_reentry();
     test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
     test_reserved_islands_traffic_gates();test_current_ferry_fare_boundary();
     test_island_save_migration();test_island_objective_guidance();

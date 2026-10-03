@@ -407,7 +407,7 @@ static void appearance_admission(void){
             "A clear final endpoint still defers appearance inside the preceding courier sweep");
     td.subsecond=25;before=td;
     require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
-            actors[9].pos.x==820*32&&actors[9].pos.y==148*32&&!td_people[0].stun,
+            actors[9].pos.x==819*32&&actors[9].pos.y==148*32&&!td_people[0].stun,
             "The same authored human appears promptly once both body and preceding sweep are clear");
     require(!memcmp(&td,&before,sizeof(td)),"Admitted appearance preserves cash, cargo, attention and save fields");
 
@@ -497,8 +497,12 @@ static void appearance_admission(void){
     for(unsigned second=0;second<6;second++){td.seconds++;td_people_second();}
     require(td_people_present(24)==0&&!td_people[0].stun&&actors[9].pos.x==817*32&&
             !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Continuously visible recovery resumes its original position after six active seconds");
-    td.seconds++;require(td_people_present(24)==0&&actors[9].pos.x!=817*32,
-            "Recovered humans continue along the unchanged authored route");
+    td.speed=0;td.seconds++;
+    require(td_people_present(24)==0&&actors[9].pos.x==817*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "Recovered humans preserve visible history while the courier still occupies their proposed step");
+    td.u=839*16;td.subsecond+=5;
+    require(td_people_present(24)==0&&actors[9].pos.x==818*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "Recovered humans continue the unchanged authored route as soon as the next clear step is due");
     td.seconds=8;td.subsecond=10;td.u=817*16;td.v=148*16;
     td_people_reset();before=td;
     require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
@@ -513,4 +517,142 @@ static void appearance_admission(void){
     fixture_authored_routes=0;
 }
 
-int main(void){fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();appearance_admission();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}
+static void idle_courier_case(void){
+    /* Actual Core cold fleet poses; the original visible route19 case is
+     * clear of all six bodies, rather than relying on hidden traffic. */
+    static const UWORD cu[6]={80,200,320,440,824,216};
+    static const UWORD cv[6]={280,392,168,632,240,72};
+    appearance_case(827*16,147*16+7);
+    td.speed=0;td.park_u=560*16;td.park_v=720*16;
+    for(UBYTE i=0;i<6;i++){
+        actors[2+i].flags=0;actors[2+i].pos.x=cu[i]*32;actors[2+i].pos.y=cv[i]*32;
+    }
+}
+static void idle_courier_boundaries(void){
+    static const int speeds[]={-6,-3,-2,0,2,3,24};
+    for(UBYTE vehicle=0;vehicle<4;vehicle++)for(UBYTE axis=0;axis<2;axis++)
+        for(int sign=-1;sign<=1;sign+=2)for(int gap=152;gap<=168;gap++)
+            for(unsigned n=0;n<sizeof(speeds)/sizeof(speeds[0]);n++){
+            idle_courier_case();td.vehicle=vehicle;td.speed=speeds[n];
+            td.u=(UWORD)(817*16+(axis?0:sign*gap));
+            td.v=(UWORD)(148*16+(axis?sign*gap:0));
+            td_state_t before=td;
+            int clear=reference_fleet_clear(817,148,td.u,td.v,7);
+            require(td_person_courier_blocks(817,148)==!clear,
+                    "The proposed-step guard matches independent fractional maximum-body rectangles at every tested speed");
+            require(!memcmp(&td,&before,sizeof(td)),"Courier yielding guard preserves all58 saved bytes");
+        }
+}
+static void idle_courier_wait_and_resume(void){
+    for(int speed=-2;speed<=2;speed++){
+        idle_courier_case();td.speed=speed;
+        require(td_people_present(24)==0&&actors[9].pos.x==817*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+                "The actual Core route19 starts visible at its strict10px clear edge");
+        for(unsigned step=1;step<=128;step++){
+            unsigned clock=8*60+10+5*step;td.seconds=clock/60;td.subsecond=clock%60;
+            td_state_t before=td;
+            require(td_people_present(24)==0&&actors[9].pos.x==817*32&&
+                    !(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+                    "Visible pedestrians wait through a full raw-phase wrap instead of entering the slow courier");
+            require(reference_fleet_clear(817,148,td.u,td.v,7)&&(actors[9].flags&0x40),
+                    "Waiting keeps the full body clear and unrelated actor bits intact");
+            require(!memcmp(&td,&before,sizeof(td)),"Waiting invents no cash/cargo/heat/save mutation");
+        }
+        td.u=839*16;td.subsecond=55;
+        require(td_people_present(24)==0&&actors[9].pos.x==818*32&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+                "The same human immediately resumes one ordinary route step after body clearance");
+    }
+}
+static void idle_courier_impacts_and_recovery(void){
+    static const int speeds[]={-6,-3,3,12,24};
+    for(unsigned n=0;n<sizeof(speeds)/sizeof(speeds[0]);n++){
+        idle_courier_case();td.speed=speeds[n];td_people_present(24);
+        td.u=824*16;td.v=148*16+3;
+        require(td_people_present(24)==1&&td_people[0].stun==6&&poses[0]==4&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Both moving directions retain genuine continuous8px driving impacts");
+        td.speed=0;td.subsecond=25;
+        require(td_people_present(24)==0&&td_people[0].stun==6&&actors[9].pos.x==817*32&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"An already stumbled overlapping human stays visible with the original recovery pose");
+        for(unsigned second=0;second<6;second++){td.seconds++;td_people_second();}
+        require(td_people_present(24)==0&&!td_people[0].stun&&actors[9].pos.x==817*32&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Six-second recovery retains visible history while a slow courier still occupies its old position");
+        td.u=839*16;td.subsecond=30;
+        require(td_people_present(24)==0&&actors[9].pos.x==818*32&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"A recovered person resumes without a new appearance delay once the courier moves clear");
+    }
+}
+static void idle_courier_context_controls(void){
+    for(UBYTE context=0;context<3;context++){
+        idle_courier_case();td_people_present(24);
+        if(context==0)td.onfoot=1;
+        else if(context==1){td_streetcar_ride_view=1;td_streetcar_focus_u=td.u;td_streetcar_focus_v=td.v;td.mode=TD_RIDE;}
+        else td_streetcar_view_district=TD_DISTRICT_WEST;
+        td.subsecond=25;td_state_t before=td;
+        require(td_people_present(24)==0&&actors[9].pos.x==820*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+                "Walking, remote paid focus and foreign loaded views retain their original human motion");
+        require(!memcmp(&td,&before,sizeof(td)),"Nonlocal/foot controls preserve complete saved state");
+    }
+    idle_courier_case();td.u=828*16;td_people_present(24);td.subsecond=15;
+    require(td_people_present(24)==0&&actors[9].pos.x==818*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "An exact10px ordinary step is admitted immediately without a grace timer");
+}
+static void idle_courier_resume_regression(void){
+    static const int held_speeds[]={-2,0,2};
+    for(unsigned n=0;n<sizeof(held_speeds)/sizeof(held_speeds[0]);n++){
+        idle_courier_case();td.speed=held_speeds[n];
+        require(td_people_present(24)==0&&actors[9].pos.x==817*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+                "The stationary/slow resume regression begins with a genuinely visible human");
+        td.subsecond=25;td_state_t before=td;
+        require(td_people_present(24)==0&&actors[9].pos.x==817*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
+                reference_fleet_clear(817,148,td.u,td.v,7),
+                "A15-VBlank idle interval cannot let a visible walker enter the stopped/slow car body");
+        require(!memcmp(&td,&before,sizeof(td)),"An idle walker creates no gameplay penalty");
+        td.v+=12;td.speed=3;before=td;
+        require(td_people_present(24)==0&&!td_people[0].stun&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+                "The first0.75px resume cannot charge the driver's prior stationary wait as a swept human impact");
+        require(!memcmp(&td,&before,sizeof(td)),"A clear resumption leaves all58 saved bytes unchanged");
+    }
+    /* Original fallback still respects a real bus hull. Do not keep a human
+     * visible inside road traffic merely because the courier blocked its
+     * proposed step. Both bus poses are on Core's actual northbound lane. */
+    idle_courier_case();actors[7].pos.x=808*32;actors[7].pos.y=160*32;
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A coherent northbound bus starts clear of the visible human");
+    actors[7].pos.y=152*32;td.subsecond=15;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "Road-occupied old positions retain the original hidden fallback without an invented impact");
+}
+
+static void reversing_courier_route83(void){
+    idle_courier_case();fixture_routes[0]=83;
+    td.u=566*16;td.v=695*16+3;td.heading=12;
+    td.cash=138;td.health=100;td.wanted=td.wanted_left=0;
+    td.seconds=24;td.subsecond=22;td_people_reset();
+    require(td_district_routes[0][83][0]==520&&td_district_routes[0][83][1]==692,
+            "The reverse-start fixture uses the exact registered Bay route83");
+    require(td_people_present(24)==0&&td_people[0].phase==35&&actors[9].pos.x==555*32&&
+            !(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "Route83 is genuinely visible at the native24:22 approach phase35");
+    for(unsigned clock=24*60+25;clock<=26*60;clock+=5){
+        td.seconds=clock/60;td.subsecond=clock%60;
+        require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+                "The native approach clock advances while the visible human waits beside the occupied car");
+    }
+    require(td_people[0].phase==36&&td_people[0].lag==19&&actors[9].pos.x==556*32,
+            "At26:00 the actual route/clock preserves native phase36 and accumulated lag19");
+    td.v=697*16+12;td.speed=-6;td.subsecond=16;
+    require(!reference_contact(556,692)&&reference_contact(559,692),
+            "The independent8px sweep clears the original human but intersects the newly advanced phase39 human");
+    td_state_t before=td;UBYTE hits=td_people_present(24);
+    if(hits||td_people[0].phase!=36)fprintf(stderr,
+      "route83 reverse diagnostic: phase=%u lag=%u human=%u,%u stun=%u hits=%u\n",
+      td_people[0].phase,td_people[0].lag,actors[9].pos.x>>5,actors[9].pos.y>>5,td_people[0].stun,hits);
+    require(!hits&&td_people[0].phase==36&&actors[9].pos.x==556*32&&
+            !td_people[0].stun&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A visible phase36 human cannot walk into the still-occupied reverse-start body at phase39");
+    require(!memcmp(&td,&before,sizeof(td)),
+            "A clear reverse start cannot invent a cash/cargo/attention penalty");
+}
+
+int main(void){fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();appearance_admission();idle_courier_boundaries();idle_courier_wait_and_resume();idle_courier_impacts_and_recovery();idle_courier_context_controls();idle_courier_resume_regression();reversing_courier_route83();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}
