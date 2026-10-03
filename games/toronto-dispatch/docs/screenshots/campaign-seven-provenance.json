@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Four unmodified genuine native emulator screenshots from the separate e797 six-new-job continuation.",
+  "rom": {
+    "path": "project/build/toronto-dispatch-courier-clearance.gbc",
+    "sha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+    "sizeBytes": 524288
+  },
+  "source": {
+    "commit": "25b659785d94ff8eaa8eeeb402243005acfe146a",
+    "debugIdentity": {
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "aa8417d346d660ea1efb2a98cac2f706bc15037438a73e7dbfd1400f1e2129b7",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "noiSha256": "7ca4749489938523e81a847527841b2b3fcf9dd08bee8844713044c859ed0b92",
+    "unchangedFromClearanceRecords": true
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "sessionId": "da2f81eb7bdf4bfdbcd97eeb8eac314b",
+    "status": "stopped",
+    "branchId": "branch-0002",
+    "frame": 21222,
+    "totalFrames": 18760,
+    "eventCount": 3500,
+    "eventDigest": "b74b518d83875b73f6a6d5acc8a4728f2e81ab7d7d85f531ca95a3c396ea39c5",
+    "outcome": "passed",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 180
+      },
+      {
+        "branchId": "branch-0002",
+        "frame": 21222,
+        "parentBranchId": "branch-0001",
+        "sourceSessionId": "985803bd872d4dfc95e38de54e73e41a",
+        "checkpointId": "checkpoint-da7d3dc9b13242aaa0b2543a4a9f4303"
+      }
+    ],
+    "originalPath": "project/artifacts/playtests/session-8b6c4341-0037-4d42-9b63-acd12818919d",
+    "closed": true,
+    "archiveId": "3a8a1dbd-67de-437f-984c-ea85dad26e27",
+    "archivePath": "project/artifacts/recording-archives/3a8a1dbd-67de-437f-984c-ea85dad26e27/recording",
+    "manifestSha256": "bc917eab5075a21645764f1718bc187e931db46f898ea9c5b32d708952d37d84",
+    "inventory": {
+      "digest": "2922bdc03bbc9f789bc0bebffd4ee8766d3c8f4ea88d7774dac86b94c193de72",
+      "bytes": 4284180,
+      "entries": 1354
+    },
+    "retrievedManifestMatches": true,
+    "endCheckpointSavedOnly": true,
+    "endCheckpoint": {
+      "checkpointId": "checkpoint-7ec56dd436e044039e9f9ff0f2178bf5",
+      "frame": 21222,
+      "branchId": "branch-0002",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "stateSha256": "e57de2afb4b703aaaa55c094f405c980dcc8590971fe51e5999969a2b0f974c9",
+      "automaticAdvance": 0
+    },
+    "freshBootFrames": 180,
+    "ordinaryPostImportFrames": 18580,
+    "journalCounts": {
+      "stepActions": 1376,
+      "heldSetChanges": 370,
+      "directFrameEvents": 1378,
+      "inheritedActions": 238,
+      "inheritedFrameReferences": 133
+    }
+  },
+  "fullIgnoredPrefix": {
+    "path": "project/build/campaign-e797-seven-closed-prefix.json",
+    "bytes": 11294176,
+    "sha256": "995b77310956ead3f566be099d05676ef76a394726a531c4d1ac36e6e5aa3d44"
+  },
+  "images": [
+    {
+      "path": "docs/screenshots/campaign-seven-shore-freight-result.png",
+      "frame": 8586,
+      "branchId": "branch-0002",
+      "rawStepIndex": 605,
+      "stepLabel": "campaign_freight_final_release",
+      "request": {
+        "buttons": [],
+        "frames": 8,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 8586,
+        "width": 160,
+        "height": 144,
+        "sha256": "96c534b2ec9cee6da1fb6b5a5d5b7ba40cf7227c222ccf9636db1200484e3069",
+        "rgbaSha256": "0026ee9b1775a15add282557f3f6c1f6a3a6279ebd915dd126ce6e5c3a3f0888",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/3a8a1dbd-67de-437f-984c-ea85dad26e27/recording/frames/96c534b2ec9cee6da1fb6b5a5d5b7ba40cf7227c222ccf9636db1200484e3069.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-8b6c4341-0037-4d42-9b63-acd12818919d",
+        "sessionId": "da2f81eb7bdf4bfdbcd97eeb8eac314b",
+        "branchId": "branch-0002",
+        "fromActionIndex": 1017,
+        "toActionIndex": 1019,
+        "fromFrame": 8578,
+        "toFrame": 8586,
+        "fromPrefixPin": {
+          "eventCount": 1563,
+          "eventDigest": "8d3c879ad48c1f8a592d9e931cb191ab4be99b83e8e18455ccd7ba9366a2540b",
+          "byteLength": 688423,
+          "sha256": "0a29f8175d170dfc45347f62bb454de22c5f376dbdeaec23b3b1b26e588ef396"
+        },
+        "prefixPin": {
+          "eventCount": 1567,
+          "eventDigest": "d591facaf191c1ede5003939c013fba058c399e086194e5fdd1272d404ae440e",
+          "byteLength": 689912,
+          "sha256": "d200f28cf017ebd2be437a3908a02df2833962b7d15da1e75dd02b7dba00ba60"
+        },
+        "emptyInterval": false
+      },
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-seven-relay-result.png",
+      "frame": 16764,
+      "branchId": "branch-0002",
+      "rawStepIndex": 886,
+      "stepLabel": "campaign_connection_Wellesley_Union_handoff_release",
+      "request": {
+        "buttons": [],
+        "frames": 16,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 16764,
+        "width": 160,
+        "height": 144,
+        "sha256": "a672ce623f817b13dd0dc4f7323bc5f63f159e85c05f24fafa4f2fefc4a61818",
+        "rgbaSha256": "6ce9d94718f2cc84972b3ce4d38d0120d8dbbad2585a9f2834fd7051625d62d9",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/3a8a1dbd-67de-437f-984c-ea85dad26e27/recording/frames/a672ce623f817b13dd0dc4f7323bc5f63f159e85c05f24fafa4f2fefc4a61818.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-8b6c4341-0037-4d42-9b63-acd12818919d",
+        "sessionId": "da2f81eb7bdf4bfdbcd97eeb8eac314b",
+        "branchId": "branch-0002",
+        "fromActionIndex": 1423,
+        "toActionIndex": 1425,
+        "fromFrame": 16748,
+        "toFrame": 16764,
+        "fromPrefixPin": {
+          "eventCount": 2375,
+          "eventDigest": "482cbaa405d021cbd7147e161fc4b7cd61bef77a3761f997fb045c6445902a8a",
+          "byteLength": 1012664,
+          "sha256": "1ccd52a679adee654138a9a163b56068667fe2186d879d53f63d761d24156cbb"
+        },
+        "prefixPin": {
+          "eventCount": 2379,
+          "eventDigest": "abc45893cb8be63f8d3fcca719020d6351326b926e927962d09685c00ffd1496",
+          "byteLength": 1014160,
+          "sha256": "5d9909192c1a0fe89b0c3849503e8cd61de7bd91451f00cfe3e8db861bb3f4e0"
+        },
+        "emptyInterval": false
+      },
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-seven-stalls-freight-result.png",
+      "frame": 21214,
+      "branchId": "branch-0002",
+      "rawStepIndex": 1349,
+      "stepLabel": "campaign_stalls_Union_final_release",
+      "request": {
+        "buttons": [],
+        "frames": 16,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 21214,
+        "width": 160,
+        "height": 144,
+        "sha256": "e60be19431bab556cdff98847affb30e51f57293d9f4d200790c3593cf569d82",
+        "rgbaSha256": "7ea35d9f9d50cc08abf5aa73a89083244215b194bab00815b649678d3fa5bffd",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/3a8a1dbd-67de-437f-984c-ea85dad26e27/recording/frames/e60be19431bab556cdff98847affb30e51f57293d9f4d200790c3593cf569d82.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-8b6c4341-0037-4d42-9b63-acd12818919d",
+        "sessionId": "da2f81eb7bdf4bfdbcd97eeb8eac314b",
+        "branchId": "branch-0002",
+        "fromActionIndex": 1981,
+        "toActionIndex": 1983,
+        "fromFrame": 21198,
+        "toFrame": 21214,
+        "fromPrefixPin": {
+          "eventCount": 3491,
+          "eventDigest": "5745fabf57f7d2918deb239d79d6c4122b3c6fb456b85e6d317b04a947171474",
+          "byteLength": 1473694,
+          "sha256": "dd2d9ffbcdb14f8fbbd66e5dc4c767958042ef14d627c04ce2c850bcd84ee7a0"
+        },
+        "prefixPin": {
+          "eventCount": 3495,
+          "eventDigest": "2d3d198cc7fde075e6715b212eb88348912a269f4e65950e258b4fb0bf0b7198",
+          "byteLength": 1475190,
+          "sha256": "ab65be86ec5f8a1d8d9e567fcceef477f124557dd8225ca0d16f506f15acc98f"
+        },
+        "emptyInterval": false
+      },
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-seven-paid-bus-menu.png",
+      "frame": 13692,
+      "branchId": "branch-0002",
+      "rawStepIndex": 819,
+      "stepLabel": "campaign_connection_Wellesley_CastleFrank_target_release_1",
+      "request": {
+        "buttons": [],
+        "frames": 8,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 13692,
+        "width": 160,
+        "height": 144,
+        "sha256": "534df77b3a7413e4bfe8b57d1956dcd5705acc9d34615bb821c9de8b3218f0b2",
+        "rgbaSha256": "6228163abe8a9e25593bd82bad3fe8e45e7042d7614990209a7c8d1666f91ff2",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/3a8a1dbd-67de-437f-984c-ea85dad26e27/recording/frames/534df77b3a7413e4bfe8b57d1956dcd5705acc9d34615bb821c9de8b3218f0b2.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-8b6c4341-0037-4d42-9b63-acd12818919d",
+        "sessionId": "da2f81eb7bdf4bfdbcd97eeb8eac314b",
+        "branchId": "branch-0002",
+        "fromActionIndex": 1333,
+        "toActionIndex": 1335,
+        "fromFrame": 13684,
+        "toFrame": 13692,
+        "fromPrefixPin": {
+          "eventCount": 2195,
+          "eventDigest": "06d3a2e3a539feb27840cd22e1875ad3bb352836ad801957dcf870158e765f8c",
+          "byteLength": 939109,
+          "sha256": "329c5ef17ec7e9308e5dcab63c45bc2f4e08a5c6240913c2716ed5fe5ac9e826"
+        },
+        "prefixPin": {
+          "eventCount": 2199,
+          "eventDigest": "b328720995e1c6c64d18d2e076a6e0f196c6827f68610ddfab038e3f45d6792b",
+          "byteLength": 940603,
+          "sha256": "37c808a4bc7fa7de8022ad17aebe862db29e5c09d22417e2c29fecff6397cc24"
+        },
+        "emptyInterval": false
+      },
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    }
+  ],
+  "hardwareCapture": false,
+  "importedCompletion": [
+    0
+  ],
+  "newCompletions": [
+    1,
+    2,
+    6,
+    3,
+    4,
+    11
+  ],
+  "fullCampaignOrHumanDurationClaim": false
+}
