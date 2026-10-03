@@ -1,6 +1,8 @@
 #pragma bank 255
 #include <string.h>
 #include "td_transit.h"
+#include "td_game.h"
+#include "td_district.h"
 
 typedef char td_transit_queen_ids_fit_origin[
     (TD_TRANSIT_QUEEN_FIRST + TD_TRANSIT_QUEEN_COUNT <= 64) ? 1 : -1];
@@ -126,12 +128,22 @@ UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED {
     return elapsed < 2 ? 0 : period - elapsed;
 }
 
-UBYTE td_transit_fare(UBYTE origin) BANKED {
+static UBYTE td_transit_fare_local(UBYTE origin) {
     UBYTE service = td_transit_service_local(origin);
     if (service == TD_TRANSIT_TRAIN || service == TD_TRANSIT_STREETCAR) return 3;
     if (service == TD_TRANSIT_BUS) return 2;
     if (service == TD_TRANSIT_FERRY) return 4;
     return 0;
+}
+
+UBYTE td_transit_fare(UBYTE origin) BANKED {
+    return td_transit_fare_local(origin);
+}
+
+UBYTE td_transit_booking_fare(UBYTE origin,UBYTE target,UBYTE job,UWORD cash,UBYTE district) BANKED {
+    if(district==TD_DISTRICT_ISLANDS&&origin>=20&&origin<=22&&
+       target==10&&job==TD_NONE&&cash<4)return 0;
+    return td_transit_fare_local(origin);
 }
 
 UBYTE td_transit_duration(UBYTE origin, UBYTE target) BANKED {

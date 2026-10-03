@@ -425,6 +425,57 @@ static void test_wait_contact_hud_and_map_restore(void) {
     }
 }
 
+static void test_reserved_islands_assistance_ui(void) {
+    /* Direct UI inputs use the reserved enum only. There is no sixth native
+       scene or relocated stop record; actual route pages remain unchanged. */
+    for(UBYTE dock=20;dock<=22;dock++){
+        reset_case();td.mode=TD_TRANSIT;td.job=TD_NONE;td.district=TD_DISTRICT_ISLANDS;
+        td.transit_origin=dock;td.transit_target=10;td.cash=3;td.seconds=(dock-19)*7+2;
+        td_get_stop(10,&td_cursor);game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(2,"ISLAND FERRY","reserved return timetable retains its actual service identity");
+        expect_window_text(6,"DEPARTS IN 28 SEC","assistance retains the normal autonomous ferry departure");
+        expect_window_text(7,"RIDE 8 SEC / $0","reserved eligible return visibly quotes the shared zero fare");
+        expect_window_text(11,"RETURN ASSISTANCE","reserved eligible return explains the zero fare before boarding");
+        expect_game_unchanged(&before);expect_text_screen_safe();
+        td.cash=4;before=snapshot_game();td_ui_draw();
+        expect_window_text(7,"RIDE 8 SEC / $4","exactly four dollars retains the ordinary ferry fare");
+        expect_window_text(11,"","a sufficient balance clears stale assistance text without a mode transition");
+        expect_game_unchanged(&before);
+        td.cash=0;td.job=0;before=snapshot_game();td_ui_draw();
+        expect_window_text(7,"RIDE 8 SEC / $4","an active parcel never receives the recovery discount");
+        expect_window_text(11,"","an active job cannot retain an earlier assistance caption");expect_game_unchanged(&before);
+        td.job=TD_NONE;td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
+        expect_window_text(7,"RIDE 8 SEC / $4","current Core Island strips retain the ordinary quoted fare");
+        expect_window_text(11,"","the reserved recovery cue does not leak into today's five-scene world");expect_game_unchanged(&before);
+
+        td.district=TD_DISTRICT_ISLANDS;td.mode=td_resume_mode=TD_WAIT;td.msg=0;
+        before=snapshot_game();td_ui_draw();
+        expect_window_text(0,"DEPARTS IN 28 SEC","assistance WAIT retains its unchanged ferry clock");
+        expect_window_text(1,"RETURN ASSISTANCE","assistance WAIT retains its eligibility cue before deduction");
+        expect_window_text(2,"B CANCEL WAIT","assistance WAIT remains cancellable");expect_game_unchanged(&before);
+        td.msg=18;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"TRAM: STEP CLEAR","the existing safety cue has priority over an assistance caption");expect_game_unchanged(&before);
+        td.msg=0;td.seconds++;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,"DEPARTS IN 27 SEC","clearing a contact cue refreshes the genuine ferry departure clock");
+        expect_window_text(1,"RETURN ASSISTANCE","clearing a contact cue restores assistance without stale font tiles");expect_game_unchanged(&before);
+        td.cash=4;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"ISLAND FERRY","WAIT loses its recovery caption when ordinary fare funds become available");
+        expect_window_text(2,"B CANCEL WAIT","ordinary and assisted waits share the cancellation control");expect_game_unchanged(&before);
+        td.mode=TD_RIDE;td.cash=0;td.ride_left=5;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,"RIDING 5 SEC","paid-state presentation retains the already booked remaining duration");
+        expect_window_text(2,"FARE PAID / ON TIME","a ride does not re-infer its past fare from the new post-payment balance");expect_game_unchanged(&before);
+    }
+    reset_case();td.mode=TD_TRANSIT;td.job=TD_NONE;td.district=TD_DISTRICT_ISLANDS;
+    td.transit_origin=10;td.transit_target=20;td.cash=0;td_get_stop(20,&td_cursor);
+    game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(7,"RIDE 8 SEC / $4","an outward ferry keeps its ordinary fare even under the reserved UI enum");
+    expect_window_text(11,"","no outward trip advertises return assistance");expect_game_unchanged(&before);
+    td.mode=TD_ROAM;td.msg=0;before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"B: FERRY AT DOCK","reserved foot-only roaming points to a ferry rather than car entry");expect_game_unchanged(&before);
+    td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"A CAR / B TRANSIT","mainland walking keeps its original car and transit controls");expect_game_unchanged(&before);
+}
+
 static void test_every_viewport(void) {
     reset_case();open_case();game_snapshot_t before=snapshot_game();unsigned viewports=0;
     verify_marker_patterns();
@@ -712,6 +763,7 @@ int main(void) {
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();
     test_sparse_table_full_and_single_holes();
     test_wait_contact_hud_and_map_restore();
+    test_reserved_islands_assistance_ui();
     test_appended_district_focus_and_holes();
     test_dispatch_board_itineraries();test_contract_payment_result();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);

@@ -17,7 +17,7 @@
   },
   "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour excludes Island land. East has no water.",
   "world_sha256": "e5bcb035a69daf71ffee8289a4740acf9e707d8ea373b5c5e5cf364bc3457d45",
-  "canonical_district_header_sha256": "42c2b4ca4dda24ca26ec72d459ef9496c5f5bd0518a4502deb9456bbf886b7fc",
+  "canonical_district_header_sha256": "c056cfd8652d5b6386edf7b0a102db4bb83af585c4399dc3c6a28bcc4c9ae7b4",
   "sources": [
     {
       "district": 0,

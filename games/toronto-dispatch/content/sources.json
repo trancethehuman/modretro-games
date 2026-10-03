@@ -373,5 +373,54 @@
     "reviewed": "2026-10-02",
     "scope": "Waterfront East streetcar project remains design/enabling work; dedicated Cherry transit bridge alone does not establish operating Port Lands streetcar service.",
     "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "islands-wayfinding-202609-reviewed20261003",
+    "url": "https://www.toronto.ca/wp-content/uploads/2026/09/8ff1-Toronto-Island-Park-mapcompressed.pdf",
+    "reviewed": "2026-10-03",
+    "scope": "One-page September 2026 map opened and visually inspected after temporary PDF rendering outside the repository. North-arrow orientation, three landings, established public paths/bridge spurs, airport/plant/club restrictions checked; printed overview is south-up. Reference only, not an adopted map era.",
+    "rights": "City PDF expressly requires written permission for reproduction, distribution or alteration and includes additional map-data credits. No map or geometry bundled, traced or used as game artwork."
+  },
+  {
+    "id": "islands-existing-context-202211-reviewed20261003",
+    "url": "https://www.toronto.ca/wp-content/uploads/2022/11/91bd-toronto-island-park-master-plan-open-house-info-panel-nov-30-2022-03.pdf",
+    "reviewed": "2026-10-03",
+    "scope": "Panel 3 existing-context aerial visually inspected. Supports north-up relative Hanlan/Gibraltar/Centre/Ward/Algonquin, airport, harbour/lake, landing and landmark arrangement; historical context, not current operating guidance.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-existing-versus-proposed-bridges-20261003",
+    "url": "https://www.toronto.ca/legdocs/mmis/2024/ie/bgrd/backgroundfile-246911.pdf",
+    "reviewed": "2026-10-03",
+    "scope": "June 20 2024 full-report Part 1, printed pp47–51 / PDF pages68–72 opened, pp50–51 visually inspected. Existing Lakeshore–Cibola/Avenue/boardwalk and Fig3-4 black existing versus red proposed bridges; no proposed Lagoon Loop/Gibraltar bridges treated as built.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-public-access-20261003",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/",
+    "reviewed": "2026-10-03",
+    "scope": "Official connected walking network and dock distances; public vehicles prohibited, emergency/commercial service exception. Island Bike Share availability does not permit its bikes on ferries. No real distances or walk times imposed as game waits.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-landmark-path-guide-20261003",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/things-to-do-on-toronto-island/",
+    "reviewed": "2026-10-03",
+    "scope": "Centre landing/Long Pond/Manitou/Avenue to south beach/pier; maze west of Avenue, Gibraltar lighthouse north of its beach, Ward waiting shed, southern boardwalk and public attractions. Original silhouettes/fictional clients only; no copied art or interior access claims.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-ferry-service-20261003",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-routes-schedules/",
+    "reviewed": "2026-10-03",
+    "scope": "Year-round Jack Layton origin, three warmer-season landing routes, winter Ward service, weather/mechanical variability. Current tables reviewed for identity only; no live timetable/fare imported or inter-island City route invented.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-project-status-20261003",
+    "url": "https://www.toronto.ca/city-government/planning-development/construction-new-facilities/parks-facility-plans-strategies/toronto-island-park-projects/",
+    "reviewed": "2026-10-03",
+    "scope": "Distinguishes completed 2024–2025 Hanlan improvements from 2026 landing concept work, future landscape/movement recommendations and proposed Snake ceremonial space. Current high-water closures are not silently adopted as game era.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
   }
 ]

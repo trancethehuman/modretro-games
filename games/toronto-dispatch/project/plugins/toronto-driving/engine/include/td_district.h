@@ -9,6 +9,8 @@
 #define TD_DISTRICT_HIGH_PARK 2
 #define TD_DISTRICT_EAST 3
 #define TD_DISTRICT_PORT_LANDS 4
+/* Reserved for the researched, ferry-only expansion. Not registered yet. */
+#define TD_DISTRICT_ISLANDS 5
 #define TD_DISTRICT_COUNT 5
 #define TD_DISTRICT_NONE 255
 #define TD_DISTRICT_TILE_WIDTH 128

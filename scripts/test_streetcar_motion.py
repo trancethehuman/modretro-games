@@ -119,6 +119,7 @@ def main():
             shutil.copyfile(ENGINE / f"include/{name}.h", work / f"{name}.h")
         (work / "td_streetcar_under_test.c").write_text(production + probe)
         shutil.copyfile(ENGINE / "include/td_district.h", work / "td_district.h")
+        shutil.copyfile(ENGINE / "include/td_game.h", work / "td_game.h")
         (work / "native_streetcar_fixture.h").write_text(fixture)
         (work / "gbdk").mkdir()
         (work / "gbdk/platform.h").write_text("""#ifndef HOST_PLATFORM_H

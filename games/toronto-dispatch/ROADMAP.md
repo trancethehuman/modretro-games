@@ -198,6 +198,8 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 
 ## Full game release
 
+- [x] Stage fuller Islands research using visually inspected official City maps and established paths/bridges, preserving proposed-versus-existing and map-era distinctions. Freeze the old six stop/nine quest source identities and exact354-tile/60-byte walking mask before migration.
+- [ ] Register the staged original Islands scene, relocate six stable clients with58-byte version9 migration, retain ferry/parked-car semantics, expose connected foot choices and tune nine jobs through ordinary controls. Source art, future runtime gates and a return-assistance query do not satisfy this gate.
 - [ ] Extend the five-scene milestone across the full historical Old Toronto footprint, waterfront and fuller Islands, verifying each playable milestone. Port Lands broader acceptance remains above; the larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) and proposed 2026 era remain unadopted proposals.
 - [ ] Extend researched western/eastern TTC coverage beyond the representative Queen game service, including King504 and Line2; preserve original fictional timing and distinguish the adopted map baseline from live detours.
 - [ ] Playtest and refine the authored objectives across all eight job types, including the unlock sequence, vehicle rules and condition/comfort rewards.

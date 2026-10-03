@@ -2973,6 +2973,89 @@ static void test_dispatch_transient_save_contract(void) {
            "recovered active-job dispatch starts at pickup with the authored reward rather than stale transient cache data");
 }
 
+static void test_reserved_islands_traffic_gates(void) {
+    /* Only the reserved loaded-view enum is exercised. The registry remains
+       five scenes: no invented scene, collision map, client or paid arrival. */
+    expect(TD_DISTRICT_ISLANDS==5&&TD_DISTRICT_COUNT==5,
+           "the Islands boundary remains reserved rather than a registered sixth scene");
+    for(UBYTE mode=TD_ROAM;mode<=TD_RIDE;mode++){
+        if(mode!=TD_ROAM&&mode!=TD_WAIT&&mode!=TD_RIDE)continue;
+        for(UBYTE foot=0;foot<2;foot++){
+            reset_case();td.mode=mode;td.onfoot=foot;td.job=0;td.stage=1;
+            td.wanted=3;td.wanted_left=1;td.cash=913;td.health=73;
+            td.speed=28;td_vx=448;td_vy=-64;
+            for(unsigned i=0;i<6;i++){
+                td_traffic_u[i]=td.u;td_traffic_v[i]=td.v;td_traffic_leg[i]=255;
+                memset(&td_traffic_samples[i],255,sizeof(td_traffic_samples[i]));
+                actors[i+2].pos.x=12000+i;actors[i+2].pos.y=13000+i;
+                actors[i+2].frame_start=231+i;actors[i+2].frame_end=232+i;
+                actors[i+2].flags=ACTOR_FLAG_ACTIVE|ACTOR_FLAG_PERSISTENT;
+            }
+            td_traffic_retreat_mask=63;td_vehicle_contact_mask=63;td_police_waypoint.valid=1;
+            td_police_waypoint.u=td.u;td_police_waypoint.v=td.v;td_police_stuck=61;
+            actors[8].flags=ACTOR_FLAG_ACTIVE;
+            for(unsigned i=9;i<15;i++)actors[i].flags=ACTOR_FLAG_ACTIVE|((i&1)?ACTOR_FLAG_HIDDEN:0);
+            actor_t before_actors[TD_ACTORS];memcpy(before_actors,actors,sizeof(before_actors));
+            td_state_t before=td;WORD vx=td_vx,vy=td_vy;unsigned stores=sram_writes,draws=ui_draws,impacts=audio_impacts;
+            UWORD before_u[6],before_v[6];UBYTE before_leg[6];td_traffic_sample_t before_samples[6];
+            memcpy(before_u,td_traffic_u,sizeof(before_u));memcpy(before_v,td_traffic_v,sizeof(before_v));
+            memcpy(before_leg,td_traffic_leg,sizeof(before_leg));memcpy(before_samples,td_traffic_samples,sizeof(before_samples));
+            td_streetcar_view_district=TD_DISTRICT_ISLANDS;
+            expect(td_traffic_free(td.u,td.v)&&td_traffic_free(td.u+167,td.v+167),
+                   "stale fleet coordinates cannot occupy the reserved foot-only view");
+            td_traffic_contacts();td_traffic_step();td_traffic_motion(63);
+            expect(!memcmp(&td,&before,58)&&td_vx==vx&&td_vy==vy&&sram_writes==stores&&
+                   ui_draws==draws&&audio_impacts==impacts,
+                   "disabled fleet cannot damage cargo, capture, refresh attention, charge or write SRAM");
+            expect(!memcmp(before_u,td_traffic_u,sizeof(before_u))&&!memcmp(before_v,td_traffic_v,sizeof(before_v))&&
+                   !memcmp(before_leg,td_traffic_leg,sizeof(before_leg))&&!memcmp(before_samples,td_traffic_samples,sizeof(before_samples))&&
+                   td_traffic_retreat_mask==63&&td_vehicle_contact_mask==63&&td_police_waypoint.valid&&td_police_stuck==61,
+                   "disabled motion rejects even malformed stale routes without advancing caches or pursuit");
+            td_traffic_present();
+            for(unsigned i=2;i<9;i++){
+                actor_t hidden=before_actors[i];hidden.flags|=ACTOR_FLAG_HIDDEN;
+                expect(!memcmp(&actors[i],&hidden,sizeof(hidden)),
+                       "reserved view hides all six fleet actors and parked car without positioning stale data");
+            }
+            for(unsigned i=0;i<TD_ACTORS;i++)if(i<2||i>=9)
+                expect(!memcmp(&actors[i],&before_actors[i],sizeof(actors[i])),
+                       "fleet suppression preserves player, beacon, civilian and aircraft actor state");
+            expect(!memcmp(&td,&before,58)&&sram_writes==stores,"fleet presentation changes no saved fields or booked state");
+        }
+    }
+    /* Restore the actual registered mainland view and demonstrate that cached
+       road users regain both occupancy and visible presentation. */
+    reset_case();td.onfoot=1;
+    td_streetcar_view_district=TD_DISTRICT_ISLANDS;td_traffic_present();
+    td_streetcar_view_district=TD_DISTRICT_CITY;
+    expect(!td_traffic_free(td_traffic_u[0],td_traffic_v[0]),"mainland cached traffic occupancy resumes after an Island view");
+    td_state_t before=td;td_traffic_present();
+    for(unsigned i=0;i<6;i++)expect(!(actors[i+2].flags&ACTOR_FLAG_HIDDEN)&&
+        actors[i+2].pos.x==(td_traffic_u[i]>>4)*32&&actors[i+2].pos.y==(td_traffic_v[i]>>4)*32,
+        "ordinary mainland presentation restores each fleet actor at its unchanged route coordinate");
+    expect(!(actors[8].flags&ACTOR_FLAG_HIDDEN)&&!memcmp(&td,&before,58),
+           "the visible mainland parked car and saved state retain their original presentation rules");
+
+    reset_case();td.u=td_traffic_u[2];td.v=td_traffic_v[2];td.onfoot=1;td.wanted=2;td.wanted_left=1;td.cash=913;
+    td_traffic_contacts();expect(td.wanted==0&&td.cash==813&&td.msg==20,
+                               "mainland police capture and its escalating fine remain active");
+}
+
+static void test_current_ferry_fare_boundary(void) {
+    for(UBYTE dock=20;dock<=22;dock++)for(UBYTE cash=0;cash<=4;cash++){
+        reset_case();authored_content=1;td.onfoot=1;td.mode=TD_WAIT;td.cash=cash;
+        td.transit_origin=dock;td.transit_target=10;td_get_stop(dock,&td_cursor);
+        td.u=td_cursor.u*16;td.v=td_cursor.v*16;td.seconds=(dock-19)*7;
+        UWORD park_u=td.park_u,park_v=td.park_v;
+        expect(td_board_current_window(),"the existing ferry evaluates its actual open boarding window");
+        expect(cash<4?(td.mode==TD_ROAM&&td.cash==cash&&td.msg==4):
+               (td.mode==TD_RIDE&&td.cash==0&&td.ride_left==8),
+               "current Core Island strips retain the ordinary four-dollar ferry fare and paid duration");
+        expect(td.park_u==park_u&&td.park_v==park_v&&td.park_district==0,
+               "ordinary ferry fare checks never relocate the mainland parked car");
+    }
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -3011,6 +3094,7 @@ int main(void) {
     test_road_police_pursuit();
     test_dispatch_itinerary_inputs();test_dispatch_acceptance_and_reentry();
     test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
+    test_reserved_islands_traffic_gates();test_current_ferry_fare_boundary();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

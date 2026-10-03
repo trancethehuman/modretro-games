@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "td_game.h"
+#include "td_district.h"
 #include "td_streetcar_runtime.h"
 #include "td_transit.h"
 #include "td_font.h"
@@ -170,7 +171,7 @@ void td_ui_init(void) BANKED {
     text_drawn=TRUE;td_ui_draw();
 }
 void td_ui_draw(void) BANKED {
-    UBYTE i,wait,service,changed=td_ui_mode!=td.mode; UWORD u=td.u>>4,v=td.v>>4;
+    UBYTE i,wait,service,fare,changed=td_ui_mode!=td.mode; UWORD u=td.u>>4,v=td.v>>4;
     td_ui_mode=td.mode;
     text_drawn=TRUE;
     if(td.mode==TD_MAP){
@@ -183,6 +184,9 @@ void td_ui_draw(void) BANKED {
             wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
             sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);
             if(td.msg==18)td_row(1,"TRAM: STEP CLEAR");
+            else if(td.district==TD_DISTRICT_ISLANDS&&td_transit_service(td.transit_origin)==TD_TRANSIT_FERRY&&
+                !td_transit_booking_fare(td.transit_origin,td.transit_target,td.job,td.cash,td.district))
+                td_row(1,"RETURN ASSISTANCE");
             else{td_transit_label(td.transit_origin,td_line);td_row(1,td_line);}
             td_row(2,"B CANCEL WAIT");return;
         }
@@ -195,7 +199,7 @@ void td_ui_draw(void) BANKED {
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
         if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);if(td_target.district!=td.district){if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);else strcpy(td_line,"NO ROAD ROUTE");td_row(2,td_line);}else td_row(2,td_target.name);}
-        else {sprintf(td_line,"$%u %s H%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
+        else {sprintf(td_line,"$%u %s H%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td.onfoot?(td.district==TD_DISTRICT_ISLANDS?"B: FERRY AT DOCK":"A CAR / B TRANSIT"):"SELECT JOBS START UI");}
         return;
     }
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
@@ -217,7 +221,7 @@ void td_ui_draw(void) BANKED {
             if(td_board_route>=td_offer.count)td_board_route=0;
             td_get_stop(td_offer.route[td_board_route],&td_cursor);
             sprintf(td_line,"%u/%u %s%s",td_board_route+1,td_offer.count,
-                td_cursor.reserved&TD_STOP_FOOT?"WALK ":"",
+                (td_cursor.reserved&TD_STOP_FOOT)||td_cursor.district==TD_DISTRICT_ISLANDS?"WALK ":"",
                 !td_board_route?"PICKUP":td_board_route+1==td_offer.count?
                 (td_offer.route[0]==td_offer.route[td_board_route]?"RETURN":"DELIVER"):"HANDOFF");
             td_row(11,td_line);td_row(12,td_cursor.name);
@@ -230,8 +234,10 @@ void td_ui_draw(void) BANKED {
         service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);
         td_row(5,service==4?(td.transit_target>=td.transit_origin?"STREETCAR EASTBOUND":"STREETCAR WESTBOUND"):"");
         wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(6,td_line);
-        sprintf(td_line,"RIDE %u SEC / $%u",td_transit_duration(td.transit_origin,td.transit_target),td_transit_fare(td.transit_origin));td_row(7,td_line);
+        fare=td_transit_booking_fare(td.transit_origin,td.transit_target,td.job,td.cash,td.district);
+        sprintf(td_line,"RIDE %u SEC / $%u",td_transit_duration(td.transit_origin,td.transit_target),fare);td_row(7,td_line);
         td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"QUEEN $3 FERRY $4");
+        td_row(11,service==TD_TRANSIT_FERRY&&!fare?"RETURN ASSISTANCE":"");
         td_row(15,service==4?"NORMAL QUEEN ROUTE":"UP: BUS/TRAIN AT");td_row(16,service==4?"GAME ROUTE ENDS HERE":"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
     }
     if(td.mode==TD_RESULT){

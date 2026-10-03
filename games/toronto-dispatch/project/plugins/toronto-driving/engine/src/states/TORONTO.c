@@ -75,6 +75,7 @@ static UBYTE td_drivable(UWORD u,UWORD v){return td_road_body(u,v,5);}
 
 static UBYTE td_traffic_free(UWORD u,UWORD v){
     UBYTE i;
+    if(td_streetcar_view_district==TD_DISTRICT_ISLANDS)return TRUE;
     for(i=0;i<6;i++)if(td_distance(u,td_traffic_u[i])<168&&td_distance(v,td_traffic_v[i])<168)return FALSE;
     return TRUE;
 }
@@ -195,7 +196,7 @@ static UBYTE td_board_current_window(void){
     if(!td_transit_valid(td.transit_origin,td.transit_target))return FALSE;
     if(!td_wait_at_origin()){td.mode=TD_ROAM;td_save();td_message(6);return TRUE;}
     if(td_transit_departure(td.transit_origin,td.transit_target,td.seconds))return FALSE;
-    fare=td_transit_fare(td.transit_origin);
+    fare=td_transit_booking_fare(td.transit_origin,td.transit_target,td.job,td.cash,td.district);
     if(td.cash<fare){td.mode=TD_ROAM;td_save();td_message(4);return TRUE;}
     /* A fresh free-roaming trip cannot inherit an old contract failure. */
     if(td.job==TD_NONE)td.health=100;
@@ -456,11 +457,14 @@ static void td_traffic_motion_inner(UBYTE mask,td_traffic_epoch_t *epoch){
 /* Keep the large transient snapshot in this tiny caller frame. The hot
    loop's ordinary locals remain within native signed-eight-bit SP reach. */
 static void td_traffic_motion(UBYTE mask){
-    td_traffic_epoch_t epoch;td_traffic_motion_inner(mask,&epoch);
+    td_traffic_epoch_t epoch;
+    if(td_streetcar_view_district==TD_DISTRICT_ISLANDS)return;
+    td_traffic_motion_inner(mask,&epoch);
 }
 static void td_traffic_step(void){td_traffic_motion(63);}
 static void td_traffic_contacts(void){
     static const UBYTE extents[6]={5,6,5,7,6,7};UBYTE i;
+    if(td_streetcar_view_district==TD_DISTRICT_ISLANDS)return;
     /* A stationary/queued vehicle is still a solid road user. Contact and
        patrol checks run even when its movement was denied by a red light. */
     if(td_people_police(td_traffic_u[2],td_traffic_v[2])){
@@ -479,11 +483,18 @@ static void td_traffic_contacts(void){
 }
 static void td_traffic_present(void){
     UBYTE i,leg,frame;
+    if(td_streetcar_view_district==TD_DISTRICT_ISLANDS){
+        /* The six cached mainland positions do not represent Island actors.
+           Hide before civilians inspect road users; keep their caches intact. */
+        for(i=2;i<9;i++)actors[i].flags|=ACTOR_FLAG_HIDDEN;
+        return;
+    }
     for(i=0;i<6;i++){
         leg=td_traffic_leg[i];
         if(td_streetcar_view_district)frame=td_traffic_samples[i].frame;
         else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
         if(i==2&&td_police_waypoint.valid)frame=td_police_waypoint.heading*2;
+        actors[i+2].flags&=~ACTOR_FLAG_HIDDEN;
         td_position(&actors[i+2],td_traffic_u[i]>>4,td_traffic_v[i]>>4);td_fleet_present(&actors[i+2],i,(frame&7)/2);
     }
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:td.vehicle*8+((td.heading+1)&15)/2);
@@ -617,7 +628,8 @@ void toronto_init(void) BANKED {
         actors[i].next=actors_inactive_head; if(actors_inactive_head)actors_inactive_head->prev=&actors[i];actors_inactive_head=&actors[i];
         activate_actor(&actors[i]);
     }
-    if(td_streetcar_view_district)td_world_traffic_init(td_streetcar_view_district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
+    if(td_streetcar_view_district&&td_streetcar_view_district!=TD_DISTRICT_ISLANDS)
+        td_world_traffic_init(td_streetcar_view_district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
     for(i=0;i<6;i++){
         if(!td_streetcar_view_district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:144)*16;td_traffic_v[i]=(i<4?(i==2?176:td_rows[2+i])-8:i==4?240:64)*16;td_traffic_leg[i]=i==5?1:0;}
 
@@ -687,7 +699,8 @@ void toronto_update(void) BANKED {
             td_drive();if(!was_entering&&td_cross_portal(old_u,old_v))return;
         }
     }
-    if(motion&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)){
+    if(motion&&td_streetcar_view_district!=TD_DISTRICT_ISLANDS&&
+       (td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)){
         /* Autonomous road motion uses a sixteen-VBlank quantum. Every
            admitted move still sweeps its whole body; couriers, pedestrians,
            tram contact, capture and collision penalties update each render.
