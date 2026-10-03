@@ -41,7 +41,7 @@ void td_boats_update(UWORD elapsed){(void)elapsed;}
 void td_traffic_lights_reset(void){}
 void td_fleet_present(actor_t *a,UBYTE kind,UBYTE direction){UBYTE frame=kind<2?kind*8+direction*2:(kind-2)*4+direction;actor_set_frames(a,frame,frame+1);}
 void td_civilian_present(actor_t *a,UBYTE variant,UBYTE pose){(void)variant;actor_set_frames(a,32+pose,33+pose);}
-static UBYTE audio_mode,audio_active,audio_cue;
+static UBYTE audio_mode,audio_active,audio_cue,audio_braking;
 static UBYTE stop0_here;
 static UBYTE authored_content;
 static UBYTE test_current_district,test_queued_district,test_queue_fail;
@@ -157,9 +157,9 @@ void td_map_close(void) {
     if(test_map_active){camera_x=test_map_camera_x;camera_y=test_map_camera_y;camera_settings=test_map_camera_settings;}
     test_map_active=0;
 }
-void td_audio_init(void) {audio_inits++;audio_mode=TD_AUDIO_FULL;audio_active=0;audio_cue=255;}
+void td_audio_init(void) {audio_inits++;audio_mode=TD_AUDIO_FULL;audio_active=audio_braking=0;audio_cue=255;}
 void td_audio_update(WORD speed,UBYTE vehicle,UBYTE onfoot,UBYTE braking,UBYTE active) {
-    (void)speed;(void)vehicle;(void)onfoot;(void)braking;audio_updates++;audio_active=active;
+    (void)speed;(void)vehicle;(void)onfoot;audio_updates++;audio_active=active;audio_braking=braking;
 }
 void td_audio_play(UBYTE cue) {if(audio_mode!=TD_AUDIO_SILENT){audio_cue=cue;if(cue==TD_AUDIO_IMPACT)audio_impacts++;}}
 void td_audio_set_mode(UBYTE mode) {audio_mode=mode;}
@@ -210,7 +210,7 @@ static void reset_case(void) {
     td.u=400*16;td.v=450*16;td.park_u=100*16;td.park_v=100*16;
     td.job=TD_NONE;td.mode=TD_ROAM;td.health=100;td.cash=30;
     td.safe_u=td.u;td.safe_v=td.v;
-    td_tick=td_notice_timer=td_red_cooldown=td_turn_tick=td_entry_timer=0;
+    td_tick=td_notice_timer=td_red_cooldown=td_turn_tick=td_entry_timer=td_result_b_release=0;
     td_entry_target=td_walk_dir=td_input_edge=0;
     td_session_live=td_transition_pending=test_current_district=test_queue_fail=0;test_queued_district=TD_DISTRICT_NONE;
     td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;td_board_route=0;
@@ -1086,6 +1086,135 @@ static void test_finished_job_target(void) {
                actors[1].pos.x==depot.u*32&&actors[1].pos.y==(depot.v-12)*32,
                "free-roam objective and beacon remain Union despite stale active-job route data");
     }
+}
+
+/* Clear terrain and distant fleet bodies isolate the input transition. The
+   actual finish, menu, clock, driving, audio handoff and save code still run. */
+static void result_input_case(UBYTE success,UBYTE onfoot) {
+    reset_case();td.onfoot=onfoot;stop0_here=onfoot;
+    td.job=0;td_get_job(0,&td_job);td.stage=1;td.left=99;
+    td_finish(success);
+    expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.speed==0,
+           "RESULT release fixture uses an actual retired contract and stopped courier");
+}
+
+static void test_result_b_release(void) {
+    for(UBYTE success=0;success<2;success++) {
+        result_input_case(success,0);
+        UWORD u=td.u,v=td.v,cash=td.cash;UBYTE done=td.done,health=td.health;
+        world_tick(J_B,1);
+        expect(td.mode==TD_ROAM&&!audio_braking,
+               "RESULT B dismisses the screen without handing its brake press to audio");
+        for(unsigned update=0;update<30;update++) {
+            world_tick(J_B,4);
+            expect(td.mode==TD_ROAM&&td.speed==0&&td_vx==0&&td_vy==0&&td.u==u&&td.v==v,
+                   "repeated held RESULT B updates keep the stopped vehicle stationary");
+            expect(audio_active&&!audio_braking,
+                   "consumed RESULT B leaves world audio active without brake audio");
+        }
+        expect(td.seconds==2&&td.subsecond==0&&td.cash==cash&&td.done==done&&td.health==health,
+               "consumed RESULT B advances the real world clock without changing the completed outcome");
+        world_tick(0,1);
+        for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+        expect(td.mode==TD_ROAM&&td.speed<0&&td.u<u&&td.v==v&&audio_braking,
+               "sampling release restores ordinary held-B reverse movement and brake audio");
+    }
+
+    result_input_case(TRUE,0);
+    world_tick(J_B,1);
+    for(unsigned update=0;update<4;update++)world_tick(J_B,4);
+    world_tick(J_B|J_START,1);
+    UWORD paused_seconds=td.seconds;UBYTE paused_fraction=td.subsecond,old_vehicle=td.vehicle;
+    expect(td.mode==TD_PAUSE&&td.speed==0&&!audio_active&&!audio_braking,
+           "held RESULT B followed by START pauses a stopped vehicle instead of inherited reverse");
+    for(unsigned row=0;row<4;row++) {
+        world_tick(J_B|J_DOWN,1);world_tick(J_B,1);
+    }
+    expect(td.menu==4,"ordinary pause navigation reaches the vehicle selector while B remains held");
+    world_tick(J_B|J_A,1);
+    expect(td.mode==TD_PAUSE&&td.vehicle==(UBYTE)((old_vehicle+1)&3)&&td.speed==0,
+           "the actual vehicle selector accepts a stopped courier after RESULT B dismissal");
+    expect(td.seconds==paused_seconds&&td.subsecond==paused_fraction,
+           "vehicle-selection inputs preserve the paused world clock");
+
+    /* B is released while a frozen menu is open, before its B exit handler. */
+    world_tick(0,1);world_tick(J_B,1);
+    expect(td.mode==TD_ROAM&&td.speed==0&&audio_braking,
+           "release sampled in PAUSE permits its fresh B exit without arming a RESULT guard");
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0,"B held after an ordinary PAUSE exit retains the existing reverse control");
+
+    result_input_case(FALSE,0);
+    world_tick(J_B,1);world_tick(J_B|J_START,1);
+    world_tick(J_B|J_DOWN,1);world_tick(J_B,1);world_tick(J_B|J_A,1);
+    expect(td.mode==TD_MAP&&test_map_opens==1,
+           "a RESULT-consumed held B can remain held through ordinary pause-to-map input");
+    td_state_t map_state=td;world_tick(0,60);
+    expect(td.mode==TD_MAP&&!memcmp(&td,&map_state,sizeof(td)),
+           "release sampled on the map does not change any of the 58 frozen gameplay bytes");
+    world_tick(J_B,1);world_tick(J_B|J_START,1);
+    expect(td.mode==TD_ROAM,"fresh map B and pause START preserve the existing two-stage map exit");
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"map-sampled B release restores reverse when gameplay resumes");
+
+    result_input_case(TRUE,0);world_tick(J_START,1);
+    expect(td.mode==TD_ROAM,"RESULT START retains its ordinary free-roam exit");
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"RESULT START does not suppress a subsequent fresh brake press");
+
+    result_input_case(TRUE,0);world_tick(J_A,1);
+    expect(td.mode==TD_BOARD&&td.job==TD_NONE,"RESULT A still opens dispatch without automatically accepting work");
+    world_tick(J_B,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.mode==TD_ROAM&&td.speed<0&&audio_braking,
+           "ordinary dispatch B exit does not inherit RESULT-only brake suppression");
+
+    result_input_case(TRUE,1);world_tick(J_B,1);
+    UWORD foot_u=td.u,foot_v=td.v;
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.mode==TD_ROAM&&td.onfoot&&td.u==foot_u&&td.v==foot_v&&!audio_braking,
+           "held RESULT B preserves the walking courier and cannot re-open transit without a new press");
+    world_tick(0,1);world_tick(J_B,1);
+    expect(td.mode==TD_TRANSIT&&td.onfoot&&td.transit_origin==0,
+           "a fresh on-foot B after release still opens the nearby service selector");
+}
+
+static void test_result_release_initialization_and_save(void) {
+    result_input_case(TRUE,0);world_tick(J_B,1);
+    td_state_t guarded,unguarded;UBYTE sequence,version;
+    td_save();
+    expect(td_read_slot(td_save_slot,&guarded,&sequence,&version)&&version==TD_SAVE_VERSION&&
+           td_save_address(td_save_slot)[3]==58&&guarded.mode==TD_ROAM,
+           "saving after consumed RESULT B produces a real current-version 58-byte roam record");
+    td_state_t before_release=td;world_tick(0,0);td_save();
+    expect(!memcmp(&td,&before_release,sizeof(td))&&
+           td_read_slot(td_save_slot,&unguarded,&sequence,&version)&&
+           !memcmp(&guarded,&unguarded,sizeof(guarded)),
+           "releasing RESULT B changes no saved gameplay field or actual serialized payload");
+
+    result_input_case(TRUE,0);world_tick(J_B,1);
+    td_session_live=1;toronto_init();
+    expect(td.mode==TD_ROAM,"warm scene initialization keeps the current free-roam mode");
+    UWORD warm_u=td.u,warm_v=td.v;
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed==0&&td.u==warm_u&&td.v==warm_v&&!audio_braking,
+           "warm initialization preserves a still-held consumed RESULT B until release");
+    world_tick(0,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"warm initialization still permits reverse after the physical release");
+
+    result_input_case(TRUE,0);world_tick(J_B,1);
+    UWORD saved_cash=td.cash;UBYTE saved_done=td.done;
+    memset(&td,0,sizeof(td));td_session_live=0;actors_inactive_head=NULL;toronto_init();
+    expect(td.mode==TD_HELP&&td.cash==saved_cash&&td.done==saved_done&&td.job==TD_NONE&&td.speed==0,
+           "cold initialization restores the committed result outcome behind ordinary help");
+    /* No sampled B release: A is newly pressed while B remains held. Cold
+       initialization must not recover a transient guard from the save. */
+    world_tick(J_A|J_B,1);
+    expect(td.mode==TD_ROAM,"ordinary help A dismisses the cold-start screen with B still held");
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking&&td.cash==saved_cash&&td.done==saved_done,
+           "cold reset clears transient RESULT suppression without losing saved earnings or completion");
 }
 
 /* Independently authored expectations for every boarding origin, including
@@ -3280,6 +3409,7 @@ int main(void) {
     test_entry_transit_exclusion();test_fresh_transit_after_failure();
     test_pickup_damage_lifecycle();
     test_finished_job_target();
+    test_result_b_release();test_result_release_initialization_and_save();
     test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
     test_safe_transit_alighting();
     test_cross_district_streetcar();

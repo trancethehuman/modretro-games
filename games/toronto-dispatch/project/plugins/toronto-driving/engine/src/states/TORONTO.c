@@ -58,6 +58,8 @@ static td_police_plan_t td_police_waypoint;
 static UWORD td_police_from_u,td_police_from_v;
 static UBYTE td_police_stuck;
 static UBYTE td_input_edge;
+/* Closing a result consumes its brake button until the player releases it. */
+static UBYTE td_result_b_release;
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v);
 
 static UWORD td_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
@@ -67,7 +69,7 @@ static void td_position(actor_t *a,UWORD u,UWORD v){
 }
 static void td_frame(actor_t *a,UBYTE f){if(a->frame_start!=f||a->frame_end!=f+1)actor_set_frames(a,f,f+1);a->anim_tick=255;}
 static void td_message(UBYTE m){td.msg=m;td_notice_timer=90;if(m==5||m==13||m==19)td_audio_play(TD_AUDIO_IMPACT);td_ui_draw();}
-static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!INPUT_B,td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
+static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!(INPUT_B&&!td_result_b_release),td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
 static UBYTE td_near(td_stop_t *s){return s->district==td.district&&td_distance(td.u>>4,s->u)<15&&td_distance(td.v>>4,s->v)<15;}
 
 static UBYTE td_drivable(UWORD u,UWORD v){return td_road_body(u,v,5);}
@@ -244,7 +246,10 @@ static void td_menu_update(void){
         else td_map_update(joy,joy_pressed);
         return;
     }
-    if(INPUT_B_PRESSED||INPUT_START_PRESSED){td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;}
+    if(INPUT_B_PRESSED||INPUT_START_PRESSED){
+        if(td.mode==TD_RESULT&&INPUT_B_PRESSED)td_result_b_release=1;
+        td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;
+    }
     if(td.mode==TD_PAUSE){
         if(INPUT_DOWN_PRESSED)td.menu=(td.menu+1)%9;
         if(INPUT_UP_PRESSED)td.menu=(td.menu+8)%9;
@@ -555,7 +560,7 @@ static void td_drive(void){
         if(td.job!=TD_NONE&&td.stage&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
     }}
     else td_turn_tick=0;
-    if(INPUT_B){if(td_tick%2==0&&td.speed>-6)td.speed--;}
+    if(INPUT_B&&!td_result_b_release){if(td_tick%2==0&&td.speed>-6)td.speed--;}
     else if(INPUT_A){if(td_tick%4==0&&td.speed<limit)td.speed++;}
     else if(td_tick%8==0){if(td.speed>0)td.speed--;else if(td.speed<0)td.speed++;}
     // Traction eases velocity toward heading instead of instantly rotating momentum.
@@ -606,7 +611,7 @@ void toronto_init(void) BANKED {
     td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     if(cold){
         td_district_reset();td_transition_pending=0;
-        td_tick=td_notice_timer=td_red_cooldown=td_entry_timer=td_turn_tick=0;td_vx=td_vy=0;td_last_frame=sys_time;td_corner_used=0;
+        td_tick=td_notice_timer=td_red_cooldown=td_entry_timer=td_turn_tick=td_result_b_release=0;td_vx=td_vy=0;td_last_frame=sys_time;td_corner_used=0;
         if(!td_restore()){
             memset(&td,0,sizeof(td));td.u=560*16;td.v=720*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
         }
@@ -659,6 +664,7 @@ void toronto_update(void) BANKED {
     td_aircraft_render_restore();
     if(td_transition_pending){td_last_frame=sys_time;if(td_transition_pending==2&&td_district_queue(td_transition_district))td_transition_pending=1;return;}
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
+    if(td_result_b_release&&!INPUT_B)td_result_b_release=0;
     tram_elapsed=elapsed;
     td_corner_used=0;
     motion=elapsed>4?4:elapsed;
