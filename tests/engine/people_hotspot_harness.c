@@ -101,42 +101,42 @@ static void fleet_extent_guards(void){
         actors[kind+2].flags=ACTOR_FLAG_HIDDEN;
         fleet_check(td_person_road_clear(500,400),"Hidden fleet bodies remain absent from pedestrian occupancy");
     }
-    /* A coherent actual Core bus leg: from(816,176) north to(816,64),
+    /* A coherent actual Core bus leg: from(808,168) north to(808,72),
      * with its next eight-pixel advance160->152. Route19 is the real
-     * horizontal foot crossing(784..847,148), phase22->23 at7:15->7:20. */
-    UWORD fleet_u[6]={80*16,200*16,320*16,440*16,824*16,816*16};
+     * horizontal foot crossing(784..847,148), phase14->15 at6:35->6:40. */
+    UWORD fleet_u[6]={80*16,200*16,320*16,440*16,824*16,808*16};
     UWORD fleet_v[6]={280*16,392*16,168*16,632*16,240*16,160*16};
     td_traffic_context_t context={fleet_u,fleet_v,&actors[9],extents,extents,560*16,720*16,0,0};
     memset(&td,0,sizeof(td));memset(actors,0,sizeof(actors));
-    td.u=816*16;td.v=112*16;td.onfoot=1;td.mode=TD_ROAM;
-    td.park_u=560*16;td.park_v=720*16;td.seconds=7;td.subsecond=15;
+    td.u=808*16;td.v=112*16;td.onfoot=1;td.mode=TD_ROAM;
+    td.park_u=560*16;td.park_v=720*16;td.seconds=6;td.subsecond=35;
     td_streetcar_view_district=TD_DISTRICT_CITY;td_streetcar_ride_view=0;
     fixture_authored_routes=1;memset(fixture_routes,TD_NONE,sizeof(fixture_routes));fixture_routes[0]=19;
     for(UBYTE i=2;i<8;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
-    actors[7].flags=0;actors[7].pos.x=816*32;actors[7].pos.y=160*32;
+    actors[7].flags=0;actors[7].pos.x=808*32;actors[7].pos.y=160*32;
     require(td_district_routes[0][19][0]==784&&td_district_routes[0][19][1]==148,
             "Bus crossing fixture uses the unchanged authored Core route19");
-    td_people_reset();require(td_people_present(24)==0&&td_people[0].phase==22&&
-            actors[9].pos.x==806*32&&actors[9].pos.y==148*32,
-            "Actual world7:15 presents the preceding safe eastbound human phase22");
-    require(td_traffic_admit(&context,0,7,5,816*16,160*16,816*16,152*16,0),
-            "Actual bus admission accepts its coherent next sweep while the human is safely at806");
-    fleet_v[5]=152*16;actors[7].pos.y=152*32;td.subsecond=20;
+    td_people_reset();require(td_people_present(24)==0&&td_people[0].phase==14&&
+            actors[9].pos.x==798*32&&actors[9].pos.y==148*32,
+            "Actual world6:35 presents the preceding safe eastbound human phase14");
+    require(td_traffic_admit(&context,0,6,5,808*16,160*16,808*16,152*16,0),
+            "Actual bus admission accepts its coherent next sweep while the human is safely at798");
+    fleet_v[5]=152*16;actors[7].pos.y=152*32;td.subsecond=40;
     td_state_t saved=td;fleet_check(td_people_present(24)==0,"The crossing guard does not invent an impact");
-    fleet_check(td_people[0].phase==22&&td_people[0].lag==1&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
-                actors[9].pos.x==806*32&&actors[9].pos.y==148*32,
-                "Attempted actual phase23 waits visibly at806 rather than entering the bus body at807");
-    fleet_check(reference_fleet_clear(actors[9].pos.x>>5,actors[9].pos.y>>5,816*16,152*16,7),
+    fleet_check(td_people[0].phase==14&&td_people[0].lag==1&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
+                actors[9].pos.x==798*32&&actors[9].pos.y==148*32,
+                "Attempted actual phase15 waits visibly at798 rather than entering the bus body at799");
+    fleet_check(reference_fleet_clear(actors[9].pos.x>>5,actors[9].pos.y>>5,808*16,152*16,7),
                 "The actual displayed human remains outside the full bus body");
     for(unsigned advance=0;advance<2;advance++){
         UWORD next=fleet_v[5]-8*16;
-        UBYTE admitted=td_traffic_admit(&context,0,7,5,fleet_u[5],fleet_v[5],fleet_u[5],next,0);
+        UBYTE admitted=td_traffic_admit(&context,0,6,5,fleet_u[5],fleet_v[5],fleet_u[5],next,0);
         fleet_check(admitted,"The bus can clear the crossing instead of becoming mutually blocked");
         if(admitted){fleet_v[5]=next;actors[7].pos.y=next*2;}
-        td.subsecond=25+advance*5;fleet_check(td_people_present(24)==0,"Waiting/resuming foot motion invents no impact");
+        td.subsecond=45+advance*5;fleet_check(td_people_present(24)==0,"Waiting/resuming foot motion invents no impact");
     }
-    fleet_check(actors[9].pos.x==807*32&&td_people[0].phase==23&&td_people[0].lag==2&&
-                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"The same phase23 resumes once the bus clears, without teleporting or hiding");
+    fleet_check(actors[9].pos.x==799*32&&td_people[0].phase==15&&td_people[0].lag==2&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"The same phase15 resumes once the bus clears, without teleporting or hiding");
     saved.subsecond=td.subsecond;fleet_check(!memcmp(&td,&saved,sizeof(td)),
                 "Crossing admission, waiting and resumption preserve all58 gameplay bytes");
     fixture_authored_routes=0;

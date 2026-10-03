@@ -213,8 +213,8 @@ UBYTE td_streetcar_runtime_traffic_segment(UBYTE district,UBYTE slot,UBYTE count
     const UBYTE *current_legs,UWORD u,UWORD v,UWORD target_u,UWORD target_v,
     UWORD *from_u,UWORD *from_v) BANKED {
     static const UWORD core_rows[]={288,400,176,640};
-    static const UWORD bus_u[]={144,208,208,640,816,816};
-    static const UWORD bus_v[]={64,64,176,176,176,64};
+    static const UWORD bus_u[]={640,216,216,640,808,808};
+    static const UWORD bus_v[]={72,72,168,168,168,72};
     UBYTE previous,leg,legs[6];td_traffic_sample_t samples[6];
     if(district>=TD_DISTRICT_COUNT||slot>=6||!current_legs||!from_u||!from_v||count<2)return FALSE;
     leg=current_legs[slot];if(leg>=count)return FALSE;

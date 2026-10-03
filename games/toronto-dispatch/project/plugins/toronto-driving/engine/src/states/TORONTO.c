@@ -375,8 +375,9 @@ static UBYTE td_traffic_separate(UBYTE i,UWORD target_u,UWORD target_v,UWORD *u,
 }
 static void td_traffic_contacts(void);
 static void td_traffic_motion_inner(UBYTE mask,td_traffic_epoch_t *epoch){
-    static const UWORD bus_u[]={144,208,208,640,816,816};
-    static const UWORD bus_v[]={64,64,176,176,176,64};
+    /* Keep opposing vehicle centres 16px apart on the existing road lanes. */
+    static const UWORD bus_u[]={640,216,216,640,808,808};
+    static const UWORD bus_v[]={72,72,168,168,168,72};
     UBYTE i,leg,blocked,separating,dirty=0,extents[6]={5,6,5,7,6,7};
     UWORD u,v,target_u,target_v,amount;
     UBYTE pursuit=td.wanted&&td.mode!=TD_RIDE&&!td_streetcar_ride_view&&td.district==td_streetcar_view_district;
@@ -498,7 +499,7 @@ static void td_traffic_present(void){
     for(i=0;i<6;i++){
         leg=td_traffic_leg[i];
         if(td_streetcar_view_district)frame=td_traffic_samples[i].frame;
-        else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
+        else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg<2?4:leg==5?6:0);
         if(i==2&&td_police_waypoint.valid)frame=td_police_waypoint.heading*2;
         actors[i+2].flags&=~ACTOR_FLAG_HIDDEN;
         /* Preserve Q4 collision centres in native Q5 actor coordinates. */
@@ -643,7 +644,7 @@ void toronto_init(void) BANKED {
     if(td_streetcar_view_district&&td_streetcar_view_district!=TD_DISTRICT_ISLANDS)
         td_world_traffic_init(td_streetcar_view_district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
     for(i=0;i<6;i++){
-        if(!td_streetcar_view_district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:144)*16;td_traffic_v[i]=(i<4?(i==2?176:td_rows[2+i])-8:i==4?240:64)*16;td_traffic_leg[i]=i==5?1:0;}
+        if(!td_streetcar_view_district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:216)*16;td_traffic_v[i]=(i<4?(i==2?176:td_rows[2+i])-8:i==4?240:72)*16;td_traffic_leg[i]=i==5?2:0;}
 
     }
     td_people_reset();

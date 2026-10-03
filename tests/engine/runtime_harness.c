@@ -438,7 +438,7 @@ static void test_parked_visibility_context(void) {
 }
 
 static void test_fractional_fleet_presentation(void) {
-    const UWORD positions[6][2]={{80,280},{200,392},{320,168},{440,632},{824,240},{816,138}};
+    const UWORD positions[6][2]={{80,280},{200,392},{320,168},{440,632},{824,240},{808,138}};
     /* Each offset remains on a genuine straight Core route segment. The
        bus is northbound leg5, immediately above the real route19 crossing. */
     for(unsigned fraction=0;fraction<16;fraction++) {
@@ -457,10 +457,10 @@ static void test_fractional_fleet_presentation(void) {
             "actual fleet publication retains every Q4 fraction in native Q5 actor coordinates");
         expect(!memcmp(&td,&before,58)&&view==td_streetcar_view_district&&ride==td_streetcar_ride_view,
                "fractional fleet publication preserves all paid/save and prepared view state");
-        expect(td_road_body(816,138,7)&&td_district_routes[0][19][0]==784&&
+        expect(td_road_body(808,138,7)&&td_district_routes[0][19][0]==784&&
                td_district_routes[0][19][1]==148,
                "fractional bus fixture remains on the registered road beside the actual route19");
-        expect(td_person_road_clear(807,148)==(fraction==0),
+        expect(td_person_road_clear(799,148)==(fraction==0),
                "real cache-to-actor fraction forbids route19 entering the bus at9px by9.xpx separation");
     }
 }
@@ -512,6 +512,71 @@ static void test_route_selection_invalid_context(void) {
     }
 }
 
+static void test_core_bus_lane_joint_loop(void) {
+    const UWORD loop[6][2]={{640,72},{216,72},{216,168},{640,168},{808,168},{808,72}};
+    const UBYTE facing[6]={2,2,1,0,0,3};
+    native_case();
+    UBYTE legs[6]={0,0,2,0,0,4};UWORD from_u=0,from_v=0;
+    UBYTE separated=td_streetcar_runtime_traffic_segment(0,5,6,legs,
+        696*16,168*16,808*16,168*16,&from_u,&from_v);
+    expect(separated&&from_u==640*16&&from_v==168*16,
+           "the actual Core bus route uses its eastbound lane rather than the opposing police body corridor");
+    /* Inspect every full7px body along the six independently specified
+       cardinal lane segments, including each shared corner and closing leg. */
+    for(unsigned leg=0;leg<6;leg++) {
+        unsigned prior=leg?leg-1:5;
+        int x=loop[prior][0],y=loop[prior][1];
+        int tx=loop[leg][0],ty=loop[leg][1];
+        legs[5]=leg;
+        td_traffic_leg[5]=leg;td_traffic_u[5]=x*16;td_traffic_v[5]=y*16;td_traffic_present();
+        expect(actors[7].frame_start==12+facing[leg],"each actual bus leg presents its cardinal direction including the westward split");
+        expect((x==tx)!=(y==ty),"each proposed bus leg is nonzero and cardinal");
+        for(;;) {
+            expect(td_road_body(x,y,7),"full bus footprint stays on registered collision at every segment/corner pixel");
+            expect(td_streetcar_runtime_traffic_segment(0,5,6,legs,x*16,y*16,
+                tx*16,ty*16,&from_u,&from_v)&&from_u==loop[prior][0]*16&&from_v==loop[prior][1]*16,
+                "actual rare-retreat segment metadata matches every complete bus lane segment");
+            if(x==tx&&y==ty)break;
+            if(x<tx)x++;else if(x>tx)x--;else if(y<ty)y++;else y--;
+        }
+    }
+    /* Exact native jam: bus696,176 east and police712,184 west. On old
+       source retain that original pose; on the corrected route put the bus
+       at the same progress on its authored168px lane. Never teleport during
+       the actual600-VBlank gameplay update below. */
+    native_case();td.mode=TD_ROAM;td.onfoot=1;td.u=840*16;td.v=147*16;
+    td.park_u=560*16;td.park_v=720*16;td.seconds=70;
+    const UWORD positions[6][2]={{80,280},{200,392},{712,184},{440,632},{824,240},{696,176}};
+    for(unsigned i=0;i<6;i++) {
+        td_traffic_u[i]=positions[i][0]*16;td_traffic_v[i]=positions[i][1]*16;
+        td_traffic_leg[i]=i==2?2:i==5?4:0;
+    }
+    if(separated)td_traffic_v[5]=168*16;
+    td_traffic_present();
+    UWORD bus_u=td_traffic_u[5],police_u=td_traffic_u[2];
+    UBYTE peak_overlap=0,bus_passed=0,police_passed=0;
+    for(unsigned frame=0;frame<600;frame++) {
+        world_tick(0,1);
+        /* Independent half-open square bodies: bus7px + police5px. */
+        int32_t bl=(int32_t)td_traffic_u[5]-112,br=(int32_t)td_traffic_u[5]+112;
+        int32_t bt=(int32_t)td_traffic_v[5]-112,bb=(int32_t)td_traffic_v[5]+112;
+        int32_t pl=(int32_t)td_traffic_u[2]-80,pr=(int32_t)td_traffic_u[2]+80;
+        int32_t pt=(int32_t)td_traffic_v[2]-80,pb=(int32_t)td_traffic_v[2]+80;
+        if(bl<pr&&pl<br&&bt<pb&&pt<bb)peak_overlap=1;
+        if(td_traffic_u[5]>=728*16&&td_traffic_v[5]==168*16)bus_passed=1;
+        if(td_traffic_u[2]<=680*16&&td_traffic_v[2]==184*16)police_passed=1;
+    }
+    if(!separated)expect(td_traffic_u[5]==696*16&&td_traffic_v[5]==176*16&&
+        td_traffic_u[2]==712*16&&td_traffic_v[2]==184*16,
+        "the actual predecessor engine reproduces the exact native pair remaining stationary for600VBlanks");
+    expect(td.seconds==80&&td.cash==30&&td.health==100&&td.mode==TD_ROAM,
+           "the coherent bus/police replay advances ten real game seconds without fines or invented impacts");
+    expect(td_traffic_u[5]!=bus_u&&td_traffic_u[2]!=police_u,
+           "the native bus/police pair both progress rather than remaining mutually stopped for600VBlanks");
+    expect(bus_passed&&police_passed,"both opposing drivers pass completely beyond the original head-on conflict");
+    expect(!peak_overlap,"opposing bus and police never overlap their complete bodies during the joint-loop replay");
+}
+
 static void test_city_routes_and_walking(void) {
     reset_case();geometry=NATIVE_GRID;
     expect(!td_drivable(76,756),"car footprint rejects a narrow solid rail under its centre");
@@ -526,15 +591,21 @@ static void test_city_routes_and_walking(void) {
 
     reset_case();geometry=NATIVE_GRID;toronto_init();td.mode=TD_ROAM;
     td.u=560*16;td.v=720*16;td.onfoot=0;
-    int usable=1,continuous=1;
+    expect(td_traffic_u[5]==216*16&&td_traffic_v[5]==72*16&&td_traffic_leg[5]==2,
+           "fresh Core initialization starts the bus at its valid southbound lane corner");
+    int usable=1,continuous=1;unsigned bus_circuits=0;
+    UBYTE initial_bus_leg=td_traffic_leg[5],previous_bus_leg=initial_bus_leg;
     for(unsigned step=0;step<12000;step++) {
         UWORD old_u=td_traffic_u[5],old_v=td_traffic_v[5];
         td.seconds=step/60;td.subsecond=step%60;td_traffic_step();
+        if(td_traffic_leg[5]==initial_bus_leg&&previous_bus_leg!=initial_bus_leg)bus_circuits++;
+        previous_bus_leg=td_traffic_leg[5];
         if(td_distance(old_u,td_traffic_u[5])+td_distance(old_v,td_traffic_v[5])>8)continuous=0;
         for(unsigned i=0;i<6;i++)if(!td_drivable(td_traffic_u[i]>>4,td_traffic_v[i]>>4))usable=0;
     }
     expect(continuous,"autonomous bus has continuous movement through clock changes and route loops");
     expect(usable,"all six vehicles follow usable native road footprints through a long route run");
+    expect(bus_circuits>0,"the bus completes its actual full route with all six fleet loops active");
 
     reset_case();geometry=NATIVE_GRID;int sidewalk=1;
     for(unsigned route=0;route<TD_PEDESTRIAN_ROUTES;route++)
@@ -2346,7 +2417,7 @@ static void test_banked_traffic_segments(void) {
         {{840,168},{840,184},{48,184},{48,168}},
         {{840,632},{840,648},{48,648},{48,632}},
         {{824,792},{808,792},{808,48},{824,48}},
-        {{144,64},{208,64},{208,176},{640,176},{816,176},{816,64}}
+        {{640,72},{216,72},{216,168},{640,168},{808,168},{808,72}}
     };
     native_case();UBYTE legs[6]={0};UWORD from_u,from_v;
     for(UBYTE slot=0;slot<6;slot++)for(UBYTE leg=0;leg<(slot==5?6:4);leg++){
@@ -3201,7 +3272,7 @@ int main(void) {
     test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();test_pedestrian_phase_reuse();
     test_signal_and_autonomous_traffic();
     test_fractional_fleet_presentation();test_parked_visibility_context();test_route_selection_invalid_context();
-    test_city_routes_and_walking();
+    test_core_bus_lane_joint_loop();test_city_routes_and_walking();
     test_audio_event_integration();
     test_bounded_corner_assist();
     test_atomic_saves();test_valid_crc_invalid_states();test_legacy_and_transit_recovery();
