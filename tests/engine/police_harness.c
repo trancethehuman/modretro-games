@@ -99,7 +99,8 @@ static void test_registered_waypoints(void){
         }
     }
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)
-        expect(successes[district]>0,"every actually registered district supports collision-backed police road choices");
+        expect(oracle_traffic_enabled[district]?successes[district]>0:!successes[district],
+               "actual road districts support police choices while the foot-only Island has no invented junction or pursuit");
     expect(navigate(0,48*16,168*16,640*16,528*16,0,24),
            "police leaves its original College loop and actually reaches a distant perpendicular courier road");
     expect(navigate(0,640*16,528*16,840*16,168*16,3,24),
@@ -108,6 +109,29 @@ static void test_registered_waypoints(void){
            "West police navigates from its short industrial loop onto a different collision-backed road");
     expect(navigate(3,384*16,288*16,816*16,496*16,0,24),
            "East police actually traverses road junctions toward a distant courier target");
+}
+static void test_actual_island_exclusion(void){
+    const UWORD anchors[6][2]={{320,280},{512,448},{920,280},{160,600},{512,744},{904,440}};
+    unsigned foot_tiles=0;
+    load(TD_DISTRICT_ISLANDS);
+    for(unsigned y=0;y<122;y++)for(unsigned x=0;x<128;x++){
+        expect(grid[y*128+x]==15||grid[y*128+x]==16,"actual Island collision consists of blocked water/buildings and public foot-only ground");
+        if(grid[y*128+x]!=16)continue;
+        foot_tiles++;td_police_plan_t plan={123,456,77,99},before=plan;
+        expect(!td_police_plan(TD_DISTRICT_ISLANDS,3,(x*8+4)*16,(y*8+4)*16,
+                              512*16,448*16,0,&plan)&&!memcmp(&plan,&before,sizeof(plan)),
+               "every actual Island foot tile rejects a vehicle pursuit without replacing its cached plan");
+    }
+    expect(foot_tiles>100,"Island police exclusion is tested on a substantial real walkable scene rather than an empty mocked map");
+    for(unsigned anchor=0;anchor<6;anchor++)for(unsigned heading=0;heading<4;heading++)
+        for(unsigned heat=0;heat<=3;heat++)for(unsigned fraction=0;fraction<16;fraction++){
+            td_police_plan_t plan={123,456,77,99},before=plan;
+            unsigned u=anchors[anchor][0]*16+fraction,v=anchors[anchor][1]*16+15-fraction;
+            expect(grid[(v/16/8)*128+u/16/8]==16,"each preserved public ferry/client checkpoint uses actual foot ground");
+            expect(!td_police_plan(TD_DISTRICT_ISLANDS,heat,u,v,560*16,720*16,heading,&plan)&&
+                   !memcmp(&plan,&before,sizeof(plan)),
+                   "all attention levels, headings and Q4 phases preserve Island checkpoint pursuit rejection");
+        }
 }
 static void test_invalid_and_obstructions(void){
     load(0);td_police_plan_t plan={123,456,77,99},before=plan;
@@ -164,7 +188,7 @@ static void test_caller_admission(void){
            "pursuing police still respects a visible pedestrian footprint");
 }
 int main(void){
-    test_registered_waypoints();test_invalid_and_obstructions();test_caller_admission();
+    test_registered_waypoints();test_actual_island_exclusion();test_invalid_and_obstructions();test_caller_admission();
     printf("Police planner: %u checks, %u failures\n",checks,failures);
     return failures?EXIT_FAILURE:EXIT_SUCCESS;
 }

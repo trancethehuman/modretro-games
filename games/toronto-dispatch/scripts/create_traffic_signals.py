@@ -11,6 +11,7 @@ from pathlib import Path
 
 from check_campaign import decode
 from city_layout import COLS, ROWS
+from district_sources import read_district_art
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADER = ROOT / "project/plugins/toronto-driving/engine/include/td_traffic_signals.h"
@@ -50,6 +51,11 @@ def model():
         assert background["id"] == scene["backgroundId"]
         attrs = decode(background["tileColors"])
         assert len(attrs) == len(grid)
+        if district.get("traffic_enabled", True) is False:
+            art = read_district_art(district)
+            assert art["roads"] == [] and art["traffic_loops"] == [] and 0 not in grid, 'Disabled traffic must not hide drivable roads'
+            output.append([])
+            continue
 
         def drivable(u, v):
             return 8 <= u <= 1016 and 8 <= v <= 968 and all(
@@ -64,7 +70,7 @@ def model():
             roads += [[(x, 24), (x, 816)] for x in COLS]
         else:
             slug = district["scene"].removeprefix("toronto_")
-            art = json.loads((ROOT / f"content/districts/{slug}_art.json").read_text())
+            art = read_district_art(district)
             roads = [road["points"] for road in art["roads"]]
         segments = [(a, b) for road in roads for a, b in zip(road, road[1:])]
         assert all((a[0] == b[0]) != (a[1] == b[1]) for a, b in segments)
@@ -113,7 +119,8 @@ def source(data=None):
             text += "#ifndef TD_TRAFFIC_SIGNALS_HORIZONTAL_ONLY\n"
         text += f"static const td_signal_t td_signals_{name}[]={{\n"
         for signals in data:
-            text += "  " + ",".join("{%d,%d,%d,%d,%d}" % p for p in sorted(signals, key=order)) + ",\n"
+            if signals:
+                text += "  " + ",".join("{%d,%d,%d,%d,%d}" % p for p in sorted(signals, key=order)) + ",\n"
         text += "};\n"
         if name == "v":
             text += "#endif\n"

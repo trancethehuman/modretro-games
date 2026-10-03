@@ -115,6 +115,20 @@ static void test_registered_graph(void){
     char name[19];
     expect(td_world_name(3,name)&&strcmp(name,"TORONTO EAST END")==0,
            "registered East district name is available through the banked metadata API");
+    expect(td_world_name(TD_DISTRICT_ISLANDS,name)&&!strcmp(name,"TORONTO ISLANDS"),
+           "registered Island district has its own native world name");
+    for(UBYTE mainland=0;mainland<TD_DISTRICT_ISLANDS;mainland++)for(UBYTE foot=0;foot<2;foot++){
+        td_portal_t prior;memset(&portal,0xA5,sizeof(portal));prior=portal;
+        expect(!td_world_route(mainland,TD_DISTRICT_ISLANDS,foot,512,448,512,448,&portal)&&
+               !memcmp(&portal,&prior,sizeof(portal)),
+               "Island access never fabricates an ordinary mainland foot or car seam");
+        expect(!td_world_route(TD_DISTRICT_ISLANDS,mainland,foot,512,448,640,784,&portal)&&
+               !memcmp(&portal,&prior,sizeof(portal)),
+               "Island return guidance cannot become an invisible mainland portal");
+    }
+    for(UWORD i=0;i<TD_PORTALS;i++)expect(td_portals[i].from!=TD_DISTRICT_ISLANDS&&
+                                       td_portals[i].to!=TD_DISTRICT_ISLANDS,
+                                       "every registered road seam remains wholly on the mainland");
 }
 
 static void test_crossings(void){
@@ -177,6 +191,24 @@ static void test_crossings(void){
 static void test_traffic_and_names(void){
     UWORD u[6],v[6];UBYTE legs[6];td_traffic_sample_t samples[6],prior[6];
     for(unsigned district=1;district<TD_DISTRICT_COUNT;district++){
+        if(district==TD_DISTRICT_ISLANDS){
+            UWORD saved_u[6],saved_v[6];UBYTE saved_legs[6];
+            memset(u,0xA5,sizeof(u));memset(v,0x5A,sizeof(v));memset(legs,0xA5,sizeof(legs));
+            memset(samples,0xA5,sizeof(samples));memcpy(saved_u,u,sizeof(u));memcpy(saved_v,v,sizeof(v));
+            memcpy(saved_legs,legs,sizeof(legs));memcpy(prior,samples,sizeof(samples));
+            for(unsigned i=0;i<6;i++)expect(!td_west_traffic_counts[district-1][i],
+                                          "the foot-only district has six explicitly disabled traffic slots");
+            expect(!td_world_traffic_init(district,u,v,legs,samples)&&
+                   !memcmp(u,saved_u,sizeof(u))&&!memcmp(v,saved_v,sizeof(v))&&
+                   !memcmp(legs,saved_legs,sizeof(legs))&&!memcmp(samples,prior,sizeof(samples)),
+                   "disabled Island fleet initialization preserves every caller-owned byte");
+            for(unsigned leg=0;leg<256;leg++){
+                memset(legs,leg,sizeof(legs));
+                expect(!td_world_traffic_samples(district,legs,samples)&&!memcmp(samples,prior,sizeof(samples)),
+                       "all stale Island traffic leg combinations are rejected without publishing coordinates");
+            }
+            continue;
+        }
         expect(td_world_traffic_init(district,u,v,legs,samples),"all six western actors initialize in one query");
         for(unsigned i=0;i<6;i++){
             expect(u[i]==td_west_traffic[district-1][i][0][0]*16&&v[i]==td_west_traffic[district-1][i][0][1]*16&&

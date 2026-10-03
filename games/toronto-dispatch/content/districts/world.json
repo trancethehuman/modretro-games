@@ -1,5 +1,5 @@
 {
-  "status": "Five authored native scenes; corrected a212dd9e candidate passes scoped native Port Lands foot entry/roaming/map/reset/aircraft/return and core delivery/driving. All-city, all-vehicle, campaign-duration and hardware acceptance remain pending; earlier evidence retains its own ROM identities.",
+  "status": "Six registered original native scenes; Islands source integration awaits independent campaign/save migration, official compiled gates and native travel. All-city duration and physical acceptance remain separate.",
   "projection": "North-up local pixels; each scene is 1024 by 976. Distances and seam lanes are original compression.",
   "districts": [
     {
@@ -51,6 +51,18 @@
       "height_pixels": 976,
       "atlas_x": 3072,
       "atlas_y": 976
+    },
+    {
+      "id": 5,
+      "name": "TORONTO ISLANDS",
+      "scene": "toronto_islands",
+      "symbol": "scene_toronto_islands",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 2048,
+      "atlas_y": 976,
+      "art_source": "content/districts/island_art.json",
+      "traffic_enabled": false
     }
   ],
   "portals": [

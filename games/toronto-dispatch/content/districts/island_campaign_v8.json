@@ -1,0 +1,2796 @@
+{
+  "schema_version": 1,
+  "captured_source_checkpoint": "d454020",
+  "notice": "Public immutable native campaign fields before Islands relocation; not SRAM or private device data. Only six declared stop u/v/district triples may change; all 96 job/completion ordinals and fields remain exact.",
+  "native_stop_fields": [
+    "id",
+    "u",
+    "v",
+    "name",
+    "transit",
+    "district",
+    "reserved"
+  ],
+  "native_quest_fields": [
+    "id",
+    "title",
+    "brief",
+    "kind_id",
+    "required_vehicle",
+    "min_completed",
+    "route",
+    "time_limit_seconds",
+    "reward"
+  ],
+  "stops": [
+    {
+      "id": 0,
+      "u": 560,
+      "v": 720,
+      "name": "UNION DEPOT",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 1,
+      "u": 768,
+      "v": 720,
+      "name": "ST LAWRENCE",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 2,
+      "u": 816,
+      "v": 720,
+      "name": "DISTILLERY",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 3,
+      "u": 560,
+      "v": 528,
+      "name": "CITY HALL",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 4,
+      "u": 336,
+      "v": 528,
+      "name": "QUEEN WEST",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 5,
+      "u": 336,
+      "v": 400,
+      "name": "AGO / GRANGE",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 6,
+      "u": 480,
+      "v": 64,
+      "name": "ROM / BLOOR",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 7,
+      "u": 208,
+      "v": 400,
+      "name": "KENSINGTON",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 8,
+      "u": 80,
+      "v": 528,
+      "name": "DUFFERIN",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 9,
+      "u": 944,
+      "v": 528,
+      "name": "RIVERSIDE",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 10,
+      "u": 640,
+      "v": 784,
+      "name": "FERRY TERMINAL",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 11,
+      "u": 816,
+      "v": 784,
+      "name": "EAST BAYFRONT",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 12,
+      "u": 640,
+      "v": 640,
+      "name": "KING STATION",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 13,
+      "u": 640,
+      "v": 528,
+      "name": "QUEEN STATION",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 14,
+      "u": 640,
+      "v": 400,
+      "name": "DUNDAS STATION",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 15,
+      "u": 640,
+      "v": 288,
+      "name": "COLLEGE STATION",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 16,
+      "u": 640,
+      "v": 176,
+      "name": "WELLESLEY",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 17,
+      "u": 640,
+      "v": 64,
+      "name": "BLOOR-YONGE",
+      "transit": 1,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 18,
+      "u": 144,
+      "v": 64,
+      "name": "OSSINGTON BUS",
+      "transit": 2,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 19,
+      "u": 816,
+      "v": 64,
+      "name": "CASTLE FRANK",
+      "transit": 2,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 20,
+      "u": 444,
+      "v": 928,
+      "name": "HANLANS POINT",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 21,
+      "u": 720,
+      "v": 920,
+      "name": "CENTRE ISLAND",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 22,
+      "u": 848,
+      "v": 896,
+      "name": "WARDS ISLAND",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 23,
+      "u": 336,
+      "v": 720,
+      "name": "CN TOWER",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 24,
+      "u": 560,
+      "v": 928,
+      "name": "HANLAN SERVICE",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 25,
+      "u": 760,
+      "v": 944,
+      "name": "CENTRE PARK POST",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 26,
+      "u": 912,
+      "v": 912,
+      "name": "WARD COTTAGE POST",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 27,
+      "u": 976,
+      "v": 288,
+      "name": "DUFFERIN COLLEGE",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0
+    },
+    {
+      "id": 28,
+      "u": 800,
+      "v": 64,
+      "name": "LANSDOWNE BLOOR",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0
+    },
+    {
+      "id": 29,
+      "u": 864,
+      "v": 528,
+      "name": "PARKDALE QUEEN",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0
+    },
+    {
+      "id": 30,
+      "u": 416,
+      "v": 352,
+      "name": "RONCY HOWARD PARK",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0
+    },
+    {
+      "id": 31,
+      "u": 544,
+      "v": 432,
+      "name": "SORAUREN SERVICE",
+      "transit": 0,
+      "district": 1,
+      "reserved": 0
+    },
+    {
+      "id": 32,
+      "u": 656,
+      "v": 272,
+      "name": "BLOOR PARK GATE",
+      "transit": 0,
+      "district": 2,
+      "reserved": 0
+    },
+    {
+      "id": 33,
+      "u": 944,
+      "v": 608,
+      "name": "PARKSIDE SOUTH",
+      "transit": 0,
+      "district": 2,
+      "reserved": 0
+    },
+    {
+      "id": 34,
+      "u": 784,
+      "v": 608,
+      "name": "COLBORNE SERVICE",
+      "transit": 0,
+      "district": 2,
+      "reserved": 1
+    },
+    {
+      "id": 35,
+      "u": 144,
+      "v": 64,
+      "name": "DANFORTH HALL",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 36,
+      "u": 320,
+      "v": 144,
+      "name": "WITHROW POST",
+      "transit": 0,
+      "district": 3,
+      "reserved": 1
+    },
+    {
+      "id": 37,
+      "u": 128,
+      "v": 528,
+      "name": "RIVERSIDE QUEEN",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 38,
+      "u": 544,
+      "v": 288,
+      "name": "GERRARD / PAPE",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 39,
+      "u": 384,
+      "v": 608,
+      "name": "CARLAW WORKS",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 40,
+      "u": 816,
+      "v": 496,
+      "name": "LESLIE / QUEEN",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 41,
+      "u": 880,
+      "v": 312,
+      "name": "GREENWOOD POST",
+      "transit": 0,
+      "district": 3,
+      "reserved": 1
+    },
+    {
+      "id": 42,
+      "u": 880,
+      "v": 496,
+      "name": "ASHBRIDGE QUEEN",
+      "transit": 0,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 43,
+      "u": 836,
+      "v": 556,
+      "name": "QUEEN PARKDALE",
+      "transit": 4,
+      "district": 1,
+      "reserved": 0
+    },
+    {
+      "id": 44,
+      "u": 116,
+      "v": 556,
+      "name": "QUEEN DUFFERIN",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 45,
+      "u": 372,
+      "v": 556,
+      "name": "QUEEN SPADINA",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 46,
+      "u": 676,
+      "v": 556,
+      "name": "QUEEN YONGE",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 47,
+      "u": 980,
+      "v": 556,
+      "name": "QUEEN BROADVIEW",
+      "transit": 4,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 48,
+      "u": 128,
+      "v": 556,
+      "name": "QUEEN SAULTER",
+      "transit": 4,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 49,
+      "u": 780,
+      "v": 524,
+      "name": "QUEEN LESLIE",
+      "transit": 4,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 50,
+      "u": 880,
+      "v": 524,
+      "name": "QUEEN ALTON",
+      "transit": 4,
+      "district": 3,
+      "reserved": 0
+    },
+    {
+      "id": 51,
+      "u": 672,
+      "v": 272,
+      "name": "CHANNEL STAGE",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0
+    },
+    {
+      "id": 52,
+      "u": 312,
+      "v": 432,
+      "name": "FIRE HALL BOOKS",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1
+    },
+    {
+      "id": 53,
+      "u": 144,
+      "v": 432,
+      "name": "CRANE WALK",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1
+    },
+    {
+      "id": 54,
+      "u": 704,
+      "v": 576,
+      "name": "TURNING BASIN",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0
+    },
+    {
+      "id": 55,
+      "u": 616,
+      "v": 808,
+      "name": "UNWIN WORKS",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0
+    },
+    {
+      "id": 56,
+      "u": 432,
+      "v": 888,
+      "name": "BEACH MAIL",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1
+    },
+    {
+      "id": 57,
+      "u": 128,
+      "v": 576,
+      "name": "POLSON PACKET",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0
+    },
+    {
+      "id": 58,
+      "u": 352,
+      "v": 592,
+      "name": "RIVERBANK PARCEL",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1
+    }
+  ],
+  "quests": [
+    {
+      "id": "contract-01",
+      "title": "MARKET START",
+      "brief": [
+        "MARKET PARCEL",
+        "UNION TO MARKET"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        1
+      ],
+      "time_limit_seconds": 120,
+      "reward": 86
+    },
+    {
+      "id": "contract-02",
+      "title": "FIRST ART CRATE",
+      "brief": [
+        "ART CRATE FOR AGO",
+        "BRAKE BEFORE TURNS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        5
+      ],
+      "time_limit_seconds": 120,
+      "reward": 119
+    },
+    {
+      "id": "contract-03",
+      "title": "DISTILLERY FILES",
+      "brief": [
+        "SEALED OFFICE FILE",
+        "BEAT THE DEADLINE"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        2
+      ],
+      "time_limit_seconds": 120,
+      "reward": 102
+    },
+    {
+      "id": "contract-04",
+      "title": "SHORE SUPPLIES",
+      "brief": [
+        "TRUCK LOADS ONLY",
+        "MARKET TO HARBOUR"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 3,
+      "route": [
+        0,
+        1,
+        2,
+        11
+      ],
+      "time_limit_seconds": 130,
+      "reward": 133
+    },
+    {
+      "id": "contract-05",
+      "title": "FIRST CONNECTION",
+      "brief": [
+        "POCKET MAIL RELAY",
+        "TRY TRAIN AND BUS"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        17,
+        16,
+        18,
+        16,
+        19,
+        16,
+        0
+      ],
+      "time_limit_seconds": 235,
+      "reward": 222
+    },
+    {
+      "id": "contract-06",
+      "title": "STATION PICKUPS",
+      "brief": [
+        "PASSENGERS BY CAR",
+        "SMOOTH CITY RIDES"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        1,
+        2,
+        9,
+        17,
+        6,
+        23,
+        0
+      ],
+      "time_limit_seconds": 235,
+      "reward": 229
+    },
+    {
+      "id": "contract-07",
+      "title": "SIGNED AND SEALED",
+      "brief": [
+        "COLLECT SIGNATURES",
+        "RETURN TO UNION"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 0,
+      "route": [
+        0,
+        3,
+        1,
+        0
+      ],
+      "time_limit_seconds": 145,
+      "reward": 120
+    },
+    {
+      "id": "contract-08",
+      "title": "CENTRE LETTERS",
+      "brief": [
+        "PARK THEN FERRY",
+        "WALK THE LAST LEG"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        21,
+        25,
+        21,
+        10
+      ],
+      "time_limit_seconds": 195,
+      "reward": 118
+    },
+    {
+      "id": "contract-09",
+      "title": "SHOPFRONT ROUND",
+      "brief": [
+        "SMALL SHOP PARCELS",
+        "LINK LOCAL STOPS"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 6,
+      "route": [
+        0,
+        1,
+        2,
+        11,
+        4,
+        7,
+        8,
+        0
+      ],
+      "time_limit_seconds": 230,
+      "reward": 208
+    },
+    {
+      "id": "contract-10",
+      "title": "GALLERY LOAN",
+      "brief": [
+        "FRAMED PRINTS",
+        "DELIVER INTACT"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 6,
+      "route": [
+        5,
+        6,
+        3,
+        4,
+        7,
+        5
+      ],
+      "time_limit_seconds": 190,
+      "reward": 198
+    },
+    {
+      "id": "contract-11",
+      "title": "CROSSING DEADLINE",
+      "brief": [
+        "CIVIC FILE RUN",
+        "CHOOSE YOUR BRIDGE"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 6,
+      "route": [
+        0,
+        3,
+        12,
+        2,
+        9,
+        19,
+        17,
+        0
+      ],
+      "time_limit_seconds": 160,
+      "reward": 229
+    },
+    {
+      "id": "contract-12",
+      "title": "STOCK THE STALLS",
+      "brief": [
+        "MARKET STOCK TRUCK",
+        "WEST TO OLD TOWN"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 6,
+      "route": [
+        11,
+        2,
+        1,
+        0,
+        23,
+        8,
+        4,
+        0
+      ],
+      "time_limit_seconds": 205,
+      "reward": 219
+    },
+    {
+      "id": "contract-13",
+      "title": "BUS CONNECTIONS",
+      "brief": [
+        "STATION LETTERS",
+        "BUS AT WELLESLEY"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 6,
+      "route": [
+        17,
+        15,
+        0,
+        16,
+        19,
+        16,
+        18,
+        16,
+        17
+      ],
+      "time_limit_seconds": 245,
+      "reward": 244
+    },
+    {
+      "id": "contract-14",
+      "title": "MUSEUM OUTING",
+      "brief": [
+        "MUSEUM VISIT RIDES",
+        "KEEP THE CAR CALM"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        6,
+        17,
+        3,
+        1,
+        11,
+        23,
+        0
+      ],
+      "time_limit_seconds": 245,
+      "reward": 245
+    },
+    {
+      "id": "contract-15",
+      "title": "HARBOUR RECEIPTS",
+      "brief": [
+        "SIGNED CARGO SLIPS",
+        "BACK TO THE DEPOT"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 6,
+      "route": [
+        0,
+        11,
+        2,
+        1,
+        3,
+        0
+      ],
+      "time_limit_seconds": 175,
+      "reward": 158
+    },
+    {
+      "id": "contract-16",
+      "title": "HANLAN POST",
+      "brief": [
+        "HANLAN LETTERS",
+        "FERRY THEN FOOT"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        20,
+        24,
+        20,
+        10
+      ],
+      "time_limit_seconds": 205,
+      "reward": 130
+    },
+    {
+      "id": "contract-17",
+      "title": "MARKET TO MARKET",
+      "brief": [
+        "NEIGHBOURHOOD MAIL",
+        "WEST TO EAST ROUND"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        8,
+        7,
+        5,
+        4,
+        3,
+        1,
+        2,
+        11,
+        0
+      ],
+      "time_limit_seconds": 220,
+      "reward": 214
+    },
+    {
+      "id": "contract-18",
+      "title": "OPENING NIGHT ART",
+      "brief": [
+        "EXHIBITION CRATES",
+        "NO HARD IMPACTS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        6,
+        5,
+        7,
+        4,
+        3,
+        1,
+        23,
+        6
+      ],
+      "time_limit_seconds": 245,
+      "reward": 257
+    },
+    {
+      "id": "contract-19",
+      "title": "BRIDGE DOCUMENTS",
+      "brief": [
+        "URGENT CITY MAIL",
+        "BRIDGE TO BRIDGE"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        7,
+        3,
+        14,
+        16,
+        19,
+        9,
+        2,
+        0
+      ],
+      "time_limit_seconds": 155,
+      "reward": 239
+    },
+    {
+      "id": "contract-20",
+      "title": "EVENT EQUIPMENT",
+      "brief": [
+        "TRUCK EVENT LOADS",
+        "RETURN EMPTY CASES"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 12,
+      "route": [
+        2,
+        11,
+        23,
+        8,
+        7,
+        4,
+        1,
+        0
+      ],
+      "time_limit_seconds": 225,
+      "reward": 249
+    },
+    {
+      "id": "contract-21",
+      "title": "CAMPUS ENVELOPES",
+      "brief": [
+        "LIGHT CAMPUS MAIL",
+        "COMPARE THE ROUTES"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        18,
+        16,
+        0,
+        12,
+        15,
+        17,
+        16,
+        19,
+        16,
+        0
+      ],
+      "time_limit_seconds": 250,
+      "reward": 266
+    },
+    {
+      "id": "contract-22",
+      "title": "AUDIENCE ARRIVALS",
+      "brief": [
+        "EVENT PASSENGERS",
+        "CAR TO EACH DOOR"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        17,
+        6,
+        5,
+        4,
+        23,
+        11,
+        2,
+        1,
+        0
+      ],
+      "time_limit_seconds": 225,
+      "reward": 245
+    },
+    {
+      "id": "contract-23",
+      "title": "PERMIT LOOP",
+      "brief": [
+        "SIGNED EVENT FORMS",
+        "RETURN TO START"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        3,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        0
+      ],
+      "time_limit_seconds": 245,
+      "reward": 238
+    },
+    {
+      "id": "contract-24",
+      "title": "WARD COTTAGE MAIL",
+      "brief": [
+        "WARD LETTER ROUND",
+        "LEAVE CAR MAINLAND"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        22,
+        26,
+        22,
+        10
+      ],
+      "time_limit_seconds": 200,
+      "reward": 142
+    },
+    {
+      "id": "contract-25",
+      "title": "WEST END THREAD",
+      "brief": [
+        "SHOP REPAIR KITS",
+        "STOPS IN ORDER"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        0,
+        23,
+        4,
+        8,
+        7,
+        5,
+        6,
+        3,
+        1,
+        0
+      ],
+      "time_limit_seconds": 260,
+      "reward": 264
+    },
+    {
+      "id": "contract-26",
+      "title": "GLASS ACROSS TOWN",
+      "brief": [
+        "GLASS NEEDS CARE",
+        "PLAN WIDE TURNS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        1,
+        2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        4,
+        23,
+        1
+      ],
+      "time_limit_seconds": 255,
+      "reward": 285
+    },
+    {
+      "id": "contract-27",
+      "title": "NORTH SOUTH FILES",
+      "brief": [
+        "OFFICE CUTOFF RUN",
+        "STOP AT THE BEACON"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        0,
+        17,
+        19,
+        9,
+        2,
+        11,
+        23,
+        3,
+        0
+      ],
+      "time_limit_seconds": 175,
+      "reward": 277
+    },
+    {
+      "id": "contract-28",
+      "title": "CITY WORK CREW",
+      "brief": [
+        "WORK CREW TOOLS",
+        "TRUCK EACH STOP"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 18,
+      "route": [
+        8,
+        7,
+        4,
+        23,
+        0,
+        1,
+        2,
+        11,
+        9,
+        8
+      ],
+      "time_limit_seconds": 250,
+      "reward": 284
+    },
+    {
+      "id": "contract-29",
+      "title": "YONGE CONNECTION",
+      "brief": [
+        "STATION MAIL",
+        "KEEP FARE MONEY"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        0,
+        14,
+        17,
+        15,
+        12,
+        16,
+        18,
+        16,
+        19,
+        16,
+        0
+      ],
+      "time_limit_seconds": 285,
+      "reward": 311
+    },
+    {
+      "id": "contract-30",
+      "title": "CITY TOUR RIDES",
+      "brief": [
+        "VISITOR RIDES",
+        "SMOOTH CITY TOUR"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 18,
+      "route": [
+        0,
+        23,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        1,
+        0
+      ],
+      "time_limit_seconds": 255,
+      "reward": 285
+    },
+    {
+      "id": "contract-31",
+      "title": "CROSS CITY INK",
+      "brief": [
+        "SIGN AT EACH STOP",
+        "UNION GETS COPIES"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        0,
+        8,
+        7,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        1,
+        0
+      ],
+      "time_limit_seconds": 285,
+      "reward": 282
+    },
+    {
+      "id": "contract-32",
+      "title": "WEST CENTRE POST",
+      "brief": [
+        "TWO ISLAND ROUNDS",
+        "TRANSFER MAINLAND"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25,
+        21,
+        10
+      ],
+      "time_limit_seconds": 310,
+      "reward": 202
+    },
+    {
+      "id": "contract-33",
+      "title": "HARBOUR SHOP MAIL",
+      "brief": [
+        "WATERFRONT PARCELS",
+        "SHORE TO CITY"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        11,
+        2,
+        1,
+        0,
+        23,
+        4,
+        7,
+        8,
+        3,
+        11
+      ],
+      "time_limit_seconds": 250,
+      "reward": 264
+    },
+    {
+      "id": "contract-34",
+      "title": "SHORE DISPLAY",
+      "brief": [
+        "FRAGILE DISPLAY",
+        "TAKE CARE AT CURBS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        5,
+        4,
+        23,
+        0,
+        11,
+        2,
+        1,
+        3,
+        6,
+        5
+      ],
+      "time_limit_seconds": 255,
+      "reward": 293
+    },
+    {
+      "id": "contract-35",
+      "title": "DOCK OFFICE DASH",
+      "brief": [
+        "URGENT SHORE FILES",
+        "BEAT THE CLOCK"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        0,
+        11,
+        2,
+        9,
+        19,
+        17,
+        15,
+        3,
+        23,
+        0
+      ],
+      "time_limit_seconds": 175,
+      "reward": 290
+    },
+    {
+      "id": "contract-36",
+      "title": "HARBOUR LOADS",
+      "brief": [
+        "BULKY SHORE CARGO",
+        "WIDE TRUCK TURNS"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 24,
+      "route": [
+        0,
+        23,
+        11,
+        2,
+        1,
+        9,
+        8,
+        4,
+        3,
+        0
+      ],
+      "time_limit_seconds": 255,
+      "reward": 303
+    },
+    {
+      "id": "contract-37",
+      "title": "SHORE CONNECTION",
+      "brief": [
+        "SMALL SHORE KIT",
+        "TRAIN THEN WALK"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        11,
+        0,
+        17,
+        16,
+        19,
+        16,
+        18,
+        16,
+        12,
+        10
+      ],
+      "time_limit_seconds": 260,
+      "reward": 298
+    },
+    {
+      "id": "contract-38",
+      "title": "FERRY CONNECTIONS",
+      "brief": [
+        "RIDES TO THE SHORE",
+        "PARK AT DROP OFFS"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 24,
+      "route": [
+        0,
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        10,
+        23,
+        0
+      ],
+      "time_limit_seconds": 265,
+      "reward": 304
+    },
+    {
+      "id": "contract-39",
+      "title": "CARGO SIGNOFF",
+      "brief": [
+        "SIGNED DOCK PAPERS",
+        "BRING COPIES HOME"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        0,
+        11,
+        2,
+        9,
+        19,
+        17,
+        6,
+        3,
+        1,
+        0
+      ],
+      "time_limit_seconds": 265,
+      "reward": 278
+    },
+    {
+      "id": "contract-40",
+      "title": "CENTRE WARD POST",
+      "brief": [
+        "TWO ISLAND PARCELS",
+        "FOOTPATHS TO DOORS"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        10,
+        21,
+        25,
+        21,
+        10,
+        22,
+        26,
+        22,
+        10
+      ],
+      "time_limit_seconds": 305,
+      "reward": 214
+    },
+    {
+      "id": "contract-41",
+      "title": "CULTURE PARCELS",
+      "brief": [
+        "BOOKS AND PROGRAMS",
+        "MUSEUM TO MARKET"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        6,
+        17,
+        3,
+        1,
+        2,
+        11,
+        23,
+        4,
+        7,
+        5,
+        6
+      ],
+      "time_limit_seconds": 275,
+      "reward": 301
+    },
+    {
+      "id": "contract-42",
+      "title": "ART EXCHANGE",
+      "brief": [
+        "FRAMED ART LOANS",
+        "KEEP CRATES WHOLE"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        5,
+        7,
+        8,
+        4,
+        23,
+        0,
+        1,
+        2,
+        3,
+        6,
+        5
+      ],
+      "time_limit_seconds": 275,
+      "reward": 325
+    },
+    {
+      "id": "contract-43",
+      "title": "PRINT SHOP CUTOFF",
+      "brief": [
+        "PRINT SHOP FILES",
+        "TIME THE CROSSINGS"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        7,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        3,
+        0
+      ],
+      "time_limit_seconds": 175,
+      "reward": 301
+    },
+    {
+      "id": "contract-44",
+      "title": "STAGE CASES",
+      "brief": [
+        "HEAVY EVENT CASES",
+        "TRUCK LOADING RUN"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 30,
+      "route": [
+        23,
+        0,
+        1,
+        2,
+        11,
+        9,
+        19,
+        6,
+        5,
+        4,
+        23
+      ],
+      "time_limit_seconds": 265,
+      "reward": 322
+    },
+    {
+      "id": "contract-45",
+      "title": "ART VIA TRANSIT",
+      "brief": [
+        "GALLERY MAIL",
+        "SMART TRANSFERS"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        5,
+        14,
+        17,
+        16,
+        18,
+        16,
+        19,
+        16,
+        12,
+        0,
+        5
+      ],
+      "time_limit_seconds": 270,
+      "reward": 323
+    },
+    {
+      "id": "contract-46",
+      "title": "GALLERY NIGHT",
+      "brief": [
+        "GALLERY CAR RIDES",
+        "PROTECT PASSENGERS"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 30,
+      "route": [
+        0,
+        5,
+        7,
+        8,
+        4,
+        23,
+        11,
+        2,
+        9,
+        6,
+        0
+      ],
+      "time_limit_seconds": 310,
+      "reward": 355
+    },
+    {
+      "id": "contract-47",
+      "title": "PROGRAM APPROVAL",
+      "brief": [
+        "COLLECT APPROVALS",
+        "RETURN ORIGINAL"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        0,
+        5,
+        7,
+        8,
+        4,
+        23,
+        11,
+        2,
+        9,
+        3,
+        0
+      ],
+      "time_limit_seconds": 280,
+      "reward": 302
+    },
+    {
+      "id": "contract-48",
+      "title": "WARD HANLAN POST",
+      "brief": [
+        "EAST AND WEST POST",
+        "FERRY FOOT FERRY"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        10,
+        22,
+        26,
+        22,
+        10,
+        20,
+        24,
+        20,
+        10
+      ],
+      "time_limit_seconds": 310,
+      "reward": 226
+    },
+    {
+      "id": "contract-49",
+      "title": "LATE SHOP ROUND",
+      "brief": [
+        "LAST SHOP PARCELS",
+        "CITY STILL MOVES"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        0,
+        1,
+        2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        7,
+        8,
+        4,
+        0
+      ],
+      "time_limit_seconds": 295,
+      "reward": 328
+    },
+    {
+      "id": "contract-50",
+      "title": "EVENING EXHIBIT",
+      "brief": [
+        "FINAL EXHIBIT LOAD",
+        "SLOW IN TURNS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        6,
+        3,
+        1,
+        2,
+        11,
+        23,
+        4,
+        8,
+        7,
+        5,
+        6
+      ],
+      "time_limit_seconds": 280,
+      "reward": 340
+    },
+    {
+      "id": "contract-51",
+      "title": "LAST FILE RUN",
+      "brief": [
+        "URGENT FINAL FILES",
+        "PLAN THEN DRIVE"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        0,
+        8,
+        7,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        3,
+        0
+      ],
+      "time_limit_seconds": 200,
+      "reward": 343
+    },
+    {
+      "id": "contract-52",
+      "title": "CLOSING STOCK",
+      "brief": [
+        "SHOP STOCK RETURNS",
+        "WIDE TURNS LOADED"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 36,
+      "route": [
+        1,
+        2,
+        11,
+        23,
+        4,
+        8,
+        7,
+        5,
+        3,
+        0,
+        1
+      ],
+      "time_limit_seconds": 250,
+      "reward": 323
+    },
+    {
+      "id": "contract-53",
+      "title": "NIGHT NETWORK",
+      "brief": [
+        "DISPATCH LETTERS",
+        "CATCH DEPARTURE"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        19,
+        16,
+        12,
+        0,
+        17,
+        15,
+        16,
+        18,
+        16,
+        14,
+        0
+      ],
+      "time_limit_seconds": 275,
+      "reward": 338
+    },
+    {
+      "id": "contract-54",
+      "title": "EVENING RIDES",
+      "brief": [
+        "LATE CITY RIDES",
+        "SAFE CAR JOURNEYS"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 36,
+      "route": [
+        0,
+        1,
+        2,
+        11,
+        23,
+        4,
+        8,
+        7,
+        5,
+        6,
+        17,
+        0
+      ],
+      "time_limit_seconds": 295,
+      "reward": 354
+    },
+    {
+      "id": "contract-55",
+      "title": "CLOSING LEDGER",
+      "brief": [
+        "SIGNED SHOP LEDGER",
+        "RETURN IT TO DEPOT"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        0,
+        23,
+        4,
+        8,
+        7,
+        5,
+        6,
+        17,
+        19,
+        9,
+        1,
+        0
+      ],
+      "time_limit_seconds": 295,
+      "reward": 328
+    },
+    {
+      "id": "contract-56",
+      "title": "THREE ISLAND POST",
+      "brief": [
+        "ALL THREE ISLANDS",
+        "WALK EACH DELIVERY"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25,
+        21,
+        10,
+        22,
+        26
+      ],
+      "time_limit_seconds": 360,
+      "reward": 262
+    },
+    {
+      "id": "contract-57",
+      "title": "CITY LINK PARCELS",
+      "brief": [
+        "CITY PARCEL ROUND",
+        "MANY ROUTE CHOICES"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        8,
+        4,
+        23,
+        11,
+        2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        7,
+        0
+      ],
+      "time_limit_seconds": 310,
+      "reward": 354
+    },
+    {
+      "id": "contract-58",
+      "title": "FRAGILE CITY LINK",
+      "brief": [
+        "CITY ART HANDOFFS",
+        "CONDITION MATTERS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        1,
+        11,
+        23,
+        4,
+        8,
+        5
+      ],
+      "time_limit_seconds": 300,
+      "reward": 371
+    },
+    {
+      "id": "contract-59",
+      "title": "NETWORK DEADLINE",
+      "brief": [
+        "EXPRESS FILE LINK",
+        "SAVE TIME LEGALLY"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        0,
+        23,
+        8,
+        7,
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        3,
+        0
+      ],
+      "time_limit_seconds": 210,
+      "reward": 368
+    },
+    {
+      "id": "contract-60",
+      "title": "NETWORK FREIGHT",
+      "brief": [
+        "LARGE CITY LOADS",
+        "TRUCK STOP CONTROL"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 42,
+      "route": [
+        11,
+        2,
+        1,
+        0,
+        23,
+        4,
+        8,
+        7,
+        6,
+        19,
+        9,
+        11
+      ],
+      "time_limit_seconds": 285,
+      "reward": 369
+    },
+    {
+      "id": "contract-61",
+      "title": "CITY TRANSFERS",
+      "brief": [
+        "POCKET CITY PAPERS",
+        "BUS TRAIN AND FOOT"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        18,
+        16,
+        19,
+        16,
+        17,
+        15,
+        0,
+        12,
+        14,
+        5,
+        1,
+        0
+      ],
+      "time_limit_seconds": 280,
+      "reward": 357
+    },
+    {
+      "id": "contract-62",
+      "title": "NEIGHBOUR RIDES",
+      "brief": [
+        "CITY RIDES",
+        "SMOOTH DRIVING"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 42,
+      "route": [
+        8,
+        7,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        1,
+        23,
+        0
+      ],
+      "time_limit_seconds": 290,
+      "reward": 363
+    },
+    {
+      "id": "contract-63",
+      "title": "SIGNATURE CHAIN",
+      "brief": [
+        "SIGNATURE CHAIN",
+        "FINAL STOP UNION"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        0,
+        1,
+        11,
+        2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        7,
+        8,
+        0
+      ],
+      "time_limit_seconds": 295,
+      "reward": 344
+    },
+    {
+      "id": "contract-64",
+      "title": "ISLAND HANDOFFS",
+      "brief": [
+        "CENTRE WARD HANLAN",
+        "MAINLAND TRANSFERS"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        10,
+        21,
+        25,
+        21,
+        10,
+        22,
+        26,
+        22,
+        10,
+        20,
+        24
+      ],
+      "time_limit_seconds": 360,
+      "reward": 274
+    },
+    {
+      "id": "contract-65",
+      "title": "MASTER PARCELS",
+      "brief": [
+        "FULL CITY PARCELS",
+        "EVERY STOP COUNTS"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        0,
+        8,
+        7,
+        5,
+        6,
+        17,
+        19,
+        9,
+        2,
+        11,
+        1,
+        23
+      ],
+      "time_limit_seconds": 305,
+      "reward": 361
+    },
+    {
+      "id": "contract-66",
+      "title": "MASTER ART ROUND",
+      "brief": [
+        "ART CARE ROUND",
+        "ARRIVE WITH CARE"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        6,
+        5,
+        8,
+        7,
+        4,
+        23,
+        0,
+        11,
+        2,
+        9,
+        19,
+        6
+      ],
+      "time_limit_seconds": 305,
+      "reward": 387
+    },
+    {
+      "id": "contract-67",
+      "title": "MASTER DEADLINE",
+      "brief": [
+        "FINAL EXPRESS RUN",
+        "CONTROL BEATS RUSH"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        0,
+        1,
+        2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        8,
+        4,
+        23,
+        0
+      ],
+      "time_limit_seconds": 200,
+      "reward": 367
+    },
+    {
+      "id": "contract-68",
+      "title": "MASTER FREIGHT",
+      "brief": [
+        "FULL TRUCK CIRCUIT",
+        "BRAKE EARLY LOADED"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 48,
+      "route": [
+        0,
+        8,
+        7,
+        4,
+        23,
+        11,
+        2,
+        9,
+        19,
+        6,
+        3,
+        0
+      ],
+      "time_limit_seconds": 310,
+      "reward": 401
+    },
+    {
+      "id": "contract-69",
+      "title": "MASTER TRANSIT",
+      "brief": [
+        "NETWORK MAIL RELAY",
+        "TIME EACH TRANSFER"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        0,
+        17,
+        15,
+        16,
+        18,
+        16,
+        19,
+        16,
+        14,
+        5,
+        1,
+        0
+      ],
+      "time_limit_seconds": 295,
+      "reward": 385
+    },
+    {
+      "id": "contract-70",
+      "title": "MASTER RIDES",
+      "brief": [
+        "FULL CITY SHIFT",
+        "SMOOTH TO THE END"
+      ],
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 48,
+      "route": [
+        0,
+        23,
+        11,
+        2,
+        9,
+        19,
+        17,
+        6,
+        5,
+        7,
+        8,
+        1
+      ],
+      "time_limit_seconds": 315,
+      "reward": 397
+    },
+    {
+      "id": "contract-71",
+      "title": "MASTER RETURNS",
+      "brief": [
+        "FULL SIGNOFF RUN",
+        "ORIGINAL TO UNION"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        0,
+        8,
+        4,
+        23,
+        11,
+        2,
+        9,
+        19,
+        17,
+        6,
+        3,
+        0
+      ],
+      "time_limit_seconds": 310,
+      "reward": 369
+    },
+    {
+      "id": "contract-72",
+      "title": "MASTER ISLAND POST",
+      "brief": [
+        "WARD HANLAN CENTRE",
+        "FINAL FOOT ROUND"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        10,
+        22,
+        26,
+        22,
+        10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25
+      ],
+      "time_limit_seconds": 360,
+      "reward": 286
+    },
+    {
+      "id": "contract-73",
+      "title": "WEST WINDOW RUN",
+      "brief": [
+        "WEST SHOP PARCELS",
+        "RETURN TO UNION"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        27,
+        29,
+        31,
+        0
+      ],
+      "time_limit_seconds": 230,
+      "reward": 215
+    },
+    {
+      "id": "contract-74",
+      "title": "PARKDALE ART",
+      "brief": [
+        "SMALL FRAMED ART",
+        "SCOOTER CARE RUN"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 3,
+      "min_completed": 6,
+      "route": [
+        5,
+        29,
+        31,
+        5
+      ],
+      "time_limit_seconds": 190,
+      "reward": 199
+    },
+    {
+      "id": "contract-75",
+      "title": "WEST RUSH FILES",
+      "brief": [
+        "MOTORCYCLE FILES",
+        "CHOOSE A CORRIDOR"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        0,
+        28,
+        32,
+        30,
+        0
+      ],
+      "time_limit_seconds": 170,
+      "reward": 265
+    },
+    {
+      "id": "contract-76",
+      "title": "WEST LOADING RUN",
+      "brief": [
+        "TRUCK SUPPLY LOAD",
+        "WIDE ROAD APPROACH"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        11,
+        27,
+        31,
+        33,
+        29,
+        0
+      ],
+      "time_limit_seconds": 270,
+      "reward": 290
+    },
+    {
+      "id": "contract-77",
+      "title": "WEST TRANSFER KIT",
+      "brief": [
+        "SMALL PACKAGE KIT",
+        "TRAIN BUS OR ROAD"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        17,
+        18,
+        28,
+        30,
+        0
+      ],
+      "time_limit_seconds": 255,
+      "reward": 242
+    },
+    {
+      "id": "contract-78",
+      "title": "LODGE LAST MILE",
+      "brief": [
+        "PARK THEN WALK",
+        "LODGE LAST MILE"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        29,
+        34,
+        33,
+        0
+      ],
+      "time_limit_seconds": 270,
+      "reward": 241
+    },
+    {
+      "id": "contract-79",
+      "title": "WEST RETURN PAPERS",
+      "brief": [
+        "CAR DOCUMENT ROUND",
+        "RETURN ORIGINAL"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        0,
+        31,
+        30,
+        27,
+        0
+      ],
+      "time_limit_seconds": 205,
+      "reward": 216
+    },
+    {
+      "id": "contract-80",
+      "title": "WEST CLOSING ROUND",
+      "brief": [
+        "SCOOTER SHOP ROUND",
+        "WEST TO HIGH PARK"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 3,
+      "min_completed": 18,
+      "route": [
+        0,
+        27,
+        28,
+        32,
+        33,
+        30,
+        29,
+        0
+      ],
+      "time_limit_seconds": 330,
+      "reward": 314
+    },
+    {
+      "id": "contract-81",
+      "title": "EAST FIRST ROUND",
+      "brief": [
+        "EAST SHOP PARCELS",
+        "QUEEN TO DANFORTH"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        37,
+        35,
+        0
+      ],
+      "time_limit_seconds": 205,
+      "reward": 188
+    },
+    {
+      "id": "contract-82",
+      "title": "DANFORTH ART KIT",
+      "brief": [
+        "FRAMED PRINT KITS",
+        "BRAKE BEFORE TURNS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        5,
+        35,
+        38,
+        37,
+        5
+      ],
+      "time_limit_seconds": 210,
+      "reward": 243
+    },
+    {
+      "id": "contract-83",
+      "title": "EAST FILE CUTOFF",
+      "brief": [
+        "URGENT EAST FILES",
+        "MOTORCYCLE ROUTE"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        0,
+        40,
+        42,
+        38,
+        0
+      ],
+      "time_limit_seconds": 145,
+      "reward": 222
+    },
+    {
+      "id": "contract-84",
+      "title": "CARLAW STOCK RUN",
+      "brief": [
+        "BULKY SHOP STOCK",
+        "TRUCK BRAKE EARLY"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        11,
+        39,
+        42,
+        37,
+        11
+      ],
+      "time_limit_seconds": 210,
+      "reward": 231
+    },
+    {
+      "id": "contract-85",
+      "title": "EAST RAIL RELAY",
+      "brief": [
+        "POCKET PARCEL KIT",
+        "PARK THEN WALK"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        17,
+        35,
+        36,
+        38,
+        12,
+        0
+      ],
+      "time_limit_seconds": 260,
+      "reward": 241
+    },
+    {
+      "id": "contract-86",
+      "title": "PARK PATH PARCELS",
+      "brief": [
+        "TWO PARK HANDOFFS",
+        "PARK THEN WALK"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        36,
+        41,
+        42,
+        39,
+        0
+      ],
+      "time_limit_seconds": 280,
+      "reward": 246
+    },
+    {
+      "id": "contract-87",
+      "title": "EAST RETURN PACK",
+      "brief": [
+        "SHOP RETURN PAPERS",
+        "ORIGINAL TO UNION"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        0,
+        39,
+        40,
+        42,
+        37,
+        0
+      ],
+      "time_limit_seconds": 215,
+      "reward": 228
+    },
+    {
+      "id": "contract-88",
+      "title": "CROSS CITY BUNDLES",
+      "brief": [
+        "EAST TO WEST MAIL",
+        "FINAL PARK DEPOT"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 3,
+      "min_completed": 18,
+      "route": [
+        0,
+        35,
+        38,
+        40,
+        42,
+        39,
+        37,
+        31,
+        33,
+        0
+      ],
+      "time_limit_seconds": 405,
+      "reward": 391
+    },
+    {
+      "id": "contract-89",
+      "title": "CHANNEL STOCK RUN",
+      "brief": [
+        "BULKY STAGE STOCK",
+        "TRUCK BRAKE EARLY"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        0,
+        51
+      ],
+      "time_limit_seconds": 170,
+      "reward": 184
+    },
+    {
+      "id": "contract-90",
+      "title": "FIRE HALL BOOKS",
+      "brief": [
+        "COMMUNITY BOOK BOX",
+        "PARK THEN WALK"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        37,
+        52
+      ],
+      "time_limit_seconds": 175,
+      "reward": 150
+    },
+    {
+      "id": "contract-91",
+      "title": "CRANE WALK PACKET",
+      "brief": [
+        "POCKET RELAY KIT",
+        "PARK OR USE QUEEN"
+      ],
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        53
+      ],
+      "time_limit_seconds": 205,
+      "reward": 173
+    },
+    {
+      "id": "contract-92",
+      "title": "TURNING BASIN LOAD",
+      "brief": [
+        "STAGE EQUIPMENT",
+        "UNWIN THEN YARD"
+      ],
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        51,
+        55,
+        54
+      ],
+      "time_limit_seconds": 185,
+      "reward": 198
+    },
+    {
+      "id": "contract-93",
+      "title": "UNWIN GLASS",
+      "brief": [
+        "FRAGILE GLASS KIT",
+        "BRAKE BEFORE TURNS"
+      ],
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        39,
+        55
+      ],
+      "time_limit_seconds": 150,
+      "reward": 170
+    },
+    {
+      "id": "contract-94",
+      "title": "BEACH MAIL",
+      "brief": [
+        "RIVER AND BEACH",
+        "TWO FOOT HANDOFFS"
+      ],
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        52,
+        58,
+        56
+      ],
+      "time_limit_seconds": 180,
+      "reward": 129
+    },
+    {
+      "id": "contract-95",
+      "title": "HARBOUR PAPER RUN",
+      "brief": [
+        "URGENT PORT FILE",
+        "MOTORCYCLE ROUTE"
+      ],
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        57,
+        1
+      ],
+      "time_limit_seconds": 120,
+      "reward": 175
+    },
+    {
+      "id": "contract-96",
+      "title": "STAGE RETURN KIT",
+      "brief": [
+        "YARD RETURN PAPERS",
+        "ORIGINAL BACK YARD"
+      ],
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        54,
+        51,
+        39,
+        54
+      ],
+      "time_limit_seconds": 200,
+      "reward": 204
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "actor.h"
+#include "city_loader_fixture.h"
 actor_t actors[21],*actors_inactive_head;
 UBYTE actors_len;
 static UBYTE district;
@@ -24,7 +25,7 @@ void deactivate_actor(actor_t *actor){
 #include "sprites_under_test.c"
 
 static void init(UBYTE place,UBYTE active){
-    UBYTE first=(place==0||place==1||place==3)?3:2;
+    UBYTE first=place<TD_DISTRICT_COUNT?host_loader_first[place]:2;
     memset(actors,0,sizeof(actors));district=place;actors_len=first+3;
     PLAYER.sprite=(far_ptr_t){4,&player_data};PLAYER.base_tile=0;
     actors[first].sprite=(far_ptr_t){8,&fleet_data};actors[first].base_tile=92;
@@ -45,8 +46,8 @@ static void init(UBYTE place,UBYTE active){
 static void presentation(void){
     UBYTE place,active,kind,orientation,variant,pose,first;
     actor_t *actor=&actors[18];
-    for(place=0;place<5;place++)for(active=0;active<2;active++){
-        first=(place==0||place==1||place==3)?3:2;init(place,active);
+    for(place=0;place<TD_DISTRICT_COUNT;place++)for(active=0;active<2;active++){
+        first=host_loader_first[place];init(place,active);
         td_city_sprites_bind();
         require(!actors[first].prev&&!actors[first].next&&
                 actors[first].flags==ACTOR_FLAG_HIDDEN,"Fleet loader detached");
@@ -100,7 +101,7 @@ static void reset_and_banks(void){
     init(0,0);actors_len=4;td_city_sprites_bind();
     td_fleet_present(&actors[18],3,2);
     require(actors[18].sprite.bank==4&&actors[18].frame==4,"Short native actor list fails closed");
-    init(5,0);td_city_sprites_bind();td_civilian_present(&actors[18],0,3);
+    init(TD_DISTRICT_COUNT,0);td_city_sprites_bind();td_civilian_present(&actors[18],0,3);
     require(actors[18].sprite.bank==4&&actors[18].frame==35,"Invalid district fails closed");
 }
 

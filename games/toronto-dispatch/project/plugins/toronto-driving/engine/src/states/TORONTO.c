@@ -117,6 +117,9 @@ void td_set_target(void) BANKED {
     td_get_stop(stop,&td_target);
     /* Show the legal approach while driving, then the actual client on foot. */
     if(!td.onfoot&&(td_target.reserved&TD_STOP_FOOT))td_get_parking(stop,&td_target.u,&td_target.v);
+    if((td.district==TD_DISTRICT_ISLANDS)!=(td_target.district==TD_DISTRICT_ISLANDS)){
+        td_ferry_beacon();return;
+    }
     routed=td_world_route(td.district,td_target.district,td.onfoot,td.u>>4,td.v>>4,td_target.u,td_target.v,&portal);
     td_route_district=routed?portal.to:TD_DISTRICT_NONE;
     td_position(&actors[1],routed?portal.u:td_target.u,(routed?portal.v:td_target.v)-12);
@@ -306,6 +309,8 @@ static void td_second(void){
     UWORD arrival_u,arrival_v;
     td.seconds++;
     if(td_people_second())td_ui_draw();
+    if(td.mode==TD_ROAM&&td.district==TD_DISTRICT_ISLANDS&&td_target.district!=TD_DISTRICT_ISLANDS)
+        td_ferry_beacon();
     if(td.job!=TD_NONE){if(td.left)td.left--;if(!td.left){td.health=0;
         /* A failed parcel still finishes its already-paid trip; never strand it in transit. */
         if(td.mode==TD_RIDE){td.job=TD_NONE;td_set_target();td_save();}else{td_finish(FALSE);return;}

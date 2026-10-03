@@ -17,6 +17,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,7 +28,12 @@ FIXTURES = ROOT / "tests/engine"
 def load_module(path, name):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    saved_path=list(sys.path)
+    try:
+        sys.path.insert(0,str(path.parent))
+        spec.loader.exec_module(module)
+    finally:
+        sys.path[:]=saved_path
     return module
 
 
@@ -43,6 +49,41 @@ def integer_macro(path, name):
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def historical_stop(stop, districts):
+    """Narrow independent geometry exception; retain the historical hashes."""
+    old = {20:(444,928,0),21:(720,920,0),22:(848,896,0),
+           24:(560,928,0),25:(760,944,0),26:(912,912,0)}
+    new = {20:(320,280,5),21:(512,448,5),22:(920,280,5),
+           24:(160,600,5),25:(512,744,5),26:(904,440,5)}
+    copy = dict(stop)
+    if stop['id'] in old:
+        expected = new[stop['id']] if districts > 5 else old[stop['id']]
+        require((stop['u'],stop['v'],stop.get('district',0)) == expected,
+                f"Island stop{stop['id']} differs from its exact staged geometry.")
+        copy['u'],copy['v'],copy['district'] = old[stop['id']]
+    return copy
+
+
+def legacy_island_fixture():
+    """Expected historic points come from raw retained tiles, never ROM masks."""
+    data=json.loads((FIXTURES/'legacy_island_geometry.json').read_text())
+    require(data['encodedCollisionSha256']=='4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92' and
+            data['decodedCollisionSha256']=='081c14a28c866c8d7285f1697ac3ecff3d5429f18a2c6e321e351be0ffaec5d8',
+            'Historical Island collision provenance changed.')
+    import hashlib
+    require(hashlib.sha256(b''.join(bytes.fromhex(region['tilesHex']) for region in data['regions'])).hexdigest()==
+            '6485098fdb85691c019069d6123b029c1f9ab7d62887ae2a6f9bca881b78beff',
+            'Frozen historical Island raw tile bytes changed.')
+    rows=['static const UBYTE td_fixture_legacy_tiles[3][204]={']
+    for region in data['regions']:
+        tiles=bytes.fromhex(region['tilesHex'])
+        require(len(tiles)==region['width']*region['height'] and all(tile in (15,16) for tile in tiles),
+                'Historical Island raw tile subset is inconsistent.')
+        rows.append('{'+','.join(map(str,tiles))+'},')
+    rows.extend(['};',''])
+    return '\n'.join(rows)
 
 
 def native_fixture(game, include):
@@ -101,10 +142,11 @@ def native_fixture(game, include):
             [stop["id"] for stop in stop_rows] == list(range(stops)), "Campaign stop IDs must remain contiguous and ordered.")
     require([job["id"] for job in job_rows] == [f"contract-{index:02d}" for index in range(1, quests + 1)],
             "Campaign contract IDs must remain contiguous and ordered.")
-    original_stops = [{field: stop[field] for field in ("id", "u", "v", "name", "transit")} for stop in stop_rows[:27]]
+    historical_stops = [historical_stop(stop,districts) for stop in stop_rows]
+    original_stops = [{field: stop[field] for field in ("id", "u", "v", "name", "transit")} for stop in historical_stops[:27]]
     original_jobs = [{field: job[field] for field in core.BASE_QUEST_FIELDS} for job in job_rows[:72]]
     require(validator.canonical_sha(original_stops) == core.BASE_STOPS_SHA256 and
-            all(stop.get("district", 0) == 0 and stop.get("reserved", 0) == 0 for stop in stop_rows[:27]),
+            all(stop.get("district", 0) == 0 and stop.get("reserved", 0) == 0 for stop in historical_stops[:27]),
             "Original 27 core stops changed.")
     require(validator.canonical_sha(original_jobs) == core.BASE_QUESTS_SHA256,
             "Original 72 contract fields changed.")
@@ -113,7 +155,7 @@ def native_fixture(game, include):
     # Planning/source metadata can evolve without changing native semantics.
     prefix_stops = [{field: stop.get(field, 0) for field in
                      ("id", "u", "v", "name", "transit", "district", "reserved")}
-                    for stop in stop_rows[:51]]
+                    for stop in historical_stops[:51]]
     prefix_jobs = [{field: job[field] for field in
                     ("id", "title", "brief", "kind_id", "required_vehicle",
                      "min_completed", "route", "time_limit_seconds", "reward")}
@@ -155,7 +197,7 @@ def native_fixture(game, include):
     return ("static const unsigned native_widths[TD_DISTRICT_COUNT]={" + ",".join(map(str, widths)) + "};\n"
             "static const unsigned native_heights[TD_DISTRICT_COUNT]={" + ",".join(map(str, heights)) + "};\n"
             "static const UBYTE native_collision[TD_DISTRICT_COUNT][TD_DISTRICT_TILE_WIDTH*TD_DISTRICT_TILE_HEIGHT]={" +
-            ",".join(grids) + "};\n" + "\n".join(content))
+            ",".join(grids) + "};\n" + "\n".join(content)+legacy_island_fixture())
 
 
 def main():

@@ -4,7 +4,7 @@
 Only original-art sources are written. Each cardinal aircraft occupies four
 8x16 OAM objects, the stippled shadow two, and startup is an empty metasprite.
 --check verifies decoded pixels, palette, object coverage and compiler-safe
-canvas coordinates, plus the imported asset and four native loader slots,
+canvas coordinates, plus the imported asset and registered native loader slots,
 without importing, building or claiming native acceptance.
 """
 import argparse
@@ -30,7 +30,8 @@ COLOURS = (TRANSPARENT, LIGHT, MID, DARK)
 DIRECTIONS = ("east", "south", "west", "north")
 SYMBOL = "sprite_ambient_aircraft"
 QUEEN_ID = "028d86c5-aef3-5752-87c9-817b5eb2a2ad"
-GAMEPLAY_SCENES = ("toronto_city", "toronto_west", "toronto_high_park", "toronto_east")
+GAMEPLAY_SCENES = tuple(d["scene"] for d in json.loads((ROOT / "content/districts/world.json").read_text())["districts"])
+QUEEN_SCENES = ("toronto_city", "toronto_west", "toronto_east")
 
 
 def ident(key):
@@ -285,7 +286,7 @@ def check_registered(png_bytes, meta, project=None):
         assert loader["_resourceType"] == "actor" and loader["spriteSheetId"] == NATIVE_ID, \
             f"{name}: aircraft loader references the wrong native asset"
         assert loader["frame"] == 13 and not loader["animate"], f"{name}: aircraft loader must start empty at frame13"
-        assert loader["_index"] == (0 if name == "toronto_high_park" else 1), \
+        assert loader["_index"] == (1 if name in QUEEN_SCENES else 0), \
             f"{name}: aircraft loader no longer occupies its reserved native slot"
         loader_ids.add(loader["id"])
         actors = [json.loads(path.read_text()) for path in directory.glob("*.gbsres")]
@@ -294,11 +295,11 @@ def check_registered(png_bytes, meta, project=None):
         indices = [actor["_index"] for actor in actors]
         assert len(indices) == len(set(indices)), f"{name}: native actor order has duplicate indices"
         queen = [actor for actor in actors if actor["spriteSheetId"] == QUEEN_ID]
-        if name == "toronto_high_park":
-            assert not queen, "High Park must retain its aircraft-only loader slot"
+        if name not in QUEEN_SCENES:
+            assert not queen, f"{name}: no-Queen loader order must be preserved"
         else:
             assert len(queen) == 1 and queen[0]["_index"] == 0, f"{name}: Queen loader must retain native index0"
-    assert len(loader_ids) == 4, "Aircraft loaders must retain unique native actor IDs"
+    assert len(loader_ids) == len(GAMEPLAY_SCENES), "Aircraft loaders must retain unique native actor IDs"
 
 
 def main():

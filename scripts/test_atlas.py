@@ -75,7 +75,7 @@ def authored_water(scene, point, metadata):
             bool(metadata.get("pond") and inside_polygon(point, metadata["pond"])))
 
 
-def fixture_header():
+def fixture_header(registered_islands=True):
     world = json.loads((GAME / "content/districts/world.json").read_text())
     districts = world["districts"]
     count = re.findall(r"^#define TD_DISTRICT_COUNT (\d+)$",
@@ -110,8 +110,14 @@ def fixture_header():
                     for field in ("atlas_x", "atlas_y")), "Atlas placement must be nonnegative and tile aligned.")
         collisions = collision_bytes(scene["collisions"], 128 * 122)
         require(set(collisions) <= {0, 15, 16}, "Review newly introduced collision classes before assigning atlas colours.")
-        metadata_path = 'content/city_art.json' if district['id'] == 0 else (
-            'content/districts/' + scene_name.removeprefix('toronto_') + '_art.json')
+        # Independently read the declared source path rather than importing
+        # the production generator's metadata resolver.
+        metadata_path = district.get('art_source', 'content/city_art.json' if district['id'] == 0 else (
+            'content/districts/' + scene_name.removeprefix('toronto_') + '_art.json'))
+        require(isinstance(metadata_path, str) and metadata_path.startswith('content/') and
+                not Path(metadata_path).is_absolute() and '..' not in Path(metadata_path).parts and
+                (GAME / metadata_path).resolve().is_relative_to((GAME / 'content').resolve()),
+                'Atlas water source must be a confined public content path.')
         metadata = json.loads((GAME / metadata_path).read_text())
         require(metadata['dimensions'] == [1024, 976], "Atlas oracle water metadata dimensions disagree.")
         offset_x, offset_y = district["atlas_x"] // 8, district["atlas_y"] // 8
@@ -135,9 +141,18 @@ def fixture_header():
     # Check the independent water oracle at real geographic boundary examples.
     core = json.loads((GAME / "content/city_art.json").read_text())
     require(authored_water("toronto_city", (892, 100), core) and
-            not authored_water("toronto_city", (400, 924), core) and
+            authored_water("toronto_city", (400, 924), core) and
             authored_water("toronto_city", (620, 924), core),
-            "Core water oracle lost the Don River, Island land or intervening lake.")
+            "Core water oracle lost the Don River or kept removed duplicate Island ground.")
+    if registered_islands:
+        island = next((d for d in districts if d['id'] == 5), None)
+        require(island is not None and island['scene'] == 'toronto_islands' and
+                (island['atlas_x'], island['atlas_y']) == (2048, 976),
+                'Fuller Islands must occupy its registered north-up cell without a road seam.')
+        island_art = json.loads((GAME / island['art_source']).read_text())
+        require(authored_water('toronto_islands', (20, 20), island_art) and
+                not authored_water('toronto_islands', (512, 448), island_art),
+                'Independent Island water oracle must distinguish lake from the Centre dock.')
     hp = json.loads((GAME / "content/districts/high_park_art.json").read_text())
     require(inside_polygon((650, 550), hp["pond"]) and not inside_polygon((750, 550), hp["pond"]),
             "Independent pond oracle does not distinguish land and water.")

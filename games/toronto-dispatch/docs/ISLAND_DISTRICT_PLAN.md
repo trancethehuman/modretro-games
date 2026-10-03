@@ -1,6 +1,6 @@
 # Toronto Islands — researched district inputs
 
-Reviewed **2026-10-03**. This is a source-art and integration plan, not a registered sixth scene or playable evidence. The current five-scene game, 96 contracts, 59 stops and v8 save remain unchanged. Full Old Toronto, measured enjoyable two-hour play and hardware acceptance remain open. The user has not adopted a 2026 map era; use established geography as the working reference without adopting temporary closures or future projects.
+Reviewed **2026-10-03**. The original district is now registered in the six-scene source, with 241 buildings/595 pedestrian routes overall and version-9 migration at the same 58-byte size. All 96 contract fields, 59 identities and seven parking anchors remain; only six Island stop geometry triples relocate. Corrected `7b2…` passes its official build and scoped native exploration/ferry/map/v9-reset tests; the nine Island jobs and native old-v8 imports remain pending. Full Old Toronto, measured enjoyable two-hour play and hardware acceptance remain open. The user has not adopted a 2026 map era; use established geography as the working reference without adopting temporary closures or future projects.
 
 ## References and visual inspection
 
@@ -39,11 +39,11 @@ Keep airport/runway land, the water treatment plant, marked restricted islands, 
 
 Only emergency and commercial service vehicles are permitted; public vehicles are prohibited. Initial gameplay should therefore be **on foot**, leaving the courier's car/motorcycle/scooter/truck on the mainland. This does not authorise new controllable service vehicles or cycling. Actual dock distances are kilometres; compress them for useful choices instead of copying 35–70-minute walks into mandatory game time. [City access guidance](https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/).
 
-## Original 1,024 × 976 compression proposal
+## Original 1,024 × 976 source compression
 
-Local `(u,v)` means east right/north up. These are original candidate pixels, not surveyed positions or registered client entrances. The art generator may refine them while retaining the public graph and shoreline ordering.
+Local `(u,v)` means east right/north up. These are original compressed pixels, not surveyed positions or real loading doors. The six dock/client anchors below now match registered content; approximate scenery positions describe the source-art plan rather than surveys.
 
-| Area / anchor | Candidate local position | Authored treatment |
+| Area / anchor | Original local position | Authored treatment |
 | --- | --- | --- |
 | Blocked airport | Northwest, approximately `u=32..288, v=24..248` | Fence, runway silhouettes and no traversable tunnel endpoint; background scenery only. |
 | Hanlan dock / service | `(320,280)` / `(160,600)` | Dock east of the western strip; fictional small park pavilion on its public path. |
@@ -66,7 +66,11 @@ Proposed jobs should reward planning: choose the nearest ferry landing for a fra
 
 Real services run from Jack Layton to the three landings in the warmer season, with Ward service in winter and weather-dependent schedules. Retain clearly fictional compressed fares/timings; do not copy current tables or present a new inter-island ferry as an established City route. Walking between landings creates the new option. [City ferry routes](https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-routes-schedules/).
 
-Before registration, keep the existing five scenes and campaign untouched. Old dock IDs **20–22** and fictional client IDs **24–26** currently point to tiny Core strips; moving them requires deliberate save/active-job/paid-trip migration, not silent coordinate replacement. Preserve old job/completion identities and mainland parked-car recovery. Plan district 5 and a separately tested migration only after source art is reviewed. Current ferry stop IDs fit the six-bit transit representation; review that encoding before adding transit nodes. Non-transit stop growth and the 128-completion-bit limit need separate checks.
+The registered district 5 now holds dock IDs **20–22** and fictional client IDs **24–26**; the duplicate tiny Core strips and three service buildings are removed while mainland art/collision/attributes above pixel 816 remain unchanged. Version-9 migration imports legitimate old walkers, waits and paid trips through the immutable historical terrain mask while preserving cash, active-stage/deadline, completion IDs, v8 attention and mainland parked cars. The actual-engine host migration gate and scoped native v9-reset/travel samples pass; native historical-v8 import remains pending. Current ferry stop IDs fit the six-bit transit representation; review that encoding before adding transit nodes. Non-transit stop growth and the 128-completion-bit limit need separate checks.
+
+The first integrated campaign reuses its nine ordered Island jobs, preserving indices 7/15/23/31/39/47/55/63/71 and deadlines 195/205/200/310/305/310/360/360/360 seconds. Their original route fields still require mainland ferry transfers where authored; free roaming permits connected walking between all landings. New alternative-route jobs above remain proposals. Source has nine Island footprints, five closed cottage yards, three existing bridges and 37 full-body pedestrian routes; 120 raw/78 flip-canonical patterns fit the source budget. Independent foot/ferry/prefix gates, full checks (787,948 engine / 25,107,699 UI), the corrected official build and scoped native bridge/path travel pass. Broader palette/OBJ/crowd/occlusion, native old-v8 imports and all nine timed jobs/deadline tuning remain pending.
+
+Current local candidate `toronto-dispatch-islands-safe.gbc` has SHA-256 `7b2af59c27179bd3445c5c074b85fb4a029b50144ef27ed3095f9a3ce83f7d5a`. Its closed ordinary-input record samples all three docks/clients/bridges, inland/coastal choices, blocked shore/private yards/airport gap, canopy occlusion, frozen map focus/panning, scheduled ferry fares and zero-fare recovery, v9/paid/free resets and distant Core car re-entry. A condition-100 first Core job then pays 109 (cash 2→111/done 1) and restores after reset. Shoreline refusal samples the native point-terrain query; full-body corridor checks are separate source evidence. It does not complete an Island mission. [Portable evidence](NATIVE_ISLAND_DISTRICT_SAMPLES.json) retains the scope; the earlier `8a96…` pause-format/map-cache failure and `4343…` five-scene evidence remain separate.
 
 Required gates:
 
@@ -74,4 +78,4 @@ Required gates:
 - Native resources: actual compiler tile/palette/OBJ banks, aircraft scratch isolation, scene loaders, stack reserve, atlas expansion and all six-scene fixtures. A source-pattern budget alone is insufficient.
 - Save/transit: old v8 imports, district-qualified foot/parked-car state, accepted/carrying/paid checkpoints, fare once, genuine reset and timeout/cancellation, with explicit new-version compatibility.
 - Ordinary inputs: all three arrivals and returns; Hanlan→Gibraltar→Centre→Ward foot travel; both eastern path choices; Algonquin/Snake bridge out-and-back; building/shore rejection, map freeze and distant mainland-car recovery.
-- Release: measured campaign variety/duration, crowds/occlusion/performance, human feedback and physical Chromatic/cartridge tests. Source-only Islands art passes none of these native or hardware gates.
+- Release: measured campaign variety/duration, crowds/occlusion/performance, human feedback and physical Chromatic/cartridge tests. Scoped native exploration/ferry/reset proof does not complete the campaign, human or hardware gates.

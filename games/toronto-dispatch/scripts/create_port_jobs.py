@@ -2,7 +2,8 @@
 """Author eight Port Lands courier contracts from registered native terrain.
 
 Writes only port_lands_jobs.json. --check and --diff never write files. Preserve
-all 51 existing stop IDs and 88 native contracts, including Queen platforms.
+all 51 existing stop identities and 88 native contracts, including Queen
+platforms, with only six explicitly pinned Island geometries relocated.
 Route/timing models are planning data, not observed gameplay or duration proof.
 """
 import argparse
@@ -13,6 +14,7 @@ import math
 from pathlib import Path
 import re
 import sys
+from island_campaign import historical_stop, relocate_island_stops
 
 from create_district_jobs import (BASE_QUEST_FIELDS, FOOT_SPEED, SPEEDS,
                                   RouteModel, canonical, decode_grid, point,
@@ -64,7 +66,7 @@ def preserved_prefix(campaign):
     stops, jobs = campaign["stops"][:PREFIX_STOPS], campaign["quests"][:PREFIX_QUESTS]
     assert len(stops) == PREFIX_STOPS and [s["id"] for s in stops] == list(range(PREFIX_STOPS))
     assert len(jobs) == PREFIX_QUESTS and [q["id"] for q in jobs] == [f"contract-{i:02d}" for i in range(1, 89)]
-    normalized_stops = [{field: stop.get(field, 0) for field in PREFIX_STOP_FIELDS} for stop in stops]
+    normalized_stops = [{field: historical_stop(stop).get(field, 0) for field in PREFIX_STOP_FIELDS} for stop in stops]
     normalized_jobs = [{field: job[field] for field in BASE_QUEST_FIELDS} for job in jobs]
     assert sha(canonical(normalized_stops)) == PREFIX_STOPS_SHA256, "Existing 51 native stop fields changed"
     assert sha(canonical(normalized_jobs)) == PREFIX_QUESTS_SHA256, "Existing 88 native contract fields changed"
@@ -73,8 +75,10 @@ def preserved_prefix(campaign):
     assert len(rows) >= PREFIX_STOPS, "Native stop prefix is unavailable"
     for stop, row in zip(stops, rows[:PREFIX_STOPS]):
         u, v, name, transit, district, flags = row
-        assert (int(u), int(v), name, int(transit), int(district), int(flags)) == (
-            stop["u"], stop["v"], stop["name"], stop["transit"], stop.get("district", 0), stop.get("reserved", 0)), f"Native stop prefix differs: {stop['id']}"
+        native = historical_stop(dict(id=stop['id'], u=int(u), v=int(v), name=name,
+                                      transit=int(transit), district=int(district), reserved=int(flags)))
+        historical = historical_stop(stop)
+        assert all(native.get(field, 0) == historical.get(field, 0) for field in PREFIX_STOP_FIELDS), f"Native stop prefix differs: {stop['id']}"
     rows = re.findall(r'\{"([^"]+)",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),\{([\d,]+)\}\}', native_table(code, "td_jobs"))
     assert len(rows) >= PREFIX_QUESTS, "Native contract prefix is unavailable"
     for job, row in zip(jobs, rows[:PREFIX_QUESTS]):
@@ -162,7 +166,7 @@ def author():
         else:
             assert clear_body(scene, stop["u"], stop["v"], 8, True), f"Blocked full-car loading bay: {index}"
         authored_stops.append(stop)
-    stops = base_stops + authored_stops
+    stops = relocate_island_stops(base_stops, world) + authored_stops
     model = RouteModel(world, stops)
     last_mile = []
     for stop in authored_stops:
@@ -259,7 +263,7 @@ def main():
                 return 1
         else:
             OUTPUT.parent.mkdir(parents=True, exist_ok=True); OUTPUT.write_text(expected)
-        print("Port Lands content: eight jobs/eight appended clients; full-foot/body routes, all 88/51 native prefix fields/briefs and progression verified. Native play and measured duration require separate evidence.", file=sys.stderr)
+        print("Port Lands source: eight jobs/eight clients; body routes, 88 native job fields/briefs and 51 stop identities with six declared Island geometry exceptions, plus progression verified. Native play and measured duration require separate evidence.", file=sys.stderr)
         return 0
     except (AssertionError, KeyError, ValueError, OSError) as error:
         print(f"Cannot author Port Lands jobs: {error}", file=sys.stderr)

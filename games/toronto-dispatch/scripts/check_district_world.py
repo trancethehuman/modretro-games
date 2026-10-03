@@ -10,6 +10,8 @@ from pathlib import Path
 from PIL import Image
 from check_campaign import ROOT, decode, TOTAL_STOPS, TOTAL_QUESTS
 from create_district_jobs import RouteModel, point
+from district_sources import read_district_art
+from island_campaign import ISLAND_DISTRICT, ISLAND_IDS
 import create_district_world
 import create_world_routes
 
@@ -124,7 +126,8 @@ def check():
         bg = read(background_path.with_suffix('.png.gbsres'))
         attrs = decode(bg['tileColors'])
         grid = decode(scene['collisions'])
-        original_attrs = read(ROOT / 'project/original-art' / f'{slug}_attributes.json')
+        meta = read_district_art(district)
+        original_attrs = read(ROOT / meta.get('source_attributes', f'project/original-art/{slug}_attributes.json'))
         width, height = scene['width'], scene['height']
         assert scene['type'] == 'TORONTO' and scene['symbol'] == district['symbol']
         assert (width, height) == (128, 122)
@@ -156,7 +159,6 @@ def check():
         captured = next(item for item in western_jobs['collision_resources'] if item['district'] == district['id'])
         assert captured['collision_sha256'] == hashlib.sha256(scene['collisions'].encode()).hexdigest(), f'{slug}: western job model uses stale native collisions'
         if district['id']:
-            meta = read(ROOT / 'content/districts' / f'{slug}_art.json')
             metadata[district['id']] = meta
             assert meta['dimensions'] == [1024, 976] and meta['tile_dimensions'] == [128, 122]
             assert meta['collisions'] == grid, f'{slug}: registered collision differs from original metadata'
@@ -164,7 +166,11 @@ def check():
             assert meta['background_sha256'] == hashlib.sha256(background_path.read_bytes()).hexdigest()
             assert meta['validation']['raw_unique_tiles'] == len(raw_patterns)
             assert meta['validation']['flip_canonical_unique_tiles'] == len(flipped_patterns)
-            assert meta['road_half_width'] == 24 and meta['walk_half_width'] == 32
+            if district.get('traffic_enabled', True):
+                assert meta['road_half_width'] == 24 and meta['walk_half_width'] == 32
+            else:
+                assert district['id'] == ISLAND_DISTRICT and not meta['roads'] and not meta['traffic_loops'], 'Only public walking Islands disable road traffic'
+                assert set(grid) <= {15, 16}, 'Foot-only district admits road vehicles'
             assert all(not (a & 128) for a, c in zip(attrs, grid) if c == 0), f'{slug}: raised roof/canopy priority covers asphalt'
             assert (ROOT / meta['source_research']).exists()
         # Ground building footprints must be blocked even while decorative lips
@@ -205,7 +211,7 @@ def check():
             points = list(cardinal_points(route['points']))
             assert all(walkable(district, u, v) for u, v in points), f"Blocked footpath: {route['name']}"
             assert any(tile(district, u // 8, v // 8) == 16 for u, v in points), f"Footpath lacks foot-only terrain: {route['name']}"
-        assert len(meta['traffic_loops']) == 6
+        assert len(meta['traffic_loops']) == (0 if district == ISLAND_DISTRICT else 6)
         for loop in meta['traffic_loops']:
             assert 4 <= len(loop) <= 16
             assert all(footprint(district, u, v, 8) for u, v in cardinal_points(loop, closed=True)), f'{district}: traffic swept footprint blocked'
@@ -239,6 +245,21 @@ def check():
             model.stop_leg(campaign['stops'][first], campaign['stops'][last])
         assert quest['timing_design']['planning_only'] and quest['timing_design']['measured_duration_seconds'] is None
 
+    # A ferry changes scenes; it is not a navigable mainland edge. Every public
+    # Island endpoint uses the same conservative full-foot component, and no
+    # Island target is rewritten as a parking client or road destination.
+    for index in ISLAND_IDS:
+        stop = campaign['stops'][index]
+        assert stop['district'] == ISLAND_DISTRICT and stop.get('reserved', 0) == 0
+        assert not stop.get('foot_only', False) and 'parking_anchor' not in stop
+        model.full_foot_shortest(campaign['stops'][20], stop)
+        assert not model.usable(point(ISLAND_DISTRICT, stop['u'], stop['v']), True)
+    assert not any(portal[side]['district'] == ISLAND_DISTRICT for portal in world['portals'] for side in ('from', 'to'))
+    for quest in campaign['quests']:
+        if quest['kind_id'] == 7:
+            for first, last in zip(quest['route'], quest['route'][1:]):
+                model.service_leg(campaign['stops'][first], campaign['stops'][last])
+
     assert create_district_world.HEADER.read_text() == create_district_world.source(), 'Compiled reciprocal seams/traffic differ'
     ped_header = create_world_routes.HEADER.read_text()
     assert ped_header == create_world_routes.source(), 'Compiled pedestrian routes differ from registered grids'
@@ -251,7 +272,8 @@ def check():
         assert len(rows) == count and len(set(rows)) == count
         assert all(walkable(district, u + offset, v) for u, v in rows for offset in range(64)), 'Compiled NPC path crosses solid terrain'
     report = ', '.join(f'{slug}:{raw} raw/{flipped} flipped tiles' for slug, raw, flipped in budgets)
-    print(f'Native district resources: {district_count} scenes, {len(world["portals"])} reciprocal seam pairs, {len(expansion_clients)} expansion clients, {6*(district_count-1)} swept-clear traffic loops and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
+    traffic_loops = sum(len(meta['traffic_loops']) for meta in metadata.values())
+    print(f'Native district resource source: {district_count} scenes, {len(world["portals"])} reciprocal seam pairs, {len(expansion_clients)} mainland expansion clients, {traffic_loops} swept-clear traffic loops, ferry-only Island access and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
 
 
 if __name__ == '__main__':

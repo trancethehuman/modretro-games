@@ -4,11 +4,14 @@ Shortest collision-grid routes inform time allowances. These are design estimate
 not measured campaign duration, and do not prove the two-hour release target.
 """
 from collections import deque
-from functools import cache
 from pathlib import Path
 import json
 import math
 from city_layout import location
+from district_sources import read_district_art
+from island_campaign import (frozen_campaign, ISLAND_IDS,
+                             NEW_ISLAND_GEOMETRY, validate_preserved_campaign,
+                             validate_relocated_stops)
 
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
@@ -165,25 +168,28 @@ def decode_grid(text):
 
 
 def shortest_routes(stops):
-    """Conservative tile-centre distances using the actual scene collision grid."""
-    scene = json.loads((ROOT / 'project/project/scenes/toronto_city/scene.gbsres').read_text())
-    width, height = scene['width'], scene['height']
-    grid = decode_grid(scene['collisions'])
-    assert len(grid) == width * height
-    points = [(s[0] // 8, s[1] // 8) for s in stops]
-
-    @cache
-    def usable(x, y, car):
-        if not (1 <= x < width - 1 and 1 <= y < height - 1):
-            return False
-        if car:
-            return all(grid[(y + dy) * width + x + dx] == 0
-                       for dx in (-1, 0, 1) for dy in (-1, 0, 1))
-        return not (grid[y * width + x] & 15)
-
+    """Scene-qualified local distances; no ferry is an ordinary foot/road edge."""
+    world = json.loads((ROOT / 'content/districts/world.json').read_text())
+    grids = {}
+    for district in {s['district'] for s in stops}:
+        scene = json.loads((ROOT / 'project/project/scenes' / world['districts'][district]['scene'] / 'scene.gbsres').read_text())
+        width, height = scene['width'], scene['height']
+        grid = decode_grid(scene['collisions'])
+        assert len(grid) == width * height
+        grids[district] = width, height, grid
+    points = [(s['district'], s['u'] // 8, s['v'] // 8) for s in stops]
     distances = {}
     for car in (False, True):
-        for origin, start in enumerate(points):
+        for origin, (district, sx, sy) in enumerate(points):
+            width, height, grid = grids[district]
+            def usable(x, y, vehicle):
+                if not (1 <= x < width - 1 and 1 <= y < height - 1):
+                    return False
+                if vehicle:
+                    return all(grid[(y + dy) * width + x + dx] == 0
+                               for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+                return not (grid[y * width + x] & 15)
+            start = sx, sy
             if not usable(*start, car):
                 continue
             queue, visited = deque([start]), {start: 0}
@@ -193,15 +199,23 @@ def shortest_routes(stops):
                     if point not in visited and usable(*point, car):
                         visited[point] = visited[x, y] + 8
                         queue.append(point)
-            for dest, point in enumerate(points):
-                distances[car, origin, dest] = visited.get(point)
+            for dest, (target_district, x, y) in enumerate(points):
+                distances[car, origin, dest] = visited.get((x, y)) if district == target_district else None
     return distances
 
 
-def route_estimate(route, kind, distances):
+def route_estimate(route, kind, distances, model=None, stops=None):
     """Model generous controlling/handling allowances; never measure gameplay here."""
     road_pixels = foot_pixels = ferry_legs = 0
+    legs = []
     for origin, dest in zip(route, route[1:]):
+        if kind == 7:
+            assert model is not None and stops is not None, 'Island estimates require typed full-body foot/ferry access'
+            leg = model.service_leg(stops[origin], stops[dest])
+            legs.append(leg)
+            foot_pixels += leg['walking_pixels']
+            ferry_legs += leg['mode'] == 'ferry'
+            continue
         walk = distances.get((False, origin, dest))
         road = distances.get((True, origin, dest))
         if walk is None:
@@ -230,7 +244,7 @@ def route_estimate(route, kind, distances):
         budget = 90 + (moving + handling) * 1.7
     else:
         budget = 90 + (moving + handling) * 2.0
-    return {
+    estimate = {
         'vehicle_route_pixels': road_pixels,
         'island_walking_pixels': foot_pixels,
         'required_ferry_legs': ferry_legs,
@@ -238,7 +252,14 @@ def route_estimate(route, kind, distances):
         'modeled_road_and_foot_seconds': round(moving, 1),
         'modeled_control_allowance_seconds': handling,
         'basis': 'Collision-grid shortest paths and native maximum speeds; not measured playtime',
-    }, math.ceil(budget / 5) * 5
+    }
+    if kind == 7:
+        estimate.update(planning_only=True, measured_duration_seconds=None,
+                        full_foot_half_pixels=5, full_foot_grid_step_pixels=4, legs=legs,
+                        worst_fictional_wait_and_ride_seconds=ferry_legs * 36,
+                        modeled_movement_wait_and_handling_seconds=round(moving + handling + ferry_legs * 36, 1),
+                        basis='Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured')
+    return estimate, math.ceil(budget / 5) * 5
 
 
 def district_street_code():
@@ -259,8 +280,7 @@ def district_street_code():
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
     for entry in world['districts'][1:]:
         district = entry['id']
-        slug = entry['scene'].removeprefix('toronto_')
-        metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
+        metadata = read_district_art(entry)
         for road in metadata['roads'] + metadata['footpaths']:
             name = aliases.get(road['name'], road['name'].upper().replace(' STREET WEST',' ST W').replace(' STREET',' ST').replace(' AVENUE',' AVE').replace(' BOULEVARD WEST',' BLVD W').replace(' BOULEVARD',' BLVD').replace(' ROAD',' RD').replace(' DRIVE',' DR'))[:18]
             if name not in street_names:
@@ -285,6 +305,8 @@ def district_street_code():
 
 
 def main(content_only=False):
+    preserved = frozen_campaign()
+    validate_preserved_campaign(json.loads((ROOT / 'content/campaign.json').read_text()))
     original_stops = [
         (288, 368, 'UNION DEPOT', 1), (384, 368, 'ST LAWRENCE', 0), (416, 368, 'DISTILLERY', 0),
         (288, 288, 'CITY HALL', 0), (192, 288, 'QUEEN WEST', 0), (192, 224, 'AGO / GRANGE', 0),
@@ -301,9 +323,21 @@ def main(content_only=False):
     #about surveyed public access or exact real-world building entrances.
     stops += [(560, 928, 'HANLAN SERVICE', 0), (760, 944, 'CENTRE PARK POST', 0),
               (912, 912, 'WARD COTTAGE POST', 0)]
+    assert [(s['u'], s['v'], s['name'], s['transit']) for s in preserved['stops'][:27]] == stops, 'Historical original-stop authoring changed'
+    stops = [dict(stop) for stop in preserved['stops'][:27]]
+    for stop in stops:
+        if stop['id'] in ISLAND_IDS:
+            stop.update(zip(('u', 'v', 'district'), NEW_ISLAND_GEOMETRY[stop['id']]))
+            stop['location_notice'] = 'Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door'
+    from create_district_jobs import RouteModel
+    world = json.loads((ROOT / 'content/districts/world.json').read_text())
+    assert len(world['districts']) == 6 and world['districts'][5]['scene'] == 'toronto_islands', 'Register actual sixth scene before generating relocated Island content'
+    island = read_district_art(world['districts'][5])
+    validate_relocated_stops(stops, island)
+    model = RouteModel(world, stops)
     distances = shortest_routes(stops)
     for i in range(len(stops)):
-        assert distances.get((False, i, i)) == 0, f'Blocked stop: {stops[i][2]}'
+        assert distances.get((False, i, i)) == 0, f'Blocked stop: {stops[i]["name"]}'
     quests = []
     for chapter, rows in enumerate(CONTRACTS):
         assert len(rows) == len(KINDS)
@@ -311,7 +345,7 @@ def main(content_only=False):
             index = len(quests)
             assert len(title) <= 18 and all(len(line) <= 18 for line in brief), title
             assert 2 <= len(route) <= 12 and all(a != b for a, b in zip(route, route[1:]))
-            estimate, seconds = route_estimate(route, kind, distances)
+            estimate, seconds = route_estimate(route, kind, distances, model, stops)
             if index < 3:
                 seconds = 120  #Tutorials preserve time to learn the controls.
             base_unlock = 3 if kind in (3, 4) else 8 if kind == 5 else 12 if kind == 7 else 0
@@ -319,13 +353,25 @@ def main(content_only=False):
                       + (len(route) - 1) * 10 + estimate['fictional_ferry_fares']
                       + (25 if kind in (1, 3, 5) else 15 if kind == 2 else 0)
                       + chapter * 12)
-            quests.append({
+            quest = {
                 'id': f'contract-{index + 1:02d}', 'title': title, 'brief': list(brief),
                 'chapter': CHAPTERS[chapter], 'kind': KINDS[kind], 'kind_id': kind,
                 'required_vehicle': 1 if kind == 3 else 0 if kind == 5 else 255,
                 'min_completed': max(base_unlock, chapter * 6), 'route': route,
                 'time_limit_seconds': seconds, 'reward': reward, 'timing_design': estimate,
-            })
+            }
+            old = preserved['quests'][index]
+            for field in ('id', 'title', 'brief', 'kind_id', 'required_vehicle', 'min_completed', 'route'):
+                assert quest[field] == old[field], f'Authored contract identity changed: {index}/{field}'
+            # Geography refreshes planning estimates, never saved ordinals or
+            # automatic payouts/deadlines. All 96 native fields stay pinned.
+            quest.update(old)
+            if kind == 7:
+                estimate['preserved_deadline_seconds'] = old['time_limit_seconds']
+                estimate['modeled_slack_seconds'] = round(old['time_limit_seconds'] - estimate['modeled_movement_wait_and_handling_seconds'], 1)
+                assert estimate['modeled_slack_seconds'] > 0, f'Island deadline needs explicit review: {index}'
+                estimate['deadline_status'] = 'Preserved native limit; nominal model fits, ordinary-input timing/tuning pending'
+            quests.append(quest)
     assert len(quests) == 72 and len({tuple(q['route']) for q in quests}) == 72
     assert len({q['title'] for q in quests}) == 72
     #Check that gated chapters can always be reached by distinct completions.
@@ -340,9 +386,7 @@ def main(content_only=False):
         'duration_target_minutes': 120, 'duration_verified': False,
         'duration_notice': 'Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.',
         'quest_types': KINDS, 'chapters': CHAPTERS,
-        'stops': [{'id': i, 'u': s[0], 'v': s[1], 'name': s[2], 'transit': s[3],
-                   **({'location_notice': 'Original fictional delivery entrance on compressed Island terrain'} if i >= 24 else {})}
-                  for i, s in enumerate(stops)],
+        'stops': stops,
         'quests': quests,
         'transit': {
             'line1': {'stops': [0, 12, 13, 14, 15, 16, 17], 'period_seconds': 18, 'fare': 3,
@@ -358,8 +402,6 @@ def main(content_only=False):
     extra = json.loads((ROOT / 'content/districts/west_jobs.json').read_text())
     assert [s['id'] for s in extra['stops']] == list(range(27, 35))
     assert [q['id'] for q in extra['quests']] == [f'contract-{i:02d}' for i in range(73, 81)]
-    for stop in content['stops']:
-        stop.update(district=0, reserved=0)
     content['stops'].extend(extra['stops'])
     quests.extend(extra['quests'])
     assert len(quests) == 80 and len(content['stops']) == 35
@@ -368,7 +410,7 @@ def main(content_only=False):
     assert [q['id'] for q in eastern['quests']] == [f'contract-{i:02d}' for i in range(81, 89)]
     content['stops'].extend(eastern['stops'])
     quests.extend(eastern['quests'])
-    content['scope'] = 'Five linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction, eastern Riverdale/Leslieville and Port Lands. Source campaign spans all five; newly appended Port Lands contracts need matching native playtests. Full Old Toronto and measured duration remain release checks.'
+    content['scope'] = 'Six original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction, eastern Riverdale/Leslieville, Port Lands and public walking Islands. Mainland scenes connect by authored seams; Islands require explicit ferry travel. Existing 96 contracts/59 stops retain IDs and native rules, with six Island endpoint geometries relocated. Native campaign timing/full Old Toronto and measured duration remain release checks.'
     assert len(quests) == 88 and len(content['stops']) == 43
     streetcar = json.loads((ROOT / 'content/streetcar.json').read_text())
     assert [s['id'] for s in streetcar['stops']] == list(range(43, 51))
@@ -384,6 +426,7 @@ def main(content_only=False):
     content['stops'].extend(port['stops'])
     quests.extend(port['quests'])
     assert len(quests) == 96 and len(content['stops']) == 59
+    validate_preserved_campaign(content)
     (ROOT / 'content/campaign.json').write_text(json.dumps(content, indent=2) + '\n')
     code = ['//Generated by scripts/create_campaign.py; original authored content.',
             '#pragma bank 255', '#include <string.h>', '#include "td_game.h"',
@@ -409,8 +452,7 @@ def main(content_only=False):
              'void td_get_street(UWORD u,UWORD v,char *d) BANKED {',
              '  if(td.district){td_get_west_street(td.district,u,v,d);return;}',
              '  const char *name="TORONTO";',
-             '  if(v>816) name="TORONTO ISLANDS";',
-             '  else if(v>768) name="QUEENS QUAY";',
+             '  if(v>768) name="QUEENS QUAY";',
              '  else if(v>688) name="FRONT STREET";',
              '  else if(v>608) name="KING STREET";',
              '  else if(v>496) name="QUEEN STREET";',

@@ -40,6 +40,7 @@
         "src/td_ui.c",
         "src/td_audio.c",
         "src/td_district.c",
+        "include/td_island_legacy.h",
         "src/td_save.c",
         "include/td_district_world.h",
         "src/td_routes.c",

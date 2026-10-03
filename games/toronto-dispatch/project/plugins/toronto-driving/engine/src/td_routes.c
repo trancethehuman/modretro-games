@@ -1,6 +1,8 @@
 #pragma bank 255
 #include "td_game.h"
 #include "td_streetcar_runtime.h"
+#include "td_world.h"
+#include "actor.h"
 #define TD_WORLD_ROUTE_DATA
 #include "td_world_routes.h"
 
@@ -31,4 +33,25 @@ void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED {
             if(score<best){best=score;identities[i]=j;nearby[i][0]=routes[j][0];nearby[i][1]=routes[j][1];}
         }
     }
+}
+
+void td_ferry_beacon(void) BANKED {
+    td_stop_t approach;td_portal_t portal;
+    UBYTE i,best_id=20,routed;UWORD score,best=0xFFFF;
+    if(td.district==TD_DISTRICT_ISLANDS&&td_target.district!=TD_DISTRICT_ISLANDS){
+        /* A local dock cue is separate from the ordinary road seam graph.
+           This bounded distance chooses guidance, not a shortest foot path. */
+        for(i=20;i<=22;i++){
+            td_get_stop(i,&approach);
+            score=td_route_distance(td.u>>4,approach.u)+td_route_distance(td.v>>4,approach.v);
+            if(score<best){best=score;best_id=i;}
+        }
+        td_get_stop(best_id,&approach);
+    }else td_get_stop(10,&approach);
+    routed=td_world_route(td.district,approach.district,td.onfoot,td.u>>4,td.v>>4,approach.u,approach.v,&portal);
+    td_route_district=routed?portal.to:TD_DISTRICT_NONE;
+    actors[1].pos.x=(routed?portal.u:approach.u)*32;
+    actors[1].pos.y=((routed?portal.v:approach.v)-12)*32;
+    if(td.district!=approach.district&&!routed)actors[1].flags|=ACTOR_FLAG_HIDDEN;
+    else actors[1].flags&=~ACTOR_FLAG_HIDDEN;
 }

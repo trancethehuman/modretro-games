@@ -99,13 +99,10 @@ def main(background_only=False):
     building(400,96,48,40,4,True,'Royal Ontario Museum')
     building(368,432,48,56,3,True,'Art Gallery of Ontario')
     building(744,584,32,24,1,label='Gooderham Flatiron')
-    building(480,928,32,24,3,label='Hanlans service pavilion')
-    building(664,904,32,24,0,label='Centre Island pavilion')
-    building(872,888,24,24,2,label='Wards Island cottages')
     # CN needle and circular observation deck in an off-road plaza west of Union.
     d.ellipse((376,664,407,695),fill=COLORS[1],outline=COLORS[0]);box(390,650,4,36,0);box(388,688,8,8,3);attr(376,648,32,48,4,True)
     # Parks, trees, street furniture and harbour bollards reuse a handful of tiles.
-    for u,v in [(112,112),(152,448),(248,336),(360,568),(488,224),(584,336),(744,208),(832,448),(960,336),(352,936),(656,936),(816,904),(664,680),(664,568),(360,448),(504,336),(584,208)]:
+    for u,v in [(112,112),(152,448),(248,336),(360,568),(488,224),(584,336),(744,208),(832,448),(960,336),(664,680),(664,568),(360,448),(504,336),(584,208)]:
         u=u//8*8;v=v//8*8
         box(u+6,v+16,3,8,0);d.ellipse((u,v,u+15,v+15),fill=COLORS[1],outline=COLORS[0]);box(u+4,v+4,8,8,2);attr(u,v,16,16,6,True);canopies.append([u,v,16,16])
     for u in range(32,992,32):box(u,808,4,4,0)
@@ -115,7 +112,7 @@ def main(background_only=False):
         u,v=location(old_u,old_v);d.rectangle((u-4,v-4,u+3,v+3),fill=COLORS[3],outline=COLORS[0]);d.line((u-2,v,u+1,v),fill=COLORS[0])
     paint_streetcar_stops(d,0,COLORS)
     img.save(PROJECT/'assets/backgrounds/toronto_city.png')
-    content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto and Island service areas; full Old Toronto boundaries remain a release check'}
+    content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto mainland and harbour; public Island paths are in their separate ferry-only scene. Full Old Toronto boundaries remain a release check'}
     (ROOT/'content/city_art.json').write_text(json.dumps(content,indent=2)+'\n')
     (PROJECT/'original-art/city_attributes.json').write_text(json.dumps(attrs)+'\n')
     if background_only:

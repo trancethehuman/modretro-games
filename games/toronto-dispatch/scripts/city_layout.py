@@ -8,7 +8,9 @@ NEW_ROWS = ROWS + [816,880,896,912,920,928,952]
 BRIDGES = [64,288,400,528,784]
 RIVER = [872,912]
 MAINLAND = [24,24,992,816]
-ISLANDS = [[336,912,600,952],[640,896,784,952],[800,880,928,928]]
+# The former miniature Island strips are captured in island_legacy_v8.json.
+# Public Islands ground now belongs to its separate ferry-only scene.
+ISLANDS = []
 ROAD_HALF, WALK_HALF = 24, 32
 WEST_PORTS = [64,288,400,528,640]
 EAST_PORTS = [64,400,528]  # Bloor/Danforth, Dundas and Queen; no King/Front bridge.

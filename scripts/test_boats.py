@@ -48,6 +48,40 @@ def check_integration():
     assert render.index("td_boats_render();") < render.index("td_aircraft_render();"), \
         "Aircraft OAM admission must include the previously appended boat"
 
+    # The appended pedestrian scene still captures the empty resource loader,
+    # but must not invent an Island boat route or displace mainland loaders.
+    world = json.loads((GAME / "content/districts/world.json").read_text())
+    expected_scenes = ("toronto_city", "toronto_west", "toronto_high_park",
+                       "toronto_east", "toronto_port_lands", "toronto_islands")
+    assert [(row["id"], row["scene"]) for row in world["districts"]] == \
+        list(enumerate(expected_scenes)), "Review boat integration when registered district identities change"
+    sprite_id = "22789632-122e-5a80-a195-5c8c6e7caeba"
+    loader_ids = set()
+    for district, name in enumerate(expected_scenes):
+        directory = GAME / "project/project/scenes" / name
+        scene = json.loads((directory / "scene.gbsres").read_text())
+        actors = [json.loads(path.read_text()) for path in (directory / "actors").glob("*.gbsres")]
+        loaders = [actor for actor in actors if actor["spriteSheetId"] == sprite_id]
+        assert len(loaders) == 1, f"{name}: capture exactly one authored boat loader"
+        loader = loaders[0]
+        expected_index = 4 if district in (0, 1, 3) else 3
+        assert loader["_index"] == expected_index, f"{name}: native boat loader slot changed"
+        assert loader["frame"] == 2 and not loader["animate"] and not loader["persistent"], \
+            f"{name}: boat loader must remain empty and stationary"
+        assert all(not loader[field] for field in ("script", "startScript", "updateScript",
+                                                   "hit1Script", "hit2Script", "hit3Script")), \
+            f"{name}: resource loader gained gameplay scripts"
+        assert scene["spritePaletteIds"][7] == "4f09c0e2-01e7-57a7-9868-ffdc3d84cc79", \
+            f"{name}: boat palette ownership changed"
+        assert loader["id"] not in loader_ids, "Boat loader resource identities must be unique"
+        loader_ids.add(loader["id"])
+    art = json.loads((GAME / "project/original-art/ambient_boat_art.json").read_text())
+    assert art["fictional_routes"] == [{"district": 0, "u": 560, "top": 840, "bottom": 896},
+                                      {"district": 4, "u": 464, "top": 64, "bottom": 432}], \
+        "Core harbour and Port water lanes must stay unchanged; Islands have no boat route"
+    assert art["port_deck_clip_rectangles"] == [[416, 96, 96, 64], [416, 256, 96, 64]]
+    assert art["water_full_hull_checks"] == 54528
+
 
 def art_fixture():
     image = Image.open(GAME / "project/original-art/ambient_boat.png").convert("RGB")
@@ -67,7 +101,7 @@ def main():
         (GAME / "project/original-art/ambient_boat.png").read_bytes(), "Imported boat pixels differ"
     district_count = int(re.search(r"#define TD_DISTRICT_COUNT (\d+)",
                                   (ENGINE / "include/td_district.h").read_text()).group(1))
-    assert district_count == 5, "Review loader slots and water routes when districts change"
+    assert district_count == 6, "Review loader slots and water routes when districts change"
     compiler = shutil.which(os.environ.get("CC", "cc"))
     if not compiler:
         raise SystemExit("Host C compiler unavailable; boat checks did not run")
@@ -91,7 +125,9 @@ typedef int16_t WORD;
 """)
         for name in ["bankdata", "actor", "data_manager", "gbs_types", "scroll", "shadow", "ui", "compat"]:
             (work / f"{name}.h").write_text('#include "host_boats.h"\n')
-        (work / "td_district.h").write_text('#include "host_boats.h"\n#define TD_DISTRICT_COUNT 5\nUBYTE td_district_current(void);\n')
+        (work / "td_district.h").write_text('#include "host_boats.h"\n' +
+                                          f'#define TD_DISTRICT_COUNT {district_count}\n' +
+                                          'UBYTE td_district_current(void);\n')
         (work / "host_boats.h").write_text("""#ifndef HOST_BOATS_H
 #define HOST_BOATS_H
 #include <gbdk/platform.h>

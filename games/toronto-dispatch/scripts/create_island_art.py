@@ -1,14 +1,16 @@
 """Generate/check original, car-free Toronto Islands source art.
 
 This is an original north-up compression of researched public relationships,
-not a raster/geometry conversion of a City map. Only new source assets and the
-source manifest are written. Native registration, gameplay, save migration,
+not a raster/geometry conversion of a City map. Source assets and the manifest
+are written; an already registered background receives the same source PNG.
+Native registration, gameplay, save migration,
 compiled budgets and hardware remain separate gates owned by integration.
 """
 import argparse
 import hashlib
 import io
 import json
+from sync_city_resources import compress
 from collections import deque
 from pathlib import Path
 
@@ -523,6 +525,23 @@ def main():
         files={ART/"toronto_islands.png":png,
                ART/"island_attributes.json":(json.dumps(attrs)+"\n").encode(),
                ROOT/"content/districts/island_art.json":(json.dumps(metadata,indent=2)+"\n").encode()}
+        # Registration belongs to the official authoring API. Once it exists,
+        # synchronize only original pixels, palette/priority RLE and collision
+        # RLE; preserve IDs, loaders, palettes, scripts and every other field.
+        native=ROOT/"project/assets/backgrounds/toronto_islands.png"
+        sidecar=native.with_suffix(".png.gbsres")
+        scene_path=ROOT/"project/project/scenes/toronto_islands/scene.gbsres"
+        if sidecar.exists() or scene_path.exists():
+            assert sidecar.exists() and scene_path.exists(), "Incomplete native Island registration"
+            background=json.loads(sidecar.read_text());scene=json.loads(scene_path.read_text())
+            assert background["filename"]==native.name and background["autoColor"] is False
+            assert scene["type"]=="TORONTO" and scene["symbol"]=="scene_toronto_islands"
+            assert scene["backgroundId"]==background["id"] and (scene["width"],scene["height"])==(TW,TH)
+            background.update(width=TW,height=TH,imageWidth=WIDTH,imageHeight=HEIGHT,tileColors=compress(attrs))
+            scene["collisions"]=compress(metadata["collisions"])
+            files[native]=png
+            files[sidecar]=(json.dumps(background,indent=2)+"\n").encode()
+            files[scene_path]=(json.dumps(scene,indent=2)+"\n").encode()
         for filename,data in files.items():
             if args.check:
                 assert filename.read_bytes()==data, f"Island source differs: {filename}"

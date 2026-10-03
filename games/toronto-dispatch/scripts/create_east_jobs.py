@@ -12,6 +12,7 @@ import math
 from pathlib import Path
 import re
 import sys
+from island_campaign import historical_stop, relocate_island_stops
 
 from create_district_jobs import (BASE_QUEST_FIELDS, FOOT_SPEED, SPEEDS,
                                   RouteModel, canonical, decode_grid, point,
@@ -70,11 +71,11 @@ def native_table(code, name):
 
 
 def preserved_prefix(campaign):
-    """Pin existing native fields, including the eight published western jobs."""
+    """Pin historical native fields; permit only six declared Island geometries."""
     stops, jobs = campaign["stops"][:PREFIX_STOPS], campaign["quests"][:PREFIX_QUESTS]
     assert len(stops) == PREFIX_STOPS and [stop["id"] for stop in stops] == list(range(PREFIX_STOPS))
     assert len(jobs) == PREFIX_QUESTS and [job["id"] for job in jobs] == [f"contract-{index:02d}" for index in range(1, 81)]
-    normalized_stops = [{field: stop.get(field, 0) for field in PREFIX_STOP_FIELDS} for stop in stops]
+    normalized_stops = [{field: historical_stop(stop).get(field, 0) for field in PREFIX_STOP_FIELDS} for stop in stops]
     normalized_jobs = [{field: job[field] for field in BASE_QUEST_FIELDS} for job in jobs]
     assert sha(canonical(normalized_stops)) == PREFIX_STOPS_SHA256, "Existing 35 native stop fields changed"
     assert sha(canonical(normalized_jobs)) == PREFIX_QUESTS_SHA256, "Existing 80 contract fields changed"
@@ -83,8 +84,10 @@ def preserved_prefix(campaign):
     assert len(rows) >= PREFIX_STOPS, "Native stop prefix is unavailable"
     for stop, row in zip(stops, rows[:PREFIX_STOPS]):
         u, v, name, transit, district, flags = row
-        assert (int(u), int(v), name, int(transit), int(district), int(flags)) == (
-            stop["u"], stop["v"], stop["name"], stop["transit"], stop.get("district", 0), stop.get("reserved", 0)), f"Native stop prefix differs: {stop['id']}"
+        native = historical_stop(dict(id=stop['id'], u=int(u), v=int(v), name=name,
+                                      transit=int(transit), district=int(district), reserved=int(flags)))
+        historical = historical_stop(stop)
+        assert all(native.get(field, 0) == historical.get(field, 0) for field in PREFIX_STOP_FIELDS), f"Native stop prefix differs: {stop['id']}"
     rows = re.findall(r'\{"([^"]+)",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),\{([\d,]+)\}\}', native_table(code, "td_jobs"))
     assert len(rows) >= PREFIX_QUESTS, "Native contract prefix is unavailable"
     for job, row in zip(jobs, rows[:PREFIX_QUESTS]):
@@ -145,7 +148,7 @@ def author():
             stop["parking_anchor"] = {"u": anchor[0], "v": anchor[1]}
             stop["access_notice"] = "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
         authored_stops.append(stop)
-    stops = [{**stop, "district": stop.get("district", 0)} for stop in base_stops] + authored_stops
+    stops = relocate_island_stops(base_stops, world) + authored_stops
     model = RouteModel(world, stops)
     for stop in authored_stops:
         node = point(stop["district"], stop["u"], stop["v"])

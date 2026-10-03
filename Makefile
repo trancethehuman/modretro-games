@@ -8,6 +8,7 @@ check:
 	python3 scripts/check_repository.py
 	python3 games/toronto-dispatch/scripts/check_campaign.py
 	python3 scripts/check_island_legacy.py
+	python3 scripts/check_island_campaign.py
 	python3 games/toronto-dispatch/scripts/create_island_art.py --check
 	python3 games/toronto-dispatch/scripts/create_campaign.py --check-streets
 	python3 games/toronto-dispatch/scripts/check_streetcar.py

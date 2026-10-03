@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 import re
 import atlas_banks
+from district_sources import district_art_path, read_district_art
 
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT / "project/plugins/toronto-driving/engine"
@@ -96,7 +97,7 @@ def water_model(district, metadata):
         left, right = [integer(v, 0, width, "river coordinate") for v in river]
         require(left < right, "Invalid core river width")
         mainland = rectangle(metadata.get("mainland"), width, height, endpoints=True)
-        require(isinstance(metadata.get("islands"), list) and metadata["islands"], "Missing core Island ground")
+        require(isinstance(metadata.get("islands"), list), "Missing core Island ground declaration")
         islands = [rectangle(r, width, height, endpoints=True) for r in metadata["islands"]]
         shapes = {"river": [left, mainland[1], right, mainland[3]],
                   "harbour_from_y": mainland[3], "island_land_exclusions": [list(r) for r in islands]}
@@ -198,9 +199,8 @@ def model():
                 and (scene.get("width"), scene.get("height")) == (128, 122),
                 "Unavailable or malformed registered scene")
         grid = decode_grid(scene.get("collisions"), 128 * 122)
-        metadata_path = ROOT / ("content/city_art.json" if i == 0 else
-                                "content/districts/" + district["scene"].removeprefix("toronto_") + "_art.json")
-        metadata = read(metadata_path)
+        metadata_path = district_art_path(district, ROOT)
+        metadata = read_district_art(district, ROOT)
         require(metadata.get("dimensions") == [1024, 976], "Art/water metadata dimensions disagree")
         if i:
             require(metadata.get("collisions") == grid, "Authored and registered district collisions disagree")
@@ -222,7 +222,7 @@ def model():
                           "scene_sha256": sha(scene_path.read_bytes()),
                           "collision_encoding_sha256": sha(scene["collisions"].encode()),
                           "collision_bytes_sha256": sha(bytes(grid)),
-                          "art_metadata": str(metadata_path.relative_to(ROOT)),
+                          "art_metadata": str(metadata_path.relative_to(ROOT.resolve())),
                           "art_metadata_sha256": sha(metadata_path.read_bytes())})
 
     patterns, indices, lookup = [], [], {}
@@ -270,7 +270,7 @@ def model():
             "scale": SCALE, "width_pixels": width, "height_pixels": height,
             "padded_height_pixels": tile_height * 8, "tile_width": tile_width, "tile_height": tile_height,
             "ground_values": {"solid": SOLID, "road": ROAD, "walk": WALK, "water": WATER},
-            "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour excludes Island land. East has no water.",
+            "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour uses its declared mainland/land exclusions; Islands use their separate water mask. East has no water.",
             "world_sha256": sha(world_path.read_bytes()), "canonical_district_header_sha256": sha(canonical_text.encode()),
             "sources": resources, "districts": compiled_districts,
             "visual_west_to_east": [d["id"] for d in sorted(compiled_districts, key=lambda d: (d["y"], d["x"]))],

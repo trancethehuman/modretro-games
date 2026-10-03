@@ -53,7 +53,7 @@ static scene_t test_native_scenes[TD_DISTRICT_COUNT];
 static unsigned test_map_opens,test_map_updates,test_map_closes;
 static UBYTE test_map_active,test_map_buttons,test_map_pressed,test_map_camera_settings;
 static UWORD test_map_camera_x,test_map_camera_y;
-static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER } geometry;
+static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER,ISLAND_CHECKPOINT_EDGE } geometry;
 static jmp_buf interrupted_save;
 static unsigned sram_writes,sram_interrupt_after;
 static int sram_interrupt_enabled;
@@ -81,7 +81,8 @@ static UBYTE district_tile(UBYTE district,UBYTE x,UBYTE y) {
     if (geometry==SOUTH_CURB && y>=50) return 15;
     if (geometry==SOUTHWEST_CORNER && y>=50 && x<50) return 15;
     if (geometry==ALIGHT_BARRIER&&x==71&&y==90) return 15;
-    if (geometry==NATIVE_GRID||geometry==ALIGHT_BARRIER) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
+    if (geometry==ISLAND_CHECKPOINT_EDGE&&district==TD_DISTRICT_ISLANDS&&x==39&&y==35)return 15;
+    if (geometry==NATIVE_GRID||geometry==ALIGHT_BARRIER||geometry==ISLAND_CHECKPOINT_EDGE) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
     if (geometry==HIDDEN_NPC_TILE && x==48 && y==53) return 15;
     return 0;
 }
@@ -868,8 +869,8 @@ static void test_pickup_damage_lifecycle(void) {
     for(UBYTE fault=0;fault<2;fault++) {
         native_case();td.cash=111;td_save();
         td.job=1;td.stage=0;td.left=110;td.health=invalid_health[fault];td.cash=999;td_save();
-        UBYTE sequence;td_state_t raw;
-        expect(td_read_slot(td_save_slot,&raw,&sequence)&&raw.job==1&&raw.stage==0&&raw.health==invalid_health[fault],
+        UBYTE sequence,source_version;td_state_t raw;
+        expect(td_read_slot(td_save_slot,&raw,&sequence,&source_version)&&raw.job==1&&raw.stage==0&&raw.health==invalid_health[fault],
                "invalid approach-condition fixture is a genuine committed CRC-valid newer current-version record");
         memset(&td,0,sizeof(td));td_session_live=0;actors_inactive_head=NULL;toronto_init();
         expect(td.mode==TD_HELP&&td.job==TD_NONE&&td.health==100&&td.cash==111,
@@ -972,6 +973,9 @@ static void test_transit_funds_pause_and_deadline(void) {
     for(unsigned i=0;i<3;i++) {
         unsigned service=services[i];UWORD phase=transit_cases[service].phase;
         transit_menu_case(service,phase+1);td.cash=transit_cases[service].fare-1;
+        /* An active job has no return assistance; idle low-cash Island
+           returns are exercised separately by the fare boundary fixture. */
+        if(td.district==TD_DISTRICT_ISLANDS){td.job=0;td_get_job(0,&td_job);td.left=600;}
         world_tick(J_A,1);
         expect(td.mode==TD_ROAM&&td.msg==4&&td.cash==transit_cases[service].fare-1&&td.ride_left==0,
                "an open departure with insufficient funds returns to roaming without charging or boarding");
@@ -982,6 +986,7 @@ static void test_transit_funds_pause_and_deadline(void) {
         world_tick(J_A,1);
         expect(td.mode==TD_RIDE&&td.cash==0,"the exact fare is sufficient for immediate boarding on each service");
         transit_menu_case(service,phase+2);td.cash=transit_cases[service].fare-1;
+        if(td.district==TD_DISTRICT_ISLANDS){td.job=0;td_get_job(0,&td_job);td.left=600;}
         world_tick(J_A,1);
         expect(td.mode==TD_WAIT&&td.msg==0&&td.cash==transit_cases[service].fare-1,
                "a closed window defers its funds check until the scheduled boarding opportunity");
@@ -1492,30 +1497,36 @@ static void test_first_frame_actors(void) {
     /* Port Lands: Leslie's clear road at128, with authored sidewalk route
        (864,92) near the courier at(930,128), rather than the zero-filled
        origin of an omitted fifth initializer. */
-    const UWORD locations[][2]={{560,720},{800,64},{736,640},{224,528},{912,128}};
+    const UWORD locations[][2]={{560,720},{800,64},{736,640},{224,528},{912,128},{320,280}};
     _Static_assert(sizeof(locations)/sizeof(locations[0])==TD_DISTRICT_COUNT,
                    "Every registered district needs an explicit first-frame neighborhood fixture");
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++) {
         native_case();td_session_live=1;test_current_district=td.district=td.park_district=district;
         td.u=(locations[district][0]+18)*16;td.v=locations[district][1]*16;
-        td.park_u=locations[district][0]*16;td.park_v=td.v;td.onfoot=1;toronto_init();
-        expect(td_drivable(locations[district][0],locations[district][1])&&td_road_walkable(td.u>>4,td.v>>4),
-               "each first-frame neighborhood fixture parks on an actual clear road and places the courier on walking terrain");
+        td.park_u=locations[district][0]*16;td.park_v=td.v;td.onfoot=1;
+        if(district==TD_DISTRICT_ISLANDS){td.u=320*16;td.park_district=TD_DISTRICT_CITY;td.park_u=560*16;td.park_v=720*16;}
+        toronto_init();
+        expect((district==TD_DISTRICT_ISLANDS?!td_drivable(locations[district][0],locations[district][1]):
+                td_drivable(locations[district][0],locations[district][1]))&&td_road_walkable(td.u>>4,td.v>>4),
+               "each first-frame neighborhood uses actual walking ground and preserves the Island road exclusion");
         expect(actors_len==TD_ACTORS&&PLAYER.pos.x==(td.u>>4)*32&&PLAYER.pos.y==(td.v>>4)*32,
                "each registered district initializes all actors and courier coordinates before its first update");
-        expect(actors[8].pos.x==(td.park_u>>4)*32&&actors[8].pos.y==(td.park_v>>4)*32&&!(actors[8].flags&ACTOR_FLAG_HIDDEN),
-               "first scene frame shows the locally parked vehicle at its real saved position");
+        if(district==TD_DISTRICT_ISLANDS)
+            expect(actors[8].flags&ACTOR_FLAG_HIDDEN,"the first real Island scene frame cannot display a parked mainland vehicle");
+        else expect(actors[8].pos.x==(td.park_u>>4)*32&&actors[8].pos.y==(td.park_v>>4)*32&&!(actors[8].flags&ACTOR_FLAG_HIDDEN),
+                    "first scene frame shows the locally parked vehicle at its real saved position");
         int traffic=1;unsigned visible=0;
         for(unsigned i=0;i<6;i++) {
-            if(actors[i+2].pos.x!=(td_traffic_u[i]>>4)*32||actors[i+2].pos.y!=(td_traffic_v[i]>>4)*32||
-               !td_drivable(td_traffic_u[i]>>4,td_traffic_v[i]>>4))traffic=0;
+            if(district==TD_DISTRICT_ISLANDS){if(!(actors[i+2].flags&ACTOR_FLAG_HIDDEN))traffic=0;}
+            else if(actors[i+2].pos.x!=(td_traffic_u[i]>>4)*32||actors[i+2].pos.y!=(td_traffic_v[i]>>4)*32||
+                    !td_drivable(td_traffic_u[i]>>4,td_traffic_v[i]>>4))traffic=0;
             if(!(actors[i+9].flags&ACTOR_FLAG_HIDDEN)) {
                 visible++;
                 expect(td_ped_route[i]<td_route_counts[td.district]&&td_road_walkable(actors[i+9].pos.x/32,actors[i+9].pos.y/32),
                        "first-frame visible pedestrian has a valid identity on actual scene walking terrain");
             }
         }
-        expect(traffic,"first scene frame places every traffic actor on its actual initialized clear road footprint");
+        expect(traffic,"first scene frame places mainland traffic on clear roads and hides all fleet on the actual foot-only Island");
         expect(visible>0,"each selected neighborhood starts with visible native pedestrians");
     }
 }
@@ -1707,8 +1718,8 @@ static void test_port_save_and_final_credit(void) {
     td.cash=2417;td.seconds=65535;td.subsecond=59;td.wanted=2;td.wanted_left=17;
     td.complete[0]=255;td.complete[1]=15;td.done=12;td.transit_origin=49;td.transit_target=43;
     td_state_t saved=td;td_save();
-    expect(td_save_address(td_save_slot)[2]==8&&td_save_address(td_save_slot)[3]==58,
-           "a new carried Port contract writes the unchanged version8/58-byte record");
+    expect(td_save_address(td_save_slot)[2]==TD_SAVE_VERSION&&td_save_address(td_save_slot)[3]==58,
+           "a new carried Port contract writes the current version with unchanged58-byte payload");
     memset(&td,0,sizeof(td));expect(td_restore()&&!memcmp(&td,&saved,58),
            "active Port job93 at Riverbank restores its exact deadline, condition, bitmap, heat, foot position and remote Core car");
     memset(&td,0,sizeof(td));td_session_live=0;load_authored_scene_fixture();toronto_init();
@@ -2247,6 +2258,18 @@ static void test_banked_traffic_segments(void) {
     }
     for(UBYTE district=1;district<TD_DISTRICT_COUNT;district++){
         UWORD start_u[6],start_v[6];td_traffic_sample_t target[6],prior[6];
+        if(district==TD_DISTRICT_ISLANDS){
+            memset(start_u,0x37,sizeof(start_u));memset(start_v,0x37,sizeof(start_v));
+            memset(target,0x37,sizeof(target));memset(legs,0x37,sizeof(legs));
+            UWORD before_u[6],before_v[6];td_traffic_sample_t before_target[6];UBYTE before_legs[6];
+            memcpy(before_u,start_u,sizeof(start_u));memcpy(before_v,start_v,sizeof(start_v));
+            memcpy(before_target,target,sizeof(target));memcpy(before_legs,legs,sizeof(legs));
+            expect(!td_world_traffic_init(district,start_u,start_v,legs,target)&&
+                   !memcmp(before_u,start_u,sizeof(start_u))&&!memcmp(before_v,start_v,sizeof(start_v))&&
+                   !memcmp(before_target,target,sizeof(target))&&!memcmp(before_legs,legs,sizeof(legs)),
+                   "the actual foot-only Island has no authored traffic route and preserves every rejected output");
+            continue;
+        }
         expect(td_world_traffic_init(district,start_u,start_v,legs,target),"segment fixture reads real registered district traffic");
         for(UBYTE slot=0;slot<6;slot++){
             UBYTE count=target[slot].count;
@@ -2470,7 +2493,9 @@ static void test_contact_corridor_coverage(void) {
         {{560,528},{824,240},{500,128}},{{944,504},{400,720},{400,128}},
         /* Clear Leslie/Lake Shore road, service drive and Cherry South
            bridge. Queen-like local y coordinates must not invent service. */
-        {{912,128},{672,536},{192,536}}
+        {{912,128},{672,536},{192,536}},
+        /* Actual public ferry checkpoints, not synthetic Island roads. */
+        {{320,280},{512,448},{920,280}}
     };
     _Static_assert(sizeof(clear_points)/sizeof(clear_points[0])==TD_DISTRICT_COUNT,
                    "Every registered district needs explicit off-corridor contact fixtures");
@@ -2547,7 +2572,10 @@ static const UWORD traffic_probe_points[][6][2]={
     {{836*16,536*16},{836*16,520*16},{912*16,528*16},{1000*16,536*16},{800*16,480*16},{512*16,536*16}},
     {{740*16,536*16},{740*16,520*16},{24*16,536*16},{1000*16,520*16},{640*16,528*16},{560*16,720*16}},
     {{680*16,536*16},{680*16,504*16},{664*16,488*16},{664*16,520*16},{400*16,504*16},{24*16,536*16}},
-    {{192*16,536*16},{672*16,536*16},{912*16,536*16},{912*16,128*16},{352*16,824*16},{736*16,128*16}}
+    {{192*16,536*16},{672*16,536*16},{912*16,536*16},{912*16,128*16},{352*16,824*16},{736*16,128*16}},
+    /* Pure body-query probes at actual foot docks/clients; no Island fleet
+       is fabricated or made drivable by these Queen exclusion checks. */
+    {{320*16,280*16},{512*16,448*16},{920*16,280*16},{160*16,600*16},{512*16,744*16},{904*16,440*16}}
 };
 _Static_assert(sizeof(traffic_probe_points)/sizeof(traffic_probe_points[0])==TD_DISTRICT_COUNT,
                "Every registered district needs explicit traffic lookahead probes");
@@ -2959,9 +2987,9 @@ static void test_dispatch_transient_save_contract(void) {
     td.mode=TD_BOARD;td.menu=95;td_board_route=3;td_offer.reward=65535;td_save();
     UBYTE payload[58];memcpy(payload,(const void *)(td_save_address(td_save_slot)+8),sizeof(payload));
     td_board_route=1;td_offer.reward=1;td_save();
-    expect(td_save_address(td_save_slot)[2]==8&&td_save_address(td_save_slot)[3]==58&&
+    expect(td_save_address(td_save_slot)[2]==TD_SAVE_VERSION&&td_save_address(td_save_slot)[3]==58&&
            !memcmp(payload,(const void *)(td_save_address(td_save_slot)+8),sizeof(payload)),
-           "preview page and offer balance cache never enter or grow the version8/58-byte SRAM payload");
+           "preview page and offer balance cache never enter or grow the current58-byte SRAM payload");
     td_state_t saved=td;saved.mode=TD_ROAM;td_board_route=11;td_offer.reward=43210;memset(&td,0,sizeof(td));
     expect(td_restore()&&!memcmp(&td,&saved,58)&&td_board_route==11&&td_offer.reward==43210,
            "restoring the real payload retains all carried-job fields and does not pretend that transient UI values were serialized");
@@ -2974,10 +3002,10 @@ static void test_dispatch_transient_save_contract(void) {
 }
 
 static void test_reserved_islands_traffic_gates(void) {
-    /* Only the reserved loaded-view enum is exercised. The registry remains
-       five scenes: no invented scene, collision map, client or paid arrival. */
-    expect(TD_DISTRICT_ISLANDS==5&&TD_DISTRICT_COUNT==5,
-           "the Islands boundary remains reserved rather than a registered sixth scene");
+    /* Deliberately stale mainland caches in the loaded Island view cannot
+       create road traffic; actual scene initialization is tested separately. */
+    expect(TD_DISTRICT_ISLANDS==5,
+           "the Islands traffic capability retains its explicit district identity");
     for(UBYTE mode=TD_ROAM;mode<=TD_RIDE;mode++){
         if(mode!=TD_ROAM&&mode!=TD_WAIT&&mode!=TD_RIDE)continue;
         for(UBYTE foot=0;foot<2;foot++){
@@ -3045,17 +3073,20 @@ static void test_current_ferry_fare_boundary(void) {
     for(UBYTE dock=20;dock<=22;dock++)for(UBYTE cash=0;cash<=4;cash++){
         reset_case();authored_content=1;td.onfoot=1;td.mode=TD_WAIT;td.cash=cash;
         td.transit_origin=dock;td.transit_target=10;td_get_stop(dock,&td_cursor);
-        td.u=td_cursor.u*16;td.v=td_cursor.v*16;td.seconds=(dock-19)*7;
+        td.u=td_cursor.u*16;td.v=td_cursor.v*16;td.district=td_cursor.district;td.seconds=(dock-19)*7;
         UWORD park_u=td.park_u,park_v=td.park_v;
         expect(td_board_current_window(),"the existing ferry evaluates its actual open boarding window");
-        expect(cash<4?(td.mode==TD_ROAM&&td.cash==cash&&td.msg==4):
-               (td.mode==TD_RIDE&&td.cash==0&&td.ride_left==8),
-               "current Core Island strips retain the ordinary four-dollar ferry fare and paid duration");
+        expect(TD_DISTRICT_COUNT>5?
+               (td.mode==TD_RIDE&&td.cash==cash-(cash<4?0:4)&&td.ride_left==8):
+               (cash<4?(td.mode==TD_ROAM&&td.cash==cash&&td.msg==4):(td.mode==TD_RIDE&&td.cash==0&&td.ride_left==8)),
+               "registered Island returns use assistance only below four dollars; ordinary fare and duration remain intact");
         expect(td.park_u==park_u&&td.park_v==park_v&&td.park_district==0,
                "ordinary ferry fare checks never relocate the mainland parked car");
     }
 }
 
+#include "island_save_harness.h"
+#include "island_objective_harness.h"
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -3095,6 +3126,7 @@ int main(void) {
     test_dispatch_itinerary_inputs();test_dispatch_acceptance_and_reentry();
     test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
     test_reserved_islands_traffic_gates();test_current_ferry_fare_boundary();
+    test_island_save_migration();test_island_objective_guidance();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

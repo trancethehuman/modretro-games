@@ -1,0 +1,749 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Retained failed six-scene pause/audio-map replay. It reaches actual Islands but is not a loading candidate.",
+  "rom": {
+    "path": "project/build/toronto-dispatch-islands-v9-bank.gbc",
+    "sha256": "8a96eb0c52f524cc121f0411ab7833da449361095d40b03258d160dcef1a4187",
+    "sizeBytes": 524288
+  },
+  "build": {
+    "durationMs": 62962,
+    "noiSha256": "639d43d92b5ff725bf8d6c111fa994645b3cd0ec6eed66f4cef88d26bf1a5297",
+    "sourceFingerprint": "cf19b9ec09320e5a09c0a3ac562e65623a580e40eb56de6094d728d5d8d639cd",
+    "staticReserveBytes": 1097
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "outcome": "failed",
+  "scope": [
+    "Ordinary stopped car exit and scheduled ferry10->21 reaches actual district5 Centre512448 with one fare30->26 and original mainland car561.75,720.",
+    "All58 gameplay bytes freeze during360 map frames.",
+    "YOU focus incorrectly remains High Park; Select car correctly focuses Core.",
+    "Pause AUDIO formatting produces non-text bytes past td_line[40], corrupting adjacent streetcar focus. Corrective source/new build/replay required."
+  ],
+  "snapshots": [
+    {
+      "label": "fresh help",
+      "frame": 180,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "0023002d0023002d1e000000000000000000000800ff00640000000000000000000000000000000000000000000000000023002d000000000000"
+    },
+    {
+      "label": "Union car exit",
+      "frame": 348,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "1c23202e1c23002d1e000100000000000000010003ff00640026000000000000000000000000000000000000000000001c23002d000000000000"
+    },
+    {
+      "label": "Terminal ferry quote Hanlan",
+      "frame": 624,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "0c28f8301c23002d1e000600000000000000010400ff0064000a000000000000000000000000000000000a14000000001c23002d000000000000"
+    },
+    {
+      "label": "First Centre Islands arrival",
+      "frame": 2656,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "0020001c1c23002d1a002700000000000000010001ff00640015000000000000000000000000000000000a15000000000020001c000000000500"
+    },
+    {
+      "label": "Island map before freeze",
+      "frame": 2696,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "0020001c1c23002d1a002700000000000000010301ff00640015000000000000000000000000000000000a15000000000020001c000000000500"
+    },
+    {
+      "label": "Island map after 360 freeze",
+      "frame": 3056,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "0020001c1c23002d1a002700000000000000010301ff00640015000000000000000000000000000000000a15000000000020001c000000000500"
+    },
+    {
+      "label": "Island map close restores roam",
+      "frame": 3190,
+      "address": "0xc1f6",
+      "length": 58,
+      "hex": "0020001c1c23002d1a002700000000000000010001ff00640030000000000000000000000000000000000a15000000000020001c000000000500"
+    }
+  ],
+  "cacheObservations": [
+    {
+      "frame": 3146,
+      "address": "0xc4e3",
+      "length": 6,
+      "hex": "020c79fea038",
+      "meaning": "Invalid streetcar district160/ride56 while MAP."
+    },
+    {
+      "frame": 3190,
+      "address": "0xc4e3",
+      "length": 6,
+      "hex": "0020001c0500",
+      "meaning": "ROAM refresh restores Centre512448/district5/ride0."
+    },
+    {
+      "frame": 3222,
+      "address": "0xc4bb",
+      "length": 46,
+      "hex": "2020415544494f3a206ffab5da472afe80281c8257020c2a835f020cfa7ada8623020cfa7bda8623020c79fea038",
+      "meaning": "Corruption already present in pause AUDIO before second MAP."
+    }
+  ],
+  "steps": [
+    {
+      "startFrame": 180,
+      "frame": 200,
+      "advancedFrames": 20,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 200,
+          "sha256": "5929eae805d77046797ba1655520be816264d8c1f48f6119fd24ea377efcfb22",
+          "rgbaSha256": "8d22a6e263e34b1efc95ff879c53514c51e5b828e5e0b6c1f0051aeb44d5fc8d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/5929eae805d77046797ba1655520be816264d8c1f48f6119fd24ea377efcfb22.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 200,
+      "frame": 208,
+      "advancedFrames": 8,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 208,
+          "sha256": "106e2678ea17cb0b67d2af570bf5cb2ed255149b23c6fc8b0917d3473042da9b",
+          "rgbaSha256": "e3453a0771711e6813d1cf59fa8019f7a19a96f799a3590174c15572437e18a0",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/106e2678ea17cb0b67d2af570bf5cb2ed255149b23c6fc8b0917d3473042da9b.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 208,
+      "frame": 216,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 216,
+          "sha256": "8f14821ace477248a7972f4ce4bb990acc63a037c1239d335d1a51e78f5c7abb",
+          "rgbaSha256": "d1762ee541ef3431c2e2a6d9af306310868bed9f6f307c90483dceaa00e4b126",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/8f14821ace477248a7972f4ce4bb990acc63a037c1239d335d1a51e78f5c7abb.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 216,
+      "frame": 224,
+      "advancedFrames": 8,
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 224,
+          "sha256": "b6065009be15e67be52af4eca301a20f8a5e64512a25f6fcf6752a9e121d3580",
+          "rgbaSha256": "5a6524d477ebc99dbd7c1b449b0abf9344c88f2809b7bfbd08b7d036650f108d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/b6065009be15e67be52af4eca301a20f8a5e64512a25f6fcf6752a9e121d3580.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 224,
+      "frame": 232,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 232,
+          "sha256": "b6065009be15e67be52af4eca301a20f8a5e64512a25f6fcf6752a9e121d3580",
+          "rgbaSha256": "5a6524d477ebc99dbd7c1b449b0abf9344c88f2809b7bfbd08b7d036650f108d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/b6065009be15e67be52af4eca301a20f8a5e64512a25f6fcf6752a9e121d3580.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 232,
+      "frame": 240,
+      "advancedFrames": 8,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 240,
+          "sha256": "507a507478e399206922c0713db2469af23ff1cedbcde20b262fac5d397792de",
+          "rgbaSha256": "79e6f225165ed46d0312b1f2bb45d124553c9486d252af8ed09aaf98ed7a6b38",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/507a507478e399206922c0713db2469af23ff1cedbcde20b262fac5d397792de.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 240,
+      "frame": 248,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 248,
+          "sha256": "507a507478e399206922c0713db2469af23ff1cedbcde20b262fac5d397792de",
+          "rgbaSha256": "79e6f225165ed46d0312b1f2bb45d124553c9486d252af8ed09aaf98ed7a6b38",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/507a507478e399206922c0713db2469af23ff1cedbcde20b262fac5d397792de.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 248,
+      "frame": 256,
+      "advancedFrames": 8,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 256,
+          "sha256": "95e0b08028715cda5ae9b27beb5238568fc40710141e0d4b34f386738c3f58c3",
+          "rgbaSha256": "1862758732827f23c5e1da0db86191cca36e95909ca7ae4fe7ee00d38282a454",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/95e0b08028715cda5ae9b27beb5238568fc40710141e0d4b34f386738c3f58c3.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 256,
+      "frame": 264,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 264,
+          "sha256": "95e0b08028715cda5ae9b27beb5238568fc40710141e0d4b34f386738c3f58c3",
+          "rgbaSha256": "1862758732827f23c5e1da0db86191cca36e95909ca7ae4fe7ee00d38282a454",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/95e0b08028715cda5ae9b27beb5238568fc40710141e0d4b34f386738c3f58c3.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 264,
+      "frame": 272,
+      "advancedFrames": 8,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 272,
+          "sha256": "fed3b4e7b9948a37b823fad66d9937e2d150768298bbe6ae1a5640b74cd466e6",
+          "rgbaSha256": "655f8d064a4c3d113a2832e896dc41fd7e6673ddf2b8d78a2ea60fd84122a1f8",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/fed3b4e7b9948a37b823fad66d9937e2d150768298bbe6ae1a5640b74cd466e6.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 272,
+      "frame": 280,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 280,
+          "sha256": "fed3b4e7b9948a37b823fad66d9937e2d150768298bbe6ae1a5640b74cd466e6",
+          "rgbaSha256": "655f8d064a4c3d113a2832e896dc41fd7e6673ddf2b8d78a2ea60fd84122a1f8",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/fed3b4e7b9948a37b823fad66d9937e2d150768298bbe6ae1a5640b74cd466e6.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 280,
+      "frame": 288,
+      "advancedFrames": 8,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 288,
+          "sha256": "a4bdbfff2421f57010d6d028d36777d2a16bf8e239715fca3afa3e8aef88fc4b",
+          "rgbaSha256": "96502ae9040977da02288a89174577ab438297ae14bfe29cc7f6f51d52f3177f",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a4bdbfff2421f57010d6d028d36777d2a16bf8e239715fca3afa3e8aef88fc4b.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 288,
+      "frame": 348,
+      "advancedFrames": 60,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 348,
+          "sha256": "a35fb685eadf883afba1a59eef03bfdc2bb47847fa912a93423b7eaec5bc8117",
+          "rgbaSha256": "bc01752730c312e14aee9c86ead564724a08c19ed0567de34ed81b3b25f08203",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a35fb685eadf883afba1a59eef03bfdc2bb47847fa912a93423b7eaec5bc8117.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 348,
+      "frame": 504,
+      "advancedFrames": 156,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 504,
+          "sha256": "dbfab0a424e6f097793c56c52957dc80568b07a791c64f86ced21f4b36daad32",
+          "rgbaSha256": "409215452b33fba606355d1af8e74036ad3eda7a17171a0b2a00e4a7690bbd4c",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/dbfab0a424e6f097793c56c52957dc80568b07a791c64f86ced21f4b36daad32.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 504,
+      "frame": 514,
+      "advancedFrames": 10,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 514,
+          "sha256": "b0395fc42b17c8d9d81a01208348b6db635762ca01de246e55301fb54ba94b20",
+          "rgbaSha256": "6dfdee7ed4622622d128d9cf23c2ddf389cced281ad5817449ddf0062d594516",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/b0395fc42b17c8d9d81a01208348b6db635762ca01de246e55301fb54ba94b20.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 514,
+      "frame": 608,
+      "advancedFrames": 94,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 608,
+          "sha256": "7a68f379146e86f8e5031a41f25320266a7c2ff2f413de15fc32dcd48179bafd",
+          "rgbaSha256": "04cf27b488b1548e3ab8906f40d1fbc6924c9e5f5efea70e23d7afa769521627",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/7a68f379146e86f8e5031a41f25320266a7c2ff2f413de15fc32dcd48179bafd.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 608,
+      "frame": 616,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 616,
+          "sha256": "67d771634c679b7c29a33a30abbf53f6c86da5d9b3b6630e1fab60154781a2ee",
+          "rgbaSha256": "8f2c807b6a0b32b4126e23afaaa9d6cb494b9ff078d19964f708b7d3d0c8eb06",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/67d771634c679b7c29a33a30abbf53f6c86da5d9b3b6630e1fab60154781a2ee.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 616,
+      "frame": 624,
+      "advancedFrames": 8,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 624,
+          "sha256": "4a3644556de43634e90a97af4a8be5735f71e94070e27cc908352308b44e08e4",
+          "rgbaSha256": "8381524bf3a5d8ab91910b2b7935c597d78eb1bda7da590de6b35ac403fda81a",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/4a3644556de43634e90a97af4a8be5735f71e94070e27cc908352308b44e08e4.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 624,
+      "frame": 632,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 632,
+          "sha256": "4a3644556de43634e90a97af4a8be5735f71e94070e27cc908352308b44e08e4",
+          "rgbaSha256": "8381524bf3a5d8ab91910b2b7935c597d78eb1bda7da590de6b35ac403fda81a",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/4a3644556de43634e90a97af4a8be5735f71e94070e27cc908352308b44e08e4.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 632,
+      "frame": 640,
+      "advancedFrames": 8,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 640,
+          "sha256": "f8eca51bca9939014e90097e76af6d130ecb4e4df445fa7b703db0442792cb71",
+          "rgbaSha256": "feef964ec2c49a128237447ce55898773463d46e85f73db4130965c976828463",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/f8eca51bca9939014e90097e76af6d130ecb4e4df445fa7b703db0442792cb71.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 640,
+      "frame": 648,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 648,
+          "sha256": "f8eca51bca9939014e90097e76af6d130ecb4e4df445fa7b703db0442792cb71",
+          "rgbaSha256": "feef964ec2c49a128237447ce55898773463d46e85f73db4130965c976828463",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/f8eca51bca9939014e90097e76af6d130ecb4e4df445fa7b703db0442792cb71.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 648,
+      "frame": 656,
+      "advancedFrames": 8,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 656,
+          "sha256": "96ee5cd47d8628db9c89008f62195c708f1581ef9c0e0874f94db10ad5f4224a",
+          "rgbaSha256": "cdb5d5e207a8c4572e658dd9bf60ed71df36b27cfb515b3d137d659719f3051b",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/96ee5cd47d8628db9c89008f62195c708f1581ef9c0e0874f94db10ad5f4224a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 656,
+      "frame": 2656,
+      "advancedFrames": 2000,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2656,
+          "sha256": "db07c76ec4d5b39fbd29371550e78eeb609f0f751e370ca28f9b8bb18047416a",
+          "rgbaSha256": "1933ac90914d745c1716f166dec9d1113d875d713f43dfd8e2bf53f858b41072",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/db07c76ec4d5b39fbd29371550e78eeb609f0f751e370ca28f9b8bb18047416a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 2656,
+      "frame": 2664,
+      "advancedFrames": 8,
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2664,
+          "sha256": "a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1",
+          "rgbaSha256": "49f1a0bcac70cb4251bdf011d54839c671696905cdd142cc87d83e731be27343",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 2664,
+      "frame": 2672,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2672,
+          "sha256": "a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1",
+          "rgbaSha256": "49f1a0bcac70cb4251bdf011d54839c671696905cdd142cc87d83e731be27343",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 2672,
+      "frame": 2680,
+      "advancedFrames": 8,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2680,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 2680,
+      "frame": 2688,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2688,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 2688,
+      "frame": 2696,
+      "advancedFrames": 8,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2696,
+          "sha256": "e7719578b4b2f9fef4756254dd7d5a308d5035ab86199b16e1a5ce5d47a24c81",
+          "rgbaSha256": "d9ad29503a11595e9c0594ebbbd32f9fafde693f4d03992bbcd2c1be45908fd0",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/e7719578b4b2f9fef4756254dd7d5a308d5035ab86199b16e1a5ce5d47a24c81.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 2696,
+      "frame": 3056,
+      "advancedFrames": 360,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3056,
+          "sha256": "55d1983d000994a04d1b5efde385351cc79f488cc90dc779708467d215d5adf4",
+          "rgbaSha256": "24f6aaada147b6ace8d0854d33d506416d009cf88d18673fda5206092ec0a53f",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/55d1983d000994a04d1b5efde385351cc79f488cc90dc779708467d215d5adf4.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3056,
+      "frame": 3146,
+      "advancedFrames": 90,
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3146,
+          "sha256": "b9bacadb7dba869637da260e4426fdfd8da3b5ee09bba144c47f5a93ab527eaf",
+          "rgbaSha256": "c4c01fa4f7f8d347b1c498eaa578a3f69015a625c4e52191291268bfc19039ad",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/b9bacadb7dba869637da260e4426fdfd8da3b5ee09bba144c47f5a93ab527eaf.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3146,
+      "frame": 3154,
+      "advancedFrames": 8,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3154,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3154,
+      "frame": 3162,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3162,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3162,
+      "frame": 3170,
+      "advancedFrames": 8,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3170,
+          "sha256": "10511524f2b9457e702f94baac20b394f6cbd83e4bd3d39a2cbff959fea58ad5",
+          "rgbaSha256": "8e271a9aeede0d0ef80083275be389934c0303765d0ae09f20352360c7dc6fd8",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/10511524f2b9457e702f94baac20b394f6cbd83e4bd3d39a2cbff959fea58ad5.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3170,
+      "frame": 3190,
+      "advancedFrames": 20,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3190,
+          "sha256": "a86ca1738c0b5357deb51d22c7fed4a45c9e70c424c3c2a96c81c51c051bd4c1",
+          "rgbaSha256": "808f19e4f3802085c9d920ec1636b4c2b3fdaf7bb9427f7ddd0a83b32325c33f",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a86ca1738c0b5357deb51d22c7fed4a45c9e70c424c3c2a96c81c51c051bd4c1.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3190,
+      "frame": 3198,
+      "advancedFrames": 8,
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3198,
+          "sha256": "a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1",
+          "rgbaSha256": "49f1a0bcac70cb4251bdf011d54839c671696905cdd142cc87d83e731be27343",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3198,
+      "frame": 3206,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3206,
+          "sha256": "a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1",
+          "rgbaSha256": "49f1a0bcac70cb4251bdf011d54839c671696905cdd142cc87d83e731be27343",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/a1a0ab5ac7466552f56b82a79927fdaf42bfdaf77d087e9baa4d4367b5d4fec1.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3206,
+      "frame": 3214,
+      "advancedFrames": 8,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3214,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3214,
+      "frame": 3222,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3222,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    },
+    {
+      "startFrame": 3222,
+      "frame": 3224,
+      "advancedFrames": 2,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3224,
+          "sha256": "2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a",
+          "rgbaSha256": "0df2e2597408b5fbc6a47c2f13f54bb9558431a358e9baf9f03a53dad5f4c95d",
+          "path": "project/artifacts/recording-archives/d60b4542-f713-4466-b65a-4f61ca9ca297/recording/frames/2a4fa732f1fedba374dffd01c5e280519dea86e1a5209d4e3d64b5362aad725a.png"
+        }
+      ]
+    }
+  ],
+  "recording": {
+    "sessionId": "2fb0d833d0414da4ab607f2603a17756",
+    "originalId": "session-aa1d01a5-285c-4484-913f-005d0e6a98df",
+    "endFrame": 3224,
+    "eventCount": 660,
+    "eventDigest": "e9f88bee029dde5f6263b580a758001120a328721154c0dc7bb29c3867f78abd",
+    "closed": true,
+    "archiveId": "d60b4542-f713-4466-b65a-4f61ca9ca297",
+    "archiveManifestSha256": "3edc3277245415382c10f508f613147f8c6bd09755eeface9373aa1c166b187e",
+    "inventoryDigest": "1e51ef6dfa4c71e35fc25d004ea063893a841ef55ad3a1baa2001bdd4a10b9d9"
+  },
+  "limitations": [
+    "No injected state or memory writes; this is ROM-only ordinary-input PyBoy evidence.",
+    "No Island mission/deadline, full campaign/two-hour, browser or hardware acceptance."
+  ]
+}

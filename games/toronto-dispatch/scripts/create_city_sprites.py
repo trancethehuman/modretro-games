@@ -22,7 +22,7 @@ LIGHT = (224, 248, 207)
 MID = (134, 192, 108)
 DARK = (7, 24, 33)
 COLOURS = (TRANSPARENT, LIGHT, MID, DARK)
-SCENES = ("toronto_city", "toronto_west", "toronto_high_park", "toronto_east", "toronto_port_lands")
+SCENES = tuple(d["scene"] for d in json.loads((ROOT / "content/districts/world.json").read_text())["districts"])
 PALETTES = (
     ("Civilian teal", ["F8F0E0", "F1D4AB", "329DA1", "182536"], 1),
     ("Civilian ochre", ["F8F0E0", "DCAE80", "E1AA36", "342839"], 2),

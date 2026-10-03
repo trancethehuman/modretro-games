@@ -44,26 +44,7 @@
     992,
     816
   ],
-  "islands": [
-    [
-      336,
-      912,
-      600,
-      952
-    ],
-    [
-      640,
-      896,
-      784,
-      952
-    ],
-    [
-      800,
-      880,
-      928,
-      928
-    ]
-  ],
+  "islands": [],
   "blocks": [
     {
       "x": 112,
@@ -757,33 +738,6 @@
       "height": 8,
       "style": 1,
       "landmark": "Gooderham Flatiron"
-    },
-    {
-      "x": 480,
-      "y": 928,
-      "width": 32,
-      "depth": 24,
-      "height": 8,
-      "style": 3,
-      "landmark": "Hanlans service pavilion"
-    },
-    {
-      "x": 664,
-      "y": 904,
-      "width": 32,
-      "depth": 24,
-      "height": 8,
-      "style": 0,
-      "landmark": "Centre Island pavilion"
-    },
-    {
-      "x": 872,
-      "y": 888,
-      "width": 24,
-      "depth": 24,
-      "height": 8,
-      "style": 2,
-      "landmark": "Wards Island cottages"
     }
   ],
   "canopies": [
@@ -842,24 +796,6 @@
       16
     ],
     [
-      352,
-      936,
-      16,
-      16
-    ],
-    [
-      656,
-      936,
-      16,
-      16
-    ],
-    [
-      816,
-      904,
-      16,
-      16
-    ],
-    [
       664,
       680,
       16,
@@ -890,5 +826,5 @@
       16
     ]
   ],
-  "scope": "Compressed central Toronto and Island service areas; full Old Toronto boundaries remain a release check"
+  "scope": "Compressed central Toronto mainland and harbour; public Island paths are in their separate ferry-only scene. Full Old Toronto boundaries remain a release check"
 }

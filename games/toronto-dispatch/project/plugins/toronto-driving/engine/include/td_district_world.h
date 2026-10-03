@@ -2,7 +2,7 @@
 #ifndef TD_DISTRICT_WORLD_H
 #define TD_DISTRICT_WORLD_H
 #include "td_world.h"
-#define TD_WORLD_GENERATED_DISTRICTS 5
+#define TD_WORLD_GENERATED_DISTRICTS 6
 #define TD_PORTALS 30
 #ifdef TD_WORLD_DATA
 static const td_portal_t td_portals[TD_PORTALS]={
@@ -37,20 +37,23 @@ static const td_portal_t td_portals[TD_PORTALS]={
     {3,4,816,952,912,24,1},
     {4,3,912,24,816,952,1},
 };
-static const char td_district_names[5][19]={
+static const char td_district_names[6][19]={
     "CENTRAL TORONTO",
     "WEST END",
     "HIGH PARK/JUNCTION",
     "TORONTO EAST END",
     "PORT LANDS",
+    "TORONTO ISLANDS",
 };
-static const UBYTE td_west_traffic_counts[4][6]={
+static const UBYTE td_west_traffic_counts[5][6]={
     {4,4,4,8,4,10},
     {6,6,4,10,6,4},
     {4,4,4,4,4,4},
     {4,4,4,4,4,4},
+    {0,0,0,0,0,0},
 };
-static const UWORD td_west_traffic[4][6][TD_TRAFFIC_POINTS][2]={
+static const UBYTE td_traffic_enabled[6]={1,1,1,1,1,0};
+static const UWORD td_west_traffic[5][6][TD_TRAFFIC_POINTS][2]={
   {
     {{800,64},{912,64},{912,288},{800,288}},
     {{800,288},{912,288},{912,400},{800,400}},
@@ -82,6 +85,14 @@ static const UWORD td_west_traffic[4][6][TD_TRAFFIC_POINTS][2]={
     {{904,272},{920,272},{920,408},{904,408}},
     {{280,816},{440,816},{440,832},{280,832}},
     {{752,216},{832,216},{832,232},{752,232}},
+  },
+  {
+    {{0,0}},
+    {{0,0}},
+    {{0,0}},
+    {{0,0}},
+    {{0,0}},
+    {{0,0}},
   },
 };
 #endif /* TD_WORLD_DATA */

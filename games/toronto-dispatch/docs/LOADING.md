@@ -2,21 +2,13 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The retained local loading candidate is `toronto-dispatch-route-feedback.gbc`, **524,288 bytes**, SHA-256 `4343f2b858e62f9e8daa2a3576a1d06bb7ee7208d2cd4a55434c36e168fb3100`. It retains 96 contracts / 59 stops / seven parking anchors and the 58-byte v8 save, with itinerary browsing, exact payout feedback and equivalent tram ROM tables. Header/compiled sprite/table guards and 1,097 static bytes pass. [Scoped native UI and Line 1 records](NATIVE_DISPATCH_UI_SAMPLES.json) cover previews/locks, first delivery/payment, timeout, reset and paid train/map/reset/arrival; broader campaign/hardware remain open. Retained `c625…` [Fire Hall replay](NATIVE_PORT_CAMPAIGN_SAMPLES.json) and `a638…` [Queen/table replay](NATIVE_TRAM_PROGRESS_SAMPLES.json) keep their own identities. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the earlier four-district `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`. No newer release or physical installation is claimed.
+The verified local loading candidate is `toronto-dispatch-islands-safe.gbc`, **524,288 bytes**, SHA-256 `7b2af59c27179bd3445c5c074b85fb4a029b50144ef27ed3095f9a3ce83f7d5a`. It contains six compressed Toronto districts, 96 contracts, 59 service points, seven mainland parking anchors and save v9 / 58 bytes. Its official build, header, compiled sprite/table guards, 1,097-byte static reserve and complete source suite pass. [Scoped native evidence](NATIVE_ISLAND_DISTRICT_SAMPLES.json) covers all three Island ferry landings/bridges, inland/coastal walking, canopy occlusion, correct map/audio menus, current-save/reset recovery, low-cash return assistance, mainland car recovery and a successful first delivery. Island contracts and their deadlines were not played in that free-roaming walkthrough.
 
-Retained Port Lands baseline `a212dd9e…`, `toronto-port-lands-labels.gbc`, keeps its earlier five-scene travel/aircraft/map/checkpoint proofs. Older 75-byte epoch `35337509…` also keeps its own delivery/90-loop identity; none of these records is assigned to new source.
+The earlier `8a96…` six-scene build has a [retained pause/audio-map failure](NATIVE_ISLAND_MAP_FAILURE.json) and must not be selected. The older five-scene `4343…` itinerary/payout, `ff5d…` preparation and `c625…` Port-job recordings keep their own scopes in [TESTING.md](../TESTING.md). The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the separate four-district `23b2…` release; no newer GitHub release or physical installation is claimed here.
 
-Retained fused `a2438348…`, `toronto-streetlife-fused.gbc`, keeps separate H1/map/reset/police/shore/boat/first-delivery evidence and a later [Port car/foot sample](NATIVE_PORT_DRIVING_SAMPLE.json). That sample crosses all six decks by car, restores a Port car/walker, walks Beach to actual water and returns through Leslie; its H2/H3 cash-zero observations do not verify higher fine amounts. Current96-job source uses only Leslie and existing rules, without 114 service. [TESTING.md](../TESTING.md) and [PERFORMANCE.md](PERFORMANCE.md) retain exact scopes. Static reserve and sampled sprite counts do not prove deepest stack or whole-city pacing.
+Current source preserves all contract IDs/fields and completion bits, relocating only six Island stop geometries. Version 9 reads valid older v4–v8 records, validates frozen old Island terrain and legitimate ferry bookings before relocation, and preserves cash and the mainland car. Normal v5–v8 restore keeps the older committed slot until the next alternating v9 write; v4 has its separate upgrade. Older ROMs cannot read both rewritten v9 slots. Preserve existing cartridge saves through the supported backup workflow before testing a newer build. Host migration checks and emulator resets do not prove native old-save imports or physical power-off persistence.
 
-Earlier walker-contact, booked-tram HOLD, legacy-service and roof checks remain attached to their actual older ROMs. All vehicles/bridges/seams, the full campaign and two-hour target, full Old Toronto/Islands, browser recovery and physical execution remain open. No cartridge write/read-back, streaming or physical cold boot is recorded for this candidate.
-
-The retained `a212…` baseline uses save v7; current street source uses v8 with the same 58-byte state, reusing obsolete cursor words for police attention/countdown and clearing them on valid pre-v8 imports. Prototype 6 uses v6. Pre-v8 binaries cannot restore rewritten v8 records once both slots are replaced; old 88-job v8 binaries reject new saved jobs/completion bits. Preserve existing cartridge saves through the supported backup workflow before testing a newer build. Host migrations and emulator reset evidence do not establish physical power-off persistence.
-
-Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
-
-It remains a prototype: full Old Toronto coverage, the full campaign/two-hour gameplay target, human handling/listening and physical cartridge behaviour are unverified. No cartridge write/read-back or physical cold boot is recorded for this candidate. A later source build must use its own new hash and test record.
-
-The newer `ff5d…` preparation ROM retains the same five registered scenes and passes an existing Hanlan ferry round-trip regression. The fuller Island background remains unregistered source art and versioned migration is pending. This loading guide intentionally retains the independently packaged `4343…` bundle; preparation evidence does not change its binary or hardware status. [Preparation scope](../TESTING.md).
+This is still a prototype. Full Old Toronto, all played contracts/balanced deadlines, two measured enjoyable hours, wider vehicle/traffic/pacing/stack checks, human handling/audio feedback, browser recovery and cartridge write/read-back/cold boot remain open. [BUILD.md](BUILD.md), [TESTING.md](../TESTING.md) and [AUDIO.md](AUDIO.md) distinguish the available evidence. A later source change needs its own ROM identity and replay.
 
 ## 1. Prepare the computer and console
 
@@ -32,22 +24,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-route-feedback.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-islands-safe.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-route-feedback.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-islands-safe.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-route-feedback.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-route-feedback.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-islands-safe.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-islands-safe.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -83,11 +75,12 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Walking and car entry | Stop, Start → Park / recover car; walk with D-pad, approach the parked car and press A to enter |
 | Map and pause | Start → Scroll City Map; D-pad pans across areas, A centres the job/booked stop/depot, Select changes focus, B returns; mission time freezes |
 | Transit | On foot at a station, Queen curb sign or ferry terminal, B opens routes; choose with left/right and board with A. At Wellesley, up changes train/bus. Check direction, wait and ride time before boarding; fare is charged once and mission time continues |
+| Islands | Park on the mainland, walk to the ferry terminal and travel to Hanlan's, Centre or Ward's; follow public paths/bridges, with no car teleport. A no-job courier with cash below $4 can return from an Island dock for $0 on the normal schedule |
 | Saving | Use the pause menu's Save action, record cash and completed count, power off/on and confirm both persist |
 | Audio | Start → Audio, then A cycles music + effects, effects only and silent; B returns. Check the city score, engine and braking sounds, short delivery/transit cues, and silence in silent mode. Menu/world pause stops music and engine; short interface/result cues may finish. The mode defaults on each boot |
 | Readability/performance | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input |
 
-Keep a note of the ROM SHA-256 and any problem's location/action. Version6 includes migration for valid v5 prototype saves, retaining the original72 contract IDs. Host checks cover migration; physical cartridge migration is unverified. Other save-format changes may retire active jobs or reject earlier records. See BUILD/TESTING. Emulator reset persistence does not prove power-off persistence on a physical cartridge.
+Keep a note of the ROM SHA-256 and any problem's location/action. Current save v9 preserves the 96 contract IDs and imports valid v4–v8 records through the documented migration. Host checks cover older saves; native old-save imports and physical migration are unverified. See BUILD/TESTING. Emulator reset persistence does not prove power-off persistence on a physical cartridge.
 
 ## If installation does not finish
 

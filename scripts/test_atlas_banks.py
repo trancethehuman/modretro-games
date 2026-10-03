@@ -166,7 +166,9 @@ def appended_source_fixture(base):
         create_atlas.ROOT, create_atlas.ENGINE = game, engine
         test_atlas.GAME, test_atlas.ENGINE = game, engine
         data = create_atlas.model()
-        oracle = test_atlas.fixture_header()
+        # This is explicitly a temporary synthetic fifth scene, not the
+        # production six-district registration guarded by the default oracle.
+        oracle = test_atlas.fixture_header(registered_islands=False)
         assert (data['tile_width'], data['tile_height']) == (80, 65)
         assert data['budgets']['index_units'] == 2 and data['budgets']['max_unit_data_bytes'] <= 8192
         assert data['districts'][4]['water_shapes']['rectangles'] == [[0, 600, 1024, 976]]

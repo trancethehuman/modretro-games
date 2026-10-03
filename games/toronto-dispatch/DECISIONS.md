@@ -181,7 +181,7 @@ This implements part of the accepted Old Toronto/waterfront scope. It registers 
 - Straight north-up pixel artwork and matching native collision grid, with CGB background priority for roofs and canopies.
 - Implemented controls: left/right steer the vehicle; A accelerates; B brakes and reverses near rest; Select interacts at pickup/drop-off; Start pauses. On foot, the D-pad walks, A enters the nearby parked car and B opens transit. Handheld comfort still needs human playtesting.
 - A documented baseline transit map rather than changing live detours. The map era is not yet selected.
-- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. That full layout remains a proposal; the historical three-/four-scene milestones and current five-scene source use their own compressed layouts. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
+- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. That full layout remains a proposal; the historical three-/four-/five-scene milestones and current six-scene source use their own compressed layouts. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
 
 ## Unresolved implementation questions
 
@@ -226,3 +226,20 @@ Implementation choices within the accepted Old Toronto/Islands scope:
 - Prepare one shared UI/boarding fare query. Assistance is zero fare only from a plain Island dock20–22 to mainland10 in future district5, no active job and cash below4. Keep the fictional schedule and eight-second trip. It uses no save field, car teleport or mission completion; normal fares remain unchanged in current registered scenes. This recovery rule must receive UI/deduction/reset native acceptance when the district becomes real.
 
 The [geography](docs/ISLAND_DISTRICT_PLAN.md) and [runtime](docs/ISLAND_RUNTIME_PLAN.md) records own the proposed source layout, migration ordering and remaining gates. This staging milestone does not relocate a stop, expand the playable scene count, measure two hours or establish hardware execution.
+
+### Fuller Islands registration — 2026-10-03
+
+The next source milestone registers native district5 `toronto_islands` at atlas `(2048,976)`, with no ordinary mainland seam or public car terrain. It removes the three duplicated Core land strips/buildings while preserving all mainland pixels, collision and attributes above the harbour edge. Six scenes contain 241 building footprints, 595 fixed civilian routes and the existing 15 mainland seam pairs / 24 expansion traffic loops. Only six nearby people are active; Islands have no road fleet or signals. Original Manitou, Algonquin and Snake bridge decks connect public foot ground, with an inland/coastal eastward choice. Restricted ground stays blocked.
+
+The six dock/client IDs retain names, flags and ordinals; only their declared local coordinates and district change. An immutable 59-stop/96-job checkpoint fixture and narrow normalization retain the prior native-prefix hashes. All96 routes, briefs, rewards, deadlines, eligibility and completion bits stay unchanged. Full-body walking/ferry estimates show nominal slack72.4–96.3 seconds for the nine old Island jobs; that is planning evidence, not measured handling or duration. Ordinary foot/car graphs remain disconnected from Islands; typed ferry edges and bounded local terminal/dock guidance provide actual access without a false road.
+
+Save9 retains the58-byte payload and two-slot CRC/sequence protocol. Source migration validates non-geographic fields, parked-car ground and genuine legacy foot masks before relocation, preserves cash/clock/deadline/condition/job/completions/attention/car, and moves an admitted legacy Island walker near an old client to its corresponding new client; other admitted walkers use their corresponding dock. Valid near-origin WAIT/paid RIDE resumes; an away unpaid WAIT cancels without charge, and inconsistent paid geometry is rejected. Keep literal `version<8` attention clearing and explicitly read v8. The first normal save writes9 to the other slot; restore does not rewrite v5–8 by itself. Historical v4 retirement/upgrade remains separate. The exact legacy source capture is never regenerated from the new Core water.
+
+Shared scheduled return assistance and traffic suppression now target this real district. Assistance still requires plain dock20–22→terminal10, no active job and cash below4, without car relocation or mission advancement. Source/host validation, native build/resource checks, ordinary-input travel/reset/migration and hardware remain distinct evidence in [TESTING.md](TESTING.md). Registration alone does not complete full Old Toronto or the two-hour target.
+
+
+### Islands build-bank and native pause-text corrections — 2026-10-03
+
+The first six-scene native build exceeds the main gameplay bank by240 bytes. Move unchanged ferry approach guidance into the existing BANKED route unit, with only stack-local temporary state. Host objective/save regressions remain passing, the native build links and static reserve remains1,097 bytes.
+
+Native replay then reveals a GBDK-specific pause AUDIO varargs mismatch: a16-bit ternary marker is passed to one-byte `%c`, shifting the next string pointer and overflowing the40-byte text buffer into the cached streetcar/map focus. Keep that failed replay as separate evidence. Replace the mixed-width formatter with bounded prefix/label concatenation (maximum18 characters plus terminator), preserving menu choices and all gameplay/save state. Verify all three audio modes and map YOU/CAR/DEPOT focus on a new exact ROM. Source/host passes cannot replace this native regression.

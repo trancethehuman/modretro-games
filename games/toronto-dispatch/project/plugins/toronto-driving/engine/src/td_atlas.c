@@ -4,21 +4,23 @@
 #include "td_atlas.h"
 #include "td_atlas_data.h"
 #include "td_district.h"
-typedef char td_atlas_registered_count_matches[(TD_DISTRICT_COUNT==5)?1:-1];
+typedef char td_atlas_registered_count_matches[(TD_DISTRICT_COUNT==6)?1:-1];
 typedef char td_atlas_registered_dimensions_match[(TD_DISTRICT_PIXEL_WIDTH==1024&&TD_DISTRICT_PIXEL_HEIGHT==976)?1:-1];
-static const UWORD td_atlas_origins[5][2]={
+static const UWORD td_atlas_origins[6][2]={
     {256,0},
     {128,0},
     {0,0},
     {384,0},
     {384,122},
+    {256,122},
 };
-static const char td_atlas_names[5][19]={
+static const char td_atlas_names[6][19]={
     "CENTRAL TORONTO",
     "WEST END",
     "HIGH PARK/JUNCTION",
     "TORONTO EAST END",
     "PORT LANDS",
+    "TORONTO ISLANDS",
 };
 UBYTE td_atlas_bounds(UWORD *width_pixels,UWORD *height_pixels) BANKED {
     if(!width_pixels||!height_pixels)return FALSE;

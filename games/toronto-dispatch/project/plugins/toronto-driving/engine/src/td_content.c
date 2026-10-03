@@ -23,13 +23,13 @@ static const td_stop_t td_stops[TD_STOPS] = {
   {640,64,"BLOOR-YONGE",1,0,0},
   {144,64,"OSSINGTON BUS",2,0,0},
   {816,64,"CASTLE FRANK",2,0,0},
-  {444,928,"HANLANS POINT",3,0,0},
-  {720,920,"CENTRE ISLAND",3,0,0},
-  {848,896,"WARDS ISLAND",3,0,0},
+  {320,280,"HANLANS POINT",3,5,0},
+  {512,448,"CENTRE ISLAND",3,5,0},
+  {920,280,"WARDS ISLAND",3,5,0},
   {336,720,"CN TOWER",0,0,0},
-  {560,928,"HANLAN SERVICE",0,0,0},
-  {760,944,"CENTRE PARK POST",0,0,0},
-  {912,912,"WARD COTTAGE POST",0,0,0},
+  {160,600,"HANLAN SERVICE",0,5,0},
+  {512,744,"CENTRE PARK POST",0,5,0},
+  {904,440,"WARD COTTAGE POST",0,5,0},
   {976,288,"DUFFERIN COLLEGE",0,1,0},
   {800,64,"LANSDOWNE BLOOR",0,1,0},
   {864,528,"PARKDALE QUEEN",0,1,0},
@@ -275,7 +275,7 @@ UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED {
  for(i=0;i<7;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
  return FALSE;
 }
-static const char td_west_street_names[63][19]={
+static const char td_west_street_names[80][19]={
   "BLOOR ST W",
   "DUNDAS ST W",
   "COLLEGE ST",
@@ -339,9 +339,26 @@ static const char td_west_street_names[63][19]={
   "WEST PARK WALK",
   "RIVERBANK WALK",
   "CHERRY BEACH WALK",
+  "HANLAN LANDING APP",
+  "LAKESHORE AVE",
+  "CIBOLA AVE",
+  "AVENUE OF THE ISLA",
+  "CENTRE LANDING GAR",
+  "CENTRE PAVILION AP",
+  "HANLAN PAVILION AP",
+  "HANLAN BEACH ACCES",
+  "GIBRALTAR LIGHTHOU",
+  "GIBRALTAR BEACH AC",
+  "CENTRE BEACH APPRO",
+  "CENTRE TO WARD COA",
+  "WARD COTTAGE POST ",
+  "WARD VILLAGE LANE",
+  "WARD BEACH ACCESS",
+  "ALGONQUIN PUBLIC B",
+  "SNAKE ISLAND PUBLI",
 };
 typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;
-static const td_street_t td_west_streets[166]={
+static const td_street_t td_west_streets[215]={
   {816,64,1000,64,1,0},
   {816,64,816,112,1,0},
   {512,112,816,112,1,0},
@@ -508,10 +525,59 @@ static const td_street_t td_west_streets[166]={
   {352,552,352,592,4,61},
   {352,864,352,888,4,62},
   {352,888,432,888,4,62},
+  {320,280,320,344,5,63},
+  {208,344,320,344,5,63},
+  {208,344,208,592,5,64},
+  {208,592,272,592,5,64},
+  {272,592,272,760,5,64},
+  {272,760,384,760,5,64},
+  {384,704,384,760,5,64},
+  {384,704,688,704,5,64},
+  {688,624,688,704,5,65},
+  {688,624,776,624,5,65},
+  {776,584,776,624,5,65},
+  {776,584,848,584,5,65},
+  {848,528,848,584,5,65},
+  {848,528,928,528,5,65},
+  {928,312,928,528,5,65},
+  {920,312,928,312,5,65},
+  {920,280,920,312,5,65},
+  {512,448,512,832,5,66},
+  {448,448,560,448,5,67},
+  {560,448,560,496,5,67},
+  {512,496,560,496,5,67},
+  {512,744,536,744,5,68},
+  {160,592,208,592,5,69},
+  {160,592,160,600,5,69},
+  {128,600,160,600,5,70},
+  {128,600,128,640,5,70},
+  {272,728,272,760,5,71},
+  {224,800,272,800,5,72},
+  {224,800,224,816,5,72},
+  {512,800,560,800,5,73},
+  {560,800,736,800,5,74},
+  {736,704,736,800,5,74},
+  {736,704,808,704,5,74},
+  {808,624,808,704,5,74},
+  {808,624,880,624,5,74},
+  {880,552,880,624,5,74},
+  {880,552,944,552,5,74},
+  {944,496,944,552,5,74},
+  {928,496,944,496,5,74},
+  {904,440,928,440,5,75},
+  {888,344,928,344,5,76},
+  {928,344,928,392,5,76},
+  {928,392,968,392,5,76},
+  {968,392,968,440,5,76},
+  {928,440,968,440,5,76},
+  {928,528,928,552,5,77},
+  {800,368,800,584,5,78},
+  {800,368,824,368,5,78},
+  {688,480,688,704,5,79},
 };
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {
  UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;
- for(i=0;i<166;i++){s=&td_west_streets[i];if(s->district!=district)continue;
+ for(i=0;i<215;i++){s=&td_west_streets[i];if(s->district!=district)continue;
  score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);
  if(score<best){best=score;name=s->name;}
  }memcpy(d,td_west_street_names[name],19);
@@ -522,8 +588,7 @@ void td_get_brief(UBYTE i,char *d) BANKED { if(i<TD_QUESTS) memcpy(d,td_briefs[i
 void td_get_street(UWORD u,UWORD v,char *d) BANKED {
   if(td.district){td_get_west_street(td.district,u,v,d);return;}
   const char *name="TORONTO";
-  if(v>816) name="TORONTO ISLANDS";
-  else if(v>768) name="QUEENS QUAY";
+  if(v>768) name="QUEENS QUAY";
   else if(v>688) name="FRONT STREET";
   else if(v>608) name="KING STREET";
   else if(v>496) name="QUEEN STREET";

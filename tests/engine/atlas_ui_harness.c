@@ -30,6 +30,7 @@ static UBYTE window_tiles[2][18][20],vram[2][256][16];
 static UBYTE window_x,window_y;
 static unsigned checks,failures,window_writes,tile_uploads,ground_uploads;
 static unsigned light_resets;
+static UBYTE audio_fixture_mode;
 void td_traffic_lights_reset(void){light_resets++;}
 static UBYTE initial_font[49][16];
 
@@ -61,17 +62,20 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
 }
 
 void ui_set_pos(UBYTE x,UBYTE y) {window_x=x;window_y=y;}
-UBYTE td_audio_get_mode(void) {return TD_AUDIO_FULL;}
+UBYTE td_audio_get_mode(void) {return audio_fixture_mode;}
 UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
 
 typedef struct {
     td_state_t state;td_job_t job,offer;td_stop_t target,cursor;
     UBYTE route,actor_count,resume_mode;
+    UWORD streetcar_u,streetcar_v;
+    UBYTE streetcar_district,streetcar_ride;
 } game_snapshot_t;
 
 static game_snapshot_t snapshot_game(void) {
-    game_snapshot_t snapshot={td,td_job,td_offer,td_target,td_cursor,td_route_district,actors_len,td_resume_mode};
+    game_snapshot_t snapshot={td,td_job,td_offer,td_target,td_cursor,td_route_district,actors_len,td_resume_mode,
+        td_streetcar_focus_u,td_streetcar_focus_v,td_streetcar_view_district,td_streetcar_ride_view};
     return snapshot;
 }
 
@@ -79,8 +83,10 @@ static void expect_game_unchanged(const game_snapshot_t *snapshot) {
     expect(!memcmp(&td,&snapshot->state,sizeof(td))&&!memcmp(&td_job,&snapshot->job,sizeof(td_job))&&
            !memcmp(&td_offer,&snapshot->offer,sizeof(td_offer))&&!memcmp(&td_target,&snapshot->target,sizeof(td_target))&&
            !memcmp(&td_cursor,&snapshot->cursor,sizeof(td_cursor))&&td_route_district==snapshot->route&&
-           actors_len==snapshot->actor_count&&td_resume_mode==snapshot->resume_mode,
-           "real map UI preserves serialized state, job, target, cursor, route cue and actor count");
+           actors_len==snapshot->actor_count&&td_resume_mode==snapshot->resume_mode&&
+           td_streetcar_focus_u==snapshot->streetcar_u&&td_streetcar_focus_v==snapshot->streetcar_v&&
+           td_streetcar_view_district==snapshot->streetcar_district&&td_streetcar_ride_view==snapshot->streetcar_ride,
+           "real map UI preserves serialized state, job, target, cursor, route cue, actor count and paid-view cache");
 }
 
 static void reset_case(void) {
@@ -96,6 +102,8 @@ static void reset_case(void) {
     for(unsigned i=0;i<21;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
     window_x=window_y=0;window_writes=tile_uploads=ground_uploads=0;
+    audio_fixture_mode=TD_AUDIO_FULL;
+    td_streetcar_focus_u=td_streetcar_focus_v=0;td_streetcar_view_district=td_streetcar_ride_view=0;
     td_ui_init();memcpy(initial_font,vram[1]+192,sizeof(initial_font));
 }
 
@@ -209,13 +217,62 @@ static void expect_board_preserves_game(const game_snapshot_t *before) {
            "itinerary draw only refreshes its cursor; saved game, active contract, offer, target and booking stay fixed");
 }
 
+static void test_pause_audio_labels_and_map_cache(void){
+    static const char *const labels[3][2]={
+        {"  AUDIO: MUSIC+SFX","> AUDIO: MUSIC+SFX"},
+        {"  AUDIO: SFX ONLY","> AUDIO: SFX ONLY"},
+        {"  AUDIO: SILENT","> AUDIO: SILENT"}
+    };
+    expect(TD_AUDIO_FULL==0&&TD_AUDIO_EFFECTS==1&&TD_AUDIO_SILENT==2,
+           "pause audio oracle covers the three real serialized preference modes");
+    for(UBYTE riding=0;riding<2;riding++){
+        reset_case();td.district=TD_DISTRICT_ISLANDS;td.u=512*16;td.v=448*16;
+        td.park_district=TD_DISTRICT_CITY;td.park_u=560*16;td.park_v=720*16;
+        td_streetcar_view_district=riding?TD_DISTRICT_EAST:TD_DISTRICT_ISLANDS;
+        td_streetcar_focus_u=(riding?128:512)*16;td_streetcar_focus_v=(riding?536:448)*16;
+        td_streetcar_ride_view=riding;
+        if(riding){td_resume_mode=TD_RIDE;td.transit_origin=43;td.transit_target=48;td.ride_left=4;}
+        for(UBYTE audio=0;audio<3;audio++)for(UBYTE selected=0;selected<2;selected++){
+            td.mode=TD_PAUSE;td.menu=selected?8:1;audio_fixture_mode=audio;
+            game_snapshot_t before=snapshot_game();actor_t original_actors[21];
+            memcpy(original_actors,actors,sizeof(actors));UWORD old_camera_x=camera_x,old_camera_y=camera_y;
+            UBYTE old_camera_settings=camera_settings;
+            td_ui_draw();
+            expect_window_text(12,labels[audio][selected],"pause audio mode and selection have the exact bounded visible label");
+            expect(memchr(td_line,0,sizeof(td_line))&&strlen(td_line)<=18&&!strcmp(td_line,labels[audio][selected]),
+                   "pause audio formatting terminates inside its40-byte buffer with at most18 characters");
+            expect_text_screen_safe();expect_game_unchanged(&before);
+            expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
+                   camera_settings==old_camera_settings,"pause audio repaint changes no actor or camera state");
+            unsigned writes=window_writes,uploads=tile_uploads;td_ui_draw();
+            expect(window_writes==writes&&tile_uploads==uploads,"an unchanged pause audio label reuses all cached text rows without upload");
+            expect_game_unchanged(&before);
+            /* Replay the native failure's PAUSE -> MAP path after every
+               audio label. A bogus paid-view flag would incorrectly reuse
+               another district or keep the map's prior zero origin. */
+            open_case();before=snapshot_game();finish_paint();
+            expect_window_text(1,riding?"TORONTO EAST END":"TORONTO ISLANDS",
+                               "YOU map focus after audio repaint names the actual walking or paid-view district");
+            expect(td_map_x==(riding?40:30)&&td_map_y==(riding?2:16),
+                   "YOU map focus after audio repaint preserves exact independent atlas coordinate and clamp expectations");
+            expect_game_unchanged(&before);td_map_close();
+            expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
+                   camera_settings==old_camera_settings,"closing the audio-to-map replay restores the same actors and camera");
+            td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();
+            expect_window_text(12,labels[audio][selected],"map close repaints the same selected audio preference without stale longer text");
+            expect_game_unchanged(&before);
+        }
+    }
+}
+
 static void expect_board_stop(unsigned job,unsigned page) {
     const td_job_t *offer=&host_ui_jobs[job];const td_stop_t *stop=&host_ui_stops[offer->route[page]];
     char expected[40];const char *role;
     if(page==0)role="PICKUP";
     else if(page+1<offer->count)role="HANDOFF";
     else role=offer->route[page]==offer->route[0]?"RETURN":"DELIVER";
-    sprintf(expected,"%u/%u %s%s",page+1,offer->count,stop->reserved&TD_STOP_FOOT?"WALK ":"",role);
+    sprintf(expected,"%u/%u %s%s",page+1,offer->count,
+            ((stop->reserved&TD_STOP_FOOT)||stop->district==TD_DISTRICT_ISLANDS)?"WALK ":"",role);
     expect_window_text(11,expected,"authored itinerary page identifies its number, walking requirement and handoff role");
     expect_window_text(12,stop->name,"itinerary renders the exact authored client name rather than a parking approach");
     expect_window_text(13,host_ui_districts[stop->district],"itinerary renders the actual client district");
@@ -273,8 +330,8 @@ static void test_dispatch_board_itineraries(void) {
             expect_window_text(16,expected,"locked itinerary states its actual completion requirement");
         }
     }
-    expect(districts==31&&saw_return&&saw_delivery&&saw_foot,
-           "all-route rendering actually covers five districts, final deliveries, returns and walking clients");
+    expect(districts==((1u<<TD_DISTRICT_COUNT)-1)&&saw_return&&saw_delivery&&saw_foot,
+           "all-route rendering covers every registered district, final deliveries, returns and walking clients");
 
     reset_case();td_board_route=231;game_snapshot_t initialized=snapshot_game();td_ui_init();
     expect(td_board_route==0,"actual native UI initialization clears a dirty transient itinerary index");
@@ -426,8 +483,8 @@ static void test_wait_contact_hud_and_map_restore(void) {
 }
 
 static void test_reserved_islands_assistance_ui(void) {
-    /* Direct UI inputs use the reserved enum only. There is no sixth native
-       scene or relocated stop record; actual route pages remain unchanged. */
+    /* These direct renderer inputs prove text/cache logic with adapters;
+       even a registered scene requires separate native travel checks. */
     for(UBYTE dock=20;dock<=22;dock++){
         reset_case();td.mode=TD_TRANSIT;td.job=TD_NONE;td.district=TD_DISTRICT_ISLANDS;
         td.transit_origin=dock;td.transit_target=10;td.cash=3;td.seconds=(dock-19)*7+2;
@@ -445,8 +502,8 @@ static void test_reserved_islands_assistance_ui(void) {
         expect_window_text(7,"RIDE 8 SEC / $4","an active parcel never receives the recovery discount");
         expect_window_text(11,"","an active job cannot retain an earlier assistance caption");expect_game_unchanged(&before);
         td.job=TD_NONE;td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
-        expect_window_text(7,"RIDE 8 SEC / $4","current Core Island strips retain the ordinary quoted fare");
-        expect_window_text(11,"","the reserved recovery cue does not leak into today's five-scene world");expect_game_unchanged(&before);
+        expect_window_text(7,"RIDE 8 SEC / $4","a mismatched mainland origin retains its ordinary quoted fare");
+        expect_window_text(11,"","the recovery caption cannot leak into a mismatched mainland district");expect_game_unchanged(&before);
 
         td.district=TD_DISTRICT_ISLANDS;td.mode=td_resume_mode=TD_WAIT;td.msg=0;
         before=snapshot_game();td_ui_draw();
@@ -474,6 +531,32 @@ static void test_reserved_islands_assistance_ui(void) {
     expect_window_text(2,"B: FERRY AT DOCK","reserved foot-only roaming points to a ferry rather than car entry");expect_game_unchanged(&before);
     td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
     expect_window_text(2,"A CAR / B TRANSIT","mainland walking keeps its original car and transit controls");expect_game_unchanged(&before);
+}
+
+static void test_island_objective_hud(void){
+    for(UBYTE from=0;from<2;from++){
+        reset_case();td.mode=TD_ROAM;td.msg=0;td.job=7;td.stage=from?0:1;
+        td.left=103;td.health=67;td.wanted=0;td.onfoot=1;
+        td.district=from?TD_DISTRICT_ISLANDS:TD_DISTRICT_CITY;
+        td_get_job(td.job,&td_job);td_get_stop(from?10:21,&td_target);td_route_district=TD_DISTRICT_NONE;
+        game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(2,from?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
+                           "a disconnected Island objective shows its concrete ferry action in the bounded HUD");
+        expect_game_unchanged(&before);
+        td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();expect_game_unchanged(&before);
+        td.mode=TD_ROAM;td_ui_draw();
+        expect_window_text(2,from?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
+                           "returning from a full-screen menu repaints the correct ferry approach cue");
+    }
+    reset_case();td.mode=TD_ROAM;td.msg=0;td.job=7;td.stage=1;td.left=103;td.health=67;
+    td.district=TD_DISTRICT_WEST;td_get_job(td.job,&td_job);td_get_stop(21,&td_target);td_route_district=0;
+    game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(2,host_ui_districts[0],"a remote Island approach first names its genuine mainland route branch");
+    expect_game_unchanged(&before);
+    td.district=TD_DISTRICT_ISLANDS;td.stage=2;td_get_stop(25,&td_target);td_route_district=TD_DISTRICT_NONE;
+    before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"CENTRE PARK POST","a local Island client keeps its own name rather than a return or road error");
+    expect_game_unchanged(&before);
 }
 
 static void test_every_viewport(void) {
@@ -764,8 +847,10 @@ int main(void) {
     test_sparse_table_full_and_single_holes();
     test_wait_contact_hud_and_map_restore();
     test_reserved_islands_assistance_ui();
+    test_island_objective_hud();
     test_appended_district_focus_and_holes();
     test_dispatch_board_itineraries();test_contract_payment_result();
+    test_pause_audio_labels_and_map_cache();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

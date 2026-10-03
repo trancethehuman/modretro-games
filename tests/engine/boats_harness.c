@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "host_boats.h"
 #include "td_game.h"
+#include "td_district.h"
 #include "td_boats.h"
 #include "boat_art_oracle.h"
 
@@ -16,7 +17,7 @@ _Alignas(256) volatile OAM_item_t shadow_OAM2[40];
 WORD draw_scroll_x,draw_scroll_y;
 far_ptr_t current_scene;
 td_state_t td;
-static UBYTE district,scene_ids[6],uploads;
+static UBYTE district,scene_ids[TD_DISTRICT_COUNT+1],uploads;
 static tileset_t rom_tiles[2];
 static metasprite_t poses[3][2];
 static const metasprite_t *frames[3];
@@ -157,9 +158,15 @@ static void capacity_checks(void){
     }
 }
 static void lifecycle_checks(void){
-    UBYTE area,mode,index;UWORD period;td_state_t original;
-    for(area=0;area<5;area++){
+    UBYTE area,mode,index;UWORD period;td_state_t original;td_boat_route_t route,unchanged;
+    for(area=0;area<TD_DISTRICT_COUNT;area++){
         fixture(area,0,0);bind_ok();original=td;
+        memset(&route,0x5a,sizeof(route));unchanged=route;
+        require(td_boat_route(&route)==(area==0||area==4),"Only Core and Port may have a boat route");
+        if(area==0||area==4)
+            require(route.u==centre_u(area)&&route.top==top(area)&&route.bottom==bottom(area),
+                    "Actual mainland water lane geometry changed");
+        else require(!memcmp(&route,&unchanged,sizeof(route)),"Unsupported route query changed its output");
         td_boats_update(60);
         require(td_boat.phase==((area==0||area==4)?240:0),"Unsupported district animated a water route");
         require(!memcmp(&td,&original,sizeof(td)),"Boat clock modified courier/save state");
@@ -174,12 +181,17 @@ static void lifecycle_checks(void){
         td.mode=TD_ROAM;td_boat.phase=123;current_scene.bank++;
         td_boats_update(600);allocated_hardware_sprites=0;td_boats_render();
         require(td_boat.phase==123&&!allocated_hardware_sprites,"Stale scene bank binding remained live");
-        current_scene.bank--;current_scene.ptr=&scene_ids[5];td_boats_update(600);td_boats_render();
+        current_scene.bank--;current_scene.ptr=&scene_ids[TD_DISTRICT_COUNT];td_boats_update(600);td_boats_render();
         require(td_boat.phase==123&&!allocated_hardware_sprites,"Stale scene pointer binding remained live");
         fixture(area,0,0);index=loader_index(area);actors[index].flags=ACTOR_FLAG_ACTIVE;
         actors[index].prev=actors[index].next=NULL;actors[1].next=NULL;
         td_boats_bind();require(td_boat.bound&&actors_inactive_head==&actors[1],"Active boat loader was not deactivated and removed");
     }
+    fixture(5,0,0);bind_ok();original=td;td_boat.phase=65535;
+    td_boats_update(65535);td_boats_render();
+    require(td_boat.phase==65535&&!allocated_hardware_sprites&&!uploads&&VBK_REG==1,
+            "Island boat loader must preserve phase and emit no OAM or VRAM uploads");
+    require(!memcmp(&td,&original,sizeof(td)),"Island boat no-route path changed courier/save state");
     for(area=0;area<=4;area+=4){
         fixture(area,0,0);bind_ok();period=(bottom(area)-top(area))*32;td_boat.phase=period-1;
         td_boats_update(65535);
@@ -190,7 +202,7 @@ static void lifecycle_checks(void){
 }
 static void invalid_binding_checks(void){
     UBYTE scenario;
-    for(scenario=0;scenario<13;scenario++){
+    for(scenario=0;scenario<14;scenario++){
         fixture(0,0,0);
         switch(scenario){
             case 0:actors_len=5;break;
@@ -206,6 +218,7 @@ static void invalid_binding_checks(void){
             case 10:rom_tiles[0].n_tiles=129;break;
             case 11:rom_tiles[0].n_tiles=3;break;
             case 12:actors[5].base_tile=125;break;
+            case 13:district=TD_DISTRICT_COUNT;break;
         }
         td_boats_bind();td_boats_update(60);td_boats_render();
         require(!td_boat.bound&&!allocated_hardware_sprites&&!uploads,"Malformed or missing native loader did not fail closed");

@@ -198,7 +198,16 @@ void td_ui_draw(void) BANKED {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
-        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);if(td_target.district!=td.district){if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);else strcpy(td_line,"NO ROAD ROUTE");td_row(2,td_line);}else td_row(2,td_target.name);}
+        if(td.job!=TD_NONE){
+            sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);
+            if(td_target.district!=td.district){
+                if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);
+                else if(td.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"RETURN FERRY AT DOCK");
+                else if(td_target.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"GO TO FERRY TERMINAL");
+                else strcpy(td_line,"NO ROAD ROUTE");
+                td_row(2,td_line);
+            }else td_row(2,td_target.name);
+        }
         else {sprintf(td_line,"$%u %s H%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td.onfoot?(td.district==TD_DISTRICT_ISLANDS?"B: FERRY AT DOCK":"A CAR / B TRANSIT"):"SELECT JOBS START UI");}
         return;
     }
@@ -210,7 +219,10 @@ void td_ui_draw(void) BANKED {
     if(td.mode==TD_PAUSE){
         sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);
         td_row(4,td.menu==0?"> RESUME":"  RESUME");td_row(5,td.menu==1?"> SCROLL CITY MAP":"  SCROLL CITY MAP");td_row(6,td.menu==2?"> DISPATCH JOBS":"  DISPATCH JOBS");td_row(7,td.menu==3?"> PARK / RECOVER CAR":"  PARK / RECOVER CAR");td_row(8,td.menu==4?"> CHANGE VEHICLE":"  CHANGE VEHICLE");td_row(9,td.menu==5?"> TRANSIT TIMETABLE":"  TRANSIT TIMETABLE");td_row(10,td.menu==6?"> SAVE PROGRESS":"  SAVE PROGRESS");td_row(11,td.menu==7?"> CANCEL ACTIVE JOB":"  CANCEL ACTIVE JOB");
-        sprintf(td_line,"%c AUDIO: %s",td.menu==8?'>':' ',td_audio_get_mode()==TD_AUDIO_FULL?"MUSIC+SFX":td_audio_get_mode()==TD_AUDIO_EFFECTS?"SFX ONLY":"SILENT");td_row(12,td_line);
+        /* GBDK %c consumes one byte; integer ternaries shift later varargs.
+           This bounded label is at most18 characters plus its terminator. */
+        strcpy(td_line,td.menu==8?"> AUDIO: ":"  AUDIO: ");
+        strcat(td_line,td_audio_get_mode()==TD_AUDIO_FULL?"MUSIC+SFX":td_audio_get_mode()==TD_AUDIO_EFFECTS?"SFX ONLY":"SILENT");td_row(12,td_line);
         td_row(14,"UP DOWN / A CHOOSE");td_row(15,td_vehicles[td.vehicle]);td_row(17,"B BACK");return;
     }
     if(td.mode==TD_BOARD){

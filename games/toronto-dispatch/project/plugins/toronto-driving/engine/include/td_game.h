@@ -16,7 +16,7 @@
 #define TD_RIDE 6
 #define TD_RESULT 7
 #define TD_HELP 8
-#define TD_SAVE_VERSION 8
+#define TD_SAVE_VERSION 9
 #define TD_STREETCAR_HOLD 1
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
@@ -56,6 +56,8 @@ void td_map_close(void) BANKED;
 void td_save(void) BANKED;
 UBYTE td_restore(void) BANKED;
 void td_set_target(void) BANKED;
+/* Ferry approach guidance shares the route bank; target/save fields stay intact. */
+void td_ferry_beacon(void) BANKED;
 UBYTE td_service(UBYTE origin) BANKED;
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED;
 #endif

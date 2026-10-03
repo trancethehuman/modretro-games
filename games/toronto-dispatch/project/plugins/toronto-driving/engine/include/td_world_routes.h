@@ -1,10 +1,10 @@
 /* Generated from native collision by create_world_routes.py. Original route placement. */
 #ifndef TD_WORLD_ROUTES_H
 #define TD_WORLD_ROUTES_H
-#define TD_PEDESTRIAN_ROUTES 102
+#define TD_PEDESTRIAN_ROUTES 95
 #ifdef TD_WORLD_ROUTE_DATA
-static const UBYTE td_route_counts[5]={102,128,128,128,79};
-static const UWORD td_district_routes[5][128][2]={
+static const UBYTE td_route_counts[6]={95,128,128,128,79,37};
+static const UWORD td_district_routes[6][128][2]={
   {
     {96,36},
     {240,36},
@@ -101,13 +101,6 @@ static const UWORD td_district_routes[5][128][2]={
     {656,756},
     {784,756},
     {920,756},
-    {376,920},
-    {520,920},
-    {376,936},
-    {520,936},
-    {656,936},
-    {376,912},
-    {520,912},
   },
   {
     {816,36},
@@ -579,6 +572,45 @@ static const UWORD td_district_routes[5][128][2]={
     {704,852},
     {768,852},
     {352,888},
+  },
+  {
+    {208,336},
+    {208,344},
+    {208,352},
+    {448,440},
+    {448,448},
+    {448,456},
+    {848,520},
+    {848,528},
+    {848,536},
+    {880,552},
+    {776,576},
+    {208,584},
+    {776,584},
+    {208,592},
+    {776,592},
+    {208,600},
+    {688,616},
+    {688,624},
+    {808,624},
+    {688,632},
+    {448,696},
+    {512,696},
+    {576,696},
+    {384,704},
+    {448,704},
+    {512,704},
+    {576,704},
+    {736,704},
+    {384,712},
+    {448,712},
+    {512,712},
+    {576,712},
+    {272,752},
+    {272,760},
+    {272,768},
+    {560,800},
+    {624,800},
   },
 };
 #endif
