@@ -634,7 +634,9 @@ void toronto_update(void) BANKED {
     if(td.mode==TD_WAIT&&INPUT_B_PRESSED){td.mode=TD_ROAM;consumed=1;td_save();td_ui_draw();}
     if(td_notice_timer){if(!--td_notice_timer){td.msg=0;td_ui_draw();}}
     /* Keep deadlines and transit tied to every VBlank, even when rendering falls behind. */
-    seconds=elapsed/60;elapsed%=60;elapsed+=td.subsecond;
+    seconds=0;
+    if(elapsed>=60){seconds=elapsed/60;elapsed%=60;}
+    elapsed+=td.subsecond;
     if(elapsed>=60){elapsed-=60;seconds++;}td.subsecond=elapsed;
     while(seconds--&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)){
         td_second();if(td_transition_pending)return;

@@ -21,6 +21,7 @@ check:
 	python3 games/toronto-dispatch/scripts/create_district_world.py --check
 	python3 games/toronto-dispatch/scripts/create_district_jobs.py --check
 	python3 games/toronto-dispatch/scripts/create_east_jobs.py --check
+	python3 games/toronto-dispatch/scripts/create_port_jobs.py --check
 	python3 games/toronto-dispatch/scripts/create_east_art.py --check
 	python3 games/toronto-dispatch/scripts/create_port_lands_art.py --check
 	python3 games/toronto-dispatch/scripts/create_world_routes.py --check

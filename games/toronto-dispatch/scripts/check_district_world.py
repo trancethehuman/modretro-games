@@ -213,10 +213,11 @@ def check():
     # Shortest paths use the registered grids, with reciprocal scene edges.
     model = RouteModel(world, campaign['stops'])
     origin = point(0, campaign['stops'][0]['u'], campaign['stops'][0]['v'])
-    # The sixteen authored expansion clients need car/park-hand-off access.
+    # All appended courier clients need car/park-hand-off access.
     # Supplemental Queen transit platforms are walking-only boarding points
     # checked independently by check_streetcar.py, including core platforms.
-    for stop in campaign['stops'][27:43]:
+    expansion_clients = [stop for stop in campaign['stops'][27:] if stop['transit'] == 0]
+    for stop in expansion_clients:
         district, u, v = stop['district'], stop['u'], stop['v']
         foot_only = bool(stop.get('foot_only', False))
         assert district in resources and district > 0 and stop['transit'] == 0
@@ -250,7 +251,7 @@ def check():
         assert len(rows) == count and len(set(rows)) == count
         assert all(walkable(district, u + offset, v) for u, v in rows for offset in range(64)), 'Compiled NPC path crosses solid terrain'
     report = ', '.join(f'{slug}:{raw} raw/{flipped} flipped tiles' for slug, raw, flipped in budgets)
-    print(f'Native district resources: {district_count} scenes, {len(world["portals"])} reciprocal seam pairs, 16 expansion clients, {6*(district_count-1)} swept-clear traffic loops and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
+    print(f'Native district resources: {district_count} scenes, {len(world["portals"])} reciprocal seam pairs, {len(expansion_clients)} expansion clients, {6*(district_count-1)} swept-clear traffic loops and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
 
 
 if __name__ == '__main__':

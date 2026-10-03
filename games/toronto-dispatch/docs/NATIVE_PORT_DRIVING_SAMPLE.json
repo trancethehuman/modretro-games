@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Ordinary-control Port Lands driving and walking on the retained 88-contract street ROM",
+  "romSha256": "a243834899097d9660190022f03ce31d322d2584d0d7cfe1fdf8adb84a8902ea",
+  "sourceFingerprint": "f9c81b07cca407abcd83f8e3fd4687cdbc2b6042e018f86feb000b4c1ff8ffb4",
+  "romPath": "project/build/toronto-streetlife-fused.gbc",
+  "counterexampleCorrection": "Beach water begins at y936; older x432/y919.5 stops on a tree trunk. This replay uses x423.625 to reach real water.",
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "recordingPath": "project/artifacts/playtests/session-a4780d9e-0d2e-4b88-8ed2-2f8105106173",
+    "sessionId": "9ccd3a34fec64d8ca2edc3786897f4bd",
+    "status": "stopped",
+    "branchId": "branch-0001",
+    "frame": 9988,
+    "totalFrames": 9988,
+    "bytesUsed": 5704183,
+    "limits": {
+      "sampleEveryFrames": 4,
+      "recentFrameCount": 12,
+      "maxBytes": 16000000,
+      "maxFrames": 60000,
+      "maxWallTimeMs": 900000
+    },
+    "eventCount": 5436,
+    "eventDigest": "e7689689507c8b934f665169ecbf77bff16f1d1087fd34308d475c7105e42626",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 9988
+      }
+    ],
+    "outcome": "passed",
+    "reason": "Scoped a243 ordinary-control Core Queen/East Leslie car entry into Port; car crossings of Lake Shore, Cherry North, Commissioners, Cherry South, Ship Channel and Unwin decks; walking Commissioners while Port car parked; genuine four-button reset restoring same-district walker/car and re-entry; Regatta parking, Beach handoff route, true clear-gap water block and re-entry; car return to East. Native H2/H3 escalation sampled with cash already zero, not exact high-heat fines or escape acceptance. No new96-job candidate or whole-city/hardware/boat-occlusion claim."
+  },
+  "archive": {
+    "schemaVersion": 1,
+    "archivePath": "project/artifacts/recording-archives/54067b4e-73e5-45c3-a1cb-59a184113b75/recording",
+    "sessionId": "9ccd3a34fec64d8ca2edc3786897f4bd",
+    "manifestSha256": "f87898a59a962d5b37cf8775ae40483f8cf7edec3cedd2a3b6c48bdc08517028",
+    "inventory": {
+      "digest": "01acc219eb5aeee07cad28960defd07d027befbdcf976511a88690dc7cfb39bc",
+      "bytes": 5704183,
+      "entries": 2123
+    },
+    "status": "archived",
+    "bytesReclaimed": 0
+  },
+  "snapshots": [
+    {
+      "purpose": "car East Leslie to Port seam",
+      "frame": 2728,
+      "hex": "163adc01163a80011e002900000018000400000000ff0064003000000000000000000000000000000000000000000000163adc01000000000404"
+    },
+    {
+      "purpose": "Lake Shore Don bridge westbound centre",
+      "frame": 3320,
+      "hex": "13225308163a80010000330000000d000800000000ff006400290000000000000000000000000000000000000044140013225308000000000404"
+    },
+    {
+      "purpose": "Lake Shore Don bridge westbound",
+      "frame": 3390,
+      "hex": "0b1d5308163a800100003400000018000800000000ff00640035000000000000000000000000000000000000000114000b1d5308000000000404"
+    },
+    {
+      "purpose": "Lake Shore west bank fully crossed",
+      "frame": 3590,
+      "hex": "f90b5308163a800100003800000018000800000000ff0064000c00000000000000000000000000000000000000000000f90b5308000000000404"
+    },
+    {
+      "purpose": "Cherry North bridge southbound",
+      "frame": 3896,
+      "hex": "760b270e163a800100003d00000018000400000000ff0064001200000000000000000000000000000000000000000000760b270e000000000404"
+    },
+    {
+      "purpose": "Commissioners river bridge eastbound",
+      "frame": 4552,
+      "hex": "9f1c2212163a800100004800000018000000000000ff0064000b000000000000000000000000000000000000000013009f1c221201001e000404"
+    },
+    {
+      "purpose": "Commissioners east bank crossed",
+      "frame": 4592,
+      "hex": "37202212163a800100004800000018000000000000ff00640037000000000000000000000000000000000000000013003720221201001e000404"
+    },
+    {
+      "purpose": "park and visible exit near Commissioners",
+      "frame": 4962,
+      "hex": "782242137822221200004d00000000000000010003ff0064003a0000000000000000000000000000000000000000140078222212000000000404"
+    },
+    {
+      "purpose": "walk Commissioners westbound with Port car parked east",
+      "frame": 5354,
+      "hex": "28190a127822221200005400000000000000010003ff0064001f0000000000000000000000000000000000000000000078222212000000000404"
+    },
+    {
+      "purpose": "real button reset restores walker and car both Port",
+      "frame": 5734,
+      "hex": "28190a127822221200005400000000000000010800ff0064001f0000000000000000000000000000000000000000000028190a12000000000404"
+    },
+    {
+      "purpose": "recover parked Port car after real reset and walking bridge",
+      "frame": 6140,
+      "hex": "782222127822221200005b00000000000000000000ff0064000c0000000000000000000000000000000000000000000078222212000000000404"
+    },
+    {
+      "purpose": "Cherry South bridge southbound",
+      "frame": 6944,
+      "hex": "800ba8217822221200006800000018000400000000ff0064002600000000000000000000000000000000000000000000800ba821010016000404"
+    },
+    {
+      "purpose": "Cherry Ship Channel bridge southbound",
+      "frame": 7044,
+      "hex": "800b23287822221200006a00000015000400000000ff0064001200000000000000000000000000000000000000071300800b232803001d000404"
+    },
+    {
+      "purpose": "Cherry Ship Channel south bank crossed with H3",
+      "frame": 7144,
+      "hex": "800be2307822221200006b00000018000400000000ff0064003900000000000000000000000000000000000000001300800be23003001c000404"
+    },
+    {
+      "purpose": "Regatta parking and foot exit for Beach route",
+      "frame": 7626,
+      "hex": "4215aa3642158a3500007200000000000300010003ff006400350000000000000000000000000000000000000000130042158a3503001c000404"
+    },
+    {
+      "purpose": "walk legal Beach promenade to future foot client",
+      "frame": 7858,
+      "hex": "621baa3742158a3500007600000000000300010003ff0064002d0000000000000000000000000000000000000000000042158a35030018000404"
+    },
+    {
+      "purpose": "actual Cherry Beach water edge at clear gap x423.625",
+      "frame": 8046,
+      "hex": "7a1a7a3a42158a3500007900000000000300010003ff006400340000000000000000000000000000000000000000000042158a35030015000404"
+    },
+    {
+      "purpose": "held south remains at real blocked water edge",
+      "frame": 8166,
+      "hex": "7a1a7a3a42158a3500007b00000000000300010003ff006400340000000000000000000000000000000000000000000042158a35030013000404"
+    },
+    {
+      "purpose": "Beach walk and parked car re-entry",
+      "frame": 8558,
+      "hex": "42158a3542158a3500008200000000000300000003ff0064001b0000000000000000000000000000000000000000000042158a3503000c000404"
+    },
+    {
+      "purpose": "Unwin circulation bridge eastbound",
+      "frame": 9128,
+      "hex": "48327e3442158a3500008b00000018000000000003ff006400390000000000000000000000000000000000000000000048327e34030017000404"
+    },
+    {
+      "purpose": "return by car from Port north Leslie to East",
+      "frame": 9987,
+      "hex": "4732803b4732803b00009a00000011000c00000003ff0064000f000000000000000000000000000000000000001913004732803b03001d000303"
+    }
+  ],
+  "resetScope": "HELP restores courier (402.5,288.625), car (551.5,290.125), cash0, clock54/sub31, both district4. Later live release subsecond45 is not asserted identical. Cosmetic boat/aircraft state resets.",
+  "pending": [
+    "Expanded96-contract ROM and new-job play",
+    "All truck/motorcycle/scooter bridge cases",
+    "Boat deck clipping",
+    "High-heat sufficient-cash fines/escape/paid transit",
+    "Whole-city performance/deepest stack",
+    "Measured two-hour campaign/human feedback",
+    "Physical cartridge"
+  ]
+}

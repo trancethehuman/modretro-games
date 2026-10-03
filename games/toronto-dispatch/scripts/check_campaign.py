@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE_STOPS, CORE_QUESTS = 27, 72
-TOTAL_STOPS, TOTAL_QUESTS = 51, 88
+TOTAL_STOPS, TOTAL_QUESTS = 59, 96
 
 
 def decode(text):
@@ -154,12 +154,18 @@ def check():
     assert stops[CORE_STOPS:35] == west['stops'], 'Western stop fusion is stale'
     assert quests[CORE_QUESTS:80] == west['quests'], 'Western contract fusion is stale'
     east = json.loads((ROOT / 'content/districts/east_jobs.json').read_text())
-    assert stops[35:43] == east['stops'] and quests[80:] == east['quests'], 'Eastern content fusion is stale'
+    assert stops[35:43] == east['stops'] and quests[80:88] == east['quests'], 'Eastern content fusion is stale'
     streetcar = json.loads((ROOT / 'content/streetcar.json').read_text())
-    assert stops[43:] == streetcar['stops'], 'Queen streetcar platform fusion is stale'
+    assert stops[43:51] == streetcar['stops'], 'Queen streetcar platform fusion is stale'
     assert campaign['transit']['streetcar501'] == streetcar['service'], 'Queen streetcar schedule fusion is stale'
     from create_east_jobs import preserved_prefix
     preserved_prefix(campaign)
+    from create_port_jobs import author as authored_port, preserved_prefix as preserved_port_prefix
+    preserved_port_prefix(campaign)
+    port = json.loads((ROOT / 'content/districts/port_lands_jobs.json').read_text())
+    assert port == authored_port(), 'Port Lands content provenance/route estimates are stale'
+    assert stops[51:] == port['stops'] and quests[88:] == port['quests'], 'Port Lands content fusion is stale'
+    assert {i for q in quests[88:] for i in q['route'] if i >= 51} == set(range(51, 59)), 'Every new Port Lands client must serve a contract'
     assert campaign['status'] == 'engine-integrated' and campaign['duration_target_minutes'] >= 120
     assert campaign['duration_verified'] is False, 'Elapsed campaign duration requires measured play evidence'
     assert len({q['kind_id'] for q in quests}) == 8
@@ -205,7 +211,7 @@ def check():
     completed_bytes = int(re.search(r'#define\s+TD_COMPLETE_BYTES\s+(\d+)', header).group(1))
     assert completed_bytes * 8 >= TOTAL_QUESTS
     assert re.search(r'UBYTE\s+td_get_parking\s*\(\s*UBYTE\s+stop\s*,\s*UWORD\s*\*\s*u\s*,\s*UWORD\s*\*\s*v\s*\)\s+BANKED\s*;', header), 'Parking getter must retain its banked whole-pixel API'
-    print(f'Native campaign: {TOTAL_QUESTS} contracts/{TOTAL_STOPS} stops and briefs match C; {parking_count} auxiliary parking anchors match metadata and clear footprints/footpaths; preserved core/Island/ferry checks and unlock closure passed. Western scene checks are separate; duration is unmeasured.')
+    print(f'Native campaign: {TOTAL_QUESTS} contracts/{TOTAL_STOPS} stops and briefs match C; {parking_count} auxiliary parking anchors match metadata and clear footprints/footpaths; all previous 88/51 native fields/briefs, core/Island/ferry checks, Port Lands body/routes and unlock closure passed. Native play and measured duration require separate evidence.')
 
 
 if __name__ == '__main__':

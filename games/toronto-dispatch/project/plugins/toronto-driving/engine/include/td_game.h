@@ -1,8 +1,8 @@
 #ifndef TD_GAME_H
 #define TD_GAME_H
 #include <gbdk/platform.h>
-#define TD_QUESTS 88
-#define TD_STOPS 51
+#define TD_QUESTS 96
+#define TD_STOPS 59
 #define TD_COMPLETE_BYTES 16
 #define TD_ACTORS 16
 #define TD_STOP_FOOT 1

@@ -527,6 +527,54 @@ static void test_clock(void) {
     expect(td.u>=before&&td.u-before<16*16,"large gap does not teleport through hundreds of motion steps");
 }
 
+static void check_clock_interval(UWORD frames,UBYTE fraction,UWORD start_frame,UWORD start_second){
+    reset_case();td.seconds=start_second;td.subsecond=fraction;
+    td_last_frame=start_frame;sys_time=(UWORD)((unsigned)start_frame+frames);
+    /* One wide absolute phase calculation is independent of production's
+     * bounded remainder/carry branches and world-second iteration. */
+    unsigned total=(unsigned)start_second*60+fraction+frames;
+    toronto_update();
+    expect(td.seconds==(UWORD)(total/60)&&td.subsecond==total%60&&td_last_frame==sys_time,
+           "actual active update preserves absolute60Hz phase across fast/full catch-up, fractional carry and both16-bit rollovers");
+}
+static void test_clock_boundaries(void){
+    /* Every valid fractional clock state crosses zero, the full common
+     * elapsed range, and both sides of the59/60/61-frame branch boundary. */
+    for(unsigned fraction=0;fraction<60;fraction++)for(unsigned frames=0;frames<=61;frames++)
+        check_clock_interval(frames,fraction,(frames+fraction)&1?65530:0,frames&1?65535:17);
+    static const UWORD long_gaps[]={62,119,120,121,255,256,257,599,600,601,3839,3840,3841,65534,65535};
+    static const UBYTE fractions[]={0,1,58,59};
+    for(unsigned i=0;i<sizeof(long_gaps)/sizeof(long_gaps[0]);i++)for(unsigned j=0;j<4;j++)
+        check_clock_interval(long_gaps[i],fractions[j],65530,65535);
+    static const UBYTE frozen_modes[]={TD_PAUSE,TD_MAP,TD_BOARD,TD_HELP};
+    static const UWORD gaps[]={0,1,59,60,61,65535};
+    for(unsigned mode=0;mode<4;mode++)for(unsigned gap=0;gap<6;gap++){
+        reset_case();td.mode=frozen_modes[mode];td.seconds=65535;td.subsecond=59;
+        td_state_t before=td;td_last_frame=65530;sys_time=(UWORD)(65530u+gaps[gap]);
+        toronto_update();
+        expect(!memcmp(&before,&td,58)&&td_last_frame==sys_time,
+               "menu/pause updates freeze the entire game state and discard each fast/full elapsed gap through video wrap");
+    }
+    for(unsigned pending=1;pending<=2;pending++)for(unsigned gap=0;gap<6;gap++){
+        reset_case();td.seconds=65535;td.subsecond=59;td_transition_pending=pending;test_queue_fail=1;
+        td_state_t before=td;td_last_frame=65530;sys_time=(UWORD)(65530u+gaps[gap]);
+        toronto_update();
+        expect(!memcmp(&before,&td,58)&&td_last_frame==sys_time&&td_transition_pending==pending,
+               "pending scene/load retry freezes clock and game bytes before the elapsed fast-path decision");
+    }
+    reset_case();td.seconds=65535;td.subsecond=59;td_last_frame=65530;sys_time=54;joy=joy_pressed=J_START;
+    toronto_update();
+    expect(td.mode==TD_PAUSE&&td.seconds==65535&&td.subsecond==59,
+           "opening pause on a60-frame gap still wins before clock catch-up");
+    joy=joy_pressed=0;sys_time=114;toronto_update();
+    joy=joy_pressed=J_B;sys_time=174;toronto_update();
+    expect(td.mode==TD_ROAM&&td.seconds==65535&&td.subsecond==59&&td_last_frame==174,
+           "resuming pause discards frozen elapsed gaps without consuming a clock second");
+    joy=joy_pressed=0;sys_time=175;toronto_update();
+    expect(td.seconds==0&&td.subsecond==0,
+           "first active frame after resume carries exactly once across world-second rollover");
+}
+
 static void refresh_record_crc(volatile UBYTE *record) {
     UWORD crc=0xFFFF;
     for(unsigned i=2;i<=4;i++)crc=td_crc_byte(crc,record[i]);
@@ -1536,7 +1584,7 @@ static void test_park_delivery_guidance(void) {
     }
     for(unsigned stop=0;stop<=TD_STOPS;stop++) {
         UWORD u=1234,v=5678;UBYTE found=td_get_parking(stop,&u,&v);
-        int expected=stop==34||stop==36||stop==41;
+        int expected=stop==34||stop==36||stop==41||stop==52||stop==53||stop==56||stop==58;
         expect(found==expected&&(expected||(u==1234&&v==5678)),
                "native parking getter leaves ordinary stops and invalid IDs unchanged");
     }
@@ -1546,6 +1594,206 @@ static void test_park_delivery_guidance(void) {
     native_case();td.job=84;td_get_job(td.job,&td_job);td.stage=3;td.district=test_current_district=1;
     td.u=736*16;td.v=640*16;td_set_target();
     expect(td_route_district==0,"remote eastern parking destination guides a western driver through the core graph branch");
+}
+
+static void test_port_content_and_ordered_handoffs(void) {
+    /* Campaign JSON is separately pinned to the pre-expansion51/88 prefix.
+       Compare its independently encoded fixture with the actual native getters
+       field by field: host struct padding is not part of the native contract. */
+    native_case();
+    for(UBYTE i=0;i<51;i++) {
+        td_stop_t stop;td_get_stop(i,&stop);const td_stop_t *expected=&td_fixture_stops[i];
+        expect(stop.u==expected->u&&stop.v==expected->v&&!strcmp(stop.name,expected->name)&&
+               stop.transit==expected->transit&&stop.district==expected->district&&stop.reserved==expected->reserved,
+               "every existing stop ordinal still decodes its pinned native coordinates, identity and restrictions");
+    }
+    for(UBYTE i=0;i<88;i++) {
+        td_job_t job;td_get_job(i,&job);const td_job_t *expected=&td_fixture_jobs[i];
+        expect(!strcmp(job.title,expected->title)&&job.kind==expected->kind&&job.count==expected->count&&
+               job.vehicle==expected->vehicle&&job.min_done==expected->min_done&&job.seconds==expected->seconds&&
+               job.reward==expected->reward&&!memcmp(job.route,expected->route,12),
+               "every existing saved job ordinal still decodes its pinned native requirements, order and reward");
+    }
+    expect(TD_QUESTS>=96&&TD_STOPS>=59,"the actual campaign contains all eight appended Port contracts and clients");
+    if(TD_QUESTS<96||TD_STOPS<59)return;
+    static const UBYTE routes[8][4]={{0,51,255,255},{37,52,255,255},{0,53,255,255},{51,55,54,255},
+                                   {39,55,255,255},{52,58,56,255},{57,1,255,255},{54,51,39,54}};
+    static const UBYTE counts[8]={2,2,2,3,2,3,2,4};
+    static const UBYTE vehicles[8]={1,255,255,1,0,255,2,0};
+    static const UBYTE kinds[8]={3,0,4,3,1,0,2,6};
+    static const UBYTE gates[8]={8,3,8,8,6,12,6,12};
+    for(UBYTE row=0;row<8;row++) {
+        native_case();memset(td.complete,255,11);td.done=88;
+        td.vehicle=vehicles[row]==TD_NONE?0:vehicles[row];td.mode=TD_BOARD;td.menu=88+row;
+        td_get_job(td.menu,&td_offer);
+        expect(td_offer.count==counts[row]&&td_offer.vehicle==vehicles[row]&&td_offer.kind==kinds[row]&&
+               td_offer.min_done==gates[row]&&!memcmp(td_offer.route,routes[row],counts[row]),
+               "each appended Port offer has the independently specified job kind, vehicle, gate and ordered route");
+        world_tick(J_A,1);
+        expect(td.mode==TD_ROAM&&td.job==88+row&&!td.stage&&td.health==100&&td.left==td_offer.seconds,
+               "the real board handler accepts each compatible unlocked Port offer without altering prior completion credit");
+        for(UBYTE stage=0;stage<counts[row];stage++) {
+            td_stop_t client,other;td_get_stop(routes[row][stage],&client);
+            td.onfoot=vehicles[row]==TD_NONE;td_set_target();
+            expect(td_target.u==client.u&&td_target.v==client.v&&td_target.district==client.district&&
+                   !strcmp(td_target.name,client.name),
+                   "each ordered Port objective resolves the true client in its authored district");
+            td.district=test_current_district=(client.district+1)%TD_DISTRICT_COUNT;
+            td.u=client.u*16;td.v=client.v*16;
+            UWORD cash=td.cash,left=td.left;unsigned stores=sram_writes;
+            td_interact();
+            expect(td.stage==stage&&td.job==88+row&&td.msg==6&&td.cash==cash&&td.left==left&&
+                   td.done==88&&sram_writes==stores,
+                   "equal client coordinates in another loaded district cannot advance, pay or save a Port handoff");
+            UBYTE other_stage=0;
+            while(routes[row][other_stage]==routes[row][stage])other_stage++;
+            td_get_stop(routes[row][other_stage],&other);
+            td.district=test_current_district=other.district;td.u=other.u*16;td.v=other.v*16;
+            td_interact();
+            expect(td.stage==stage&&td.job==88+row&&td.msg==6&&td.cash==cash&&td.left==left&&
+                   td.done==88&&sram_writes==stores,
+                   "an otherwise real pickup, future handoff or return endpoint cannot skip the current ordered Port stage");
+            td.district=test_current_district=client.district;td.u=client.u*16;td.v=client.v*16;
+            td.speed=0;td_interact();
+            expect(td.stage==stage+1&&td.job==(stage+1==counts[row]?TD_NONE:88+row)&&
+                   td.mode==(stage+1==counts[row]?TD_RESULT:TD_ROAM)&&
+                   td.done==(stage+1==counts[row]?89:88),
+                   "only the current eligible client advances one actual stage and only the final handoff credits completion");
+        }
+    }
+}
+
+/* Fixed pre-Port version6/7/8 disk layout. These ROMs had88 jobs and51 stops,
+   but already stored58 bytes and a16-byte bitmap. Encode offsets independently
+   instead of memcpying today's struct into an alleged historical snapshot. */
+static void write_pre_port_record(UBYTE version,const td_state_t *state) {
+    UBYTE bytes[58]={0};volatile UBYTE *record=td_save_address(0);UWORD crc=0xFFFF;
+    old_word(bytes,0,state->u);old_word(bytes,2,state->v);old_word(bytes,4,state->park_u);old_word(bytes,6,state->park_v);
+    old_word(bytes,8,state->cash);old_word(bytes,10,state->seconds);old_word(bytes,12,state->left);old_word(bytes,14,state->speed);
+    bytes[16]=state->heading;bytes[17]=state->vehicle;bytes[18]=state->onfoot;bytes[19]=state->mode;
+    bytes[20]=state->menu;bytes[21]=state->job;bytes[22]=state->stage;bytes[23]=state->health;
+    bytes[24]=state->done;bytes[25]=state->subsecond;memcpy(bytes+26,state->complete,11);
+    bytes[42]=state->transit_origin;bytes[43]=state->transit_target;bytes[44]=state->ride_left;
+    bytes[45]=state->cooldown;bytes[46]=state->msg;bytes[47]=state->reserved;
+    old_word(bytes,48,state->safe_u);old_word(bytes,50,state->safe_v);
+    old_word(bytes,52,version<8?1400:state->wanted);old_word(bytes,54,version<8?2200:state->wanted_left);
+    bytes[56]=state->district;bytes[57]=state->park_district;
+    record[0]=0x54;record[1]=0xD7;record[2]=version;record[3]=58;record[4]=37;record[7]=0;
+    for(unsigned i=2;i<=4;i++)crc=td_crc_byte(crc,record[i]);
+    for(unsigned i=0;i<58;i++){record[8+i]=bytes[i];crc=td_crc_byte(crc,bytes[i]);}
+    record[5]=crc;record[6]=crc>>8;
+}
+
+static void test_port_save_and_final_credit(void) {
+    for(UBYTE version=6;version<=8;version++) {
+        native_case();td.cash=5678;td.seconds=65535;td.subsecond=59;td.left=203;
+        td.vehicle=3;td.heading=9;td.job=87;td.stage=8;td.health=73;
+        memset(td.complete,255,11);td.done=88;td.cooldown=7;td.msg=12;
+        if(version==8){td.wanted=2;td.wanted_left=17;}
+        td_state_t historical=td;write_pre_port_record(version,&historical);memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&historical,58),
+               "an independently encoded pre-Port58-byte v6/v7/v8 snapshot preserves active job87, all88 completions and prior fields");
+        int empty=1;for(unsigned i=11;i<16;i++)if(td.complete[i])empty=0;
+        expect(empty&&td.done==88&&td.job==87&&td.stage==8&&td.complete[10]==255,
+               "expanding the campaign leaves every new quest bit unset without retiring an existing carried contract");
+        td.job=TD_NONE;td_ready_offer();
+        expect(td.menu==89&&td_offer.vehicle==TD_NONE,
+               "all88 old completions unlock the next compatible appended offer while skipping truck-only work for the saved scooter");
+    }
+    native_case();td.district=4;td.onfoot=1;td.u=td.safe_u=352*16;td.v=td.safe_v=592*16;
+    td.job=93;td.stage=1;td_get_job(td.job,&td_job);td.left=161;td.health=67;
+    td.cash=2417;td.seconds=65535;td.subsecond=59;td.wanted=2;td.wanted_left=17;
+    td.complete[0]=255;td.complete[1]=15;td.done=12;td.transit_origin=49;td.transit_target=43;
+    td_state_t saved=td;td_save();
+    expect(td_save_address(td_save_slot)[2]==8&&td_save_address(td_save_slot)[3]==58,
+           "a new carried Port contract writes the unchanged version8/58-byte record");
+    memset(&td,0,sizeof(td));expect(td_restore()&&!memcmp(&td,&saved,58),
+           "active Port job93 at Riverbank restores its exact deadline, condition, bitmap, heat, foot position and remote Core car");
+    memset(&td,0,sizeof(td));td_session_live=0;load_authored_scene_fixture();toronto_init();
+    expect(td.mode==TD_HELP&&td_resume_mode==TD_ROAM&&td_transition_pending==1&&test_queued_district==4,
+           "cold recovery queues the real Port scene before exposing its saved active foot contract");
+    td_state_t waiting=td;world_tick(0,600);
+    expect(!memcmp(&td,&waiting,58),"pending Port recovery freezes every saved byte through a long video-frame gap");
+    apply_queued_scene();waiting.mode=TD_HELP;
+    expect(!memcmp(&td,&waiting,58)&&!td_transition_pending&&test_current_district==4&&
+           td_job.route[td.stage]==58&&td_target.u==352&&td_target.v==592&&td_target.district==4,
+           "the warm Port load restores the same carried stage, true foot objective and remote car without replaying a handoff");
+    world_tick(J_A,1);waiting.mode=TD_ROAM;
+    expect(!memcmp(&td,&waiting,58),"leaving recovery help resumes the saved Port contract without charging or consuming its clock");
+
+    native_case();memset(td.complete,255,11);td.complete[11]=127;td.done=95;
+    td.mode=TD_BOARD;td.menu=95;td_get_job(95,&td_offer);world_tick(J_A,1);
+    expect(td.job==95&&!td.stage&&td.done==95,"the last appended job accepts after95 unique completions");
+    static const UBYTE last_route[4]={54,51,39,54};
+    UWORD reward=(UWORD)((unsigned)td_fixture_jobs[95].reward*67/100+99/5);
+    for(unsigned repeat=0;repeat<2;repeat++) {
+        if(repeat){td.mode=TD_BOARD;td.menu=95;td_get_job(95,&td_offer);world_tick(0,0);world_tick(J_A,1);}
+        for(UBYTE stage=0;stage<4;stage++) {
+            td_stop_t stop;td_get_stop(last_route[stage],&stop);
+            td.district=test_current_district=stop.district;td.u=stop.u*16;td.v=stop.v*16;
+            td.left=99;td.health=67;td.speed=0;td_set_target();td_interact();
+        }
+        expect(td.job==TD_NONE&&td.mode==TD_RESULT&&td.stage==4&&td.done==96&&td.complete[11]==255&&
+               td.cash==30+(repeat+1)*reward,
+               "job95 records bit95 and reaches96 exactly once; a full replay retains unique credit and earns the normal condition/time reward");
+        td_state_t finished=td;finished.mode=TD_ROAM;memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&finished,58),
+               "the final96-completion record and bounded repeat reward survive the actual save/restore path");
+    }
+}
+
+static void test_port_freight_transit_and_riverbank_walk(void) {
+    native_case();memset(td.complete,255,11);td.done=88;td.mode=TD_BOARD;td.menu=88;td_get_job(88,&td_offer);
+    world_tick(J_A,1);
+    expect(td.job==TD_NONE&&td.mode==TD_BOARD&&td.msg==2&&td.cash==30,
+           "the actual Port stock contract rejects acceptance with the courier's car instead of its required truck");
+    td.vehicle=1;world_tick(0,0);world_tick(J_A,1);
+    expect(td.job==88&&td.vehicle==1&&td_job.kind==3,"the same Port freight offer accepts with its required truck");
+    for(UBYTE stage=0;stage<2;stage++) {
+        td.onfoot=1;td.stage=stage;td.u=574*16;td.v=720*16;
+        td.transit_origin=43;td.transit_target=49;td.ride_left=0;
+        td_state_t before=td;unsigned stores=sram_writes;td_transit_open();
+        before.msg=8;
+        expect(!memcmp(&td,&before,58)&&td.mode==TD_ROAM&&sram_writes==stores,
+               "walking beside real Union transit cannot turn empty or carried Port truck freight into a paid waiting/ride state");
+    }
+    native_case();test_current_district=td.district=td.park_district=4;
+    td.u=td.park_u=td.safe_u=192*16;td.v=td.park_v=td.safe_v=552*16;
+    td.job=93;td.stage=1;td.left=180;td_get_job(td.job,&td_job);td_set_target();
+    td_stop_t client;td_get_stop(58,&client);
+    int full_foot=1;
+    for(unsigned y=(client.v-2)>>3;y<=(unsigned)(client.v+2)>>3;y++)
+        for(unsigned x=(client.u-2)>>3;x<=(unsigned)(client.u+2)>>3;x++)
+            if(native_collision[4][y*native_widths[4]+x]&15)full_foot=0;
+    expect(client.u==352&&client.v==592&&client.district==4&&(client.reserved&TD_STOP_FOOT)&&!client.transit&&
+           !td_drivable(client.u,client.v)&&full_foot&&td_drivable(192,552),
+           "Riverbank is a real full-foot-only client with a clear road parking anchor, not a vehicle handoff or new transit station");
+    expect(td_target.u==192&&td_target.v==552&&td_target.district==4,
+           "driving job93 stage1 marks Riverbank's real legal road approach");
+    td_interact();expect(td.stage==1&&td.msg==16&&td.job==93,"the Riverbank parking beacon cannot deliver from inside the car");
+    td_enter_exit();
+    expect(td.onfoot&&td_entry_timer==12&&td.park_u==192*16&&td.park_v==552*16&&
+           td.u==192*16&&td.v==570*16&&td_target.u==352&&td_target.v==592,
+           "actual Riverbank car exit chooses a connected visible door and switches the objective to the foot client");
+    for(unsigned i=0;i<12;i++)driving_tick(0);
+    td_interact();expect(td.stage==1&&td.msg==6,"the actual walking door is still too far from the Riverbank parcel");
+    /* Use ordinary walking through a fixed authored clear L-shaped approach.
+       No fixture placement or unchecked teleport connects parking and client. */
+    for(unsigned i=0;i<320;i++)driving_tick(J_RIGHT);
+    for(unsigned i=0;i<44;i++)driving_tick(J_DOWN);
+    expect(td.u==352*16&&td.v==592*16&&td.onfoot&&td_foot_free(td.u,td.v),
+           "the courier walks the full182px door-to-Riverbank route on the actual Port collision map");
+    td_interact();expect(td.stage==2&&td.job==93&&td.mode==TD_ROAM&&td_target.u==432&&td_target.v==888,
+           "the true Riverbank handoff advances exactly once to the next Beach foot parcel");
+    td_interact();expect(td.stage==2&&td.msg==6,"Select again at Riverbank cannot also deliver the distant next parcel");
+    for(unsigned i=0;i<44;i++)driving_tick(J_UP);
+    for(unsigned i=0;i<320;i++)driving_tick(J_LEFT);
+    expect(td.u==192*16&&td.v==570*16&&td_near_car()&&td.park_district==4,
+           "the courier walks back to the same saved car door without moving the parked vehicle");
+    td_enter_exit();for(unsigned i=0;i<12;i++)driving_tick(0);
+    expect(!td.onfoot&&td.u==192*16&&td.v==552*16&&td.job==93&&td.stage==2&&
+           td_target.u==352&&td_target.v==856&&td_target.district==4,
+           "ordinary car re-entry retains the completed Riverbank stage and changes the next Beach objective to its legal road approach");
 }
 
 static void test_atlas_driver_handoff_and_freeze(void) {
@@ -2480,7 +2728,7 @@ static void test_road_police_pursuit(void){
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
-    test_momentum_and_coasting();test_pressed_edge_once();test_clock();
+    test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_clock_boundaries();
     test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();test_pedestrian_phase_reuse();
     test_signal_and_autonomous_traffic();
     test_city_routes_and_walking();
@@ -2498,6 +2746,8 @@ int main(void) {
     test_reciprocal_portals();test_queue_failure_and_remote_boot();test_car_entry_at_portal();test_first_frame_actors();
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
+    test_port_content_and_ordered_handoffs();test_port_save_and_final_credit();
+    test_port_freight_transit_and_riverbank_walk();
     test_atlas_driver_handoff_and_freeze();
     test_streetcar_loader_binding();test_queen_visual_save_follow_and_loaded_arrival();
     test_queen_cold_derived_view();test_queen_visual_queue_retry_clock();test_streetcar_pause_and_map_pose();

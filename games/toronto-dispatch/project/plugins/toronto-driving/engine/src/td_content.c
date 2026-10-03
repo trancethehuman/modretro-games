@@ -54,6 +54,14 @@ static const td_stop_t td_stops[TD_STOPS] = {
   {128,556,"QUEEN SAULTER",4,3,0},
   {780,524,"QUEEN LESLIE",4,3,0},
   {880,524,"QUEEN ALTON",4,3,0},
+  {672,272,"CHANNEL STAGE",0,4,0},
+  {312,432,"FIRE HALL BOOKS",0,4,1},
+  {144,432,"CRANE WALK",0,4,1},
+  {704,576,"TURNING BASIN",0,4,0},
+  {616,808,"UNWIN WORKS",0,4,0},
+  {432,888,"BEACH MAIL",0,4,1},
+  {128,576,"POLSON PACKET",0,4,0},
+  {352,592,"RIVERBANK PARCEL",0,4,1},
 };
 static const td_job_t td_jobs[TD_QUESTS] = {
   {"MARKET START",0,2,255,0,120,86,{0,1,255,255,255,255,255,255,255,255,255,255}},
@@ -144,6 +152,14 @@ static const td_job_t td_jobs[TD_QUESTS] = {
   {"PARK PATH PARCELS",0,6,255,12,280,246,{0,36,41,42,39,0,255,255,255,255,255,255}},
   {"EAST RETURN PACK",6,6,0,12,215,228,{0,39,40,42,37,0,255,255,255,255,255,255}},
   {"CROSS CITY BUNDLES",0,10,3,18,405,391,{0,35,38,40,42,39,37,31,33,0,255,255}},
+  {"CHANNEL STOCK RUN",3,2,1,8,170,184,{0,51,255,255,255,255,255,255,255,255,255,255}},
+  {"FIRE HALL BOOKS",0,2,255,3,175,150,{37,52,255,255,255,255,255,255,255,255,255,255}},
+  {"CRANE WALK PACKET",4,2,255,8,205,173,{0,53,255,255,255,255,255,255,255,255,255,255}},
+  {"TURNING BASIN LOAD",3,3,1,8,185,198,{51,55,54,255,255,255,255,255,255,255,255,255}},
+  {"UNWIN GLASS",1,2,0,6,150,170,{39,55,255,255,255,255,255,255,255,255,255,255}},
+  {"BEACH MAIL",0,3,255,12,180,129,{52,58,56,255,255,255,255,255,255,255,255,255}},
+  {"HARBOUR PAPER RUN",2,2,2,6,120,175,{57,1,255,255,255,255,255,255,255,255,255,255}},
+  {"STAGE RETURN KIT",6,4,0,12,200,204,{54,51,39,54,255,255,255,255,255,255,255,255}},
 };
 static const char td_briefs[TD_QUESTS][37] = {
   "MARKET PARCEL     UNION TO MARKET   ",
@@ -234,17 +250,29 @@ static const char td_briefs[TD_QUESTS][37] = {
   "TWO PARK HANDOFFS PARK THEN WALK    ",
   "SHOP RETURN PAPERSORIGINAL TO UNION ",
   "EAST TO WEST MAIL FINAL PARK DEPOT  ",
+  "BULKY STAGE STOCK TRUCK BRAKE EARLY ",
+  "COMMUNITY BOOK BOXPARK THEN WALK    ",
+  "POCKET RELAY KIT  PARK OR USE QUEEN ",
+  "STAGE EQUIPMENT   UNWIN THEN YARD   ",
+  "FRAGILE GLASS KIT BRAKE BEFORE TURNS",
+  "RIVER AND BEACH   TWO FOOT HANDOFFS ",
+  "URGENT PORT FILE  MOTORCYCLE ROUTE  ",
+  "YARD RETURN PAPERSORIGINAL BACK YARD",
 };
 /* Auxiliary parking cues; client records remain unchanged. */
 typedef struct { UWORD u,v; UBYTE stop; } td_parking_t;
-static const td_parking_t td_parking[3]={
+static const td_parking_t td_parking[7]={
   {736,640,34},
   {224,144,36},
   {816,312,41},
+  {304,352,52},
+  {192,352,53},
+  {352,856,56},
+  {192,552,58},
 };
 UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED {
  UBYTE i;if(!u||!v)return FALSE;
- for(i=0;i<3;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
+ for(i=0;i<7;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
  return FALSE;
 }
 static const char td_west_street_names[63][19]={

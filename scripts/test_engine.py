@@ -108,6 +108,22 @@ def native_fixture(game, include):
             "Original 27 core stops changed.")
     require(validator.canonical_sha(original_jobs) == core.BASE_QUESTS_SHA256,
             "Original 72 contract fields changed.")
+    # Snapshot the complete pre-Port campaign, independently of the content
+    # generator. Old saves identify these records by ordinal, not by name.
+    # Planning/source metadata can evolve without changing native semantics.
+    prefix_stops = [{field: stop.get(field, 0) for field in
+                     ("id", "u", "v", "name", "transit", "district", "reserved")}
+                    for stop in stop_rows[:51]]
+    prefix_jobs = [{field: job[field] for field in
+                    ("id", "title", "brief", "kind_id", "required_vehicle",
+                     "min_completed", "route", "time_limit_seconds", "reward")}
+                   for job in job_rows[:88]]
+    require(validator.canonical_sha(prefix_stops) ==
+            "68f6104038ab9724ca197de13ecef7528ab5e8a4713ee8d05cff8b8004a73325",
+            "The existing 51 native stop identities/fields changed.")
+    require(validator.canonical_sha(prefix_jobs) ==
+            "ae5d1177fc297337b7efe449144d6ffbe188c333d3607d6710080c9d065e130a",
+            "The existing 88 native contracts or briefings changed.")
     content = ["static const td_stop_t td_fixture_stops[TD_STOPS]={"]
     for stop in stop_rows:
         district, flags = stop.get("district", 0), stop.get("reserved", 0)
