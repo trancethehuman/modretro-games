@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Curated fresh native delivery/RESULT-B, continuously visible human impact, map freezing/pan and genuine game-button save reset on the pedestrian-admission build; the first-appearance defect remains host/compiled evidence.",
+  "source": {
+    "baseCommit": "3674c615b8f54a74ea06687534220081bac8907f",
+    "workingTreeBuild": true,
+    "commitForFrozenProductionChangeAtBuildTime": null,
+    "frozenProductionFile": {
+      "path": "project/plugins/toronto-driving/engine/src/td_people.c",
+      "sha256": "6ba73602a0f8198b246572002e3f4bb19e64be6ff1bc0cb080c13e510a7da4f1"
+    },
+    "attribution": "Build uses committed base plus one frozen production file; no new source commit is invented."
+  },
+  "rom": {
+    "path": "project/build/toronto-dispatch-pedestrian-admission.gbc",
+    "sha256": "964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a",
+    "sizeBytes": 524288
+  },
+  "build": {
+    "success": true,
+    "durationMs": 55964,
+    "header": {
+      "sizeBytes": 524288,
+      "sha256": "964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a",
+      "title": "TORONTODISPATCH",
+      "colorMode": "gbc-only",
+      "colorFlag": 192,
+      "cartridgeType": 30,
+      "cartridgeTypeName": "MBC5+RUMBLE+RAM+BATTERY",
+      "mapper": "MBC5",
+      "romSizeCode": 4,
+      "declaredRomSizeBytes": 524288,
+      "ramSizeCode": 3,
+      "declaredRamSizeBytes": 32768,
+      "nintendoLogoValid": true,
+      "headerChecksum": 233,
+      "computedHeaderChecksum": 233,
+      "headerChecksumValid": true,
+      "valid": true
+    },
+    "noiPath": "project/build/toronto-dispatch-pedestrian-admission.gbc.debug/symbols.noi",
+    "noiSha256": "b3eb0e28000a5cb446bfca27d6f93d6bd31399c9cf6b3689a10311d182c3ace1",
+    "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+    "sourceFingerprint": "d453a3f065fc718c9647fa400153fc0edccf8607d2917940e22b6ae805c344a7",
+    "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "engineAbi": {
+      "layout": "gbvm-farptr3-uword16-v1",
+      "sha256": "4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "compiledAudit": {
+      "assertions": 580,
+      "outcome": "passed-scoped",
+      "privateReport": "project/build/PEDESTRIAN_ADMISSION_COMPILED_AUDIT.json",
+      "privateReportSha256": "e15c8f411aee84be3ab4eba0960426299fde2e42de2a112a7b9c247406f55f78"
+    },
+    "memory": {
+      "heapEnd": "0xdab8",
+      "stackBase": "0xdf00",
+      "linkedReserveBytes": 1096,
+      "dataBytes": 6621,
+      "initializedBytes": 59,
+      "persistentAllocationGrowth": 0,
+      "exportedRelocations": {
+        "_td_boat": {
+          "old": "0xd558",
+          "new": "0xd59d"
+        }
+      },
+      "presentLocalFrameBytes": 28,
+      "previousPresentLocalFrameBytes": 27,
+      "deepestRuntimeStackMeasured": false
+    },
+    "focusedSourceChecks": {
+      "peopleAsanUbsan": 2423750,
+      "engine": 800555,
+      "zeroFailures": true
+    },
+    "fullRepositoryRerunClaimedByThisPrefix": false,
+    "saveVersion": 9,
+    "gameStateBytes": 58
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "projection": {
+    "curated": true,
+    "exhaustive": false,
+    "rawPrefixPath": "project/build/current-964f-pedestrian-admission-native-prefix.json",
+    "rawPrefixBytes": 879507,
+    "rawPrefixSha256": "f0a721b949c48b2b7222346d7a4d0a03b12b404c99fcf020506a372f5b025518",
+    "rawPrefixPublished": false,
+    "allCompletedIntervalsRetainedPrivately": 65,
+    "allRetainedInspections": 182,
+    "additionalUnretainedDiagnosticAttempts": {
+      "frame": 1076,
+      "count": 2,
+      "details": [
+        "One 69-byte diagnostic read response was not retained.",
+        "One rejected 336-byte diagnostic request/response was not retained."
+      ],
+      "payloadsNotReconstructed": true,
+      "readOnlyNoAdvancement": true
+    },
+    "selectedIntervals": 19,
+    "selectedObservationSets": 20,
+    "selectedReadPayloads": 70,
+    "noOpaqueCheckpointStatePublished": true,
+    "noContentOrToolStdoutPublished": true
+  },
+  "outcome": "passed-scoped",
+  "scope": {
+    "freshBoot": true,
+    "checkpointImport": false,
+    "ramWrites": false,
+    "firstDelivery": {
+      "frame": 564,
+      "condition": 100,
+      "left": 115,
+      "baseReward": 86,
+      "timeBonus": 23,
+      "credit": 109,
+      "cash": 139,
+      "done": 1
+    },
+    "heldResultB": {
+      "startFrame": 564,
+      "endFrame": 684,
+      "vblanks": 120,
+      "u": 757.1875,
+      "v": 720,
+      "speed": 0,
+      "clockBefore": {
+        "seconds": 5,
+        "subsecond": 50
+      },
+      "clockAfter": {
+        "seconds": 7,
+        "subsecond": 49
+      },
+      "worldAndFleetAdvance": true
+    },
+    "continuousHumanImpact": {
+      "approachFrames": [
+        1100,
+        1144
+      ],
+      "effectFrame": 1152,
+      "route": 83,
+      "actorIndex": 9,
+      "witnesses": [
+        {
+          "frame": 1100,
+          "flags": 48,
+          "phase": 47,
+          "stun": 0,
+          "u": 567,
+          "v": 692
+        },
+        {
+          "frame": 1144,
+          "flags": 48,
+          "phase": 56,
+          "stun": 0,
+          "u": 576,
+          "v": 692
+        },
+        {
+          "frame": 1152,
+          "flags": 48,
+          "phase": 57,
+          "stun": 6,
+          "u": 577,
+          "v": 692
+        }
+      ],
+      "witnessInterpretation": "Decoded through matching compiled people/actor layout, not a coordinate returned by the memory tool.",
+      "cashBefore": 139,
+      "cashAfter": 119,
+      "wanted": 1,
+      "message": 19,
+      "carU": 569.1875,
+      "carV": 692.5625,
+      "notFirstAppearanceBugcase": true,
+      "intentLabelCaveat": "Stopped after impact at1188 still has speed4; actual stopped state is1220."
+    },
+    "mapFreeze": {
+      "startFrame": 1268,
+      "endFrame": 1508,
+      "vblanks": 240,
+      "game58Equal": true,
+      "people69Equal": true,
+      "fleet24Equal": true,
+      "eastPanFrame": 1532,
+      "pannedImageFrame": 1652
+    },
+    "saveReset": {
+      "saveAFrame": 1772,
+      "saveAPose": [
+        578.4375,
+        683.25
+      ],
+      "saveASpeed": 1,
+      "saveAClock": [
+        16,
+        50
+      ],
+      "releasedFrame": 1784,
+      "laterAutomaticSavedPose": [
+        578.5,
+        683.1875
+      ],
+      "laterAutomaticSavedClock": [
+        17,
+        0
+      ],
+      "cash": 119,
+      "done": 1,
+      "wanted": 1,
+      "wantedLeft": 28,
+      "resetButtons": [
+        "a",
+        "b",
+        "start",
+        "select"
+      ],
+      "resetFrames": [
+        1784,
+        1964
+      ],
+      "earlyResetImageBlankFrame": 1964,
+      "visibleHelpFrames": [
+        1976,
+        2156
+      ],
+      "resetRetainsCommittedDurableFields": true,
+      "resetAll58BytesEqualClaimed": false
+    },
+    "oam": {
+      "frame": 1784,
+      "returnedVisible": 10,
+      "toolReportedPeak": 4,
+      "hardwareLimit": 10,
+      "overLimitScanlines": 0,
+      "oneSampleOnly": true
+    }
+  },
+  "inspection": {
+    "stateAddress": "0xc1f6",
+    "fleetUAddress": "0xc2b6",
+    "fleetVAddress": "0xc2c2",
+    "people69Address": "0xd558",
+    "input4Address": "0xd9ed",
+    "scene3Address": "0xd5aa",
+    "coreFarPointerHex": "16c47e",
+    "actorStride": 56,
+    "actorFlagsOffset": 0,
+    "actor9Address": "0xc7e4",
+    "allRetainedCounts": {
+      "primary256": 57,
+      "input4": 57,
+      "scene3": 57,
+      "people69": 5,
+      "actor168": 4,
+      "motion15": 1,
+      "oam": 1
+    }
+  },
+  "observations": [
+    {"rawIndex": 0,"label": "Fresh admission ROM initial state","frame": 180,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 180,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "0023002d0023002d1e000000000000000000000800ff00640000000000000000000000000000000000000000000000000023002d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003002d002554e494f4e204445504f540000000000000000010000000000000000000000000000000000000000000000000000000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 180,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 180,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 560.0,"v": 720.0,"parkU": 560.0,"parkV": 720.0,"cash": 30,"seconds": 0,"left": 0,"speed": 0,"heading": 0,"vehicle": 0,"onfoot": 0,"mode": 8,"menu": 0,"job": 255,"stage": 0,"health": 100,"done": 0,"subsecond": 0,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "00000000000000000000000000000000","safeU": 560.0,"safeV": 720.0,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 80.0,"v": 280.0},{"u": 200.0,"v": 392.0},{"u": 320.0,"v": 168.0},{"u": 440.0,"v": 632.0},{"u": 824.0,"v": 240.0},{"u": 216.0,"v": 72.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 18,"label": "First package pickup","frame": 296,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 296,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "9123002d0023002d1e0001007700000000000000000001640026000000000000000000000000000000000000000000009123002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff00000008800f0017001e8033800d80118018800a80278010000700000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 296,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "40400000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 296,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 569.0625,"v": 720.0,"parkU": 560.0,"parkV": 720.0,"cash": 30,"seconds": 1,"left": 119,"speed": 0,"heading": 0,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 0,"stage": 1,"health": 100,"done": 0,"subsecond": 38,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "00000000000000000000000000000000","safeU": 569.0625,"safeV": 720.0,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 128.0,"v": 280.0},{"u": 248.0,"v": 392.0},{"u": 368.0,"v": 168.0},{"u": 480.0,"v": 632.0},{"u": 824.0,"v": 264.0},{"u": 216.0,"v": 112.0}],"input": "40400000","scene": "16c47e"}},
+    {"rawIndex": 36,"label": "First completed delivery","frame": 564,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 564,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "532f002d0023002d8b000500730000000000000700ff0264013201000000000000000000000000000000000000000000532f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000000f8016001e80258033800d80118018800a80278010800900000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 564,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 564,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 757.1875,"v": 720.0,"parkU": 560.0,"parkV": 720.0,"cash": 139,"seconds": 5,"left": 115,"speed": 0,"heading": 0,"vehicle": 0,"onfoot": 0,"mode": 7,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 50,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 757.1875,"safeV": 720.0,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 240.0,"v": 280.0},{"u": 360.0,"v": 392.0},{"u": 480.0,"v": 168.0},{"u": 600.0,"v": 632.0},{"u": 824.0,"v": 264.0},{"u": 216.0,"v": 152.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 39,"label": "Held B remains stopped","frame": 684,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 684,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "532f002d0023002d8b000700730000000000000000ff0264013101000000000000000000000000000000000000000000532f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00008012001a802100298033000e80118018800a80270012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 684,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "20200000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 684,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 757.1875,"v": 720.0,"parkU": 560.0,"parkV": 720.0,"cash": 139,"seconds": 7,"left": 115,"speed": 0,"heading": 0,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 49,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 757.1875,"safeV": 720.0,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 296.0,"v": 280.0},{"u": 416.0,"v": 392.0},{"u": 536.0,"v": 168.0},{"u": 656.0,"v": 632.0},{"u": 824.0,"v": 288.0},{"u": 224.0,"v": 168.0}],"input": "20200000","scene": "16c47e"}},
+    {"rawIndex": 42,"label": "Released result B","frame": 696,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 696,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "532f002d0023002d8b000800730000000000000000ff0264010001000000000000000000000000000000000000000000532f002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000013801a802180298033800e80118018800a80278012800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 696,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 696,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 757.1875,"v": 720.0,"parkU": 560.0,"parkV": 720.0,"cash": 139,"seconds": 8,"left": 115,"speed": 0,"heading": 0,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 0,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 757.1875,"safeV": 720.0,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 304.0,"v": 280.0},{"u": 424.0,"v": 392.0},{"u": 536.0,"v": 168.0},{"u": 664.0,"v": 632.0},{"u": 824.0,"v": 296.0},{"u": 232.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 85,"label": "Northbound stopped start","frame": 1076,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1076,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "8922002d0023002d8b000e00730000000c00000000ff02640113010000000000000000000000000000000000000000008922002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801780208025802f8033801780118018800a8027801d800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1076,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1076,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 552.5625,"v": 720.0,"parkU": 560.0,"parkV": 720.0,"cash": 139,"seconds": 14,"left": 115,"speed": 0,"heading": 12,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 19,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 552.5625,"safeV": 720.0,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 376.0,"v": 280.0},{"u": 520.0,"v": 392.0},{"u": 600.0,"v": 168.0},{"u": 760.0,"v": 632.0},{"u": 824.0,"v": 472.0},{"u": 376.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 88,"label": "North approach first bounded interval","frame": 1100,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1100,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "8922c92c0023002d8b000e00730006000c00000000ff0264012c010000000000000000000000000000000000000000008922c92c0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff000000180021002600308033001880118018800a8027001e800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1100,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "10100000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1100,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1368,"length": 69},"received": {"view": "memory","frame": 1100,"region": "wram","offset": 1368,"length": 69,"address": "0xd558","hex": "53002f000059000d00005c007c000049003d00004e007600004f001b00000802b4020802ec029002f4020802640208029c0290029c0253595c494e4f092802d0028922d32c","bank": 1}},{"request": {"view": "memory","region": "wram","offset": 2020,"length": 168},"received": {"view": "memory","frame": 1100,"region": "wram","offset": 2020,"length": 168,"address": "0xc7e4","hex": "30e0468056004000bf014000bf016c060607ff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000acc71cc830a042805d004000bf014000bf016c060607ff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000e4c754c8306052805e004000bf014000bf016c030304ff200000001f001f001f001f001f001f001f001f02e97f00000000000000800080001cc88cc8"}},{"request": {"view": "memory","region": "wram","offset": 2188,"length": 168},"received": {"view": "memory","frame": 1100,"region": "wram","offset": 2188,"length": 168,"address": "0xc88c","hex": "32a048804c004000bf014000bf016c060607ff200000001f001f001f001f001f001f001f001f02e97f000000000000008000800054c8c4c83020428053004000bf014000bf016c030304ff200000001f001f001f001f001f001f001f001f02e97f00000000000000800080008cc8fcc83260558053004000bf014000bf016c060607ff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000c4c80000"}}],"decoded": {"u": 552.5625,"v": 716.5625,"parkU": 560.0,"parkV": 720.0,"cash": 139,"seconds": 14,"left": 115,"speed": 6,"heading": 12,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 44,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 552.5625,"safeV": 716.5625,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 384.0,"v": 280.0},{"u": 528.0,"v": 392.0},{"u": 608.0,"v": 168.0},{"u": 768.0,"v": 632.0},{"u": 824.0,"v": 480.0},{"u": 384.0,"v": 168.0}],"input": "10100000","scene": "16c47e"}},
+    {"rawIndex": 100,"label": "Diagonal crossing approach","frame": 1144,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1144,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "52238a2b0023002d8b000f00730010000e00000000ff0264011b0100000000000000000000000000000000000000000052238a2b0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff000080198022802780318033801980118018800a8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1144,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "10100000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1144,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1368,"length": 69},"received": {"view": "memory","frame": 1144,"region": "wram","offset": 1368,"length": 69,"address": "0xd558","hex": "530038000059001600005c0005000049004600004e007f00004f002400000802b4020802ec029002f4020802640208029c0290029c0253595c494e4f0c2d02c00252238a2b","bank": 1}},{"request": {"view": "memory","region": "wram","offset": 2020,"length": 168},"received": {"view": "memory","frame": 1144,"region": "wram","offset": 2020,"length": 168,"address": "0xc7e4","hex": "3000488056004000bf014000bf016c050506ff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000acc71cc830c043805d004000bf014000bf016c050506ff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000e4c754c830a052805e004000bf014000bf016c000001ff200000001f001f001f001f001f001f001f001f02e97f00000000000000800080001cc88cc8"}}],"decoded": {"u": 565.125,"v": 696.625,"parkU": 560.0,"parkV": 720.0,"cash": 139,"seconds": 15,"left": 115,"speed": 16,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 27,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 565.125,"safeV": 696.625,"wanted": 0,"wantedLeft": 0,"fleet": [{"u": 408.0,"v": 280.0},{"u": 552.0,"v": 392.0},{"u": 632.0,"v": 168.0},{"u": 792.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 408.0,"v": 168.0}],"input": "10100000","scene": "16c47e"}},
+    {"rawIndex": 105,"label": "Visible human impact effects","frame": 1152,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1152,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "9323492b0023002d77000f00730009000e00000000ff02640125010000000000000000000000000000000000002d13009323492b01001e0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff000080198022802780318033801980118018800a8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1152,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "10100000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1152,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1368,"length": 69},"received": {"view": "memory","frame": 1152,"region": "wram","offset": 1368,"length": 69,"address": "0xd558","hex": "530639000059001700005c0006000049004700004e000000004f002500000802b4020802ec029002f4020802640208029c0290029c0253595c494e4f0a2d02c0029323492b","bank": 1}},{"request": {"view": "memory","region": "wram","offset": 2020,"length": 168},"received": {"view": "memory","frame": 1152,"region": "wram","offset": 2020,"length": 168,"address": "0xc7e4","hex": "3020488056004000bf014000bf016c09090aff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000acc71cc830e043805d004000bf014000bf016c060607ff200000001f001f001f001f001f001f001f001f02e97f0000000000000080008000e4c754c830c052805e004000bf014000bf016c010102ff200000001f001f001f001f001f001f001f001f02e97f00000000000000800080001cc88cc8"}}],"decoded": {"u": 569.1875,"v": 692.5625,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 15,"left": 115,"speed": 9,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 37,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 45,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 569.1875,"safeV": 692.5625,"wanted": 1,"wantedLeft": 30,"fleet": [{"u": 408.0,"v": 280.0},{"u": 552.0,"v": 392.0},{"u": 632.0,"v": 168.0},{"u": 792.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 408.0,"v": 168.0}],"input": "10100000","scene": "16c47e"}},
+    {"rawIndex": 113,"label": "Stopped after impact","frame": 1188,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1188,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "1d24be2a0023002d77001000730004000e00000000ff0264010b010000000000000000000000000000000000000b13001d24be2a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801a8023802780328033801a80118018240c8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1188,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1188,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 577.8125,"v": 683.875,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 4,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 11,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 11,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 577.8125,"safeV": 683.875,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 424.0,"v": 280.0},{"u": 568.0,"v": 392.0},{"u": 632.0,"v": 194.25},{"u": 808.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 424.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 119,"label": "Actual stopped impact recovery","frame": 1220,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1220,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2724b42a0023002d77001000730000000e00000000ff0264012b010000000000000000000000000000000000000013002724b42a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801b8024802780338033801b80118018c80d8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1220,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1220,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.4375,"v": 683.25,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 43,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.4375,"safeV": 683.25,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 440.0,"v": 280.0},{"u": 584.0,"v": 392.0},{"u": 632.0,"v": 220.5},{"u": 824.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 440.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 131,"label": "Paused map freeze baseline","frame": 1268,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1268,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2724b42a0023002d77001000730000000e00000301ff0264012b010000000000000000000000000000000000000013002724b42a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801b8024802780338033801b80118018c80d8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1268,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1268,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1368,"length": 69},"received": {"view": "memory","frame": 1268,"region": "wram","offset": 1368,"length": 69,"address": "0xd558","hex": "530539000059002500005c0014000049005500004e000e00004f003300000802b4020802ec029002f4020802640208029c0290029c0253595c494e4f054102ab022724b42a","bank": 1}}],"decoded": {"u": 578.4375,"v": 683.25,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 3,"menu": 1,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 43,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.4375,"safeV": 683.25,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 440.0,"v": 280.0},{"u": 584.0,"v": 392.0},{"u": 632.0,"v": 220.5},{"u": 824.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 440.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 135,"label": "Atlas after240 native frames","frame": 1508,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1508,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2724b42a0023002d77001000730000000e00000301ff0264012b010000000000000000000000000000000000000013002724b42a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801b8024802780338033801b80118018c80d8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1508,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1508,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1368,"length": 69},"received": {"view": "memory","frame": 1508,"region": "wram","offset": 1368,"length": 69,"address": "0xd558","hex": "530539000059002500005c0014000049005500004e000e00004f003300000802b4020802ec029002f4020802640208029c0290029c0253595c494e4f054102ab022724b42a","bank": 1}}],"decoded": {"u": 578.4375,"v": 683.25,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 3,"menu": 1,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 43,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.4375,"safeV": 683.25,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 440.0,"v": 280.0},{"u": 584.0,"v": 392.0},{"u": 632.0,"v": 220.5},{"u": 824.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 440.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 139,"label": "Atlas east pan retains world state","frame": 1532,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1532,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2724b42a0023002d77001000730000000e00000301ff0264012b010000000000000000000000000000000000000013002724b42a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801b8024802780338033801b80118018c80d8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1532,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "01010100","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1532,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.4375,"v": 683.25,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 3,"menu": 1,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 43,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.4375,"safeV": 683.25,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 440.0,"v": 280.0},{"u": 584.0,"v": 392.0},{"u": 632.0,"v": 220.5},{"u": 824.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 440.0,"v": 168.0}],"input": "01010100","scene": "16c47e"}},
+    {"rawIndex": 142,"label": "Panned atlas stable","frame": 1652,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1652,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2724b42a0023002d77001000730000000e00000301ff0264012b010000000000000000000000000000000000000013002724b42a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801b8024802780338033801b80118018c80d8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1652,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1652,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.4375,"v": 683.25,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 3,"menu": 1,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 43,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 19,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.4375,"safeV": 683.25,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 440.0,"v": 280.0},{"u": 584.0,"v": 392.0},{"u": 632.0,"v": 220.5},{"u": 824.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 440.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 166,"label": "Live state after Save A","frame": 1772,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1772,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2724b42a0023002d77001000730001000e00000006ff0264013201000000000000000000000000000000000000000c002724b42a01001d0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000801b8024802780338033801b80118018f80d8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1772,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "10100000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1772,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.4375,"v": 683.25,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 16,"left": 115,"speed": 1,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 6,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 50,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 12,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.4375,"safeV": 683.25,"wanted": 1,"wantedLeft": 29,"fleet": [{"u": 440.0,"v": 280.0},{"u": 584.0,"v": 392.0},{"u": 632.0,"v": 223.5},{"u": 824.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 440.0,"v": 168.0}],"input": "10100000","scene": "16c47e"}},
+    {"rawIndex": 169,"label": "Released saved courier","frame": 1784,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1784,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2824b32a0023002d77001100730000000e00000006ff0264010001000000000000000000000000000000000000000c002824b32a01001c0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff0000001c0025802700348033001c80118018940e8027801f800a00000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1784,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1784,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}},{"request": {"view": "oam","visibleOnly": true,"limit": 40,"includeScanlineSummary": true},"received": {"view": "oam","frame": 1784,"totalObjects": 40,"visibleObjects": 10,"matchedObjects": 10,"returnedObjects": 10,"truncated": false,"objects": [{"index": 0,"x": 80,"y": 24,"tile": 4,"attributes": 64,"width": 8,"height": 16,"visible": true},{"index": 1,"x": 72,"y": 24,"tile": 6,"attributes": 64,"width": 8,"height": 16,"visible": true},{"index": 6,"x": 62,"y": 49,"tile": 50,"attributes": 8,"width": 8,"height": 16,"visible": true},{"index": 7,"x": 54,"y": 49,"tile": 52,"attributes": 8,"width": 8,"height": 16,"visible": true},{"index": 8,"x": 79,"y": 33,"tile": 110,"attributes": 10,"width": 8,"height": 16,"visible": true},{"index": 9,"x": 71,"y": 33,"tile": 112,"attributes": 10,"width": 8,"height": 16,"visible": true},{"index": 10,"x": 62,"y": 89,"tile": 112,"attributes": 2,"width": 8,"height": 16,"visible": true},{"index": 11,"x": 54,"y": 89,"tile": 108,"attributes": 10,"width": 8,"height": 16,"visible": true},{"index": 16,"x": 39,"y": 9,"tile": 112,"attributes": 1,"width": 8,"height": 16,"visible": true},{"index": 17,"x": 31,"y": 9,"tile": 108,"attributes": 9,"width": 8,"height": 16,"visible": true}],"scanlineSummary": {"peakObjects": 4,"hardwareLimit": 10,"overLimitScanlines": 0,"peakScanlines": [24,33,34,35,36,37,38,39,97,98,99,100,101,102,103,104,141,142,143]}}}],"decoded": {"u": 578.5,"v": 683.1875,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 17,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 0,"menu": 6,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 0,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 12,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.5,"safeV": 683.1875,"wanted": 1,"wantedLeft": 28,"fleet": [{"u": 448.0,"v": 280.0},{"u": 592.0,"v": 392.0},{"u": 632.0,"v": 233.25},{"u": 832.0,"v": 632.0},{"u": 824.0,"v": 504.0},{"u": 448.0,"v": 168.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 173,"label": "Reset chord outcome actual","frame": 1964,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1964,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2824b32a0023002d77001100730000000e00000800ff02640100010000000000000000000000000000000000000000002824b32a01001c0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1964,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "000000f0","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1964,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.5,"v": 683.1875,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 17,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 8,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 0,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.5,"safeV": 683.1875,"wanted": 1,"wantedLeft": 28,"fleet": [{"u": 80.0,"v": 280.0},{"u": 200.0,"v": 392.0},{"u": 320.0,"v": 168.0},{"u": 440.0,"v": 632.0},{"u": 824.0,"v": 240.0},{"u": 216.0,"v": 72.0}],"input": "000000f0","scene": "16c47e"}},
+    {"rawIndex": 176,"label": "Released reset chord outcome","frame": 1976,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 1976,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2824b32a0023002d77001100730000000e00000800ff02640100010000000000000000000000000000000000000000002824b32a01001c0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 1976,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 1976,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.5,"v": 683.1875,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 17,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 8,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 0,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.5,"safeV": 683.1875,"wanted": 1,"wantedLeft": 28,"fleet": [{"u": 80.0,"v": 280.0},{"u": 200.0,"v": 392.0},{"u": 320.0,"v": 168.0},{"u": 440.0,"v": 632.0},{"u": 824.0,"v": 240.0},{"u": 216.0,"v": 72.0}],"input": "00000000","scene": "16c47e"}},
+    {"rawIndex": 179,"label": "Visible reset completion and attention retained","frame": 2156,"branchId": "branch-0001","reads": [{"request": {"view": "memory","region": "wram","offset": 502,"length": 256},"received": {"view": "memory","frame": 2156,"region": "wram","offset": 502,"length": 256,"address": "0xc1f6","hex": "2824b32a0023002d77001100730000000e00000800ff02640100010000000000000000000000000000000000000000002824b32a01001c0000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff0078001e000001ffffffffffffffffffff3002d002554e494f4e204445504f5400000000000000000100003002d002554e494f4e204445504f54000000000000000001000001ff00000005800c0014801b8033800d80118018800a8027000f800400000000000000000000000000000000000000000000000000000000000000000000000000000000"}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 2541,"length": 4},"received": {"view": "memory","frame": 2156,"region": "wram","offset": 2541,"length": 4,"address": "0xd9ed","hex": "00000000","bank": 1}},{"request": {"view": "memory","region": "wram","bank": 1,"offset": 1450,"length": 3},"received": {"view": "memory","frame": 2156,"region": "wram","offset": 1450,"length": 3,"address": "0xd5aa","hex": "16c47e","bank": 1}}],"decoded": {"u": 578.5,"v": 683.1875,"parkU": 560.0,"parkV": 720.0,"cash": 119,"seconds": 17,"left": 115,"speed": 0,"heading": 14,"vehicle": 0,"onfoot": 0,"mode": 8,"menu": 0,"job": 255,"stage": 2,"health": 100,"done": 1,"subsecond": 0,"origin": 0,"target": 0,"rideLeft": 0,"cooldown": 0,"message": 0,"reserved": 0,"district": 0,"parkDistrict": 0,"complete": "01000000000000000000000000000000","safeU": 578.5,"safeV": 683.1875,"wanted": 1,"wantedLeft": 28,"fleet": [{"u": 80.0,"v": 280.0},{"u": 200.0,"v": 392.0},{"u": 320.0,"v": 168.0},{"u": 440.0,"v": 632.0},{"u": 824.0,"v": 240.0},{"u": 216.0,"v": 72.0}],"input": "00000000","scene": "16c47e"}}
+  ],
+  "steps": [
+    {"rawIndex": 6,"label": "Collect first package at Union","request": {"buttons": ["select"],"frames": 8,"sampleCount": 1,"includeImages": true},"result": {"startFrame": 288,"frame": 296,"advancedFrames": 8,"appliedButtons": ["select"],"sampledButtons": ["select"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 13,"toActionIndex": 15,"fromFrame": 288,"toFrame": 296,"fromPrefixPin": {"eventCount": 31,"eventDigest": "a81a76d5a69b3464b8ba34820c23840d36f735d84c0cac95ac5992a25637aa72","byteLength": 12407,"sha256": "4f1c74453f68bf72a34ea76753c3f420b6ddabf267fa3621dc0df3b7547f5adf"},"prefixPin": {"eventCount": 35,"eventDigest": "c80a3426b7c4f4a2e70c5e94aa0bcd60c78e7da688665998886a6d8abceaa125","byteLength": 13892,"sha256": "98f05222cd1ba7a7baba045e32db9834a5d57c4fd3a111fb95bca397ef89a118"},"emptyInterval": false},"samples": [{"frame": 296,"width": 160,"height": 144,"sha256": "0997cc45d9c833cabd78412bcb8d2b136ab408921afe79288f46c52229492d0a","rgbaSha256": "bbc87edc4b5ac6338d4c4b21f86631042ecfe9ac4d2c46b47bae8e27b84191ab","sampledButtons": ["select"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/0997cc45d9c833cabd78412bcb8d2b136ab408921afe79288f46c52229492d0a.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 14,"label": "Neutral delivery receipt","request": {"buttons": [],"frames": 12,"sampleCount": 1,"includeImages": true},"result": {"startFrame": 552,"frame": 564,"advancedFrames": 12,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 34,"toActionIndex": 36,"fromFrame": 552,"toFrame": 564,"fromPrefixPin": {"eventCount": 73,"eventDigest": "582de931480c4bd20f2eeba19f0b94700dead99eae149bcee394bcd6a4e9c7f1","byteLength": 28894,"sha256": "43f5f09684cb6c330edfe1316ced4701d78174d1c601906227eda01801bc6521"},"prefixPin": {"eventCount": 77,"eventDigest": "5d7da0d63906d7a1c9c065a0ca23ef04a908133b2a015d83b8dea1609c7a5ef8","byteLength": 30364,"sha256": "e235d657e1c318fda3c64e71e468a753c16674dccd0e3e2cb9a5014442500808"},"emptyInterval": false},"samples": [{"frame": 564,"width": 160,"height": 144,"sha256": "459c02f9760d7b313efb7f9c28c5ad472f386d72bf6b19a0fd19a31729160fa5","rgbaSha256": "6cfc703c95b1e0f4b7d032ed942d3713fa7570d661aabbff238b4ba80c7f52e7","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/459c02f9760d7b313efb7f9c28c5ad472f386d72bf6b19a0fd19a31729160fa5.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 15,"label": "Hold result-closing B while city runs","request": {"buttons": ["b"],"frames": 120,"sampleCount": 4,"includeImages": true},"result": {"startFrame": 564,"frame": 684,"advancedFrames": 120,"appliedButtons": ["b"],"sampledButtons": ["b"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 36,"toActionIndex": 42,"fromFrame": 564,"toFrame": 684,"fromPrefixPin": {"eventCount": 77,"eventDigest": "5d7da0d63906d7a1c9c065a0ca23ef04a908133b2a015d83b8dea1609c7a5ef8","byteLength": 30364,"sha256": "e235d657e1c318fda3c64e71e468a753c16674dccd0e3e2cb9a5014442500808"},"prefixPin": {"eventCount": 89,"eventDigest": "39aed7e6ff3540585ef59667b5de61ceac1fb04d1db6852f93fc04f337e7cb52","byteLength": 35230,"sha256": "67567c9fafe4f52589bd43cb9be9eb9c8cf7fd84bb086416e6908d4f31cf7dca"},"emptyInterval": false},"samples": [{"frame": 594,"width": 160,"height": 144,"sha256": "5799001021b43f1faa42dce2e22399221da6e89287c64d8793a1fc2701d0cad3","rgbaSha256": "6e60a44854a44e2dccd0f406f352a74b630973e2bbe2e45481300e734fa409da","sampledButtons": ["b"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/5799001021b43f1faa42dce2e22399221da6e89287c64d8793a1fc2701d0cad3.png"},{"frame": 624,"width": 160,"height": 144,"sha256": "26973751129dddedde16424a01605fca6821951c0d010aa5d7153fedf6220933","rgbaSha256": "b9db4019e12cc682f9fc4df5850b8822968aeacb07523e63ac9ba6e20a390c50","sampledButtons": ["b"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/26973751129dddedde16424a01605fca6821951c0d010aa5d7153fedf6220933.png"},{"frame": 654,"width": 160,"height": 144,"sha256": "a36d94ad6331c0873c187886e5e040f4ab265a03f5fd1e731b2efcaa1494ad79","rgbaSha256": "7ead8305d757060c6f8213c2933759bbb6a9ab98da7c90ae94aa4b4d507c4420","sampledButtons": ["b"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/a36d94ad6331c0873c187886e5e040f4ab265a03f5fd1e731b2efcaa1494ad79.png"},{"frame": 684,"width": 160,"height": 144,"sha256": "33a5f01c5fb38d5becdf051550d75ebfe74fa11e213372ba039c3a797088deff","rgbaSha256": "a6ee4837598cc2b695b310e41fee7214ac3dd99cdd40a12717ee68cb771def15","sampledButtons": ["b"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/33a5f01c5fb38d5becdf051550d75ebfe74fa11e213372ba039c3a797088deff.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 16,"label": "Release held result B","request": {"buttons": [],"frames": 12,"sampleCount": 1},"result": {"startFrame": 684,"frame": 696,"advancedFrames": 12,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 42,"toActionIndex": 44,"fromFrame": 684,"toFrame": 696,"fromPrefixPin": {"eventCount": 89,"eventDigest": "39aed7e6ff3540585ef59667b5de61ceac1fb04d1db6852f93fc04f337e7cb52","byteLength": 35230,"sha256": "67567c9fafe4f52589bd43cb9be9eb9c8cf7fd84bb086416e6908d4f31cf7dca"},"prefixPin": {"eventCount": 93,"eventDigest": "4facf0ef19d2ecafe50255c1679b5f7e28d444182496ef742aca1121d1232ebd","byteLength": 36695,"sha256": "5a61ec1afcd6ce0750671cccdf775a3f0a468c5013fd16af3d454722685e1152"},"emptyInterval": false},"samples": [{"frame": 696,"width": 160,"height": 144,"sha256": "9612995d1cc778868e0d446c2b88942f91f02f00a19792e8b378e6cef31177e1","rgbaSha256": "5214b8c4f5db24b2628592f856241314f8fda53368b2c0bec8e3de215a0666bc","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/9612995d1cc778868e0d446c2b88942f91f02f00a19792e8b378e6cef31177e1.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 29,"label": "Release north steering","request": {"buttons": [],"frames": 8,"sampleCount": 1},"result": {"startFrame": 1068,"frame": 1076,"advancedFrames": 8,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 75,"toActionIndex": 77,"fromFrame": 1068,"toFrame": 1076,"fromPrefixPin": {"eventCount": 155,"eventDigest": "5ec3b49fe5cb88c7a71c4cb59d46ec6cdd6f0e0a4535e4ebec68920c9397a98d","byteLength": 61741,"sha256": "49b8081c9a29065fa9db64d5c118fb7793d01a0291d8675c9d992e75d90aa27c"},"prefixPin": {"eventCount": 159,"eventDigest": "53c16f7fcba3629fc384a09e8b7ea26cc16936d439da885be11f41c18185dc90","byteLength": 63219,"sha256": "39c2254bd3f89824d3ef06bb2ca00fbbbb1474fb021144cd866571206e8513f0"},"emptyInterval": false},"samples": [{"frame": 1076,"width": 160,"height": 144,"sha256": "1a9962d40f71e9a720436c8fdfc05ad216153f0dcf62d5b3b2cc4070a79faf43","rgbaSha256": "11f26a3c31890935df24905b0a93ca5f8ebe92e40d7818a8a1797f93d37be824","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/1a9962d40f71e9a720436c8fdfc05ad216153f0dcf62d5b3b2cc4070a79faf43.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 30,"label": "Start northbound Bay crossing approach","request": {"buttons": ["a"],"frames": 24,"sampleCount": 3,"includeImages": true},"result": {"startFrame": 1076,"frame": 1100,"advancedFrames": 24,"appliedButtons": ["a"],"sampledButtons": ["a"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 77,"toActionIndex": 82,"fromFrame": 1076,"toFrame": 1100,"fromPrefixPin": {"eventCount": 159,"eventDigest": "53c16f7fcba3629fc384a09e8b7ea26cc16936d439da885be11f41c18185dc90","byteLength": 63219,"sha256": "39c2254bd3f89824d3ef06bb2ca00fbbbb1474fb021144cd866571206e8513f0"},"prefixPin": {"eventCount": 169,"eventDigest": "0e379a094cf782b65e7c08313743f7627a973a4680a5d419fed53982c67fa7f7","byteLength": 67258,"sha256": "f110d409589ad76ff85862cf1183ee361f1045806eb0b2afb5465b1f8556b409"},"emptyInterval": false},"samples": [{"frame": 1084,"width": 160,"height": 144,"sha256": "6e41abd75c65afe851fc30d5a743809f93fd6169e06f7d77997a55c9e97a4012","rgbaSha256": "8eb87beb12785490a705d12daeff1498476552a7a7ec8d7269094371da90c61d","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/6e41abd75c65afe851fc30d5a743809f93fd6169e06f7d77997a55c9e97a4012.png"},{"frame": 1092,"width": 160,"height": 144,"sha256": "4aa59133d7b80eb92b394415512e4297b6650e0ac3e802cbc0eb47f84048c137","rgbaSha256": "1950f206045f5d9fd4c8530431c527d46031de3eec9899d6982b80fa171a8837","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/4aa59133d7b80eb92b394415512e4297b6650e0ac3e802cbc0eb47f84048c137.png"},{"frame": 1100,"width": 160,"height": 144,"sha256": "4a574a41b3136061b3434b6124e8e30ea4b2661c40158a347b6d7c065b05b4fd","rgbaSha256": "f5bf37daaaa6668cd1832ed025afe4dc3af41f12f3064cd58c91e3520b9c99f3","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/4a574a41b3136061b3434b6124e8e30ea4b2661c40158a347b6d7c065b05b4fd.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 33,"label": "Approach visible human diagonally","request": {"buttons": ["a"],"frames": 24,"sampleCount": 3,"includeImages": true},"result": {"startFrame": 1120,"frame": 1144,"advancedFrames": 24,"appliedButtons": ["a"],"sampledButtons": ["a"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 87,"toActionIndex": 91,"fromFrame": 1120,"toFrame": 1144,"fromPrefixPin": {"eventCount": 179,"eventDigest": "cea5ebf25c85d52a412fd4f724bc60dfe9c4817d74a6b5d62a15085a8b515c96","byteLength": 71317,"sha256": "133c0d0e16c6fb7d1db3e2410138ea6fc2199a839224d9914b85bed7cae262af"},"prefixPin": {"eventCount": 187,"eventDigest": "48bd15a28ac39ca7a933ec2e2cfa29255beb4059a631cbc1c9f767b37a5dfe99","byteLength": 74507,"sha256": "bda45599e3c751c30432949026f514837f0f9ea95240c6e3f4db9ac98f7467b5"},"emptyInterval": false},"samples": [{"frame": 1128,"width": 160,"height": 144,"sha256": "9a4ea8a53726df0812d50c859521bed8838fe5a172740471ebc671b34671820d","rgbaSha256": "d22edb837f65ee0b318a6e771a35c2c83a5b0dd3e450a1f1c6fa61ae4950221f","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/9a4ea8a53726df0812d50c859521bed8838fe5a172740471ebc671b34671820d.png"},{"frame": 1136,"width": 160,"height": 144,"sha256": "5e6df92d090b07b473c3af122b9f8cd7c8b8f491a12f3468b22606dcd756a2f4","rgbaSha256": "865774381216658abc60e4742e68f9ec2a602b5c37a8920af21ddb50322f833d","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/5e6df92d090b07b473c3af122b9f8cd7c8b8f491a12f3468b22606dcd756a2f4.png"},{"frame": 1144,"width": 160,"height": 144,"sha256": "7009ca03f308ae19dd0fdcfb0df5fd7d8e33d475165b538e04af7486a06d4791","rgbaSha256": "9742025a4ca11ec4390ea998b62cd7eccc70c6b5456ebdbb3a1811686bbc80d9","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/7009ca03f308ae19dd0fdcfb0df5fd7d8e33d475165b538e04af7486a06d4791.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 34,"label": "Drive through continuously visible crossing","request": {"buttons": ["a"],"frames": 8,"sampleCount": 8,"includeImages": true},"result": {"startFrame": 1144,"frame": 1152,"advancedFrames": 8,"appliedButtons": ["a"],"sampledButtons": ["a"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 91,"toActionIndex": 99,"fromFrame": 1144,"toFrame": 1152,"fromPrefixPin": {"eventCount": 187,"eventDigest": "48bd15a28ac39ca7a933ec2e2cfa29255beb4059a631cbc1c9f767b37a5dfe99","byteLength": 74507,"sha256": "bda45599e3c751c30432949026f514837f0f9ea95240c6e3f4db9ac98f7467b5"},"prefixPin": {"eventCount": 203,"eventDigest": "eee64d1cbfdb3ae561a6b3e0bd1636a67370060c9b1c3735efa2fa1dbd320c12","byteLength": 81331,"sha256": "129c28672e9236477d5329446a10b417615b4be2dbbc32d40db3093ed4c9fa5d"},"emptyInterval": false},"samples": [{"frame": 1145,"width": 160,"height": 144,"sha256": "c2365807689d9d3ca46664a8cdabaff2854be3a0ece68fe5db7c3cf0f62a5149","rgbaSha256": "662eb9f05a7ea53bfdb8e22133bb683fae866c4d6a73ed5ceb42e602dcfeb6fd","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/c2365807689d9d3ca46664a8cdabaff2854be3a0ece68fe5db7c3cf0f62a5149.png"},{"frame": 1146,"width": 160,"height": 144,"sha256": "d5f56047d9ce43c6e58164357263759463fc5feef097cbf60618ac3ee4b00b11","rgbaSha256": "af42e4e8d2a78d391b215e67da22b9d9523c6d22cf31b4662a829b14689254ae","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/d5f56047d9ce43c6e58164357263759463fc5feef097cbf60618ac3ee4b00b11.png"},{"frame": 1147,"width": 160,"height": 144,"sha256": "d5f56047d9ce43c6e58164357263759463fc5feef097cbf60618ac3ee4b00b11","rgbaSha256": "af42e4e8d2a78d391b215e67da22b9d9523c6d22cf31b4662a829b14689254ae","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/d5f56047d9ce43c6e58164357263759463fc5feef097cbf60618ac3ee4b00b11.png"},{"frame": 1148,"width": 160,"height": 144,"sha256": "202be32969a29a85200d0f9eb317be771561831474f6b116e17bcd870500339d","rgbaSha256": "8d87843636c76e4d4fda271151f091c178cdd2f2e18770afcb86c877113ffa2b","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/202be32969a29a85200d0f9eb317be771561831474f6b116e17bcd870500339d.png"},{"frame": 1149,"width": 160,"height": 144,"sha256": "ebfc2d530d095099a73c36d46d80477a49a61b846a3fbb1c36676dea286d3528","rgbaSha256": "d656034ebf46f49f348bc28ca790e7d2f3456f75768a2080fb9cf398d3d8897e","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/ebfc2d530d095099a73c36d46d80477a49a61b846a3fbb1c36676dea286d3528.png"},{"frame": 1150,"width": 160,"height": 144,"sha256": "c37a7b2865dde1299166f12f95fcbb2884469d9eda147eaac302f5bb309b1710","rgbaSha256": "1634bc43404b51d55d527e918536ac0cb3eaa1e464c4a7862022cc732b134aab","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/c37a7b2865dde1299166f12f95fcbb2884469d9eda147eaac302f5bb309b1710.png"},{"frame": 1151,"width": 160,"height": 144,"sha256": "65c7bebb244016d2c6dfa9a9e8b0afa43d1cbfab713db142dcd0b3850e30171a","rgbaSha256": "44b5adc92144160648d6642193176d31630dec14bc93d2db792edc348c7795c6","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/65c7bebb244016d2c6dfa9a9e8b0afa43d1cbfab713db142dcd0b3850e30171a.png"},{"frame": 1152,"width": 160,"height": 144,"sha256": "b882da4d0bf8c9b6646b7e03cfbd0f05b32514ffd8205ddd6a9b70206dd18ae5","rgbaSha256": "9a38c66bd092ad134705f0b8b7cd4c551890c431a3cb3dc274925161ab4355da","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/b882da4d0bf8c9b6646b7e03cfbd0f05b32514ffd8205ddd6a9b70206dd18ae5.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 36,"label": "Settle without another human charge","request": {"buttons": [],"frames": 24,"sampleCount": 2,"includeImages": true},"result": {"startFrame": 1164,"frame": 1188,"advancedFrames": 24,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 102,"toActionIndex": 105,"fromFrame": 1164,"toFrame": 1188,"fromPrefixPin": {"eventCount": 209,"eventDigest": "9f048be39110802855bff8714042950484270265c26ff10ec9f8a3dcb335cf4d","byteLength": 83672,"sha256": "edd1d826c58514807e51612aa65b85359a7abc253a76f576aaa397536d6e766e"},"prefixPin": {"eventCount": 215,"eventDigest": "3e883cc9ecf0358540f30b5fbbc3b158f9d028eddd55ac6c176573c86ead2523","byteLength": 86006,"sha256": "03d2443d2020a26b6b62d62301a4b7f6b3ef49336d334d4ead6f6bec5baebac9"},"emptyInterval": false},"samples": [{"frame": 1176,"width": 160,"height": 144,"sha256": "b912fbe1384f4be2c6afaa18df614e2d576b6679f4357d64740fdd485a1594ba","rgbaSha256": "d96a6535c2ee18d2b76034931bfeea541352c65b5cc65b5f3a34535d914af08a","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/b912fbe1384f4be2c6afaa18df614e2d576b6679f4357d64740fdd485a1594ba.png"},{"frame": 1188,"width": 160,"height": 144,"sha256": "bdfa053598b99779e5a6fd32bb1c36413525b9939bed0c84c68b5e49ae1a8eea","rgbaSha256": "213ed9926f968ba18dc47b5ef1f5885681745627527e44d03e5b1c9811bbd3ff","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/bdfa053598b99779e5a6fd32bb1c36413525b9939bed0c84c68b5e49ae1a8eea.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 38,"label": "Release brake and stop fully","request": {"buttons": [],"frames": 24,"sampleCount": 1},"result": {"startFrame": 1196,"frame": 1220,"advancedFrames": 24,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 107,"toActionIndex": 110,"fromFrame": 1196,"toFrame": 1220,"fromPrefixPin": {"eventCount": 219,"eventDigest": "0fc48bc4fcbb8c456d497954ba18a3af0549688d7366c257a060f5823ad8ea95","byteLength": 87489,"sha256": "e3d7f8aff883ec90e3c9e129c8c3b1abba168fa7eb9e30c1a98b9991624a1492"},"prefixPin": {"eventCount": 225,"eventDigest": "35cae9405ef0e1c8475fcd3ba1538e7243ff34f752549a5031a96c7cd7c9ccb9","byteLength": 89822,"sha256": "6013c94d55abe4380b1c69d8f7ad8215e0e2f61b708bfa3377b1a3df08d603e2"},"emptyInterval": false},"samples": [{"frame": 1220,"width": 160,"height": 144,"sha256": "c8339084b176a75f5641000f1419aa8aee6781501c29393b34953c4e9b6b464b","rgbaSha256": "433510620bf90172b09ad2e2ccb17d58ffd987014073300a6489335c0667702f","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/c8339084b176a75f5641000f1419aa8aee6781501c29393b34953c4e9b6b464b.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 44,"label": "Release atlas acceptance","request": {"buttons": [],"frames": 8,"sampleCount": 1},"result": {"startFrame": 1260,"frame": 1268,"advancedFrames": 8,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 120,"toActionIndex": 122,"fromFrame": 1260,"toFrame": 1268,"fromPrefixPin": {"eventCount": 245,"eventDigest": "ba85a0f2b9e038eda23c8663f2f410e9456d7aaa61e442723459881ca07c2e44","byteLength": 97253,"sha256": "3272152a4ec908910cea23835995f8f98bbaba2bda903ccf86bbeb0c92b1af9e"},"prefixPin": {"eventCount": 249,"eventDigest": "bfbc6965ee8daac050a7c19ad7970f16aa2e1988314f98714321ed0f893aa484","byteLength": 98730,"sha256": "4ffaade5a33fc477acfc704c36775967a6fcacff80c95ec468793f3350b92f45"},"emptyInterval": false},"samples": [{"frame": 1268,"width": 160,"height": 144,"sha256": "5c1b61b6dc6657a743e27cee13778378f727f065dd6a53f1bbadf6aa7b64235d","rgbaSha256": "b8a9d8bc6660ba5edc46eeb4cbd1626bf5dc6fabdac07d0896147249b06d796e","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/5c1b61b6dc6657a743e27cee13778378f727f065dd6a53f1bbadf6aa7b64235d.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 45,"label": "Wait for atlas drawing with frozen street world","request": {"buttons": [],"frames": 240,"sampleCount": 4,"includeImages": true},"result": {"startFrame": 1268,"frame": 1508,"advancedFrames": 240,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 122,"toActionIndex": 128,"fromFrame": 1268,"toFrame": 1508,"fromPrefixPin": {"eventCount": 249,"eventDigest": "bfbc6965ee8daac050a7c19ad7970f16aa2e1988314f98714321ed0f893aa484","byteLength": 98730,"sha256": "4ffaade5a33fc477acfc704c36775967a6fcacff80c95ec468793f3350b92f45"},"prefixPin": {"eventCount": 261,"eventDigest": "0b333c6ba53e119d1bcfca41563bf7357c0408983f72a1a917e05f1164ccdac0","byteLength": 103864,"sha256": "404243cc5175d20523d4ed00f83c164fcedbe278d2f904862c5c0386f6cdfcca"},"emptyInterval": false},"samples": [{"frame": 1328,"width": 160,"height": 144,"sha256": "f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e","rgbaSha256": "8a9f254521974d23cfc5e64b666ceb1178d007e99ac90c89c2fabf7fd094a714","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e.png"},{"frame": 1388,"width": 160,"height": 144,"sha256": "f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e","rgbaSha256": "8a9f254521974d23cfc5e64b666ceb1178d007e99ac90c89c2fabf7fd094a714","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e.png"},{"frame": 1448,"width": 160,"height": 144,"sha256": "f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e","rgbaSha256": "8a9f254521974d23cfc5e64b666ceb1178d007e99ac90c89c2fabf7fd094a714","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e.png"},{"frame": 1508,"width": 160,"height": 144,"sha256": "f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e","rgbaSha256": "8a9f254521974d23cfc5e64b666ceb1178d007e99ac90c89c2fabf7fd094a714","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/f90f2921df93da73eda8ce7c1672f345e72c60584feef1f39bb8ff07ecea477e.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 46,"label": "Pan city atlas east","request": {"buttons": ["right"],"frames": 24,"sampleCount": 2,"includeImages": true},"result": {"startFrame": 1508,"frame": 1532,"advancedFrames": 24,"appliedButtons": ["right"],"sampledButtons": ["right"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 128,"toActionIndex": 131,"fromFrame": 1508,"toFrame": 1532,"fromPrefixPin": {"eventCount": 261,"eventDigest": "0b333c6ba53e119d1bcfca41563bf7357c0408983f72a1a917e05f1164ccdac0","byteLength": 103864,"sha256": "404243cc5175d20523d4ed00f83c164fcedbe278d2f904862c5c0386f6cdfcca"},"prefixPin": {"eventCount": 267,"eventDigest": "ba5e2bf61c7edd33e0a32ffe62baba139a90d98b75c3d89a7f44330b1d7df44e","byteLength": 106216,"sha256": "2fdd396791c2fcf9c57ea370f4596ba456dcefa8766e4ed30c52c91c4b5c5805"},"emptyInterval": false},"samples": [{"frame": 1520,"width": 160,"height": 144,"sha256": "cce0fce3eb992e2bd2904eb70065083cb5e47b09e1d111943e2a9e6b7ddcb9c1","rgbaSha256": "5eefebc710219168767cea5369746d0046fca1346d900e35780ac5b8ce8926c6","sampledButtons": ["right"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/cce0fce3eb992e2bd2904eb70065083cb5e47b09e1d111943e2a9e6b7ddcb9c1.png"},{"frame": 1532,"width": 160,"height": 144,"sha256": "8262d9be50572aa6649c06f0897edb59b4d7e9948307fa44c626ada1da18a557","rgbaSha256": "53019f6f38f2fdabb38456b5a812a2d0f02e74e54e0b60e7d34adc7d7e4a2cd3","sampledButtons": ["right"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/8262d9be50572aa6649c06f0897edb59b4d7e9948307fa44c626ada1da18a557.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 47,"label": "Finish redrawing panned atlas","request": {"buttons": [],"frames": 120,"sampleCount": 2,"includeImages": true},"result": {"startFrame": 1532,"frame": 1652,"advancedFrames": 120,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 131,"toActionIndex": 135,"fromFrame": 1532,"toFrame": 1652,"fromPrefixPin": {"eventCount": 267,"eventDigest": "ba5e2bf61c7edd33e0a32ffe62baba139a90d98b75c3d89a7f44330b1d7df44e","byteLength": 106216,"sha256": "2fdd396791c2fcf9c57ea370f4596ba456dcefa8766e4ed30c52c91c4b5c5805"},"prefixPin": {"eventCount": 275,"eventDigest": "b7e31c8130f6fea0ebccba75b4b21de0f8fc2b37c58d527740d33393c18492b3","byteLength": 109410,"sha256": "7c48e0599dc2b6d5523959330a79e3d7a2692520b158cc43968860a4029a7dd5"},"emptyInterval": false},"samples": [{"frame": 1592,"width": 160,"height": 144,"sha256": "40ec9320ba5ee409167323ea5f48aa899230e39ad8d6f5005a80b3f9ce053a73","rgbaSha256": "25eb1c5a51fc30f22141a493ab0bb2ff5801b9d3ebbaa19b85e915e0d39f1b8f","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/40ec9320ba5ee409167323ea5f48aa899230e39ad8d6f5005a80b3f9ce053a73.png"},{"frame": 1652,"width": 160,"height": 144,"sha256": "40ec9320ba5ee409167323ea5f48aa899230e39ad8d6f5005a80b3f9ce053a73","rgbaSha256": "25eb1c5a51fc30f22141a493ab0bb2ff5801b9d3ebbaa19b85e915e0d39f1b8f","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/40ec9320ba5ee409167323ea5f48aa899230e39ad8d6f5005a80b3f9ce053a73.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 60,"label": "Save courier progress with attention","request": {"buttons": ["a"],"frames": 8,"sampleCount": 1,"includeImages": true},"result": {"startFrame": 1764,"frame": 1772,"advancedFrames": 8,"appliedButtons": ["a"],"sampledButtons": ["a"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 160,"toActionIndex": 162,"fromFrame": 1764,"toFrame": 1772,"fromPrefixPin": {"eventCount": 325,"eventDigest": "3ed799cef5c8de52ab0611eed52f6d19d321a067e48766f0fc2ba27fd95e69b2","byteLength": 128086,"sha256": "1dd35451373b2f25cc7d934702aae8e71922f5f8dabc313634a7907782277277"},"prefixPin": {"eventCount": 329,"eventDigest": "6f0199e7c6549ace61a17764ab9f36febebad69655a5872502a66db125564b23","byteLength": 129569,"sha256": "0845e95c99fd5840e9914665bd119f40ea29418875cffdf45efe25da4da6c3e6"},"emptyInterval": false},"samples": [{"frame": 1772,"width": 160,"height": 144,"sha256": "8ea6e764d8d148947fc34ed78d13b4d671f5da8a905fe5eddf3a1e95cf4ec7ca","rgbaSha256": "d34ce77d71ad8463f498c1e13b890707c8c6247e839f9047386300dc10812d53","sampledButtons": ["a"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/8ea6e764d8d148947fc34ed78d13b4d671f5da8a905fe5eddf3a1e95cf4ec7ca.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 61,"label": "Release Save A","request": {"buttons": [],"frames": 12,"sampleCount": 1},"result": {"startFrame": 1772,"frame": 1784,"advancedFrames": 12,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 162,"toActionIndex": 164,"fromFrame": 1772,"toFrame": 1784,"fromPrefixPin": {"eventCount": 329,"eventDigest": "6f0199e7c6549ace61a17764ab9f36febebad69655a5872502a66db125564b23","byteLength": 129569,"sha256": "0845e95c99fd5840e9914665bd119f40ea29418875cffdf45efe25da4da6c3e6"},"prefixPin": {"eventCount": 333,"eventDigest": "d22bf5f6646741c157ac20e968bdd9b898c466101549b6d63a02ba3e2c85abf5","byteLength": 131047,"sha256": "bb280d6b4d19b304ceaa61b0ba567f347d7f7963953672ff4965e5bac95b4a84"},"emptyInterval": false},"samples": [{"frame": 1784,"width": 160,"height": 144,"sha256": "ab4d2ee17e0d2ffdcafb3acf77f90b57a870e64585e3f550c580691af4bc3845","rgbaSha256": "e97741fdf3d40ef21b647aa73fd652cdfa6411aecaa52942c6cc89675238e750","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/ab4d2ee17e0d2ffdcafb3acf77f90b57a870e64585e3f550c580691af4bc3845.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 62,"label": "Genuine game-button reset after saved progress","request": {"buttons": ["a","b","start","select"],"frames": 180,"sampleCount": 4,"includeImages": true},"result": {"startFrame": 1784,"frame": 1964,"advancedFrames": 180,"appliedButtons": ["a","b","select","start"],"sampledButtons": ["a","b","select","start"],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 164,"toActionIndex": 171,"fromFrame": 1784,"toFrame": 1964,"fromPrefixPin": {"eventCount": 333,"eventDigest": "d22bf5f6646741c157ac20e968bdd9b898c466101549b6d63a02ba3e2c85abf5","byteLength": 131047,"sha256": "bb280d6b4d19b304ceaa61b0ba567f347d7f7963953672ff4965e5bac95b4a84"},"prefixPin": {"eventCount": 347,"eventDigest": "fbcbd9824bf19f178294e768db1ba9f24d0499da53bab0bc3975ccca08cb9fbf","byteLength": 136873,"sha256": "36feb8aa0d7324e8e7749c8d5dd4983220d4f0b7fc44638d2a4fb5f0573807ea"},"emptyInterval": false},"samples": [{"frame": 1829,"width": 160,"height": 144,"sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304","rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914","sampledButtons": ["a","b","select","start"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"},{"frame": 1874,"width": 160,"height": 144,"sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304","rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914","sampledButtons": ["a","b","select","start"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"},{"frame": 1919,"width": 160,"height": 144,"sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304","rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914","sampledButtons": ["a","b","select","start"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"},{"frame": 1964,"width": 160,"height": 144,"sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304","rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914","sampledButtons": ["a","b","select","start"],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 63,"label": "Release reset chord","request": {"buttons": [],"frames": 12,"sampleCount": 1,"includeImages": true},"result": {"startFrame": 1964,"frame": 1976,"advancedFrames": 12,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 171,"toActionIndex": 173,"fromFrame": 1964,"toFrame": 1976,"fromPrefixPin": {"eventCount": 347,"eventDigest": "fbcbd9824bf19f178294e768db1ba9f24d0499da53bab0bc3975ccca08cb9fbf","byteLength": 136873,"sha256": "36feb8aa0d7324e8e7749c8d5dd4983220d4f0b7fc44638d2a4fb5f0573807ea"},"prefixPin": {"eventCount": 351,"eventDigest": "4ebfff4754f567a663c14f54bb7d7f0bd38c5830e78703f4346f2266052fe3d0","byteLength": 138372,"sha256": "562af7dc483bd068726c5011ba1ab086565ac65d704fb959faccef1d632b2f92"},"emptyInterval": false},"samples": [{"frame": 1976,"width": 160,"height": 144,"sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474","rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"}],"genuineEmulatorFrames": true}},
+    {"rawIndex": 64,"label": "Allow reset boot to settle","request": {"buttons": [],"frames": 180,"sampleCount": 4,"includeImages": true},"result": {"startFrame": 1976,"frame": 2156,"advancedFrames": 180,"appliedButtons": [],"sampledButtons": [],"recordingSpan": {"recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7","sessionId": "3468a8cbb6024b18bd164ae38c1f96ea","branchId": "branch-0001","fromActionIndex": 173,"toActionIndex": 178,"fromFrame": 1976,"toFrame": 2156,"fromPrefixPin": {"eventCount": 351,"eventDigest": "4ebfff4754f567a663c14f54bb7d7f0bd38c5830e78703f4346f2266052fe3d0","byteLength": 138372,"sha256": "562af7dc483bd068726c5011ba1ab086565ac65d704fb959faccef1d632b2f92"},"prefixPin": {"eventCount": 361,"eventDigest": "e64d5128f5876c5255f4853b7bf27ff1785e3cf357304a0191168b940dcbee07","byteLength": 142652,"sha256": "5f66c3bc09fc93569a3c1e0be3d2e2dd1c4b86dcab5bd96ce1b5235736205b4c"},"emptyInterval": false},"samples": [{"frame": 2021,"width": 160,"height": 144,"sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474","rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"},{"frame": 2066,"width": 160,"height": 144,"sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474","rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"},{"frame": 2111,"width": 160,"height": 144,"sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474","rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"},{"frame": 2156,"width": 160,"height": 144,"sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474","rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58","sampledButtons": [],"path": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"}],"genuineEmulatorFrames": true}}
+  ],
+  "sourceDebug": {
+    "mode": "source",
+    "identity": {
+      "romSha256": "964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "d453a3f065fc718c9647fa400153fc0edccf8607d2917940e22b6ae805c344a7",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "frame": 2156,
+    "scene": {
+      "id": "38250bbe-d302-5807-8c67-bbadaf9dbe82",
+      "sceneId": "38250bbe-d302-5807-8c67-bbadaf9dbe82",
+      "name": "Toronto north-up city",
+      "symbol": "scene_toronto_city",
+      "resourcePath": "project/scenes/toronto_city/scene.gbsres",
+      "type": "TORONTO",
+      "width": 128,
+      "height": 122
+    }
+  },
+  "recording": {
+    "originalPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7",
+    "runtimeSessionId": "3468a8cbb6024b18bd164ae38c1f96ea",
+    "stop": {
+      "recordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7",
+      "sessionId": "3468a8cbb6024b18bd164ae38c1f96ea",
+      "status": "stopped",
+      "branchId": "branch-0001",
+      "frame": 2156,
+      "totalFrames": 2156,
+      "bytesUsed": 529266,
+      "limits": {
+        "sampleEveryFrames": 120,
+        "recentFrameCount": 32,
+        "maxBytes": 16000000,
+        "maxFrames": 30000,
+        "maxWallTimeMs": 1800000
+      },
+      "eventCount": 364,
+      "eventDigest": "e6d9061f587b1bca05ab8b330767e728942c2d856b7bff8e422f089cbed8aa0f",
+      "branches": [
+        {
+          "branchId": "branch-0001",
+          "frame": 2156
+        }
+      ],
+      "outcome": "passed",
+      "reason": "Scoped fresh964f first-delivery/held-B world, continuously visible human H1/$20 impact, four-second atlas freeze/pan and genuine-button saved-progress reset pass. Route19 admission defect reproduction remains host/compiled evidence; no whole-campaign/two-hour/browser/hardware acceptance."
+    },
+    "closed": true,
+    "archiveId": "46557fb8-a56e-429d-bd82-1035ceae776a",
+    "archivePath": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording",
+    "manifestSha256": "add40e928c16681e5c12ea5ec83b579df08dd5de259b267289cbd97e9a89b558",
+    "inventory": {
+      "digest": "bddce6876016a9c7b3f65ba4c2e52b5e8576ef5ffcbff267805ec0b6381f824f",
+      "bytes": 529266,
+      "entries": 103
+    },
+    "retrievedArchiveMatches": true,
+    "endCheckpoint": {
+      "checkpointId": "checkpoint-79df5796759c42388d33cfb3b6881611",
+      "frame": 2156,
+      "branchId": "branch-0001",
+      "romSha256": "964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a",
+      "stateSha256": "b19272fa9f944182a0a704101cb74dc478e84c6725357db455b8a41dec1a675a",
+      "automaticAdvance": 0
+    },
+    "endCheckpointSavedOnly": true,
+    "actualJournal": {
+      "events": 364,
+      "stepActions": 125,
+      "buttonChanges": 53,
+      "actions": 178,
+      "directFrameEvents": 128,
+      "publicSampleReferences": 111,
+      "distinctReferencedFrames": 111,
+      "referencedPngHashes": 87,
+      "allArchivePngFiles": 93,
+      "primaryDistinctReadFrames": 56,
+      "bootFrames": 180,
+      "newStepFrames": 1976,
+      "totalFrames": 2156
+    }
+  },
+  "historicalScopes": [
+    {
+      "romSha256": "a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634",
+      "records": [
+        "docs/NATIVE_RESULT_CONTROLS_SAMPLES.json",
+        "docs/NATIVE_MATCHED_TRANSIT_SAMPLES.json"
+      ],
+      "notReassignedToThisRom": true
+    },
+    {
+      "romSha256": "d58bc338f6dceb2b208bf855112cc9b93f0d72fdf254ac0ccdbd17ec1ff357b8",
+      "records": [
+        "docs/NATIVE_CORE_BUS_LANES_SAMPLES.json",
+        "docs/NATIVE_COURIER_HEAT_SAMPLES.json",
+        "docs/NATIVE_LOWER_HEAT_PATROL_SAMPLES.json",
+        "docs/NATIVE_SIX_JOB_CONTINUATION_SAMPLES.json"
+      ],
+      "notReassignedToThisRom": true
+    }
+  ],
+  "limitations": [
+    "Exact route19 first-appearance reproduction and prevention are host/compiled evidence; this native record checks a continuously visible human impact instead.",
+    "Native memory inspections preserve paused reads; two earlier1076 diagnostic responses were not retained and are not reconstructed.",
+    "SAVE A resumes/slightly accelerates; reset preserves later automatically committed progress, not byte identity with the prior live SAVE inspection.",
+    "People-present local compiler frame grows27→28bytes; unchanged1096-byte linked reserve is not a deepest-stack or performance measurement.",
+    "One OAM sample does not prove crowded scenes, flicker or hardware rendering.",
+    "No prior Bay impact diagnosis, matched transit, six-job campaign, higher heat/native capture, all96 contracts/eight remaining Island missions, two enjoyable human hours, browser or physical cartridge acceptance is inherited or claimed."
+  ],
+  "showcase": {
+    "schemaVersion": 1,
+    "date": "2026-10-03",
+    "baseSourceCommit": "3674c615b8f54a74ea06687534220081bac8907f",
+    "productionChangeAtRecording": "One uncommitted production-file change: pedestrian admission in td_people.c; base commit alone does not identify this ROM.",
+    "sourceFile": "project/plugins/toronto-driving/engine/src/td_people.c",
+    "sourceFileSha256": "6ba73602a0f8198b246572002e3f4bb19e64be6ff1bc0cb080c13e510a7da4f1",
+    "sourceFingerprint": "d453a3f065fc718c9647fa400153fc0edccf8607d2917940e22b6ae805c344a7",
+    "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+    "romFile": "project/build/toronto-dispatch-pedestrian-admission.gbc",
+    "romBytes": 524288,
+    "romSha256": "964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a",
+    "noiSha256": "b3eb0e28000a5cb446bfca27d6f93d6bd31399c9cf6b3689a10311d182c3ace1",
+    "runtime": {
+      "name": "PyBoy",
+      "protocolVersion": 1,
+      "version": "2.7.0",
+      "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+    },
+    "sessionId": "3468a8cbb6024b18bd164ae38c1f96ea",
+    "branchId": "branch-0001",
+    "originalRecordingPath": "project/artifacts/playtests/session-39224612-4995-4b94-869f-cb1ad744bae7",
+    "archiveId": "46557fb8-a56e-429d-bd82-1035ceae776a",
+    "archiveRecordingPath": "project/artifacts/recording-archives/46557fb8-a56e-429d-bd82-1035ceae776a/recording",
+    "archiveManifestSha256": "add40e928c16681e5c12ea5ec83b579df08dd5de259b267289cbd97e9a89b558",
+    "archiveInventoryDigest": "bddce6876016a9c7b3f65ba4c2e52b5e8576ef5ffcbff267805ec0b6381f824f",
+    "archiveInventoryBytes": 529266,
+    "archiveInventoryEntries": 103,
+    "eventCount": 364,
+    "eventDigest": "e6d9061f587b1bca05ab8b330767e728942c2d856b7bff8e422f089cbed8aa0f",
+    "finalFrame": 2156,
+    "outcome": "passed",
+    "closed": true,
+    "retainedPrefix": {
+      "file": "project/build/current-964f-pedestrian-admission-native-prefix.json",
+      "bytes": 879507,
+      "sha256": "f0a721b949c48b2b7222346d7a4d0a03b12b404c99fcf020506a372f5b025518",
+      "completedStepWrappers": 65,
+      "inspectionResponses": 182,
+      "qualification": "Two earlier diagnostic responses at frame 1076 (one 69-byte read and one rejected 336-byte request) were not retained; these screenshots are matched to the closed full journal."
+    },
+    "hardwareCapture": false,
+    "sourceAdmissionBugcaseHostOnly": true,
+    "genuineEmulatorFrames": true,
+    "pixelEditingOrResizing": false,
+    "frames": [
+      {
+        "file": "pedestrian-admission-market-result.png",
+        "frame": 564,
+        "width": 160,
+        "height": 144,
+        "mode": "RGBA",
+        "pngBytes": 1933,
+        "pngSha256": "459c02f9760d7b313efb7f9c28c5ad472f386d72bf6b19a0fd19a31729160fa5",
+        "rgbaBytes": 92160,
+        "rgbaSha256": "6cfc703c95b1e0f4b7d032ed942d3713fa7570d661aabbff238b4ba80c7f52e7",
+        "originalArchiveFile": "frames/459c02f9760d7b313efb7f9c28c5ad472f386d72bf6b19a0fd19a31729160fa5.png",
+        "prefixStepIndexZeroBased": 14,
+        "stepLabel": "Neutral delivery receipt",
+        "stepStartFrame": 552,
+        "stepEndFrame": 564,
+        "requestedFrames": 12,
+        "advancedFrames": 12,
+        "requestedButtons": [],
+        "appliedButtons": [],
+        "sampledButtons": [],
+        "journalSequence": 77,
+        "journalActionIndex": 36,
+        "journalDigest": "5d7da0d63906d7a1c9c065a0ca23ef04a908133b2a015d83b8dea1609c7a5ef8",
+        "unchangedFromNativeArchive": true
+      },
+      {
+        "file": "pedestrian-admission-visible-impact.png",
+        "frame": 1152,
+        "width": 160,
+        "height": 144,
+        "mode": "RGBA",
+        "pngBytes": 2059,
+        "pngSha256": "b882da4d0bf8c9b6646b7e03cfbd0f05b32514ffd8205ddd6a9b70206dd18ae5",
+        "rgbaBytes": 92160,
+        "rgbaSha256": "9a38c66bd092ad134705f0b8b7cd4c551890c431a3cb3dc274925161ab4355da",
+        "originalArchiveFile": "frames/b882da4d0bf8c9b6646b7e03cfbd0f05b32514ffd8205ddd6a9b70206dd18ae5.png",
+        "prefixStepIndexZeroBased": 34,
+        "stepLabel": "Drive through continuously visible crossing",
+        "stepStartFrame": 1144,
+        "stepEndFrame": 1152,
+        "requestedFrames": 8,
+        "advancedFrames": 8,
+        "requestedButtons": [
+          "a"
+        ],
+        "appliedButtons": [
+          "a"
+        ],
+        "sampledButtons": [
+          "a"
+        ],
+        "journalSequence": 203,
+        "journalActionIndex": 99,
+        "journalDigest": "eee64d1cbfdb3ae561a6b3e0bd1636a67370060c9b1c3735efa2fa1dbd320c12",
+        "unchangedFromNativeArchive": true
+      },
+      {
+        "file": "pedestrian-admission-city-atlas.png",
+        "frame": 1652,
+        "width": 160,
+        "height": 144,
+        "mode": "RGBA",
+        "pngBytes": 1856,
+        "pngSha256": "40ec9320ba5ee409167323ea5f48aa899230e39ad8d6f5005a80b3f9ce053a73",
+        "rgbaBytes": 92160,
+        "rgbaSha256": "25eb1c5a51fc30f22141a493ab0bb2ff5801b9d3ebbaa19b85e915e0d39f1b8f",
+        "originalArchiveFile": "frames/40ec9320ba5ee409167323ea5f48aa899230e39ad8d6f5005a80b3f9ce053a73.png",
+        "prefixStepIndexZeroBased": 47,
+        "stepLabel": "Finish redrawing panned atlas",
+        "stepStartFrame": 1532,
+        "stepEndFrame": 1652,
+        "requestedFrames": 120,
+        "advancedFrames": 120,
+        "requestedButtons": [],
+        "appliedButtons": [],
+        "sampledButtons": [],
+        "journalSequence": 275,
+        "journalActionIndex": 135,
+        "journalDigest": "b7e31c8130f6fea0ebccba75b4b21de0f8fc2b37c58d527740d33393c18492b3",
+        "unchangedFromNativeArchive": true
+      },
+      {
+        "file": "pedestrian-admission-reset-help.png",
+        "frame": 2156,
+        "width": 160,
+        "height": 144,
+        "mode": "RGBA",
+        "pngBytes": 2124,
+        "pngSha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+        "rgbaBytes": 92160,
+        "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+        "originalArchiveFile": "frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png",
+        "prefixStepIndexZeroBased": 64,
+        "stepLabel": "Allow reset boot to settle",
+        "stepStartFrame": 1976,
+        "stepEndFrame": 2156,
+        "requestedFrames": 180,
+        "advancedFrames": 180,
+        "requestedButtons": [],
+        "appliedButtons": [],
+        "sampledButtons": [],
+        "journalSequence": 361,
+        "journalActionIndex": 178,
+        "journalDigest": "e64d5128f5876c5255f4853b7bf27ff1785e3cf357304a0191168b940dcbee07",
+        "unchangedFromNativeArchive": true
+      }
+    ],
+    "scope": "Selected original emulator frames show first-delivery result, a genuine continuously visible human impact, panned city atlas and visible saved-progress reset HELP. The exact route19 first-appearance defect is host/compiled evidence, not a native seeded reproduction. These frames do not establish physical cartridge capture, whole-campaign playtime, crowd/performance or hardware acceptance."
+  }
+}

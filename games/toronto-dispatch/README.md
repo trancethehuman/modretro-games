@@ -4,7 +4,7 @@ A north-up, top-down pixel-art courier sandbox for ModRetro Chromatic / Game Boy
 
 ## Play and install
 
-The current local candidate is `project/build/toronto-dispatch-result-controls.gbc`, **524,288 bytes**, SHA-256 **`a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634`**. Follow the [Chromatic loading guide](docs/LOADING.md); generated ROMs stay out of Git. Use the ModRetro Chromatic plugin's native emulator or official preview to play the exact inspected build. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
+The current local candidate is `project/build/toronto-dispatch-pedestrian-admission.gbc`, **524,288 bytes**, SHA-256 **`964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a`**. Follow the [Chromatic loading guide](docs/LOADING.md); generated ROMs stay out of Git. Use the ModRetro Chromatic plugin's native emulator or official preview to play the exact inspected build. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
 
 | Action | Controls |
 | --- | --- |
@@ -26,17 +26,17 @@ Source contains **241 buildings, 595 fixed pedestrian routes, 96 contracts, 59 s
 
 Jobs include packages, fragile art, freight, signatures/returns and transit relays. Port Lands uses legal Leslie access and authored collision-backed bridges; Islands use ferry/public walking paths. Civilian impacts cause non-graphic recovery, condition loss on carried jobs, escalating fines and local police pursuit. Six road vehicle kinds obey fictional signals; planes/helicopters and under-deck boats are cosmetic. Visible road traffic and paid transit schedules are separate game abstractions.
 
-![Core street](docs/screenshots/front-street-result-controls.png) ![Delivery result](docs/screenshots/delivery-result-controls.png)
+![Visible street impact](docs/screenshots/pedestrian-admission-visible-impact.png) ![Delivery result](docs/screenshots/pedestrian-admission-market-result.png)
 
-Unmodified sampled Core frames 632 and 560 on current `a0bd…`; [provenance](docs/screenshots/result-controls-provenance.json).
+Unmodified sampled Core frames 1,152 and 564 on current `964f…`; [provenance](docs/screenshots/pedestrian-admission-provenance.json).
 
 ## Verified scope
 
-Current `a0bd…` passes official/header/compiled guards and full repository checks, including 800,554 engine cases and a 1,096-byte static reserve. Its [fresh native replay](docs/NATIVE_RESULT_CONTROLS_SAMPLES.json) completes Market Start, holds RESULT B without reversing while the world runs, selects a truck, reverses after release and restores the latest automatic save through a genuine game-button reset. Opaque final emulator checkpoint is saved only.
+Current `964f…` passes official/header/compiled guards and full repository checks, with a 1,096-byte static reserve. Its [fresh native replay](docs/NATIVE_PEDESTRIAN_ADMISSION_SAMPLES.json) completes Market Start, keeps the car stopped during held RESULT B while the world runs, confirms a continuously visible pedestrian impact, freezes game/person/fleet state on the map and restores saved cash/progression/attention through a genuine game-button reset. The specific first-appearance correction has host/compiled evidence; the native impact is a different case. The final emulator checkpoint is saved only.
 
-Four historical `d58…` records separately cover bus/transit, courier/H3, funded lower-heat patrol behavior and a disclosed two-job checkpoint continuation to six completions. Older Queen and 13-job Island records retain their own hashes; none is inherited by the new ROM. [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md) retain full histories.
+Earlier `a0bd…` matched transit/driving trials, four `d58…` bus/heat/patrol/campaign records and older Queen/13-job Island records retain their own hashes in [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md). Their wider acceptance is not inherited by this ROM.
 
-All 96 played contracts/balance, eight remaining Island jobs, full Old Toronto, two measured enjoyable human hours, wider new-ROM transit/heat/district/pacing, native older-save imports, browser recovery, human handling/audio and physical cartridge execution remain pending.
+All 96 played contracts/balance, eight remaining Island jobs, full Old Toronto, two measured enjoyable human hours, wider new-ROM transit/heat/district/pacing/stack, native older-save imports, browser recovery, human handling/audio and physical cartridge execution remain pending.
 
 ## Develop
 

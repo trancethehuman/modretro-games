@@ -2987,6 +2987,9 @@ static void test_human_impacts_and_police(void){
     td.u=(u-10)*16;td.v=v*16;td.seconds=clock;td.speed=24;td_vx=384;
     td_people_reset();td_ped_refresh=16;td_ped_route[0]=route;
     td_nearby_routes[0][0]=td_district_routes[0][route][0];td_nearby_routes[0][1]=v;
+    td_pedestrians();
+    expect(!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun&&td.cash==30&&!td.wanted,
+           "the real route is presented at the clear ten-pixel edge before the courier crosses it");
     td.u=(u+8)*16;td_pedestrians();
     expect(td_people[0].stun==6&&actors[9].frame_start==36,
            "swept movement knocks down the actual human even when the final car endpoint clears the hit box");

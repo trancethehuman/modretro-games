@@ -372,4 +372,145 @@ static void paid_parked_presentation(void){
     fixture_authored_routes=0;
 }
 
-int main(void){fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}
+static void appearance_case(UWORD u,UWORD v){
+    memset(&td,0,sizeof(td));memset(actors,0,sizeof(actors));
+    memset(fixture_routes,TD_NONE,sizeof(fixture_routes));fixture_routes[0]=19;
+    fixture_authored_routes=1;td.mode=TD_ROAM;td.job=TD_NONE;
+    td.u=u;td.v=v;td.speed=3;td.seconds=8;td.subsecond=10;
+    td.cash=237;td.health=81;td.wanted=2;td.wanted_left=21;
+    td_streetcar_ride_view=0;td_streetcar_view_district=TD_DISTRICT_CITY;
+    td_streetcar_elapsed=0;
+    for(UBYTE i=2;i<8;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
+    actors[9].flags=ACTOR_FLAG_HIDDEN|0x40;
+    td_people_reset();
+}
+
+static void appearance_admission(void){
+    td_state_t before;
+    require(td_district_routes[0][19][0]==784&&td_district_routes[0][19][1]==148,
+            "Appearance fixtures use actual Core crossing route19, not a synthetic human location");
+    /* The bus is on its real northbound leg808,168->808,72 and may retain
+     * this pose over the five-VBlank interval between traffic batches. */
+    appearance_case(824*16,147*16+7);
+    actors[7].flags=0;actors[7].pos.x=808*32;actors[7].pos.y=152*32;
+    before=td;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&td_people[0].phase==33,
+            "At8:10 the bus hides authored phase33 human817,148 before any courier contact");
+    require(!memcmp(&td,&before,sizeof(td)),"Hidden bus occupancy preserves all58 gameplay bytes");
+    td.subsecond=15;td.v=148*16+3;before=td;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "At8:15 a newly clear phase34 human818,148 cannot appear inside the advancing occupied courier");
+    require(!memcmp(&td,&before,sizeof(td))&&(actors[9].flags&0x40),
+            "Denied appearance adds no penalty and preserves unrelated actor flags");
+    td.u=833*16;td.subsecond=20;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A clear final endpoint still defers appearance inside the preceding courier sweep");
+    td.subsecond=25;before=td;
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
+            actors[9].pos.x==820*32&&actors[9].pos.y==148*32&&!td_people[0].stun,
+            "The same authored human appears promptly once both body and preceding sweep are clear");
+    require(!memcmp(&td,&before,sizeof(td)),"Admitted appearance preserves cash, cargo, attention and save fields");
+
+    appearance_case(824*16,148*16);
+    actors[7].flags=0;actors[7].pos.x=808*32;actors[7].pos.y=152*32;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN),"Stationary control starts with the same bus-hidden human");
+    td.subsecond=15;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "A stationary occupied vehicle does not admit an overlapping appearance or invent an impact");
+    td.u=833*16;td.subsecond=20;td_people_present(24);
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "After separation a stationary clear update needs no extra grace countdown");
+
+    /* These signed rectangle bounds are an independent conservative maximum
+     * occupied vehicle half7 plus human half3. Exercise every Q4 fraction
+     * around strict10px, all vehicle selections and both coordinate axes. */
+    for(UBYTE vehicle=0;vehicle<4;vehicle++)for(UBYTE axis=0;axis<2;axis++)
+        for(int sign=-1;sign<=1;sign+=2)for(int gap=144;gap<176;gap++){
+            UWORD cu=(UWORD)(817*16+(axis?0:sign*gap));
+            UWORD cv=(UWORD)(148*16+(axis?sign*gap:0));
+            appearance_case(cu,cv);td.vehicle=vehicle;before=td;
+            int clear=reference_fleet_clear(817,148,cu,cv,7);
+            require(td_people_present(24)==0,"Stationary fractional-boundary admission never charges a hit");
+            require(!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!clear,
+                    "Appearance visibility follows independent exact Q4 maximum-body rectangles");
+            require(!td_people[0].stun&&!memcmp(&td,&before,sizeof(td))&&(actors[9].flags&0x40),
+                    "Boundary admission preserves recovery, every saved byte and unrelated actor flags");
+        }
+
+    /* A new route must not inherit an old route's visible history. */
+    appearance_case(827*16,148*16);
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "Exactly10px separated first appearance is admitted without a delay");
+    require(td_district_routes[0][26][0]==784&&td_district_routes[0][26][1]==204,
+            "Replacement case uses the registered Core route26");
+    fixture_routes[0]=26;td_ped_refresh=1;td.u=826*16;td.v=204*16;before=td;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "A replacement route cannot inherit stale visible flags and materialize inside the courier");
+    require(!memcmp(&td,&before,sizeof(td)),"Replacing a nearby identity creates no saved impact consequences");
+
+    appearance_case(805*16,148*16);td.u=829*16;before=td;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "A first appearance beyond both endpoints cannot retroactively collide with the24px crossing sweep");
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A now-clear stationary sweep admits that person immediately on the next update");
+    require(!memcmp(&td,&before,sizeof(td)),"Retrospective admission suppression adds no gameplay penalty");
+
+    /* Endpoint rectangles are independently clear. The middle point of the
+     * cardinal sweep tests fractional tangency of the same full bodies. */
+    for(UBYTE axis=0;axis<2;axis++)for(int sign=-1;sign<=1;sign+=2)
+        for(int gap=159;gap<=161;gap++){
+            UWORD start_u=(UWORD)(817*16+(axis?sign*gap:-12*16));
+            UWORD start_v=(UWORD)(148*16+(axis?-12*16:sign*gap));
+            UWORD end_u=(UWORD)(817*16+(axis?sign*gap:12*16));
+            UWORD end_v=(UWORD)(148*16+(axis?12*16:sign*gap));
+            UWORD middle_u=(UWORD)(817*16+(axis?sign*gap:0));
+            UWORD middle_v=(UWORD)(148*16+(axis?0:sign*gap));
+            appearance_case(start_u,start_v);td.u=end_u;td.v=end_v;
+            require(reference_fleet_clear(817,148,start_u,start_v,7)&&
+                    reference_fleet_clear(817,148,end_u,end_v,7),
+                    "Tangential prior-sweep fixture has independently clear start and end bodies");
+            int clear=reference_fleet_clear(817,148,middle_u,middle_v,7);
+            require(td_people_present(24)==0&&!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!clear,
+                    "Prior-sweep admission retains strict159/160/161Q4 tangency on both axes and signs");
+            require(!td_people[0].stun,"Tangential first appearances never produce a retrospective stumble");
+        }
+    appearance_case(805*16,136*16);td.u=829*16;td.v=160*16;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "A diagonal first-appearance sweep through the human also defers admission despite clear endpoints");
+
+    appearance_case(781*16,148*16);td.u=853*16;
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A remote discontinuity beyond32px retains the existing rejected-sweep semantics");
+    appearance_case(781*16,148*16);td.u=817*16;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A rejected remote sweep still cannot bypass current occupied-body admission");
+
+    /* Continuously visible crossings retain the actual swept impact/recovery
+     * rules; only the first appearance is admitted at the10px edge. */
+    appearance_case(827*16,148*16);
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),"Continuous control begins with a truly presented human");
+    td.u=824*16;before=td;
+    require(td_people_present(24)==1&&td_people[0].stun==6&&poses[0]==4&&
+            !(actors[9].flags&ACTOR_FLAG_HIDDEN),"A real continuously visible swept contact still produces one stumble");
+    require(!memcmp(&td,&before,sizeof(td)),"People returns the genuine hit without independently rewriting higher-level penalties");
+    require(td_people_present(24)==0&&td_people[0].stun==6,"The same recovering human cannot be charged twice");
+    for(unsigned second=0;second<6;second++){td.seconds++;td_people_second();}
+    require(td_people_present(24)==0&&!td_people[0].stun&&actors[9].pos.x==817*32&&
+            !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Continuously visible recovery resumes its original position after six active seconds");
+    td.seconds++;require(td_people_present(24)==0&&actors[9].pos.x!=817*32,
+            "Recovered humans continue along the unchanged authored route");
+    td.seconds=8;td.subsecond=10;td.u=817*16;td.v=148*16;
+    td_people_reset();before=td;
+    require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
+            "Scene reset discards stale visible continuity before admitting a person overlapping the vehicle");
+    require(!memcmp(&td,&before,sizeof(td)),"Scene-reset admission leaves the58-byte game record unchanged");
+
+    appearance_case(817*16,148*16);td.mode=TD_RIDE;td.district=TD_DISTRICT_WEST;
+    td_streetcar_ride_view=1;td_streetcar_focus_u=817*16;td_streetcar_focus_v=148*16;before=td;
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
+            "A remote paid view does not treat logical-origin occupied coordinates as a visible local car");
+    require(!memcmp(&td,&before,sizeof(td)),"Remote appearance preserves paid fields and logical district");
+    fixture_authored_routes=0;
+}
+
+int main(void){fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();appearance_admission();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}

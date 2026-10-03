@@ -38,37 +38,38 @@ void td_people_reset(void) BANKED {
 
 /* Sweep actual movement in increments no larger than one pixel. A scene change must reset
  * this anchor; reject a remote discontinuity instead of striking distant NPCs. */
-static UBYTE td_person_contact(UWORD u,UWORD v){
+static UBYTE td_person_sweep(UWORD u,UWORD v,UBYTE radius){
     UBYTE n,steps;WORD du=(WORD)td.u-td_people_last_u,dv=(WORD)td.v-td_people_last_v;
     UWORD span=du<0?-du:du,other=dv<0?-dv:dv;WORD x,y;
     UWORD low,high,point;
     if(other>span)span=other;
     if(!span||span>512)return FALSE;
     /* Every divided sample lies inside the endpoint rectangle. Reject only
-     * beyond its strict128-Q4 contact radius, before the sample divisions.
+     * beyond its strict radius, before the sample divisions.
      * Keep the original oracle for malformed wrapping16-bit endpoints. */
     if(td_people_distance(td.u,td_people_last_u)<=512){
         low=td.u<td_people_last_u?td.u:td_people_last_u;
         high=td.u>td_people_last_u?td.u:td_people_last_u;point=u*16;
-        if((point<low&&low-point>=128)||(point>high&&point-high>=128))return FALSE;
+        if((point<low&&low-point>=radius)||(point>high&&point-high>=radius))return FALSE;
     }
     if(td_people_distance(td.v,td_people_last_v)<=512){
         low=td.v<td_people_last_v?td.v:td_people_last_v;
         high=td.v>td_people_last_v?td.v:td_people_last_v;point=v*16;
-        if((point<low&&low-point>=128)||(point>high&&point-high>=128))return FALSE;
+        if((point<low&&low-point>=radius)||(point>high&&point-high>=radius))return FALSE;
     }
     /* span<=512 and steps<=32 keep du*n/dv*n within signed16-bit range.
      * Avoid pulling 32-bit arithmetic helpers into the scarce fixed ROM bank. */
     steps=(span+15)/16;
     for(n=0;n<=steps;n++){
         x=td_people_last_u+du*(WORD)n/steps;y=td_people_last_v+dv*(WORD)n/steps;
-        if(td_people_distance(x,u*16)<128&&td_people_distance(y,v*16)<128)return TRUE;
+        if(td_people_distance(x,u*16)<radius&&td_people_distance(y,v*16)<radius)return TRUE;
     }
     return FALSE;
 }
+static UBYTE td_person_contact(UWORD u,UWORD v){return td_person_sweep(u,v,128);}
 
 UBYTE td_people_present(UBYTE tick) BANKED {
-    UBYTE i,route,phase,raw,refresh,hits=0,visible,clock_phase;UWORD u,v;
+    UBYTE i,route,phase,raw,refresh,hits=0,visible,continuous,clock_phase;UWORD u,v;
     UWORD player_u=(td_streetcar_ride_view?td_streetcar_focus_u:td.u)>>4;
     UWORD player_v=(td_streetcar_ride_view?td_streetcar_focus_v:td.v)>>4;
     td_person_t *person;
@@ -80,6 +81,7 @@ UBYTE td_people_present(UBYTE tick) BANKED {
     clock_phase=(td.seconds*12+td.subsecond/5)&127;
     for(i=0;i<6;i++){
         route=td_ped_route[i];person=&td_people[i];
+        continuous=person->route==route&&!(actors[9+i].flags&ACTOR_FLAG_HIDDEN);
         raw=(clock_phase+route*37)&127;
         if(person->route!=route){
             memset(person,0,sizeof(*person));person->route=route;
@@ -96,8 +98,22 @@ UBYTE td_people_present(UBYTE tick) BANKED {
         }
         person->phase=phase;
         visible=td_people_distance(player_u,u)<112&&td_people_distance(player_v,v)<96;
+        /* A new identity or hidden human has no visible crossing history.
+         * Defer appearance inside the occupied courier or its prior sweep;
+         * half7 vehicle + half3 human gives strict10px Q4 admission. The
+         * endpoint check also protects stationary/discontinuous movement.
+         * A paid remote view must not inherit the origin's car occupancy. */
+        if(visible&&!continuous&&!td.onfoot&&!td_streetcar_ride_view&&
+           td.district==td_streetcar_view_district&&
+           ((td_people_distance(td.u,u*16)<160&&td_people_distance(td.v,v*16)<160)||
+            td_person_sweep(u,v,160))){
+            volatile actor_t *appearing=&actors[9+i];
+            /* Reload the actual actor after the context/query predicates;
+             * avoid the pinned SDCC conditional compound-store pattern. */
+            appearing->flags=appearing->flags|ACTOR_FLAG_HIDDEN;continue;
+        }
         if(visible)actors[9+i].flags&=~ACTOR_FLAG_HIDDEN;else actors[9+i].flags|=ACTOR_FLAG_HIDDEN;
-        if(visible&&!person->stun&&td.mode==TD_ROAM&&!td.onfoot&&
+        if(visible&&continuous&&!person->stun&&td.mode==TD_ROAM&&!td.onfoot&&
            (td.speed>2||td.speed<-2)&&td_person_contact(u,v)){
             person->stun=6;person->phase=phase;hits++;
         }

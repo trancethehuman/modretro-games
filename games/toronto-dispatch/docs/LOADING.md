@@ -1,8 +1,8 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Select **`toronto-dispatch-result-controls.gbc`**, **524,288 bytes**, SHA-256 **`a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634`**. Its source contains six compressed districts, 96 contracts, 59 service points and save v9 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
+Select **`toronto-dispatch-pedestrian-admission.gbc`**, **524,288 bytes**, SHA-256 **`964f4ad40275eb373c7a2e2cb500a0bdc84220fe0093f6333d317a25e89d409a`**. Its source contains six compressed districts, 96 contracts, 59 service points and save v9 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
 
-Official build/header/compiled/source checks and scoped native first-delivery/RESULT-control/reset checks pass. No physical installation has been attempted. All 96 played contracts, two measured enjoyable human hours, browser recovery and cartridge cold-boot/save persistence remain pending. Follow the device steps below; detailed [build](BUILD.md) and [test evidence](../TESTING.md) are separate from physical verification.
+Official build/header/compiled and full source checks pass, with scoped native first-delivery/RESULT-control/visible-impact/map/reset evidence. No physical installation has been attempted. All 96 played contracts, two measured enjoyable human hours, browser recovery and cartridge cold-boot/save persistence remain pending. Follow the device steps below; detailed [build](BUILD.md) and [test evidence](../TESTING.md) are separate from physical verification.
 
 ## 1. Prepare the computer and console
 
@@ -18,24 +18,24 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-pedestrian-admission.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The local loading bundle is `toronto-dispatch-result-controls.zip`. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the committed source and instructions. Published Prototype 6 remains the separate older release linked under Evidence and older builds below.
+For a prepared loading bundle, use `toronto-dispatch-pedestrian-admission.zip`. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the committed source and instructions. Published Prototype 6 remains the separate older release linked under Evidence and older builds below.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-result-controls.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-pedestrian-admission.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-result-controls.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-pedestrian-admission.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-pedestrian-admission.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -93,8 +93,8 @@ Reviewed 2026-10-02 against official ModRetro support and installed plugin 1.0.3
 
 ## Evidence and older builds
 
-The current [fresh native record](NATIVE_RESULT_CONTROLS_SAMPLES.json) verifies first delivery, held RESULT B without reversing while clock/traffic continue, truck selection, fresh reverse after release and a genuine reset restoring the later automatic save. SAVE A can resume and slightly accelerate while held; the reset does not claim byte identity with the later live inspection. Its final emulator checkpoint is saved only.
+The current [fresh native record](NATIVE_PEDESTRIAN_ADMISSION_SAMPLES.json) verifies first delivery, held RESULT B stop while clock/traffic continue, a continuously visible pedestrian impact, exact game/person/fleet map freeze/panning and genuine reset preserving later saved cash/progress/H1. SAVE A can resume and slightly accelerate; the later automatic checkpoint differs from the earlier live SAVE inspection. The final emulator checkpoint is saved only. The first-appearance bugcase remains host/compiled evidence, and one OAM frame is not crowded/hardware acceptance.
 
-Four older `d58…` bus/courier/heat/patrol/campaign records, `5ae4…` Queen travel and `7b2…` Island/13-job evidence retain their original hashes in [TESTING.md](../TESTING.md). They are not native acceptance on this new ROM. The failed `8a96…` and `cf2f…` candidates must not be selected. Downloadable [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
+Older `a0bd…` matched-transit/control, `d58…` bus/courier/heat/patrol/campaign, `5ae4…` Queen and `7b2…` Island/13-job records retain their original hashes in [TESTING.md](../TESTING.md). They are not native acceptance on this selected ROM. Failed `8a96…` and `cf2f…` candidates must not be selected. Downloadable [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
 
 Full Old Toronto, remaining Island jobs, all contracts/balance, two enjoyable human hours, wider vehicle/crowd/pacing/stack checks, native older-save imports, human handling/audio, browser recovery and hardware remain open. Host migration checks and emulator resets do not establish physical power-off persistence.

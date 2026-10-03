@@ -231,7 +231,7 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [ ] Verify H2 moving-car capture, active/higher-heat escapes, other patrol-return routes/districts and every paid-mode suppression branch; keep new-job SRAM reset, wider human-impact/crowd/performance and full campaign gates open.
 - [ ] Broaden native pedestrian wait/resume, crowded lane/junction and performance coverage; full campaign, eight remaining Island jobs, native older-save imports, two measured enjoyable hours, human handling, browser recovery and hardware remain pending.
 
-## RESULT B release handling — current scoped native pass
+## Retained RESULT B release handling — a0bd scoped native pass
 
 - [x] Consume RESULT-closing B until release without freezing the active world or altering ordinary fresh braking/reverse; add one transient byte, preserving v9 / 58-byte saves and all campaign fields.
 - [x] Build current `a0bd…` (`toronto-dispatch-result-controls.gbc`), with full checks / 800,554 engine cases, independent 514-check compiled audit and 1,096-byte static reserve.
@@ -239,6 +239,14 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Close a separate current-ROM continuation from a disclosed genuine done-1 import: new fragile/art and Distillery completions reach done 3; condition-70 pay 102, full-condition pay 124, cash-zero continuation, ordinary car recovery and funded H1 foot/H2 stationary-car fines pass.
 - [x] Compare First Connection from the exact same done-3 neutral checkpoint in independent transit/walking and conservative cardinal-driving branches; each reaches done 4. Retain actual four fares/$10, Castle wait-versus-walk, credits 254/252, nine whole seconds of deadline difference and $3 cash difference as a single-phase observation. [Selected native evidence](docs/NATIVE_MATCHED_TRANSIT_SAMPLES.json) keeps both branches and imported completions explicit.
 - [ ] Broaden this exact ROM's campaign/transit/heat/district/pacing evidence. Keep four older `d58…` records separate; all 96 jobs, remaining Islands, two measured enjoyable human hours, native older-save imports, browser and hardware remain pending.
+
+## Pedestrian admission correction — current compiled and scoped native pass
+
+- [x] Reproduce the Core route-19/bus first-appearance overlap in a host fixture and defer newly selected/hidden people near the occupied courier's current body or preceding bounded sweep. Use strict ten-pixel admission clearance and loaded-view applicability; preserve continuously visible eight-pixel impacts, six-second recovery and all penalties.
+- [x] Pass strict host compilation and ASan/UBSan pedestrian checks (2,423,750) plus the actual-engine gate (800,555). Establish prior visibility in the retained-impact engine fixture; add no persistent/history/save bytes, routes, art or cadence changes.
+- [x] Build `964f…` and pass 580 matching compiled checks, including flags destination/context and admission/impact radii. Retain save v9/58 bytes and 1,096-byte linked reserve; local frame 27→28 does not establish deepest-stack or performance behavior.
+- [x] Close a fresh native delivery/held-B live-world/continuously visible route-83 impact/map-freeze/pan/saved-progress reset replay; retain its one OAM frame and save-only checkpoint scope. [Curated evidence](docs/NATIVE_PEDESTRIAN_ADMISSION_SAMPLES.json) discloses two unretained diagnostic responses.
+- [ ] Natively reproduce the specific first-appearance case and broaden crowd/vehicle/transit/heat/pacing checks. The host/compiled case does not diagnose prior Bay impacts, and older `a0bd…` matched-route/campaign scopes are not assigned to `964f…`. All 96 jobs, remaining Islands, two enjoyable human hours, browser and hardware remain pending.
 
 ## Device milestone
 
