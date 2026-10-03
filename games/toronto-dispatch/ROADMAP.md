@@ -147,7 +147,7 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [ ] Verify truck/motorcycle/scooter bridge cases, roof/crane/boat occlusion, wider water/scene combinations and crowded traffic/aircraft pacing; scoped car travel does not complete them.
 - [ ] Broaden second-row marker/focus/cancellation/VRAM combinations and native coverage beyond sampled pans; host fixtures cover all 900 viewports.
 - [x] Append eight original Port clients/jobs for 96 contracts/59 stops and seven parking anchors. Pin all previous 88/51 native records/briefs; retain save v8/58 bytes, 16 completion bytes and 16 actors. Validate every client/parking route through the sole Leslie seam, meaningful truck/multi-stop/closed-return routes and provisional deadlines.
-- [x] Validate real-engine ordered/wrong-district/foot 58/parking/truck-transit/final95 credit/save fixtures and old 88-job v6/v7/v8 records; current engine gate passes 699,955 checks. Keep the shorter VBlank clock conversion equivalent without added persistent state.
+- [x] Validate real-engine ordered/wrong-district/foot 58/parking/truck-transit/final95 credit/save fixtures and old 88-job v6/v7/v8 records; the Port-campaign engine gate passes 699,955 checks. Keep the shorter VBlank clock conversion equivalent without added persistent state.
 - [x] Build exact 96/59 `c625…`; full suite/header/compiled/memory gates pass with 1,098 static bytes. Stationary 110/360 versus retained 108 is a tiny scoped sample, not whole-city pace.
 - [x] Complete original jobs 0,2,1 and new Fire Hall Books/index 89 through ordinary Riverside pickup/Leslie/Port parking/legal foot handoff. Delivery condition 36 / cash 71 / done 4 and real reset/restored bit 89/Port car re-entry pass in a closed 11,024-frame [record](docs/NATIVE_PORT_CAMPAIGN_SAMPLES.json).
 - [ ] Play the other seven new jobs and all 96 native progression, test saved active new-job recovery, and tune deadlines/condition/rewards/handling. Exact higher fine amounts are not isolated by the sampled H3/cash-clamped capture. Broader pacing remains pending; retained `a243…` six-car-bridge scope stays separate.
@@ -171,6 +171,17 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Add eight source Port courier jobs with reachable loading/parking/foot approaches for 96 contracts/59 stops; native execution/tuning is tracked above.
 - [ ] Add later useful service incidents/jobs after acceptance, match visible bus movement to tested paid stops before claiming that connection and research any additional/opening bridge.
 - [ ] Verify crowded CPU/scanline/stack limits, human readability/handling/fun and physical cartridge boot/save/audio separately. No new street-simulation feature is certified by the historical courier/flyby samples or quest count.
+
+## Dispatch planning and reward feedback — full checks and scoped native passes
+
+- [x] Add full itinerary browsing: Left/Right retains contract selection; Up/Down visits ordered/repeated stops with place, district, role and walking requirement. Preserve A/B, eligibility, paused world and existing mission/save IDs.
+- [x] Show base, condition percentage/adjusted pay, time bonus and exact credit at the balance cap; reuse existing offer storage plus one transient itinerary byte. Preserve failure, cancellation, replay, return and reset semantics.
+- [x] Separately build/play tram-only `a638c374…`, before UI changes. Its exact ROM-only progress tables retain motion/sweeps/schedules and 1,098 static bytes; paired 18-second Core counts 381/1,080 versus `c625…` 348/1,080, about 9.5% scoped. First delivery/held turn, paid Queen fare/map freeze/button reset/East arrival pass.
+- [x] Build combined `4343f2b8…` with compiled limits/1,097 static bytes; host UI passes 24,185,014 checks/all 796 pages. Its own stationary sample repeats 381/1,080. Ordinary controls cover wrap/return previews/Beach WALK cues/locked denial, acceptance from a later preview still picking up at Union, exact condition/base/time/credit and zero-pay replay timeout.
+- [x] Separately record combined-ROM Line 1 Union→King fare 30→27, all 58 paid-map bytes frozen, genuine paid reset/arrival and the parked Union car. Keep earlier tram-only Queen evidence on `a638c374…`.
+- [x] Pass full combined `make check`, including 704,884 engine and 24,185,014 actual-UI checks.
+- [ ] Broaden native damaged/capped payouts, cancellation/other routes and human/handheld readability/deep-stack checks. Scoped results do not complete all 96 contracts, full city, two hours or hardware.
+- [ ] Compare ordinary truck/fragile/passenger/park-walk/transit route choices, then tune handling/deadlines/rewards from normal-speed human play. Retain the full-city and measured two-hour gates below.
 
 ## Next playable polish
 

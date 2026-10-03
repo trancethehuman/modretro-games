@@ -120,5 +120,33 @@
     "recording_id": "session-4c31f047-edb7-4696-9d45-6c9a020d6588",
     "archive_id": "6b5223b6-19fb-4d5f-8c98-a86b7b350195",
     "archive_manifest_sha256": "95031ba5fe18555d3df388912d358316259c86a32f7dfaa3b6a2242ab987c317"
+  },
+  {
+    "label": "actual Beach Mail final walking delivery, locked",
+    "file": "dispatch-walking-route.png",
+    "frame": 2319,
+    "rom_sha256": "4343f2b858e62f9e8daa2a3576a1d06bb7ee7208d2cd4a55434c36e168fb3100",
+    "png_sha256": "db99c9172f078ad8d1e4f2a40ba2c147ebaf136fba1b17b3e6188df5cb4c75cb",
+    "session_id": "fed547178c15453897be6fe576796f0e",
+    "journal_event_digest": "f2abd1bbaf0a346c0f7fc9111b3a51460acceca38296d7533c7b05b8bc841b6d",
+    "journal_events": 5446,
+    "recording_id": "session-fe461838-1acc-4b18-80f4-55b2a4833179",
+    "archive_id": "b7cee6d4-d0b2-4cea-b667-069f4725eecc",
+    "archive_manifest_sha256": "1a0ac2f84cf408cf65834365da4b51dd55da498c600612e1bdb2e63c4e79ced1",
+    "source": "Unmodified genuine PyBoy native emulator frame; ordinary inputs and read-only observation; closed scoped-pass journal archived locally"
+  },
+  {
+    "label": "Market Start completed payout",
+    "file": "dispatch-payout.png",
+    "frame": 2223,
+    "rom_sha256": "4343f2b858e62f9e8daa2a3576a1d06bb7ee7208d2cd4a55434c36e168fb3100",
+    "png_sha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+    "session_id": "fed547178c15453897be6fe576796f0e",
+    "journal_event_digest": "f2abd1bbaf0a346c0f7fc9111b3a51460acceca38296d7533c7b05b8bc841b6d",
+    "journal_events": 5446,
+    "recording_id": "session-fe461838-1acc-4b18-80f4-55b2a4833179",
+    "archive_id": "b7cee6d4-d0b2-4cea-b667-069f4725eecc",
+    "archive_manifest_sha256": "1a0ac2f84cf408cf65834365da4b51dd55da498c600612e1bdb2e63c4e79ced1",
+    "source": "Unmodified genuine PyBoy native emulator frame; ordinary inputs and read-only observation; closed scoped-pass journal archived locally"
   }
 ]

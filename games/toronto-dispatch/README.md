@@ -20,9 +20,16 @@ Newer source adds an original moving Queen streetcar with door poses and scene-f
 
 Retained fused output `project/build/toronto-streetlife-fused.gbc`, SHA-256 **`a243834899097d9660190022f03ce31d322d2584d0d7cfe1fdf8adb84a8902ea`**, passes its official build/resource/1,098-byte reserve guards and full `make check`. Ordinary-control recordings sample H1 impact/stumble, map/attention reset, road police capture, park/exit/walking/blocked Core shore/a visible boat, and a separate condition-100 first delivery at cash 139/done one. Correct paired pacing measures 108 updates/360 VBlanks, below the retained 132 baseline. A separate [9,988-frame Port driving record](docs/NATIVE_PORT_DRIVING_SAMPLE.json) crosses Lake Shore, Cherry North, Commissioners, Cherry South, Ship Channel and Unwin decks by car, walks Commissioners with the car parked, resets/restores that Port checkpoint, parks/walks Beach to actual water at `(423.625,935.625)`, re-enters and drives back to East. H2/H3 escalation with cash zero does not prove higher fine amounts. Earlier `a212dd9e…`, `bd09f1c3…` and `555f3d31…` keep their own scopes.
 
-Current `project/build/toronto-port-campaign-clock.gbc`, SHA-256 **`c625e6dce80a56a787c940885da5abd332fce47335e52f57698c3395a14ba364`**, compiles **96 contracts/59 stops** with seven parking anchors, preserving all earlier native records/briefs. Full `make check` (699,955 engine checks), official compiled/header gates and 1,098 static bytes pass. New work includes truck equipment, fragile glass, express files, park handoffs and a closed return kit. Deadlines remain provisional, only Leslie connects Port, and no 114 service is added. Old88-job ROMs reject saved new jobs/completion bits despite the same 58-byte v8 state/16 completion bytes.
+Retained `project/build/toronto-port-campaign-clock.gbc`, SHA-256 **`c625e6dce80a56a787c940885da5abd332fce47335e52f57698c3395a14ba364`**, compiles **96 contracts/59 stops** with seven parking anchors, preserving all earlier native records/briefs. Its full checks, compiled/header gates and 1,098 static bytes pass. Port work includes truck equipment, fragile glass, express files, park handoffs and a closed return kit. Deadlines remain provisional, only Leslie connects Port, and no 114 service is added. Old88-job ROMs reject saved new jobs/completion bits despite the same 58-byte v8 state/16 completion bytes.
 
 The [closed exact-ROM replay](docs/NATIVE_PORT_CAMPAIGN_SAMPLES.json) completes three original jobs and FIRE HALL BOOKS (contract 90/index 89): Riverside pickup, Leslie trip, parking, walking around the blocked Fire Hall footprint, delivery with condition 36 / cash 71 / done 4, genuine reset/restored completion and Port car re-entry. This verifies one of eight new jobs, not the full campaign or balance. Higher attention/capture occurs without isolating sufficient-cash higher fines. Stationary 110/360 versus older 108 is a tiny scoped timing difference; wider pacing, other seven jobs, all 96 progression, two hours, browser and physical play remain pending. These changes are absent from downloadable Prototype 6; [TESTING.md](TESTING.md) scopes exact records.
+
+Current `project/build/toronto-dispatch-route-feedback.gbc`, SHA-256 **`4343f2b858e62f9e8daa2a3576a1d06bb7ee7208d2cd4a55434c36e168fb3100`**, adds the full ordered itinerary before accepting a quest and an exact completion payout breakdown. Browse each place, district, return and walking requirement. Results show condition, base, condition-adjusted pay, time bonus and actual credit, including the balance cap. Native route/lock/first-payment/timeout/reset and a separate paid train/map/reset sample pass; every authored page and cap arithmetic have independent host checks. ROM-table tram interpolation preserves geometry/timing without persistent RAM; a scoped stationary sample improves from 348 to 381 updates over 1,080 VBlanks. The new one-byte itinerary cursor leaves 1,097 static bytes. [Portable evidence](docs/NATIVE_DISPATCH_UI_SAMPLES.json) retains this build's scope; full campaign, human readability and physical play remain pending.
+
+![Walking delivery itinerary](docs/screenshots/dispatch-walking-route.png)
+![Completion payout](docs/screenshots/dispatch-payout.png)
+
+Unmodified native frames from this candidate; [provenance](docs/screenshots/provenance.json).
 
 | Action | Controls |
 | --- | --- |
@@ -30,6 +37,7 @@ The [closed exact-ROM replay](docs/NATIVE_PORT_CAMPAIGN_SAMPLES.json) completes 
 | Steer the vehicle | Left / right; brake for tighter corners |
 | Brake / reverse | B; keep holding near rest to reverse |
 | Accept or deliver a package | Select opens dispatch, then A accepts; Select at a beacon while stopped collects/delivers |
+| Plan a quest | Dispatch: left/right selects contracts, up/down browses ordered stops; A accepts, B returns |
 | Pause menu | Start; up/down and A choose |
 | Park and exit | Stop, then pause → Park / recover car |
 | Walk | D-pad; A near the parked car animates entry |

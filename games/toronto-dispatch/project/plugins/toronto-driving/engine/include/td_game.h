@@ -46,6 +46,8 @@ void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED;
 void td_get_district_name(UBYTE index,char *dest) BANKED;
 extern UBYTE td_route_district; /* Rebuilt objective cue; not serialized. */
 extern UBYTE td_resume_mode;
+/* Paused dispatch itinerary index; never serialized. */
+extern UBYTE td_board_route;
 void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
 void td_map_open(void) BANKED;

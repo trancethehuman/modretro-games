@@ -2,7 +2,7 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The latest built source candidate is `toronto-port-campaign-clock.gbc`, **524,288 bytes**, SHA-256 `c625e6dce80a56a787c940885da5abd332fce47335e52f57698c3395a14ba364`. It compiles 96 contracts / 59 stops / seven parking anchors, preserving prior native IDs/briefs and the 58-byte v8 state. Official header/compiled aircraft/Queen/ 1,098-byte reserve and full `make check` pass; ordinary controls complete three original jobs, then Fire Hall Books at condition 36 / cash 71 / done 4, genuine completion reset and Port car recovery. [The scoped replay](NATIVE_PORT_CAMPAIGN_SAMPLES.json) passes one of eight new jobs; the other seven and tuning remain pending. Stationary 110 loops / 360 VBlanks versus retained fused 108 is a tiny scoped difference, below baseline 132; broader pace/hardware remains open. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the earlier four-district `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`. No newer release or physical installation is claimed.
+The latest built source candidate is `toronto-dispatch-route-feedback.gbc`, **524,288 bytes**, SHA-256 `4343f2b858e62f9e8daa2a3576a1d06bb7ee7208d2cd4a55434c36e168fb3100`. It retains 96 contracts / 59 stops / seven parking anchors and the 58-byte v8 save, with itinerary browsing, exact payout feedback and equivalent tram ROM tables. Header/compiled sprite/table guards and 1,097 static bytes pass. [Scoped native UI and Line 1 records](NATIVE_DISPATCH_UI_SAMPLES.json) cover previews/locks, first delivery/payment, timeout, reset and paid train/map/reset/arrival; broader campaign/hardware remain open. Retained `c625…` [Fire Hall replay](NATIVE_PORT_CAMPAIGN_SAMPLES.json) and `a638…` [Queen/table replay](NATIVE_TRAM_PROGRESS_SAMPLES.json) keep their own identities. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the earlier four-district `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`. No newer release or physical installation is claimed.
 
 Retained Port Lands baseline `a212dd9e…`, `toronto-port-lands-labels.gbc`, keeps its earlier five-scene travel/aircraft/map/checkpoint proofs. Older 75-byte epoch `35337509…` also keeps its own delivery/90-loop identity; none of these records is assigned to new source.
 
@@ -30,22 +30,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-port-campaign-clock.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-route-feedback.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to `build/toronto-port-campaign-clock.gbc` with matching debug artifacts, preserving older measured files and using a new distinct name for later source changes. Run the memory and compiled resource/frame/isolation guards, inspect its exact path/size/SHA-256 and test that same ROM's street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-route-feedback.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-port-campaign-clock.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-port-campaign-clock.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-route-feedback.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-route-feedback.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -77,6 +77,7 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Cold boot | Toronto Dispatch's title/help/start flow appears and enters the city; no blank screen, corrupt tiles or reset loop |
 | Driving | A accelerates, left/right steer, B brakes and reverses near rest; corners retain momentum |
 | First delivery | Select opens dispatch; accept the first Union-to-St. Lawrence job with A, Select collects at Union, drive east on Front Street, brake and Select delivers at the marker |
+| Quest planning and payment | Dispatch left/right selects jobs; up/down browses stops, districts and walking/return cues. Check condition/base/time/credited pay after delivery, and zero payment after timeout |
 | Walking and car entry | Stop, Start → Park / recover car; walk with D-pad, approach the parked car and press A to enter |
 | Map and pause | Start → Scroll City Map; D-pad pans across areas, A centres the job/booked stop/depot, Select changes focus, B returns; mission time freezes |
 | Transit | On foot at a station, Queen curb sign or ferry terminal, B opens routes; choose with left/right and board with A. At Wellesley, up changes train/bus. Check direction, wait and ride time before boarding; fare is charged once and mission time continues |

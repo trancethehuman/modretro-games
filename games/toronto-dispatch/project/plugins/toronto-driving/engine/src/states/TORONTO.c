@@ -44,6 +44,7 @@ static td_traffic_sample_t td_traffic_samples[6];
 static UBYTE td_traffic_leg[6];
 static UBYTE td_tick,td_notice_timer,td_red_cooldown,td_turn_tick,td_entry_timer,td_entry_target,td_walk_dir;
 UBYTE td_resume_mode;
+UBYTE td_board_route;
 static WORD td_vx,td_vy;
 static UWORD td_last_frame;
 static UBYTE td_corner_used;
@@ -140,6 +141,9 @@ static UBYTE td_cross_portal(UWORD old_u,UWORD old_v){
     return td_change_district(crossing.district,crossing.u,crossing.v);
 }
 static void td_finish(UBYTE success){
+    /* The board-only offer buffer retains the pre-payment balance while the
+       result is visible. It is rebuilt before the next offer is accepted. */
+    td_offer.reward=td.cash;
     td_audio_play(success?TD_AUDIO_COMPLETE:TD_AUDIO_FAIL);
     if(success){
         if(!(td.complete[td.job>>3]&(1<<(td.job&7)))){td.complete[td.job>>3]|=1<<(td.job&7);td.done++;}
@@ -149,7 +153,7 @@ static void td_finish(UBYTE success){
     td.job=TD_NONE;td.speed=0;td_vx=td_vy=0;td.mode=TD_RESULT;td_set_target();td_save();td_ui_draw();
 }
 static void td_ready_offer(void){
-    UBYTE i;
+    UBYTE i;td_board_route=0;
     for(i=0;i<TD_QUESTS;i++){
         td_get_job(i,&td_offer);
         if(td.done>=td_offer.min_done&&!(td.complete[i>>3]&(1<<(i&7)))&&(td_offer.vehicle==TD_NONE||(!td.onfoot&&td.vehicle==td_offer.vehicle))){td.menu=i;return;}
@@ -216,7 +220,7 @@ static void td_pause_choose(void){
     switch(td.menu){
         case 0:td.mode=td_resume_mode;break;
         case 1:td.mode=TD_MAP;td_map_open();break;
-        case 2:td.mode=TD_BOARD;if(td.job==TD_NONE)td_ready_offer();else{td.menu=td.job;td_get_job(td.menu,&td_offer);}break;
+        case 2:td.mode=TD_BOARD;td_board_route=0;if(td.job==TD_NONE)td_ready_offer();else{td.menu=td.job;td_get_job(td.menu,&td_offer);}break;
         case 3:td_enter_exit();return;
         case 4:
             if(td.job!=TD_NONE||td.speed>2||td.speed<-2||td.onfoot){td_message(2);return;}
@@ -242,8 +246,13 @@ static void td_menu_update(void){
         if(INPUT_UP_PRESSED)td.menu=(td.menu+8)%9;
         if(INPUT_A_PRESSED){td_pause_choose();return;}
     }else if(td.mode==TD_BOARD){
-        if(INPUT_RIGHT_PRESSED){td.menu=(td.menu+1)%TD_QUESTS;td_get_job(td.menu,&td_offer);}
-        if(INPUT_LEFT_PRESSED){td.menu=(td.menu+TD_QUESTS-1)%TD_QUESTS;td_get_job(td.menu,&td_offer);}
+        if(INPUT_RIGHT_PRESSED){td.menu=(td.menu+1)%TD_QUESTS;td_get_job(td.menu,&td_offer);td_board_route=0;}
+        if(INPUT_LEFT_PRESSED){td.menu=(td.menu+TD_QUESTS-1)%TD_QUESTS;td_get_job(td.menu,&td_offer);td_board_route=0;}
+        if(td_offer.count){
+            if(td_board_route>=td_offer.count)td_board_route=0;
+            if(INPUT_UP_PRESSED)td_board_route=td_board_route?td_board_route-1:td_offer.count-1;
+            else if(INPUT_DOWN_PRESSED)td_board_route=td_board_route+1<td_offer.count?td_board_route+1:0;
+        }
         if(INPUT_A_PRESSED){
             if(td.job!=TD_NONE){td_message(2);return;}
             if(td.done<td_offer.min_done){td_message(3);return;}

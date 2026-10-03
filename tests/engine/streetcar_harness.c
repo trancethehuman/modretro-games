@@ -9,6 +9,12 @@
 #include "td_district.h"
 #include "native_streetcar_fixture.h"
 
+/* These host-only wrappers expose actual private C, not a replacement lookup.
+ * No generated interpolation values are included in this oracle's inputs. */
+UWORD host_streetcar_progress(UBYTE route,UBYTE tick);
+unsigned host_streetcar_progress_value_bytes(void);
+unsigned host_streetcar_progress_route_count(void);
+
 static unsigned long checks,failures;
 static unsigned char occupied[HOST_DISTRICTS][976][1024];
 
@@ -117,6 +123,56 @@ static void test_clock_and_poses(void){
     expect(td_streetcar_pose(60,0,&pose),1,"west terminal arrival",0,0);
     expect(pose.stop,43,"west terminal doors",0,0);
     expect(td_transit_departure(43,44,60),4,"west terminal return wait",0,0);
+}
+static void test_exact_interpolation_resources(void){
+    /* Whole-pixel distances from the independently stitched corridor above.
+     * Seams contribute no length; the two terminal lane changes are16px.
+     * This wide product is deliberately different from both the old16-bit
+     * quotient decomposition and the new generated table implementation. */
+    static const unsigned pixels[16]={256,256,304,304,124,684,100,100,
+                                      684,124,304,304,256,256,16,16};
+    for(unsigned route=0;route<16;route++)for(unsigned tick=0;tick<=120;tick++){
+        unsigned expected=(unsigned)((uint64_t)pixels[route]*16*tick/120);
+        expect(host_streetcar_progress(route,tick),expected,
+               "actual private progress versus independent wide corridor interpolation",tick,route);
+    }
+    expect(host_streetcar_progress_value_bytes(),1452,"six actual UWORD table resources",0,0);
+    expect(host_streetcar_progress_route_count(),16,"actual same-bank route pointer count",0,0);
+    expect(host_streetcar_progress_value_bytes()+host_streetcar_progress_route_count()*2,1484,
+           "native table budget models guarded two-byte pointers rather than host pointer size",0,0);
+}
+
+static void test_section_endpoint_sweeps(void){
+    static const int offsets[]={-225,-224,-223,-97,-96,-95,0,95,96,97,223,224,225};
+    td_streetcar_pose_t last,arrival;td_streetcar_box_t obstacle;
+    for(unsigned section=0;section<16;section++){
+        unsigned clock=(section+1)*240;
+        oracle_pose(clock-1,&last);oracle_pose(clock%3840,&arrival);
+        unsigned hu=last.heading==0||last.heading==8?224:96;
+        unsigned hv=hu==224?96:224;
+        /* All authored final edges are longer than a last-tick advance. Thus
+         * the final interval is one straight closed-body union plus the new
+         * dwell body. Terminal turns need both differently oriented bodies;
+         * a single enclosing rectangle would incorrectly fill their corners. */
+        unsigned left=(last.u<arrival.u?last.u:arrival.u)-hu;
+        unsigned right=(last.u>arrival.u?last.u:arrival.u)+hu-1;
+        unsigned top=(last.v<arrival.v?last.v:arrival.v)-hv;
+        unsigned bottom=(last.v>arrival.v?last.v:arrival.v)+hv-1;
+        expect(last.district,arrival.district,"section endpoint remains in its actual local scene",clock,section);
+        for(unsigned x=0;x<sizeof(offsets)/sizeof(offsets[0]);x++)
+            for(unsigned y=0;y<sizeof(offsets)/sizeof(offsets[0]);y++){
+                obstacle.left=obstacle.right=(UWORD)((int)arrival.u+offsets[x]);
+                obstacle.top=obstacle.bottom=(UWORD)((int)arrival.v+offsets[y]);
+                obstacle.district=arrival.district;
+                unsigned dwell=oracle_inside(&arrival,&obstacle);
+                unsigned previous=obstacle.left>=left&&obstacle.left<=right&&
+                                  obstacle.top>=top&&obstacle.top<=bottom;
+                expect(td_streetcar_sweep(clock/60,clock%60,0,&obstacle),dwell,
+                       "exact Q4 section boundary has only the new static dwell body",clock,x*13+y);
+                expect(td_streetcar_sweep(clock/60,clock%60,1,&obstacle),dwell||previous,
+                       "last travel tick includes exact endpoint and new dwell without filling terminal corners",clock,x*13+y);
+            }
+    }
 }
 static void test_riding(void){
     unsigned origin,target,tick,left;td_streetcar_pose_t pose,expected,prior;
@@ -303,9 +359,50 @@ static void test_invalid_queries(void){
     box=point(0,500,500);box.top++;
     expect(td_streetcar_sweep(0,0,1,&box),255,"reversed vertical box",0,0);
 }
+static void test_lookup_public_validation_boundaries(void){
+    static const UWORD clocks[]={0,1,2,3,4,31,32,63,65535};
+    td_streetcar_pose_t pose,prior;td_streetcar_box_t box,box_prior;
+    box=point(0,500,536);box_prior=box;
+    for(unsigned i=0;i<sizeof(clocks)/sizeof(clocks[0]);i++)for(unsigned sub=60;sub<256;sub++){
+        memset(&pose,0xA5,sizeof(pose));prior=pose;
+        expect(td_streetcar_pose(clocks[i],sub,&pose),0,"every malformed subsecond is rejected before private table addressing",clocks[i],sub);
+        expect(td_streetcar_ride(43,50,1,clocks[i],sub,&pose),0,"booked retry validates every malformed subsecond before lookup",clocks[i],sub);
+        expect(memcmp(&pose,&prior,sizeof(pose)),0,"all malformed clock queries preserve every pose output byte",clocks[i],sub);
+        expect(td_streetcar_sweep(clocks[i],sub,1,&box),255,"sweep validates every malformed subsecond before interpolation",clocks[i],sub);
+        expect(memcmp(&box,&box_prior,sizeof(box)),0,"invalid sweep preserves its caller-owned obstacle",clocks[i],sub);
+    }
+    for(unsigned heading=0;heading<256;heading++){
+        pose=(td_streetcar_pose_t){500*16,500*16,0,heading,255,255,255,255};
+        memset(&box,0xA5,sizeof(box));box_prior=box;
+        unsigned valid=heading==0||heading==4||heading==8||heading==12;
+        expect(td_streetcar_bounds(&pose,&box),valid,"all encoded headings retain cardinal body validation",0,heading);
+        if(!valid)expect(memcmp(&box,&box_prior,sizeof(box)),0,"invalid heading leaves bounds output unchanged",0,heading);
+        else{
+            unsigned hu=heading==0||heading==8?224:96,hv=hu==224?96:224;
+            expect(box.right-box.left+1,hu*2,"valid body ignores non-spatial pose fields",0,heading);
+            expect(box.bottom-box.top+1,hv*2,"valid cardinal body keeps independent height",0,heading);
+        }
+    }
+    for(unsigned origin=43;origin<=50;origin++)for(unsigned target=43;target<=50;target++){
+        if(origin==target)continue;
+        unsigned duration=(origin>target?origin-target:target-origin)*4;
+        static const unsigned malformed_left[]={0,29,255};
+        for(unsigned i=0;i<sizeof(malformed_left)/sizeof(malformed_left[0]);i++){
+            memset(&pose,0xA5,sizeof(pose));prior=pose;
+            expect(td_streetcar_ride(origin,target,malformed_left[i],65535,59,&pose),0,
+                   "all directional bookings reject zero or oversized remaining time before interpolation",malformed_left[i],origin*64+target);
+            expect(memcmp(&pose,&prior,sizeof(pose)),0,"bad remaining-time query preserves booked output",malformed_left[i],origin*64+target);
+        }
+        memset(&pose,0xA5,sizeof(pose));prior=pose;
+        expect(td_streetcar_ride(origin,target,duration+1,65535,59,&pose),0,
+               "remaining time exceeding the actual booked distance is rejected even inside the global28-second bound",duration,origin*64+target);
+        expect(memcmp(&pose,&prior,sizeof(pose)),0,"distance-inconsistent booking leaves outputs unchanged",duration,origin*64+target);
+    }
+}
 int main(void){
-    test_clock_and_poses();test_riding();test_destination_and_real_ride_history();
+    test_exact_interpolation_resources();test_clock_and_poses();test_riding();test_destination_and_real_ride_history();
     test_full_corridor();test_temporal_sweeps();test_invalid_queries();
+    test_section_endpoint_sweeps();test_lookup_public_validation_boundaries();
     printf("Queen streetcar actual-C regressions: %lu checks, %lu failures\n",checks,failures);
     return failures?1:0;
 }

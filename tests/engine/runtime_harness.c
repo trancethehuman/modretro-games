@@ -139,7 +139,9 @@ UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank) {
     size_t index=address-start;
     return district_tile(district,index%native_widths[district],index/native_widths[district]);
 }
-void td_ui_init(void) { ui_draws++; }
+/* The actual UI initializer's transient-page reset is independently exercised
+ * by the production UI harness. Retain that contract in this hardware stub. */
+void td_ui_init(void) { td_board_route=0;ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
 void td_map_open(void) {
     test_map_opens++;test_map_active=1;
@@ -210,7 +212,7 @@ static void reset_case(void) {
     td_tick=td_notice_timer=td_red_cooldown=td_turn_tick=td_entry_timer=0;
     td_entry_target=td_walk_dir=td_input_edge=0;
     td_session_live=td_transition_pending=test_current_district=test_queue_fail=0;test_queued_district=TD_DISTRICT_NONE;
-    td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;
+    td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;td_board_route=0;
     td_route_district=TD_DISTRICT_NONE;memset(td_traffic_samples,0,sizeof(td_traffic_samples));
     td_corner_used=td_contact_episode=td_traffic_retreat_mask=td_vehicle_contact_mask=0;td_traffic_advance=8;td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
@@ -2725,6 +2727,252 @@ static void test_road_police_pursuit(void){
     expect(td.health==88&&td.msg==5,"vehicle contact penalties are checked before the next autonomous motion quantum");
 }
 
+/* Real input edges without advancing physical scenery between fixture client
+ * placements. Long frozen updates below separately verify clock behaviour. */
+static void dispatch_edge(UBYTE button) {
+    world_tick(0,0);world_tick(button,0);
+}
+
+static void dispatch_offer(UBYTE job) {
+    native_case();td.mode=TD_BOARD;td.menu=job;td_get_job(job,&td_offer);
+    /* A valid, fully unlocked campaign with precisely this job uncompleted. */
+    memset(td.complete,255,TD_QUESTS/8);td.complete[job>>3]&=~(1<<(job&7));td.done=TD_QUESTS-1;
+}
+
+static void test_dispatch_itinerary_inputs(void) {
+    unsigned ordered_stops=0,repeated_stops=0;
+    for(UBYTE job=0;job<TD_QUESTS;job++) {
+        dispatch_offer(job);td.seconds=65535;td.subsecond=59;td.left=217;
+        td_set_target();td_state_t paused=td;td_stop_t objective=td_target;
+        unsigned stores=sram_writes;const td_job_t *expected=&td_fixture_jobs[job];
+        expect(expected->count&&td_offer.count==expected->count,"every itinerary fixture uses the campaign JSON's actual ordered stop count");
+        for(UBYTE page=0;page<expected->count;page++) {
+            expect(td_board_route==page&&td_offer.route[td_board_route]==expected->route[page],
+                   "Down reaches each campaign stop in its original order, including repeated endpoints");
+            ordered_stops++;
+            for(UBYTE prior=0;prior<page;prior++)if(expected->route[prior]==expected->route[page]){repeated_stops++;break;}
+            world_tick(0,255);
+            expect(!memcmp(&td,&paused,58)&&!memcmp(&td_target,&objective,sizeof(objective))&&sram_writes==stores,
+                   "itinerary browsing freezes all saved fields, the delivery objective and SRAM across long updates");
+            dispatch_edge(J_DOWN);
+        }
+        expect(td_board_route==0,"Down wraps from the last ordered stop to pickup");
+        for(UBYTE remaining=expected->count;remaining;remaining--) {
+            dispatch_edge(J_UP);
+            expect(td_board_route==remaining-1&&td_offer.route[td_board_route]==expected->route[remaining-1],
+                   "Up visits every ordered stop backwards and wraps from pickup to the final stop");
+        }
+        expect(td_board_route==0,"a complete upward itinerary cycle returns to pickup");
+        dispatch_edge(J_DOWN);UBYTE held_page=td_board_route;
+        world_tick(J_DOWN,255);
+        expect(td_board_route==held_page&&!memcmp(&td,&paused,58),"holding Down does not repeat the pressed itinerary action or consume the paused deadline");
+        dispatch_edge(J_UP|J_DOWN);
+        expect(td_board_route==0,"simultaneous Up and Down retains the existing Up-first menu policy");
+        td_board_route=expected->count-1;dispatch_edge(J_RIGHT);
+        UBYTE next=(job+1)%TD_QUESTS;
+        expect(td.menu==next&&!td_board_route&&td_offer.reward==td_fixture_jobs[next].reward&&
+               !memcmp(td_offer.route,td_fixture_jobs[next].route,12),
+               "Right changes to the next actual offer, wraps at the campaign end and resets the preview to pickup");
+        td_board_route=td_offer.count-1;dispatch_edge(J_LEFT);
+        expect(td.menu==job&&!td_board_route&&td_offer.reward==expected->reward&&
+               !memcmp(td_offer.route,expected->route,12),
+               "Left returns to the previous actual offer, wraps at the campaign start and resets the preview to pickup");
+        expect(td.stage==paused.stage&&td.job==paused.job&&td.seconds==paused.seconds&&td.left==paused.left&&sram_writes==stores,
+               "contract selection and stop navigation cannot collect cargo, pay money or save progress");
+    }
+    expect(ordered_stops>TD_QUESTS*2&&repeated_stops>0,"navigation coverage includes longer itineraries and repeated return endpoints rather than only two-stop deliveries");
+
+    /* Recovery from a stale transient index happens before processing input. */
+    dispatch_offer(95);td_board_route=255;dispatch_edge(J_DOWN);
+    expect(td_board_route==1,"an invalid transient page is normalized before Down selects the second ordered stop");
+    dispatch_offer(95);td_board_route=255;dispatch_edge(J_UP);
+    expect(td_board_route==td_fixture_jobs[95].count-1,"an invalid transient page is normalized before Up wraps to the actual return");
+}
+
+static void test_dispatch_acceptance_and_reentry(void) {
+    for(UBYTE job=0;job<TD_QUESTS;job++) {
+        const td_job_t *expected=&td_fixture_jobs[job];
+        dispatch_offer(job);td.vehicle=expected->vehicle==TD_NONE?0:expected->vehicle;
+        td_board_route=expected->count-1;td.health=37;td.cash=913;
+        dispatch_edge(J_A);
+        expect(td.mode==TD_ROAM&&td.job==job&&!td.stage&&td.health==100&&td.left==expected->seconds&&td.cash==913&&
+               td_job.reward==expected->reward&&!memcmp(td_job.route,expected->route,12),
+               "A accepts the actual compatible offer from any preview page but begins the job at pickup without charging or paying");
+        td_state_t accepted=td;unsigned stores=sram_writes;
+        world_tick(J_A,0);
+        expect(!memcmp(&td,&accepted,58)&&sram_writes==stores,"a held acceptance edge cannot accept or save the contract twice");
+
+        dispatch_offer(job);td_board_route=expected->count-1;td_state_t before=td;stores=sram_writes;
+        dispatch_edge(J_B);before.mode=TD_ROAM;
+        expect(!memcmp(&td,&before,58)&&sram_writes==stores,"B leaves an unaccepted preview for roaming without committing, paying or changing its itinerary");
+        dispatch_edge(J_SELECT);
+        expect(td.mode==TD_BOARD&&!td_board_route&&td_offer.reward==td_fixture_jobs[td.menu].reward,
+               "Select reopens dispatch after B with a rebuilt offer and pickup preview");
+
+        if(expected->min_done) {
+            dispatch_offer(job);memset(td.complete,0,sizeof(td.complete));td.done=0;
+            td.vehicle=expected->vehicle==TD_NONE?0:expected->vehicle;td_board_route=expected->count-1;
+            stores=sram_writes;dispatch_edge(J_A);
+            expect(td.mode==TD_BOARD&&td.job==TD_NONE&&td.msg==3&&td_board_route==expected->count-1&&
+                   td.cash==30&&!td.stage&&sram_writes==stores,
+                   "previewing the destination cannot bypass the actual unique-completion lock");
+        }
+        if(expected->vehicle!=TD_NONE)for(UBYTE foot=0;foot<2;foot++) {
+            dispatch_offer(job);td.vehicle=foot?expected->vehicle:(expected->vehicle+1)&3;td.onfoot=foot;
+            td_board_route=expected->count-1;stores=sram_writes;dispatch_edge(J_A);
+            expect(td.mode==TD_BOARD&&td.job==TD_NONE&&td.msg==2&&td_board_route==expected->count-1&&
+                   td.cash==30&&!td.stage&&sram_writes==stores,
+                   "a wrong vehicle or walking courier cannot accept a vehicle-required job from its final preview page");
+        }
+        if(expected->vehicle==TD_NONE) {
+            dispatch_offer(job);td.onfoot=1;td_board_route=expected->count-1;dispatch_edge(J_A);
+            expect(td.mode==TD_ROAM&&td.job==job&&!td.stage&&td.onfoot&&td.left==expected->seconds,
+                   "a walking courier can still accept every vehicle-independent package offer from any itinerary page");
+        }
+        dispatch_offer(job);td.vehicle=expected->vehicle==TD_NONE?0:expected->vehicle;
+        td.complete[job>>3]|=1<<(job&7);td.done=TD_QUESTS;dispatch_edge(J_A);
+        expect(td.job==job&&!td.stage&&td.done==TD_QUESTS&&td.complete[job>>3]&(1<<(job&7)),
+               "completed offers remain replayable through A without removing or awarding unique completion credit");
+    }
+
+    dispatch_offer(95);td.vehicle=0;dispatch_edge(J_A);td.stage=2;td.left=73;td.health=67;td_set_target();
+    td_state_t active=td;td_stop_t target=td_target;unsigned stores=sram_writes;
+    td_board_route=3;dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
+    expect(td.mode==TD_BOARD&&td.menu==95&&!td_board_route&&td_offer.reward==td_fixture_jobs[95].reward&&
+           !memcmp(td_offer.route,td_job.route,12),"opening dispatch from pause during work rebuilds the active job's complete itinerary at pickup");
+    dispatch_edge(J_UP);dispatch_edge(J_RIGHT);dispatch_edge(J_DOWN);dispatch_edge(J_A);
+    expect(td.mode==TD_BOARD&&td.msg==2&&td.job==95&&td.stage==active.stage&&td.left==active.left&&
+           td.health==active.health&&td.cash==active.cash&&sram_writes==stores&&
+           !memcmp(&td_target,&target,sizeof(target)),
+           "browsing another contract cannot replace the active job or move its current handoff when A is rejected");
+    dispatch_edge(J_B);
+    expect(td.mode==TD_ROAM&&td.job==95&&td.stage==2&&td.left==73,"B returns from an active-job preview to the unchanged carried job");
+    td_board_route=3;dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
+    expect(td.mode==TD_BOARD&&td.menu==95&&!td_board_route,"re-entering the active-job board always returns its preview to pickup");
+    dispatch_edge(J_START);
+    expect(td.mode==TD_ROAM&&td.job==95&&td.stage==2,"Start retains its board-back behaviour without cancelling the carried job");
+}
+
+static void test_dispatch_credit_cache_and_order(void) {
+    for(UBYTE job=0;job<TD_QUESTS;job++) {
+        const td_job_t *expected=&td_fixture_jobs[job];
+        dispatch_offer(job);td.vehicle=expected->vehicle==TD_NONE?0:expected->vehicle;
+        td_board_route=expected->count-1;dispatch_edge(J_A);
+        UWORD cash_before=td.cash;unsigned gross=(unsigned)expected->reward*67/100+99/5;
+        for(UBYTE page=0;page<expected->count;page++) {
+            td_stop_t client;td_get_stop(expected->route[page],&client);
+            td.district=test_current_district=client.district;td.onfoot=expected->vehicle==TD_NONE;
+            td.u=client.u*16;td.v=client.v*16;td.speed=0;td.left=99;td.health=67;td_set_target();
+            if(page+1<expected->count) {
+                /* The preview index deliberately remains on the last stop. */
+                UWORD cached=td_offer.reward;dispatch_edge(J_SELECT);
+                expect(td.job==job&&td.stage==page+1&&td.mode==TD_ROAM&&td.cash==cash_before&&td_offer.reward==cached,
+                       "Select at each actual ordered nonfinal stop advances one delivery stage without replacing the payout cache or paying early");
+            }else {
+                dispatch_edge(J_SELECT);
+                expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.stage==expected->count&&td.cash==cash_before+gross&&
+                       td_offer.reward==cash_before&&td.done==TD_QUESTS&&td.complete[job>>3]&(1<<(job&7)),
+                       "only the actual final ordered handoff completes once and caches the true pre-payment cash independently of the preview page");
+            }
+        }
+        unsigned stores=sram_writes;td_state_t result=td;world_tick(J_SELECT,240);
+        expect(!memcmp(&td,&result,58)&&td_offer.reward==cash_before&&sram_writes==stores,
+               "holding Select on a delivered result neither repeats payment nor overwrites its balance cache");
+        td_board_route=255;dispatch_edge(J_A);
+        expect(td.mode==TD_BOARD&&!td_board_route&&td_offer.reward==td_fixture_jobs[td.menu].reward&&
+               td.cash==cash_before+gross&&td.done==TD_QUESTS,
+               "A leaves the result with a fresh real offer instead of accepting the cached pre-payment balance as a reward");
+    }
+
+    const UWORD balances[]={30,59900,59999,60000,65535};
+    const UBYTE conditions[]={1,67,100};
+    for(unsigned b=0;b<sizeof(balances)/sizeof(balances[0]);b++)for(unsigned h=0;h<sizeof(conditions);h++) {
+        dispatch_offer(0);dispatch_edge(J_A);td.stage=1;td.left=99;td.health=conditions[h];td.cash=balances[b];
+        td_set_target();td.u=td_target.u*16;td.v=td_target.v*16;td.speed=0;
+        unsigned gross=(unsigned)td_fixture_jobs[0].reward*conditions[h]/100+99/5;
+        unsigned wide=balances[b]+gross,credited=wide>60000?60000:wide;
+        dispatch_edge(J_SELECT);
+        expect(td.mode==TD_RESULT&&td.cash==credited&&td_offer.reward==balances[b],
+               "actual final interaction retains the full pre-payment balance for normal, partial, zero-cap and above-cap legacy credits");
+        td_state_t result=td;result.mode=TD_ROAM;td_board_route=11;td_offer.reward=balances[b];
+        memset(&td,0,sizeof(td));
+        expect(td_restore()&&!memcmp(&td,&result,58),"capped payment and its unique completion restore through the unchanged real58-byte save record");
+        unsigned inits=ui_draws;td_session_live=0;load_authored_scene_fixture();toronto_init();
+        expect(td.mode==TD_HELP&&td_resume_mode==TD_ROAM&&!td_board_route&&ui_draws>inits&&td.cash==credited&&td.job==TD_NONE,
+               "a genuine cold initialization invokes UI reset and restores a delivered result as roaming behind help without another credit");
+        dispatch_edge(J_A);dispatch_edge(J_SELECT);
+        expect(td.mode==TD_BOARD&&!td_board_route&&td_offer.reward==td_fixture_jobs[td.menu].reward&&td.cash==credited,
+               "dispatch after result reset rebuilds its reward and pickup page rather than showing the discarded balance cache");
+    }
+
+    /* A closing return shares pickup coordinates, but is still a later stage. */
+    dispatch_offer(95);td.vehicle=0;dispatch_edge(J_A);td.left=99;td.health=67;
+    td_stop_t yard;td_get_stop(54,&yard);td.district=test_current_district=yard.district;td.u=yard.u*16;td.v=yard.v*16;td_set_target();
+    dispatch_edge(J_SELECT);
+    expect(td.job==95&&td.stage==1&&td.cash==30&&td_offer.reward==td_fixture_jobs[95].reward,
+           "Select at the return yard initially performs pickup rather than prematurely awarding the displayed closing return");
+    dispatch_edge(J_SELECT);
+    expect(td.job==95&&td.stage==1&&td.cash==30&&td.msg==6,"return-yard repeated interaction cannot skip the intermediate studio and works handoffs");
+    td.mode=TD_PAUSE;td_resume_mode=TD_ROAM;td.menu=7;td_board_route=3;dispatch_edge(J_A);
+    expect(td.mode==TD_ROAM&&td.job==TD_NONE&&td.cash==30&&td.done==TD_QUESTS-1,
+           "cancelling a partially collected ordered return gives no payout or unique completion");
+
+    for(UBYTE stage=0;stage<2;stage++) {
+        dispatch_offer(0);dispatch_edge(J_A);td.stage=stage;td.left=1;td.health=67;td.cash=59999;
+        td.subsecond=59;td_set_target();td_offer.reward=43210;world_tick(0,1);
+        expect(td.mode==TD_RESULT&&td.job==TD_NONE&&!td.health&&!td.left&&td.cash==59999&&td_offer.reward==59999&&td.done==TD_QUESTS-1,
+               "the real deadline failure before or after pickup caches current cash but pays nothing and leaves unique completion unset");
+        td_board_route=11;dispatch_edge(J_A);
+        expect(td.mode==TD_BOARD&&!td_board_route&&td_offer.reward==td_fixture_jobs[td.menu].reward&&td.cash==59999,
+               "retry dispatch after failure clears a stale balance cache and itinerary page without paying the failed job");
+    }
+
+    /* Paid expiry retires its parcel before arrival and intentionally bypasses
+       td_finish. Its stale board buffer must stay harmless and be rebuilt. */
+    dispatch_offer(0);dispatch_edge(J_A);td.onfoot=1;td.mode=TD_TRANSIT;
+    td.transit_origin=0;td.transit_target=17;td_get_stop(17,&td_cursor);td.seconds=18;
+    td.left=1;td_offer.reward=43210;dispatch_edge(J_A);
+    expect(td.mode==TD_RIDE&&td.cash==27&&td.job==0,"result-cache fixture pays the actual authored subway fare before its parcel expires");
+    world_tick(0,60);
+    expect(td.mode==TD_RIDE&&td.job==TD_NONE&&!td.health&&td.cash==27,
+           "expiry on a paid trip retires the parcel without cancelling or recharging the accepted ride");
+    for(unsigned retry=0;retry<16&&td.mode==TD_RIDE;retry++)world_tick(0,60);
+    expect(td.mode==TD_RESULT&&td.job==TD_NONE&&!td.health&&td.cash==27&&td.done==TD_QUESTS-1&&td_offer.reward==43210,
+           "actual paid failed arrival pays nothing even though the retired parcel never overwrote the stale offer buffer");
+    td_board_route=11;dispatch_edge(J_A);
+    expect(td.mode==TD_BOARD&&!td_board_route&&td_offer.reward==td_fixture_jobs[td.menu].reward&&td.cash==27,
+           "A after paid failure replaces the stale offer buffer and preview page without charging another fare");
+
+    dispatch_offer(0);dispatch_edge(J_A);td.stage=1;td.left=99;td.health=67;td_set_target();
+    td.u=td_target.u*16;td.v=td_target.v*16;dispatch_edge(J_SELECT);UWORD once=td.cash;
+    dispatch_edge(J_A);td.menu=0;td_get_job(0,&td_offer);dispatch_edge(J_A);
+    for(UBYTE stage=0;stage<2;stage++) {
+        td_stop_t stop;td_get_stop(td_fixture_jobs[0].route[stage],&stop);td.u=stop.u*16;td.v=stop.v*16;
+        td.left=99;td.health=67;td_set_target();dispatch_edge(J_SELECT);
+    }
+    expect(td.mode==TD_RESULT&&td.cash==once+(unsigned)td_fixture_jobs[0].reward*67/100+99/5&&td_offer.reward==once&&td.done==TD_QUESTS,
+           "a full actual replay earns again and caches its new previous balance while preserving the first unique completion");
+}
+
+static void test_dispatch_transient_save_contract(void) {
+    dispatch_offer(95);td.vehicle=0;dispatch_edge(J_A);td.stage=2;td.left=73;td.health=67;td_set_target();
+    td.mode=TD_BOARD;td.menu=95;td_board_route=3;td_offer.reward=65535;td_save();
+    UBYTE payload[58];memcpy(payload,(const void *)(td_save_address(td_save_slot)+8),sizeof(payload));
+    td_board_route=1;td_offer.reward=1;td_save();
+    expect(td_save_address(td_save_slot)[2]==8&&td_save_address(td_save_slot)[3]==58&&
+           !memcmp(payload,(const void *)(td_save_address(td_save_slot)+8),sizeof(payload)),
+           "preview page and offer balance cache never enter or grow the version8/58-byte SRAM payload");
+    td_state_t saved=td;saved.mode=TD_ROAM;td_board_route=11;td_offer.reward=43210;memset(&td,0,sizeof(td));
+    expect(td_restore()&&!memcmp(&td,&saved,58)&&td_board_route==11&&td_offer.reward==43210,
+           "restoring the real payload retains all carried-job fields and does not pretend that transient UI values were serialized");
+    td_session_live=0;load_authored_scene_fixture();toronto_init();
+    expect(td.mode==TD_HELP&&td_resume_mode==TD_ROAM&&!td_board_route&&td.job==95&&td.stage==2&&td.left==73&&td.health==67,
+           "cold carried-job recovery calls the UI reset hook while preserving its actual ordered stage, remaining deadline and condition");
+    dispatch_edge(J_A);dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
+    expect(td.mode==TD_BOARD&&td.menu==95&&!td_board_route&&td_offer.reward==td_fixture_jobs[95].reward,
+           "recovered active-job dispatch starts at pickup with the authored reward rather than stale transient cache data");
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -2761,6 +3009,8 @@ int main(void) {
     test_aircraft_world_freezing();
     test_human_impacts_and_police();
     test_road_police_pursuit();
+    test_dispatch_itinerary_inputs();test_dispatch_acceptance_and_reentry();
+    test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

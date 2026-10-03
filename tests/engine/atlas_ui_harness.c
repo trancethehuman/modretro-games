@@ -9,12 +9,14 @@
 #include "td_atlas.h"
 #include "atlas_under_test.c"
 #include "ui_under_test.c"
+#include "ui_content_oracle.h"
 
 td_state_t td;
 td_job_t td_job,td_offer;
 td_stop_t td_target,td_cursor;
 UBYTE td_route_district;
 UBYTE td_resume_mode;
+UBYTE td_board_route;
 UWORD td_streetcar_focus_u,td_streetcar_focus_v;
 UBYTE td_streetcar_view_district,td_streetcar_ride_view;
 actor_t actors[21];
@@ -27,7 +29,6 @@ UBYTE camera_settings,VBK_REG,text_drawn;
 static UBYTE window_tiles[2][18][20],vram[2][256][16];
 static UBYTE window_x,window_y;
 static unsigned checks,failures,window_writes,tile_uploads,ground_uploads;
-static unsigned content_reads;
 static unsigned light_resets;
 void td_traffic_lights_reset(void){light_resets++;}
 static UBYTE initial_font[49][16];
@@ -63,12 +64,6 @@ void ui_set_pos(UBYTE x,UBYTE y) {window_x=x;window_y=y;}
 UBYTE td_audio_get_mode(void) {return TD_AUDIO_FULL;}
 UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
-void td_get_street(UWORD u,UWORD v,char *dest) {(void)u;(void)v;content_reads++;strcpy(dest,"TEST ROAD");}
-void td_get_district_name(UBYTE district,char *dest) {(void)district;content_reads++;strcpy(dest,"TEST DISTRICT");}
-void td_get_brief(UBYTE index,char *dest) {(void)index;content_reads++;memset(dest,' ',36);dest[36]=0;}
-void td_get_stop(UBYTE index,td_stop_t *dest) {
-    (void)index;content_reads++;memset(dest,0,sizeof(*dest));strcpy(dest->name,"TEST STOP");
-}
 
 typedef struct {
     td_state_t state;td_job_t job,offer;td_stop_t target,cursor;
@@ -100,7 +95,7 @@ static void reset_case(void) {
     td_route_district=0;td_resume_mode=TD_ROAM;actors_len=TD_ACTORS;
     for(unsigned i=0;i<21;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
-    window_x=window_y=0;window_writes=tile_uploads=ground_uploads=content_reads=0;
+    window_x=window_y=0;window_writes=tile_uploads=ground_uploads=0;
     td_ui_init();memcpy(initial_font,vram[1]+192,sizeof(initial_font));
 }
 
@@ -194,6 +189,170 @@ static void expect_window_text(unsigned row,const char *text,const char *name) {
     if(row>=18||length>20)return;
     memset(expected,' ',20);memcpy(expected,text,length);expected[20]=0;
     read_window_text(row,actual);expect(!strcmp(actual,expected),name);
+}
+
+static void expect_text_screen_safe(void) {
+    UBYTE safe=1;
+    for(unsigned row=0;row<18;row++)for(unsigned column=0;column<20;column++)
+        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+           window_tiles[1][row][column]!=15)safe=0;
+    expect(safe&&window_x==0&&window_y==0&&VBK_REG==0,
+           "dispatch/result screen uses bounded native twenty-column font rows and neutral VRAM bank");
+    expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),
+           "itinerary and payment draws preserve actual uploaded font patterns");
+}
+
+static void expect_board_preserves_game(const game_snapshot_t *before) {
+    expect(!memcmp(&td,&before->state,sizeof(td))&&!memcmp(&td_job,&before->job,sizeof(td_job))&&
+           !memcmp(&td_offer,&before->offer,sizeof(td_offer))&&!memcmp(&td_target,&before->target,sizeof(td_target))&&
+           td_route_district==before->route&&td_resume_mode==before->resume_mode&&actors_len==before->actor_count,
+           "itinerary draw only refreshes its cursor; saved game, active contract, offer, target and booking stay fixed");
+}
+
+static void expect_board_stop(unsigned job,unsigned page) {
+    const td_job_t *offer=&host_ui_jobs[job];const td_stop_t *stop=&host_ui_stops[offer->route[page]];
+    char expected[40];const char *role;
+    if(page==0)role="PICKUP";
+    else if(page+1<offer->count)role="HANDOFF";
+    else role=offer->route[page]==offer->route[0]?"RETURN":"DELIVER";
+    sprintf(expected,"%u/%u %s%s",page+1,offer->count,stop->reserved&TD_STOP_FOOT?"WALK ":"",role);
+    expect_window_text(11,expected,"authored itinerary page identifies its number, walking requirement and handoff role");
+    expect_window_text(12,stop->name,"itinerary renders the exact authored client name rather than a parking approach");
+    expect_window_text(13,host_ui_districts[stop->district],"itinerary renders the actual client district");
+    expect(td_cursor.u==stop->u&&td_cursor.v==stop->v&&td_cursor.district==stop->district&&
+           td_cursor.reserved==stop->reserved&&!strcmp(td_cursor.name,stop->name),
+           "itinerary native getter selects the true client including remote and foot-only records");
+    expect(td_board_route==page,"valid itinerary draw preserves the caller's selected page");
+}
+
+static void test_dispatch_board_itineraries(void) {
+    expect(sizeof(host_ui_jobs)/sizeof(host_ui_jobs[0])==TD_QUESTS&&
+           sizeof(host_ui_stops)/sizeof(host_ui_stops[0])==TD_STOPS,
+           "independent editable-content oracle covers every registered native job and stop");
+    UBYTE districts=0,saw_return=0,saw_delivery=0,saw_foot=0;
+    for(unsigned job=0;job<TD_QUESTS;job++) {
+        reset_case();td.mode=TD_BOARD;td.menu=job;td_get_job(job,&td_offer);
+        const td_job_t *offer=&host_ui_jobs[job];char expected[40],brief[19];
+        expect(td_offer.count==offer->count&&td_offer.reward==offer->reward&&td_offer.seconds==offer->seconds&&
+               td_offer.vehicle==offer->vehicle&&td_offer.kind==offer->kind&&td_offer.min_done==offer->min_done&&
+               !strcmp(td_offer.title,offer->title)&&!memcmp(td_offer.route,offer->route,12),
+               "board fixture uses unchanged compiled content matching independent authored JSON");
+        for(unsigned page=0;page<offer->count;page++) {
+            td_board_route=page;game_snapshot_t before=snapshot_game();td_ui_draw();
+            expect_board_stop(job,page);expect_board_preserves_game(&before);expect_text_screen_safe();
+            const td_stop_t *stop=&host_ui_stops[offer->route[page]];
+            districts|=1u<<stop->district;if(stop->reserved&TD_STOP_FOOT)saw_foot=1;
+            if(page+1==offer->count){if(offer->route[page]==offer->route[0])saw_return=1;else saw_delivery=1;}
+            if(!page) {
+                sprintf(expected,"CONTRACT %02u/%u",job+1,TD_QUESTS);expect_window_text(2,expected,"board displays its actual contract ID and expanded count");
+                expect_window_text(4,offer->title,"board retains the exact authored contract title");
+                memcpy(brief,host_ui_briefs[job],18);brief[18]=0;expect_window_text(5,brief,"first brief line remains visible above itinerary");
+                memcpy(brief,host_ui_briefs[job]+18,18);expect_window_text(6,brief,"second brief line remains visible above itinerary");
+                sprintf(expected,"%u STOPS  %u SEC",offer->count,offer->seconds);expect_window_text(8,expected,"board keeps the authored stop count and deadline");
+                sprintf(expected,"BASE $%u + TIME",offer->reward);expect_window_text(9,expected,"board advertises base reward with a separate time bonus");
+                const char *vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
+                expect_window_text(10,offer->vehicle==TD_NONE?"ANY VEHICLE / TTC":vehicles[offer->vehicle],
+                                   "itinerary retains its authored fixed-vehicle or transit-friendly eligibility");
+                expect_window_text(14,"L/R JOB U/D STOPS","itinerary exposes job and stop navigation on one native row");
+                expect_window_text(15,"A ACCEPT  B BACK","itinerary retains its accept/cancel actions");
+            }
+        }
+        /* The driver owns button dispatch. Present both wrap endpoints and
+         * stale invalid cursor recovery through the real renderer here. */
+        td_board_route=0;td_ui_draw();expect_board_stop(job,0);
+        td_board_route=offer->count-1;td_ui_draw();expect_board_stop(job,offer->count-1);
+        td_board_route=255;game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_board_stop(job,0);expect_board_preserves_game(&before);
+        unsigned writes=window_writes;td_ui_draw();
+        expect(window_writes==writes,"an unchanged board page reuses its actual row cache without redundant tile writes");
+        td.complete[job>>3]|=1u<<(job&7);td_ui_draw();expect_window_text(16,"COMPLETE / REPLAY","completed itinerary keeps its replay state");
+        td.complete[job>>3]&=~(1u<<(job&7));td.done=offer->min_done;td_ui_draw();
+        expect_window_text(16,"READY TO ACCEPT","unlock boundary keeps the current itinerary ready");
+        if(offer->min_done) {
+            td.done=offer->min_done-1;td_ui_draw();sprintf(expected,"NEEDS %u COMPLETED",offer->min_done);
+            expect_window_text(16,expected,"locked itinerary states its actual completion requirement");
+        }
+    }
+    expect(districts==31&&saw_return&&saw_delivery&&saw_foot,
+           "all-route rendering actually covers five districts, final deliveries, returns and walking clients");
+
+    reset_case();td_board_route=231;game_snapshot_t initialized=snapshot_game();td_ui_init();
+    expect(td_board_route==0,"actual native UI initialization clears a dirty transient itinerary index");
+    expect_game_unchanged(&initialized);
+
+    /* A shorter name/role must clear the prior long row even in the same
+     * mode. An empty offer must clear all three formerly occupied rows. */
+    reset_case();td.mode=TD_BOARD;td.menu=93;td_get_job(93,&td_offer);td_board_route=1;td_ui_draw();
+    expect_window_text(12,"RIVERBANK PARCEL","stale-row fixture begins with a real long Port client name");
+    td.menu=0;td_get_job(0,&td_offer);td_board_route=1;td_ui_draw();
+    expect_board_stop(0,1);expect_text_screen_safe();
+    td_offer.count=0;game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(11,"NO ROUTE","empty itinerary visibly rejects a stale route");
+    expect_window_text(12,"","empty itinerary clears the previous client row");
+    expect_window_text(13,"","empty itinerary clears the previous district row");
+    expect_game_unchanged(&before);
+}
+
+static void result_fixture(unsigned job,UBYTE condition,UWORD left,UWORD previous,UBYTE done) {
+    td.mode=TD_RESULT;td.job=TD_NONE;td.health=condition;td.left=left;td.done=done;
+    td_get_job(job,&td_job);td_offer.reward=previous;
+    /* Independent wide arithmetic follows authored payout rules, avoiding
+     * the runtime's split multiply and the renderer's cached-balance logic. */
+    unsigned condition_pay=(unsigned long)host_ui_jobs[job].reward*condition/100u;
+    unsigned bonus=left/5u,total=condition_pay+bonus;
+    unsigned after=condition&&left?previous+total:previous;
+    if(after>60000)after=60000;
+    td.cash=after;
+    game_snapshot_t before=snapshot_game();char expected[40];td_ui_draw();
+    expect_window_text(4,condition&&left?"CONTRACT DELIVERED":"CONTRACT FAILED","result distinguishes completed and failed contracts");
+    sprintf(expected,"CONDITION %u%%",condition);expect_window_text(5,expected,"result displays the actual final cargo condition");
+    if(condition&&left) {
+        sprintf(expected,"BASE $%u",host_ui_jobs[job].reward);expect_window_text(6,expected,"result preserves authored base separately from scaled payment");
+        sprintf(expected,"CONDITION PAY $%u",condition_pay);expect_window_text(7,expected,"condition payment matches independent wide multiply/floor");
+        sprintf(expected,"TIME %uS +$%u",left,bonus);expect_window_text(8,expected,"time bonus matches independent five-second floor");
+        sprintf(expected,"CREDIT $%u",after-previous);expect_window_text(9,expected,"credit shows the actual balance increase including cash cap");
+        expect_window_text(10,total>60000u-previous?"BALANCE CAP $60000":
+                           done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT",
+                           "result cap/master cue follows actual credit rather than nominal reward");
+    }else {
+        expect_window_text(6,"NO PAYMENT","failure explicitly receives no payment");
+        sprintf(expected,"TIME %uS",left);expect_window_text(7,expected,"failure retains actual remaining time");
+        expect_window_text(8,"","failure clears a previously visible bonus row");
+        expect_window_text(9,"CREDIT $0","failure clears a previously positive credit");
+        expect_window_text(10,"RETRY OR PICK A JOB","failure offers a useful continuation cue");
+    }
+    sprintf(expected,"$%u DONE %u/%u",after,done,TD_QUESTS);expect_window_text(11,expected,"result retains final cash and expanded unique-completion count");
+    expect_window_text(13,"A: DISPATCH BOARD","result retains dispatch continuation");
+    expect_window_text(14,"B: FREE ROAM","result retains free-roam continuation");
+    expect_window_text(16,"PROGRESS AUTO-SAVED","result retains its persistence cue");
+    expect_game_unchanged(&before);expect_text_screen_safe();
+    unsigned writes=window_writes;td_ui_draw();expect(window_writes==writes,"an unchanged result retains its actual row cache");
+}
+
+static void test_contract_payment_result(void) {
+    reset_case();
+    for(unsigned job=0;job<TD_QUESTS;job++) {
+        result_fixture(job,36,host_ui_jobs[job].seconds,71,4);
+        result_fixture(job,100,5,59999,95);
+        result_fixture(job,100,4,60000,96);
+    }
+    /* Real Fire Hall observed values plus condition and time floor edges.
+     * Keep success/failure in the same mode to expose stale cached rows. */
+    result_fixture(89,36,86,0,4);
+    result_fixture(0,1,1,0,0);result_fixture(0,99,4,17,95);
+    result_fixture(0,100,5,17,96);
+    result_fixture(0,100,1,60000-host_ui_jobs[0].reward,96);
+    result_fixture(0,0,99,123,2);result_fixture(0,100,0,123,2);
+    result_fixture(95,100,65535,59000,96);
+
+    /* A defensive negative delta must be explicit, and a failed result must
+     * still erase it rather than showing a made-up positive payout. */
+    td.health=100;td.left=5;td.cash=50;td_offer.reward=123;game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(9,"BALANCE -$73","result represents a negative cached balance delta explicitly");
+    expect_game_unchanged(&before);
+    td.health=0;td.left=0;before=snapshot_game();td_ui_draw();
+    expect_window_text(9,"CREDIT $0","failure replaces a defensive negative balance delta");
+    expect_window_text(8,"","failure removes stale successful time/bonus text");expect_game_unchanged(&before);
 }
 
 static void test_wait_contact_hud_and_map_restore(void) {
@@ -554,6 +713,7 @@ int main(void) {
     test_sparse_table_full_and_single_holes();
     test_wait_contact_hud_and_map_restore();
     test_appended_district_focus_and_holes();
+    test_dispatch_board_itineraries();test_contract_payment_result();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

@@ -163,7 +163,7 @@ void td_map_close(void) BANKED {
     td_traffic_lights_reset();
 }
 void td_ui_init(void) BANKED {
-    UBYTE i;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
+    UBYTE i;td_board_route=0;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
     /* The window always uses font bank 1 / UI palette 7; attributes need one upload. */
     VBK_REG=1;for(i=0;i<18;i++)set_win_tiles(0,i,20,1,td_tiles);
     VBK_REG=1;set_bkg_data(192,sizeof(td_font)/16,td_font);VBK_REG=0;
@@ -212,10 +212,19 @@ void td_ui_draw(void) BANKED {
     if(td.mode==TD_BOARD){
         sprintf(td_line,"CONTRACT %02u/%u",td.menu+1,TD_QUESTS);td_row(2,td_line);td_row(4,td_offer.title);
         td_get_brief(td.menu,td_line);td_row(6,td_line+18);td_line[18]=0;td_row(5,td_line);td_row(7,td_kinds[td_offer.kind]);
-        sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"PAYS $%u",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
-        td_get_stop(td_offer.route[0],&td_cursor);td_row(11,td_cursor.name);
-        if(td.complete[td.menu>>3]&(1<<(td.menu&7)))td_row(12,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(12,td_line);}else td_row(12,"READY TO ACCEPT");
-        td_row(14,"LEFT RIGHT: BROWSE");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
+        sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"BASE $%u + TIME",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
+        if(td_offer.count){
+            if(td_board_route>=td_offer.count)td_board_route=0;
+            td_get_stop(td_offer.route[td_board_route],&td_cursor);
+            sprintf(td_line,"%u/%u %s%s",td_board_route+1,td_offer.count,
+                td_cursor.reserved&TD_STOP_FOOT?"WALK ":"",
+                !td_board_route?"PICKUP":td_board_route+1==td_offer.count?
+                (td_offer.route[0]==td_offer.route[td_board_route]?"RETURN":"DELIVER"):"HANDOFF");
+            td_row(11,td_line);td_row(12,td_cursor.name);
+            td_get_district_name(td_cursor.district,td_line);td_row(13,td_line);
+        }else{td_row(11,"NO ROUTE");td_row(12,"");td_row(13,"");}
+        if(td.complete[td.menu>>3]&(1<<(td.menu&7)))td_row(16,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}else td_row(16,"READY TO ACCEPT");
+        td_row(14,"L/R JOB U/D STOPS");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){
         service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);
@@ -226,6 +235,28 @@ void td_ui_draw(void) BANKED {
         td_row(15,service==4?"NORMAL QUEEN ROUTE":"UP: BUS/TRAIN AT");td_row(16,service==4?"GAME ROUTE ENDS HERE":"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
     }
     if(td.mode==TD_RESULT){
-        td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(7,td_line);td_row(10,td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");td_row(12,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
+        td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");
+        if(td.health && td.left){
+            /* Match the runtime's split multiply/floor; u and v are existing
+               stack locals, not a second stored reward or balance. */
+            u=td_job.reward/100*td.health+(td_job.reward%100)*td.health/100;
+            v=td.left/5;
+            sprintf(td_line,"CONDITION %u%%",td.health);td_row(5,td_line);
+            sprintf(td_line,"BASE $%u",td_job.reward);td_row(6,td_line);
+            sprintf(td_line,"CONDITION PAY $%u",u);td_row(7,td_line);
+            sprintf(td_line,"TIME %uS +$%u",td.left,v);td_row(8,td_line);
+            if(td.cash>=td_offer.reward)sprintf(td_line,"CREDIT $%u",td.cash-td_offer.reward);
+            else sprintf(td_line,"BALANCE -$%u",td_offer.reward-td.cash);
+            td_row(9,td_line);
+            td_row(10,td.cash==60000&&(td_offer.reward>td.cash||u+v>td.cash-td_offer.reward)?
+                "BALANCE CAP $60000":td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");
+        }else{
+            sprintf(td_line,"CONDITION %u%%",td.health);td_row(5,td_line);
+            td_row(6,"NO PAYMENT");
+            sprintf(td_line,"TIME %uS",td.left);td_row(7,td_line);
+            td_row(8,"");td_row(9,"CREDIT $0");td_row(10,"RETRY OR PICK A JOB");
+        }
+        sprintf(td_line,"$%u DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(11,td_line);
+        td_row(13,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
     }
 }

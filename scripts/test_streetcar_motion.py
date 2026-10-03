@@ -1,8 +1,11 @@
-"""Exercise unchanged Queen pose/sweep C against independent native-grid oracles.
+"""Exercise actual Queen pose/sweep C against independent native-grid oracles.
 
 Only GBDK integer types and banking annotations are adapted. Registered scene
 collision bytes are decoded without importing art/path generators. These tests
-do not establish ROM banking, rendered motion, OAM limits or hardware behavior.
+also expose the unchanged private interpolation helper in a host-only wrapper;
+the value oracle uses wide arithmetic and independently authored distances.
+They do not establish ROM banking, CPU savings, rendered motion, OAM limits or
+hardware behavior.
 """
 from pathlib import Path
 import json
@@ -10,6 +13,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -66,16 +70,54 @@ def native_fixture():
             ",".join(platform_rows) + "};\n")
 
 
+def progress_probe(source):
+    """Expose actual private code/data; never use generated values as an oracle.
+
+    Host pointers are wider than the native two-byte same-bank pointers. The
+    production SDCC pointer guard establishes that ABI at ROM build time; here
+    count actual declarations/elements and explicitly model native data bytes.
+    """
+    rows = re.findall(r"static\s+const\s+UWORD\s+(td_streetcar_progress_[0-9]+)\[([0-9]+)\]", source)
+    require(len(rows) == 6 and len({name for name, _ in rows}) == 6 and
+            all(int(count) == 121 for _, count in rows),
+            "Review the six constant121-tick interpolation resources before changing their native budget.")
+    require(re.search(r"static\s+const\s+UWORD\s*\*\s*const\s+td_streetcar_progress_routes\[16\]", source),
+            "Interpolation route pointers must remain ROM constants in the same compilation unit.")
+    require("td_streetcar_progress_near_pointer_fits" in source and
+            re.search(r"sizeof\(td_streetcar_progress_routes\[0\]\)\s*==\s*2", source),
+            "Native two-byte near-pointer ABI must retain its compile-time guard.")
+    stripped = re.sub(r"/\*.*?\*/|//[^\n]*", "", source, flags=re.S)
+    helper = re.search(r"static\s+UWORD\s+td_streetcar_progress\(UBYTE\s+route,UBYTE\s+tick\)\s*\{([^}]+)\}", stripped)
+    require(helper and "/" not in helper[1] and "%" not in helper[1] and
+            not re.search(r"\btd_streetcar_length\s*\(", stripped),
+            "Private interpolation must not retain runtime division or route-length folding.")
+    sizes = "+".join(f"sizeof({name})" for name, _ in rows)
+    print("Streetcar source resource gate: six const121-tick tables,16 same-bank pointers; "
+          "1484 modeled native ROM bytes, no interpolation division or runtime length fold.", flush=True)
+    return f"""
+/* Host-only private probes. Production source above is unchanged. */
+UWORD host_streetcar_progress(UBYTE route,UBYTE tick){{return td_streetcar_progress(route,tick);}}
+unsigned host_streetcar_progress_value_bytes(void){{return {sizes};}}
+unsigned host_streetcar_progress_route_count(void){{
+    return sizeof(td_streetcar_progress_routes)/sizeof(td_streetcar_progress_routes[0]);
+}}
+"""
+
+
 def main():
     compiler = shutil.which(os.environ.get("CC", "cc"))
     if not compiler:
         raise SystemExit("Host C compiler unavailable; streetcar regressions did not run.")
+    subprocess.run([sys.executable, "-B", str(GAME / "scripts/create_streetcar_progress.py"), "--check"], check=True)
+    production = (ENGINE / "src/td_streetcar.c").read_text()
+    probe = progress_probe(production)
     fixture = native_fixture()
     with tempfile.TemporaryDirectory(prefix="toronto-streetcar-tests-") as directory:
         work = Path(directory)
         for name in ("td_streetcar", "td_transit"):
             shutil.copyfile(ENGINE / f"src/{name}.c", work / f"{name}.c")
             shutil.copyfile(ENGINE / f"include/{name}.h", work / f"{name}.h")
+        (work / "td_streetcar_under_test.c").write_text(production + probe)
         shutil.copyfile(ENGINE / "include/td_district.h", work / "td_district.h")
         (work / "native_streetcar_fixture.h").write_text(fixture)
         (work / "gbdk").mkdir()
@@ -99,7 +141,7 @@ typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
         binary = work / "streetcar-regressions"
         subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
                         "-Wno-unknown-pragmas", "-fsanitize=address,undefined", "-I", str(work),
-                        str(work / "td_streetcar.c"), str(work / "td_transit.c"),
+                        str(work / "td_streetcar_under_test.c"), str(work / "td_transit.c"),
                         str(ROOT / "tests/engine/streetcar_harness.c"), "-o", str(binary)], check=True)
         raise SystemExit(subprocess.run([str(binary)], check=False).returncode)
 
