@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Four unmodified archived native screenshots from the four-new-contract e797 continuation, with inspected vehicle fields.",
+  "rom": {
+    "path": "project/build/toronto-dispatch-courier-clearance.gbc",
+    "sha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+    "sizeBytes": 524288
+  },
+  "source": {
+    "commit": "25b659785d94ff8eaa8eeeb402243005acfe146a",
+    "debugIdentity": {
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "aa8417d346d660ea1efb2a98cac2f706bc15037438a73e7dbfd1400f1e2129b7",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "noiSha256": "7ca4749489938523e81a847527841b2b3fcf9dd08bee8844713044c859ed0b92",
+    "unchangedFromClearanceAndSevenRecords": true
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "sessionId": "4ccf74dc66a6499d8dde8dfb5bd34ee2",
+    "status": "stopped",
+    "branchId": "branch-0002",
+    "frame": 41442,
+    "totalFrames": 20400,
+    "eventCount": 5664,
+    "eventDigest": "738eb954bf2c4aebfe53da358bf7d227e876f56976b70b8fdbf1f1fe7dd1cacf",
+    "outcome": "passed",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 180
+      },
+      {
+        "branchId": "branch-0002",
+        "frame": 41442,
+        "parentBranchId": "branch-0002",
+        "sourceSessionId": "da2f81eb7bdf4bfdbcd97eeb8eac314b",
+        "checkpointId": "checkpoint-7ec56dd436e044039e9f9ff0f2178bf5"
+      }
+    ],
+    "originalPath": "project/artifacts/playtests/session-88271e19-a66f-457b-9ea1-e786e1bf0284",
+    "closed": true,
+    "archiveId": "34679729-7e7c-4e0a-ae5d-abc4f4fbf8e0",
+    "archivePath": "project/artifacts/recording-archives/34679729-7e7c-4e0a-ae5d-abc4f4fbf8e0/recording",
+    "manifestSha256": "ba615de042d328d6ee7c945432cbc415d2e10e14e0cbd8f35ae6bd52866690e9",
+    "inventory": {
+      "digest": "b310d85bde8721293a5625ffaad2a0cbf8490934c94ab6bce05d926be0d92a4c",
+      "bytes": 9329328,
+      "entries": 3243
+    },
+    "retrievedManifestMatches": true,
+    "endCheckpointSavedOnly": true,
+    "endCheckpoint": {
+      "checkpointId": "checkpoint-f7b3acea29484bcab55ff67b0094fc14",
+      "frame": 41442,
+      "branchId": "branch-0002",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "stateSha256": "8e0824c466f59ca96f7c09964012c91b327c9dd2427593670580bad73701fb10",
+      "automaticAdvance": 0
+    },
+    "freshBootFrames": 180,
+    "ordinaryPostImportFrames": 20220
+  },
+  "fullIgnoredPrefix": {
+    "path": "project/build/campaign-e797-eleven-closed-prefix.json",
+    "bytes": 17274367,
+    "sha256": "8780e84f66909da5b0c155ca6c5bf1865923e0bf00a72e62725af21a99313200"
+  },
+  "images": [
+    {
+      "path": "docs/screenshots/campaign-eleven-motorcycle-courier.png",
+      "frame": 21590,
+      "branchId": "branch-0002",
+      "rawStepIndex": 33,
+      "stepLabel": "campaign_receipts_pickup_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 21590,
+        "width": 160,
+        "height": 144,
+        "sha256": "e04b9ff884997b448f16b2f8f8855d31a614a65049531d016dd5cfe3855cbc8f",
+        "rgbaSha256": "7bd76ebd18f29d8d90a263064b054f71b2227f1a571f25bc32e6b75ca0196353",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/34679729-7e7c-4e0a-ae5d-abc4f4fbf8e0/recording/frames/e04b9ff884997b448f16b2f8f8855d31a614a65049531d016dd5cfe3855cbc8f.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-88271e19-a66f-457b-9ea1-e786e1bf0284",
+        "sessionId": "4ccf74dc66a6499d8dde8dfb5bd34ee2",
+        "branchId": "branch-0002",
+        "fromActionIndex": 2050,
+        "toActionIndex": 2052,
+        "fromFrame": 21558,
+        "toFrame": 21590,
+        "fromPrefixPin": {
+          "eventCount": 137,
+          "eventDigest": "bb885e356398aa8902e1a25f4a9af9af2ff009793ea2632ad23cf0473bb62d30",
+          "byteLength": 672229,
+          "sha256": "56b2a30d42a8c0eb00c213392f6cb2a402e509150c4b5e4a836760efa1f83832"
+        },
+        "prefixPin": {
+          "eventCount": 141,
+          "eventDigest": "8ab364096037cdabc3f72e6567e641d7af975a17c76b9111ca5bc7cb5d433246",
+          "byteLength": 673721,
+          "sha256": "a39c2f807e541afe13046e52f4d8c687e994176c2903c445a2d3cf83d4069a09"
+        },
+        "emptyInterval": false
+      },
+      "decodedVehicleField": 2,
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-eleven-scooter-courier.png",
+      "frame": 25436,
+      "branchId": "branch-0002",
+      "rawStepIndex": 429,
+      "stepLabel": "campaign_shopfront_pickup_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 25436,
+        "width": 160,
+        "height": 144,
+        "sha256": "c2f5863a17fb1c5d2726dc761a786739577d65fbaab551c29a1f1c35ce97dfa8",
+        "rgbaSha256": "24c8b8daafed7ef0ce2b90c0e9493320f96cc6dc559f4b16c0609b9709fec2e9",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/34679729-7e7c-4e0a-ae5d-abc4f4fbf8e0/recording/frames/c2f5863a17fb1c5d2726dc761a786739577d65fbaab551c29a1f1c35ce97dfa8.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-88271e19-a66f-457b-9ea1-e786e1bf0284",
+        "sessionId": "4ccf74dc66a6499d8dde8dfb5bd34ee2",
+        "branchId": "branch-0002",
+        "fromActionIndex": 2614,
+        "toActionIndex": 2616,
+        "fromFrame": 25404,
+        "toFrame": 25436,
+        "fromPrefixPin": {
+          "eventCount": 1265,
+          "eventDigest": "e25ee28146411e5b35485ca60c904f49ec132ac465d67fe7c05fe955d4f404a8",
+          "byteLength": 1120856,
+          "sha256": "c866cbc656919e6bed6c5d7b680c715b65fafd8c754af7ec818640fce9ab1c66"
+        },
+        "prefixPin": {
+          "eventCount": 1269,
+          "eventDigest": "7e49498fe112a1e4b1ed429d1244b8ef1d671aa16888d0199f2f923481bf2580",
+          "byteLength": 1122352,
+          "sha256": "b097d7efc915efcd5f5379ef59fa731a7861b97f39d68b0fea9ba778e243a027"
+        },
+        "emptyInterval": false
+      },
+      "decodedVehicleField": 3,
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-eleven-gallery-result.png",
+      "frame": 36070,
+      "branchId": "branch-0002",
+      "rawStepIndex": 1536,
+      "stepLabel": "campaign_gallery_result_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 36070,
+        "width": 160,
+        "height": 144,
+        "sha256": "fade09780b9e847588fcb42dc648b132ae0228e5eb4a124cb58bd42fdfdbc79e",
+        "rgbaSha256": "0b876564668d3df41943bb7bc13971215b17739bb6dbf28ecf85d8696c784b3c",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/34679729-7e7c-4e0a-ae5d-abc4f4fbf8e0/recording/frames/fade09780b9e847588fcb42dc648b132ae0228e5eb4a124cb58bd42fdfdbc79e.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-88271e19-a66f-457b-9ea1-e786e1bf0284",
+        "sessionId": "4ccf74dc66a6499d8dde8dfb5bd34ee2",
+        "branchId": "branch-0002",
+        "fromActionIndex": 4133,
+        "toActionIndex": 4136,
+        "fromFrame": 36038,
+        "toFrame": 36070,
+        "fromPrefixPin": {
+          "eventCount": 4303,
+          "eventDigest": "bf2a29d6f481a5ebdf441143f609baf2dd3547f14dc2ef156ff82d5238c4c486",
+          "byteLength": 2339548,
+          "sha256": "37938bf41e50166e95962c0a9ec16440ac2781f8a43e24de1e30de0bd878db3e"
+        },
+        "prefixPin": {
+          "eventCount": 4309,
+          "eventDigest": "d01e7d456bb532885a781fc46033ce43ce9f98eee4e07471cc176cd1a9fbc83d",
+          "byteLength": 2341906,
+          "sha256": "989b8d46f4e5ede5a24bb6d2022faf2a21980bd3aa42762852cbe81a4813199a"
+        },
+        "emptyInterval": false
+      },
+      "decodedVehicleField": 0,
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-eleven-passenger-result.png",
+      "frame": 41434,
+      "branchId": "branch-0002",
+      "rawStepIndex": 2059,
+      "stepLabel": "campaign_passenger_result_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 41434,
+        "width": 160,
+        "height": 144,
+        "sha256": "325508f5a0f67ff361182be1156109e6c52db9634f30510f5fb13731f689b9fe",
+        "rgbaSha256": "f0d4a51a68f81ef960d569387519bc99b0a04c1d74a3a14c94a405ab91378f6d",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/34679729-7e7c-4e0a-ae5d-abc4f4fbf8e0/recording/frames/325508f5a0f67ff361182be1156109e6c52db9634f30510f5fb13731f689b9fe.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-88271e19-a66f-457b-9ea1-e786e1bf0284",
+        "sessionId": "4ccf74dc66a6499d8dde8dfb5bd34ee2",
+        "branchId": "branch-0002",
+        "fromActionIndex": 4809,
+        "toActionIndex": 4811,
+        "fromFrame": 41402,
+        "toFrame": 41434,
+        "fromPrefixPin": {
+          "eventCount": 5655,
+          "eventDigest": "2c9624c17fa02d05b38262b9a7f8d1c7879ee687e47837e803765856fd07baf8",
+          "byteLength": 2889201,
+          "sha256": "9ff0a67dd33f55769925c4a2fa377495aa729ae981b142f7e878f84ca3a3085c"
+        },
+        "prefixPin": {
+          "eventCount": 5659,
+          "eventDigest": "9685df9d60fec23948b0c5ef28670e7bb4e52a1a098ba5f96a0378ee1fbc212f",
+          "byteLength": 2890697,
+          "sha256": "c555d7e98c6dd6d5e8f43f5c71db70d6c26b63eb7d118c039b506d0709f2380a"
+        },
+        "emptyInterval": false
+      },
+      "decodedVehicleField": 0,
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    }
+  ],
+  "hardwareCapture": false,
+  "importedCompletions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    11
+  ],
+  "newCompletions": [
+    14,
+    8,
+    9,
+    5
+  ],
+  "fullCampaignOrHumanDurationClaim": false
+}
