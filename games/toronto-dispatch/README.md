@@ -34,9 +34,11 @@ Unmodified sampled Core frames on current `e797…`; [provenance](docs/screensho
 
 Current `e797…` passes official/header/compiled guards and full repository checks, with a 1,096-byte static reserve. Its [native records](docs/NATIVE_COURIER_CLEARANCE_SAMPLES.json) cover all twelve chapter starts and held-input rules, Market Start, held RESULT B, a visible walker waiting then resuming after reverse clearance, a genuine forward pedestrian impact and map simulation freeze. A separate record imports its genuine same-ROM checkpoint and verifies saved cash/progression/attention through the game's reset. Fresh plugin workers deliberately start with empty save RAM; physical persistence remains unverified.
 
+One genuine campaign now reaches [19 unique completions](docs/NATIVE_CAMPAIGN_NINETEEN_SAMPLES.json), cumulatively covering all eight quest kinds and all six loaded districts. Matching continuations sample required truck/car work, motorcycle/scooter deliveries, condition-scaled rewards, paid train/bus relays and Centre/Hanlan/Ward roundtrip posts. The west-end continuation retains a cargo-exhaustion failure and a successful retry that parks, walks two client visits, recovers the original car and returns to Union. These are scoped emulator tests; imported completions and controller corrections are disclosed.
+
 The retained `964f…` five-job chain, earlier matched transit/driving trials and older Queen/13-job Island records retain their own hashes in [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md). Their wider acceptance is not inherited by this ROM. The failed `c4fa…` speed-gated clearance candidate remains documented separately.
 
-All 96 played contracts/balance, eight remaining Island jobs, full Old Toronto, two measured enjoyable human hours, wider new-ROM transit/heat/district/pacing/stack, native older-save imports, browser recovery, human handling/audio and physical cartridge execution remain pending.
+The remaining 77 contracts, including six Island jobs, full Old Toronto, two measured enjoyable human hours, wider handling/balance/pacing/stack, native older-save imports, browser recovery, human handling/audio and physical cartridge execution remain pending.
 
 ## Develop
 
