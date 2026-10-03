@@ -2,7 +2,9 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The verified local loading candidate is `toronto-dispatch-queen-street-life.gbc`, **524,288 bytes**, SHA-256 `5ae4a83b3cb13dfbd838e4fdf9b49df79e8db1949af360e91e69a97fe148dda2`. It contains six compressed Toronto districts, 96 contracts, 59 service points, seven mainland parking anchors and save v9 / 58 bytes. Its official build/header, compiled resource/table guards, 1,097-byte static reserve and complete source suite pass. [Its scoped native replay](NATIVE_QUEEN_STREET_LIFE_SAMPLES.json) covers a full-condition first delivery, paid Queen 47→43→47 with correct pedestrian/view behavior, paid reset, original parked-car recovery, audio labels, two exact map-freeze pairs and resumed driving. This fixes the later native actor-flags/view corruption and remote-car filtering; it does not inherit the older Island campaign results.
+The verified local loading candidate is `toronto-dispatch-bus-lanes.gbc`, **524,288 bytes**, SHA-256 `d58bc338f6dceb2b208bf855112cc9b93f0d72fdf254ac0ccdbd17ec1ff357b8`. It contains six compressed Toronto districts, 96 contracts, 59 service points, seven mainland parking anchors and save v9 / 58 bytes. Official build/header, compiled resource/table/body guards, 1,097-byte static reserve and the complete source suite pass. [Its scoped native replay](NATIVE_CORE_BUS_LANES_SAMPLES.json) covers a full-condition first delivery, paid Line 1 fare once, exact map freezing, genuine paid reset/arrival, two bus passes past opposing police, all six loop legs and sampled northbound human clearance. The corrected visible bus uses fictional compressed lanes; the precise nine-pixel human wait/resume case remains host-only evidence.
+
+Retained `5ae4…` Queen travel and `7b2…` Island/13-job campaign records keep their original ROM identities in [TESTING.md](../TESTING.md). The intermediate `cf2f…` [bus lane failure](NATIVE_CORE_BUS_LANE_FAILURE.json) remains needs-review and is not the selected file. The current pass does not inherit those older campaign/Queen results.
 
 The earlier `8a96…` six-scene build has a [retained pause/audio-map failure](NATIVE_ISLAND_MAP_FAILURE.json) and must not be selected. The older five-scene `4343…` itinerary/payout, `ff5d…` preparation and `c625…` Port-job recordings keep their own scopes in [TESTING.md](../TESTING.md). The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the separate four-district `23b2…` release; no newer GitHub release or physical installation is claimed here.
 
@@ -26,22 +28,24 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-queen-street-life.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
+The local review bundle is `toronto-dispatch-bus-lanes.zip`. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the committed source and instructions. Published Prototype 6 remains the separate release linked above.
+
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-queen-street-life.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-bus-lanes.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-queen-street-life.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-queen-street-life.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-bus-lanes.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

@@ -1,0 +1,3996 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Portable evidence for a reproduced Core bus/police lane standstill. Passing opening-delivery and paid Line 1 checks remain separate from the needs-review traffic result. This historical candidate does not replace the current 5ae4 loading choice.",
+  "sourceCommit": "3c0e092318b383a0becaa1a0a26381576d453994",
+  "rom": {
+    "path": "project/build/toronto-dispatch-traffic-clearance.gbc",
+    "sha256": "cf2f9acb6533e4217acd57f610c62725cc1cb18834e1f8986e3d1ef5d19f6048",
+    "sizeBytes": 524288
+  },
+  "build": {
+    "success": true,
+    "builder": "gb-studio-cli",
+    "durationMs": 64540,
+    "noiPath": "project/build/toronto-dispatch-traffic-clearance.gbc.debug/symbols.noi",
+    "noiSha256": "5c6dd74b62db519c8f4150370bdfada11066952c8161fa04e69826608c48ba7e",
+    "sourceFingerprint": "42195996d86e6dc174c92b0d6f95d5edd13378a056a5977388ee60c79a46c284",
+    "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+    "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "engineAbi": {
+      "layout": "gbvm-farptr3-uword16-v1",
+      "sha256": "4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "header": {
+      "title": "TORONTODISPATCH",
+      "colorMode": "gbc-only",
+      "colorFlag": 192,
+      "cartridgeType": 30,
+      "cartridgeTypeName": "MBC5+RUMBLE+RAM+BATTERY",
+      "mapper": "MBC5",
+      "romSizeCode": 4,
+      "declaredRomSizeBytes": 524288,
+      "ramSizeCode": 3,
+      "declaredRamSizeBytes": 32768,
+      "nintendoLogoValid": true,
+      "headerChecksum": 233,
+      "computedHeaderChecksum": 233,
+      "headerChecksumValid": true,
+      "valid": true
+    }
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "inspection": {
+    "method": "89 completed ordinary held-button steps from a fresh boot, read-only memory/OAM observations and a genuine in-game A+B+Select+Start reset. No memory writes, injected progression, restored emulator checkpoint, browser or physical-device action.",
+    "debugMode": "source",
+    "gameplayAddress": "0xc1f6",
+    "stateBytes": 58,
+    "positionFormat": "Q4",
+    "registeredCityScenes": 6,
+    "labelMeaning": "Retained labels describe inspection intent. Raw bytes and authenticated addresses determine actual fields. Labels mentioning legs do not establish native leg IDs.",
+    "counts": {
+      "completedSteps": 89,
+      "inspectionAttempts": 39,
+      "validMemorySnapshots": 36,
+      "validOamSnapshots": 2,
+      "validSnapshots": 38,
+      "rejectedReadAttempts": 1,
+      "referencedPngSamples": 104,
+      "distinctReferencedPngFrames": 104,
+      "uniqueReferencedPngSha256": 81,
+      "archivePngFiles": 125
+    },
+    "pngCountMeaning": "104 step sample references point to 81 distinct PNG byte hashes. The closed local archive has 125 PNG files including additional archive sampling; the portable steps do not enumerate every archive image.",
+    "pngHashVerification": "Every referenced archived PNG exists and its file SHA-256 matches the retained sample hash. RGBA hashes are retained tool metadata, not recomputed in this audit.",
+    "rejectedAttempts": [
+      {
+        "label": "Actual visible fleet native actor positions",
+        "code": -32602,
+        "error": [
+          "MCP error -32602: Input validation error: Invalid arguments for tool emulator_inspect: Number must be less than or equal to 256 at length"
+        ],
+        "requestedLength": 336,
+        "maximumLength": 256,
+        "advancedFrames": 0,
+        "neighboringValidInspectionFrame": 4260,
+        "returnedMemory": false,
+        "note": "Read-only tool validation rejection. No frame or memory bytes were returned; this attempt is excluded from valid snapshots."
+      }
+    ],
+    "fleetLayout": {
+      "uAddress": "0xc2b6",
+      "vAddress": "0xc2c2",
+      "count": 6,
+      "coordinateBytes": 24,
+      "coordinateFormat": "U16 Q4 little endian",
+      "followingSamplesAddress": "0xc2ce",
+      "compiledLegArrayAddress": "0xc2f2",
+      "legArrayInspected": false,
+      "note": "C2B6 length 30 includes U/V plus six bytes of traffic_samples. C2B0 length 30 includes six opaque preceding bytes plus U/V. Neither reaches the compiled leg array."
+    },
+    "actorLayout": {
+      "baseAddress": "0xc5eb",
+      "strideBytes": 56,
+      "positionFormat": "U16 Q5 little endian",
+      "decodedBytesPerActor": 5
+    },
+    "peoplePositionMeaning": "Native phase/state fields are retained. Computed positions are explicitly source-derived, not separately read actor positions.",
+    "oamPeakMeaning": "Scanline peaks are the tool-reported full hardware summary. They cannot be reconstructed solely from the returned, visible-filtered object subset."
+  },
+  "outcome": "needs-review",
+  "scope": [
+    "Opening Market Start completes at frame 572 with condition 100, 116 seconds left, base 86 + time 23 = credit 109, cash 139 and one completion. The genuine result PNG and raw state agree.",
+    "Ordinary parking and walking reach Union. Scheduled Line 1 Union to Wellesley costs 3 once, cash 139 to 136; frame 2646 shows RIDE with three seconds left.",
+    "Paid MAP frames 2706 to 2946 freeze all 58 gameplay bytes for 240 frames. Explicit save, four-button reset and normal HELP dismissal preserve the paid ride, cash 136, one completion and the original Core car at 754.25/720. Subsecond changes 55 to 2 and the safe pose changes; reset does not preserve all 58 bytes identically.",
+    "Actual Wellesley arrival is frame 3766 at 640/176 without a second fare. Ordinary walking reaches the bus observation sidewalk at 840/147 by frame 4260.",
+    "Actual bus 696/176 and police 712/184 remain unchanged at frames 5580, 6180, 6340 and 6524. The 5580 to 6180 interval is 600 neutral frames; other fleet coordinates and pedestrian phases advance. Raw state gives world seconds 80 at 6180 and 86 at 6524.",
+    "The recording reviewer reports world seconds 70 to 86 across the standstill. Starting second 70 is reported in the stop reason, not raw-decoded from a C1F6 snapshot at frame 5580.",
+    "Route 19 remains selected in pedestrian slot 2 with no stun or lag; native phases 5, 125, 77, 13 and 5 at frames 4260, 4860, 5260, 5580 and 6180 show walking continuing.",
+    "Tool-reported OAM peaks are 4 at frame 4260 and 6 at 6340, with zero scanlines exceeding 10. At 6340 only one partially clipped bus object is returned, not a full bus pose OAM sample.",
+    "A lane correction requires a new matching ROM and ordinary-input replay; this record does not verify the later proposed correction."
+  ],
+  "completions": [
+    {
+      "job": 0,
+      "observedFrame": 572,
+      "health": 100,
+      "left": 116,
+      "base": 86,
+      "timeBonus": 23,
+      "credit": 109,
+      "cash": 139,
+      "done": 1,
+      "evidenceMethod": "Retained native result PNG plus actual 58-byte WRAM state",
+      "sampleSha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6"
+    }
+  ],
+  "checks": {
+    "paidMapFreeze": {
+      "beforeFrame": 2706,
+      "afterFrame": 2946,
+      "frames": 240,
+      "comparedBytes": 58,
+      "equal": true
+    },
+    "paidReset": {
+      "savedObservationFrame": 3086,
+      "helpFrame": 3506,
+      "actualArrivalFrame": 3766,
+      "farePaidOnce": 3,
+      "cashAfterPaymentAndArrival": 136,
+      "rideLeftSavedAndRestored": 3,
+      "subsecondBefore": 55,
+      "subsecondAfter": 2,
+      "safeBefore": [
+        754.25,
+        720.0
+      ],
+      "safeAfter": [
+        571.75,
+        732.5
+      ],
+      "all58BytesIdentical": false
+    },
+    "standstill": {
+      "sampleFrames": [
+        5580,
+        6180,
+        6340,
+        6524
+      ],
+      "busFleetIndex": 5,
+      "busCentre": [
+        696,
+        176
+      ],
+      "policeFleetIndex": 2,
+      "policeCentre": [
+        712,
+        184
+      ],
+      "neutralInterval": {
+        "startFrame": 5580,
+        "endFrame": 6180,
+        "frames": 600
+      },
+      "worldClockRawReads": [
+        {
+          "frame": 6180,
+          "seconds": 80,
+          "subsecond": 35
+        },
+        {
+          "frame": 6340,
+          "seconds": 83,
+          "subsecond": 14
+        },
+        {
+          "frame": 6524,
+          "seconds": 86,
+          "subsecond": 17
+        }
+      ],
+      "reviewerReportedStartingWorldSecond": 70,
+      "startingSecondBasis": "Recording stop reason; no raw gameplay state was retained at frame 5580.",
+      "otherFleetChangedDuringNeutralInterval": [
+        0,
+        1,
+        3,
+        4
+      ]
+    },
+    "sourceDerivedGuardGeometry": {
+      "basis": "Hypothetical source guard geometry using actual centres and source half extents. Future centres, direction and boxes are analysis, not native leg reads or observed accepted motion.",
+      "centreDelta": [
+        16,
+        8
+      ],
+      "busHalfExtent": 7,
+      "policeHalfExtent": 5,
+      "busCurrentBounds": [
+        689,
+        169,
+        703,
+        183
+      ],
+      "policeCurrentBounds": [
+        707,
+        179,
+        717,
+        189
+      ],
+      "currentBodiesOverlap": false,
+      "hypotheticalBusEastEightPixels": {
+        "centre": [
+          704,
+          176
+        ],
+        "bounds": [
+          697,
+          169,
+          711,
+          183
+        ],
+        "overlapsStationaryPolice": true
+      },
+      "hypotheticalPoliceWestEightPixels": {
+        "centre": [
+          704,
+          184
+        ],
+        "bounds": [
+          699,
+          179,
+          709,
+          189
+        ],
+        "overlapsStationaryBus": true
+      },
+      "nativeLegIdsObserved": false,
+      "laneCorrectionAcceptance": "pending"
+    }
+  },
+  "snapshots": [
+    {
+      "label": "New clearance ROM first delivery",
+      "view": "memory",
+      "frame": 572,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "6d2f002d0023002d8b000500740000000000000700ff02640131010000000000000000000000000000000000000000006d2f002d000000000000",
+      "state": {
+        "u": 758.8125,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "cash": 139,
+        "seconds": 5,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 7,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 49,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 758.8125,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual parked-car and foot endpoint",
+      "view": "memory",
+      "frame": 980,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "242f202e242f002d8b000b00740000000000010003ff0264010401000000000000000000000000000000000000000000242f002d000000000000",
+      "state": {
+        "u": 754.25,
+        "v": 738.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 139,
+        "seconds": 11,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 4,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Union sidewalk approach",
+      "view": "memory",
+      "frame": 1580,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "841d202e242f002d8b001500740000000000010003ff0264010501000000000000000000000000000000000000000000242f002d000000000000",
+      "state": {
+        "u": 472.25,
+        "v": 738.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 139,
+        "seconds": 21,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 5,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual Union transit choice",
+      "view": "memory",
+      "frame": 1830,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "f423c82d242f002d8b001900740000000000010003ff0264011001000000000000000000000000000000000000000600242f002d000000000000",
+      "state": {
+        "u": 575.25,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 139,
+        "seconds": 25,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 16,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 6,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual opened train timetable",
+      "view": "memory",
+      "frame": 1866,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d8b001900740000000000010400ff0264012501000000000000000000000000000000000000000600242f002d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 139,
+        "seconds": 25,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 4,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 37,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 6,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Wellesley WAIT before any fare",
+      "view": "memory",
+      "frame": 1986,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d8b001900740000000000010505ff0264013501000000000000000000000000000000001000000600242f002d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 139,
+        "seconds": 25,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 5,
+        "menu": 5,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 53,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 6,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Paid Wellesley ride",
+      "view": "memory",
+      "frame": 2646,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d88002400740000000000010605ff0264013701000000000000000000000000000000001003000000242f002d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 36,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 6,
+        "menu": 5,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 55,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 3,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Paid MAP freeze before",
+      "view": "memory",
+      "frame": 2706,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d88002400740000000000010301ff0264013701000000000000000000000000000000001003000000242f002d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 36,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 3,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 55,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 3,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Paid MAP freeze after",
+      "view": "memory",
+      "frame": 2946,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d88002400740000000000010301ff0264013701000000000000000000000000000000001003000000242f002d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 36,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 3,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 55,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 3,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Explicit saved paid ride before real reset",
+      "view": "memory",
+      "frame": 3086,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d88002400740000000000010106ff0264013701000000000000000000000000000000001003000200242f002d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 36,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 1,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 55,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 3,
+        "cooldown": 0,
+        "message": 2,
+        "reserved": 0,
+        "safeU": 754.25,
+        "safeV": 720.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual reset-restored paid train and progress",
+      "view": "memory",
+      "frame": 3506,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "bc23c82d242f002d88002400740000000000010800ff0264010201000000000000000000000000000000001003000000bc23c82d000000000000",
+      "state": {
+        "u": 571.75,
+        "v": 732.5,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 36,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 2,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 3,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 571.75,
+        "safeV": 732.5,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual resumed train arrival",
+      "view": "memory",
+      "frame": 3766,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "0028000b242f002d88002800740000000000010000ff02640111010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 640.0,
+        "v": 176.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 40,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 17,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual Wellesley east approach",
+      "view": "memory",
+      "frame": 4166,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "d833000b242f002d88002e00740000000000010000ff0264013a010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 829.5,
+        "v": 176.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 46,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 58,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual bus-corridor courier state",
+      "view": "memory",
+      "frame": 4260,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "80343009242f002d88003000740000000000010000ff02640123010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 840.0,
+        "v": 147.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 48,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 35,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual fleet Q4 caches and legs",
+      "view": "memory",
+      "frame": 4260,
+      "region": "wram",
+      "offset": 694,
+      "length": 30,
+      "address": "0xc2b6",
+      "hex": "8014801d8022802c8033801480118018800a8027801a000b000000000000",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 5248,
+          "vQ4": 4480,
+          "u": 328.0,
+          "v": 280.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 7552,
+          "vQ4": 6272,
+          "u": 472.0,
+          "v": 392.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 8832,
+          "vQ4": 2688,
+          "u": 552.0,
+          "v": 168.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 11392,
+          "vQ4": 10112,
+          "u": 712.0,
+          "v": 632.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 13184,
+          "vQ4": 6784,
+          "u": 824.0,
+          "v": 424.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 5248,
+          "vQ4": 2816,
+          "u": 328.0,
+          "v": 176.0
+        }
+      ],
+      "followingTrafficSamplesHex": "000000000000",
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    },
+    {
+      "label": "Actual selected human routes/phases",
+      "view": "memory",
+      "frame": 4260,
+      "region": "wram",
+      "offset": 5476,
+      "length": 61,
+      "address": "0xd564",
+      "hex": "14002a0000120060000013000500001a000800000c0002000021000b00009803940090029400100394001003cc0010035c00100304011412131a0c2105",
+      "sourceDerivedPeople": [
+        {
+          "slot": 0,
+          "route": 20,
+          "stun": 0,
+          "phase": 42,
+          "lag": 0,
+          "recover": 0,
+          "startU": 920,
+          "startV": 148,
+          "selectedRoute": 20,
+          "sourceComputedU": 962,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 1,
+          "route": 18,
+          "stun": 0,
+          "phase": 96,
+          "lag": 0,
+          "recover": 0,
+          "startU": 656,
+          "startV": 148,
+          "selectedRoute": 18,
+          "sourceComputedU": 687,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 2,
+          "route": 19,
+          "stun": 0,
+          "phase": 5,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 148,
+          "selectedRoute": 19,
+          "sourceComputedU": 789,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 3,
+          "route": 26,
+          "stun": 0,
+          "phase": 8,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 204,
+          "selectedRoute": 26,
+          "sourceComputedU": 792,
+          "sourceComputedV": 204
+        },
+        {
+          "slot": 4,
+          "route": 12,
+          "stun": 0,
+          "phase": 2,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 92,
+          "selectedRoute": 12,
+          "sourceComputedU": 786,
+          "sourceComputedV": 92
+        },
+        {
+          "slot": 5,
+          "route": 33,
+          "stun": 0,
+          "phase": 11,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 260,
+          "selectedRoute": 33,
+          "sourceComputedU": 795,
+          "sourceComputedV": 260
+        }
+      ],
+      "refresh": 5,
+      "decodeBasis": "Raw slot/phase fields use the retained source layout. Computed positions use the source triangle-walk formula; they are not independent actor-coordinate reads."
+    },
+    {
+      "label": "Actual fleet actors 2 to 4",
+      "view": "memory",
+      "frame": 4260,
+      "region": "wram",
+      "offset": 1627,
+      "length": 168,
+      "address": "0xc65b",
+      "hex": "7000290023004000bf014000bf0100000001ff200000001f001f001f001f001f001f001f001f082e7f000000000000008000800023c693c670003b0031004000bf014000bf0100080809ff200000001f001f001f001f001f001f001f001f082e7f00000000000000800080005bc6cbc67000450015004000bf014000bf015c000001ff200000001f001f001f001f001f001f001f001f10f87d000000000000008000800093c603c7",
+      "nativeActorCoordinates": [
+        {
+          "actorIndex": 2,
+          "fleetIndex": 0,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 10496,
+          "vQ5": 8960,
+          "u": 328.0,
+          "v": 280.0
+        },
+        {
+          "actorIndex": 3,
+          "fleetIndex": 1,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 15104,
+          "vQ5": 12544,
+          "u": 472.0,
+          "v": 392.0
+        },
+        {
+          "actorIndex": 4,
+          "fleetIndex": 2,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 17664,
+          "vQ5": 5376,
+          "u": 552.0,
+          "v": 168.0
+        }
+      ],
+      "decodeBasis": "First five bytes of each 56-byte stock actor: flags, U16 Q5 X, U16 Q5 Y. Remaining bytes are preserved without inferred native leg or heading fields."
+    },
+    {
+      "label": "Actual fleet actors 5 to 7",
+      "view": "memory",
+      "frame": 4260,
+      "region": "wram",
+      "offset": 1795,
+      "length": 168,
+      "address": "0xc703",
+      "hex": "700059004f004000bf014000bf015c040405ff200000001f001f001f001f001f001f001f001f10f87d0000000000000080008000cbc63bc77000670035004000bf014000bf015c09090aff200000001f001f001f001f001f001f001f001f10f87d000000000000008000800003c773c77000290016004000bf014000bf015c0c0c0dff200000001f001f001f001f001f001f001f001f10f87d00000000000000800080003bc7abc7",
+      "nativeActorCoordinates": [
+        {
+          "actorIndex": 5,
+          "fleetIndex": 3,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 22784,
+          "vQ5": 20224,
+          "u": 712.0,
+          "v": 632.0
+        },
+        {
+          "actorIndex": 6,
+          "fleetIndex": 4,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 26368,
+          "vQ5": 13568,
+          "u": 824.0,
+          "v": 424.0
+        },
+        {
+          "actorIndex": 7,
+          "fleetIndex": 5,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 10496,
+          "vQ5": 5632,
+          "u": 328.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "First five bytes of each 56-byte stock actor: flags, U16 Q5 X, U16 Q5 Y. Remaining bytes are preserved without inferred native leg or heading fields."
+    },
+    {
+      "label": "Actual OAM sidewalk sample",
+      "view": "oam",
+      "frame": 4260,
+      "totalObjects": 40,
+      "visibleObjects": 6,
+      "matchedObjects": 6,
+      "returnedObjects": 6,
+      "truncated": false,
+      "objects": [
+        {
+          "index": 0,
+          "x": 80,
+          "y": 24,
+          "tile": 42,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 1,
+          "x": 72,
+          "y": 24,
+          "tile": 44,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 6,
+          "x": 29,
+          "y": 25,
+          "tile": 108,
+          "attributes": 2,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 7,
+          "x": 21,
+          "y": 25,
+          "tile": 110,
+          "attributes": 2,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 8,
+          "x": 32,
+          "y": 81,
+          "tile": 108,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 9,
+          "x": 24,
+          "y": 81,
+          "tile": 110,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        }
+      ],
+      "scanlineSummary": {
+        "peakObjects": 4,
+        "hardwareLimit": 10,
+        "overLimitScanlines": 0,
+        "peakScanlines": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ]
+      }
+    },
+    {
+      "label": "Bus-corridor active clock",
+      "view": "memory",
+      "frame": 4860,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "80343009242f002d88003a00740000000000010000ff02640122010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 840.0,
+        "v": 147.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 58,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 34,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Bus-corridor actual fleet progression",
+      "view": "memory",
+      "frame": 4860,
+      "region": "wram",
+      "offset": 694,
+      "length": 30,
+      "address": "0xc2b6",
+      "hex": "8021802b8031802e8033802180118018800a80280026000b000000000000",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 8576,
+          "vQ4": 4480,
+          "u": 536.0,
+          "v": 280.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 11136,
+          "vQ4": 6272,
+          "u": 696.0,
+          "v": 392.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 12672,
+          "vQ4": 2688,
+          "u": 792.0,
+          "v": 168.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 11904,
+          "vQ4": 10368,
+          "u": 744.0,
+          "v": 648.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 13184,
+          "vQ4": 9728,
+          "u": 824.0,
+          "v": 608.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 8576,
+          "vQ4": 2816,
+          "u": 536.0,
+          "v": 176.0
+        }
+      ],
+      "followingTrafficSamplesHex": "000000000000",
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    },
+    {
+      "label": "Bus-corridor human route continuation",
+      "view": "memory",
+      "frame": 4860,
+      "region": "wram",
+      "offset": 5476,
+      "length": 61,
+      "address": "0xd564",
+      "hex": "1400220000120058000013007d00001a000000000c007a000005007700009803940090029400100394001003cc0010035c00100324001412131a0c0504",
+      "sourceDerivedPeople": [
+        {
+          "slot": 0,
+          "route": 20,
+          "stun": 0,
+          "phase": 34,
+          "lag": 0,
+          "recover": 0,
+          "startU": 920,
+          "startV": 148,
+          "selectedRoute": 20,
+          "sourceComputedU": 954,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 1,
+          "route": 18,
+          "stun": 0,
+          "phase": 88,
+          "lag": 0,
+          "recover": 0,
+          "startU": 656,
+          "startV": 148,
+          "selectedRoute": 18,
+          "sourceComputedU": 695,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 2,
+          "route": 19,
+          "stun": 0,
+          "phase": 125,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 148,
+          "selectedRoute": 19,
+          "sourceComputedU": 786,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 3,
+          "route": 26,
+          "stun": 0,
+          "phase": 0,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 204,
+          "selectedRoute": 26,
+          "sourceComputedU": 784,
+          "sourceComputedV": 204
+        },
+        {
+          "slot": 4,
+          "route": 12,
+          "stun": 0,
+          "phase": 122,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 92,
+          "selectedRoute": 12,
+          "sourceComputedU": 789,
+          "sourceComputedV": 92
+        },
+        {
+          "slot": 5,
+          "route": 5,
+          "stun": 0,
+          "phase": 119,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 36,
+          "selectedRoute": 5,
+          "sourceComputedU": 792,
+          "sourceComputedV": 36
+        }
+      ],
+      "refresh": 4,
+      "decodeBasis": "Raw slot/phase fields use the retained source layout. Computed positions use the source triangle-walk formula; they are not independent actor-coordinate reads."
+    },
+    {
+      "label": "Bus approach active clock",
+      "view": "memory",
+      "frame": 5260,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "80343009242f002d88004100740000000000010000ff0264010e010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 840.0,
+        "v": 147.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 65,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 14,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Bus approach fleet caches and legs",
+      "view": "memory",
+      "frame": 5260,
+      "region": "wram",
+      "offset": 694,
+      "length": 30,
+      "address": "0xc2b6",
+      "hex": "802a8034802f80258033802a80118018800b8028802b000b000000000000",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 10880,
+          "vQ4": 4480,
+          "u": 680.0,
+          "v": 280.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 13440,
+          "vQ4": 6272,
+          "u": 840.0,
+          "v": 392.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 12160,
+          "vQ4": 2944,
+          "u": 760.0,
+          "v": 184.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 9600,
+          "vQ4": 10368,
+          "u": 600.0,
+          "v": 648.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 13184,
+          "vQ4": 11136,
+          "u": 824.0,
+          "v": 696.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 10880,
+          "vQ4": 2816,
+          "u": 680.0,
+          "v": 176.0
+        }
+      ],
+      "followingTrafficSamplesHex": "000000000000",
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    },
+    {
+      "label": "Bus approach human phases",
+      "view": "memory",
+      "frame": 5260,
+      "region": "wram",
+      "offset": 5476,
+      "length": 61,
+      "address": "0xd564",
+      "hex": "1400720000120028000013004d00001a005000000c004a000005004700009803940090029400100394001003cc0010035c00100324001412131a0c0505",
+      "sourceDerivedPeople": [
+        {
+          "slot": 0,
+          "route": 20,
+          "stun": 0,
+          "phase": 114,
+          "lag": 0,
+          "recover": 0,
+          "startU": 920,
+          "startV": 148,
+          "selectedRoute": 20,
+          "sourceComputedU": 933,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 1,
+          "route": 18,
+          "stun": 0,
+          "phase": 40,
+          "lag": 0,
+          "recover": 0,
+          "startU": 656,
+          "startV": 148,
+          "selectedRoute": 18,
+          "sourceComputedU": 696,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 2,
+          "route": 19,
+          "stun": 0,
+          "phase": 77,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 148,
+          "selectedRoute": 19,
+          "sourceComputedU": 834,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 3,
+          "route": 26,
+          "stun": 0,
+          "phase": 80,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 204,
+          "selectedRoute": 26,
+          "sourceComputedU": 831,
+          "sourceComputedV": 204
+        },
+        {
+          "slot": 4,
+          "route": 12,
+          "stun": 0,
+          "phase": 74,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 92,
+          "selectedRoute": 12,
+          "sourceComputedU": 837,
+          "sourceComputedV": 92
+        },
+        {
+          "slot": 5,
+          "route": 5,
+          "stun": 0,
+          "phase": 71,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 36,
+          "selectedRoute": 5,
+          "sourceComputedU": 840,
+          "sourceComputedV": 36
+        }
+      ],
+      "refresh": 5,
+      "decodeBasis": "Raw slot/phase fields use the retained source layout. Computed positions use the source triangle-walk formula; they are not independent actor-coordinate reads."
+    },
+    {
+      "label": "Bus approach native bus actor",
+      "view": "memory",
+      "frame": 5260,
+      "region": "wram",
+      "offset": 1907,
+      "length": 5,
+      "address": "0xc773",
+      "hex": "7000550016",
+      "nativeActorCoordinates": [
+        {
+          "actorIndex": 7,
+          "fleetIndex": 5,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 21760,
+          "vQ5": 5632,
+          "u": 680.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "First five bytes of each 56-byte stock actor: flags, U16 Q5 X, U16 Q5 Y. Remaining bytes are preserved without inferred native leg or heading fields."
+    },
+    {
+      "label": "Bus nearing northbound turn",
+      "view": "memory",
+      "frame": 5580,
+      "region": "wram",
+      "offset": 694,
+      "length": 24,
+      "address": "0xc2b6",
+      "hex": "8031802e802c801f0033802b80118019800b80288031000b",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 12672,
+          "vQ4": 4480,
+          "u": 792.0,
+          "v": 280.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 11904,
+          "vQ4": 6528,
+          "u": 744.0,
+          "v": 408.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 11392,
+          "vQ4": 2944,
+          "u": 712.0,
+          "v": 184.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 8064,
+          "vQ4": 10368,
+          "u": 504.0,
+          "v": 648.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 13056,
+          "vQ4": 12672,
+          "u": 816.0,
+          "v": 792.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 11136,
+          "vQ4": 2816,
+          "u": 696.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    },
+    {
+      "label": "Bus turn human continuity",
+      "view": "memory",
+      "frame": 5580,
+      "region": "wram",
+      "offset": 5476,
+      "length": 61,
+      "address": "0xd564",
+      "hex": "1400320000120068000013000d00001a001000000c000a000005000700009803940090029400100394001003cc0010035c00100324001412131a0c0502",
+      "sourceDerivedPeople": [
+        {
+          "slot": 0,
+          "route": 20,
+          "stun": 0,
+          "phase": 50,
+          "lag": 0,
+          "recover": 0,
+          "startU": 920,
+          "startV": 148,
+          "selectedRoute": 20,
+          "sourceComputedU": 970,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 1,
+          "route": 18,
+          "stun": 0,
+          "phase": 104,
+          "lag": 0,
+          "recover": 0,
+          "startU": 656,
+          "startV": 148,
+          "selectedRoute": 18,
+          "sourceComputedU": 679,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 2,
+          "route": 19,
+          "stun": 0,
+          "phase": 13,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 148,
+          "selectedRoute": 19,
+          "sourceComputedU": 797,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 3,
+          "route": 26,
+          "stun": 0,
+          "phase": 16,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 204,
+          "selectedRoute": 26,
+          "sourceComputedU": 800,
+          "sourceComputedV": 204
+        },
+        {
+          "slot": 4,
+          "route": 12,
+          "stun": 0,
+          "phase": 10,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 92,
+          "selectedRoute": 12,
+          "sourceComputedU": 794,
+          "sourceComputedV": 92
+        },
+        {
+          "slot": 5,
+          "route": 5,
+          "stun": 0,
+          "phase": 7,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 36,
+          "selectedRoute": 5,
+          "sourceComputedU": 791,
+          "sourceComputedV": 36
+        }
+      ],
+      "refresh": 2,
+      "decodeBasis": "Raw slot/phase fields use the retained source layout. Computed positions use the source triangle-walk formula; they are not independent actor-coordinate reads."
+    },
+    {
+      "label": "Bus turn native bus actor",
+      "view": "memory",
+      "frame": 5580,
+      "region": "wram",
+      "offset": 1907,
+      "length": 5,
+      "address": "0xc773",
+      "hex": "7000570016",
+      "nativeActorCoordinates": [
+        {
+          "actorIndex": 7,
+          "fleetIndex": 5,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 22272,
+          "vQ5": 5632,
+          "u": 696.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "First five bytes of each 56-byte stock actor: flags, U16 Q5 X, U16 Q5 Y. Remaining bytes are preserved without inferred native leg or heading fields."
+    },
+    {
+      "label": "Standstill world advances",
+      "view": "memory",
+      "frame": 6180,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "80343009242f002d88005000740000000000010000ff02640123010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 840.0,
+        "v": 147.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 80,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 35,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual fleet legs and precise positions at standstill",
+      "view": "memory",
+      "frame": 6180,
+      "region": "wram",
+      "offset": 688,
+      "length": 30,
+      "address": "0xc2b0",
+      "hex": "000001ff00008029801f802c00108032802b80128019800b8028802b000b",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 10624,
+          "vQ4": 4736,
+          "u": 664.0,
+          "v": 296.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 8064,
+          "vQ4": 6528,
+          "u": 504.0,
+          "v": 408.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 11392,
+          "vQ4": 2944,
+          "u": 712.0,
+          "v": 184.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 4096,
+          "vQ4": 10368,
+          "u": 256.0,
+          "v": 648.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 12928,
+          "vQ4": 11136,
+          "u": 808.0,
+          "v": 696.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 11136,
+          "vQ4": 2816,
+          "u": 696.0,
+          "v": 176.0
+        }
+      ],
+      "precedingOpaqueHex": "000001ff0000",
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    },
+    {
+      "label": "Human phases continue during fleet standstill",
+      "view": "memory",
+      "frame": 6180,
+      "region": "wram",
+      "offset": 5476,
+      "length": 61,
+      "address": "0xd564",
+      "hex": "14002a0000120060000013000500001a000800000c0002000005007f00009803940090029400100394001003cc0010035c00100324001412131a0c0507",
+      "sourceDerivedPeople": [
+        {
+          "slot": 0,
+          "route": 20,
+          "stun": 0,
+          "phase": 42,
+          "lag": 0,
+          "recover": 0,
+          "startU": 920,
+          "startV": 148,
+          "selectedRoute": 20,
+          "sourceComputedU": 962,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 1,
+          "route": 18,
+          "stun": 0,
+          "phase": 96,
+          "lag": 0,
+          "recover": 0,
+          "startU": 656,
+          "startV": 148,
+          "selectedRoute": 18,
+          "sourceComputedU": 687,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 2,
+          "route": 19,
+          "stun": 0,
+          "phase": 5,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 148,
+          "selectedRoute": 19,
+          "sourceComputedU": 789,
+          "sourceComputedV": 148
+        },
+        {
+          "slot": 3,
+          "route": 26,
+          "stun": 0,
+          "phase": 8,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 204,
+          "selectedRoute": 26,
+          "sourceComputedU": 792,
+          "sourceComputedV": 204
+        },
+        {
+          "slot": 4,
+          "route": 12,
+          "stun": 0,
+          "phase": 2,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 92,
+          "selectedRoute": 12,
+          "sourceComputedU": 786,
+          "sourceComputedV": 92
+        },
+        {
+          "slot": 5,
+          "route": 5,
+          "stun": 0,
+          "phase": 127,
+          "lag": 0,
+          "recover": 0,
+          "startU": 784,
+          "startV": 36,
+          "selectedRoute": 5,
+          "sourceComputedU": 784,
+          "sourceComputedV": 36
+        }
+      ],
+      "refresh": 7,
+      "decodeBasis": "Raw slot/phase fields use the retained source layout. Computed positions use the source triangle-walk formula; they are not independent actor-coordinate reads."
+    },
+    {
+      "label": "Actual standstill viewing position",
+      "view": "memory",
+      "frame": 6340,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "882f3009242f002d88005300740000000000010000ff0264010e010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 760.5,
+        "v": 147.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 83,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 14,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual bus and police unchanged during approach",
+      "view": "memory",
+      "frame": 6340,
+      "region": "wram",
+      "offset": 694,
+      "length": 24,
+      "address": "0xc2b6",
+      "hex": "8029801f802c800e8032802b80128019800b80280027000b",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 10624,
+          "vQ4": 4736,
+          "u": 664.0,
+          "v": 296.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 8064,
+          "vQ4": 6528,
+          "u": 504.0,
+          "v": 408.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 11392,
+          "vQ4": 2944,
+          "u": 712.0,
+          "v": 184.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 3712,
+          "vQ4": 10368,
+          "u": 232.0,
+          "v": 648.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 12928,
+          "vQ4": 9984,
+          "u": 808.0,
+          "v": 624.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 11136,
+          "vQ4": 2816,
+          "u": 696.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    },
+    {
+      "label": "Actual standstill visible fleet actors",
+      "view": "memory",
+      "frame": 6340,
+      "region": "wram",
+      "offset": 1795,
+      "length": 168,
+      "address": "0xc703",
+      "hex": "70001d0051004000bf014000bf015c060607ff200000001f001f001f001f001f001f001f001f10f87d0000000000000080008000cbc63bc7700065004e004000bf014000bf015c0b0b0cff200000001f001f001f001f001f001f001f001f10f87d000000000000008000800003c773c73000570016004000bf014000bf015c0c0c0dff200000001f001f001f001f001f001f001f001f10f87d00000000000000800080003bc7abc7",
+      "nativeActorCoordinates": [
+        {
+          "actorIndex": 5,
+          "fleetIndex": 3,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 7424,
+          "vQ5": 20736,
+          "u": 232.0,
+          "v": 648.0
+        },
+        {
+          "actorIndex": 6,
+          "fleetIndex": 4,
+          "flags": 112,
+          "flagsHex": "0x70",
+          "uQ5": 25856,
+          "vQ5": 19968,
+          "u": 808.0,
+          "v": 624.0
+        },
+        {
+          "actorIndex": 7,
+          "fleetIndex": 5,
+          "flags": 48,
+          "flagsHex": "0x30",
+          "uQ5": 22272,
+          "vQ5": 5632,
+          "u": 696.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "First five bytes of each 56-byte stock actor: flags, U16 Q5 X, U16 Q5 Y. Remaining bytes are preserved without inferred native leg or heading fields."
+    },
+    {
+      "label": "Actual standstill visible OAM",
+      "view": "oam",
+      "frame": 6340,
+      "totalObjects": 40,
+      "visibleObjects": 9,
+      "matchedObjects": 9,
+      "returnedObjects": 9,
+      "truncated": false,
+      "objects": [
+        {
+          "index": 0,
+          "x": 64,
+          "y": 24,
+          "tile": 46,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 1,
+          "x": 56,
+          "y": 24,
+          "tile": 48,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 4,
+          "x": 15,
+          "y": 61,
+          "tile": 94,
+          "attributes": 35,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 5,
+          "x": 7,
+          "y": 61,
+          "tile": 92,
+          "attributes": 35,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 6,
+          "x": -1,
+          "y": 53,
+          "tile": 100,
+          "attributes": 14,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 12,
+          "x": 124,
+          "y": 25,
+          "tile": 112,
+          "attributes": 2,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 13,
+          "x": 116,
+          "y": 25,
+          "tile": 108,
+          "attributes": 10,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 14,
+          "x": 127,
+          "y": 81,
+          "tile": 112,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 15,
+          "x": 119,
+          "y": 81,
+          "tile": 108,
+          "attributes": 9,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        }
+      ],
+      "scanlineSummary": {
+        "peakObjects": 6,
+        "hardwareLimit": 10,
+        "overLimitScanlines": 0,
+        "peakScanlines": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ]
+      }
+    },
+    {
+      "label": "Actual fully visible standstill courier",
+      "view": "memory",
+      "frame": 6524,
+      "region": "wram",
+      "offset": 502,
+      "length": 58,
+      "address": "0xc1f6",
+      "hex": "882d3009242f002d88005600740000000000010000ff02640111010000000000000000000000000000000010000000000028000b000000000000",
+      "state": {
+        "u": 728.5,
+        "v": 147.0,
+        "parkU": 754.25,
+        "parkV": 720.0,
+        "cash": 136,
+        "seconds": 86,
+        "left": 116,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 17,
+        "completionBitmap": "01000000000000000000000000000000",
+        "origin": 0,
+        "target": 16,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "safeU": 640.0,
+        "safeV": 176.0,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "label": "Actual fully visible standstill fleet",
+      "view": "memory",
+      "frame": 6524,
+      "region": "wram",
+      "offset": 694,
+      "length": 24,
+      "address": "0xc2b6",
+      "hex": "8025801b802c800a8032802b80128019800b80288022000b",
+      "nativeFleetCoordinates": [
+        {
+          "fleetIndex": 0,
+          "sourceKind": "car",
+          "uQ4": 9600,
+          "vQ4": 4736,
+          "u": 600.0,
+          "v": 296.0
+        },
+        {
+          "fleetIndex": 1,
+          "sourceKind": "truck",
+          "uQ4": 7040,
+          "vQ4": 6528,
+          "u": 440.0,
+          "v": 408.0
+        },
+        {
+          "fleetIndex": 2,
+          "sourceKind": "police",
+          "uQ4": 11392,
+          "vQ4": 2944,
+          "u": 712.0,
+          "v": 184.0
+        },
+        {
+          "fleetIndex": 3,
+          "sourceKind": "fire engine",
+          "uQ4": 2688,
+          "vQ4": 10368,
+          "u": 168.0,
+          "v": 648.0
+        },
+        {
+          "fleetIndex": 4,
+          "sourceKind": "ambulance",
+          "uQ4": 12928,
+          "vQ4": 8832,
+          "u": 808.0,
+          "v": 552.0
+        },
+        {
+          "fleetIndex": 5,
+          "sourceKind": "bus",
+          "uQ4": 11136,
+          "vQ4": 2816,
+          "u": 696.0,
+          "v": 176.0
+        }
+      ],
+      "decodeBasis": "Only U/V coordinates at C2B6/C2C2 are authenticated. Adjacent bytes do not provide inspected leg IDs; compiled legs at C2F2 were not read. Kind names use the source fleet slot convention."
+    }
+  ],
+  "steps": [
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 180,
+      "frame": 200,
+      "advancedFrames": 20,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 200,
+          "sha256": "5929eae805d77046797ba1655520be816264d8c1f48f6119fd24ea377efcfb22",
+          "rgbaSha256": "8d22a6e263e34b1efc95ff879c53514c51e5b828e5e0b6c1f0051aeb44d5fc8d",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/5929eae805d77046797ba1655520be816264d8c1f48f6119fd24ea377efcfb22.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 200,
+      "frame": 208,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 208,
+          "sha256": "bbb962faa3f66aa766ad81617b5e3ff4e659d73a7e748632dfe93ad690c8362d",
+          "rgbaSha256": "76518eb9d55fff2f012e49fef5d321046ddb8d4e4f3c72ec3978c5dc3aff21b5",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/bbb962faa3f66aa766ad81617b5e3ff4e659d73a7e748632dfe93ad690c8362d.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 208,
+      "frame": 220,
+      "advancedFrames": 12,
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 220,
+          "sha256": "93a3fe1006284c1fe7fbf37b0289fc6079ce27c22cf730e2646d9df8d4121808",
+          "rgbaSha256": "5adc5dc57b3aad0212893d53cc55c1b437525e4ecdccd4446d23aaa21e95886c",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/93a3fe1006284c1fe7fbf37b0289fc6079ce27c22cf730e2646d9df8d4121808.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 220,
+      "frame": 228,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 228,
+          "sha256": "46dd9bbaf04bb84590c032c50335f1851805e484828361c5e0b7aa86c088912a",
+          "rgbaSha256": "7a11044f6b26ff892e12ce5c0af617fb9ea7df12ccb495275c9cacb4ead95560",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/46dd9bbaf04bb84590c032c50335f1851805e484828361c5e0b7aa86c088912a.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 228,
+      "frame": 240,
+      "advancedFrames": 12,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 240,
+          "sha256": "5dc3b5d5f198dc61f741f5d644c1262e75956e12cf7e8090fc4b6236e4e7d0e0",
+          "rgbaSha256": "dd1d1f4ff66234db85ca1c2dc96072d9ed4acea09121fe3aa5ac9b9ba70426dc",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/5dc3b5d5f198dc61f741f5d644c1262e75956e12cf7e8090fc4b6236e4e7d0e0.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 240,
+      "frame": 248,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 248,
+          "sha256": "0d5d6525d986f824083166f9df448e09042701e1c981cbce1604e1d59b11069b",
+          "rgbaSha256": "fd87cc4149f161ff5bbe87f74f7311c748b70a15b226716887b48a6f74724cf9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/0d5d6525d986f824083166f9df448e09042701e1c981cbce1604e1d59b11069b.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 248,
+      "frame": 260,
+      "advancedFrames": 12,
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 260,
+          "sha256": "8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2",
+          "rgbaSha256": "106bd94fb6cd693489635654a521d817f2f2162d4915647a58952fce03f900d5",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 260,
+      "frame": 272,
+      "advancedFrames": 12,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 272,
+          "sha256": "8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2",
+          "rgbaSha256": "106bd94fb6cd693489635654a521d817f2f2162d4915647a58952fce03f900d5",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/8a8afc55e236f6659b826fd1135b13590826b4854119c6a983088563762555f2.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 272,
+      "frame": 284,
+      "advancedFrames": 12,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 284,
+          "sha256": "fd4f6f817d96894b552cd5d69e4ce5309948bc85a8e5d57e54d5618fd9c9b16c",
+          "rgbaSha256": "1bd4ef4dbbfdf1e173320d8dcdea1e11453f7b28bc407d91e5a31d3a6dc218b3",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/fd4f6f817d96894b552cd5d69e4ce5309948bc85a8e5d57e54d5618fd9c9b16c.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 284,
+      "frame": 296,
+      "advancedFrames": 12,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 296,
+          "sha256": "a35c59de6933bb9e9ad0e9e420451f56f2cc0797612e0d455d82929bb8443bd2",
+          "rgbaSha256": "9cf7b81bfba6b75b8af6f0befd1cffe0637ae1e0c58734f86f7436f747bf63e0",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/a35c59de6933bb9e9ad0e9e420451f56f2cc0797612e0d455d82929bb8443bd2.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 296,
+      "frame": 308,
+      "advancedFrames": 12,
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 308,
+          "sha256": "acf8d32320b994b9c53d86fdcf6fcad8aa37a6d21c5efffe5d4f8a4e25f24f4d",
+          "rgbaSha256": "ce8f145c23e68148d6c46b5d023fa098a8a66ea087658242e5b9a69427bde651",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/acf8d32320b994b9c53d86fdcf6fcad8aa37a6d21c5efffe5d4f8a4e25f24f4d.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 308,
+      "frame": 320,
+      "advancedFrames": 12,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 320,
+          "sha256": "e0b870ba3b822fc39ef0937f0afae37f6f6e4dbe9c9348eb9c22caf19d3e6c93",
+          "rgbaSha256": "62ffc87f69e7898a1bf17ca57085ad98f1cfd258d3754f001bb53d6026d87be1",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/e0b870ba3b822fc39ef0937f0afae37f6f6e4dbe9c9348eb9c22caf19d3e6c93.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 320,
+      "frame": 440,
+      "advancedFrames": 120,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 440,
+          "sha256": "cffbf37f75831ce5b46542612d22001cd76f8b0e1dd86b0c0f4a952b4826bb40",
+          "rgbaSha256": "439c2209331fad8f7b49555c0957d3f6a4a125092020982a95daa95c7182295b",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/cffbf37f75831ce5b46542612d22001cd76f8b0e1dd86b0c0f4a952b4826bb40.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 440,
+      "frame": 488,
+      "advancedFrames": 48,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 488,
+          "sha256": "3e2280c71946456c7b49160dbd25a7dcdf193f0393f69676efe595c6cb83a123",
+          "rgbaSha256": "948b0228c026b14a8796ff2fafbd0572399046a48c5ae46776e4b9c59052a01d",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/3e2280c71946456c7b49160dbd25a7dcdf193f0393f69676efe595c6cb83a123.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 488,
+      "frame": 536,
+      "advancedFrames": 48,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 536,
+          "sha256": "148846fd09d1615d9cb9c10aaa4494edfef8e83046f99a8e4fbb03425e8ffc9b",
+          "rgbaSha256": "c2102df46f30163efb659c56747cb9d8a340f2e80305afc2ead2114730a828db",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/148846fd09d1615d9cb9c10aaa4494edfef8e83046f99a8e4fbb03425e8ffc9b.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 536,
+      "frame": 548,
+      "advancedFrames": 12,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 548,
+          "sha256": "9e9e4d6ae3f2b6d3eb248f526dae6680a4a70aaa7f66ac742595b07e3a2fc09e",
+          "rgbaSha256": "73a407c84112da298da5da743dabf873d9bf82ad58aeeb1ed1e890363c1699e9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9e9e4d6ae3f2b6d3eb248f526dae6680a4a70aaa7f66ac742595b07e3a2fc09e.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 548,
+      "frame": 560,
+      "advancedFrames": 12,
+      "buttons": [
+        "select"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 560,
+          "sha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+          "rgbaSha256": "9fa1fcb188aebd11dce628b1ba769499fe054606effa58294f16183e4268b1e8",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6.png"
+        }
+      ]
+    },
+    {
+      "label": "Fresh new-ROM opening delivery",
+      "startFrame": 560,
+      "frame": 572,
+      "advancedFrames": 12,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 572,
+          "sha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+          "rgbaSha256": "9fa1fcb188aebd11dce628b1ba769499fe054606effa58294f16183e4268b1e8",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 572,
+      "frame": 584,
+      "advancedFrames": 12,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 584,
+          "sha256": "70387e690a2f97757ce2196ea0fdc095e8532f34c726afc397aaaf5e805bf1c2",
+          "rgbaSha256": "fa37b139adac314e921aab69dd6797dfea714b4eac292b4a22d3ca97626d9a2d",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/70387e690a2f97757ce2196ea0fdc095e8532f34c726afc397aaaf5e805bf1c2.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 584,
+      "frame": 764,
+      "advancedFrames": 180,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 764,
+          "sha256": "aff7cad0627aee3e7d8e101914a9b86aafb0b5eaf498fe8e9af065add73f68fb",
+          "rgbaSha256": "cc70e02c1a370962bc90bf1092adc709b3043a01f897039aba5f083db846b896",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/aff7cad0627aee3e7d8e101914a9b86aafb0b5eaf498fe8e9af065add73f68fb.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 764,
+      "frame": 784,
+      "advancedFrames": 20,
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 784,
+          "sha256": "a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67",
+          "rgbaSha256": "c79d8a1d04b16012c8b83eaf180afd508b305f55dfb94458b4e8caa1e717197f",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 784,
+      "frame": 792,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 792,
+          "sha256": "a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67",
+          "rgbaSha256": "c79d8a1d04b16012c8b83eaf180afd508b305f55dfb94458b4e8caa1e717197f",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/a630ccc5894a2b738f47657402d93dcb9a1fdee745d381a07f611d01ae89cd67.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 792,
+      "frame": 804,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 804,
+          "sha256": "8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a",
+          "rgbaSha256": "2f1ce245da07a6e1019acde791988b05206c550e6a84d34705221f14dc2cd266",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 804,
+      "frame": 812,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 812,
+          "sha256": "8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a",
+          "rgbaSha256": "2f1ce245da07a6e1019acde791988b05206c550e6a84d34705221f14dc2cd266",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/8941fac509be2dd72ba1820d87bfb047ab4839e02bc2ef48b0cb8f2a12d2d07a.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 812,
+      "frame": 824,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 824,
+          "sha256": "da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c",
+          "rgbaSha256": "7efa390592105e2f80d4804018c89300cfb8b61837188cf8b4a16e9b34c401f2",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 824,
+      "frame": 832,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 832,
+          "sha256": "da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c",
+          "rgbaSha256": "7efa390592105e2f80d4804018c89300cfb8b61837188cf8b4a16e9b34c401f2",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/da372f974e124bb658b0cf66d1e180ce379c3ec340b4d0eb2d996d33a50c949c.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 832,
+      "frame": 844,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 844,
+          "sha256": "2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d",
+          "rgbaSha256": "caf66e8d4f575e4444adeb365b6a657a2294613fe745de28a0b47fb3b274af43",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 844,
+      "frame": 852,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 852,
+          "sha256": "2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d",
+          "rgbaSha256": "caf66e8d4f575e4444adeb365b6a657a2294613fe745de28a0b47fb3b274af43",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2d125fd032482aadc8798cc7f77a7c516758e9708aeb03a3482e09e18b2b291d.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 852,
+      "frame": 860,
+      "advancedFrames": 8,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 860,
+          "sha256": "3821d61f8ca0e2bb302421a8d5ef5556e426cde7ada717a8d6d7376f6fc0821d",
+          "rgbaSha256": "8ddbad2de252a4299303cafccd43a0c2297e598367aab90f545977c9e034b375",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/3821d61f8ca0e2bb302421a8d5ef5556e426cde7ada717a8d6d7376f6fc0821d.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary result exit, coasting stop and park animation",
+      "startFrame": 860,
+      "frame": 980,
+      "advancedFrames": 120,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 980,
+          "sha256": "b34deb1edd381f963464ae94260da466d4ac50d418dad0d085b8f0060a8d4d78",
+          "rgbaSha256": "7434f28fc42e2c5d05922aeb2ccb325049a993cad2c4fba2bd35d58c55f5de0f",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/b34deb1edd381f963464ae94260da466d4ac50d418dad0d085b8f0060a8d4d78.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary sidewalk walking toward Union transit",
+      "startFrame": 980,
+      "frame": 1580,
+      "advancedFrames": 600,
+      "buttons": [
+        "left"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1180,
+          "sha256": "73f9ceb991c5e800e15a621ed766cd4120626c7dab58eca9edbf980428dfcf17",
+          "rgbaSha256": "0807e63d6b2afc29a314fb980b70d9519662b9f8ab8f5e27e21b456ff1ca20a0",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/73f9ceb991c5e800e15a621ed766cd4120626c7dab58eca9edbf980428dfcf17.png"
+        },
+        {
+          "frame": 1380,
+          "sha256": "9bb84761fc51f0d2fba6646ec1395f69c1fb853f25133510bbaebb06964d195d",
+          "rgbaSha256": "6530f2f7656d156b057e6599588699861165d8a7120a7e28e9ba1a293f0fa8b7",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9bb84761fc51f0d2fba6646ec1395f69c1fb853f25133510bbaebb06964d195d.png"
+        },
+        {
+          "frame": 1580,
+          "sha256": "2d3f9db097d3af2361b42b54407ce3bfa188013a39ce974df4b7f44d1ecd268f",
+          "rgbaSha256": "552528bc6b2a196676af9834a440ece8bcb1d666834da7c310983be11ed8dfbf",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2d3f9db097d3af2361b42b54407ce3bfa188013a39ce974df4b7f44d1ecd268f.png"
+        }
+      ]
+    },
+    {
+      "label": "Adaptive Union approach and transit interaction",
+      "startFrame": 1580,
+      "frame": 1790,
+      "advancedFrames": 210,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1790,
+          "sha256": "51d9d51f3e8471b67477d353f394c75bb4281b0315a7d9a28ad4a7cd2f7f7da2",
+          "rgbaSha256": "81eeba966898c00a56d64c679a60600e773b765c2c6549aeb26e4e5523457a75",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/51d9d51f3e8471b67477d353f394c75bb4281b0315a7d9a28ad4a7cd2f7f7da2.png"
+        }
+      ]
+    },
+    {
+      "label": "Adaptive Union approach and transit interaction",
+      "startFrame": 1790,
+      "frame": 1802,
+      "advancedFrames": 12,
+      "buttons": [
+        "up"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1802,
+          "sha256": "dbdd0bd2808c429fe79b67c30b8825b6059444b092b913fd11a5c3a36c0a7023",
+          "rgbaSha256": "8323d1ad3a28e144d26bd1bac5d050fb65a89ef5d3eb4567671808c8ecbdb0b3",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/dbdd0bd2808c429fe79b67c30b8825b6059444b092b913fd11a5c3a36c0a7023.png"
+        }
+      ]
+    },
+    {
+      "label": "Adaptive Union approach and transit interaction",
+      "startFrame": 1802,
+      "frame": 1810,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1810,
+          "sha256": "dcdaa87c49c67c3f4a72825853f6083df12d5f714486bad2d2c6f980396a50f9",
+          "rgbaSha256": "cfd985d05fad7b76c46adfd8538b70f5f8a290ca205ded2f4462e7710af02a85",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/dcdaa87c49c67c3f4a72825853f6083df12d5f714486bad2d2c6f980396a50f9.png"
+        }
+      ]
+    },
+    {
+      "label": "Adaptive Union approach and transit interaction",
+      "startFrame": 1810,
+      "frame": 1822,
+      "advancedFrames": 12,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1822,
+          "sha256": "45403648b044ed383d34f8626346b2b89ff5f643e47817b9aed9b4ef1352cdb8",
+          "rgbaSha256": "bada64661312b548a8e106e63c9421a1f49eedc97545886bfe4d56f598bc7dc6",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/45403648b044ed383d34f8626346b2b89ff5f643e47817b9aed9b4ef1352cdb8.png"
+        }
+      ]
+    },
+    {
+      "label": "Adaptive Union approach and transit interaction",
+      "startFrame": 1822,
+      "frame": 1830,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1830,
+          "sha256": "fe12e113e5eaece32f8f3bc2f0ab8b989d6c1560199c7968dca9a26e07e4e6dd",
+          "rgbaSha256": "265444adba19b1574fa90d1292d07a3210b16cde38f347791f814d870422a82b",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/fe12e113e5eaece32f8f3bc2f0ab8b989d6c1560199c7968dca9a26e07e4e6dd.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary strict-radius Union boarding correction",
+      "startFrame": 1830,
+      "frame": 1838,
+      "advancedFrames": 8,
+      "buttons": [
+        "left"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1838,
+          "sha256": "d01861e66d1e7a32a50b081668f600b1ff8c11624d8c669e6c259eefab10fb1d",
+          "rgbaSha256": "114703fb47ca38930e802743a179ff5cb7769772162baf3a0b96acec6804755b",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/d01861e66d1e7a32a50b081668f600b1ff8c11624d8c669e6c259eefab10fb1d.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary strict-radius Union boarding correction",
+      "startFrame": 1838,
+      "frame": 1846,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1846,
+          "sha256": "0fc6966500490dc1f1aeb486162a0f8a441629cf1595fc02e6686ab08777ede8",
+          "rgbaSha256": "aba99c89de9c5109ea7d268d49bf23eabfca6aca90c2a5c5cfb6a8c931e22e0b",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/0fc6966500490dc1f1aeb486162a0f8a441629cf1595fc02e6686ab08777ede8.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary strict-radius Union boarding correction",
+      "startFrame": 1846,
+      "frame": 1858,
+      "advancedFrames": 12,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1858,
+          "sha256": "c0f80e0863eec9a3e7f20942cbebd507d17e46801bc1da095e1156fe7cc925b6",
+          "rgbaSha256": "547920de50a73160eda78fbef438039968086927e2b66de57bd4ddfacc0f0541",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/c0f80e0863eec9a3e7f20942cbebd507d17e46801bc1da095e1156fe7cc925b6.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary strict-radius Union boarding correction",
+      "startFrame": 1858,
+      "frame": 1866,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1866,
+          "sha256": "c0f80e0863eec9a3e7f20942cbebd507d17e46801bc1da095e1156fe7cc925b6",
+          "rgbaSha256": "547920de50a73160eda78fbef438039968086927e2b66de57bd4ddfacc0f0541",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/c0f80e0863eec9a3e7f20942cbebd507d17e46801bc1da095e1156fe7cc925b6.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1866,
+      "frame": 1878,
+      "advancedFrames": 12,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1878,
+          "sha256": "716418fe074049a6d33bb210275ec3dff4f780c444166068ebf7fd1ecd1bf58b",
+          "rgbaSha256": "fdfe30fa77b2421b6f5d1d8ae61423df76f7a5ac820dd000e0fdd1bb752bea6d",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/716418fe074049a6d33bb210275ec3dff4f780c444166068ebf7fd1ecd1bf58b.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1878,
+      "frame": 1886,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1886,
+          "sha256": "716418fe074049a6d33bb210275ec3dff4f780c444166068ebf7fd1ecd1bf58b",
+          "rgbaSha256": "fdfe30fa77b2421b6f5d1d8ae61423df76f7a5ac820dd000e0fdd1bb752bea6d",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/716418fe074049a6d33bb210275ec3dff4f780c444166068ebf7fd1ecd1bf58b.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1886,
+      "frame": 1898,
+      "advancedFrames": 12,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1898,
+          "sha256": "5fc4fe1e60c84d60b5bc6941dbf6b5dfd48fe2b61329888b506ba8640487044f",
+          "rgbaSha256": "4f78943de5950518e6a76acff43b49499e15833242898384c536a1787b9432a0",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/5fc4fe1e60c84d60b5bc6941dbf6b5dfd48fe2b61329888b506ba8640487044f.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1898,
+      "frame": 1906,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1906,
+          "sha256": "5fc4fe1e60c84d60b5bc6941dbf6b5dfd48fe2b61329888b506ba8640487044f",
+          "rgbaSha256": "4f78943de5950518e6a76acff43b49499e15833242898384c536a1787b9432a0",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/5fc4fe1e60c84d60b5bc6941dbf6b5dfd48fe2b61329888b506ba8640487044f.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1906,
+      "frame": 1918,
+      "advancedFrames": 12,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1918,
+          "sha256": "2d4f9682300bf6505a0fa25fcafc7ca4d27f02e8ff4a3025f49a5f22a872332b",
+          "rgbaSha256": "fbc7e54d0c2574f332fdd2f613b68ea9c7ef4c6a5be9db629455ee51ccf93242",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2d4f9682300bf6505a0fa25fcafc7ca4d27f02e8ff4a3025f49a5f22a872332b.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1918,
+      "frame": 1926,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1926,
+          "sha256": "2d4f9682300bf6505a0fa25fcafc7ca4d27f02e8ff4a3025f49a5f22a872332b",
+          "rgbaSha256": "fbc7e54d0c2574f332fdd2f613b68ea9c7ef4c6a5be9db629455ee51ccf93242",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2d4f9682300bf6505a0fa25fcafc7ca4d27f02e8ff4a3025f49a5f22a872332b.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1926,
+      "frame": 1938,
+      "advancedFrames": 12,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1938,
+          "sha256": "b335f297e8ea393a373e34da2fc6c7c15e07829aab4fc46e855b37d992b8c5f7",
+          "rgbaSha256": "e5e5f0f1aec7ac4177ae9e6872084b0f1f8d54d6c8b45d233826f0cbb9ce17ea",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/b335f297e8ea393a373e34da2fc6c7c15e07829aab4fc46e855b37d992b8c5f7.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1938,
+      "frame": 1946,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1946,
+          "sha256": "b335f297e8ea393a373e34da2fc6c7c15e07829aab4fc46e855b37d992b8c5f7",
+          "rgbaSha256": "e5e5f0f1aec7ac4177ae9e6872084b0f1f8d54d6c8b45d233826f0cbb9ce17ea",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/b335f297e8ea393a373e34da2fc6c7c15e07829aab4fc46e855b37d992b8c5f7.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1946,
+      "frame": 1958,
+      "advancedFrames": 12,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1958,
+          "sha256": "375571935543f13771dbfda2c91b5e0f04262b482470696a0fba590b7384f375",
+          "rgbaSha256": "6eb4e67e9cc21aeb95423d9dbe47a47ec4a9e89ed92dd5adaf6052b23bd52724",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/375571935543f13771dbfda2c91b5e0f04262b482470696a0fba590b7384f375.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1958,
+      "frame": 1966,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1966,
+          "sha256": "375571935543f13771dbfda2c91b5e0f04262b482470696a0fba590b7384f375",
+          "rgbaSha256": "6eb4e67e9cc21aeb95423d9dbe47a47ec4a9e89ed92dd5adaf6052b23bd52724",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/375571935543f13771dbfda2c91b5e0f04262b482470696a0fba590b7384f375.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1966,
+      "frame": 1978,
+      "advancedFrames": 12,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1978,
+          "sha256": "4565a2855c1764cd781dc96e7910119c866e476785e12f01766282b53f105c8c",
+          "rgbaSha256": "a57da0a6059d3a42ef5f465440114da4265ea41076fa2d8f1df20611e56b0285",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/4565a2855c1764cd781dc96e7910119c866e476785e12f01766282b53f105c8c.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley train selection and booking",
+      "startFrame": 1978,
+      "frame": 1986,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 1986,
+          "sha256": "81b5e5a18c4483b09209ea18f82ec39ae9730d03af6ccca5cf71e17ac6718205",
+          "rgbaSha256": "0a207501f1edddcea67f2789c23624b6e9d7bc17d6dd2d1e1a7bc86384e19ddd",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/81b5e5a18c4483b09209ea18f82ec39ae9730d03af6ccca5cf71e17ac6718205.png"
+        }
+      ]
+    },
+    {
+      "label": "Autonomous scheduled Line 1 departure",
+      "startFrame": 1986,
+      "frame": 2646,
+      "advancedFrames": 660,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2206,
+          "sha256": "17352111c8b2dd27fc9ea3bff9ceed1d821ada98ee44c5a2ccf751b5bb98cef7",
+          "rgbaSha256": "b238e665d4eb1dcd172fc65b757dcacd0d9f69ffc48fce30a664ca5b7ff9f849",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/17352111c8b2dd27fc9ea3bff9ceed1d821ada98ee44c5a2ccf751b5bb98cef7.png"
+        },
+        {
+          "frame": 2426,
+          "sha256": "9555f342df998ae08473ea9d86c577a865ca9d2c80cda278a626db681f218b07",
+          "rgbaSha256": "5fbbd0bbe6aa6bb631f133286b1358aeb3641dd8cd3edb09ff9abd9ead2ef75e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9555f342df998ae08473ea9d86c577a865ca9d2c80cda278a626db681f218b07.png"
+        },
+        {
+          "frame": 2646,
+          "sha256": "7d71ef82dbc8fa56bcb6e4cc9faaf8dde6c3d6aefe8f590597c6b2c57e7506e1",
+          "rgbaSha256": "65971962b58b16a3b24d6486b098d06b454811e18351c120df22908e8006ec00",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/7d71ef82dbc8fa56bcb6e4cc9faaf8dde6c3d6aefe8f590597c6b2c57e7506e1.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map entry",
+      "startFrame": 2646,
+      "frame": 2658,
+      "advancedFrames": 12,
+      "buttons": [
+        "start"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2658,
+          "sha256": "9054657e9f7dc25000c42092de13ccff726d9c141b8d8b1e933366c5951ce22d",
+          "rgbaSha256": "8b2aa61095d97d79e29df90e54e0511cd8be7bc8e9ea2f5fde13e489783e87c6",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9054657e9f7dc25000c42092de13ccff726d9c141b8d8b1e933366c5951ce22d.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map entry",
+      "startFrame": 2658,
+      "frame": 2666,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2666,
+          "sha256": "9054657e9f7dc25000c42092de13ccff726d9c141b8d8b1e933366c5951ce22d",
+          "rgbaSha256": "8b2aa61095d97d79e29df90e54e0511cd8be7bc8e9ea2f5fde13e489783e87c6",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9054657e9f7dc25000c42092de13ccff726d9c141b8d8b1e933366c5951ce22d.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map entry",
+      "startFrame": 2666,
+      "frame": 2678,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2678,
+          "sha256": "db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42",
+          "rgbaSha256": "cc4994ad34d419da5d47fc50996e117281f32983dc2d4ac8c1da1b950bb8d46e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map entry",
+      "startFrame": 2678,
+      "frame": 2686,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2686,
+          "sha256": "db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42",
+          "rgbaSha256": "cc4994ad34d419da5d47fc50996e117281f32983dc2d4ac8c1da1b950bb8d46e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map entry",
+      "startFrame": 2686,
+      "frame": 2698,
+      "advancedFrames": 12,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2698,
+          "sha256": "7daa840b70b3be2565bcdaf81c3e3693eb287c168647ad4e28b2c1862fd4eb21",
+          "rgbaSha256": "30de01c50c7c1e99579bf756fed37b0e558a18172f4b6c686787658957412a68",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/7daa840b70b3be2565bcdaf81c3e3693eb287c168647ad4e28b2c1862fd4eb21.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map entry",
+      "startFrame": 2698,
+      "frame": 2706,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2706,
+          "sha256": "aa32faa299e7bcdfa51805e4139a133a4dde2ac0a091eae5b70926b2def017d0",
+          "rgbaSha256": "3c970457a57cdb1ba22b9f7b3da24ac11ddf5392d8251b95b3e9ffae97a018dd",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/aa32faa299e7bcdfa51805e4139a133a4dde2ac0a091eae5b70926b2def017d0.png"
+        }
+      ]
+    },
+    {
+      "label": "Paid train map frozen interval",
+      "startFrame": 2706,
+      "frame": 2946,
+      "advancedFrames": 240,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2946,
+          "sha256": "9ca9c462edbea901afd894c0819c9f1c848e4c17f4f1f5358ece4a78100caf92",
+          "rgbaSha256": "ef7cc2285f0b1b37a6157528adc4687a7c59b5bdcc8cbd48fd16d1d4dedc1b83",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9ca9c462edbea901afd894c0819c9f1c848e4c17f4f1f5358ece4a78100caf92.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 2946,
+      "frame": 2958,
+      "advancedFrames": 12,
+      "buttons": [
+        "b"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2958,
+          "sha256": "db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42",
+          "rgbaSha256": "cc4994ad34d419da5d47fc50996e117281f32983dc2d4ac8c1da1b950bb8d46e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 2958,
+      "frame": 2966,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2966,
+          "sha256": "db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42",
+          "rgbaSha256": "cc4994ad34d419da5d47fc50996e117281f32983dc2d4ac8c1da1b950bb8d46e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/db9387c3e20c1b6d0c86c306411f595841f2551a074144fb0cd40dff17ec9f42.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 2966,
+      "frame": 2978,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2978,
+          "sha256": "2a3e11f81af433547fada27445898f67668efc8f95ae0d9b99938091cc95dc73",
+          "rgbaSha256": "7b295b47e22e30ac5266439ee1c6015a6b25a030d19ffbf6f436ba16e1b4df54",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2a3e11f81af433547fada27445898f67668efc8f95ae0d9b99938091cc95dc73.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 2978,
+      "frame": 2986,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2986,
+          "sha256": "2a3e11f81af433547fada27445898f67668efc8f95ae0d9b99938091cc95dc73",
+          "rgbaSha256": "7b295b47e22e30ac5266439ee1c6015a6b25a030d19ffbf6f436ba16e1b4df54",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/2a3e11f81af433547fada27445898f67668efc8f95ae0d9b99938091cc95dc73.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 2986,
+      "frame": 2998,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 2998,
+          "sha256": "fbd97e5eeb51f1a95527fdcde4e469095eb5d40420ed2db9b814b1f0bf57cc43",
+          "rgbaSha256": "ada2d0d912e4543baf6df4e5432929202dc88a532140f4fcae10c0edad963bb3",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/fbd97e5eeb51f1a95527fdcde4e469095eb5d40420ed2db9b814b1f0bf57cc43.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 2998,
+      "frame": 3006,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3006,
+          "sha256": "fbd97e5eeb51f1a95527fdcde4e469095eb5d40420ed2db9b814b1f0bf57cc43",
+          "rgbaSha256": "ada2d0d912e4543baf6df4e5432929202dc88a532140f4fcae10c0edad963bb3",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/fbd97e5eeb51f1a95527fdcde4e469095eb5d40420ed2db9b814b1f0bf57cc43.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3006,
+      "frame": 3018,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3018,
+          "sha256": "b6f052254729536665466d9eedfe184a8ca2c29121400a69895ace43e79ef9e4",
+          "rgbaSha256": "302e2e4717d3d606170e46488706cde99033ae3cc93be9f4bc97ef884be8d1b9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/b6f052254729536665466d9eedfe184a8ca2c29121400a69895ace43e79ef9e4.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3018,
+      "frame": 3026,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3026,
+          "sha256": "b6f052254729536665466d9eedfe184a8ca2c29121400a69895ace43e79ef9e4",
+          "rgbaSha256": "302e2e4717d3d606170e46488706cde99033ae3cc93be9f4bc97ef884be8d1b9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/b6f052254729536665466d9eedfe184a8ca2c29121400a69895ace43e79ef9e4.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3026,
+      "frame": 3038,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3038,
+          "sha256": "df72ccd1e00bafe1f87130ff7d8168e37890720482670c4312713efb22a5d7fc",
+          "rgbaSha256": "ed0aeb1ec2e7b41973ad1015d25d83f7e5f4da93305604be508722b0f735eaf9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/df72ccd1e00bafe1f87130ff7d8168e37890720482670c4312713efb22a5d7fc.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3038,
+      "frame": 3046,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3046,
+          "sha256": "df72ccd1e00bafe1f87130ff7d8168e37890720482670c4312713efb22a5d7fc",
+          "rgbaSha256": "ed0aeb1ec2e7b41973ad1015d25d83f7e5f4da93305604be508722b0f735eaf9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/df72ccd1e00bafe1f87130ff7d8168e37890720482670c4312713efb22a5d7fc.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3046,
+      "frame": 3058,
+      "advancedFrames": 12,
+      "buttons": [
+        "down"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3058,
+          "sha256": "1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8",
+          "rgbaSha256": "08ea64dd4ac485088771d9728a874e638be43bd16de2767bf3091a5de1686091",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3058,
+      "frame": 3066,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3066,
+          "sha256": "1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8",
+          "rgbaSha256": "08ea64dd4ac485088771d9728a874e638be43bd16de2767bf3091a5de1686091",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3066,
+      "frame": 3078,
+      "advancedFrames": 12,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3078,
+          "sha256": "1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8",
+          "rgbaSha256": "08ea64dd4ac485088771d9728a874e638be43bd16de2767bf3091a5de1686091",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8.png"
+        }
+      ]
+    },
+    {
+      "label": "Explicit save of paused paid train",
+      "startFrame": 3078,
+      "frame": 3086,
+      "advancedFrames": 8,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3086,
+          "sha256": "1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8",
+          "rgbaSha256": "08ea64dd4ac485088771d9728a874e638be43bd16de2767bf3091a5de1686091",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/1a9c0a2bce0079304e45930eccd8a05410ef2a3117821accf9fe9b46807126a8.png"
+        }
+      ]
+    },
+    {
+      "label": "Genuine four-button reset and ordinary boot wait",
+      "startFrame": 3086,
+      "frame": 3206,
+      "advancedFrames": 120,
+      "buttons": [
+        "a",
+        "b",
+        "select",
+        "start"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3206,
+          "sha256": "02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304",
+          "rgbaSha256": "bff899319e337b9fb8c1e3efdc66cb16550ba3fb65af667696314d7efae47914",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/02f08ecf6a86e56956bc06cb6a86a563b99d33d066f6410141c0082e292bf304.png"
+        }
+      ]
+    },
+    {
+      "label": "Genuine four-button reset and ordinary boot wait",
+      "startFrame": 3206,
+      "frame": 3506,
+      "advancedFrames": 300,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3506,
+          "sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+          "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png"
+        }
+      ]
+    },
+    {
+      "label": "Resume paid train after genuine reset",
+      "startFrame": 3506,
+      "frame": 3526,
+      "advancedFrames": 20,
+      "buttons": [
+        "a"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3526,
+          "sha256": "1b399fa4e3d0ab2226d718cc2d7c26494d448fc57693fb2383e18ae3aaf7866d",
+          "rgbaSha256": "741bca49963511d7836f81125f5528641ba44c8c1cbf4b554a4e0093c3cd0d3a",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/1b399fa4e3d0ab2226d718cc2d7c26494d448fc57693fb2383e18ae3aaf7866d.png"
+        }
+      ]
+    },
+    {
+      "label": "Resume paid train after genuine reset",
+      "startFrame": 3526,
+      "frame": 3766,
+      "advancedFrames": 240,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3766,
+          "sha256": "f959ca4c0c658801a56c449771cc1f45ebec426c4cfd7e0d1c6310aa003316b4",
+          "rgbaSha256": "3d53f0a9ed4c98121efc1e924c94b47083da10d8aa922968d5f4eb371e8437b8",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/f959ca4c0c658801a56c449771cc1f45ebec426c4cfd7e0d1c6310aa003316b4.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary Wellesley eastward walking toward bus crossing",
+      "startFrame": 3766,
+      "frame": 4166,
+      "advancedFrames": 400,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 3899,
+          "sha256": "82a8dae55bb2582f16e3e079fbd6b5473a6b1460845efc087dd75044bbeaecbd",
+          "rgbaSha256": "97ca9733b58dc41b5f111398d872cca2e7974b95e61d42cf5f160b9bbc5c4ffe",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/82a8dae55bb2582f16e3e079fbd6b5473a6b1460845efc087dd75044bbeaecbd.png"
+        },
+        {
+          "frame": 4032,
+          "sha256": "eed79e6c2a53f513909e342b897f112f06303b2ef2968c88d19d1bfae9c6bc4f",
+          "rgbaSha256": "1379b64f6a61a7d16d40ccab345096c0031977506403c8c2cc46491dbf422ab3",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/eed79e6c2a53f513909e342b897f112f06303b2ef2968c88d19d1bfae9c6bc4f.png"
+        },
+        {
+          "frame": 4166,
+          "sha256": "93f895efcbe9522d18e387aea80f2248a158eafcd40b4dec68523ae632fd81cd",
+          "rgbaSha256": "ba916b2d592f011acb982fb57a6197415c4c55becdc7ccaa85699a1e745c8bd1",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/93f895efcbe9522d18e387aea80f2248a158eafcd40b4dec68523ae632fd81cd.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary east sidewalk observation-point approach",
+      "startFrame": 4166,
+      "frame": 4188,
+      "advancedFrames": 22,
+      "buttons": [
+        "right"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 4188,
+          "sha256": "6b6fb1e5d9571026b6257b7f085d159f0992b1f0407097170bfae3997a4f57be",
+          "rgbaSha256": "42710f32c6a3d1cb4d08e4c1956673b4fe66333cdec7064bcc9b5b3fdf17e661",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/6b6fb1e5d9571026b6257b7f085d159f0992b1f0407097170bfae3997a4f57be.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary east sidewalk observation-point approach",
+      "startFrame": 4188,
+      "frame": 4248,
+      "advancedFrames": 60,
+      "buttons": [
+        "up"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 4248,
+          "sha256": "b4ae2873261ccfae1c4dd0d4e30946ef383303a4a14a6d150b117582b2779385",
+          "rgbaSha256": "dd077292530038951acb1bf5ab7a06df7619bf1d3934e3bda706dc4da13d286c",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/b4ae2873261ccfae1c4dd0d4e30946ef383303a4a14a6d150b117582b2779385.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary east sidewalk observation-point approach",
+      "startFrame": 4248,
+      "frame": 4260,
+      "advancedFrames": 12,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 4260,
+          "sha256": "c6cde6f9e98534554e415f77360b170249b8d4d89e179c00c69a3d0108ac1c10",
+          "rgbaSha256": "5594ce5df4455fb811109ff01a774f61240d65876241f42cfb4575a5c98c1d1f",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/c6cde6f9e98534554e415f77360b170249b8d4d89e179c00c69a3d0108ac1c10.png"
+        }
+      ]
+    },
+    {
+      "label": "Active neutral bus-corridor observation",
+      "startFrame": 4260,
+      "frame": 4860,
+      "advancedFrames": 600,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 4460,
+          "sha256": "5fd97ebd7ebe78dc31344b7236c8e462cd34f701cbc705d33c62833dabe47819",
+          "rgbaSha256": "c89e04afab1f194aa307f967dbd7b9639a3a3411cbf074e86947d1aee725ed80",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/5fd97ebd7ebe78dc31344b7236c8e462cd34f701cbc705d33c62833dabe47819.png"
+        },
+        {
+          "frame": 4660,
+          "sha256": "77bfbf028cf63d3e7d1a0adb309f6f4d2d1accce7e2b2b78140fd82d959f3697",
+          "rgbaSha256": "1c3db10c3288ca541b506d9ca911693de459a6d1601282f8268e4dd4d86ab4ba",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/77bfbf028cf63d3e7d1a0adb309f6f4d2d1accce7e2b2b78140fd82d959f3697.png"
+        },
+        {
+          "frame": 4860,
+          "sha256": "8e5411ca82d0c95c8edede4c1545955fbb822cdfabfedce0542026a9246ca46a",
+          "rgbaSha256": "b1328abba5cdeee6395d89e777263670b355854ab6c3f43fea6457d9163c42e7",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/8e5411ca82d0c95c8edede4c1545955fbb822cdfabfedce0542026a9246ca46a.png"
+        }
+      ]
+    },
+    {
+      "label": "Active native bus approach observation",
+      "startFrame": 4860,
+      "frame": 5260,
+      "advancedFrames": 400,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 4993,
+          "sha256": "32776623efab2266b1b00ee33518b11a46b0bbc86106cfae231a1f2b9369d91a",
+          "rgbaSha256": "042b540744ad06e6ee9d680a1a6f108bd13e98342efee011a0a18328489f0d49",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/32776623efab2266b1b00ee33518b11a46b0bbc86106cfae231a1f2b9369d91a.png"
+        },
+        {
+          "frame": 5126,
+          "sha256": "63a40740bc5c54de6e7cb587762adf2fa511981f042ce4b26906a3a207076dc8",
+          "rgbaSha256": "29dc55d4ca6b7a6a5c8b9595af59886d9aa4baec4c271085ec7f83983c6fc75e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/63a40740bc5c54de6e7cb587762adf2fa511981f042ce4b26906a3a207076dc8.png"
+        },
+        {
+          "frame": 5260,
+          "sha256": "f59c550febc760dab181c046e8305f4725b3b636c70763f9616ee81975d1fc45",
+          "rgbaSha256": "980dbc169e8dadd4ba1bd9f5a1b40caa33d2a7014a374b0fcd744c98a9fcdf9d",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/f59c550febc760dab181c046e8305f4725b3b636c70763f9616ee81975d1fc45.png"
+        }
+      ]
+    },
+    {
+      "label": "Active native eastward bus/human observation",
+      "startFrame": 5260,
+      "frame": 5580,
+      "advancedFrames": 320,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 5366,
+          "sha256": "19e7976d2af3e19faa92ba70aaf0156e19df5b7ec2db5ffedfa3510cfc2c0677",
+          "rgbaSha256": "0f0f42b0fd032f6539ad0f2a1b9631ff38be99cd293a1fedb653a0b6e5cdc727",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/19e7976d2af3e19faa92ba70aaf0156e19df5b7ec2db5ffedfa3510cfc2c0677.png"
+        },
+        {
+          "frame": 5473,
+          "sha256": "56c04c1b4078c5a4e8cfc6fb74dad53d7bb02cf297fe69fc29413d5b24697cee",
+          "rgbaSha256": "413192e73f51b5ce479b8333ce725927b34c35ddff90d7376708ee99405cf8e9",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/56c04c1b4078c5a4e8cfc6fb74dad53d7bb02cf297fe69fc29413d5b24697cee.png"
+        },
+        {
+          "frame": 5580,
+          "sha256": "46671c43203a1b9cb47826109f8ca772b62c994e9ebcfccca4802ffb91b4fa0e",
+          "rgbaSha256": "fe08fe1b3c29c5a2750e125667a3b39f9fec4cb750a2e0c1c3fe45c11d515928",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/46671c43203a1b9cb47826109f8ca772b62c994e9ebcfccca4802ffb91b4fa0e.png"
+        }
+      ]
+    },
+    {
+      "label": "Active native investigation of bus/police standstill",
+      "startFrame": 5580,
+      "frame": 6180,
+      "advancedFrames": 600,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 5780,
+          "sha256": "9b1fd48aaf6166016e966877527513a340fc16ba2a2ed3fa24ae84da910bf901",
+          "rgbaSha256": "d65054758b895f235e95f1e0e88ca8e88a8cfbc8aa197be0467d5455ad190362",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/9b1fd48aaf6166016e966877527513a340fc16ba2a2ed3fa24ae84da910bf901.png"
+        },
+        {
+          "frame": 5980,
+          "sha256": "c257de5825f0039034dc03ac6801ae201b89b6675ab3a9dfd52b8635025177dd",
+          "rgbaSha256": "8b9c66c9fb0276781d6a15248da688eb3cb256bf980d62a618ac3245c96bed9c",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/c257de5825f0039034dc03ac6801ae201b89b6675ab3a9dfd52b8635025177dd.png"
+        },
+        {
+          "frame": 6180,
+          "sha256": "f4ec9e3582b3e5ec41da2cd7fbdf1bb579026e8b08453aa4d086fb68a639c39d",
+          "rgbaSha256": "ccea4db4321495346683c151c2f32d2194c7f10510fa9333a12aa2c0999b15dd",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/f4ec9e3582b3e5ec41da2cd7fbdf1bb579026e8b08453aa4d086fb68a639c39d.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary sidewalk approach to view the confirmed fleet standstill",
+      "startFrame": 6180,
+      "frame": 6340,
+      "advancedFrames": 160,
+      "buttons": [
+        "left"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 6260,
+          "sha256": "493ea35615c065c219de4a0167caaa1394abbedcb3d0453f812cfb194210cd3d",
+          "rgbaSha256": "6cd91786eb6420be4ba2e12b0b209cf7869924ad2cd884ed234788ccae00ad2f",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/493ea35615c065c219de4a0167caaa1394abbedcb3d0453f812cfb194210cd3d.png"
+        },
+        {
+          "frame": 6340,
+          "sha256": "e41901c0c436512c872ce645414cfd05b153905723a087a32ce221d5b6ac52e1",
+          "rgbaSha256": "5804085b5dcb70b74a177eb564c5678473318f7fcaaea4159c2797b48c42ca68",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/e41901c0c436512c872ce645414cfd05b153905723a087a32ce221d5b6ac52e1.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary sidewalk framing of the native bus/police standstill",
+      "startFrame": 6340,
+      "frame": 6404,
+      "advancedFrames": 64,
+      "buttons": [
+        "left"
+      ],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 6404,
+          "sha256": "1041a6aa52f881209ff7ed070e7aa3eac3632e2cba7895ad1c4f5fa1ad056f1c",
+          "rgbaSha256": "237e7c2a4f13c6c9828db306ab2ac7bf4800ab6e7d64a2e4e7659db05cd862a1",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/1041a6aa52f881209ff7ed070e7aa3eac3632e2cba7895ad1c4f5fa1ad056f1c.png"
+        }
+      ]
+    },
+    {
+      "label": "Ordinary sidewalk framing of the native bus/police standstill",
+      "startFrame": 6404,
+      "frame": 6524,
+      "advancedFrames": 120,
+      "buttons": [],
+      "execution": "completed",
+      "samples": [
+        {
+          "frame": 6524,
+          "sha256": "940ccff8a94fed0fd1d275927068fa46a035c3519cf5d7827903490decd18bd5",
+          "rgbaSha256": "a81cbfef7a11185e18abe6082078a1935ed44063c7f837461423a29eb00bf66e",
+          "path": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording/frames/940ccff8a94fed0fd1d275927068fa46a035c3519cf5d7827903490decd18bd5.png"
+        }
+      ]
+    }
+  ],
+  "recording": {
+    "originalSessionId": "session-3583ed07-5c2b-425f-b849-fce94e23a5bc",
+    "sessionId": "6753cd85ca5047ba81ee4566092a139c",
+    "branchId": "branch-0001",
+    "status": "stopped",
+    "outcome": "needs-review",
+    "frame": 6524,
+    "eventCount": 479,
+    "eventDigest": "900f5deb964a7c192376450b221094a49146d359094415571b73affa327b412f",
+    "closed": true,
+    "archiveId": "8458616d-f644-4dca-a99c-c9ae0d21fa7d",
+    "archivePath": "project/artifacts/recording-archives/8458616d-f644-4dca-a99c-c9ae0d21fa7d/recording",
+    "manifestSha256": "d350fc3860b16ccf47ab13cf8f3594de400f4e5b75cf5d95167b3fa9f944a2b1",
+    "inventoryDigest": "7b92a5c09126b123f3bc1141e584ef3162e1a3871385b31938780e75b707d2d0",
+    "inventoryEntries": 132,
+    "inventoryBytes": 423352,
+    "reason": "Delivery, paid train, map freeze, paid reset and ordinary arrival/access pass in this recording. The reproducible Core bus/police standstill requires review and correction."
+  },
+  "limitations": [
+    "Historical cf2f needs-review recording. Loading remains the separately tested 5ae4 Queen street-life candidate; no loading guide or release changes here.",
+    "Relative archive locators and hashes are not public downloadable gameplay or save files. No PNG binary, SRAM file, activation state or host path is included.",
+    "Leg IDs and headings are not authenticated by adjacent cache bytes. Opposing motion/body calculations are source/pose analysis, separate from actual native positions.",
+    "Starting world second 70 is a recording-review report; raw gameplay snapshots authenticate later seconds 80, 83 and 86.",
+    "Sampled OAM limits do not prove all-city sprite safety or CPU pacing. This record does not establish the later lane correction, all 96 contracts, remaining Island missions, two measured enjoyable hours, browser restart, legacy save imports or physical cartridge execution."
+  ]
+}
