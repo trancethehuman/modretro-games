@@ -17,7 +17,14 @@ static UWORD td_route_position(UBYTE identity,UWORD start){
 void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED {
     UBYTE i,j,k,route;UWORD score,best,u,pu=(td_streetcar_ride_view?td_streetcar_focus_u:td.u)>>4,pv=(td_streetcar_ride_view?td_streetcar_focus_v:td.v)>>4;
     UBYTE district=td_streetcar_ride_view?td_streetcar_view_district:td.district;
-    const UWORD (*routes)[2]=td_district_routes[district];
+    const UWORD (*routes)[2];
+    /* A malformed derived view must never index ROM beyond the registered
+       rows. Hide all identities while preserving their cached coordinates. */
+    if(district>=TD_DISTRICT_COUNT){
+        for(i=0;i<6;i++)identities[i]=TD_NONE;
+        return;
+    }
+    routes=td_district_routes[district];
     for(i=0;i<6;i++){
         route=identities[i];
         if(route<td_route_counts[district]&&

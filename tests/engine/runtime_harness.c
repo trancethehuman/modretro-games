@@ -405,6 +405,85 @@ static void test_signal_and_autonomous_traffic(void) {
     td_traffic_step();expect(td_traffic_u[0]==before,"elapsed traffic cannot sweep across a red stop line with clear endpoints");
 }
 
+static void test_parked_visibility_context(void) {
+    static const UBYTE districts[]={0,1,3},modes[]={TD_ROAM,TD_WAIT,TD_RIDE};
+    static const UBYTE flags[]={0x30,0x32,0x70,0x72};
+    for(unsigned logical=0;logical<3;logical++)for(unsigned view=0;view<3;view++)
+        for(unsigned park=0;park<TD_DISTRICT_COUNT;park++)for(unsigned foot=0;foot<2;foot++)
+        for(unsigned mode=0;mode<3;mode++)for(unsigned pattern=0;pattern<4;pattern++){
+            reset_case();td.district=districts[logical];td.park_district=park;
+            td.onfoot=foot;td.mode=modes[mode];td.vehicle=pattern;td.heading=pattern*4;
+            td.park_u=952*16+6;td.park_v=548*16+12;
+            td_streetcar_view_district=districts[view];td_streetcar_ride_view=td.mode==TD_RIDE;
+            td_streetcar_focus_u=910*16+11;td_streetcar_focus_v=520*16+3;
+            td_streetcar_elapsed=23;td_streetcar_bound=td_streetcar_valid=1;
+            td_streetcar_cue=7;td_streetcar_was_ride=td_streetcar_ride_view;
+            td_streetcar_pose(59,25,&td_streetcar_display);
+            actors[8].flags=flags[pattern];
+            td_state_t before=td;td_streetcar_pose_t display=td_streetcar_display;
+            UBYTE hidden=foot&&park==districts[view]?0:ACTOR_FLAG_HIDDEN;
+            td_traffic_present();
+            expect(actors[8].flags==((flags[pattern]&~ACTOR_FLAG_HIDDEN)|hidden),
+                   "parked visibility uses loaded view and preserves every other actor flag");
+            expect(td_streetcar_view_district==districts[view]&&td_streetcar_ride_view==(td.mode==TD_RIDE)&&
+                   td_streetcar_focus_u==910*16+11&&td_streetcar_focus_v==520*16+3,
+                   "parked actor presentation never overwrites the ride district or focus");
+            expect(!memcmp(&td_streetcar_display,&display,sizeof(display))&&td_streetcar_elapsed==23&&
+                   td_streetcar_bound==1&&td_streetcar_valid==1&&td_streetcar_cue==7&&
+                   td_streetcar_was_ride==(td.mode==TD_RIDE),
+                   "fleet presentation preserves prepared tram pose and transient timing");
+            expect(!memcmp(&td,&before,58)&&actors[8].pos.x==952*32&&actors[8].pos.y==548*32,
+                   "loaded parked visibility retains serialized state and floored car position");
+        }
+}
+
+static void test_route_selection_invalid_context(void) {
+    for(unsigned ride=0;ride<2;ride++)for(unsigned invalid=TD_DISTRICT_COUNT;invalid<=255;invalid++){
+        struct {UBYTE before[3],ids[6],after[3];} slots={{0x41,0x82,0xC3},{0,1,70,255,127,128},{0xD4,0xA5,0x76}};
+        struct {UWORD before,points[6][2],after;} points={0xA15C,{{123,456},{789,12},{345,678},{901,234},{567,890},{1234,5678}},0xE29D};
+        UWORD cached[6][2];memcpy(cached,points.points,sizeof(cached));
+        reset_case();td.district=ride?0:invalid;td.mode=ride?TD_RIDE:TD_ROAM;
+        td_streetcar_view_district=ride?invalid:1;td_streetcar_ride_view=ride;
+        td_streetcar_focus_u=910*16+15;td_streetcar_focus_v=520*16+7;
+        td_state_t before=td;
+        td_refresh_routes(slots.ids,points.points);
+        for(unsigned slot=0;slot<6;slot++)expect(slots.ids[slot]==TD_NONE,
+                "invalid chosen district clears every pedestrian identity before ROM indexing");
+        expect(!memcmp(points.points,cached,sizeof(cached))&&points.before==0xA15C&&points.after==0xE29D&&
+               slots.before[0]==0x41&&slots.before[1]==0x82&&slots.before[2]==0xC3&&
+               slots.after[0]==0xD4&&slots.after[1]==0xA5&&slots.after[2]==0x76,
+               "invalid route context preserves all coordinate bytes and surrounding caller buffers");
+        expect(!memcmp(&td,&before,58)&&td_streetcar_view_district==(ride?invalid:1)&&
+               td_streetcar_ride_view==ride&&td_streetcar_focus_u==910*16+15&&td_streetcar_focus_v==520*16+7,
+               "invalid route selection changes no serialized or presentation context");
+    }
+    /* Only the selected context is guarded: a stale unused view must not
+       suppress legitimate logical-scene pedestrians while walking. */
+    reset_case();td.district=1;td.u=910*16;td.v=520*16;
+    td_streetcar_view_district=1;td_streetcar_ride_view=0;
+    UBYTE expected[6];UWORD expected_points[6][2];memset(expected,TD_NONE,sizeof(expected));
+    memset(expected_points,0xA5,sizeof(expected_points));td_refresh_routes(expected,expected_points);
+    expect(expected[0]!=TD_NONE,"registered West comparison selects actual nearby pedestrian routes");
+    for(unsigned invalid=TD_DISTRICT_COUNT;invalid<=255;invalid++){
+        UBYTE selected[6];UWORD points[6][2];memset(selected,TD_NONE,sizeof(selected));memset(points,0xA5,sizeof(points));
+        td_streetcar_view_district=invalid;td_refresh_routes(selected,points);
+        expect(!memcmp(selected,expected,sizeof(selected))&&!memcmp(points,expected_points,sizeof(points)),
+               "unused invalid view cannot alter valid logical-district route selection");
+    }
+    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned ride=0;ride<2;ride++){
+        UBYTE selected[6];UWORD points[6][2];memset(selected,TD_NONE,sizeof(selected));memset(points,0,sizeof(points));
+        reset_case();td.district=ride?0:district;td_streetcar_view_district=district;td_streetcar_ride_view=ride;
+        td.u=td_streetcar_focus_u=(td_district_routes[district][0][0]+32)*16;
+        td.v=td_streetcar_focus_v=td_district_routes[district][0][1]*16;
+        td_refresh_routes(selected,points);
+        expect(selected[0]!=TD_NONE,"every registered chosen district retains positive route selection");
+        for(unsigned slot=0;slot<6;slot++)expect(selected[slot]==TD_NONE||
+            (selected[slot]<td_route_counts[district]&&points[slot][0]==td_district_routes[district][selected[slot]][0]&&
+             points[slot][1]==td_district_routes[district][selected[slot]][1]),
+             "selected route identities and cached coordinates remain authored and in range");
+    }
+}
+
 static void test_city_routes_and_walking(void) {
     reset_case();geometry=NATIVE_GRID;
     expect(!td_drivable(76,756),"car footprint rejects a narrow solid rail under its centre");
@@ -3093,6 +3172,7 @@ int main(void) {
     test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_clock_boundaries();
     test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();test_pedestrian_phase_reuse();
     test_signal_and_autonomous_traffic();
+    test_parked_visibility_context();test_route_selection_invalid_context();
     test_city_routes_and_walking();
     test_audio_event_integration();
     test_bounded_corner_assist();

@@ -19,7 +19,7 @@ static UBYTE td_person_road_clear(UWORD u,UWORD v){
     UBYTE i;
     for(i=2;i<8;i++)if(!(actors[i].flags&ACTOR_FLAG_HIDDEN)&&
         td_people_distance(u,actors[i].pos.x>>5)<9&&td_people_distance(v,actors[i].pos.y>>5)<9)return FALSE;
-    if(td.onfoot&&td.park_district==td.district&&td_people_distance(u,td.park_u>>4)<9&&
+    if(td.onfoot&&td.park_district==td_streetcar_view_district&&td_people_distance(u,td.park_u>>4)<9&&
         td_people_distance(v,td.park_v>>4)<9)return FALSE;
     return td_streetcar_runtime_pedestrian_clear(td_streetcar_view_district,u*16,v*16);
 }

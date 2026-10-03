@@ -487,7 +487,8 @@ static void td_traffic_contacts(void){
     }
 }
 static void td_traffic_present(void){
-    UBYTE i,leg,frame;
+    UBYTE i,leg,frame,parked_hidden;
+    volatile actor_t *parked=&actors[8];
     if(td_streetcar_view_district==TD_DISTRICT_ISLANDS){
         /* The six cached mainland positions do not represent Island actors.
            Hide before civilians inspect road users; keep their caches intact. */
@@ -503,7 +504,11 @@ static void td_traffic_present(void){
         td_position(&actors[i+2],td_traffic_u[i]>>4,td_traffic_v[i]>>4);td_fleet_present(&actors[i+2],i,(frame&7)/2);
     }
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:td.vehicle*8+((td.heading+1)&15)/2);
-    if(td.onfoot&&td.park_district==td_streetcar_view_district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
+    parked_hidden=td.onfoot&&td.park_district==td_streetcar_view_district?0:ACTOR_FLAG_HIDDEN;
+    /* Complete the context comparison before this single volatile actor
+       write. SDCC reused the comparison's HL for the old branch RMW store,
+       overwriting the loaded district with parked-car flags on foot. */
+    parked->flags=(parked->flags&~ACTOR_FLAG_HIDDEN)|parked_hidden;
 }
 static void td_pedestrians(void){
     UBYTE hits=td_people_present(td_tick);UWORD fine;
