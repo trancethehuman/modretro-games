@@ -10,6 +10,8 @@ Current source preserves all contract IDs/fields and completion bits, relocating
 
 This is still a prototype. Full Old Toronto, all played contracts/balanced deadlines, two measured enjoyable hours, wider vehicle/traffic/pacing/stack checks, human handling/audio feedback, browser recovery and cartridge write/read-back/cold boot remain open. [BUILD.md](BUILD.md), [TESTING.md](../TESTING.md) and [AUDIO.md](AUDIO.md) distinguish the available evidence. A later source change needs its own ROM identity and replay.
 
+A [separate campaign replay](NATIVE_ISLAND_CAMPAIGN_SAMPLES.json) completes 13 unique quests on this same ROM, covering all eight job kinds. Centre Letters finishes its 195-second limit at full condition with 136 seconds left. Active-job map freezing, carried and paid-ferry resets, cancellation and a deliberate paid-crossing timeout pass. Island arrivals require **Select at each ordered dock/client** before moving to the next objective. The remaining eight Island jobs and the broader acceptance checks above remain pending.
+
 ## 1. Prepare the computer and console
 
 1. Install the ModRetro Chromatic plugin in Codex on the Mac connected to the console. It is already installed in this project owner's current setup. Open this repository as the project.

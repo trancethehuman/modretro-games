@@ -243,3 +243,9 @@ Shared scheduled return assistance and traffic suppression now target this real 
 The first six-scene native build exceeds the main gameplay bank by240 bytes. Move unchanged ferry approach guidance into the existing BANKED route unit, with only stack-local temporary state. Host objective/save regressions remain passing, the native build links and static reserve remains1,097 bytes.
 
 Native replay then reveals a GBDK-specific pause AUDIO varargs mismatch: a16-bit ternary marker is passed to one-byte `%c`, shifting the next string pointer and overflowing the40-byte text buffer into the cached streetcar/map focus. Keep that failed replay as separate evidence. Replace the mixed-width formatter with bounded prefix/label concatenation (maximum18 characters plus terminator), preserving menu choices and all gameplay/save state. Verify all three audio modes and map YOU/CAR/DEPOT focus on a new exact ROM. Source/host passes cannot replace this native regression.
+
+### Native campaign validation — 2026-10-03
+
+Retain the existing contracts, eligibility, rewards, deadlines and save format after the first timed Island check. A separate ordinary-input replay on unchanged `7b2…` completes 13 unique jobs across the eight kind IDs; Centre Letters unlocks after 12 and finishes its 195-second limit at condition 100 with 136 seconds left / credit 145. Active-job map, client/paid-return reset and unpaid WAIT cancellation pass with the mainland car retained.
+
+An intentional missed-client replay confirms expiry during a paid return: the genuine reset retains the fare and remaining trip, then RESULT pays zero without another completion or fare. These are scoped validation results, not a balance or duration decision. The remaining eight Island jobs, native historical-v8 imports, all 96 contracts, two measured enjoyable hours, human feedback and physical cartridge checks remain open. See the [separate campaign record](docs/NATIVE_ISLAND_CAMPAIGN_SAMPLES.json).
