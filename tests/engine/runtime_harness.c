@@ -437,6 +437,34 @@ static void test_parked_visibility_context(void) {
         }
 }
 
+static void test_fractional_fleet_presentation(void) {
+    const UWORD positions[6][2]={{80,280},{200,392},{320,168},{440,632},{824,240},{816,138}};
+    /* Each offset remains on a genuine straight Core route segment. The
+       bus is northbound leg5, immediately above the real route19 crossing. */
+    for(unsigned fraction=0;fraction<16;fraction++) {
+        native_case();td.onfoot=1;td.u=816*16;td.v=112*16;
+        td.park_u=560*16;td.park_v=720*16;td.seconds=7;td.subsecond=20;
+        for(unsigned i=0;i<6;i++) {
+            td_traffic_u[i]=positions[i][0]*16+(i<4?fraction:0);
+            td_traffic_v[i]=positions[i][1]*16+(i>=4?fraction:0);
+            td_traffic_leg[i]=i==5?5:0;
+        }
+        td_state_t before=td;
+        UBYTE view=td_streetcar_view_district,ride=td_streetcar_ride_view;
+        td_traffic_present();
+        for(unsigned i=0;i<6;i++)expect(actors[i+2].pos.x==td_traffic_u[i]*2&&
+            actors[i+2].pos.y==td_traffic_v[i]*2&&!(actors[i+2].flags&ACTOR_FLAG_HIDDEN),
+            "actual fleet publication retains every Q4 fraction in native Q5 actor coordinates");
+        expect(!memcmp(&td,&before,58)&&view==td_streetcar_view_district&&ride==td_streetcar_ride_view,
+               "fractional fleet publication preserves all paid/save and prepared view state");
+        expect(td_road_body(816,138,7)&&td_district_routes[0][19][0]==784&&
+               td_district_routes[0][19][1]==148,
+               "fractional bus fixture remains on the registered road beside the actual route19");
+        expect(td_person_road_clear(807,148)==(fraction==0),
+               "real cache-to-actor fraction forbids route19 entering the bus at9px by9.xpx separation");
+    }
+}
+
 static void test_route_selection_invalid_context(void) {
     for(unsigned ride=0;ride<2;ride++)for(unsigned invalid=TD_DISTRICT_COUNT;invalid<=255;invalid++){
         struct {UBYTE before[3],ids[6],after[3];} slots={{0x41,0x82,0xC3},{0,1,70,255,127,128},{0xD4,0xA5,0x76}};
@@ -541,7 +569,7 @@ static void test_city_routes_and_walking(void) {
 
     reset_case();td_traffic_u[0]=300*16;td_traffic_v[0]=280*16;
     td_traffic_step();expect(!actors[2].pos.x&&!actors[2].pos.y,"motion substeps do not perform duplicate actor presentation");
-    td_traffic_present();expect(actors[2].pos.x==(td_traffic_u[0]>>4)*32,"actor presentation reflects the final integrated position");
+    td_traffic_present();expect(actors[2].pos.x==td_traffic_u[0]*2,"actor presentation reflects the final integrated position");
 }
 
 static void test_audio_event_integration(void) {
@@ -1597,7 +1625,7 @@ static void test_first_frame_actors(void) {
         int traffic=1;unsigned visible=0;
         for(unsigned i=0;i<6;i++) {
             if(district==TD_DISTRICT_ISLANDS){if(!(actors[i+2].flags&ACTOR_FLAG_HIDDEN))traffic=0;}
-            else if(actors[i+2].pos.x!=(td_traffic_u[i]>>4)*32||actors[i+2].pos.y!=(td_traffic_v[i]>>4)*32||
+            else if(actors[i+2].pos.x!=td_traffic_u[i]*2||actors[i+2].pos.y!=td_traffic_v[i]*2||
                     !td_drivable(td_traffic_u[i]>>4,td_traffic_v[i]>>4))traffic=0;
             if(!(actors[i+9].flags&ACTOR_FLAG_HIDDEN)) {
                 visible++;
@@ -3138,7 +3166,7 @@ static void test_reserved_islands_traffic_gates(void) {
     expect(!td_traffic_free(td_traffic_u[0],td_traffic_v[0]),"mainland cached traffic occupancy resumes after an Island view");
     td_state_t before=td;td_traffic_present();
     for(unsigned i=0;i<6;i++)expect(!(actors[i+2].flags&ACTOR_FLAG_HIDDEN)&&
-        actors[i+2].pos.x==(td_traffic_u[i]>>4)*32&&actors[i+2].pos.y==(td_traffic_v[i]>>4)*32,
+        actors[i+2].pos.x==td_traffic_u[i]*2&&actors[i+2].pos.y==td_traffic_v[i]*2,
         "ordinary mainland presentation restores each fleet actor at its unchanged route coordinate");
     expect(!(actors[8].flags&ACTOR_FLAG_HIDDEN)&&!memcmp(&td,&before,58),
            "the visible mainland parked car and saved state retain their original presentation rules");
@@ -3172,7 +3200,7 @@ int main(void) {
     test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_clock_boundaries();
     test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();test_pedestrian_phase_reuse();
     test_signal_and_autonomous_traffic();
-    test_parked_visibility_context();test_route_selection_invalid_context();
+    test_fractional_fleet_presentation();test_parked_visibility_context();test_route_selection_invalid_context();
     test_city_routes_and_walking();
     test_audio_event_integration();
     test_bounded_corner_assist();

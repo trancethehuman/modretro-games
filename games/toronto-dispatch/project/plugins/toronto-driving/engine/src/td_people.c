@@ -16,12 +16,17 @@ static UBYTE td_ped_route[6],td_ped_refresh;
 static UWORD td_ped_anchor_u,td_ped_anchor_v,td_people_last_u,td_people_last_v;
 static UWORD td_people_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
 static UBYTE td_person_road_clear(UWORD u,UWORD v){
-    UBYTE i;
+    static const UBYTE fleet_radius[6]={144,144,144,160,144,160};
+    UBYTE i;UWORD pu=u*16,pv=v*16;
+    /* Bus/fire bodies have a 7px half extent, humans 3px. Retain the
+       existing 9px margin for smaller vehicles and compare exact Q4
+       centres so half-pixel fleet advances cannot admit an overlap. */
     for(i=2;i<8;i++)if(!(actors[i].flags&ACTOR_FLAG_HIDDEN)&&
-        td_people_distance(u,actors[i].pos.x>>5)<9&&td_people_distance(v,actors[i].pos.y>>5)<9)return FALSE;
-    if(td.onfoot&&td.park_district==td_streetcar_view_district&&td_people_distance(u,td.park_u>>4)<9&&
-        td_people_distance(v,td.park_v>>4)<9)return FALSE;
-    return td_streetcar_runtime_pedestrian_clear(td_streetcar_view_district,u*16,v*16);
+        td_people_distance(pu,actors[i].pos.x>>1)<fleet_radius[i-2]&&
+        td_people_distance(pv,actors[i].pos.y>>1)<fleet_radius[i-2])return FALSE;
+    if(td.onfoot&&td.park_district==td_streetcar_view_district&&td_people_distance(pu,td.park_u)<144&&
+        td_people_distance(pv,td.park_v)<144)return FALSE;
+    return td_streetcar_runtime_pedestrian_clear(td_streetcar_view_district,pu,pv);
 }
 
 void td_people_reset(void) BANKED {

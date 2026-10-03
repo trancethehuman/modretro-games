@@ -501,7 +501,9 @@ static void td_traffic_present(void){
         else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
         if(i==2&&td_police_waypoint.valid)frame=td_police_waypoint.heading*2;
         actors[i+2].flags&=~ACTOR_FLAG_HIDDEN;
-        td_position(&actors[i+2],td_traffic_u[i]>>4,td_traffic_v[i]>>4);td_fleet_present(&actors[i+2],i,(frame&7)/2);
+        /* Preserve Q4 collision centres in native Q5 actor coordinates. */
+        actors[i+2].pos.x=td_traffic_u[i]*2;actors[i+2].pos.y=td_traffic_v[i]*2;
+        td_fleet_present(&actors[i+2],i,(frame&7)/2);
     }
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:td.vehicle*8+((td.heading+1)&15)/2);
     parked_hidden=td.onfoot&&td.park_district==td_streetcar_view_district?0:ACTOR_FLAG_HIDDEN;

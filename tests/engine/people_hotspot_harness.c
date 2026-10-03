@@ -40,6 +40,110 @@ void td_civilian_present(actor_t *actor,UBYTE variant,UBYTE pose){
     variants[index]=variant;poses[index]=pose;
 }
 #include "people_under_test.c"
+/* Exercise the actual fleet body/signal admission code alongside people.
+ * The focused cases use these pure queries, not the separate terrain/tram
+ * epoch wrapper. Its unused hardware callbacks fail closed and are counted. */
+#include "../../games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_traffic.c"
+static unsigned unused_traffic_callbacks;
+UBYTE td_road_sweep(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half){
+    (void)old_u;(void)old_v;(void)u;(void)v;(void)half;unused_traffic_callbacks++;return FALSE;
+}
+UBYTE td_streetcar_runtime_traffic_sweep_clear(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half){
+    (void)district;(void)old_u;(void)old_v;(void)u;(void)v;(void)half;unused_traffic_callbacks++;return FALSE;
+}
+UBYTE td_traffic_signal_stop(UBYTE district,UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v){
+    (void)district;(void)seconds;(void)old_u;(void)old_v;(void)u;(void)v;unused_traffic_callbacks++;return TRUE;
+}
+
+static unsigned fleet_failures;
+static void fleet_check(int condition,const char *message){
+    checks++;
+    if(!condition){
+        fleet_failures++;
+        if(fleet_failures<=12)fprintf(stderr,"FAIL %lu: %s\n",checks,message);
+    }
+}
+static int reference_fleet_clear(UWORD u,UWORD v,UWORD car_u,UWORD car_v,unsigned half){
+    /* Independent signed half-open rectangles in Q4; retain fractional fleet
+     * centres instead of rounding the bus/fire body to a whole pixel. */
+    int32_t pl=(int32_t)u*16-48,pr=(int32_t)u*16+48;
+    int32_t pt=(int32_t)v*16-48,pb=(int32_t)v*16+48;
+    int32_t cl=(int32_t)car_u-(int32_t)half*16,cr=(int32_t)car_u+(int32_t)half*16;
+    int32_t ct=(int32_t)car_v-(int32_t)half*16,cb=(int32_t)car_v+(int32_t)half*16;
+    return !(pl<cr&&cl<pr&&pt<cb&&ct<pb);
+}
+static void fleet_extent_guards(void){
+    static const UBYTE extents[6]={5,6,5,7,6,7};
+    memset(&td,0,sizeof(td));memset(actors,0,sizeof(actors));
+    td.mode=TD_ROAM;td.onfoot=1;td.park_u=560*16;td.park_v=720*16;
+    td_streetcar_view_district=TD_DISTRICT_CITY;td_streetcar_ride_view=0;td_streetcar_elapsed=0;
+    for(unsigned kind=0;kind<6;kind++){
+        unsigned violations=0;
+        for(UBYTE i=2;i<8;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
+        actors[kind+2].flags=0;
+        for(unsigned fraction=0;fraction<2;fraction++){
+            UWORD cu=500*16+fraction*8,cv=400*16+fraction*8;
+            actors[kind+2].pos.x=cu*2;actors[kind+2].pos.y=cv*2;
+            td_state_t saved=td;actor_t saved_actor=actors[kind+2];
+            for(int dx=-11;dx<=11;dx++)for(int dy=-11;dy<=11;dy++){
+                UWORD u=(UWORD)(500+dx),v=(UWORD)(400+dy);
+                UBYTE clear=td_person_road_clear(u,v);
+                int body_clear=reference_fleet_clear(u,v,cu,cv,extents[kind]);
+                if(clear&&!body_clear)violations++;
+                fleet_check(!clear||body_clear,"A permitted human position never overlaps the actual fleet body");
+                if(dx<=-11||dx>=11||dy<=-11||dy>=11)
+                    fleet_check(clear,"Humans remain free beyond the fleet exclusion boundary");
+            }
+            fleet_check(!memcmp(&td,&saved,sizeof(td))&&!memcmp(&actors[kind+2],&saved_actor,sizeof(saved_actor)),
+                        "Fleet clearance queries preserve saved state and the actual actor body");
+        }
+        if(violations)fprintf(stderr,"Fleet kind%u half%u: %u unsafe permitted centres\n",kind,extents[kind],violations);
+        actors[kind+2].flags=ACTOR_FLAG_HIDDEN;
+        fleet_check(td_person_road_clear(500,400),"Hidden fleet bodies remain absent from pedestrian occupancy");
+    }
+    /* A coherent actual Core bus leg: from(816,176) north to(816,64),
+     * with its next eight-pixel advance160->152. Route19 is the real
+     * horizontal foot crossing(784..847,148), phase22->23 at7:15->7:20. */
+    UWORD fleet_u[6]={80*16,200*16,320*16,440*16,824*16,816*16};
+    UWORD fleet_v[6]={280*16,392*16,168*16,632*16,240*16,160*16};
+    td_traffic_context_t context={fleet_u,fleet_v,&actors[9],extents,extents,560*16,720*16,0,0};
+    memset(&td,0,sizeof(td));memset(actors,0,sizeof(actors));
+    td.u=816*16;td.v=112*16;td.onfoot=1;td.mode=TD_ROAM;
+    td.park_u=560*16;td.park_v=720*16;td.seconds=7;td.subsecond=15;
+    td_streetcar_view_district=TD_DISTRICT_CITY;td_streetcar_ride_view=0;
+    fixture_authored_routes=1;memset(fixture_routes,TD_NONE,sizeof(fixture_routes));fixture_routes[0]=19;
+    for(UBYTE i=2;i<8;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
+    actors[7].flags=0;actors[7].pos.x=816*32;actors[7].pos.y=160*32;
+    require(td_district_routes[0][19][0]==784&&td_district_routes[0][19][1]==148,
+            "Bus crossing fixture uses the unchanged authored Core route19");
+    td_people_reset();require(td_people_present(24)==0&&td_people[0].phase==22&&
+            actors[9].pos.x==806*32&&actors[9].pos.y==148*32,
+            "Actual world7:15 presents the preceding safe eastbound human phase22");
+    require(td_traffic_admit(&context,0,7,5,816*16,160*16,816*16,152*16,0),
+            "Actual bus admission accepts its coherent next sweep while the human is safely at806");
+    fleet_v[5]=152*16;actors[7].pos.y=152*32;td.subsecond=20;
+    td_state_t saved=td;fleet_check(td_people_present(24)==0,"The crossing guard does not invent an impact");
+    fleet_check(td_people[0].phase==22&&td_people[0].lag==1&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
+                actors[9].pos.x==806*32&&actors[9].pos.y==148*32,
+                "Attempted actual phase23 waits visibly at806 rather than entering the bus body at807");
+    fleet_check(reference_fleet_clear(actors[9].pos.x>>5,actors[9].pos.y>>5,816*16,152*16,7),
+                "The actual displayed human remains outside the full bus body");
+    for(unsigned advance=0;advance<2;advance++){
+        UWORD next=fleet_v[5]-8*16;
+        UBYTE admitted=td_traffic_admit(&context,0,7,5,fleet_u[5],fleet_v[5],fleet_u[5],next,0);
+        fleet_check(admitted,"The bus can clear the crossing instead of becoming mutually blocked");
+        if(admitted){fleet_v[5]=next;actors[7].pos.y=next*2;}
+        td.subsecond=25+advance*5;fleet_check(td_people_present(24)==0,"Waiting/resuming foot motion invents no impact");
+    }
+    fleet_check(actors[9].pos.x==807*32&&td_people[0].phase==23&&td_people[0].lag==2&&
+                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"The same phase23 resumes once the bus clears, without teleporting or hiding");
+    saved.subsecond=td.subsecond;fleet_check(!memcmp(&td,&saved,sizeof(td)),
+                "Crossing admission, waiting and resumption preserve all58 gameplay bytes");
+    fixture_authored_routes=0;
+    require(!unused_traffic_callbacks,"Pure actual traffic body/admission checks never consult the fail-closed hardware stubs");
+    if(fleet_failures)fprintf(stderr,"Fleet extent regression: %u failures\n",fleet_failures);
+    require(!fleet_failures,"Fleet extent and authored crossing safety regressions pass");
+}
 
 static uint32_t random_u32(void){random_state=random_state*1664525u+1013904223u;return random_state;}
 static unsigned distance16(uint16_t a,uint16_t b){return a>b?a-b:b-a;}
@@ -169,17 +273,21 @@ static void parked_district_queries(void){
     for(UBYTE i=2;i<8;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
     td.mode=TD_RIDE;td_streetcar_ride_view=1;td_streetcar_elapsed=0;
     td.cash=237;td.health=81;td.wanted=2;td.wanted_left=21;
-    td.park_u=824*16+15;td.park_v=400*16+15;
+    for(unsigned fraction=0;fraction<16;fraction++)
     for(unsigned logical=0;logical<3;logical++)for(unsigned view=0;view<3;view++)
         for(UBYTE parked=0;parked<TD_DISTRICT_COUNT;parked++)for(UBYTE foot=0;foot<2;foot++)
             for(unsigned point=0;point<sizeof(offsets)/sizeof(offsets[0]);point++){
                 UWORD u=(UWORD)(824+offsets[point][0]),v=(UWORD)(400+offsets[point][1]);
                 td.district=queen_districts[logical];td_streetcar_view_district=queen_districts[view];
-                td.park_district=parked;td.onfoot=foot;before=td;
-                /* Literal same-position/8px points are blocked, exact9px points
-                 * are clear. The fractional parked position still floors once. */
-                require(td_person_road_clear(u,v)==!(foot&&parked==queen_districts[view]&&point<2),
-                        "Park occupancy uses the loaded district and retains strict9px/floored coordinates");
+                td.park_district=parked;td.onfoot=foot;
+                td.park_u=824*16+fraction;td.park_v=400*16+fraction;before=td;
+                /* A conservative6px parked body plus3px human footprint.
+                 * Positive9px is blocked at fractions1..15; negative9px
+                 * remains clear. The reference uses signed body rectangles. */
+                int occupied=foot&&parked==queen_districts[view]&&
+                    !reference_fleet_clear(u,v,td.park_u,td.park_v,6);
+                require(td_person_road_clear(u,v)==!occupied,
+                        "Park occupancy uses loaded district and actual fractional Q4 boundaries");
                 require(!memcmp(&td,&before,sizeof(td)),"Park query preserves every paid-trip/save byte");
             }
     td.onfoot=1;td.park_district=td_streetcar_view_district=TD_DISTRICT_CITY;
@@ -264,4 +372,4 @@ static void paid_parked_presentation(void){
     fixture_authored_routes=0;
 }
 
-int main(void){contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}
+int main(void){fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}
