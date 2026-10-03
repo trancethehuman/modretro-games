@@ -4,7 +4,7 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Current status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, six Toronto districts, 96 contracts, walking/driving and scheduled transit | Native prototype; matching emulator campaign reaches 19 unique completions and all six loaded districts. Full campaign, two enjoyable human hours and hardware remain pending. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, six Toronto districts, 96 contracts, walking/driving and scheduled transit | Native prototype; matching emulator campaign reaches 22 unique completions and all six loaded districts. Full campaign, two enjoyable human hours and hardware remain pending. |
 
 Toronto Dispatch contains 241 buildings, 595 pedestrian routes, 59 service points, seven parking anchors and four player vehicles. Explore compressed mainland neighbourhoods, Port Lands industry/bridges and public walking Islands. Momentum/braking, pedestrians and police consequences, scheduled train/bus/Queen/ferry travel, a scrollable atlas, original audio and save v9 progression are implemented.
 
@@ -16,9 +16,9 @@ Unmodified Core emulator frames from current `e797…`; [provenance](games/toron
 
 Read the [controls and features](games/toronto-dispatch/README.md) and [Chromatic loading guide](games/toronto-dispatch/docs/LOADING.md). Current local ROM is `toronto-dispatch-courier-clearance.gbc`, 524,288 bytes, SHA-256 `e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f`. On the dispatch board, Select jumps to the next eight-job chapter. RESULT B closes the receipt without reversing while held; release and press B again to brake/reverse normally.
 
-This exact ROM's growing emulator campaign reaches [19 distinct completed quests](games/toronto-dispatch/docs/NATIVE_CAMPAIGN_NINETEEN_SAMPLES.json), including all eight kinds, scheduled train/bus relays, three public Island roundtrips and west/east/Port Lands jobs. Imported progress and each newly played continuation remain explicit. A failed west-end run and successful mixed driving/walking retry are retained. Chapter/control/walker-yield/impact/map checks and a separate same-ROM checkpoint/reset record also pass.
+This exact ROM's growing emulator campaign reaches [22 distinct completed quests](games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json), including all eight kinds, scheduled train/bus relays, three public Island roundtrips and west/east/Port Lands jobs. The latest continuation verifies three foot-only client handoffs, recovery of the original parked car and three Port Lands road bridges. Imported progress, test-controller corrections and route-checking scope remain explicit. A failed west-end run and successful mixed driving/walking retry are retained. Chapter/control/walker-yield/impact/map checks and a separate same-ROM checkpoint/reset record also pass.
 
-The remaining 77 contracts, fuller Old Toronto, two measured enjoyable human hours, wider pacing/balance, browser recovery and physical stream/flash/cold-boot/save persistence remain unverified. Earlier ROM records retain their own identities in [TESTING.md](games/toronto-dispatch/TESTING.md). No hardware installation is claimed; [published Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is a separate older release.
+The remaining 74 contracts, fuller Old Toronto, two measured enjoyable human hours, wider pacing/balance, browser recovery and physical stream/flash/cold-boot/save persistence remain unverified. Earlier ROM records retain their own identities in [TESTING.md](games/toronto-dispatch/TESTING.md). No hardware installation is claimed; [published Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is a separate older release.
 
 ## Develop
 

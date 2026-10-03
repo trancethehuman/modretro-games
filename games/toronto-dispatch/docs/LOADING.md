@@ -4,7 +4,7 @@ Select **`toronto-dispatch-courier-clearance.gbc`**, **524,288 bytes**, SHA-256 
 
 Official build/header/compiled and full source checks pass, with scoped native chapter/first-delivery/RESULT-control/visible-walker-yield/impact/map evidence and a separate same-ROM checkpoint/reset record. No physical installation has been attempted. All 96 played contracts, two measured enjoyable human hours, browser recovery and cartridge cold-boot/save persistence remain pending. Follow the device steps below; detailed [build](BUILD.md) and [test evidence](../TESTING.md) are separate from physical verification.
 
-The unchanged candidate also has a [19-completion emulator campaign](NATIVE_CAMPAIGN_NINETEEN_SAMPLES.json), cumulatively representing all eight quest kinds and all six loaded districts. Scheduled train/bus relays and three Island roundtrips pass; regional records retain collision penalties, a failed delivery and its successful retry. Imported progression is disclosed. This adds gameplay evidence to the same ROM and loading bundle; it does not verify the physical cartridge.
+The unchanged candidate also has a [22-completion emulator campaign](NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json), cumulatively representing all eight quest kinds and all six loaded districts. Scheduled train/bus relays, three Island roundtrips and three further foot-client deliveries pass; regional records retain collision penalties, a failed delivery and its successful retry. Imported progression and test-controller corrections are disclosed. This adds gameplay evidence to the same ROM and loading bundle; it does not verify the physical cartridge.
 
 ## 1. Prepare the computer and console
 
