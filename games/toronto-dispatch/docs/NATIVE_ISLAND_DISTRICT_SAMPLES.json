@@ -41,7 +41,8 @@
       ],
       "backgroundScratchStart": 32,
       "tramBytes": 1484,
-      "tramBank": 18
+      "tramBank": 24,
+      "tramBankHex": "0x18"
     }
   },
   "runtime": {
@@ -11995,7 +11996,7 @@
   },
   "limitations": [
     "Island contracts are reached freely here; their active objectives/deadlines are not played. All96 contracts and two measured enjoyable hours remain pending.",
-    "Host v4–v8 migrations do not establish native old-save imports or physical power-off/interrupted-save behavior.",
+    "Host v4\u2013v8 migrations do not establish native old-save imports or physical power-off/interrupted-save behavior.",
     "Other services, all vehicles/seams/roof regions, crowded pacing and deepest stack need broader exact-ROM evidence.",
     "No browser recovery, streaming, cartridge write/readback, physical cold boot or human handling/audio review."
   ]

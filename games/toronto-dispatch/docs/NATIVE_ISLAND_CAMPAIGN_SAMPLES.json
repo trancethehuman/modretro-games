@@ -42,7 +42,8 @@
       ],
       "backgroundScratchStart": 32,
       "tramBytes": 1484,
-      "tramBank": 18
+      "tramBank": 24,
+      "tramBankHex": "0x18"
     }
   },
   "runtime": {

@@ -2,7 +2,7 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The verified local loading candidate is `toronto-dispatch-islands-safe.gbc`, **524,288 bytes**, SHA-256 `7b2af59c27179bd3445c5c074b85fb4a029b50144ef27ed3095f9a3ce83f7d5a`. It contains six compressed Toronto districts, 96 contracts, 59 service points, seven mainland parking anchors and save v9 / 58 bytes. Its official build, header, compiled sprite/table guards, 1,097-byte static reserve and complete source suite pass. [Scoped native evidence](NATIVE_ISLAND_DISTRICT_SAMPLES.json) covers all three Island ferry landings/bridges, inland/coastal walking, canopy occlusion, correct map/audio menus, current-save/reset recovery, low-cash return assistance, mainland car recovery and a successful first delivery. Island contracts and their deadlines were not played in that free-roaming walkthrough.
+The verified local loading candidate is `toronto-dispatch-queen-street-life.gbc`, **524,288 bytes**, SHA-256 `5ae4a83b3cb13dfbd838e4fdf9b49df79e8db1949af360e91e69a97fe148dda2`. It contains six compressed Toronto districts, 96 contracts, 59 service points, seven mainland parking anchors and save v9 / 58 bytes. Its official build/header, compiled resource/table guards, 1,097-byte static reserve and complete source suite pass. [Its scoped native replay](NATIVE_QUEEN_STREET_LIFE_SAMPLES.json) covers a full-condition first delivery, paid Queen 47→43→47 with correct pedestrian/view behavior, paid reset, original parked-car recovery, audio labels, two exact map-freeze pairs and resumed driving. This fixes the later native actor-flags/view corruption and remote-car filtering; it does not inherit the older Island campaign results.
 
 The earlier `8a96…` six-scene build has a [retained pause/audio-map failure](NATIVE_ISLAND_MAP_FAILURE.json) and must not be selected. The older five-scene `4343…` itinerary/payout, `ff5d…` preparation and `c625…` Port-job recordings keep their own scopes in [TESTING.md](../TESTING.md). The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the separate four-district `23b2…` release; no newer GitHub release or physical installation is claimed here.
 
@@ -10,7 +10,7 @@ Current source preserves all contract IDs/fields and completion bits, relocating
 
 This is still a prototype. Full Old Toronto, all played contracts/balanced deadlines, two measured enjoyable hours, wider vehicle/traffic/pacing/stack checks, human handling/audio feedback, browser recovery and cartridge write/read-back/cold boot remain open. [BUILD.md](BUILD.md), [TESTING.md](../TESTING.md) and [AUDIO.md](AUDIO.md) distinguish the available evidence. A later source change needs its own ROM identity and replay.
 
-A [separate campaign replay](NATIVE_ISLAND_CAMPAIGN_SAMPLES.json) completes 13 unique quests on this same ROM, covering all eight job kinds. Centre Letters finishes its 195-second limit at full condition with 136 seconds left. Active-job map freezing, carried and paid-ferry resets, cancellation and a deliberate paid-crossing timeout pass. Island arrivals require **Select at each ordered dock/client** before moving to the next objective. The remaining eight Island jobs and the broader acceptance checks above remain pending.
+A [separate campaign replay](NATIVE_ISLAND_CAMPAIGN_SAMPLES.json) completes 13 unique quests on retained `7b2af59c…` (`toronto-dispatch-islands-safe.gbc`), covering all eight job kinds. Centre Letters finishes its 195-second limit at full condition with 136 seconds left. Active-job map freezing, carried and paid-ferry resets, cancellation and a deliberate paid-crossing timeout pass. Island arrivals require **Select at each ordered dock/client** before moving to the next objective. The remaining eight Island jobs and the broader acceptance checks above remain pending.
 
 ## 1. Prepare the computer and console
 
@@ -26,22 +26,22 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-islands-safe.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-queen-street-life.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-islands-safe.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-queen-street-life.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-islands-safe.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-islands-safe.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-queen-street-life.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-queen-street-life.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
