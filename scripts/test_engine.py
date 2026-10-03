@@ -153,6 +153,9 @@ def main():
                 (ENGINE / "src/td_streetcar.c").read_text() + '\n' +
                 (ENGINE / "src/td_streetcar_runtime.c").read_text() + '\n' +
                 (ENGINE / "src/td_aircraft.c").read_text() + '\n' +
+                (ENGINE / "src/td_people.c").read_text() + '\n' +
+                (ENGINE / "src/td_traffic.c").read_text() + '\n' +
+                (ENGINE / "src/td_roads.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +
                 (ENGINE / "src/td_routes.c").read_text())
@@ -191,7 +194,8 @@ def main():
         command = [compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra",
                    "-Wno-unknown-pragmas", "-Wno-parentheses", "-fsanitize=address,undefined",
                    "-I", str(work), "-I", str(ENGINE / "include"),
-                   str(FIXTURES / "runtime_harness.c"), "-o", str(binary)]
+                   str(FIXTURES / "runtime_harness.c"), str(ENGINE / "src/td_police.c"),
+                   str(ENGINE / "src/td_traffic_signal_stop.c"), "-o", str(binary)]
         subprocess.run(command, check=True)
         result = subprocess.run([str(binary)], check=False)
         raise SystemExit(result.returncode)

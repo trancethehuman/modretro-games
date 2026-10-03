@@ -169,6 +169,14 @@ void td_streetcar_runtime_present(void) BANKED {
 UBYTE td_streetcar_runtime_foot_clear(UWORD u,UWORD v) BANKED {
     return td_streetcar_runtime_clear(u,v,3*16,td.district,td_streetcar_elapsed);
 }
+UBYTE td_streetcar_runtime_pedestrian_clear(UBYTE district,UWORD u,UWORD v) BANKED {
+    td_streetcar_box_t box,body;td_streetcar_pose_t pose;
+    if(td.subsecond>=60||!td_streetcar_runtime_box(u,v,3*16,3*16,district,&box))return FALSE;
+    if(td_streetcar_runtime_held())return td_streetcar_runtime_held_body(&pose,&body)&&
+        !td_streetcar_runtime_overlap(&box,&body);
+    return !td_streetcar_runtime_near(&box)||
+        td_streetcar_sweep(td.seconds,td.subsecond,td_streetcar_elapsed,&box)==TD_STREETCAR_CLEAR;
+}
 UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v) BANKED {
     td_streetcar_box_t box;
     if(!td_streetcar_runtime_box(u,v,5*16,5*16,td.district,&box)||old_u>=1024*16||old_v>=976*16||
@@ -181,15 +189,25 @@ UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v) BA
     return td.subsecond<60&&(!td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(td.seconds,td.subsecond,td_streetcar_elapsed,&box)==TD_STREETCAR_CLEAR);
 }
-UBYTE td_streetcar_runtime_traffic_clear(UBYTE district,UWORD u,UWORD v) BANKED {
-    td_streetcar_box_t box,body;td_streetcar_pose_t pose;UWORD future=td.seconds+1;
-    if(td.subsecond>=60||!td_streetcar_runtime_box(u,v,5*16,5*16,district,&box))return FALSE;
+UBYTE td_streetcar_runtime_traffic_sweep_clear(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
+    td_streetcar_box_t box,old_box,body;td_streetcar_pose_t pose;UWORD future=td.seconds+1;
+    if(half<5||half>8||td.subsecond>=60||
+       !td_streetcar_runtime_box(u,v,half*16,half*16,district,&box)||
+       !td_streetcar_runtime_box(old_u,old_v,half*16,half*16,district,&old_box))return FALSE;
+    if(old_box.left<box.left)box.left=old_box.left;
+    if(old_box.right>box.right)box.right=old_box.right;
+    if(old_box.top<box.top)box.top=old_box.top;
+    if(old_box.bottom>box.bottom)box.bottom=old_box.bottom;
     if(td_streetcar_runtime_held())return td_streetcar_runtime_held_body(&pose,&body)&&
         !td_streetcar_runtime_overlap(&box,&body);
-    /* Yield before entering the rails, not only after the tram swept past.
-     * The one-second future interval remains exact across clock rollover. */
     return !td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(future,td.subsecond,60,&box)==TD_STREETCAR_CLEAR;
+}
+UBYTE td_streetcar_runtime_traffic_clear_extent(UBYTE district,UWORD u,UWORD v,UBYTE half) BANKED {
+    return td_streetcar_runtime_traffic_sweep_clear(district,u,v,u,v,half);
+}
+UBYTE td_streetcar_runtime_traffic_clear(UBYTE district,UWORD u,UWORD v) BANKED {
+    return td_streetcar_runtime_traffic_clear_extent(district,u,v,5);
 }
 UBYTE td_streetcar_runtime_traffic_segment(UBYTE district,UBYTE slot,UBYTE count,
     const UBYTE *current_legs,UWORD u,UWORD v,UWORD target_u,UWORD target_v,
@@ -225,15 +243,15 @@ UBYTE td_streetcar_runtime_traffic_segment(UBYTE district,UBYTE slot,UBYTE count
         u>=(*from_u<target_u?*from_u:target_u)&&u<=(*from_u>target_u?*from_u:target_u);
     return FALSE;
 }
-UBYTE td_streetcar_runtime_traffic_retreat(UBYTE district,UWORD old_u,UWORD old_v,
-                                        UWORD u,UWORD v) BANKED {
+UBYTE td_streetcar_runtime_traffic_retreat_extent(UBYTE district,UWORD old_u,UWORD old_v,
+                                        UWORD u,UWORD v,UBYTE half) BANKED {
     td_streetcar_box_t old_box,box,body,guard;td_streetcar_pose_t pose;
     UBYTE held=td_streetcar_runtime_held(),tick,sub;UWORD second,old_distance,new_distance;
-    if(td.subsecond>=60||!td_streetcar_runtime_box(old_u,old_v,80,80,district,&old_box)||
-       !td_streetcar_runtime_box(u,v,80,80,district,&box)||
+    if(half<5||half>8||td.subsecond>=60||!td_streetcar_runtime_box(old_u,old_v,half*16,half*16,district,&old_box)||
+       !td_streetcar_runtime_box(u,v,half*16,half*16,district,&box)||
        !((old_u==u&&old_v!=v&&td_streetcar_runtime_distance(old_v,v)<=8)||
          (old_v==v&&old_u!=u&&td_streetcar_runtime_distance(old_u,u)<=8)))return FALSE;
-    if(td_streetcar_runtime_traffic_clear(district,u,v))return TRUE;
+    if(td_streetcar_runtime_traffic_clear_extent(district,u,v,half))return TRUE;
     if(held){if(!td_streetcar_runtime_held_body(&pose,&body))return FALSE;}
     else if(!td_streetcar_pose(td.seconds,td.subsecond,&pose)||!td_streetcar_bounds(&pose,&body))return FALSE;
     /* Incoming traffic never receives this exception. Only an actual,
@@ -276,6 +294,9 @@ UBYTE td_streetcar_runtime_traffic_retreat(UBYTE district,UWORD old_u,UWORD old_
         if(++sub==60){sub=0;second++;}
     }
     return TRUE;
+}
+UBYTE td_streetcar_runtime_traffic_retreat(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v) BANKED {
+    return td_streetcar_runtime_traffic_retreat_extent(district,old_u,old_v,u,v,5);
 }
 UBYTE td_streetcar_runtime_parking_allowed(UBYTE district,UWORD u,UWORD v) BANKED {
     return td_streetcar_runtime_clear(u,v,5*16,district,TD_STREETCAR_PERIOD_TICKS);

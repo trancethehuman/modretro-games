@@ -72,4 +72,7 @@ void deactivate_actor(actor_t *actor);
 void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank);
 UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank);
 
+extern UBYTE tile_hit_x,tile_hit_y;
+UBYTE tile_col_test_range_x(UBYTE mask,UBYTE row,UBYTE first,UBYTE last);
+UBYTE tile_col_test_range_y(UBYTE mask,UBYTE column,UBYTE first,UBYTE last);
 #endif

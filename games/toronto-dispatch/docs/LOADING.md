@@ -2,13 +2,15 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The latest locally tested source candidate is **524,288 bytes**, SHA-256 `a212dd9ed479310a98e58b701416f8af88aaa09174f186747dca678ff4c164f4`, named `toronto-port-lands-labels.gbc`. It includes five linked compressed districts, the Port Lands industrial area and Cherry Beach, occasional planes/helicopters, a vertically scrollable city atlas and the previous moving Queen streetcar/traffic corrections. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the earlier four-district `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include these later changes. This source candidate has not been published as a new release.
+The latest scoped-native source candidate is `toronto-streetlife-fused.gbc`, **524,288 bytes**, SHA-256 `a243834899097d9660190022f03ce31d322d2584d0d7cfe1fdf8adb84a8902ea`. It passes official header/compiled poses/limits/1,098-byte static reserve and final full `make check`. Two fresh same-ROM records sample H1 impact/stumble, map/attention reset, police capture, parking/walking/blocked shore/a visible boat, and a full-condition first delivery. Correct paired timing is 108 loops/360 VBlanks, below retained baseline 132; broader street/performance/hardware acceptance remains open. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains the earlier four-district `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`. No newer street-source release or physical installation is claimed.
 
-The campaign remains 88 contracts and 51 service points; Port Lands currently adds free roaming. Three fresh scoped native passes cover paid Queen 46→49 and the reciprocal Leslie connection, industrial streets/Unwin bridge/Cherry Beach, exact map pause, a real button reset restoring a saved Port Lands checkpoint with its car still in Core, rendered plane/helicopter rotor poses and shadows, first delivery/steering/braking/reverse, and Front Street loop measurements. Official build/header/compiled frames and a 1,176-byte static reserve pass, alongside the full sanitizer/content suite. [TESTING.md](../TESTING.md) and [PERFORMANCE.md](PERFORMANCE.md) retain each ROM's own evidence. Static reserve and sampled sprite counts do not prove deepest stack usage or whole-city pacing.
+Retained Port Lands baseline `a212dd9e…`, `toronto-port-lands-labels.gbc`, keeps its earlier five-scene travel/aircraft/map/checkpoint proofs. Older 75-byte epoch `35337509…` also keeps its own delivery/90-loop identity; none of these records is assigned to new source.
+
+The campaign remains 88 contracts/51 service points; Port Lands currently adds free roaming. The separate `a212…` record covers Queen/Leslie travel, Beach/Unwin walking, exact map freeze, real reset with parked Core car retained, rendered aircraft and first-delivery driving, with 1,176-byte reserve. [TESTING.md](../TESTING.md) and [PERFORMANCE.md](PERFORMANCE.md) retain each ROM's evidence. Static reserve and sampled sprite counts do not prove deepest stack usage or whole-city pacing.
 
 Earlier walker-contact, booked-tram HOLD, legacy-service and roof checks remain attached to their actual older ROMs. All vehicles/bridges/seams, the full campaign and two-hour target, full Old Toronto/Islands, browser recovery and physical execution remain open. No cartridge write/read-back, streaming or physical cold boot is recorded for this candidate.
 
-The new candidate uses save version 7 with the same 58-byte state and reads valid older checkpoints. Prototype 6 uses version 6 and cannot read rewritten version-7 records once both saved slots have been replaced. Preserve existing cartridge saves through the supported backup workflow before testing a newer build.
+The retained `a212…` baseline uses save v7; current street source uses v8 with the same 58-byte state, reusing obsolete cursor words for police attention/countdown and clearing them on valid older imports. Prototype 6 uses v6. Older binaries cannot restore rewritten v8 records once both slots are replaced. Preserve existing cartridge saves through the supported backup workflow before testing a newer build. Host migrations and emulator reset evidence do not establish physical power-off persistence.
 
 Original music and vehicle/event/transit effects are implemented, with music + effects, effects-only and silent options. [TESTING.md](../TESTING.md) separates native gameplay scenarios and their build identities; [AUDIO.md](AUDIO.md) records the actual PCM evidence and remaining listening checks.
 
@@ -25,25 +27,25 @@ The updater activates the computer and handles console firmware. The game itself
 
 ## 2. Select the actual game build
 
-The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
+The editable project is `games/toronto-dispatch/project/project.gbsproj`. The latest scoped-native fused output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc
+games/toronto-dispatch/project/build/toronto-streetlife-fused.gbc
 ```
 
-Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
+Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse the measured fused hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select this repository's Toronto Dispatch project, build `build/toronto-port-lands-labels.gbc` with matching debug artifacts, run the documented native memory and compiled-frame guards, inspect the resulting ROM, and show its exact path, size and SHA-256. Boot and smoke-test that exact native ROM before preparing installation.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to `build/toronto-streetlife-fused.gbc` with matching debug artifacts, preserving older measured files and using a new distinct name for later source changes. Run the memory and compiled resource/frame/isolation guards, inspect its exact path/size/SHA-256 and test that same ROM's street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
-Optional read-only checks from the repository root on macOS:
+Optional read-only checks for the measured fused candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-port-lands-labels.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-streetlife-fused.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-streetlife-fused.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

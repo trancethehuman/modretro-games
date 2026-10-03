@@ -25,6 +25,15 @@ check:
 	python3 games/toronto-dispatch/scripts/create_port_lands_art.py --check
 	python3 games/toronto-dispatch/scripts/create_world_routes.py --check
 	python3 games/toronto-dispatch/scripts/create_audio.py --check
+	python3 games/toronto-dispatch/scripts/create_city_sprites.py --check
+	python3 games/toronto-dispatch/scripts/create_boat_sprite.py --check
+	python3 games/toronto-dispatch/scripts/create_traffic_signals.py --check
+	python3 scripts/test_boats.py
+	python3 scripts/test_city_sprites.py
+	python3 scripts/test_people_hotspots.py
+	python3 scripts/test_traffic.py
+	python3 scripts/test_roads.py
+	python3 scripts/test_police.py
 	python3 scripts/test_engine.py
 	python3 scripts/test_district_bridge.py
 	python3 scripts/test_world_navigation.py

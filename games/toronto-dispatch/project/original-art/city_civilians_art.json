@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "licence": "MIT",
+  "notice": "Original hand-placed pixels; no logo, photograph or copied game sprite",
+  "generator": "scripts/create_city_sprites.py",
+  "native_asset_id": "e89b6d16-588b-5bfb-ae62-3fe34d537c86",
+  "native_symbol": "sprite_city_civilians",
+  "source_png": "original-art/city_civilians.png",
+  "source_metadata": "original-art/city_civilians.metadata.json",
+  "destination": "assets/sprites/city_civilians.png",
+  "png_sha256": "ee7a375a55fc5e9bde5e4254f96a69221cddca06d7cbf808520942ae2a932803",
+  "metadata_sha256": "bbca85da9d9b580ab1fa5129ce8c99b7e3398266427daf15a7554f4b6455464d",
+  "decoded_rgb_sha256": "a64f52178b735f521bd35d59d628e25097efa7eaf248937ea4a98fd67ce252f5",
+  "visible_frames": 10,
+  "hidden_frame": 10,
+  "objects_per_visible_pose": 2,
+  "palette_slots": [
+    1,
+    2
+  ],
+  "source_unique_8x16_patterns": 6,
+  "allocation_target_max_8x8_per_obj_bank": 14,
+  "frame_layout": "teal/ochre each E-step0,E-step1,W-step0,W-step1,stumble",
+  "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"
+}

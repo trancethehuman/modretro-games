@@ -7,6 +7,7 @@
 #include "td_font.h"
 #include "td_audio.h"
 #include "td_atlas.h"
+#include "td_traffic_lights.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "ui.h"
@@ -159,6 +160,7 @@ void td_map_close(void) BANKED {
     for(i=0;i<td_map_actor_count;i++)actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|td_map_hidden[i];
     camera_x=td_map_camera_x;camera_y=td_map_camera_y;camera_settings=td_map_camera_settings;
     td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;
+    td_traffic_lights_reset();
 }
 void td_ui_init(void) BANKED {
     UBYTE i;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
@@ -186,20 +188,20 @@ void td_ui_draw(void) BANKED {
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         if(td.msg){
-            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR"};
+            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE"};
             td_row(0,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
         }else {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
-        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);if(td_target.district!=td.district){if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);else strcpy(td_line,"NO ROAD ROUTE");td_row(2,td_line);}else td_row(2,td_target.name);}
-        else {sprintf(td_line,"$%u %s %u/%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.done,TD_QUESTS);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
+        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);if(td_target.district!=td.district){if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);else strcpy(td_line,"NO ROAD ROUTE");td_row(2,td_line);}else td_row(2,td_target.name);}
+        else {sprintf(td_line,"$%u %s H%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
         return;
     }
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
     td_row(0," TORONTO DISPATCH");
     if(td.mode==TD_HELP){
-        td_row(2,"A GAS / B BRAKE");td_row(3,"LEFT RIGHT STEERING");td_row(4,"B HELD: REVERSE");td_row(6,"SELECT: DELIVER/JOBS");td_row(7,"START: PAUSE MENU");td_row(8,"STOP NEAR THE BEACON");td_row(10,"PARK TO WALK / TTC");td_row(12,"ON FOOT: A ENTER CAR");td_row(13,"B TTC AT A STATION");td_row(11,"FARES + TIMETABLES");td_row(15,"A OR B: ENTER CITY");return;
+        td_row(2,"A GAS / B BRAKE");td_row(3,"LEFT RIGHT STEERING");td_row(4,"B HELD: REVERSE");td_row(6,"SELECT: DELIVER/JOBS");td_row(7,"START: PAUSE MENU");td_row(8,"STOP NEAR THE BEACON");td_row(10,"PARK TO WALK / TTC");td_row(12,"ON FOOT: A ENTER CAR");td_row(13,"B TTC AT A STATION");td_row(11,"FARES + TIMETABLES");td_row(14,"H: POLICE ATTENTION");td_row(15,"A OR B: ENTER CITY");return;
     }
     if(td.mode==TD_PAUSE){
         sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);

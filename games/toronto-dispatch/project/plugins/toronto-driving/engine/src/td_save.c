@@ -16,6 +16,7 @@ static UWORD td_crc_byte(UWORD crc,UBYTE value){
 static volatile UBYTE *td_save_address(UBYTE slot){return slot?(volatile UBYTE*)0xA180:(volatile UBYTE*)0xA100;}
 static UBYTE td_valid_state(td_state_t *s){
     UBYTE i,bits=0,value;td_job_t job;td_stop_t stop;
+    if(s->wanted>3||s->wanted_left>30||(!s->wanted!=!s->wanted_left))return FALSE;
     if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP)return FALSE;
     if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
     if(s->district>=TD_DISTRICT_COUNT||s->park_district>=TD_DISTRICT_COUNT||(s->reserved&~TD_STREETCAR_HOLD))return FALSE;
@@ -63,7 +64,7 @@ static void td_migrate_old(td_state_t *dest){
 static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq){
     UBYTE i,version,length;UWORD crc=0xFFFF;UBYTE *dst=(UBYTE*)dest;volatile UBYTE *ram=td_save_address(slot);
     version=ram[2];length=ram[3];
-    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==TD_SAVE_VERSION||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
+    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==TD_SAVE_VERSION||version==7||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
     for(i=2;i<=4;i++)crc=td_crc_byte(crc,ram[i]);
     for(i=0;i<length;i++){dst[i]=ram[8+i];crc=td_crc_byte(crc,ram[8+i]);}
     if(crc!=(ram[5]|(UWORD)ram[6]<<8))return FALSE;
@@ -71,6 +72,8 @@ static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq){
        a corrupt legacy record as the new paid-arrival hold flag. */
     if(version==6&&dest->reserved)return FALSE;
     if(version==5)td_migrate_old(dest);
+    /* v4..7 cursor words never drove the atlas; do not turn them into heat. */
+    if(version<8)dest->wanted=dest->wanted_left=0;
     *seq=ram[4];return TRUE;
 }
 UBYTE td_restore(void) BANKED {
@@ -94,6 +97,6 @@ UBYTE td_restore(void) BANKED {
     valid=ram[0]==0x54&&ram[1]==0xD7&&ram[2]==4;
     if(valid){for(i=0;i<48;i++){raw[i]=ram[4+i];check^=raw[i];}valid=check==ram[3];if(valid)td_migrate_old(&candidate);}
     SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
-    if(valid){candidate.job=TD_NONE;candidate.stage=0;candidate.left=0;candidate.health=100;candidate.mode=TD_ROAM;candidate.speed=0;if(td_valid_state(&candidate)){td=candidate;td_save_slot=0;td_save();return TRUE;}}
+    if(valid){candidate.wanted=candidate.wanted_left=0;candidate.job=TD_NONE;candidate.stage=0;candidate.left=0;candidate.health=100;candidate.mode=TD_ROAM;candidate.speed=0;if(td_valid_state(&candidate)){td=candidate;td_save_slot=0;td_save();return TRUE;}}
     return FALSE;
 }

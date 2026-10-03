@@ -37,12 +37,16 @@ def check_actor_override():
     tail = source[source.index("#pragma bank 255"):]
     edits = [("#include \"td_aircraft_render.h\"\n", ""),
              ("    td_aircraft_render_restore();\n\n", ""),
-             ("    td_aircraft_render();\n", "")]
+             ("    td_aircraft_render();\n", ""),
+             ('#include "td_boats.h"\n', ""),
+             ('#include "td_traffic_lights.h"\n', ""),
+             ("    td_traffic_lights_render();\n", ""),
+             ("    td_boats_render();\n", "")]
     for before, after in edits:
-        assert tail.count(before) == 1, "Actor override must contain exactly the three scoped additions"
+        assert tail.count(before) == 1, "Actor override must contain each scoped living-city addition exactly once"
         tail = tail.replace(before, after)
     assert hashlib.sha256(tail.encode()).hexdigest() == "b7360f4e84c720090e127aa047daa21f7d70517a4a2d9512d2a96f568e9ee5f5", \
-        "Actor override changed beyond the pinned include and two render hooks"
+        "Actor override changed beyond the pinned living-city includes and render hooks"
     assert "Copyright (c) 2020 Toxa" in source and "THE SOFTWARE IS PROVIDED" in source
 
 

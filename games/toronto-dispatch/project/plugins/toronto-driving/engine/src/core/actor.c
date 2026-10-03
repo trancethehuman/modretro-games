@@ -2,8 +2,8 @@
  * Upstream: https://github.com/chrismaltby/gbvm
  * Pinned commit: bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3
  * Upstream file SHA-256: b7360f4e84c720090e127aa047daa21f7d70517a4a2d9512d2a96f568e9ee5f5
- * Changes: include td_aircraft_render.h; restore at actors_render entry;
- * render ambient aircraft after original ground actors.
+ * Changes: restore aircraft at actors_render entry; after ground actors,
+ * render signal tiles, capacity-admitted harbour boats, then ambient aircraft.
  *
  * MIT License
  * Copyright (c) 2020 Toxa
@@ -30,6 +30,8 @@
 
 #include "actor.h"
 #include "td_aircraft_render.h"
+#include "td_boats.h"
+#include "td_traffic_lights.h"
 
 #include <gbdk/platform.h>
 #include <gbdk/metasprites.h>
@@ -284,6 +286,8 @@ void actors_render(void) NONBANKED {
     }
 
     SWITCH_ROM(_save);
+    td_traffic_lights_render();
+    td_boats_render();
     td_aircraft_render();
 }
 

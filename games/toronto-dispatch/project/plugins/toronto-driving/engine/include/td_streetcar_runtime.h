@@ -34,9 +34,16 @@ void td_streetcar_runtime_present(void) BANKED;
  * geometry. Driving tests a conservative old/new11px-body union, walking a
  *6px body, and traffic an11px body, against the sampled tram motion. */
 UBYTE td_streetcar_runtime_foot_clear(UWORD u,UWORD v) BANKED;
+/* Loaded civilians use presentation-district coordinates while a paid ride
+ * retains the courier's saved origin. A held arrival uses booked doors. */
+UBYTE td_streetcar_runtime_pedestrian_clear(UBYTE district,UWORD u,UWORD v) BANKED;
 UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,
                                    UWORD u,UWORD v) BANKED;
 UBYTE td_streetcar_runtime_traffic_clear(UBYTE district,UWORD u,UWORD v) BANKED;
+/* Full fleet body half-extent5..8px; preserves future/HOLD guards. */
+UBYTE td_streetcar_runtime_traffic_sweep_clear(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED;
+UBYTE td_streetcar_runtime_traffic_clear_extent(UBYTE district,UWORD u,UWORD v,UBYTE half) BANKED;
+UBYTE td_streetcar_runtime_traffic_retreat_extent(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED;
 /* Rare route-segment query kept in a separate ROM bank from the driver.
  * Legs and output endpoints must be WRAM pointers. Count/target/current
  * coordinates are the caller's existing cache; no actor/cache state is

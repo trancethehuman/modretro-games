@@ -28,6 +28,8 @@ static UBYTE window_tiles[2][18][20],vram[2][256][16];
 static UBYTE window_x,window_y;
 static unsigned checks,failures,window_writes,tile_uploads,ground_uploads;
 static unsigned content_reads;
+static unsigned light_resets;
+void td_traffic_lights_reset(void){light_resets++;}
 static UBYTE initial_font[49][16];
 
 static void expect(int condition,const char *name) {
@@ -92,7 +94,7 @@ static void reset_case(void) {
     memset(actors,0,sizeof(actors));memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
     td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;
     td.park_district=1;td.park_u=400*16;td.park_v=528*16;td.cash=123;td.seconds=4321;
-    td.left=199;td.health=100;td.job=84;td.stage=3;td.map_x=43210;td.map_y=32109;td.mode=TD_PAUSE;
+    td.left=199;td.health=100;td.job=84;td.stage=3;td.wanted=2;td.wanted_left=21;td.mode=TD_PAUSE;
     td_target.district=3;td_target.u=320;td_target.v=144;td_target.reserved=TD_STOP_FOOT;strcpy(td_target.name,"WITHROW PARK");
     td_job.count=5;td_job.route[3]=36;td_job.seconds=199;td_job.reward=130;
     td_route_district=0;td_resume_mode=TD_ROAM;actors_len=TD_ACTORS;
@@ -287,7 +289,9 @@ static void test_every_viewport(void) {
     }
     expect(viewports==(TD_ATLAS_TILE_WIDTH-19)*(TD_ATLAS_TILE_HEIGHT-11),
            "fixture renders every actual legal twenty-by-twelve atlas viewport");
+    unsigned resets_before=light_resets;
     expect_game_unchanged(&before);td_map_close();
+    expect(light_resets==resets_before+1,"closing the atlas invalidates native signal pattern residency");
     for(unsigned i=0;i<sizeof(td_ui_cache);i++)
         expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the360-byte text/pattern union cache");
     td.mode=TD_PAUSE;unsigned writes=window_writes;td_ui_draw();

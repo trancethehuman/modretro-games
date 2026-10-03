@@ -1,0 +1,70 @@
+{
+  "status": "Original source; compiled scratch isolation, scene allocation and native play remain separate gates",
+  "native_frame_order": [
+    "north_hull",
+    "independent_scratch",
+    "empty_startup"
+  ],
+  "source_colours": [
+    [
+      101,
+      255,
+      0
+    ],
+    [
+      224,
+      248,
+      207
+    ],
+    [
+      134,
+      192,
+      108
+    ],
+    [
+      7,
+      24,
+      33
+    ]
+  ],
+  "hull_objects": 1,
+  "scratch_tile_pairs": 1,
+  "compiled_reserved_tiles_per_bank_limit": 6,
+  "sprite_palette": 7,
+  "loader_frame": 2,
+  "persistent_native_state_target_bytes": 13,
+  "maximum_persistent_state_bytes": 20,
+  "fictional_routes": [
+    {
+      "district": 0,
+      "u": 560,
+      "top": 840,
+      "bottom": 896
+    },
+    {
+      "district": 4,
+      "u": 464,
+      "top": 64,
+      "bottom": 432
+    }
+  ],
+  "port_deck_clip_rectangles": [
+    [
+      416,
+      96,
+      96,
+      64
+    ],
+    [
+      416,
+      256,
+      96,
+      64
+    ]
+  ],
+  "player_control": false,
+  "passenger_service": false,
+  "save_fields": false,
+  "water_full_hull_checks": 54528,
+  "source_raw_8x8_patterns": 4
+}

@@ -22,7 +22,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "scene_sha256": "a8ed929e4424742d17551ee86c962b76106119f7be27a3ec9fd2fed21c46fa2e",
+      "scene_sha256": "109d057ca8cabcea4f6fca503d3a3981aeaacb1f176ee382a2578cdb5861af3f",
       "collision_encoding_sha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92",
       "collision_bytes_sha256": "081c14a28c866c8d7285f1697ac3ecff3d5429f18a2c6e321e351be0ffaec5d8",
       "art_metadata": "content/city_art.json",
@@ -31,7 +31,7 @@
     {
       "district": 1,
       "scene": "project/project/scenes/toronto_west/scene.gbsres",
-      "scene_sha256": "3025e4929e6669993bed55de3008164b09dc03183f57d77875ed6fa20fd08bd4",
+      "scene_sha256": "f1be3404affed305db1283eddf8d58258613afb7e602953d58554f9f862d2ef5",
       "collision_encoding_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e",
       "collision_bytes_sha256": "ab4d0215477aa433df3824a4b3131b193bea42ba3ea8c837f10f69e936a56891",
       "art_metadata": "content/districts/west_art.json",
@@ -40,7 +40,7 @@
     {
       "district": 2,
       "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
-      "scene_sha256": "a7394c4da57f54e06c621f970a34949e6feaec103e3f3af1fa9dd46ba71145e7",
+      "scene_sha256": "c4f9c1eda658c693088edc77b73c91782cce379b45276705d088b701da802e25",
       "collision_encoding_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c",
       "collision_bytes_sha256": "4c89e9ff15874e740988156e2f0f0786ec98ccefce83437963718055115b4de4",
       "art_metadata": "content/districts/high_park_art.json",
@@ -49,7 +49,7 @@
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "scene_sha256": "3d8b9875dd421de70aacea5e21748425dfb56a9ff17f01b2cff4a7279a2568f3",
+      "scene_sha256": "74d671f39a963d4a467394b792547e29a1b59c64705509cf9c0b3f23dec7e754",
       "collision_encoding_sha256": "c70340500318d89e5301a3cc94d51e96f534b0fcd6f33ab1ffb73c012e7e1764",
       "collision_bytes_sha256": "ff13b8ab29a9591b2d30f8e390f95d6321a6ec21f0169d9e84e40e23ca0f667b",
       "art_metadata": "content/districts/east_art.json",
@@ -58,7 +58,7 @@
     {
       "district": 4,
       "scene": "project/project/scenes/toronto_port_lands/scene.gbsres",
-      "scene_sha256": "5bc19e8ea1800d4f8e06f70593557643c1166efeb1dcc0926198492a38c1cee6",
+      "scene_sha256": "d86537d60253d415ff8066ec8d8d3df360c815caa3f0f8de698f70cf53d73cad",
       "collision_encoding_sha256": "5d20e96673670728837a481462b0f7e30d76e354579b1ea0427bc73545f73d1d",
       "collision_bytes_sha256": "1fc75a2a83c18ebf1153745719992aef618213851bc91e13f1c5e27ffba6795e",
       "art_metadata": "content/districts/port_lands_art.json",

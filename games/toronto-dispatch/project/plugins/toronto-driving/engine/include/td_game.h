@@ -16,7 +16,7 @@
 #define TD_RIDE 6
 #define TD_RESULT 7
 #define TD_HELP 8
-#define TD_SAVE_VERSION 7
+#define TD_SAVE_VERSION 8
 #define TD_STREETCAR_HOLD 1
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
@@ -27,7 +27,8 @@ typedef struct {
     UBYTE complete[TD_COMPLETE_BYTES];
     UBYTE transit_origin,transit_target,ride_left,cooldown,msg;
     UBYTE reserved;
-    UWORD safe_u,safe_v,map_x,map_y;
+    /* v8 reuses obsolete serialized map cursor words; atlas cursor is private. */
+    UWORD safe_u,safe_v,wanted,wanted_left;
     UBYTE district,park_district;
 } td_state_t;
 extern td_state_t td;
