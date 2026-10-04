@@ -1,0 +1,18 @@
+{
+  "_resourceType": "palette",
+  "id": "8393d91e-46ef-5689-86db-e29b7050867c",
+  "name": "Ambulance fleet",
+  "colors": [
+    "F8F0E0",
+    "FFF5E4",
+    "EA6253",
+    "263C53"
+  ],
+  "defaultName": "Ambulance fleet",
+  "defaultColors": [
+    "F8F0E0",
+    "FFF5E4",
+    "EA6253",
+    "263C53"
+  ]
+}

@@ -186,10 +186,37 @@ static void test_complete_uword_clock(void) {
                  "uword-modulo-reset", 43, 50, 0);
 }
 
+static void test_booking_fares(void) {
+    /* The future enum is queried directly. District5 has no registered scene
+       in this milestone; these tests do not fabricate ferry destinations. */
+    static const unsigned fares[]={0,3,2,4,3};
+    static const unsigned jobs[]={255,0,95,254};
+    static const unsigned districts[]={0,1,2,3,4,5,255};
+    static const unsigned targets[]={10,0,20,21,22,63,64,255};
+    for(unsigned origin=0;origin<256;origin++)for(unsigned cash=0;cash<=4;cash++)
+        for(unsigned job=0;job<sizeof(jobs)/sizeof(jobs[0]);job++)
+            for(unsigned district=0;district<sizeof(districts)/sizeof(districts[0]);district++)
+                for(unsigned target=0;target<sizeof(targets)/sizeof(targets[0]);target++){
+                    unsigned expected=fares[oracle_service(origin)];
+                    /* Derive eligibility from the independent public service
+                       oracle, which rejects all encoded/malformed docks. */
+                    if(oracle_service(origin)==3&&origin!=10&&targets[target]==10&&
+                       jobs[job]==255&&districts[district]==5&&cash<4)expected=0;
+                    expect_value(td_transit_booking_fare(origin,targets[target],jobs[job],cash,districts[district]),
+                                 expected,"booking-fare",origin,targets[target],cash);
+                }
+    for(unsigned origin=20;origin<=22;origin++){
+        expect_value(td_transit_booking_fare(origin,10,255,65535,5),4,
+                     "booking-large-cash",origin,10,65535);
+        expect_value(td_transit_fare(origin),4,"ordinary-ferry-unmodified",origin,10,0);
+    }
+}
+
 int main(void) {
     test_encodings_and_routes();
     test_every_route_and_phase();
     test_complete_uword_clock();
+    test_booking_fares();
     printf("Transit production-source regressions: %lu checks, %lu failures.\n", checks, failures);
     return failures ? 1 : 0;
 }

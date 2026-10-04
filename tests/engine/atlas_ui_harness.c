@@ -9,12 +9,16 @@
 #include "td_atlas.h"
 #include "atlas_under_test.c"
 #include "ui_under_test.c"
+#include "ui_content_oracle.h"
 
 td_state_t td;
 td_job_t td_job,td_offer;
 td_stop_t td_target,td_cursor;
 UBYTE td_route_district;
 UBYTE td_resume_mode;
+UBYTE td_board_route;
+UWORD td_streetcar_focus_u,td_streetcar_focus_v;
+UBYTE td_streetcar_view_district,td_streetcar_ride_view;
 actor_t actors[21];
 UBYTE actors_len;
 UWORD camera_x,camera_y;
@@ -25,7 +29,9 @@ UBYTE camera_settings,VBK_REG,text_drawn;
 static UBYTE window_tiles[2][18][20],vram[2][256][16];
 static UBYTE window_x,window_y;
 static unsigned checks,failures,window_writes,tile_uploads,ground_uploads;
-static unsigned content_reads;
+static unsigned light_resets;
+static UBYTE audio_fixture_mode;
+void td_traffic_lights_reset(void){light_resets++;}
 static UBYTE initial_font[49][16];
 
 static void expect(int condition,const char *name) {
@@ -56,23 +62,20 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
 }
 
 void ui_set_pos(UBYTE x,UBYTE y) {window_x=x;window_y=y;}
-UBYTE td_audio_get_mode(void) {return TD_AUDIO_FULL;}
+UBYTE td_audio_get_mode(void) {return audio_fixture_mode;}
 UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
-void td_get_street(UWORD u,UWORD v,char *dest) {(void)u;(void)v;content_reads++;strcpy(dest,"TEST ROAD");}
-void td_get_district_name(UBYTE district,char *dest) {(void)district;content_reads++;strcpy(dest,"TEST DISTRICT");}
-void td_get_brief(UBYTE index,char *dest) {(void)index;content_reads++;memset(dest,' ',36);dest[36]=0;}
-void td_get_stop(UBYTE index,td_stop_t *dest) {
-    (void)index;content_reads++;memset(dest,0,sizeof(*dest));strcpy(dest->name,"TEST STOP");
-}
 
 typedef struct {
     td_state_t state;td_job_t job,offer;td_stop_t target,cursor;
     UBYTE route,actor_count,resume_mode;
+    UWORD streetcar_u,streetcar_v;
+    UBYTE streetcar_district,streetcar_ride;
 } game_snapshot_t;
 
 static game_snapshot_t snapshot_game(void) {
-    game_snapshot_t snapshot={td,td_job,td_offer,td_target,td_cursor,td_route_district,actors_len,td_resume_mode};
+    game_snapshot_t snapshot={td,td_job,td_offer,td_target,td_cursor,td_route_district,actors_len,td_resume_mode,
+        td_streetcar_focus_u,td_streetcar_focus_v,td_streetcar_view_district,td_streetcar_ride_view};
     return snapshot;
 }
 
@@ -80,8 +83,10 @@ static void expect_game_unchanged(const game_snapshot_t *snapshot) {
     expect(!memcmp(&td,&snapshot->state,sizeof(td))&&!memcmp(&td_job,&snapshot->job,sizeof(td_job))&&
            !memcmp(&td_offer,&snapshot->offer,sizeof(td_offer))&&!memcmp(&td_target,&snapshot->target,sizeof(td_target))&&
            !memcmp(&td_cursor,&snapshot->cursor,sizeof(td_cursor))&&td_route_district==snapshot->route&&
-           actors_len==snapshot->actor_count&&td_resume_mode==snapshot->resume_mode,
-           "real map UI preserves serialized state, job, target, cursor, route cue and actor count");
+           actors_len==snapshot->actor_count&&td_resume_mode==snapshot->resume_mode&&
+           td_streetcar_focus_u==snapshot->streetcar_u&&td_streetcar_focus_v==snapshot->streetcar_v&&
+           td_streetcar_view_district==snapshot->streetcar_district&&td_streetcar_ride_view==snapshot->streetcar_ride,
+           "real map UI preserves serialized state, job, target, cursor, route cue, actor count and paid-view cache");
 }
 
 static void reset_case(void) {
@@ -90,13 +95,15 @@ static void reset_case(void) {
     memset(actors,0,sizeof(actors));memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
     td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;
     td.park_district=1;td.park_u=400*16;td.park_v=528*16;td.cash=123;td.seconds=4321;
-    td.left=199;td.health=100;td.job=84;td.stage=3;td.map_x=43210;td.map_y=32109;td.mode=TD_PAUSE;
+    td.left=199;td.health=100;td.job=84;td.stage=3;td.wanted=2;td.wanted_left=21;td.mode=TD_PAUSE;
     td_target.district=3;td_target.u=320;td_target.v=144;td_target.reserved=TD_STOP_FOOT;strcpy(td_target.name,"WITHROW PARK");
     td_job.count=5;td_job.route[3]=36;td_job.seconds=199;td_job.reward=130;
     td_route_district=0;td_resume_mode=TD_ROAM;actors_len=TD_ACTORS;
     for(unsigned i=0;i<21;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
-    window_x=window_y=0;window_writes=tile_uploads=ground_uploads=content_reads=0;
+    window_x=window_y=0;window_writes=tile_uploads=ground_uploads=0;
+    audio_fixture_mode=TD_AUDIO_FULL;
+    td_streetcar_focus_u=td_streetcar_focus_v=0;td_streetcar_view_district=td_streetcar_ride_view=0;
     td_ui_init();memcpy(initial_font,vram[1]+192,sizeof(initial_font));
 }
 
@@ -184,6 +191,387 @@ static void read_window_text(unsigned y,char out[21]) {
     out[20]=0;
 }
 
+static void expect_window_text(unsigned row,const char *text,const char *name) {
+    char actual[21],expected[21];size_t length=strlen(text);
+    expect(row<18&&length<=20,"HUD fixture text fits its native twenty-column row");
+    if(row>=18||length>20)return;
+    memset(expected,' ',20);memcpy(expected,text,length);expected[20]=0;
+    read_window_text(row,actual);expect(!strcmp(actual,expected),name);
+}
+
+static void expect_text_screen_safe(void) {
+    UBYTE safe=1;
+    for(unsigned row=0;row<18;row++)for(unsigned column=0;column<20;column++)
+        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+           window_tiles[1][row][column]!=15)safe=0;
+    expect(safe&&window_x==0&&window_y==0&&VBK_REG==0,
+           "dispatch/result screen uses bounded native twenty-column font rows and neutral VRAM bank");
+    expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),
+           "itinerary and payment draws preserve actual uploaded font patterns");
+}
+
+static void expect_board_preserves_game(const game_snapshot_t *before) {
+    expect(!memcmp(&td,&before->state,sizeof(td))&&!memcmp(&td_job,&before->job,sizeof(td_job))&&
+           !memcmp(&td_offer,&before->offer,sizeof(td_offer))&&!memcmp(&td_target,&before->target,sizeof(td_target))&&
+           td_route_district==before->route&&td_resume_mode==before->resume_mode&&actors_len==before->actor_count,
+           "itinerary draw only refreshes its cursor; saved game, active contract, offer, target and booking stay fixed");
+}
+
+static void test_pause_audio_labels_and_map_cache(void){
+    static const char *const labels[3][2]={
+        {"  AUDIO: MUSIC+SFX","> AUDIO: MUSIC+SFX"},
+        {"  AUDIO: SFX ONLY","> AUDIO: SFX ONLY"},
+        {"  AUDIO: SILENT","> AUDIO: SILENT"}
+    };
+    expect(TD_AUDIO_FULL==0&&TD_AUDIO_EFFECTS==1&&TD_AUDIO_SILENT==2,
+           "pause audio oracle covers the three real serialized preference modes");
+    for(UBYTE riding=0;riding<2;riding++){
+        reset_case();td.district=TD_DISTRICT_ISLANDS;td.u=512*16;td.v=448*16;
+        td.park_district=TD_DISTRICT_CITY;td.park_u=560*16;td.park_v=720*16;
+        td_streetcar_view_district=riding?TD_DISTRICT_EAST:TD_DISTRICT_ISLANDS;
+        td_streetcar_focus_u=(riding?128:512)*16;td_streetcar_focus_v=(riding?536:448)*16;
+        td_streetcar_ride_view=riding;
+        if(riding){td_resume_mode=TD_RIDE;td.transit_origin=43;td.transit_target=48;td.ride_left=4;}
+        for(UBYTE audio=0;audio<3;audio++)for(UBYTE selected=0;selected<2;selected++){
+            td.mode=TD_PAUSE;td.menu=selected?8:1;audio_fixture_mode=audio;
+            game_snapshot_t before=snapshot_game();actor_t original_actors[21];
+            memcpy(original_actors,actors,sizeof(actors));UWORD old_camera_x=camera_x,old_camera_y=camera_y;
+            UBYTE old_camera_settings=camera_settings;
+            td_ui_draw();
+            expect_window_text(12,labels[audio][selected],"pause audio mode and selection have the exact bounded visible label");
+            expect(memchr(td_line,0,sizeof(td_line))&&strlen(td_line)<=18&&!strcmp(td_line,labels[audio][selected]),
+                   "pause audio formatting terminates inside its40-byte buffer with at most18 characters");
+            expect_text_screen_safe();expect_game_unchanged(&before);
+            expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
+                   camera_settings==old_camera_settings,"pause audio repaint changes no actor or camera state");
+            unsigned writes=window_writes,uploads=tile_uploads;td_ui_draw();
+            expect(window_writes==writes&&tile_uploads==uploads,"an unchanged pause audio label reuses all cached text rows without upload");
+            expect_game_unchanged(&before);
+            /* Replay the native failure's PAUSE -> MAP path after every
+               audio label. A bogus paid-view flag would incorrectly reuse
+               another district or keep the map's prior zero origin. */
+            open_case();before=snapshot_game();finish_paint();
+            expect_window_text(1,riding?"TORONTO EAST END":"TORONTO ISLANDS",
+                               "YOU map focus after audio repaint names the actual walking or paid-view district");
+            expect(td_map_x==(riding?40:30)&&td_map_y==(riding?2:16),
+                   "YOU map focus after audio repaint preserves exact independent atlas coordinate and clamp expectations");
+            expect_game_unchanged(&before);td_map_close();
+            expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
+                   camera_settings==old_camera_settings,"closing the audio-to-map replay restores the same actors and camera");
+            td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();
+            expect_window_text(12,labels[audio][selected],"map close repaints the same selected audio preference without stale longer text");
+            expect_game_unchanged(&before);
+        }
+    }
+}
+
+static void expect_board_stop(unsigned job,unsigned page) {
+    const td_job_t *offer=&host_ui_jobs[job];const td_stop_t *stop=&host_ui_stops[offer->route[page]];
+    char expected[40];const char *role;
+    if(page==0)role="PICKUP";
+    else if(page+1<offer->count)role="HANDOFF";
+    else role=offer->route[page]==offer->route[0]?"RETURN":"DELIVER";
+    sprintf(expected,"%u/%u %s%s",page+1,offer->count,
+            ((stop->reserved&TD_STOP_FOOT)||stop->district==TD_DISTRICT_ISLANDS)?"WALK ":"",role);
+    expect_window_text(11,expected,"authored itinerary page identifies its number, walking requirement and handoff role");
+    expect_window_text(12,stop->name,"itinerary renders the exact authored client name rather than a parking approach");
+    expect_window_text(13,host_ui_districts[stop->district],"itinerary renders the actual client district");
+    expect(td_cursor.u==stop->u&&td_cursor.v==stop->v&&td_cursor.district==stop->district&&
+           td_cursor.reserved==stop->reserved&&!strcmp(td_cursor.name,stop->name),
+           "itinerary native getter selects the true client including remote and foot-only records");
+    expect(td_board_route==page,"valid itinerary draw preserves the caller's selected page");
+}
+
+static void test_dispatch_board_itineraries(void) {
+    expect(sizeof(host_ui_jobs)/sizeof(host_ui_jobs[0])==TD_QUESTS&&
+           sizeof(host_ui_stops)/sizeof(host_ui_stops[0])==TD_STOPS,
+           "independent editable-content oracle covers every registered native job and stop");
+    UBYTE districts=0,saw_return=0,saw_delivery=0,saw_foot=0;
+    for(unsigned job=0;job<TD_QUESTS;job++) {
+        reset_case();td.mode=TD_BOARD;td.menu=job;td_get_job(job,&td_offer);
+        const td_job_t *offer=&host_ui_jobs[job];char expected[40],brief[19];
+        expect(td_offer.count==offer->count&&td_offer.reward==offer->reward&&td_offer.seconds==offer->seconds&&
+               td_offer.vehicle==offer->vehicle&&td_offer.kind==offer->kind&&td_offer.min_done==offer->min_done&&
+               !strcmp(td_offer.title,offer->title)&&!memcmp(td_offer.route,offer->route,12),
+               "board fixture uses unchanged compiled content matching independent authored JSON");
+        for(unsigned page=0;page<offer->count;page++) {
+            td_board_route=page;game_snapshot_t before=snapshot_game();td_ui_draw();
+            expect_board_stop(job,page);expect_board_preserves_game(&before);expect_text_screen_safe();
+            const td_stop_t *stop=&host_ui_stops[offer->route[page]];
+            districts|=1u<<stop->district;if(stop->reserved&TD_STOP_FOOT)saw_foot=1;
+            if(page+1==offer->count){if(offer->route[page]==offer->route[0])saw_return=1;else saw_delivery=1;}
+            if(!page) {
+                expect_window_text(1,host_ui_chapters[job/8],"each actual offer displays its authored chapter and position within twelve groups");
+                expect_window_text(3,"SELECT NEXT CHAPTER","board exposes the chapter shortcut without hiding the individual offer and itinerary controls");
+                sprintf(expected,"CONTRACT %02u/%u",job+1,TD_QUESTS);expect_window_text(2,expected,"board displays its actual contract ID and expanded count");
+                expect_window_text(4,offer->title,"board retains the exact authored contract title");
+                memcpy(brief,host_ui_briefs[job],18);brief[18]=0;expect_window_text(5,brief,"first brief line remains visible above itinerary");
+                memcpy(brief,host_ui_briefs[job]+18,18);expect_window_text(6,brief,"second brief line remains visible above itinerary");
+                sprintf(expected,"%u STOPS  %u SEC",offer->count,offer->seconds);expect_window_text(8,expected,"board keeps the authored stop count and deadline");
+                sprintf(expected,"BASE $%u + TIME",offer->reward);expect_window_text(9,expected,"board advertises base reward with a separate time bonus");
+                const char *vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
+                expect_window_text(10,offer->vehicle==TD_NONE?"ANY VEHICLE / TTC":vehicles[offer->vehicle],
+                                   "itinerary retains its authored fixed-vehicle or transit-friendly eligibility");
+                expect_window_text(14,"L/R JOB U/D STOPS","itinerary exposes job and stop navigation on one native row");
+                expect_window_text(15,"A ACCEPT  B BACK","itinerary retains its accept/cancel actions");
+            }
+        }
+        /* The driver owns button dispatch. Present both wrap endpoints and
+         * stale invalid cursor recovery through the real renderer here. */
+        td_board_route=0;td_ui_draw();expect_board_stop(job,0);
+        td_board_route=offer->count-1;td_ui_draw();expect_board_stop(job,offer->count-1);
+        td_board_route=255;game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_board_stop(job,0);expect_board_preserves_game(&before);
+        unsigned writes=window_writes;td_ui_draw();
+        expect(window_writes==writes,"an unchanged board page reuses its actual row cache without redundant tile writes");
+        td.complete[job>>3]|=1u<<(job&7);td_ui_draw();expect_window_text(16,"COMPLETE / REPLAY","completed itinerary keeps its replay state");
+        td.complete[job>>3]&=~(1u<<(job&7));td.done=offer->min_done;td_ui_draw();
+        expect_window_text(16,"READY TO ACCEPT","unlock boundary keeps the current itinerary ready");
+        if(offer->min_done) {
+            td.done=offer->min_done-1;td_ui_draw();sprintf(expected,"NEEDS %u COMPLETED",offer->min_done);
+            expect_window_text(16,expected,"locked itinerary states its actual completion requirement");
+        }
+    }
+    expect(districts==((1u<<TD_DISTRICT_COUNT)-1)&&saw_return&&saw_delivery&&saw_foot,
+           "all-route rendering covers every registered district, final deliveries, returns and walking clients");
+
+    reset_case();td_board_route=231;game_snapshot_t initialized=snapshot_game();td_ui_init();
+    expect(td_board_route==0,"actual native UI initialization clears a dirty transient itinerary index");
+    expect_game_unchanged(&initialized);
+
+    /* A shorter name/role must clear the prior long row even in the same
+     * mode. An empty offer must clear all three formerly occupied rows. */
+    reset_case();td.mode=TD_BOARD;td.menu=93;td_get_job(93,&td_offer);td_board_route=1;td_ui_draw();
+    expect_window_text(12,"RIVERBANK PARCEL","stale-row fixture begins with a real long Port client name");
+    td.menu=0;td_get_job(0,&td_offer);td_board_route=1;td_ui_draw();
+    expect_window_text(1,host_ui_chapters[0],"shorter chapter captions clear the previous Port Lands row through the actual cache");
+    expect_board_stop(0,1);expect_text_screen_safe();
+    td_offer.count=0;game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(11,"NO ROUTE","empty itinerary visibly rejects a stale route");
+    expect_window_text(12,"","empty itinerary clears the previous client row");
+    expect_window_text(13,"","empty itinerary clears the previous district row");
+    expect_game_unchanged(&before);
+
+    td.mode=TD_RESULT;td_ui_draw();
+    expect_window_text(1,"","leaving dispatch clears the chapter caption rather than leaking it onto the result");
+    expect_window_text(3,"","leaving dispatch clears the chapter shortcut caption");
+    for(unsigned invalid=TD_QUESTS;invalid<=255;invalid++){
+        td.mode=TD_BOARD;td.menu=invalid;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"DISPATCH CHAPTER","every invalid transient menu uses a bounded fallback without indexing the chapter table");
+        expect_window_text(16,"READY TO ACCEPT","invalid menu never reads or invents a completed-offer bit outside the actual campaign");
+        expect_game_unchanged(&before);expect_text_screen_safe();
+    }
+}
+
+static void result_fixture(unsigned job,UBYTE condition,UWORD left,UWORD previous,UBYTE done) {
+    td.mode=TD_RESULT;td.job=TD_NONE;td.health=condition;td.left=left;td.done=done;
+    td_get_job(job,&td_job);td_offer.reward=previous;
+    /* Independent wide arithmetic follows authored payout rules, avoiding
+     * the runtime's split multiply and the renderer's cached-balance logic. */
+    unsigned condition_pay=(unsigned long)host_ui_jobs[job].reward*condition/100u;
+    unsigned bonus=left/5u,total=condition_pay+bonus;
+    unsigned after=condition&&left?previous+total:previous;
+    if(after>60000)after=60000;
+    td.cash=after;
+    game_snapshot_t before=snapshot_game();char expected[40];td_ui_draw();
+    expect_window_text(4,condition&&left?"CONTRACT DELIVERED":"CONTRACT FAILED","result distinguishes completed and failed contracts");
+    sprintf(expected,"CONDITION %u%%",condition);expect_window_text(5,expected,"result displays the actual final cargo condition");
+    if(condition&&left) {
+        sprintf(expected,"BASE $%u",host_ui_jobs[job].reward);expect_window_text(6,expected,"result preserves authored base separately from scaled payment");
+        sprintf(expected,"CONDITION PAY $%u",condition_pay);expect_window_text(7,expected,"condition payment matches independent wide multiply/floor");
+        sprintf(expected,"TIME %uS +$%u",left,bonus);expect_window_text(8,expected,"time bonus matches independent five-second floor");
+        sprintf(expected,"CREDIT $%u",after-previous);expect_window_text(9,expected,"credit shows the actual balance increase including cash cap");
+        expect_window_text(10,total>60000u-previous?"BALANCE CAP $60000":
+                           done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT",
+                           "result cap/master cue follows actual credit rather than nominal reward");
+    }else {
+        expect_window_text(6,"NO PAYMENT","failure explicitly receives no payment");
+        sprintf(expected,"TIME %uS",left);expect_window_text(7,expected,"failure retains actual remaining time");
+        expect_window_text(8,"","failure clears a previously visible bonus row");
+        expect_window_text(9,"CREDIT $0","failure clears a previously positive credit");
+        expect_window_text(10,"RETRY OR PICK A JOB","failure offers a useful continuation cue");
+    }
+    sprintf(expected,"$%u DONE %u/%u",after,done,TD_QUESTS);expect_window_text(11,expected,"result retains final cash and expanded unique-completion count");
+    expect_window_text(13,"A: DISPATCH BOARD","result retains dispatch continuation");
+    expect_window_text(14,"B: FREE ROAM","result retains free-roam continuation");
+    expect_window_text(16,"PROGRESS AUTO-SAVED","result retains its persistence cue");
+    expect_game_unchanged(&before);expect_text_screen_safe();
+    unsigned writes=window_writes;td_ui_draw();expect(window_writes==writes,"an unchanged result retains its actual row cache");
+}
+
+static void test_contract_payment_result(void) {
+    reset_case();
+    for(unsigned job=0;job<TD_QUESTS;job++) {
+        result_fixture(job,36,host_ui_jobs[job].seconds,71,4);
+        result_fixture(job,100,5,59999,95);
+        result_fixture(job,100,4,60000,96);
+    }
+    /* Real Fire Hall observed values plus condition and time floor edges.
+     * Keep success/failure in the same mode to expose stale cached rows. */
+    result_fixture(89,36,86,0,4);
+    result_fixture(0,1,1,0,0);result_fixture(0,99,4,17,95);
+    result_fixture(0,100,5,17,96);
+    result_fixture(0,100,1,60000-host_ui_jobs[0].reward,96);
+    result_fixture(0,0,99,123,2);result_fixture(0,100,0,123,2);
+    result_fixture(95,100,65535,59000,96);
+
+    /* A defensive negative delta must be explicit, and a failed result must
+     * still erase it rather than showing a made-up positive payout. */
+    td.health=100;td.left=5;td.cash=50;td_offer.reward=123;game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(9,"BALANCE -$73","result represents a negative cached balance delta explicitly");
+    expect_game_unchanged(&before);
+    td.health=0;td.left=0;before=snapshot_game();td_ui_draw();
+    expect_window_text(9,"CREDIT $0","failure replaces a defensive negative balance delta");
+    expect_window_text(8,"","failure removes stale successful time/bonus text");expect_game_unchanged(&before);
+}
+
+static void test_wait_contact_hud_and_map_restore(void) {
+    /* Fixed output examples exercise the shared WAIT layout, not another
+     * timetable oracle. Transit arithmetic has its own independent suite. */
+    const struct {UBYTE origin,target,wait;UWORD seconds;const char *service;} cases[]={
+        {46,48,62,14,"501 QUEEN"},
+        {46,44,62,50,"501 QUEEN"},
+        {0,12,16,2,"LINE 1 TRAIN"},
+        {80,19,22,6,"94 WELLESLEY BUS"},
+        {10,20,28,2,"ISLAND FERRY"}
+    };
+    for(unsigned fixture=0;fixture<sizeof(cases)/sizeof(cases[0]);fixture++) {
+        reset_case();td.mode=td_resume_mode=TD_WAIT;td.transit_origin=cases[fixture].origin;
+        td.transit_target=cases[fixture].target;td.seconds=cases[fixture].seconds;
+        td.ride_left=0;td.msg=0;strcpy(td_cursor.name,"BOOKED DESTINATION");
+        game_snapshot_t before=snapshot_game();char countdown[21];
+        td_ui_draw();
+        sprintf(countdown,"DEPARTS IN %u SEC",cases[fixture].wait);
+        expect_window_text(0,countdown,"ordinary WAIT retains its actual departure countdown");
+        expect_window_text(1,cases[fixture].service,"ordinary WAIT identifies its booked service");
+        expect_window_text(2,"B CANCEL WAIT","ordinary WAIT retains its cancellation action");
+        expect_game_unchanged(&before);
+
+        td.msg=18;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,countdown,"contact cue leaves the departure countdown visible in row0");
+        expect_window_text(1,"TRAM: STEP CLEAR","blocked WAIT visibly gives the complete contact cue in row1");
+        expect_window_text(2,"B CANCEL WAIT","contact cue preserves B cancellation in row2");
+        expect(window_x==0&&window_y==120,"WAIT contact keeps the native three-row lower HUD");
+        UBYTE bounded=1;
+        for(unsigned row=0;row<3;row++)for(unsigned column=0;column<20;column++)
+            if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+               window_tiles[1][row][column]!=15)bounded=0;
+        expect(bounded,"WAIT contact rows use bounded font tiles and the existing native palette/bank");
+        expect_game_unchanged(&before);
+
+        /* A contact message must not make the countdown stale as the caller
+         * advances the world clock, or mutate the unpaid booking itself. */
+        td.seconds++;before=snapshot_game();td_ui_draw();
+        sprintf(countdown,"DEPARTS IN %u SEC",cases[fixture].wait-1);
+        expect_window_text(0,countdown,"departure countdown refreshes while contact cue remains visible");
+        expect_window_text(1,"TRAM: STEP CLEAR","countdown refresh cannot erase the outstanding contact cue");
+        expect_game_unchanged(&before);
+
+        if(fixture==0) {
+            UBYTE original_hud[2][3][20];
+            memcpy(original_hud[0],window_tiles[0],sizeof(original_hud[0]));
+            memcpy(original_hud[1],window_tiles[1],sizeof(original_hud[1]));
+            game_snapshot_t waiting=snapshot_game();
+            UWORD saved_x=camera_x,saved_y=camera_y;UBYTE settings=camera_settings;
+            td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();expect_game_unchanged(&before);
+            td.mode=TD_MAP;before=snapshot_game();td_map_open();td_ui_draw();td_map_update(0,0);
+            expect_game_unchanged(&before);
+            td_map_close();
+            expect(camera_x==saved_x&&camera_y==saved_y&&camera_settings==settings,
+                   "paused WAIT map restores its actual captured gameplay camera");
+            td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();expect_game_unchanged(&before);
+            td.mode=TD_WAIT;td_ui_draw();
+            expect(!memcmp(original_hud[0],window_tiles[0],sizeof(original_hud[0]))&&
+                   !memcmp(original_hud[1],window_tiles[1],sizeof(original_hud[1])),
+                   "return from a partial atlas repaint restores the exact countdown/contact/cancel HUD");
+            expect_game_unchanged(&waiting);
+        }
+
+        td.msg=0;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,countdown,"clearing contact preserves the current departure countdown");
+        expect_window_text(1,cases[fixture].service,"clearing contact restores service identity without stale cue pixels");
+        expect_window_text(2,"B CANCEL WAIT","cleared WAIT still exposes its cancellation action");
+        expect_game_unchanged(&before);
+    }
+}
+
+static void test_reserved_islands_assistance_ui(void) {
+    /* These direct renderer inputs prove text/cache logic with adapters;
+       even a registered scene requires separate native travel checks. */
+    for(UBYTE dock=20;dock<=22;dock++){
+        reset_case();td.mode=TD_TRANSIT;td.job=TD_NONE;td.district=TD_DISTRICT_ISLANDS;
+        td.transit_origin=dock;td.transit_target=10;td.cash=3;td.seconds=(dock-19)*7+2;
+        td_get_stop(10,&td_cursor);game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(2,"ISLAND FERRY","reserved return timetable retains its actual service identity");
+        expect_window_text(6,"DEPARTS IN 28 SEC","assistance retains the normal autonomous ferry departure");
+        expect_window_text(7,"RIDE 8 SEC / $0","reserved eligible return visibly quotes the shared zero fare");
+        expect_window_text(11,"RETURN ASSISTANCE","reserved eligible return explains the zero fare before boarding");
+        expect_game_unchanged(&before);expect_text_screen_safe();
+        td.cash=4;before=snapshot_game();td_ui_draw();
+        expect_window_text(7,"RIDE 8 SEC / $4","exactly four dollars retains the ordinary ferry fare");
+        expect_window_text(11,"","a sufficient balance clears stale assistance text without a mode transition");
+        expect_game_unchanged(&before);
+        td.cash=0;td.job=0;before=snapshot_game();td_ui_draw();
+        expect_window_text(7,"RIDE 8 SEC / $4","an active parcel never receives the recovery discount");
+        expect_window_text(11,"","an active job cannot retain an earlier assistance caption");expect_game_unchanged(&before);
+        td.job=TD_NONE;td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
+        expect_window_text(7,"RIDE 8 SEC / $4","a mismatched mainland origin retains its ordinary quoted fare");
+        expect_window_text(11,"","the recovery caption cannot leak into a mismatched mainland district");expect_game_unchanged(&before);
+
+        td.district=TD_DISTRICT_ISLANDS;td.mode=td_resume_mode=TD_WAIT;td.msg=0;
+        before=snapshot_game();td_ui_draw();
+        expect_window_text(0,"DEPARTS IN 28 SEC","assistance WAIT retains its unchanged ferry clock");
+        expect_window_text(1,"RETURN ASSISTANCE","assistance WAIT retains its eligibility cue before deduction");
+        expect_window_text(2,"B CANCEL WAIT","assistance WAIT remains cancellable");expect_game_unchanged(&before);
+        td.msg=18;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"TRAM: STEP CLEAR","the existing safety cue has priority over an assistance caption");expect_game_unchanged(&before);
+        td.msg=0;td.seconds++;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,"DEPARTS IN 27 SEC","clearing a contact cue refreshes the genuine ferry departure clock");
+        expect_window_text(1,"RETURN ASSISTANCE","clearing a contact cue restores assistance without stale font tiles");expect_game_unchanged(&before);
+        td.cash=4;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"ISLAND FERRY","WAIT loses its recovery caption when ordinary fare funds become available");
+        expect_window_text(2,"B CANCEL WAIT","ordinary and assisted waits share the cancellation control");expect_game_unchanged(&before);
+        td.mode=TD_RIDE;td.cash=0;td.ride_left=5;before=snapshot_game();td_ui_draw();
+        expect_window_text(0,"RIDING 5 SEC","paid-state presentation retains the already booked remaining duration");
+        expect_window_text(2,"FARE PAID / ON TIME","a ride does not re-infer its past fare from the new post-payment balance");expect_game_unchanged(&before);
+    }
+    reset_case();td.mode=TD_TRANSIT;td.job=TD_NONE;td.district=TD_DISTRICT_ISLANDS;
+    td.transit_origin=10;td.transit_target=20;td.cash=0;td_get_stop(20,&td_cursor);
+    game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(7,"RIDE 8 SEC / $4","an outward ferry keeps its ordinary fare even under the reserved UI enum");
+    expect_window_text(11,"","no outward trip advertises return assistance");expect_game_unchanged(&before);
+    td.mode=TD_ROAM;td.msg=0;before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"B: FERRY AT DOCK","reserved foot-only roaming points to a ferry rather than car entry");expect_game_unchanged(&before);
+    td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"A CAR / B TRANSIT","mainland walking keeps its original car and transit controls");expect_game_unchanged(&before);
+}
+
+static void test_island_objective_hud(void){
+    for(UBYTE from=0;from<2;from++){
+        reset_case();td.mode=TD_ROAM;td.msg=0;td.job=7;td.stage=from?0:1;
+        td.left=103;td.health=67;td.wanted=0;td.onfoot=1;
+        td.district=from?TD_DISTRICT_ISLANDS:TD_DISTRICT_CITY;
+        td_get_job(td.job,&td_job);td_get_stop(from?10:21,&td_target);td_route_district=TD_DISTRICT_NONE;
+        game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(2,from?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
+                           "a disconnected Island objective shows its concrete ferry action in the bounded HUD");
+        expect_game_unchanged(&before);
+        td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();expect_game_unchanged(&before);
+        td.mode=TD_ROAM;td_ui_draw();
+        expect_window_text(2,from?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
+                           "returning from a full-screen menu repaints the correct ferry approach cue");
+    }
+    reset_case();td.mode=TD_ROAM;td.msg=0;td.job=7;td.stage=1;td.left=103;td.health=67;
+    td.district=TD_DISTRICT_WEST;td_get_job(td.job,&td_job);td_get_stop(21,&td_target);td_route_district=0;
+    game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(2,host_ui_districts[0],"a remote Island approach first names its genuine mainland route branch");
+    expect_game_unchanged(&before);
+    td.district=TD_DISTRICT_ISLANDS;td.stage=2;td_get_stop(25,&td_target);td_route_district=TD_DISTRICT_NONE;
+    before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"CENTRE PARK POST","a local Island client keeps its own name rather than a return or road error");
+    expect_game_unchanged(&before);
+}
+
 static void test_every_viewport(void) {
     reset_case();open_case();game_snapshot_t before=snapshot_game();unsigned viewports=0;
     verify_marker_patterns();
@@ -201,12 +589,15 @@ static void test_every_viewport(void) {
                    "map header redraws never overwrite the shared active pattern dictionary cache");
             td_map_update(0,0);
         }
-        expect(td_map_row==12&&!td_map_error,"all225legal viewports finish real cached rendering");
+        expect(td_map_row==12&&!td_map_error,"every legal viewport finishes real cached rendering");
         expect(ground_uploads-uploads_before==td_map_count,"each viewport uploads each distinct ground pattern exactly once");
         verify_viewport();viewports++;
     }
-    expect(viewports==225,"fixture renders every actual legal twenty-by-twelve atlas viewport");
+    expect(viewports==(TD_ATLAS_TILE_WIDTH-19)*(TD_ATLAS_TILE_HEIGHT-11),
+           "fixture renders every actual legal twenty-by-twelve atlas viewport");
+    unsigned resets_before=light_resets;
     expect_game_unchanged(&before);td_map_close();
+    expect(light_resets==resets_before+1,"closing the atlas invalidates native signal pattern residency");
     for(unsigned i=0;i<sizeof(td_ui_cache);i++)
         expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the360-byte text/pattern union cache");
     td.mode=TD_PAUSE;unsigned writes=window_writes;td_ui_draw();
@@ -265,21 +656,48 @@ static void test_panning_and_bounds(void) {
     UBYTE x=td_map_x,y=td_map_y;
     td_map_update(J_LEFT|J_RIGHT|J_UP|J_DOWN,0);
     expect(td_map_x==x&&td_map_y==y&&td_map_row==12,"opposing held pan directions cancel on both axes");
-    for(unsigned i=0;i<50;i++){td_map_update(J_LEFT|J_UP,0);finish_paint();}
+    unsigned pan_steps=TD_ATLAS_TILE_WIDTH>100?(TD_ATLAS_TILE_WIDTH+1)/2:50;
+    if(pan_steps<TD_ATLAS_TILE_HEIGHT)pan_steps=TD_ATLAS_TILE_HEIGHT;
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_LEFT|J_UP,0);finish_paint();}
     expect(td_map_x==0&&td_map_y==0,"repeated diagonal panning clamps exactly at the northwest atlas bounds");
     verify_viewport();
-    for(unsigned i=0;i<50;i++){td_map_update(J_RIGHT|J_DOWN,0);finish_paint();}
-    expect(td_map_x==44&&td_map_y==4,"repeated diagonal panning clamps exactly at the southeast padded atlas bounds");
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_RIGHT|J_DOWN,0);finish_paint();}
+    expect(td_map_x==TD_ATLAS_TILE_WIDTH-20&&td_map_y==TD_ATLAS_TILE_HEIGHT-12,
+           "repeated diagonal panning clamps exactly at the southeast padded atlas bounds");
     verify_viewport();
-    for(unsigned i=0;i<50;i++){td_map_update(J_LEFT|J_DOWN,0);finish_paint();}
-    expect(td_map_x==0&&td_map_y==4,"horizontal motion never underflows the atlas while bottom edge remains clamped");
-    for(unsigned i=0;i<50;i++){td_map_update(J_RIGHT|J_UP,0);finish_paint();}
-    expect(td_map_x==44&&td_map_y==0,"horizontal motion never overflows the atlas while top edge remains clamped");
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_LEFT|J_DOWN,0);finish_paint();}
+    expect(td_map_x==0&&td_map_y==TD_ATLAS_TILE_HEIGHT-12,
+           "horizontal motion never underflows the atlas while bottom edge remains clamped");
+    for(unsigned i=0;i<pan_steps;i++){td_map_update(J_RIGHT|J_UP,0);finish_paint();}
+    expect(td_map_x==TD_ATLAS_TILE_WIDTH-20&&td_map_y==0,
+           "horizontal motion never overflows the atlas while top edge remains clamped");
     td_map_update(J_A,J_A);x=td_map_x;y=td_map_y;
     expect(td_map_row==1,"focus begins a genuine partial paint for held-input gating");
     td_map_update(J_LEFT|J_UP,0);
     expect(td_map_x==x&&td_map_y==y&&td_map_row==2,"held panning waits until the current atlas viewport has fully painted");
     finish_paint();verify_viewport();expect_game_unchanged(&before);td_map_close();
+}
+
+static void test_appended_district_focus_and_holes(void) {
+    if(TD_DISTRICT_COUNT==4)return;
+    for(UBYTE district=4;district<TD_DISTRICT_COUNT;district++) {
+        reset_case();td.district=district;td.u=480*16;td.v=700*16;
+        td_target.district=district;td_target.u=512;td_target.v=512;
+        open_case();game_snapshot_t before=snapshot_game();finish_paint();verify_viewport();
+        expect_focus(0,district,480,700,"appended scene centres and renders its player marker without shifting earlier districts");
+        td_map_update(J_A,J_A);finish_paint();verify_viewport();
+        expect_focus(2,district,512,512,"appended scene objective focus uses its actual two-dimensional atlas origin");
+        expect_game_unchanged(&before);td_map_close();
+    }
+    for(unsigned y=0;y+12<=TD_ATLAS_TILE_HEIGHT;y++)for(unsigned x=0;x+20<=TD_ATLAS_TILE_WIDTH;x++) {
+        char district_name[19];
+        if(td_atlas_district((x+10)*8,(y+6)*8,district_name))continue;
+        reset_case();open_case();game_snapshot_t before=snapshot_game();
+        td_map_x=x;td_map_y=y;td_map_begin();td_map_headers();finish_paint();verify_viewport();
+        char text[21];read_window_text(1,text);
+        expect(strstr(text,"CITY EDGE")!=NULL,"a sparse atlas hole renders the visible city-edge header");
+        expect_game_unchanged(&before);td_map_close();return;
+    }
 }
 
 static void test_paid_transit_objective_context(void) {
@@ -408,7 +826,7 @@ static void test_sparse_table_full_and_single_holes(void) {
             /* Deliberately force congestion with synthetic occupied IDs that
              * cannot match any actual pattern. No hash/home/stride calculation
              * is mirrored: each possible sole empty slot must be reachable. */
-            for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=1000+i;
+            for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=TD_ATLAS_PATTERNS+i;
             td_ui_cache.patterns[hole]=65535;
             game_snapshot_t before=snapshot_game();unsigned uploads=ground_uploads;
             td_map_paint_row();
@@ -417,14 +835,14 @@ static void test_sparse_table_full_and_single_holes(void) {
             expect(ground_uploads==uploads+1&&!memcmp(vram[1][16+hole],pattern,16),
                    "single-hole insertion uploads the correct real pattern exactly once to its stable bounded slot");
             for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)if(i!=hole)
-                expect(td_ui_cache.patterns[i]==1000+i,"collision probing never overwrites an occupied cache slot");
+                expect(td_ui_cache.patterns[i]==TD_ATLAS_PATTERNS+i,"collision probing never overwrites an occupied cache slot");
             if(distinct)expect(td_map_error&&td_map_row==12,"a second distinct row pattern terminates safely when the table has become full");
             else expect(!td_map_error,"an already inserted row pattern remains retrievable after the table becomes full");
             expect_game_unchanged(&before);td_map_close();
         }
         reset_case();open_case();td_map_x=cases[fixture][0];td_map_y=cases[fixture][1];td_map_row=cases[fixture][2];
         td_map_count=TD_ATLAS_VISIBLE_LIMIT;
-        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=1000+i;
+        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=TD_ATLAS_PATTERNS+i;
         UWORD before[TD_ATLAS_VISIBLE_LIMIT];memcpy(before,td_ui_cache.patterns,sizeof(before));
         unsigned uploads=ground_uploads;td_map_paint_row();
         expect(td_map_error&&td_map_row==12&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
@@ -440,6 +858,12 @@ int main(void) {
     test_paid_transit_objective_context();test_interrupt_restore_and_idempotence();
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();
     test_sparse_table_full_and_single_holes();
+    test_wait_contact_hud_and_map_restore();
+    test_reserved_islands_assistance_ui();
+    test_island_objective_hud();
+    test_appended_district_focus_and_holes();
+    test_dispatch_board_itineraries();test_contract_payment_result();
+    test_pause_audio_labels_and_map_cache();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

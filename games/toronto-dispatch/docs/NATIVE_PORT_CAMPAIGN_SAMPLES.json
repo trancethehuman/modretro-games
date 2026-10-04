@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-02",
+  "purpose": "Scoped native ordinary-input acceptance of the 96-contract Port Lands campaign and clock conversion",
+  "rom": {
+    "path": "project/build/toronto-port-campaign-clock.gbc",
+    "sha256": "c625e6dce80a56a787c940885da5abd332fce47335e52f57698c3395a14ba364",
+    "sizeBytes": 524288,
+    "colorMode": "gbc-only",
+    "cartridgeType": "MBC5+RUMBLE+RAM+BATTERY",
+    "declaredRamSizeBytes": 32768,
+    "headerChecksumValid": true,
+    "nintendoLogoValid": true
+  },
+  "build": {
+    "success": true,
+    "exitCode": 0,
+    "durationMs": 60620,
+    "noiSha256": "1e4d7d05715fb86e3552594b2c3511bba526c801f37867b9874841435435f05f",
+    "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+    "sourceFingerprint": "ed6b11e18955ff84532f06ab8ad40de69a034159b392f5e7ef3b15ee868d32c6",
+    "projectRevision": "4968f2a69f5a3e1d34c395ae2195371b33fde3e9f555285b6ea4ac2062a9ed6b",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "sourceDebugAbi": {
+      "layout": "gbvm-farptr3-uword16-v1",
+      "sha256": "4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "staticReserveBytes": 1098,
+    "heapStart": "0xDAB6",
+    "stackBase": "0xDF00",
+    "deepestStackMeasured": false
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "debugMode": "rom",
+  "inspection": {
+    "method": "Read-only bounded WRAM; ordinary inputs only, no RAM injection",
+    "gameTimeAddress": "0xC0B9",
+    "gameplayAddress": "0xC1F6",
+    "gameplaySizeBytes": 58,
+    "positionFormat": "Unsigned Q4"
+  },
+  "scope": [
+    "First three distinct original contracts 01/03/02 delivered at condition 100; cash 401 and done 3 earned normally.",
+    "New contract 90 FIRE HALL BOOKS unlocked after earned three-completion progression; pickup at Riverside.",
+    "Cargo carried through the actual East-to-Port Leslie seam; human impacts, heat up to H3 and police penalties encountered.",
+    "Car stopped near (304,352); courier exited visibly and walked around the Fire Hall solid footprint to its foot-only handoff.",
+    "New job completed at condition 36 with 86 seconds left; damaged-cargo payout 71, cash 71 and done 4.",
+    "Real four-button reset restored appended completion bit 89, cash 71/done 4 and the Port foot/car checkpoint.",
+    "Courier walked back around the footprint and entered the restored original parked car."
+  ],
+  "pacing": {
+    "counterSamples": [
+      {
+        "frame": 482,
+        "hex": "ba",
+        "address": "0xc0b9"
+      },
+      {
+        "frame": 542,
+        "hex": "d1",
+        "address": "0xc0b9"
+      },
+      {
+        "frame": 602,
+        "hex": "e3",
+        "address": "0xc0b9"
+      },
+      {
+        "frame": 662,
+        "hex": "f4",
+        "address": "0xc0b9"
+      },
+      {
+        "frame": 722,
+        "hex": "05",
+        "address": "0xc0b9"
+      },
+      {
+        "frame": 782,
+        "hex": "16",
+        "address": "0xc0b9"
+      },
+      {
+        "frame": 842,
+        "hex": "28",
+        "address": "0xc0b9"
+      }
+    ],
+    "deltas": [
+      23,
+      18,
+      17,
+      17,
+      17,
+      18
+    ],
+    "loopCount": 110,
+    "vblanks": 360,
+    "loopsPer60Vblanks": 18.333333333333332,
+    "setup": "Stationary initial Core car; run 180, dismiss help A2, neutral 300, then six neutral 60-frame windows",
+    "comparison": {
+      "retainedFusedLoops": 108,
+      "retainedLighterBaselineLoops": 132
+    },
+    "interpretation": "110 versus 108 is a tiny scoped difference, not a statistically meaningful whole-city improvement or physical frame pacing result."
+  },
+  "recording": {
+    "recordingPath": "project/artifacts/playtests/session-437acdf5-9d2f-4f0d-b8f1-ee7ded64fcaa",
+    "sessionId": "19e21ca1186d4c53af3ed741367012d5",
+    "status": "stopped",
+    "branchId": "branch-0001",
+    "frame": 11024,
+    "totalFrames": 11024,
+    "bytesUsed": 6681122,
+    "limits": {
+      "sampleEveryFrames": 4,
+      "recentFrameCount": 12,
+      "maxBytes": 16000000,
+      "maxFrames": 60000,
+      "maxWallTimeMs": 900000
+    },
+    "eventCount": 6228,
+    "eventDigest": "6fb5412929c304ce265a3dc437974f64e5d7c5fe30c429125a14549491390201",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 11024
+      }
+    ],
+    "outcome": "passed",
+    "reason": "Scoped c625 ordinary-input regression: first three original contracts completed condition100/cash401/done3; new appended contract90 FIRE HALL BOOKS unlocked via earned progression, Riverside pickup, Leslie seam to Port, collision-footprint detour, native stopped parking/exit/on-foot handoff and $71 damaged-cargo payout at condition36 with86seconds remaining; cold reset restores completion bit89/done4/cash71/Port foot and parked car, then walking/reentry succeeds. Six stationary60-VBlank samples yield110 game loops/360; not full96-contract/whole-city/two-hour/physical-cartridge acceptance."
+  },
+  "archive": {
+    "schemaVersion": 1,
+    "originalPath": "project/artifacts/playtests/session-437acdf5-9d2f-4f0d-b8f1-ee7ded64fcaa",
+    "archivePath": "project/artifacts/recording-archives/a09d89c8-52bd-4d8a-8d60-7b6fd667dd4e/recording",
+    "sessionId": "19e21ca1186d4c53af3ed741367012d5",
+    "manifestSha256": "97c36533129625d087ffa8923e9f60b9f76860dfa496b6c5db1495dda09a2366",
+    "inventory": {
+      "digest": "479ecca0fd570dbaee748ba3a1dd83e93c030427b35e0cf7f8089a0982c80061",
+      "bytes": 6681122,
+      "entries": 2347
+    },
+    "status": "archived",
+    "bytesReclaimed": 0
+  },
+  "snapshots": [
+    {
+      "purpose": "fresh expanded-ROM contract01 completion",
+      "frame": 1152,
+      "hex": "7d30002d0023002d8b000f00740000000000000700ff0264012e010000000000000000000000000000000000000000007d30002d000000000000",
+      "decoded": {
+        "u": 775.8125,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 139,
+        "world_seconds": 15,
+        "seconds_left": 116,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 0,
+        "mode": 7,
+        "job": 255,
+        "stage": 2,
+        "condition": 100,
+        "unique_done": 1,
+        "completion_hex": "01000000000000000000000000000000",
+        "attention": 0,
+        "district": 0,
+        "park_district": 0
+      }
+    },
+    {
+      "purpose": "expanded-ROM contract03 completion",
+      "frame": 1922,
+      "hex": "6b33002d0023002d06011b006c0000000000000702ff02640230050000000000000000000000000000000000000000006b33002d000000000000",
+      "decoded": {
+        "u": 822.6875,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 262,
+        "world_seconds": 27,
+        "seconds_left": 108,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 0,
+        "mode": 7,
+        "job": 255,
+        "stage": 2,
+        "condition": 100,
+        "unique_done": 2,
+        "completion_hex": "05000000000000000000000000000000",
+        "attention": 0,
+        "district": 0,
+        "park_district": 0
+      }
+    },
+    {
+      "purpose": "Fragile art delivered to AGO, third distinct completed contract",
+      "frame": 2864,
+      "hex": "351419190023002d91012b00680000000c00000701ff026403000700000000000000000000000000000000000000000035141919000000000000",
+      "decoded": {
+        "u": 323.3125,
+        "v": 401.5625,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 401,
+        "world_seconds": 43,
+        "seconds_left": 104,
+        "speed": 0,
+        "heading": 12,
+        "onfoot": 0,
+        "mode": 7,
+        "job": 255,
+        "stage": 2,
+        "condition": 100,
+        "unique_done": 3,
+        "completion_hex": "07000000000000000000000000000000",
+        "attention": 0,
+        "district": 0,
+        "park_district": 0
+      }
+    },
+    {
+      "purpose": "Contract 90 FIRE HALL BOOKS accepted after three ordinary-input completions; Riverside pickup",
+      "frame": 5179,
+      "hex": "a9080b21800128197d014e00ac0000000800000059590164030f07000000000000000000000000000000000000000000a9080b2101001e000303",
+      "decoded": {
+        "u": 138.5625,
+        "v": 528.6875,
+        "park_u": 24,
+        "park_v": 402.5,
+        "cash": 381,
+        "world_seconds": 78,
+        "seconds_left": 172,
+        "speed": 0,
+        "heading": 8,
+        "onfoot": 0,
+        "mode": 0,
+        "job": 89,
+        "stage": 1,
+        "condition": 100,
+        "unique_done": 3,
+        "completion_hex": "07000000000000000000000000000000",
+        "attention": 1,
+        "district": 3,
+        "park_district": 3
+      }
+    },
+    {
+      "purpose": "New FIRE HALL BOOKS courier arrives through sole Leslie East-Port road seam carrying damaged cargo and heat 3",
+      "frame": 8172,
+      "hex": "ea382a04ea3880011f007f007b000c000400000059590124033207000000000000000000000000000000000000000000ea382a04030019000404",
+      "decoded": {
+        "u": 910.625,
+        "v": 66.625,
+        "park_u": 910.625,
+        "park_v": 24,
+        "cash": 31,
+        "world_seconds": 127,
+        "seconds_left": 123,
+        "speed": 12,
+        "heading": 4,
+        "onfoot": 0,
+        "mode": 0,
+        "job": 89,
+        "stage": 1,
+        "condition": 36,
+        "unique_done": 3,
+        "completion_hex": "07000000000000000000000000000000",
+        "attention": 3,
+        "district": 4,
+        "park_district": 4
+      }
+    },
+    {
+      "purpose": "FIRE HALL BOOKS native stopped parking and visible player exits at Port car park anchor near304,352",
+      "frame": 10108,
+      "hex": "5f1315175f13f51500009f005b00000000000100035901240302070000000000000000000000000000000000000000005f13f515000000000404",
+      "decoded": {
+        "u": 309.9375,
+        "v": 369.3125,
+        "park_u": 309.9375,
+        "park_v": 351.3125,
+        "cash": 0,
+        "world_seconds": 159,
+        "seconds_left": 91,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "job": 89,
+        "stage": 1,
+        "condition": 36,
+        "unique_done": 3,
+        "completion_hex": "07000000000000000000000000000000",
+        "attention": 0,
+        "district": 4,
+        "park_district": 4
+      }
+    },
+    {
+      "purpose": "Direct south walking blocks at Fire Hall footprint; no delivery yet",
+      "frame": 10266,
+      "hex": "5f137d185f13f5150000a1005900000000000100035901240328070000000000000000000000000000000000000006005f13f515000000000404",
+      "decoded": {
+        "u": 309.9375,
+        "v": 391.8125,
+        "park_u": 309.9375,
+        "park_v": 351.3125,
+        "cash": 0,
+        "world_seconds": 161,
+        "seconds_left": 89,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "job": 89,
+        "stage": 1,
+        "condition": 36,
+        "unique_done": 3,
+        "completion_hex": "07000000000000000000000000000000",
+        "attention": 0,
+        "district": 4,
+        "park_district": 4
+      }
+    },
+    {
+      "purpose": "Walk around east edge of Fire Hall footprint; contract 90 delivered with 86 seconds left",
+      "frame": 10462,
+      "hex": "7713c51a5f13f5154700a400560000000000010703ff0224042c070000000000000000000002000000000000000006005f13f515000000000404",
+      "decoded": {
+        "u": 311.4375,
+        "v": 428.3125,
+        "park_u": 309.9375,
+        "park_v": 351.3125,
+        "cash": 71,
+        "world_seconds": 164,
+        "seconds_left": 86,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 1,
+        "mode": 7,
+        "job": 255,
+        "stage": 2,
+        "condition": 36,
+        "unique_done": 4,
+        "completion_hex": "07000000000000000000000200000000",
+        "attention": 0,
+        "district": 4,
+        "park_district": 4
+      }
+    },
+    {
+      "purpose": "Cold native reset after actual contract 90 completion restores done 4/cash 71/appended bit 89/Port foot and parked car",
+      "frame": 10762,
+      "hex": "7713c51a5f13f5154700a400560000000000010800ff0224042c070000000000000000000002000000000000000000007713c51a000000000404",
+      "decoded": {
+        "u": 311.4375,
+        "v": 428.3125,
+        "park_u": 309.9375,
+        "park_v": 351.3125,
+        "cash": 71,
+        "world_seconds": 164,
+        "seconds_left": 86,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 1,
+        "mode": 8,
+        "job": 255,
+        "stage": 2,
+        "condition": 36,
+        "unique_done": 4,
+        "completion_hex": "07000000000000000000000200000000",
+        "attention": 0,
+        "district": 4,
+        "park_district": 4
+      }
+    },
+    {
+      "purpose": "Reset-restored courier walks back around fire-hall footprint and enters original parked Port car at (309.9375,351.3125)",
+      "frame": 11024,
+      "hex": "5f13f5155f13f5154700a900560000000000000000ff02240405070000000000000000000002000000000000000000005f13f515000000000404",
+      "decoded": {
+        "u": 309.9375,
+        "v": 351.3125,
+        "park_u": 309.9375,
+        "park_v": 351.3125,
+        "cash": 71,
+        "world_seconds": 169,
+        "seconds_left": 86,
+        "speed": 0,
+        "heading": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "condition": 36,
+        "unique_done": 4,
+        "completion_hex": "07000000000000000000000200000000",
+        "attention": 0,
+        "district": 4,
+        "park_district": 4
+      }
+    }
+  ],
+  "notEstablished": [
+    "Other seven new Port jobs and every96-contract route/unlock",
+    "Provisional deadline tuning and player enjoyment",
+    "Sufficient-cash isolated higher-heat fine amounts or escape",
+    "All vehicle sizes, bridges, roof/canopy occlusion and crowded native frame pace",
+    "Full former Toronto or fuller Islands",
+    "Measured two hours of distinct varied gameplay",
+    "Browser preview recovery",
+    "Physical cartridge write/read-back/cold boot or manual handheld acceptance"
+  ]
+}

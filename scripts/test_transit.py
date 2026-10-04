@@ -1,4 +1,4 @@
-"""Exercise the unchanged banked transit module with an independent route oracle.
+"""Exercise the actual banked transit module with an independent route oracle.
 
 Only GBDK types and bank annotations are adapted. This checks native C logic,
 not ROM bank placement, scene transitions, physical boarding or cartridge play.
@@ -31,6 +31,14 @@ typedef int16_t WORD;
 #define BANKED
 #define TRUE 1
 #define FALSE 0
+#endif
+''')
+        # td_district.h supplies the future Islands enum used by the real fare
+        # query. Only its GBVM far-pointer type is adapted for host compilation.
+        (work / 'bankdata.h').write_text('''#ifndef HOST_BANKDATA_H
+#define HOST_BANKDATA_H
+#include <gbdk/platform.h>
+typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
 #endif
 ''')
         binary = work / 'transit-regressions'

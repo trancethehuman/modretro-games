@@ -3,6 +3,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from district_sources import read_district_art
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADER = ROOT / 'project/plugins/toronto-driving/engine/include/td_district_world.h'
@@ -15,6 +16,12 @@ def source():
     assert len(world['districts']) == canonical and 2 <= canonical <= 32
     assert [d['id'] for d in world['districts']] == list(range(canonical))
     assert all(d['width_pixels'] == 1024 and d['height_pixels'] == 976 for d in world['districts'])
+    enabled = []
+    for district in world['districts']:
+        flag = district.get('traffic_enabled', True)
+        assert type(flag) is bool, 'Traffic capability must be explicit boolean'
+        enabled.append(flag)
+    assert enabled[0], 'Core authored traffic must remain enabled'
 
     def endpoint(point):
         assert all(type(point[key]) is int for key in ('district', 'u', 'v'))
@@ -32,6 +39,7 @@ def source():
         assert a['district'] != b['district']
         axis = endpoint(a)
         assert endpoint(b) == axis
+        assert enabled[a['district']] and enabled[b['district']], 'Foot-only ferry districts cannot acquire ordinary road seams'
         assert (b['u'] == 1024 - a['u']) if axis == 'horizontal' else (b['v'] == 976 - a['v'])
         assert 'foot' in pair['access'] and set(pair['access']) <= {'foot', 'vehicle'}
         for origin, dest in ((a, b), (b, a)):
@@ -53,8 +61,13 @@ def source():
     for district in world['districts'][1:]:
         assert district['scene'].startswith('toronto_')
         slug = district['scene'].removeprefix('toronto_')
-        data = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
+        data = read_district_art(district)
         loops = data['traffic_loops']
+        if not enabled[district['id']]:
+            assert loops == [] and data['roads'] == [] and data['ports'] == [], 'Foot-only district cannot contain ordinary road traffic or seams'
+            paths.append([[] for _ in range(6)])
+            out.append('    {0,0,0,0,0,0},')
+            continue
         assert len(loops) == 6
         for loop in loops:
             assert 4 <= len(loop) <= 16
@@ -65,13 +78,14 @@ def source():
         paths.append(loops)
         out.append('    {' + ','.join(str(len(p)) for p in loops) + '},')
     # Eleven native bytes/portal and65 bytes/traffic slot; leave4KiB for code.
-    metadata_bytes = canonical * 19 + len(portals) * 11 + (canonical - 1) * 6 * 65
+    metadata_bytes = canonical * 20 + len(portals) * 11 + (canonical - 1) * 6 * 65
     assert metadata_bytes <= 12288, 'World metadata needs another ROM bank; do not exhaust banked code space'
-    out += ['};', f'static const UWORD td_west_traffic[{canonical - 1}][6][TD_TRAFFIC_POINTS][2]={{']
+    out += ['};', f'static const UBYTE td_traffic_enabled[{canonical}]={{' + ','.join(str(int(flag)) for flag in enabled) + '};',
+            f'static const UWORD td_west_traffic[{canonical - 1}][6][TD_TRAFFIC_POINTS][2]={{']
     for loops in paths:
         out.append('  {')
         for loop in loops:
-            out.append('    {' + ','.join('{' + ','.join(map(str, p)) + '}' for p in loop) + '},')
+            out.append('    {' + (','.join('{' + ','.join(map(str, p)) + '}' for p in loop) if loop else '{0,0}') + '},')
         out.append('  },')
     out += ['};', '#endif /* TD_WORLD_DATA */', '#endif', '']
     return '\n'.join(out)

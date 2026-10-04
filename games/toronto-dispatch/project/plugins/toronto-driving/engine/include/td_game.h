@@ -1,10 +1,10 @@
 #ifndef TD_GAME_H
 #define TD_GAME_H
 #include <gbdk/platform.h>
-#define TD_QUESTS 88
-#define TD_STOPS 51
+#define TD_QUESTS 96
+#define TD_STOPS 59
 #define TD_COMPLETE_BYTES 16
-#define TD_ACTORS 15
+#define TD_ACTORS 16
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0
@@ -16,6 +16,8 @@
 #define TD_RIDE 6
 #define TD_RESULT 7
 #define TD_HELP 8
+#define TD_SAVE_VERSION 9
+#define TD_STREETCAR_HOLD 1
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
 typedef struct {
@@ -25,7 +27,8 @@ typedef struct {
     UBYTE complete[TD_COMPLETE_BYTES];
     UBYTE transit_origin,transit_target,ride_left,cooldown,msg;
     UBYTE reserved;
-    UWORD safe_u,safe_v,map_x,map_y;
+    /* v8 reuses obsolete serialized map cursor words; atlas cursor is private. */
+    UWORD safe_u,safe_v,wanted,wanted_left;
     UBYTE district,park_district;
 } td_state_t;
 extern td_state_t td;
@@ -43,6 +46,8 @@ void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED;
 void td_get_district_name(UBYTE index,char *dest) BANKED;
 extern UBYTE td_route_district; /* Rebuilt objective cue; not serialized. */
 extern UBYTE td_resume_mode;
+/* Paused dispatch itinerary index; never serialized. */
+extern UBYTE td_board_route;
 void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
 void td_map_open(void) BANKED;
@@ -51,6 +56,8 @@ void td_map_close(void) BANKED;
 void td_save(void) BANKED;
 UBYTE td_restore(void) BANKED;
 void td_set_target(void) BANKED;
+/* Ferry approach guidance shares the route bank; target/save fields stay intact. */
+void td_ferry_beacon(void) BANKED;
 UBYTE td_service(UBYTE origin) BANKED;
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED;
 #endif

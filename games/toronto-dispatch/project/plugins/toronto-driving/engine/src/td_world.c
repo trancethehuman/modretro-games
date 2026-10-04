@@ -117,7 +117,7 @@ UBYTE td_world_crossing(UBYTE district,UBYTE onfoot,UWORD old_u,UWORD old_v,
 
 static UBYTE td_world_valid_traffic(UBYTE district,const UBYTE *legs){
     UBYTE i,count;
-    if(!district||district>=TD_DISTRICT_COUNT)return FALSE;
+    if(!district||district>=TD_DISTRICT_COUNT||!td_traffic_enabled[district])return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++){
         count=td_west_traffic_counts[district-1][i];
         if(count<2||count>TD_TRAFFIC_POINTS||(legs&&legs[i]>=count))return FALSE;

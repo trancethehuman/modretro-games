@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "romSha256": "a0bd037ac8925534e40d5147ae8ae4f748e533462bd0c01502ae5004648ae634",
+  "runtimeSourceCommit": "371641fefae975654eb1fe43f9fb09dbb6d34140",
+  "archiveId": "432d757a-8da0-4b9f-b514-0af3184a7684",
+  "manifestSha256": "e9508d33473a020ee26eede9f3436021d99f50f0ab2c420009c59d9266b7a8d4",
+  "originalNativePixels": true,
+  "hardwareCapture": false,
+  "samples": [
+    {
+      "path": "docs/screenshots/castle-frank-bus-schedule.png",
+      "label": "TTC_branch_Castle_return_schedule",
+      "frame": 9315,
+      "branchId": "branch-0002",
+      "sha256": "b60768fb8d97bd04ce70d766719a236ecf6cdd25100f1f53fcaa9ec2b014ff9a",
+      "rgbaSha256": "432ae793f5b172a670d96babfbe0255137c32f7166538f989fae1514a0ed445f",
+      "sampledButtons": [
+        "right"
+      ]
+    },
+    {
+      "path": "docs/screenshots/first-connection-transit-result.png",
+      "label": "TTC_branch_result_visible",
+      "frame": 10580,
+      "branchId": "branch-0002",
+      "sha256": "5faa9d5db186cf2718ce48367bb4b7a4481574b0da9727a466e2bd8d93bf7dd7",
+      "rgbaSha256": "a65bf901e02c280c6ed7f4eb01462ab146775ddb98393264d85515d165c95b65",
+      "sampledButtons": []
+    },
+    {
+      "path": "docs/screenshots/first-connection-driving-result.png",
+      "label": "road_branch_result_visible",
+      "frame": 11005,
+      "branchId": "branch-0003",
+      "sha256": "75b62323243593f37cf2c61f67ae55693b2bc9811832a833ba52615cdd64c042",
+      "rgbaSha256": "f4d349abf566ecfe7ad4586ee6ba9fae7a240e834b99bdb0bdcc1c98b3673b14",
+      "sampledButtons": []
+    }
+  ]
+}

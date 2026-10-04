@@ -2,10 +2,13 @@
 #include <string.h>
 #include <stdio.h>
 #include "td_game.h"
+#include "td_district.h"
+#include "td_streetcar_runtime.h"
 #include "td_transit.h"
 #include "td_font.h"
 #include "td_audio.h"
 #include "td_atlas.h"
+#include "td_traffic_lights.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "ui.h"
@@ -26,6 +29,21 @@ static UWORD td_map_camera_x,td_map_camera_y;
 static UBYTE td_ui_mode=255;
 static char td_line[40];
 static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
+static const char * const td_chapters[]={
+    "01/12 FIRST SHIFT",
+    "02/12 NEIGHBOURHOODS",
+    "03/12 CITY EVENTS",
+    "04/12 CROSS THE CITY",
+    "05/12 WATERFRONT",
+    "06/12 ARTS/AUDIENCES",
+    "07/12 EVENING",
+    "08/12 NETWORK",
+    "09/12 MASTER COURIER",
+    "10/12 WEST ROUTES",
+    "11/12 EAST ROUTES",
+    "12/12 PORT LANDS",
+};
+typedef char td_chapter_offer_count[(TD_QUESTS==8*(sizeof(td_chapters)/sizeof(td_chapters[0])))?1:-1];
 static const char *td_kinds[]={"PARCEL ROUND","FRAGILE: NO CRASH","EXPRESS DEADLINE","TRUCK FREIGHT","TRANSIT FRIENDLY","PASSENGER: SMOOTH","RETURN DOCUMENTS","ISLAND FERRY POST"};
 static UBYTE td_glyph(char c) {
     if(c>='a'&&c<='z')c-=32;
@@ -47,7 +65,7 @@ static const td_stop_t *td_map_destination(void){
 }
 static UBYTE td_map_point(UBYTE focus,UWORD *x,UWORD *y){
     const td_stop_t *target;
-    if(!focus)return td_atlas_position(td.district,td.u>>4,td.v>>4,x,y);
+    if(!focus)return td_streetcar_ride_view?td_atlas_position(td_streetcar_view_district,td_streetcar_focus_u>>4,td_streetcar_focus_v>>4,x,y):td_atlas_position(td.district,td.u>>4,td.v>>4,x,y);
     if(focus==1)return td_atlas_position(td.onfoot?td.park_district:td.district,
         (td.onfoot?td.park_u:td.u)>>4,(td.onfoot?td.park_v:td.v)>>4,x,y);
     target=td_map_destination();return td_atlas_position(target->district,target->u,target->v,x,y);
@@ -66,7 +84,7 @@ static void td_map_headers(void){
     if(td_atlas_district((td_map_x+10)*8,(td_map_y+6)*8,td_line))td_row(1,td_line);
     else td_row(1,"CITY EDGE");
     td_row(14,trip?"P YOU C CAR O STOP":td.job==TD_NONE?"P YOU C CAR O DEPOT":"P YOU C CAR O JOB");
-    if(!td_map_focus)td_row(15,td.onfoot?"YOU ON FOOT":"YOU DRIVING");
+    if(!td_map_focus)td_row(15,td_streetcar_ride_view?"YOU ON STREETCAR":td.onfoot?"YOU ON FOOT":"YOU DRIVING");
     else if(td_map_focus==1)td_row(15,td.onfoot?"YOUR PARKED VEHICLE":"YOUR DRIVING VEHICLE");
     else{sprintf(td_line,"%s%s",trip?"TRIP: ":td.job==TD_NONE?"DEPOT: ":"JOB: ",target->name);td_row(15,td_line);}
     td_row(16,"DPAD PAN SELECT VIEW");
@@ -158,16 +176,17 @@ void td_map_close(void) BANKED {
     for(i=0;i<td_map_actor_count;i++)actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|td_map_hidden[i];
     camera_x=td_map_camera_x;camera_y=td_map_camera_y;camera_settings=td_map_camera_settings;
     td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;
+    td_traffic_lights_reset();
 }
 void td_ui_init(void) BANKED {
-    UBYTE i;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
+    UBYTE i;td_board_route=0;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
     /* The window always uses font bank 1 / UI palette 7; attributes need one upload. */
     VBK_REG=1;for(i=0;i<18;i++)set_win_tiles(0,i,20,1,td_tiles);
     VBK_REG=1;set_bkg_data(192,sizeof(td_font)/16,td_font);VBK_REG=0;
     text_drawn=TRUE;td_ui_draw();
 }
 void td_ui_draw(void) BANKED {
-    UBYTE i,wait,service,changed=td_ui_mode!=td.mode; UWORD u=td.u>>4,v=td.v>>4;
+    UBYTE i,wait,service,fare,changed=td_ui_mode!=td.mode; UWORD u=td.u>>4,v=td.v>>4;
     td_ui_mode=td.mode;
     text_drawn=TRUE;
     if(td.mode==TD_MAP){
@@ -178,48 +197,101 @@ void td_ui_draw(void) BANKED {
         ui_set_pos(0,120);
         if(td.mode==TD_WAIT){
             wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
-            sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);td_transit_label(td.transit_origin,td_line);td_row(1,td_line);td_row(2,"B CANCEL WAIT");return;
+            sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);
+            if(td.msg==18)td_row(1,"TRAM: STEP CLEAR");
+            else if(td.district==TD_DISTRICT_ISLANDS&&td_transit_service(td.transit_origin)==TD_TRANSIT_FERRY&&
+                !td_transit_booking_fare(td.transit_origin,td.transit_target,td.job,td.cash,td.district))
+                td_row(1,"RETURN ASSISTANCE");
+            else{td_transit_label(td.transit_origin,td_line);td_row(1,td_line);}
+            td_row(2,"B CANCEL WAIT");return;
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         if(td.msg){
-            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK"};
+            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE"};
             td_row(0,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
         }else {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
-        if(td.job!=TD_NONE){sprintf(td_line,"%u/%u %uS C%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);if(td_target.district!=td.district){if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);else strcpy(td_line,"NO ROAD ROUTE");td_row(2,td_line);}else td_row(2,td_target.name);}
-        else {sprintf(td_line,"$%u %s %u/%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.done,TD_QUESTS);td_row(1,td_line);td_row(2,td.onfoot?"A CAR / B TRANSIT":"SELECT JOBS START UI");}
+        if(td.job!=TD_NONE){
+            sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);
+            if(td_target.district!=td.district){
+                if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);
+                else if(td.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"RETURN FERRY AT DOCK");
+                else if(td_target.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"GO TO FERRY TERMINAL");
+                else strcpy(td_line,"NO ROAD ROUTE");
+                td_row(2,td_line);
+            }else td_row(2,td_target.name);
+        }
+        else {sprintf(td_line,"$%u %s H%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td.onfoot?(td.district==TD_DISTRICT_ISLANDS?"B: FERRY AT DOCK":"A CAR / B TRANSIT"):"SELECT JOBS START UI");}
         return;
     }
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
     td_row(0," TORONTO DISPATCH");
     if(td.mode==TD_HELP){
-        td_row(2,"A GAS / B BRAKE");td_row(3,"LEFT RIGHT STEERING");td_row(4,"B HELD: REVERSE");td_row(6,"SELECT: DELIVER/JOBS");td_row(7,"START: PAUSE MENU");td_row(8,"STOP NEAR THE BEACON");td_row(10,"PARK TO WALK / TTC");td_row(12,"ON FOOT: A ENTER CAR");td_row(13,"B TTC AT A STATION");td_row(11,"FARES + TIMETABLES");td_row(15,"A OR B: ENTER CITY");return;
+        td_row(2,"A GAS / B BRAKE");td_row(3,"LEFT RIGHT STEERING");td_row(4,"B HELD: REVERSE");td_row(6,"SELECT: DELIVER/JOBS");td_row(7,"START: PAUSE MENU");td_row(8,"STOP NEAR THE BEACON");td_row(10,"PARK TO WALK / TTC");td_row(12,"ON FOOT: A ENTER CAR");td_row(13,"B TTC AT A STATION");td_row(11,"FARES + TIMETABLES");td_row(14,"H: POLICE ATTENTION");td_row(15,"A OR B: ENTER CITY");return;
     }
     if(td.mode==TD_PAUSE){
         sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);
         td_row(4,td.menu==0?"> RESUME":"  RESUME");td_row(5,td.menu==1?"> SCROLL CITY MAP":"  SCROLL CITY MAP");td_row(6,td.menu==2?"> DISPATCH JOBS":"  DISPATCH JOBS");td_row(7,td.menu==3?"> PARK / RECOVER CAR":"  PARK / RECOVER CAR");td_row(8,td.menu==4?"> CHANGE VEHICLE":"  CHANGE VEHICLE");td_row(9,td.menu==5?"> TRANSIT TIMETABLE":"  TRANSIT TIMETABLE");td_row(10,td.menu==6?"> SAVE PROGRESS":"  SAVE PROGRESS");td_row(11,td.menu==7?"> CANCEL ACTIVE JOB":"  CANCEL ACTIVE JOB");
-        sprintf(td_line,"%c AUDIO: %s",td.menu==8?'>':' ',td_audio_get_mode()==TD_AUDIO_FULL?"MUSIC+SFX":td_audio_get_mode()==TD_AUDIO_EFFECTS?"SFX ONLY":"SILENT");td_row(12,td_line);
+        /* GBDK %c consumes one byte; integer ternaries shift later varargs.
+           This bounded label is at most18 characters plus its terminator. */
+        strcpy(td_line,td.menu==8?"> AUDIO: ":"  AUDIO: ");
+        strcat(td_line,td_audio_get_mode()==TD_AUDIO_FULL?"MUSIC+SFX":td_audio_get_mode()==TD_AUDIO_EFFECTS?"SFX ONLY":"SILENT");td_row(12,td_line);
         td_row(14,"UP DOWN / A CHOOSE");td_row(15,td_vehicles[td.vehicle]);td_row(17,"B BACK");return;
     }
     if(td.mode==TD_BOARD){
+        td_row(1,td.menu<TD_QUESTS?td_chapters[td.menu>>3]:"DISPATCH CHAPTER");
+        td_row(3,"SELECT NEXT CHAPTER");
         sprintf(td_line,"CONTRACT %02u/%u",td.menu+1,TD_QUESTS);td_row(2,td_line);td_row(4,td_offer.title);
         td_get_brief(td.menu,td_line);td_row(6,td_line+18);td_line[18]=0;td_row(5,td_line);td_row(7,td_kinds[td_offer.kind]);
-        sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"PAYS $%u",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
-        td_get_stop(td_offer.route[0],&td_cursor);td_row(11,td_cursor.name);
-        if(td.complete[td.menu>>3]&(1<<(td.menu&7)))td_row(12,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(12,td_line);}else td_row(12,"READY TO ACCEPT");
-        td_row(14,"LEFT RIGHT: BROWSE");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
+        sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"BASE $%u + TIME",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
+        if(td_offer.count){
+            if(td_board_route>=td_offer.count)td_board_route=0;
+            td_get_stop(td_offer.route[td_board_route],&td_cursor);
+            sprintf(td_line,"%u/%u %s%s",td_board_route+1,td_offer.count,
+                (td_cursor.reserved&TD_STOP_FOOT)||td_cursor.district==TD_DISTRICT_ISLANDS?"WALK ":"",
+                !td_board_route?"PICKUP":td_board_route+1==td_offer.count?
+                (td_offer.route[0]==td_offer.route[td_board_route]?"RETURN":"DELIVER"):"HANDOFF");
+            td_row(11,td_line);td_row(12,td_cursor.name);
+            td_get_district_name(td_cursor.district,td_line);td_row(13,td_line);
+        }else{td_row(11,"NO ROUTE");td_row(12,"");td_row(13,"");}
+        if(td.menu<TD_QUESTS&&(td.complete[td.menu>>3]&(1<<(td.menu&7))))td_row(16,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}else td_row(16,"READY TO ACCEPT");
+        td_row(14,"L/R JOB U/D STOPS");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){
         service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);
         td_row(5,service==4?(td.transit_target>=td.transit_origin?"STREETCAR EASTBOUND":"STREETCAR WESTBOUND"):"");
         wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(6,td_line);
-        sprintf(td_line,"RIDE %u SEC / $%u",td_transit_duration(td.transit_origin,td.transit_target),td_transit_fare(td.transit_origin));td_row(7,td_line);
+        fare=td_transit_booking_fare(td.transit_origin,td.transit_target,td.job,td.cash,td.district);
+        sprintf(td_line,"RIDE %u SEC / $%u",td_transit_duration(td.transit_origin,td.transit_target),fare);td_row(7,td_line);
         td_row(8,"LEFT RIGHT: STOPS");td_row(9,"A: WAIT AND BOARD");td_row(10,"B: BACK");td_row(12,"TRAIN $3 BUS $2");td_row(13,"QUEEN $3 FERRY $4");
+        td_row(11,service==TD_TRANSIT_FERRY&&!fare?"RETURN ASSISTANCE":"");
         td_row(15,service==4?"NORMAL QUEEN ROUTE":"UP: BUS/TRAIN AT");td_row(16,service==4?"GAME ROUTE ENDS HERE":"WELLESLEY INTERCHANGE");td_row(17,"SCHEDULES ARE FICTION");return;
     }
     if(td.mode==TD_RESULT){
-        td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(7,td_line);td_row(10,td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");td_row(12,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
+        td_row(4,td.health && td.left?"CONTRACT DELIVERED":"CONTRACT FAILED");
+        if(td.health && td.left){
+            /* Match the runtime's split multiply/floor; u and v are existing
+               stack locals, not a second stored reward or balance. */
+            u=td_job.reward/100*td.health+(td_job.reward%100)*td.health/100;
+            v=td.left/5;
+            sprintf(td_line,"CONDITION %u%%",td.health);td_row(5,td_line);
+            sprintf(td_line,"BASE $%u",td_job.reward);td_row(6,td_line);
+            sprintf(td_line,"CONDITION PAY $%u",u);td_row(7,td_line);
+            sprintf(td_line,"TIME %uS +$%u",td.left,v);td_row(8,td_line);
+            if(td.cash>=td_offer.reward)sprintf(td_line,"CREDIT $%u",td.cash-td_offer.reward);
+            else sprintf(td_line,"BALANCE -$%u",td_offer.reward-td.cash);
+            td_row(9,td_line);
+            td_row(10,td.cash==60000&&(td_offer.reward>td.cash||u+v>td.cash-td_offer.reward)?
+                "BALANCE CAP $60000":td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");
+        }else{
+            sprintf(td_line,"CONDITION %u%%",td.health);td_row(5,td_line);
+            td_row(6,"NO PAYMENT");
+            sprintf(td_line,"TIME %uS",td.left);td_row(7,td_line);
+            td_row(8,"");td_row(9,"CREDIT $0");td_row(10,"RETRY OR PICK A JOB");
+        }
+        sprintf(td_line,"$%u DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(11,td_line);
+        td_row(13,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
     }
 }

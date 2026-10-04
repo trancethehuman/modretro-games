@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "description": "Immutable historical v8 Core Island tile subset. Raw tile bytes, not reconstructed masks/art; used independently after Core water replaces old strips.",
+  "encodedCollisionSha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92",
+  "decodedCollisionSha256": "081c14a28c866c8d7285f1697ac3ecff3d5429f18a2c6e321e351be0ffaec5d8",
+  "regions": [
+    {
+      "dock": 20,
+      "client": 24,
+      "left": 42,
+      "top": 114,
+      "width": 34,
+      "height": 6,
+      "oldDock": [
+        444,
+        928
+      ],
+      "oldClient": [
+        560,
+        928
+      ],
+      "tilesHex": "1010101010101010101010101010101010101010101010101010101010101010100f1010101010101010101010101010101010101010101010101010101010101010100f1010101010101010101010101010101010100f0f0f0f10101010101010101010100f1010101010101010101010101010101010100f0f0f0f10101010101010101010100f1010101010101010101010101010101010100f0f0f0f10101010101010101010100f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
+      "maskHex": "fffffffffdfffffff7ff3ffcdffffff07fffffc3ff0100000000",
+      "maskOffset": 0
+    },
+    {
+      "dock": 21,
+      "client": 25,
+      "left": 80,
+      "top": 112,
+      "width": 19,
+      "height": 8,
+      "oldDock": [
+        720,
+        920
+      ],
+      "oldClient": [
+        760,
+        944
+      ],
+      "tilesHex": "1010101010101010101010101010101010100f1010100f0f0f0f10101010101010101010100f1010100f0f0f0f10101010101010101010100f1010100f0f0f0f10101010101010101010100f1010101010101010101010101010101010100f1010101010101010101010101010101010100f1010101010101010101010101010101010100f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
+      "maskHex": "ffff3bfcdfe1ff0efff7ffbffffffdff0f0000",
+      "maskOffset": 26
+    },
+    {
+      "dock": 22,
+      "client": 26,
+      "left": 100,
+      "top": 110,
+      "width": 17,
+      "height": 7,
+      "oldDock": [
+        848,
+        896
+      ],
+      "oldClient": [
+        912,
+        912
+      ],
+      "tilesHex": "101010101010101010101010101010100f1010101010101010100f0f0f101010100f1010101010101010100f0f0f101010100f1010101010101010100f0f0f101010100f101010101010101010101010101010100f101010101010101010101010101010100f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
+      "maskHex": "fffffee3fdc7fb8ff7ffefff1f0000",
+      "maskOffset": 45
+    }
+  ]
+}

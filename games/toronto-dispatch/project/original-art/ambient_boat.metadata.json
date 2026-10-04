@@ -1,0 +1,138 @@
+{
+  "_resourceType": "sprite",
+  "id": "62f6dd2a-a420-5181-81c0-189fbabd8df5",
+  "name": "Ambient boat",
+  "symbol": "sprite_ambient_boat",
+  "filename": "ambient_boat.png",
+  "width": 32,
+  "height": 16,
+  "checksum": "7d41595652a351792a88cc51dc3b81c3b61d2aae",
+  "numTiles": 4,
+  "canvasOriginX": 8,
+  "canvasOriginY": 8,
+  "canvasWidth": 16,
+  "canvasHeight": 16,
+  "boundsX": 0,
+  "boundsY": 0,
+  "boundsWidth": 8,
+  "boundsHeight": 16,
+  "animSpeed": 255,
+  "states": [
+    {
+      "id": "f3bcd019-eb43-55ed-b389-19d38aca22af",
+      "name": "",
+      "animationType": "fixed",
+      "flipLeft": false,
+      "animations": [
+        {
+          "id": "b3348913-bddc-5224-b788-758534814a4b",
+          "frames": [
+            {
+              "id": "c2d6a623-ca51-535a-961c-d58ec349ee7c",
+              "tiles": [
+                {
+                  "id": "fa5f4f7a-8ac6-59f5-995a-d1640ef35d6c",
+                  "x": 0,
+                  "y": 0,
+                  "sliceX": 0,
+                  "sliceY": 0,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "d298e67b-d109-5b1e-a39a-f15b589d21d9",
+              "tiles": [
+                {
+                  "id": "88e365f9-5386-55da-ab98-d06a80f9008e",
+                  "x": 0,
+                  "y": 0,
+                  "sliceX": 8,
+                  "sliceY": 0,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "fc285d54-b905-501e-a042-6de486071321",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "d1d946b1-f0ff-5783-82ae-d71d053086fc",
+          "frames": [
+            {
+              "id": "407b33c7-1e5a-54b3-aeb5-c0037be2d042",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "53d0b8e7-7635-55a2-9e22-725bb99d2fca",
+          "frames": [
+            {
+              "id": "59d201b8-4bd3-5496-bdb4-840d03b7c257",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "83d13cd7-8fac-5ec4-b47d-554991bc698a",
+          "frames": [
+            {
+              "id": "bc70899c-d55b-5bf7-b636-138287cf19df",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "14efc317-e478-5288-b068-f3b66c392b9a",
+          "frames": [
+            {
+              "id": "9d86710c-84f3-578e-a89f-59ca394dff76",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "68d815a7-b55d-5fef-bc01-f48558201759",
+          "frames": [
+            {
+              "id": "f4ce0de3-e4d9-5b4f-aa1b-2229eece35a7",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "b94e4a84-2e7d-59be-a556-aef3ba833b27",
+          "frames": [
+            {
+              "id": "71f94889-2090-5b68-aaf7-d1166c641b3d",
+              "tiles": []
+            }
+          ]
+        },
+        {
+          "id": "97cb50ba-72ba-5d82-ae1e-f4325470866b",
+          "frames": [
+            {
+              "id": "5678d418-c121-5ac2-bae4-e46d108715f7",
+              "tiles": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

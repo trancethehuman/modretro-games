@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Four unmodified native archived screenshots: Bus Connections receipt and the Centre/Hanlan/Ward client handoffs in one Islands district.",
+  "rom": {
+    "path": "project/build/toronto-dispatch-courier-clearance.gbc",
+    "sha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+    "sizeBytes": 524288
+  },
+  "source": {
+    "commit": "25b659785d94ff8eaa8eeeb402243005acfe146a",
+    "debugIdentity": {
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "aa8417d346d660ea1efb2a98cac2f706bc15037438a73e7dbfd1400f1e2129b7",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "noiSha256": "7ca4749489938523e81a847527841b2b3fcf9dd08bee8844713044c859ed0b92",
+    "unchangedFromClearanceSevenAndElevenRecords": true
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "sessionId": "90129596530f46a58accd17bda901289",
+    "status": "stopped",
+    "branchId": "branch-0002",
+    "frame": 65737,
+    "totalFrames": 24475,
+    "eventCount": 2006,
+    "eventDigest": "a39ef261398a3977efc482f9fc333aa919092dcbce2997e26e442d6a808b34de",
+    "outcome": "passed",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 180
+      },
+      {
+        "branchId": "branch-0002",
+        "frame": 65737,
+        "parentBranchId": "branch-0002",
+        "sourceSessionId": "4ccf74dc66a6499d8dde8dfb5bd34ee2",
+        "checkpointId": "checkpoint-f7b3acea29484bcab55ff67b0094fc14"
+      }
+    ],
+    "originalPath": "project/artifacts/playtests/session-3752c72d-361c-43d6-ad05-78d573266ada",
+    "closed": true,
+    "archiveId": "b77669b9-59d0-4054-a4cf-1503af5cfd08",
+    "archivePath": "project/artifacts/recording-archives/b77669b9-59d0-4054-a4cf-1503af5cfd08/recording",
+    "manifestSha256": "d49da4333e55e539159d15106a92d102c0ff283e6baf03d2588ccdb584c171c4",
+    "inventory": {
+      "digest": "ba44dde69526f7db5258f4f584552286eefc2cecb946bd4e219af8f0a1883b47",
+      "bytes": 9859985,
+      "entries": 3864
+    },
+    "retrievedManifestMatches": true,
+    "endCheckpointSavedOnly": true,
+    "endCheckpoint": {
+      "checkpointId": "checkpoint-dd8301d4f3ca4becb95cf50150125a0a",
+      "frame": 65737,
+      "branchId": "branch-0002",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "stateSha256": "dafc856a9b790c6dcdafb7700adabf6a465999087f89b112b75c93d251c980e4",
+      "automaticAdvance": 0
+    },
+    "freshBootFrames": 180,
+    "ordinaryPostImportFrames": 24295
+  },
+  "fullIgnoredPrefix": {
+    "path": "project/build/campaign-e797-fifteen-closed-prefix.json",
+    "bytes": 3795084,
+    "sha256": "cd8a08878ce837836d7eb0c8fd1ee2744e7b1d161d85ccd1286253371fbbbbcd"
+  },
+  "images": [
+    {
+      "path": "docs/screenshots/campaign-fifteen-bus-connections-result.png",
+      "frame": 50712,
+      "branchId": "branch-0002",
+      "rawStepIndex": 313,
+      "stepLabel": "campaign_busconnections_Wellesley_Bloor_handoff_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 50712,
+        "width": 160,
+        "height": 144,
+        "sha256": "ed63e360911e07bbab7a4eb70823163844cc973a52b2e3599896606a2ec72ac7",
+        "rgbaSha256": "bec56d4ff719d670976a687a9c522b8c0cbc2483f78354e78c976bed8b4b5509",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/b77669b9-59d0-4054-a4cf-1503af5cfd08/recording/frames/ed63e360911e07bbab7a4eb70823163844cc973a52b2e3599896606a2ec72ac7.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-3752c72d-361c-43d6-ad05-78d573266ada",
+        "sessionId": "90129596530f46a58accd17bda901289",
+        "branchId": "branch-0002",
+        "fromActionIndex": 5265,
+        "toActionIndex": 5267,
+        "fromFrame": 50680,
+        "toFrame": 50712,
+        "fromPrefixPin": {
+          "eventCount": 911,
+          "eventDigest": "35680fa5fdaa1fbb84ecb31d41f9b802ba87fcff8ecf62bcfe19181a548c5312",
+          "byteLength": 1848328,
+          "sha256": "68d89103a51286db6e2a48eb00424d2f33f0354b6a9d630381fc1d3942d371a7"
+        },
+        "prefixPin": {
+          "eventCount": 915,
+          "eventDigest": "85965fea219bc062b1f237b6892530150cbeb1ff6a9e8dbbbdab89e709a9cd3b",
+          "byteLength": 1849820,
+          "sha256": "1d69b9c45d2a7e418573f74ff3d29454dac7271ec7fb9959d4c70bf5139f76a3"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 0,
+      "decodedOnFootField": 1,
+      "sceneBytes": "16a67f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-fifteen-centre-client.png",
+      "frame": 53743,
+      "branchId": "branch-0002",
+      "rawStepIndex": 386,
+      "stepLabel": "campaign_centreletters_client_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 53743,
+        "width": 160,
+        "height": 144,
+        "sha256": "3f87b6ed8f53e8664d1648288d45f348473618bae57646c59678d588c6d7ebcc",
+        "rgbaSha256": "44b8473e1edec29b4c755ec8efcd8048038132c82337729750994ef85b0f138a",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/b77669b9-59d0-4054-a4cf-1503af5cfd08/recording/frames/3f87b6ed8f53e8664d1648288d45f348473618bae57646c59678d588c6d7ebcc.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-3752c72d-361c-43d6-ad05-78d573266ada",
+        "sessionId": "90129596530f46a58accd17bda901289",
+        "branchId": "branch-0002",
+        "fromActionIndex": 5371,
+        "toActionIndex": 5373,
+        "fromFrame": 53711,
+        "toFrame": 53743,
+        "fromPrefixPin": {
+          "eventCount": 1123,
+          "eventDigest": "df29064e830703a29d2de420ae17bc9aa2fe47b81bafd040d6a6bc46731d53c9",
+          "byteLength": 1933353,
+          "sha256": "2639ecbafdf72650ba15ebd56597009dcb14d46e1fe68cab6022b153d2b55bcc"
+        },
+        "prefixPin": {
+          "eventCount": 1127,
+          "eventDigest": "ec0600578255c80fca93c88813cd27e36ea8a53adf4cc2447bd8c7f85833ebf8",
+          "byteLength": 1934849,
+          "sha256": "a1fc9680628b20d2a098921dd7cc7eef9ceebe8c1f2bc3f8297c003eb1739064"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 5,
+      "decodedOnFootField": 1,
+      "sceneBytes": "17b07f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-fifteen-hanlan-client.png",
+      "frame": 58080,
+      "branchId": "branch-0002",
+      "rawStepIndex": 496,
+      "stepLabel": "campaign_hanlan_client_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 58080,
+        "width": 160,
+        "height": 144,
+        "sha256": "14ef47035af3b1d0d6da1009900576de3d604a7ca699c233891fa549f9ebbc81",
+        "rgbaSha256": "c0ff2f53cf9b6283cfaad6b42aaee203c2d4fd53d9255aee094caa0ffe4e02a3",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/b77669b9-59d0-4054-a4cf-1503af5cfd08/recording/frames/14ef47035af3b1d0d6da1009900576de3d604a7ca699c233891fa549f9ebbc81.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-3752c72d-361c-43d6-ad05-78d573266ada",
+        "sessionId": "90129596530f46a58accd17bda901289",
+        "branchId": "branch-0002",
+        "fromActionIndex": 5536,
+        "toActionIndex": 5539,
+        "fromFrame": 58048,
+        "toFrame": 58080,
+        "fromPrefixPin": {
+          "eventCount": 1453,
+          "eventDigest": "47d6f6e6ee39859f0658ea3b3e94bf27b3aa01e8d535edc27227eadda27d3acc",
+          "byteLength": 2064876,
+          "sha256": "e9c9becbe64cb111fd41c34b56af6a945f3077a2e337b20dab58d4ba15e9a428"
+        },
+        "prefixPin": {
+          "eventCount": 1459,
+          "eventDigest": "6efddef141b066a84ce2752d38b0ae7b2b78e7defd96746eb0e140361c7e284c",
+          "byteLength": 2067235,
+          "sha256": "e9a8e845238f8221eba7210fd97606d07c62d1361c6413bd3da0c3df91f26253"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 5,
+      "decodedOnFootField": 1,
+      "sceneBytes": "17b07f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-fifteen-ward-client.png",
+      "frame": 63125,
+      "branchId": "branch-0002",
+      "rawStepIndex": 627,
+      "stepLabel": "campaign_ward_client_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 63125,
+        "width": 160,
+        "height": 144,
+        "sha256": "5a525b17f3317277dc06e2fdbe5abc1e38733577cd3a64a41ff108ff8c27d036",
+        "rgbaSha256": "29f14005f031873a1e1a06019a7af780014e57bbbf3576267354abb4941946cb",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/b77669b9-59d0-4054-a4cf-1503af5cfd08/recording/frames/5a525b17f3317277dc06e2fdbe5abc1e38733577cd3a64a41ff108ff8c27d036.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-3752c72d-361c-43d6-ad05-78d573266ada",
+        "sessionId": "90129596530f46a58accd17bda901289",
+        "branchId": "branch-0002",
+        "fromActionIndex": 5738,
+        "toActionIndex": 5740,
+        "fromFrame": 63093,
+        "toFrame": 63125,
+        "fromPrefixPin": {
+          "eventCount": 1857,
+          "eventDigest": "f7e5b0b935e435e4cdf16695fbde52888d02ea08ef7e4409862a0cfd43f15734",
+          "byteLength": 2225176,
+          "sha256": "d54caa61ba764c4ba833b1a8301a2d28cea35374700924ba6103a437798368c5"
+        },
+        "prefixPin": {
+          "eventCount": 1861,
+          "eventDigest": "011b52d20fdf7a31c512652fc55f6c00b058c300c960c4172981f46fdde79f28",
+          "byteLength": 2226672,
+          "sha256": "d45ba1c4744825e9905539c7a7b877d35e906bd27c06b26f45bef8357c4a2c2b"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 5,
+      "decodedOnFootField": 1,
+      "sceneBytes": "17b07f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    }
+  ],
+  "hardwareCapture": false,
+  "importedCompletions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    11,
+    14
+  ],
+  "newCompletions": [
+    12,
+    7,
+    15,
+    23
+  ],
+  "fullCampaignOrHumanDurationClaim": false
+}

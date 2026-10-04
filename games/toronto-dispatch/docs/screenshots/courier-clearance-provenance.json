@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "romFile": "project/build/toronto-dispatch-courier-clearance.gbc",
+  "romBytes": 524288,
+  "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+  "noiSha256": "7ca4749489938523e81a847527841b2b3fcf9dd08bee8844713044c859ed0b92",
+  "sourceFingerprint": "aa8417d346d660ea1efb2a98cac2f706bc15037438a73e7dbfd1400f1e2129b7",
+  "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+  "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+  "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f",
+  "productionFiles": [
+    {
+      "file": "project/plugins/toronto-driving/engine/src/td_people.c",
+      "sha256": "dff370c9f04b915dd65ca6d4968cfc88e4c51f407157d1f3038791715611f936"
+    },
+    {
+      "file": "project/plugins/toronto-driving/engine/src/states/TORONTO.c",
+      "sha256": "c9f5e62c16f561f529237408a101df0c0e6af92c42d83bcb2f4247dcfc564a59"
+    },
+    {
+      "file": "project/plugins/toronto-driving/engine/src/td_ui.c",
+      "sha256": "877d8bb9d6bd9eacd5f65b492700b2cab45b677b79e25be318156be5370092e8"
+    }
+  ],
+  "sourceQualification": "Production files were frozen during this official build and closed recording; the captured same-build fingerprint identifies the source independently of a later Git commit.",
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "sessionId": "985803bd872d4dfc95e38de54e73e41a",
+  "branchId": "branch-0001",
+  "originalRecordingPath": "project/artifacts/playtests/session-1a6488f4-a56c-4228-be95-1db84d53a83e",
+  "archiveId": "2d803a50-5ef6-43e4-8205-47f15562ae25",
+  "archiveRecordingPath": "project/artifacts/recording-archives/2d803a50-5ef6-43e4-8205-47f15562ae25/recording",
+  "archiveManifestSha256": "b615b0d76ae0e8b60ed25d0b9e3bd6cab2b32e4e7c8f30da72366e1142aaa1cd",
+  "archiveInventoryDigest": "034af9f21ddd453f3cf0af635778a2d5cc8639f603952c5feeadb0571de601dc",
+  "archiveInventoryBytes": 588423,
+  "archiveInventoryEntries": 109,
+  "eventCount": 483,
+  "eventDigest": "5e58c79e049d29a759b96535f4770ea1ff1fe54dfedceab8624104a51478e3ed",
+  "finalFrame": 2642,
+  "outcome": "passed",
+  "closed": true,
+  "retainedPrefix": {
+    "file": "project/build/courier-clearance-e797-closed-prefix.json",
+    "bytes": 782228,
+    "sha256": "fd0ca4fac63a71b4b15f4f1c9928e54a125d919d295ea48d89a7ec131e835ab7",
+    "completedStepWrappers": 128,
+    "inspectionResponses": 392
+  },
+  "hardwareCapture": false,
+  "genuineEmulatorFrames": true,
+  "pixelEditingOrResizing": false,
+  "frames": [
+    {
+      "file": "courier-clearance-market-result.png",
+      "frame": 1192,
+      "description": "First Market Start result: condition 100, cash 138, one unique completion.",
+      "width": 160,
+      "height": 144,
+      "mode": "RGBA",
+      "pngBytes": 1912,
+      "pngSha256": "63b6aace9f0a95ee614e7e437e2e129bbfd5b1cab598d5812f5e4503964dba17",
+      "rgbaBytes": 92160,
+      "rgbaSha256": "2a42dd02e3021e6dd3a1052314f341ef53e6aca8f3fbbc0741057858644bc2b9",
+      "originalArchiveFile": "frames/63b6aace9f0a95ee614e7e437e2e129bbfd5b1cab598d5812f5e4503964dba17.png",
+      "prefixStepIndexZeroBased": 63,
+      "stepLabel": "deliver_verified_market",
+      "stepStartFrame": 1184,
+      "stepEndFrame": 1192,
+      "requestedFrames": 8,
+      "advancedFrames": 8,
+      "requestedButtons": [
+        "select"
+      ],
+      "appliedButtons": [
+        "select"
+      ],
+      "sampledButtons": [
+        "select"
+      ],
+      "journalSequence": 252,
+      "journalActionIndex": 124,
+      "journalDigest": "0bd5edf81c1a5ff0c571798ed4118acdd1cea03f220ca08f379b56bb5afad966",
+      "unchangedFromNativeArchive": true
+    },
+    {
+      "file": "courier-clearance-visible-walker.png",
+      "frame": 2234,
+      "description": "Continuously visible route 83 waits at phase 47 beside the occupied courier in the adapted ordinary-input trajectory.",
+      "width": 160,
+      "height": 144,
+      "mode": "RGBA",
+      "pngBytes": 2055,
+      "pngSha256": "73488cc777e47c22b6d1a151cde36a4a74e0c20cdf8ba3a9ed3cd74a1dcf2c18",
+      "rgbaBytes": 92160,
+      "rgbaSha256": "84dd48391a60b2c4b0787e9b89b632342d133ebd6e10e5eed16f4381d3dbea9f",
+      "originalArchiveFile": "frames/73488cc777e47c22b6d1a151cde36a4a74e0c20cdf8ba3a9ed3cd74a1dcf2c18.png",
+      "prefixStepIndexZeroBased": 94,
+      "stepLabel": "adapted_visible_human_wait",
+      "stepStartFrame": 2174,
+      "stepEndFrame": 2234,
+      "requestedFrames": 60,
+      "advancedFrames": 60,
+      "requestedButtons": [],
+      "appliedButtons": [],
+      "sampledButtons": [],
+      "journalSequence": 358,
+      "journalActionIndex": 177,
+      "journalDigest": "9d5afd3dc071f0691ae987fa7b257a9c872a17f2783d8b26ea6f4cc0c5e50965",
+      "unchangedFromNativeArchive": true
+    },
+    {
+      "file": "courier-clearance-visible-impact.png",
+      "frame": 2383,
+      "description": "A later genuine forward collision retains the visible human stumble and $20/H1 consequence.",
+      "width": 160,
+      "height": 144,
+      "mode": "RGBA",
+      "pngBytes": 2140,
+      "pngSha256": "1c5f2f41cfcea8890aa03f9e68a0b60f6a0680f9ecfab9a3c7abdd1d4013f6b4",
+      "rgbaBytes": 92160,
+      "rgbaSha256": "99cb47b11e338ac4c949ad07a8bd49bcfc582ccadbdec584eec2865ed554e98d",
+      "originalArchiveFile": "frames/1c5f2f41cfcea8890aa03f9e68a0b60f6a0680f9ecfab9a3c7abdd1d4013f6b4.png",
+      "prefixStepIndexZeroBased": 105,
+      "stepLabel": "genuine_visible_impact_1",
+      "stepStartFrame": 2379,
+      "stepEndFrame": 2383,
+      "requestedFrames": 4,
+      "advancedFrames": 4,
+      "requestedButtons": [
+        "a"
+      ],
+      "appliedButtons": [
+        "a"
+      ],
+      "sampledButtons": [
+        "a"
+      ],
+      "journalSequence": 390,
+      "journalActionIndex": 193,
+      "journalDigest": "445f9de04e48d3628119f77e4a1c65bcc1549aa525c01f3a00665e3dfed35d00",
+      "unchangedFromNativeArchive": true
+    },
+    {
+      "file": "courier-clearance-chapter-board.png",
+      "frame": 500,
+      "description": "SELECT reaches chapter 12 PORT LANDS and first offer 89 CHANNEL STOCK RUN; its original lock remains visible.",
+      "width": 160,
+      "height": 144,
+      "mode": "RGBA",
+      "pngBytes": 2495,
+      "pngSha256": "092d096064b9ce0b1f358d89769876997820e9444d2a7770c9f903e9a69041e8",
+      "rgbaBytes": 92160,
+      "rgbaSha256": "3f66c05856a23e0e9524a9c00258456885856a4d07280355e0c63d1b54b72c17",
+      "originalArchiveFile": "frames/092d096064b9ce0b1f358d89769876997820e9444d2a7770c9f903e9a69041e8.png",
+      "prefixStepIndexZeroBased": 25,
+      "stepLabel": "chapter_jump_88",
+      "stepStartFrame": 492,
+      "stepEndFrame": 500,
+      "requestedFrames": 8,
+      "advancedFrames": 8,
+      "requestedButtons": [
+        "select"
+      ],
+      "appliedButtons": [
+        "select"
+      ],
+      "sampledButtons": [
+        "select"
+      ],
+      "journalSequence": 106,
+      "journalActionIndex": 51,
+      "journalDigest": "1823f47b2ba06a7150b05b9bf75ca7d16bab4ed3f9c539b52b1ae0ab1ae5d606",
+      "unchangedFromNativeArchive": true
+    }
+  ],
+  "scope": "Four original native 160x144 emulator frames show first-delivery payment, a continuously visible walker yielding beside the occupied car, a later genuine driver-caused impact and the Port Lands chapter shortcut/lock. The corrected native driveaway uses an adapted ordinary-input trajectory; it does not repeat the literal c4fa pose/clock. These images do not establish all 96 contracts, enjoyable two-hour duration, browser UI, physical cartridge persistence or hardware capture. The main record checkpoint was save-only; the separate same-ROM checkpoint-import/soft-reset record has its own scope."
+}

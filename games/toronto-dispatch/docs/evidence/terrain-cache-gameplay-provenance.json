@@ -1,0 +1,111 @@
+{
+  "manifest": "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_GAMEPLAY.json",
+  "manifestSha256": "0ce9b30d20ead1ba5773585cdc2d54666c62181d07500253ab3e57b3234a7d1a",
+  "images": [
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 496,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6.png",
+      "pngSha256": "f3d2a09c68a1d46a64a5c72aed2877a86c5f988f49b6d44c753bb7d9b6c4c0d6",
+      "rgbaSha256": "9fa1fcb188aebd11dce628b1ba769499fe054606effa58294f16183e4268b1e8",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "full-condition first delivery",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-496.png"
+    },
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 716,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/7a9786204f9f00ca323a7e87b81b6e1822964ff5007fc96c65d57e21d583218a.png",
+      "pngSha256": "7a9786204f9f00ca323a7e87b81b6e1822964ff5007fc96c65d57e21d583218a",
+      "rgbaSha256": "c7cbfc63fd284f755e56a1b6fda8e01d192318ef045f3159b1b0b7235c752d08",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "diagonal glancing movement before first penalty",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-716.png"
+    },
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 948,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/bdf94a8803b9e712cbe8193e2c0357742a143a574788c5ccb67dd661f4f25285.png",
+      "pngSha256": "bdf94a8803b9e712cbe8193e2c0357742a143a574788c5ccb67dd661f4f25285",
+      "rgbaSha256": "58ebe60dd9fc7d4eb5e18d400730ad6a7d1e305eecb92d8db243f329a65fb60d",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "held acceleration blocked by solid rail",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-948.png"
+    },
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 1497,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/e06e1e2146bf7a2e535b4b18c6e5aafa47509ae4cf13c1fa409c1b52eefc8cc2.png",
+      "pngSha256": "e06e1e2146bf7a2e535b4b18c6e5aafa47509ae4cf13c1fa409c1b52eefc8cc2",
+      "rgbaSha256": "7eb435632e36cc16a9f0c74b56bc4fa3f8f526b30fe575e49e32841014d63de8",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "map before pan",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-1497.png"
+    },
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 1617,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/c430f291721ad61b091b34fc8b615284a51e4bfe5ee0e0211c7db94df1f32d24.png",
+      "pngSha256": "c430f291721ad61b091b34fc8b615284a51e4bfe5ee0e0211c7db94df1f32d24",
+      "rgbaSha256": "c848b79628f33784e39b35718b323c06fdb1054d005060c7cd1e6aca587c1eb5",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "map after pan",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-1617.png"
+    },
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 1685,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/f5fdee031fde28f06e1a78d0456bb091679621bdeb17fc15913f4e53fb3597b6.png",
+      "pngSha256": "f5fdee031fde28f06e1a78d0456bb091679621bdeb17fc15913f4e53fb3597b6",
+      "rgbaSha256": "125092518b716295fb8d401e0c38ca20ff8de7d46d5f043614113b93959c1ff5",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "visible walking after parking",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-1685.png"
+    },
+    {
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 1729,
+      "archiveId": "d888f7aa-20ce-4562-80c8-c64cf91fad13",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d888f7aa-20ce-4562-80c8-c64cf91fad13/recording/frames/5595ed1609efb3da47a13e1daa2917c871bff6c8518fb8c9ee6650fdcad2223d.png",
+      "pngSha256": "5595ed1609efb3da47a13e1daa2917c871bff6c8518fb8c9ee6650fdcad2223d",
+      "rgbaSha256": "52bee08df3f514420e4b4dd923df106065575923ba9599122d0799f673d29b68",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "completed car entry with unresolved WALK HUD",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-gameplay-1729.png"
+    }
+  ]
+}

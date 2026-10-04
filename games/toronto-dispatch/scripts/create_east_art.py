@@ -182,10 +182,17 @@ def render():
         assert 4<=len(loop)<=16;sweep(loop,closed=True)
     for port in EAST["ports"]+EAST["conditional_ports"]:
         # A closed conditional connector has no swept portal approach yet.
-        approach=range(20,29) if port in EAST["ports"] else (24,)
-        for x in approach:
-            for offset in range(-18,19):assert clear(x,port["y"]+offset,5,True),("native car seam",port,offset)
-            for offset in range(-28,29):assert clear(x,port["y"]+offset),("native foot seam",port,offset)
+        horizontal=port["edge"] in ("west","east")
+        inset=port["x"] if horizontal else port["y"]
+        lateral=port["y"] if horizontal else port["x"]
+        approach=range(inset-4,inset+5) if port in EAST["ports"] else (inset,)
+        for coordinate in approach:
+            for offset in range(-18,19):
+                pos=(coordinate,lateral+offset) if horizontal else (lateral+offset,coordinate)
+                assert clear(*pos,5,True),("native car seam",port,offset)
+            for offset in range(-28,29):
+                pos=(coordinate,lateral+offset) if horizontal else (lateral+offset,coordinate)
+                assert clear(*pos),("native foot seam",port,offset)
     for stop in EAST["stop_candidates"]:
         assert clear(stop["x"],stop["y"],2 if stop["foot_only"] else 8,not stop["foot_only"]),stop
         if stop.get("parking_anchor"):assert clear(*stop["parking_anchor"],8,True),stop

@@ -30,6 +30,11 @@ UBYTE td_transit_stop(UBYTE origin, UBYTE selection) BANKED;
 UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED;
 /* Invalid queries return zero. A valid service fare does not require a target. */
 UBYTE td_transit_fare(UBYTE origin) BANKED;
+/* Pure pre-boarding fare. Future Islands return assistance applies only to
+ * plain dock20..22 -> terminal10, no job, district5 and cash below4.
+ * All other inputs retain the ordinary service fare; route validity, the
+ * departure window and booking persistence remain the caller's checks. */
+UBYTE td_transit_booking_fare(UBYTE origin,UBYTE target,UBYTE job,UWORD cash,UBYTE district) BANKED;
 UBYTE td_transit_duration(UBYTE origin, UBYTE target) BANKED;
 /* Caller supplies nineteen WRAM bytes. FALSE leaves the buffer unchanged. */
 UBYTE td_transit_label(UBYTE origin, char *dest19) BANKED;

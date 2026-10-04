@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "status": "Frozen source fixture for a future versioned migration; no SRAM or private device data",
+  "captured_source_commit": "d6ee4521921edd685b4ff89e81f7392ec995e6a6",
+  "scene_path": "games/toronto-dispatch/project/project/scenes/toronto_city/scene.gbsres",
+  "scene_sha256": "109d057ca8cabcea4f6fca503d3a3981aeaacb1f176ee382a2578cdb5861af3f",
+  "collision_bytes_sha256": "081c14a28c866c8d7285f1697ac3ecff3d5429f18a2c6e321e351be0ffaec5d8",
+  "campaign_path": "games/toronto-dispatch/content/campaign.json",
+  "campaign_sha256": "6c8499c21dbbfce0b80c16d141d6c49d446d4d38071e2e59ceb495a4173eb660",
+  "native_save_version": 8,
+  "native_state_bytes": 58,
+  "native_district": 0,
+  "regions": [
+    {
+      "name": "Hanlan",
+      "tile_x": 42,
+      "tile_y": 114,
+      "tile_width": 34,
+      "tile_height": 6,
+      "bit_order": "LSB-first row-major",
+      "foot_bitmap_hex": "fffffffffdfffffff7ff3ffcdffffff07fffffc3ff0100000000",
+      "walkable_tiles": 153
+    },
+    {
+      "name": "Centre",
+      "tile_x": 80,
+      "tile_y": 112,
+      "tile_width": 19,
+      "tile_height": 8,
+      "bit_order": "LSB-first row-major",
+      "foot_bitmap_hex": "ffff3bfcdfe1ff0efff7ffbffffffdff0f0000",
+      "walkable_tiles": 114
+    },
+    {
+      "name": "Ward",
+      "tile_x": 100,
+      "tile_y": 110,
+      "tile_width": 17,
+      "tile_height": 7,
+      "bit_order": "LSB-first row-major",
+      "foot_bitmap_hex": "fffffee3fdc7fb8ff7ffefff1f0000",
+      "walkable_tiles": 87
+    }
+  ],
+  "stops": [
+    {
+      "id": 20,
+      "u": 444,
+      "v": 928,
+      "name": "HANLANS POINT",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 21,
+      "u": 720,
+      "v": 920,
+      "name": "CENTRE ISLAND",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 22,
+      "u": 848,
+      "v": 896,
+      "name": "WARDS ISLAND",
+      "transit": 3,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 24,
+      "u": 560,
+      "v": 928,
+      "name": "HANLAN SERVICE",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 25,
+      "u": 760,
+      "v": 944,
+      "name": "CENTRE PARK POST",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    },
+    {
+      "id": 26,
+      "u": 912,
+      "v": 912,
+      "name": "WARD COTTAGE POST",
+      "transit": 0,
+      "district": 0,
+      "reserved": 0
+    }
+  ],
+  "quests": [
+    {
+      "id": "contract-08",
+      "title": "CENTRE LETTERS",
+      "brief": [
+        "PARK THEN FERRY",
+        "WALK THE LAST LEG"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        21,
+        25,
+        21,
+        10
+      ],
+      "time_limit_seconds": 195,
+      "reward": 118
+    },
+    {
+      "id": "contract-16",
+      "title": "HANLAN POST",
+      "brief": [
+        "HANLAN LETTERS",
+        "FERRY THEN FOOT"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        20,
+        24,
+        20,
+        10
+      ],
+      "time_limit_seconds": 205,
+      "reward": 130
+    },
+    {
+      "id": "contract-24",
+      "title": "WARD COTTAGE MAIL",
+      "brief": [
+        "WARD LETTER ROUND",
+        "LEAVE CAR MAINLAND"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        10,
+        22,
+        26,
+        22,
+        10
+      ],
+      "time_limit_seconds": 200,
+      "reward": 142
+    },
+    {
+      "id": "contract-32",
+      "title": "WEST CENTRE POST",
+      "brief": [
+        "TWO ISLAND ROUNDS",
+        "TRANSFER MAINLAND"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 18,
+      "route": [
+        10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25,
+        21,
+        10
+      ],
+      "time_limit_seconds": 310,
+      "reward": 202
+    },
+    {
+      "id": "contract-40",
+      "title": "CENTRE WARD POST",
+      "brief": [
+        "TWO ISLAND PARCELS",
+        "FOOTPATHS TO DOORS"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 24,
+      "route": [
+        10,
+        21,
+        25,
+        21,
+        10,
+        22,
+        26,
+        22,
+        10
+      ],
+      "time_limit_seconds": 305,
+      "reward": 214
+    },
+    {
+      "id": "contract-48",
+      "title": "WARD HANLAN POST",
+      "brief": [
+        "EAST AND WEST POST",
+        "FERRY FOOT FERRY"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 30,
+      "route": [
+        10,
+        22,
+        26,
+        22,
+        10,
+        20,
+        24,
+        20,
+        10
+      ],
+      "time_limit_seconds": 310,
+      "reward": 226
+    },
+    {
+      "id": "contract-56",
+      "title": "THREE ISLAND POST",
+      "brief": [
+        "ALL THREE ISLANDS",
+        "WALK EACH DELIVERY"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 36,
+      "route": [
+        10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25,
+        21,
+        10,
+        22,
+        26
+      ],
+      "time_limit_seconds": 360,
+      "reward": 262
+    },
+    {
+      "id": "contract-64",
+      "title": "ISLAND HANDOFFS",
+      "brief": [
+        "CENTRE WARD HANLAN",
+        "MAINLAND TRANSFERS"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 42,
+      "route": [
+        10,
+        21,
+        25,
+        21,
+        10,
+        22,
+        26,
+        22,
+        10,
+        20,
+        24
+      ],
+      "time_limit_seconds": 360,
+      "reward": 274
+    },
+    {
+      "id": "contract-72",
+      "title": "MASTER ISLAND POST",
+      "brief": [
+        "WARD HANLAN CENTRE",
+        "FINAL FOOT ROUND"
+      ],
+      "kind_id": 7,
+      "required_vehicle": 255,
+      "min_completed": 48,
+      "route": [
+        10,
+        22,
+        26,
+        22,
+        10,
+        20,
+        24,
+        20,
+        10,
+        21,
+        25
+      ],
+      "time_limit_seconds": 360,
+      "reward": 286
+    }
+  ],
+  "validation": {
+    "region_tiles": 475,
+    "bitmap_bytes": 60,
+    "walkable_tiles": 354,
+    "public_car_tiles": 0
+  },
+  "migration_notice": "The new district is not registered. This immutable terrain and ordinal fixture will allow legacy Island walkers and ferry origins to be validated before relocating them; current v8 semantics remain unchanged."
+}

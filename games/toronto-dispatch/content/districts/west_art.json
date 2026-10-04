@@ -619,20 +619,20 @@
     ],
     [
       [
-        800,
+        904,
         400
       ],
       [
-        912,
+        920,
         400
       ],
       [
-        912,
-        528
+        920,
+        488
       ],
       [
-        800,
-        528
+        904,
+        488
       ]
     ],
     [
@@ -16787,11 +16787,11 @@
     "solid": 15
   },
   "background_filename": "toronto_west.png",
-  "background_sha256": "5c012fe2453846fdbca15316262f6865feb4d43fa358972abaaa636e3aad29a1",
+  "background_sha256": "3c3ecccb07bb76466b7f30d146436f47a7499c57c437681194e60679e784cd36",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 157,
-    "flip_canonical_unique_tiles": 134,
+    "raw_unique_tiles": 166,
+    "flip_canonical_unique_tiles": 143,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
     "traffic_swept_all_overlapped_tiles_clear": true,

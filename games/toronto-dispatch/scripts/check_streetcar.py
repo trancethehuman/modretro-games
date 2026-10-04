@@ -6,7 +6,7 @@ streetcar artwork, human route enjoyment, runtime scene loading or hardware.
 import json
 from pathlib import Path
 
-from check_campaign import decode
+from check_campaign import TOTAL_STOPS, decode
 from create_district_jobs import RouteModel, point
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,7 +18,7 @@ def check():
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
     stops = authored['stops']
     assert [stop['id'] for stop in stops] == list(range(43, 51))
-    assert stops == campaign['stops'][43:51] and len(campaign['stops']) == 51
+    assert stops == campaign['stops'][43:51] and len(campaign['stops']) == TOTAL_STOPS
     service = authored['service']
     assert service['stops'] == list(range(43, 51))
     assert service['fare'] == 3 and service['period_seconds'] == 64

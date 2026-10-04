@@ -10,12 +10,16 @@
 #include "data/scene_toronto_west.h"
 #include "data/scene_toronto_high_park.h"
 #include "data/scene_toronto_east.h"
+#include "data/scene_toronto_port_lands.h"
+#include "data/scene_toronto_islands.h"
 
 static const far_ptr_t td_district_scenes[TD_DISTRICT_COUNT]={
     TO_FAR_PTR_T(scene_toronto_city),
     TO_FAR_PTR_T(scene_toronto_west),
     TO_FAR_PTR_T(scene_toronto_high_park),
-    TO_FAR_PTR_T(scene_toronto_east)
+    TO_FAR_PTR_T(scene_toronto_east),
+    TO_FAR_PTR_T(scene_toronto_port_lands),
+    TO_FAR_PTR_T(scene_toronto_islands)
 };
 
 /* This persistent WRAM buffer remains valid until core consumes the exception.
