@@ -14,7 +14,7 @@ Prototype fixed-point values and a stable simulation tick after checking the eng
 
 Collision slows or stops the vehicle, applies a bounded time/cargo penalty, and offers recovery if stuck. Avoid rewarding repeated collisions or leaving the player trapped. Mission timeout must return the player to free roaming with a retry option.
 
-Menu-used A/B remain consumed until each release before normal driving/audio resumes. The existing held-menu byte stores physical input without adding persistent/save state; steering after exit and on-foot movement keep their normal rules. Distinct `7ccfa…` fresh native checks complete one Market job and sample menu controls, map/reset and North travel; public curation/independent native-prose review pass 13,669 / 34,355 checks with zero findings. Its new package remains pending, and older campaign totals remain assigned to their own ROMs.
+Menu-used A/B remain consumed until each release before normal driving/audio resumes. The existing held-menu byte stores physical input without adding persistent/save state; steering after exit and on-foot movement keep their normal rules. Distinct `7ccfa…` fresh native checks complete one Market job and sample menu controls, map/reset and North travel; public curation/independent native-prose review pass 13,669 / 34,355 checks with zero findings. Its prepared local package passes 1,337 independent checks against [source `b7666c…`](https://github.com/trancethehuman/modretro-games/tree/b7666c784cac0651a3c9f5e22bc28c707eeec667/games/toronto-dispatch), without adding gameplay or hardware coverage; older campaign totals remain assigned to their own ROMs.
 
 ## Traffic and environment
 

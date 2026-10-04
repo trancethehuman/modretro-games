@@ -23,7 +23,7 @@ games/toronto-dispatch/project/build/toronto-dispatch-menu-input-release.gbc
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The selected menu-input ROM is available locally at the path above. The matching loading bundle is named `toronto-dispatch-menu-input-release.zip`; check its `SHA256SUMS` against the ROM above and retain its `BUILDINFO.json`, loading instructions, licence and notices. The bundle guide is frozen at its recorded source commit; later documentation can add package checks without changing that archive. The historical `toronto-dispatch-north-initial.zip` belongs to the older ROM.
+The prepared local `toronto-dispatch-menu-input-release.zip` is **139,546 bytes**, SHA-256 **`65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f`**, pinned to source **`b7666c784cac0651a3c9f5e22bc28c707eeec667`**. Its [independent package audit](MENU_INPUT_PACKAGE_AUDIT.json) passes 1,337 checks, including all 203 committed build inputs and the six-member allowlist. Extract it, check `SHA256SUMS` against the ROM above and retain `BUILDINFO.json`, loading instructions, licence and notices. The bundled guide is frozen at that source commit; these later package checks do not change the archive. The historical `toronto-dispatch-north-initial.zip` belongs to the older ROM.
 
 For a source build, ask Codex:
 
