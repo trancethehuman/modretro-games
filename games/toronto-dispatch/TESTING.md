@@ -1,5 +1,13 @@
 # Testing record
 
+## Physical cartridge installation — 2026-10-04
+
+The [installation record](docs/CARTRIDGE_INSTALL_2026_10_04.json) binds the exact native-tested `project/build/toronto-dispatch-driving-only.gbc`, 1,048,576 bytes / SHA-256 `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`, to the supported plugin's completed cartridge write. Vendor CLI 1.2.1 reports success after 49,679 ms, with exit and process-close code 0; no automatic or manual write retry occurred. Fresh device selection matched the intended previously detected 4 MiB writable cartridge. The vendor's returned ROM digest identifies the input file; no separate complete cartridge read-back digest was provided.
+
+The user had explicitly accepted cartridge erasure, possible save loss and no automatic backup, then waived the unavailable original-ROM preservation prerequisite. Updater's available 32 KiB `.sav` export is local and ignored; it contains save data rather than the original game ROM. Activation state and raw device identities/journals are excluded from this public record.
+
+After the write, the user reports Toronto Dispatch boots and responds to the physical buttons after power-off, USB disconnection and power-on with the cartridge inserted. Cartridge cold boot and button response are therefore manually confirmed by the user. Physical gameplay, audio, power-off save persistence and hardware performance remain pending; no physical capture or broad hardware acceptance is claimed.
+
 ## Current driving-only warning candidate — 2026-10-04
 
 Exact ROM `project/build/toronto-dispatch-driving-only.gbc` is 1,048,576 bytes / SHA `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`. Official source-debug build succeeds in 60,735 ms, source fingerprint `61c6df9f7434398181491ee8e00dc5ad74d354edc4e8b4dc7fb0cdda1095605e`. [Compiled review](docs/DRIVING_ONLY_BUILD_AUDIT.json) verifies 291 finite checks: one 18-character warning replacement among 206 inputs, all other ROM bytes identical apart from four generated stock-save-signature bytes and one global-checksum byte. NOI/globals, ABI, UI/main/helper headroom 150/10/1, 52-byte UI frame, static reserve 1,096 and save v10 / 58 bytes are unchanged. Full `make check` passes. Capacity is separate from deepest-stack/performance acceptance.

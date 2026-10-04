@@ -2,7 +2,9 @@
 
 The user requested on 2026-10-04 that the original game supplied on their ModRetro DevDay cartridge be preserved in this repository as a historical artifact before Toronto Dispatch replaces it.
 
-**The original ROM has not been exported or committed.** It remains on the cartridge. This directory currently records the preservation request and observed header; it is not a playable backup.
+Later on 2026-10-04, after being told that supported original-ROM export was unavailable and installation was paused, the user replied: "thats fine we can just go ahead with our gamer". This accepted waiver authorizes continuing with Toronto Dispatch and removes the backup-before-flash prerequisite. The earlier explicit erase/save-loss/no-automatic-backup consent still applies to the same intended development cartridge. The optional original-ROM archival exception remains available if the exact artifact can later be obtained.
+
+**At the waiver, the original ROM had never been exported or committed.** This directory records the historical request, accepted waiver and observed header; it is not a playable backup. Later installation outcomes are recorded in [HARDWARE.md](../../docs/HARDWARE.md) and [TESTING.md](../../games/toronto-dispatch/TESTING.md).
 
 ## Observed cartridge header
 
@@ -20,12 +22,12 @@ The official plugin's supported cartridge detection reported these fields on 202
 
 These fields do not establish a complete ROM digest. The header title alone does not identify the game as Codex Land.
 
-## Preservation procedure
+## Optional archival procedure
 
 1. Obtain the exact original cartridge ROM through a supported export, or an authoritative original file with sufficient identity evidence. The current plugin and vendor CLI expose no ROM export.
 2. Inspect its header, size and SHA-256. Save the untouched ROM as `original-openai.gbc`, and add `SHA256SUMS` and provenance documenting how it was obtained and what was verified.
 3. Retain the original artifact's licence and attribution. The collection's MIT licence does not relicense a third-party demo.
-4. Commit the original ROM and provenance before replacing the game. Keep saves, activation state, raw device journals and identifiers outside the archive.
+4. If the exact original becomes available, commit it with its provenance. This is optional and no longer a prerequisite for installing Toronto Dispatch. Keep saves, activation state, raw device journals and identifiers outside the archive.
 
 The official [Updater backup](https://support.modretro.com/en_us/chromatic-firmware-updater-ryhoYnzCx) exports `.sav` data, which does not contain the ROM. That available backup was saved locally and excluded from Git.
 
