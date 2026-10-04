@@ -8,6 +8,8 @@ A separate [same-ROM continuation](NATIVE_DISPATCH_WEST_CONTINUATION.json) resto
 
 Later [scooter/express evidence](NATIVE_SCOOTER_EXPRESS_REVIEW.json) imports those six jobs and adds only Parkdale Art for $70, while its motorcycle attempt times out and remains needs-review. A new [motorcycle return](NATIVE_MOTORCYCLE_RETURN.json) imports the genuine seven-job checkpoint and completes only that motorcycle contract: condition 80 / one second left pays $212, reaching eight unique completions. Explicit save retains eight / $212. The narrow deadline margin still needs human pacing review. All native inputs, the selected ROM and reviewed loading bundle remain unchanged; these continuations add no new reset or hardware evidence.
 
+A new [passenger continuation](NATIVE_PASSENGER_CONTINUATION.json) imports the genuine eight-job save and adds only Station Pickups. Wrong-bike acceptance, active vehicle changes, transit and on-foot handoffs refuse correctly. Slow steering preserves comfort; a fast turn reduces it by one point. The eight-stop return pays $226 at 89% comfort / 119 seconds left, ending nine completions / $393. The selected ROM and reviewed loading ZIP remain unchanged; no new reset, human-duration or hardware result follows.
+
 ## 1. Prepare the computer and console
 
 1. Install the ModRetro Chromatic plugin in Codex on the Mac connected to the console. It is already installed in this project owner's current setup. Open this repository as the project.
