@@ -261,6 +261,16 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Import the genuine nineteen-completion `e797…` checkpoint and add jobs 89/77/90, reaching done 22 / cash 48. Verify Fire Hall, Colborne Lodge and Crane Walk foot-only clients, all three original-car recoveries and ordered Lodge returns. Credits 75/181/48 and observed decreases reconcile. [Curated evidence](docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json) identifies Commissioners / Lake Shore Don / Cherry North deck crossings from actual coordinates, correcting misleading driver labels. Preserve the missed West→High Park controller guard, ordinary recovery and explicit five-pixel driver policy without a ROM fix or seven-pixel guarantee. Matching-counter 121 loops / 360 VBlanks and two world OAM samples are narrow stopped-Port observations; final neutral ROAM checkpoint is saved only. Remaining 74 contracts, six other Island contracts, broader native/human/hardware acceptance remain pending.
 - [ ] Broaden corrected-ROM campaign, vehicle/crowd/district/pacing and save-import checks; retain failed c4fa and earlier 964f scopes separately. All 96 contracts, remaining Island jobs/full Old Toronto, two enjoyable measured human hours, browser and physical cartridge acceptance remain pending.
 
+## Update-local terrain cache — source experiment, wider acceptance pending
+
+- [x] Reuse one exact whole-pixel full-body terrain result per update with six automatic bytes; retain live dynamic guards and unchanged routes, input, clock, save v9 / 58 bytes and 1,096-byte persistent reserve.
+- [x] Retain the first 16,501-byte gameplay-unit failure (117 over); move only the new helper to a banked module and build distinct `825444a0…`. Verify the actual pointer/nested-call ABI in 611 compiled checks; update frame 10→16 and eight helper locals are not deepest-stack acceptance.
+- [x] Match 6,463 actual-C snapshots / 3,425,390 fields, including cargo/cash/save, actors, people/fleet, tile-hit markers and modeled bank preservation. Engine 804,856 and roads 2,339,979 checks pass.
+- [x] Repeat the [fresh Core comparison](docs/NATIVE_TERRAIN_CACHE_COMPARISON.json): idle 361→385 loops / 1,080 VBlanks (+6.648%); fixed moving tail 77→80 / 240 (+3.896%). Preserve these modest scopes without whole-city or human-FPS claims.
+- [x] Close a separate [825 gameplay replay](docs/NATIVE_TERRAIN_CACHE_GAMEPLAY.json) for first delivery, fast approach/glancing/solid-rail/reverse controls, H1/H2 contacts, map freeze, walking/car entry and in-worker committed SRAM recovery. Earlier e797 campaign completions are not inherited by this fresh replay.
+- [ ] Fix stale WALK/car controls after completed entry and active-job board acceptance/WRONG VEHICLE feedback, then build/play the new exact ROM. Keep `825…` experimental and the e797 loading bundle unchanged until that next phase.
+- [ ] Broaden scene/crowd/stack/performance and remaining-contract coverage; full Old Toronto, two measured enjoyable human hours, browser and physical cartridge acceptance remain open.
+
 ## Device milestone
 
 - [ ] Identify the connected Chromatic and supported writable cartridge; establish Developer Mode readiness.

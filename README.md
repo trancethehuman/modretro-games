@@ -22,6 +22,8 @@ The remaining 74 contracts, fuller Old Toronto, two measured enjoyable human hou
 
 ## Develop
 
+Editable source adds an update-local terrain cache, separately built as `toronto-dispatch-update-terrain-banked.gbc` (`825444a0…`). Repeated [native comparisons](games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json) observe 6.6% more completed updates while parked in Core and 3.9% more during one fixed driving sequence. These are scoped workloads, with no added persistent RAM or save bytes. This source experiment has its own gameplay record; the e797 loading bundle remains selected while active-job prompts and a car-entry HUD lag receive further polish.
+
 Install the ModRetro Chromatic plugin, read [AGENTS.md](AGENTS.md) and the game's design/decisions/roadmap, then select `games/toronto-dispatch/project/project.gbsproj`. Follow [native build instructions](games/toronto-dispatch/docs/BUILD.md). Shared workflows live in [skills/](skills/), also exposed at `.agents/skills`.
 
 ```sh

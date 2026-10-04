@@ -7,6 +7,13 @@
 #define TD_WORLD_ROUTE_DATA
 #define TD_WORLD_DATA
 #include "engine_under_test.c"
+
+/* Host-only isolated private-call compatibility; no production NULL path. */
+static void td_test_drive(void){td_terrain_cache_t cache;cache.valid=0;td_drive(&cache);}
+static UBYTE td_test_drivable(UWORD u,UWORD v){td_terrain_cache_t cache;cache.valid=0;return td_terrain_drivable(u,v,&cache);}
+#define td_drive() td_test_drive()
+#define td_drivable(u,v) td_test_drivable(u,v)
+
 #define td_get_stop td_authored_get_stop
 #define td_get_job td_authored_get_job
 #define td_get_brief td_authored_get_brief

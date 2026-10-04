@@ -15,6 +15,7 @@
 #include "td_traffic.h"
 #include "td_boats.h"
 #include "td_roads.h"
+#include "td_terrain.h"
 #include "td_police.h"
 #include "td_traffic_lights.h"
 #include "actor.h"
@@ -72,7 +73,7 @@ static void td_message(UBYTE m){td.msg=m;td_notice_timer=90;if(m==5||m==13||m==1
 static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!(INPUT_B&&!td_result_b_release),td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
 static UBYTE td_near(td_stop_t *s){return s->district==td.district&&td_distance(td.u>>4,s->u)<15&&td_distance(td.v>>4,s->v)<15;}
 
-static UBYTE td_drivable(UWORD u,UWORD v){return td_road_body(u,v,5);}
+/* Terrain cache queries live in their own banked unit. */
 
 
 static UBYTE td_traffic_free(UWORD u,UWORD v){
@@ -534,7 +535,7 @@ static void td_pedestrians(void){
     if(td.job!=TD_NONE&&!td.health)td_finish(FALSE);else td_save();
 }
 
-static void td_drive(void){
+static void td_drive(td_terrain_cache_t *cache){
     WORD nu,nv,target_x,target_y;BYTE walk_x,walk_y;UBYTE limit,turn_period,moving=0,slide=0,speed;UWORD u,v;
     if(td.cooldown)td.cooldown--;
     if(td_red_cooldown)td_red_cooldown--;
@@ -579,7 +580,7 @@ static void td_drive(void){
         if(td.job!=TD_NONE&&!td.health)td_finish(FALSE);
         return;
     }
-    if(td_drivable(u,v)){
+    if(td_terrain_drivable(u,v,cache)){
         if(td.district==0&&!td_red_cooldown&&td.speed>6&&td_distance(u,640)<14&&td_distance(v,528)<14&&
           (td_distance(td.u>>4,640)>=14||td_distance(td.v>>4,528)>=14)){
             UBYTE ax=td_dx[td.heading]<0?-td_dx[td.heading]:td_dx[td.heading];
@@ -589,8 +590,8 @@ static void td_drive(void){
         td.u=nu;td.v=nv;
     }else{
         // A glancing curb contact slides along the free axis and preserves forward speed.
-        if(nu!=(WORD)td.u&&td_drivable(nu>>4,td.v>>4)){td.u=nu;td_vy=0;slide=1;}
-        if(nv!=(WORD)td.v&&td_drivable(td.u>>4,nv>>4)){td.v=nv;td_vx=0;slide=1;}
+        if(nu!=(WORD)td.u&&td_terrain_drivable(nu>>4,td.v>>4,cache)){td.u=nu;td_vy=0;slide=1;}
+        if(nv!=(WORD)td.v&&td_terrain_drivable(td.u>>4,nv>>4,cache)){td.v=nv;td_vx=0;slide=1;}
         if(!slide)slide=td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,nu,nv);
         /* Remove only blocked-axis motion. Repeated curb scrapes must not beat the throttle. */
         if(slide){if(speed>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
@@ -664,6 +665,7 @@ void toronto_init(void) BANKED {
     if(cold)td_audio_init();td_ui_init();
 }
 void toronto_update(void) BANKED {
+    td_terrain_cache_t terrain;
     UWORD now,elapsed,seconds,old_u,old_v,tram_elapsed;UBYTE motion,step,was_entering,contact,consumed=0;
     /* Restore the ordinary background before menus reuse its VRAM tiles. */
     td_aircraft_render_restore();
@@ -716,11 +718,12 @@ void toronto_update(void) BANKED {
             }
         }
     }
+    terrain.valid=0;
     for(step=0;step<motion&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);step++){
         td_tick++;td_input_edge=step==0&&!consumed;
         if(td.mode==TD_ROAM){
             old_u=td.u;old_v=td.v;was_entering=td_entry_timer;
-            td_drive();if(!was_entering&&td_cross_portal(old_u,old_v))return;
+            td_drive(&terrain);if(!was_entering&&td_cross_portal(old_u,old_v))return;
         }
     }
     if(motion&&td_streetcar_view_district!=TD_DISTRICT_ISLANDS&&

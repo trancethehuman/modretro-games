@@ -40,6 +40,7 @@ check:
 	python3 scripts/test_roads.py
 	python3 scripts/test_police.py
 	python3 scripts/test_engine.py
+	python3 scripts/test_terrain_cache.py
 	python3 scripts/test_district_bridge.py
 	python3 scripts/test_world_navigation.py
 	python3 tests/test_rom_memory.py

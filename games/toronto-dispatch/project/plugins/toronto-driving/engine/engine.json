@@ -69,6 +69,8 @@
         "include/td_traffic_lights.h",
         "include/td_roads.h",
         "src/td_roads.c",
+        "include/td_terrain.h",
+        "src/td_terrain.c",
         "include/td_police.h",
         "src/td_police.c"
       ]

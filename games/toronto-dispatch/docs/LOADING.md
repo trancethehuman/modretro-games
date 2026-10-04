@@ -17,7 +17,7 @@ The updater activates the computer and handles console firmware. The game itself
 
 ## 2. Select the actual game build
 
-The editable project is `games/toronto-dispatch/project/project.gbsproj`. The current expanded source output is:
+The editable project is `games/toronto-dispatch/project/project.gbsproj`. The selected loading ROM is:
 
 ```text
 games/toronto-dispatch/project/build/toronto-dispatch-courier-clearance.gbc

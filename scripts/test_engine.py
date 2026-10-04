@@ -214,6 +214,7 @@ def main():
                 (ENGINE / "src/td_people.c").read_text() + '\n' +
                 (ENGINE / "src/td_traffic.c").read_text() + '\n' +
                 (ENGINE / "src/td_roads.c").read_text() + '\n' +
+                (ENGINE / "src/td_terrain.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +
                 (ENGINE / "src/td_routes.c").read_text())
