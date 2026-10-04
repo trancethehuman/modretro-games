@@ -1,6 +1,16 @@
 # Native build and preview
 
-## Current right-hand traffic build
+## Current ferry-clarity build
+
+Selected local ROM **`toronto-dispatch-ferry-clarity.gbc`** is **1,048,576 bytes**, SHA-256 **`a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b`**. Official build with matching debug artifacts succeeds in **56,197 ms**; NOI is `7257787183e0d53689b53a10f043d8694703f95ce278fbc1ef9eb0b0abed4c94`, source fingerprint `cc8e09b92f8debf7ec8769142dea7de18f30be73be1aebd8192eb8078cae5515`. [Focused source/compiled audit](FERRY_CLARITY_BUILD_AUDIT.json) passes 1,116 checks, preserving 205 of 206 inputs and changing only the UI. Full `make check` passes, including 51,257 new ferry UI checks. There are no new saved fields or fare/schedule/penalty changes.
+
+UI bank 26 leaves 122 bytes; gameplay bank 25 and helper bank 1 leave ten/one. Its 52-byte automatic UI frame, WRAM addresses, linked reserve 1,096 and save v10 / 58 bytes are unchanged. Main/police/content/save banks match e4a9 exactly; authenticated relocations and stock signature/checksum account for other non-UI byte differences. Capacity is separate from peak-stack and timing evidence.
+
+The [fresh closed replay](NATIVE_FERRY_CLARITY.json) observes all nine $8/$16/$24 planning hints, spends eight train fares and one ferry fare to $2, then checks active-fare rejection, explicit no-credit cancellation, scheduled $0 assistance, settled mainland arrival and original-car walking/entry. A fresh condition-100 Market delivery credits 108, ends cash 110 / done 1 and survives genuine in-worker button reset. It retains controller mistakes and the transient arrival image. The prior e4a9 three-job/police replay remains separate. Full campaign, two enjoyable human hours, browser and hardware acceptance remain pending; [TESTING.md](../TESTING.md) records scope.
+
+Package this exact ROM only after committing its matching native source; record that real revision in BUILDINFO. Generated ROMs, debug outputs, raw journals and loading ZIPs stay outside Git. Prior binaries and bundles below remain immutable.
+
+## Retained right-hand traffic build
 
 Selected local ROM **`toronto-dispatch-right-hand-traffic-filter.gbc`** is **1,048,576 bytes**, SHA-256 **`e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6`**. Official native compilation with matching debug artifacts succeeds in **52,039 ms**; NOI is **`449e832e380619a252ca72891278a19aa8506a970ae81d769b9f43e4f5d5ce8d`**, source fingerprint **`c4fa1cedbe63204b43b8c467fb777468476568f5f61c8f7b6c921e76068d90c0`**. [Source/build audit](RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json) freezes 206 inputs, all 36 lane circuits, actual ABI/body/table bytes, relocation and code/memory headroom. Full `make check` passes; linked reserve 1,096 bytes/save v10 / 58 are unchanged. Helper bank 1 leaves one byte and gameplay bank 25 ten; capacity is not deepest-stack evidence.
 

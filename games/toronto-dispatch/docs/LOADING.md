@@ -1,8 +1,8 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Select the latest local playtest candidate, **`toronto-dispatch-right-hand-traffic-filter.gbc`**, **1,048,576 bytes**, SHA-256 **`e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
+Select the latest local playtest candidate, **`toronto-dispatch-ferry-clarity.gbc`**, **1,048,576 bytes**, SHA-256 **`a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
 
-This build retains menu-button release handling and corrects 36 NPC traffic circuits to right-hand lanes with connected police chase/return. Its fresh native replay completes three unique jobs, samples all three attention levels and cash-zero recovery, takes paid Union–St Clair train trips, preserves the parked car, walks/re-enters it, freezes/controls the map and restores committed progress by in-worker reset. Official/full source/compiled checks pass. Test-route mistakes and the initial needs-review record remain disclosed. These scoped records do not prove every contract, two enjoyable human hours or physical installation. Detailed [build](BUILD.md), [current native evidence](NATIVE_RIGHT_HAND_TRAFFIC.json) and [test scopes](../TESTING.md) remain separate from physical verification.
+This build retains right-hand NPC traffic, escalating pursuit/penalties and menu-button release handling, and adds clear ferry budgets and low-cash return instructions. Its own fresh native replay checks all nine Island offer hints, eight paid train rides, active $2 ferry rejection, explicit cancellation, scheduled $0 return assistance, original-car recovery, one fresh delivery and committed in-worker reset. Official/full source/compiled checks pass. Prior e4a9 police/three-job observations remain assigned to that older ROM. These scoped records do not prove every contract, two enjoyable human hours or physical installation. Detailed [build](BUILD.md), [current native evidence](NATIVE_FERRY_CLARITY.json) and [test scopes](../TESTING.md) remain separate from physical verification.
 
 ## 1. Prepare the computer and console
 
@@ -18,26 +18,28 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The selected loading ROM is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The current prepared local bundle is **`project/build/toronto-dispatch-right-hand-traffic-filter.zip`**, **146,040 bytes**, SHA-256 **`615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc`**, pinned to source **`9b1017d762ac4289b2b66c730ad4c69e07c6b444`**. Its [independent package audit](RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json) passes 1,518 checks with zero findings. Extract it and check `SHA256SUMS` as shown below; keep BUILDINFO, instructions, licence and notices. Its bundled guide is frozen at the source commit, before this later package metadata. This local ZIP has not been published as a GitHub release.
+The current ferry-clarity ROM has passed its own build/native gates; its distinct source-pinned loading bundle is prepared after the matching source is committed. Check that bundle's SHA256SUMS against the exact a935 digest above, and retain BUILDINFO, instructions, licence and notices.
+
+The retained local traffic bundle is **`project/build/toronto-dispatch-right-hand-traffic-filter.zip`**, **146,040 bytes**, SHA-256 **`615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc`**, pinned to source **`9b1017d762ac4289b2b66c730ad4c69e07c6b444`**. Its [independent package audit](RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json) passes 1,518 checks with zero findings. It contains the e4a9 traffic ROM, not the newer a935 UI follow-up. Its bundled guide remains frozen at that source commit. This local ZIP has not been published as a GitHub release.
 
 The older prepared local `toronto-dispatch-menu-input-release.zip` is **139,546 bytes**, SHA-256 **`65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f`**, pinned to source **`b7666c784cac0651a3c9f5e22bc28c707eeec667`**. Its [independent package audit](MENU_INPUT_PACKAGE_AUDIT.json) passes 1,337 checks, including all 203 committed build inputs and the six-member allowlist. Its ROM is `7ccfa3b0532b2fa2f65f5198644c8f5ee3dc59df2b2e40034a3f1af954bdbeb9`, not the current traffic ROM. For any current bundle, extract it, check `SHA256SUMS` against its own ROM and retain `BUILDINFO.json`, loading instructions, licence and notices. The bundled guide is frozen at that source commit; these later package checks do not change the archive. The historical `toronto-dispatch-north-initial.zip` belongs to the older ROM.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-right-hand-traffic-filter.gbc`, `toronto-dispatch-north-initial.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-ferry-clarity.gbc`, `toronto-dispatch-right-hand-traffic-filter.gbc`, `toronto-dispatch-north-initial.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -74,7 +76,7 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Walking and car entry | Stop, Start → Park / recover car; walk with D-pad, approach the parked car and press A to enter. With no active job, the completed-entry HUD shows the vehicle and driving controls |
 | Map and pause | Start → Scroll City Map; D-pad pans across areas, A centres the job/booked stop/depot, Select changes focus, B returns; mission time freezes |
 | Transit | On foot at a station, Queen curb sign or ferry terminal, B opens routes; choose with left/right and board with A. At Wellesley, up changes train/bus. Check direction, wait and ride time before boarding; fare is charged once and mission time continues |
-| Islands | Park on the mainland, walk to the ferry terminal and travel to Hanlan's, Centre or Ward's; follow public paths/bridges, with no car teleport. A no-job courier with cash below $4 can return from an Island dock for $0 on the normal schedule |
+| Islands | Offers show $8/$16/$24 ferry budgets; extra travel/fines are excluded. Park on the mainland and use public paths/bridges. If an active job leaves less than $4 at an Island dock, try the return, then follow Start → Cancel Active Job. Cancellation gives no payout/completion; B reopens $0 return assistance on the normal schedule. B cancelling WAIT alone does not abandon a job |
 | Northern district | Follow Spadina or Yonge north of Bloor. Complete three starter jobs to unlock chapter 13's Baldwin Book Box, collect at Union and park below Baldwin Steps; walk the public stair route to deliver |
 | Northern train stops | Walk to Summerhill or St Clair, press B, choose the other stop and board with A. Each trip costs $3; the parked car stays at its original location |
 | Street consequences | Human impacts have non-graphic recovery, condition loss after pickup, $20/$40/$60 escalation and H1/H2/H3 pursuit. Capture clears attention and clamps its $25/$100/$225 fine at available cash. A car blocking a lane makes NPCs wait; move it clear and check police return |
@@ -94,11 +96,13 @@ Keep a note of the ROM SHA-256 and any problem's location/action. Save v10 prese
 
 A host-streamed `play` demo is optional and never writes the cartridge. It can help assess the screen/buttons, but it cannot replace the cold-boot and save checks above.
 
-Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected traffic ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
+Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected ferry-clarity ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
 
 ## Evidence and older builds
 
-The selected traffic build's [source/build audit](RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json) authenticates 206 inputs and actual compiled lane/police/ABI guards. The [fresh scoped native replay](NATIVE_RIGHT_HAND_TRAFFIC.json) ends with three completions/$101 after $20/$40/$60 human fines, underfunded H3 capture, recovery delivery and two $3 train fares. Native reset proves committed in-worker SRAM restoration, not physical cold-boot persistence. The [initial traffic replay](NATIVE_TRAFFIC_INITIAL_REVIEW.json) remains needs-review. Synthetic coordinate-filter work reduction does not establish a native/whole-city speedup. Helper/gameplay banks have 1/10 free bytes, reserve 1,096, deepest stack unmeasured. Supported discovery on 2026-10-04 found zero connected Chromatics; no physical loading is claimed.
+The selected ferry-clarity build's [focused audit](FERRY_CLARITY_BUILD_AUDIT.json) authenticates 206 inputs with only UI changed. Its [fresh scoped replay](NATIVE_FERRY_CLARITY.json) ends with one new completion/$110 after paid travel, low-cash cancellation, scheduled assistance and car recovery. Native reset proves committed in-worker SRAM restoration, not physical cold-boot persistence. UI/helper/gameplay banks have 122/1/10 free bytes, reserve 1,096, deepest stack unmeasured. Supported discovery on 2026-10-04 found zero connected Chromatics; no physical loading is claimed.
+
+The retained e4a9 traffic build's [source/build audit](RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json) authenticates its lanes/police/ABI guards. Its own [fresh native replay](NATIVE_RIGHT_HAND_TRAFFIC.json) ends with three completions/$101 after $20/$40/$60 human fines, underfunded H3 capture, recovery delivery and two $3 train fares. The [initial traffic replay](NATIVE_TRAFFIC_INITIAL_REVIEW.json) remains needs-review. Synthetic coordinate-filter work reduction does not establish a native/whole-city speedup, and old gameplay outcomes are not assigned to a935.
 
 ### Historical menu-input build
 

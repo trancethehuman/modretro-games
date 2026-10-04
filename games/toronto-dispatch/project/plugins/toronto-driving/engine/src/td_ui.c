@@ -207,16 +207,18 @@ void td_ui_draw(void) BANKED {
             td_row(2,"B CANCEL WAIT");return;
         }
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
+        fare=td.msg==4&&td.district==TD_DISTRICT_ISLANDS&&td.job!=TD_NONE&&td.cash<4;
         if(td.msg){
             const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE"};
-            td_row(0,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
+            td_row(0,fare?"NO FARE: START MENU":td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
         }else {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
             else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
         if(td.job!=TD_NONE){
             sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);
-            if(td_target.district!=td.district){
+            if(fare)td_row(2,"CANCEL JOB TO RETURN");
+            else if(td_target.district!=td.district){
                 if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line);
                 else if(td.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"RETURN FERRY AT DOCK");
                 else if(td_target.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"GO TO FERRY TERMINAL");
@@ -263,7 +265,12 @@ void td_ui_draw(void) BANKED {
             td_row(16,td.job!=TD_NONE?"COMPLETE / PREVIEW":"COMPLETE / REPLAY");
         }else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}
         else td_row(16,td.job!=TD_NONE?"READY AFTER THIS JOB":"READY TO ACCEPT");
-        td_row(14,"L/R JOB U/D STOPS");td_row(15,td.job!=TD_NONE?"A RESUME  B BACK":"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
+        td_row(14,"L/R JOB U/D STOPS");td_row(15,td.job!=TD_NONE?"A RESUME  B BACK":"A ACCEPT  B BACK");
+        /* These nine preserved rounds include a normal return from the last
+           Island; the longest rounds pay before that final return fare. */
+        td_row(17,td.menu<72&&(td.menu&7)==7&&td_offer.kind==7?
+            (td.menu<24?"FERRY BUDGET $8":td.menu<48?"FERRY BUDGET $16":"FERRY BUDGET $24"):
+            "PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){
         service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);

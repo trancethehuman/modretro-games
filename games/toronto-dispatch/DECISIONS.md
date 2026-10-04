@@ -1,5 +1,13 @@
 # Decisions
 
+## Ferry budget and recovery cues — compiled and scoped native milestone, 2026-10-04
+
+Explain the existing ferry rules without changing them. The nine preserved Island rounds need two/four/five paid legs before completion; show budgets $8/$16/$24 on their offer screen, with the final amount including a normal $4 homeward trip after the on-Island payout. Optional positioning trips and penalties are outside the budget. Do not reserve cash, introduce an acceptance lock, change any brief/mission field, or make active-job fares free.
+
+After an active Island courier receives NO FARE with less than $4, show `NO FARE: START MENU` and `CANCEL JOB TO RETURN` while retaining objective progress/time/condition/attention. Start → Cancel Active Job abandons the contract without payout or completion; B at an Island dock then offers the existing no-job $0 scheduled assistance. WAIT cancellation alone does not cancel a contract. This fixes an unclear recovery path rather than a permanent softlock. The implementation is confined to the UI with no new persistent state; host, compiled and native acceptance are recorded separately.
+
+Distinct `a9353a76…` passes the official build, full `make check` and [focused compiled audit](docs/FERRY_CLARITY_BUILD_AUDIT.json). Only `td_ui.c` changes among 206 native inputs. The fresh [closed native record](docs/NATIVE_FERRY_CLARITY.json) checks all nine budget offers, spends eight $3 train fares and one $4 ferry fare, then rejects the active return at $2 with 96 seconds left. Cancelling leaves $2 and zero completions; free assistance waits for its normal departure and eight-second ride. After the settled mainland scene, ordinary walking/entry recovers the parked car. A new Market Start completes at condition 100 for credit 108 / cash 110 / done 1; a genuine button reset restores committed progress. Root's mistaken marker and deadline/mode expectations remain disclosed. Select this distinct local playtest ROM; prior e4a9 artifacts and police/three-job evidence remain unchanged and separate. Full campaign, human duration, browser and physical execution remain open.
+
 ## Accepted, 2026-10-01
 
 - Original game for the user's ModRetro device and writable cartridge.

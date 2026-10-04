@@ -211,6 +211,17 @@ static void expect_text_screen_safe(void) {
            "itinerary and payment draws preserve actual uploaded font patterns");
 }
 
+static void expect_three_row_hud_safe(void){
+    UBYTE safe=1;
+    for(unsigned row=0;row<3;row++)for(unsigned column=0;column<20;column++)
+        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+           window_tiles[1][row][column]!=15)safe=0;
+    expect(safe&&window_x==0&&window_y==120&&VBK_REG==0,
+           "three-row gameplay HUD uses bounded native font rows at its actual sliding-window position");
+    expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),
+           "ferry cancellation HUD preserves the actual uploaded font patterns");
+}
+
 static void expect_board_preserves_game(const game_snapshot_t *before) {
     expect(!memcmp(&td,&before->state,sizeof(td))&&!memcmp(&td_job,&before->job,sizeof(td_job))&&
            !memcmp(&td_offer,&before->offer,sizeof(td_offer))&&!memcmp(&td_target,&before->target,sizeof(td_target))&&
@@ -628,6 +639,129 @@ static void test_island_objective_hud(void){
     expect_game_unchanged(&before);
 }
 
+static void test_ferry_offer_budgets(void){
+    unsigned island_offers=0;
+    for(unsigned job=0;job<TD_QUESTS;job++){
+        const td_job_t *offer=&host_ui_jobs[job];unsigned budget=0;
+        if(offer->kind==7){
+            island_offers++;
+            /* Count actual authored terminal/dock edges, independently of
+               the renderer's offer-index groups. Include a normal return
+               after a final Island payout, without altering the route. */
+            for(unsigned leg=1;leg<offer->count;leg++){
+                unsigned a=offer->route[leg-1],b=offer->route[leg];
+                if((a==10&&b>=20&&b<=22)||(b==10&&a>=20&&a<=22))budget+=4;
+            }
+            if(host_ui_stops[offer->route[offer->count-1]].district==TD_DISTRICT_ISLANDS)budget+=4;
+        }
+        for(unsigned context=0;context<4;context++){
+            reset_case();td.mode=TD_BOARD;td.menu=job;td_offer=*offer;td_board_route=1;
+            td.job=context==2?job:TD_NONE;td_job=*offer;td.stage=offer->count-1;
+            td.done=context==1?0:TD_QUESTS;td.cash=3;
+            if(context==3)td.complete[job>>3]|=1u<<(job&7);
+            td_get_stop(offer->route[td_board_route],&td_cursor);
+            game_snapshot_t before=snapshot_game();td_ui_draw();char expected[40],brief[19];
+            if(budget)sprintf(expected,"FERRY BUDGET $%u",budget);
+            else strcpy(expected,"PAUSE FREEZES CLOCK");
+            expect_window_text(17,expected,"all actual offers show only their independently derived ferry reserve or ordinary pause cue");
+            memcpy(brief,host_ui_briefs[job],18);brief[18]=0;
+            expect_window_text(5,brief,"ferry hint preserves the first pinned authored brief");
+            memcpy(brief,host_ui_briefs[job]+18,18);
+            expect_window_text(6,brief,"ferry hint preserves the second pinned authored brief");
+            expect_board_stop(job,td_board_route);
+            if(context==2){
+                sprintf(expected,"CURRENT STOP %u/%u",td.stage+1,offer->count);
+                expect_window_text(16,expected,"ferry budget does not replace active actual-stage feedback");
+                expect_window_text(15,"A RESUME  B BACK","active ferry preview retains resume controls");
+            }else{
+                if(context==3)strcpy(expected,"COMPLETE / REPLAY");
+                else if(td.done<offer->min_done)sprintf(expected,"NEEDS %u COMPLETED",offer->min_done);
+                else strcpy(expected,"READY TO ACCEPT");
+                expect_window_text(16,expected,"ferry budget preserves locks and completed/eligible captions");
+                expect_window_text(15,"A ACCEPT  B BACK","ferry preview retains acceptance controls");
+            }
+            expect_window_text(1,host_ui_chapters[job/8],"ferry hint retains the actual chapter caption");
+            expect_window_text(14,"L/R JOB U/D STOPS","ferry hint retains offer and itinerary navigation");
+            expect_game_unchanged(&before);expect_text_screen_safe();
+            expect(td_board_route==1,"ferry budget does not move the itinerary cursor");
+        }
+    }
+    expect(island_offers==9,"exact nine preserved Island offers receive ferry budgets");
+    reset_case();td.mode=TD_BOARD;td.job=TD_NONE;td_get_job(7,&td_offer);td_board_route=0;
+    td_get_stop(td_offer.route[0],&td_cursor);
+    for(unsigned invalid=TD_QUESTS;invalid<=255;invalid++){
+        td.menu=invalid;game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(17,"PAUSE FREEZES CLOCK","invalid offer indices never infer ferry budgets from a stale Island offer");
+        expect_game_unchanged(&before);expect_text_screen_safe();
+    }
+    td.menu=7;td_get_job(0,&td_offer);td_get_stop(td_offer.route[0],&td_cursor);
+    game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(17,"PAUSE FREEZES CLOCK","a mismatched non-Island offer keeps the ordinary pause cue");
+    expect_game_unchanged(&before);
+}
+
+static void test_island_no_fare_guidance(void){
+    for(unsigned island=0;island<2;island++)for(unsigned active=0;active<2;active++)
+    for(unsigned cash=0;cash<8;cash++)for(unsigned local=0;local<2;local++){
+        reset_case();td.mode=TD_ROAM;td.msg=4;td.onfoot=1;td.cash=cash;
+        td.district=island?TD_DISTRICT_ISLANDS:TD_DISTRICT_CITY;td.job=active?7:TD_NONE;
+        td_get_job(7,&td_job);td.stage=2;td.left=103;td.health=67;td.wanted=3;td_route_district=TD_NONE;
+        td_get_stop(local?(island?25:0):(island?10:25),&td_target);
+        game_snapshot_t before=snapshot_game();td_ui_draw();char status[40];
+        int rescue_cue=island&&active&&cash<4;
+        expect_window_text(0,rescue_cue?"NO FARE: START MENU":"NO FARE MONEY",
+                           "only an active low-cash Island notice exposes the cancellation recovery action");
+        if(active){
+            sprintf(status,"3/%u 103S C67 H3",td_job.count);
+            expect_window_text(1,status,"recovery guidance preserves actual condition, deadline and attention");
+            expect_window_text(2,rescue_cue?"CANCEL JOB TO RETURN":local?td_target.name:
+                               island?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
+                               "no-fare cancellation replaces only the eligible objective row");
+        }else{
+            sprintf(status,"$%u WALK H3",cash);
+            expect_window_text(1,status,"idle insufficient-fare notices retain wallet and walking/attention status");
+            expect_window_text(2,island?"B: FERRY AT DOCK":"A CAR / B TRANSIT",
+                               "no-job and mainland notices retain their normal controls");
+        }
+        expect_game_unchanged(&before);expect_three_row_hud_safe();
+        td.msg=0;before=snapshot_game();td_ui_draw();
+        expect_window_text(2,active?(local?td_target.name:island?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL"):
+                           island?"B: FERRY AT DOCK":"A CAR / B TRANSIT",
+                           "clearing no-fare guidance restores the exact ordinary objective/control text");
+        expect_game_unchanged(&before);
+    }
+    /* Unrelated notices and genuine booking/WAIT/paid-RIDE states must not
+       gain cancellation advice solely from an active job and empty wallet. */
+    reset_case();td.job=7;td.district=TD_DISTRICT_ISLANDS;td.cash=0;td.mode=TD_ROAM;
+    td_get_job(7,&td_job);td_get_stop(25,&td_target);
+    static const UBYTE notices[]={1,5,19};
+    static const char *const text[]={"STOP TO INTERACT","CRASH: CARGO HURT","HUMAN HIT: FINE + H"};
+    for(unsigned i=0;i<sizeof(notices);i++){
+        td.msg=notices[i];game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(0,text[i],"other active Island notices keep their original safety/penalty text");
+        expect_window_text(2,"CENTRE PARK POST","other notices retain the Island client objective");
+        expect_game_unchanged(&before);
+    }
+    td.msg=4;td.transit_origin=20;td.transit_target=10;td.seconds=9;td_get_stop(10,&td_cursor);
+    for(unsigned mode=TD_TRANSIT;mode<=TD_RIDE;mode++){
+        td.mode=mode;td.ride_left=5;game_snapshot_t before=snapshot_game();td_ui_draw();
+        if(mode==TD_TRANSIT){
+            expect_window_text(7,"RIDE 8 SEC / $4","active Island booking still quotes the actual unchanged fare and duration");
+            expect_window_text(11,"","active booking still has no no-job return assistance");
+        }else if(mode==TD_WAIT){
+            expect_window_text(0,"DEPARTS IN 28 SEC","active WAIT keeps its real autonomous departure countdown");
+            expect_window_text(1,"ISLAND FERRY","active WAIT keeps its service identity");
+            expect_window_text(2,"B CANCEL WAIT","active WAIT retains its existing unpaid cancellation control");
+        }else{
+            expect_window_text(0,"RIDING 5 SEC","genuine paid RIDE keeps its booked remaining time");
+            expect_window_text(2,"FARE PAID / ON TIME","a paid RIDE never reclassifies its fare from current empty cash");
+        }
+        expect_game_unchanged(&before);
+        if(mode==TD_TRANSIT)expect_text_screen_safe();
+        else expect_three_row_hud_safe();
+    }
+}
+
 static void test_every_viewport(void) {
     reset_case();open_case();game_snapshot_t before=snapshot_game();unsigned viewports=0;
     verify_marker_patterns();
@@ -920,6 +1054,9 @@ int main(void) {
     test_car_entry_hud_repaint();test_wait_contact_hud_and_map_restore();
     test_reserved_islands_assistance_ui();
     test_island_objective_hud();
+    unsigned ferry_checks=checks,ferry_failures=failures;
+    test_ferry_offer_budgets();test_island_no_fare_guidance();
+    printf("Ferry clarity UI regressions: %u checks, %u failures.\n",checks-ferry_checks,failures-ferry_failures);
     test_appended_district_focus_and_holes();
     test_dispatch_board_itineraries();test_dispatch_active_board_captions();test_contract_payment_result();
     test_pause_audio_labels_and_map_cache();
