@@ -1,0 +1,1144 @@
+{
+  "outcome": "passed-independent-source-and-compiled-initial-North-audit",
+  "checks": 47502,
+  "checksByGroup": {
+    "identity": 4,
+    "source": 204,
+    "header": 2,
+    "memory": 20,
+    "capacity": 35,
+    "bounds": 21,
+    "compiled": 21,
+    "content": 328,
+    "scene": 8,
+    "loaders": 1,
+    "graphics": 46848,
+    "palette": 8,
+    "UI": 2
+  },
+  "findings": [],
+  "rom": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-north-initial.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95"
+  },
+  "noi": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-north-initial.gbc.debug/symbols.noi",
+    "sizeBytes": 57809,
+    "sha256": "9315d5dfbf855b2a50e15bbf687e262bd04edabce81dac3f2cce51e82d58f0a7"
+  },
+  "sourceFingerprint": "f007836c9aa73957ecaa922157e42a29b068b04f1b6652eb28f7578903fa44f0",
+  "frozenProjectInputsCompared": 203,
+  "sourcePins": {
+    "path": "games/toronto-dispatch/project/build/north-initial-source-pins.json",
+    "sizeBytes": 40481,
+    "sha256": "49b1cc06045bffa79a64ed1bcb4b0af9a24112884c7766d6c232acc72adae393"
+  },
+  "buildReceipt": {
+    "path": "games/toronto-dispatch/project/build/north-initial-build.json",
+    "sizeBytes": 14171,
+    "sha256": "8c26fb87822b814af0ed1a8c10bc5cf5003fb716659921a990e07f08d4dcb862"
+  },
+  "compilerWarningsPreserved": "(node:39463) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.\n(Use `node --trace-deprecation ...` to show where the warning was created)\ninclude/sfx_player.h:33: warning 126: unreachable code\ninclude/sfx_player.h:36: warning 126: unreachable code\nsrc/td_save.c:47: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:197: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/td_transit.c:162: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:436: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:424: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:518: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:520: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:545: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:604: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\nsrc/states/TORONTO.c:663: warning 110: conditional flow changed by optimizer: so said EVELYN the modified DOG\n",
+  "proof": {
+    "restore_single_candidate_frame": {
+      "bank": 29,
+      "address": "0x7721",
+      "wire": "e8c0",
+      "meaning": "64 automatic bytes: candidate0..57, seq58, version59, saved pointer60..61, check62, slot63"
+    },
+    "restore_candidate_read_outputs": {
+      "bank": 29,
+      "address": "0x7753",
+      "wire": "f83b5d54f83a4d44d5c5210400395d54f8437ecd5c75",
+      "meaning": "WRAM stack outputs atcandidate+58/+59; candidate base is sameSP object passed to near read_slot"
+    },
+    "restore_prepare_only_after_read": {
+      "bank": 29,
+      "address": "0x7774",
+      "wire": "79b7284ff83b7e210000395d54cdab70",
+      "meaning": "Zero read_slot result bypasses prepare; successful read feeds source version and candidate to near prepare"
+    },
+    "read_current_and_v9_header": {
+      "bank": 29,
+      "address": "0x75c1",
+      "wire": "f8087ed60a281bf8087ed6092814f8087ed608280df8087ed6072806",
+      "meaning": "Explicit versions10/9/8/7 lead to length58 branch;v6 handled local flag"
+    },
+    "read58_header_length": {
+      "bank": 29,
+      "address": "0x75e3",
+      "wire": "f8097ed63a2811",
+      "meaning": "58-byte length accepted before copying"
+    },
+    "crc_mismatch_returns_before_prepare": {
+      "bank": 29,
+      "address": "0x7680",
+      "wire": "f8027e912005237e932804afc31b77",
+      "meaning": "Both CRC bytes compared; either mismatch returns0 via epilogue771B before prepare caller"
+    },
+    "field_old_district_job_guards": {
+      "bank": 29,
+      "address": "0x68e1",
+      "wire": "d1d51ad6063018f8542a5f561ad606300ef8452a5f561afeff2808d6603804afc3526c",
+      "meaning": "Pre10 guard rejects district/park6 and nonNONEjob96 before lookup"
+    },
+    "field_old_paid_stop_guards": {
+      "bank": 29,
+      "address": "0x6934",
+      "wire": "f8562a5f561afe052804d6062019f8472a5f561ae63fd63b3009232a5f561ad63b3804afc3526c",
+      "meaning": "WAIT/RIDE originlow6bits/target59 rejected before stop lookup"
+    },
+    "field_old_bitmap_bytes": {
+      "bank": 29,
+      "address": "0x6ae1",
+      "wire": "f8447eb7280ff8597ed60c38087bb72804afc3526c",
+      "meaning": "Pre10 bytes12..15 reject any bit, before active getter6B53"
+    },
+    "field_current_bitmap_bytes": {
+      "bank": 29,
+      "address": "0x6af6",
+      "wire": "f8597ed60d38087bb72804afc3526c",
+      "meaning": "Current104bitmap rejects bytes13..15; full16byte loopretained"
+    },
+    "field_current_job_bound": {
+      "bank": 29,
+      "address": "0x6b38",
+      "wire": "f8597ed6683804afc3526c",
+      "meaning": "Current activejob>=104 fails before getter"
+    },
+    "field_actual_job_getter": {
+      "bank": 29,
+      "address": "0x6b4e",
+      "wire": "1e1921b078cd7d3e",
+      "meaning": "Bank25:78B0 current job getter only after field/bitmap checks"
+    },
+    "prepare_field_then_overlay": {
+      "bank": 29,
+      "address": "0x7105",
+      "wire": "f80f2a5e2356cda3685fb7cab273",
+      "meaning": "Fieldvalidity must succeed before any overlay/terrain/Island transform"
+    },
+    "prepare_old_version_gate": {
+      "bank": 29,
+      "address": "0x7172",
+      "wire": "f80f7ed60a306c",
+      "meaning": "Current10 bypasses historicalCoreoverlay;pre10 executes exactsame-bank helper"
+    },
+    "park_overlay_half5": {
+      "bank": 29,
+      "address": "0x71b0",
+      "wire": "3e05f55c33cda567",
+      "meaning": "Wholepixel parkedCore body uses half5; near helper samebank"
+    },
+    "player_overlay_half0_or5": {
+      "bank": 29,
+      "address": "0x71c9",
+      "wire": "1ab72803af18023e05f533f8042a4f46f8022a5f56cda567",
+      "meaning": "Onfoot nonzero chooses0; driven chooses5; immutablewholepixelQ4->pixel input"
+    },
+    "overlay_y24": {
+      "bank": 29,
+      "address": "0x67da",
+      "wire": "79d61878de0038043e01182e",
+      "meaning": "Anyfoot/body top>=24 returnsclear; others check oldsolid columns"
+    },
+    "overlay_x304_368_608_672": {
+      "bank": 29,
+      "address": "0x67ed",
+      "wire": "79d67078de0130087dd6307cde01301379d6a078de0230087dd6607cde023003",
+      "meaning": "Exact half-open oldCore columns304..367 and608..671 with inclusivebodyedge"
+    },
+    "writer_v10": {
+      "bank": 29,
+      "address": "0x7431",
+      "wire": "03033e0a02",
+      "meaning": "Actual SRAMrecordversion10 atoffset2"
+    },
+    "writer_length58": {
+      "bank": 29,
+      "address": "0x7447",
+      "wire": "2a666f363a",
+      "meaning": "Actual SRAMrecordoffset3=58"
+    },
+    "bank_restore_wrapper": {
+      "bank": 0,
+      "address": "0x3e7d",
+      "wire": "f090f57be090ea0020e7e16f7ce090ea00207dc9",
+      "meaning": "Stock wrapper restores priorHRAM/mappercodebank after nested BANKED getters"
+    }
+  },
+  "compiledContentLocations": {
+    "all64_native_stops": {
+      "bank": 25,
+      "address": "0x4066",
+      "bytes": 1664,
+      "sha256": "27bbc58cff8e814f9021fd58ff808d5ac7e40bc064836b2ad6b5f3fe5c407f63"
+    },
+    "all104_native_jobs": {
+      "bank": 25,
+      "address": "0x46e6",
+      "bytes": 4056,
+      "sha256": "ff9773dabe9c6f5f698d70b3a012b2f9022f3721aa4b04d05e8ace447e060bc8"
+    }
+  },
+  "memory": {
+    "staticReserve": 1096,
+    "heapEnd": "0xdab8",
+    "allExportedWramSameAs03": false,
+    "stockWramRelocationsVersus03": {
+      "_link_byte_sent": {
+        "before": "0xc0b2",
+        "after": "0xc0b5"
+      },
+      "_link_next_mode": {
+        "before": "0xc0b3",
+        "after": "0xc0b6"
+      },
+      "_SIO_status": {
+        "before": "0xc0b1",
+        "after": "0xc0b4"
+      },
+      ".image_tile_width": {
+        "before": "0xc0b4",
+        "after": "0xc0bb"
+      },
+      "__current_ram_bank": {
+        "before": "0xc0b7",
+        "after": "0xc0b3"
+      },
+      "_sfx_frame_skip": {
+        "before": "0xc0bb",
+        "after": "0xc0ba"
+      },
+      "_sfx_play_sample": {
+        "before": "0xc0b9",
+        "after": "0xc0b8"
+      },
+      "_sfx_play_bank": {
+        "before": "0xc0b8",
+        "after": "0xc0b7"
+      },
+      "_exchange_state": {
+        "before": "0xdaaa",
+        "after": "0xdab4"
+      },
+      "__is_CGB": {
+        "before": "0xc0b5",
+        "after": "0xc0b1"
+      },
+      "__is_SGB": {
+        "before": "0xc0b6",
+        "after": "0xc0b2"
+      }
+    },
+    "newExportedPersistentSymbols": 0,
+    "savePayloadBytes": 58,
+    "restoreFrameAutomaticBytes": 64,
+    "validFieldsAutomaticFrameBytes": 90,
+    "maximumRuntimeStackMeasured": false
+  },
+  "bankCapacity": {
+    "packedBytes": {
+      "33": 6441,
+      "26": 16064,
+      "28": 16223,
+      "30": 16353,
+      "27": 16363,
+      "32": 16366,
+      "29": 16369,
+      "25": 16374,
+      "12": 16375,
+      "23": 16375,
+      "18": 16376,
+      "24": 16376,
+      "16": 16378,
+      "19": 16379,
+      "20": 16379,
+      "7": 16380,
+      "1": 16381,
+      "21": 16381,
+      "31": 16381,
+      "10": 16382,
+      "17": 16382,
+      "3": 16383,
+      "11": 16384,
+      "13": 16384,
+      "14": 16384,
+      "15": 16384,
+      "2": 16384,
+      "22": 16384,
+      "4": 16384,
+      "5": 16384,
+      "6": 16384,
+      "8": 16384,
+      "9": 16384
+    },
+    "mainBank2Free": 0,
+    "UIBank1Free": 3,
+    "saveBank29Free": 15,
+    "inlineChapter": 13,
+    "ROMBytes": 1048576
+  },
+  "NorthScene": {
+    "scene": "0x177eba",
+    "collision": "0x154000",
+    "tileset": "0x20606c",
+    "BKGPatterns": 83,
+    "collisionBytes": 15616,
+    "pixelTilesCompared": 15616,
+    "originalPixelsCompared": 999424,
+    "paletteSlotsCompared": 7,
+    "loaders": [
+      "aircraft",
+      "fleet",
+      "civilians"
+    ],
+    "boatOrQueenLoader": false,
+    "roofAttributesMatchOriginal": true
+  },
+  "nativeAddresses": {
+    "_td": "0xc1f6",
+    "_td_job": "0xc230",
+    "_td_offer": "0xc257",
+    "_actors": "0xc5ec",
+    "_frame_joy": "0xd9c4",
+    "_last_joy": "0xd9c5",
+    "_recent_joy": "0xd9c6",
+    "_joy_pressed": "0xd9c7",
+    "_game_time": "0xc0bc",
+    "_current_scene": "0xd5aa",
+    "_td_restore": "0x1d7721",
+    "_td_save": "0x1d73b5",
+    "_td_ui_draw": "0x15e1b",
+    "_toronto_update": "0x27a05"
+  },
+  "limits": [
+    "No native execution, plugin tool, browser/device, tracked file or Git mutation by this audit.",
+    "Compiled bank fit and static1096-byte reserve are not deepest-stack, frame timing or hardware proof.",
+    "Host save migration and these compiled branches do not prove native older-SRAM import or support cross-ROM emulator checkpoints.",
+    "New North native gameplay, all104quests, human2hours and physical cartridge acceptance require separate evidence.",
+    "General aircraft/Queen/streetlife/progress gates owned by root are separate from this focusedNorth inspection."
+  ],
+  "rawAuditProvenance": {
+    "path": "games/toronto-dispatch/project/build/NORTH_INITIAL_COMPILED_AUDIT.json",
+    "sizeBytes": 11509,
+    "sha256": "18a90b9eb3321464b1c720353b875f44d689b2d031f4d8a0cb3baefb411826de",
+    "published": false,
+    "note": "The original independent compiled audit remains ignored. This is a public structured projection with exact source input pins; no source commit is assigned before publication."
+  },
+  "sourceInputPins": {
+    "games/toronto-dispatch/project/ASSET_LICENSE": {
+      "sha256": "c46a5f93c655d8a890391242058d050cbc6ff575d751f27477f22d1f8d53fba4",
+      "sizeBytes": 1072
+    },
+    "games/toronto-dispatch/project/LICENSE": {
+      "sha256": "6fc7dd0727262618eb53594406b778aa4fd4cde9eb1d978736fe7c07b5607e79",
+      "sizeBytes": 1073
+    },
+    "games/toronto-dispatch/project/README.md": {
+      "sha256": "09adde98247141519860cf569b23d9003bbc6c498335292b49a2e832a0e9ab1e",
+      "sizeBytes": 771
+    },
+    "games/toronto-dispatch/project/STARTER_PROVENANCE.json": {
+      "sha256": "ad64ece250e33ca31b4f82d9c7ade46ad4bccebedf9ecede419fe2f0316e0af0",
+      "sizeBytes": 2245
+    },
+    "games/toronto-dispatch/project/assets/avatars/README.md": {
+      "sha256": "8d21f717f26c5c641533dd3d35463802874bc78fd5c0f708175ecc2fb00e5267",
+      "sizeBytes": 143
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/README.md": {
+      "sha256": "3ba8e88d6f8fde5dc5a21a6ba61e53549b929a5c7c5f48ffce5e4b3057055259",
+      "sizeBytes": 131
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_city.png": {
+      "sha256": "cd9b4d4610db1b4bb86112bbd34eadda8dc8386a87589c48eb35dc83cd5013eb",
+      "sizeBytes": 16709
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_city.png.gbsres": {
+      "sha256": "51efce533a6207ca7ef60a92283cac56bca872dd1c9c8493ed34f5e9f41ffa70",
+      "sizeBytes": 3022
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_east.png": {
+      "sha256": "f76abe8eb28d4b8e4b8cae8022c84c0d04faa3a817390e3bda68279a8dfeeccc",
+      "sizeBytes": 12129
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_east.png.gbsres": {
+      "sha256": "aef080a93d249eed37683bf8d7025aa9ffc4a5cdb2b16952b760e944810180e9",
+      "sizeBytes": 4778
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_high_park.png": {
+      "sha256": "0fb03c15925113143e514e8243ed79fafa91a2e010ec0e3675c379873fcce518",
+      "sizeBytes": 13213
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_high_park.png.gbsres": {
+      "sha256": "84364688036ba6c4c389ca61a791711466ccb737bddca03212aca25508472d90",
+      "sizeBytes": 5120
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_islands.png": {
+      "sha256": "001c85bc3d64fbab5406b34a70832f6e9f19c48060634965fc465a85267a6565",
+      "sizeBytes": 14525
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_islands.png.gbsres": {
+      "sha256": "1e8ea0f501082228af91464883e1be40291c80a1c7b664af8f1b8e5a250118fe",
+      "sizeBytes": 5222
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_north.png": {
+      "sha256": "9c2f31d7c1c24fd2461a0edf3ff921b0198cb555d43dbd3efc4eb417eb36db7a",
+      "sizeBytes": 18288
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_north.png.gbsres": {
+      "sha256": "762acbf1fd3da9722f9d7b9f99d4e5a9d7c867bab76853f222312e5d15b81bf9",
+      "sizeBytes": 7497
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_port_lands.png": {
+      "sha256": "9d4e87757ea07ac9b47c8a3429b35399431181377333f8c1b2fa14f695a96ea5",
+      "sizeBytes": 12717
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_port_lands.png.gbsres": {
+      "sha256": "448c3683fb64ec3a9ae449a9ae95467dde724598f639036a2f99e8ed4d6aa92f",
+      "sizeBytes": 6028
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_west.png": {
+      "sha256": "3c3ecccb07bb76466b7f30d146436f47a7499c57c437681194e60679e784cd36",
+      "sizeBytes": 11902
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/toronto_west.png.gbsres": {
+      "sha256": "5249e001d54381265be9f8390e808cc7d466656d98611d2e0ed006453d6e8293",
+      "sizeBytes": 3795
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/workshop.png": {
+      "sha256": "62b4c3e9d7a3aefad8c1eb8f91e0c24ab2e148e4526845dc2810ad00a805ef21",
+      "sizeBytes": 1947
+    },
+    "games/toronto-dispatch/project/assets/backgrounds/workshop.png.gbsres": {
+      "sha256": "5c65d888533bf3685c30d19b8c3b4fa2fe5ce3f6f0dd7202314bb0537155a14f",
+      "sizeBytes": 291
+    },
+    "games/toronto-dispatch/project/assets/emotes/README.md": {
+      "sha256": "b8c5226927e87703fa139f487cc927a96a0ca2fb9b8f4073bde5556195490c9a",
+      "sizeBytes": 136
+    },
+    "games/toronto-dispatch/project/assets/fonts/README.md": {
+      "sha256": "dc7b0a156b4a08cd811a0d01530c28bfc2dd55b08d43b8617c98131f20084f3f",
+      "sizeBytes": 155
+    },
+    "games/toronto-dispatch/project/assets/fonts/bench-mono.json": {
+      "sha256": "fe07b62939eaf26f4b9cb299d1e774e7aa2d24a5404afdc2c74e5b2194ce0415",
+      "sizeBytes": 49
+    },
+    "games/toronto-dispatch/project/assets/fonts/bench-mono.png": {
+      "sha256": "5ef84106e16f70e7843ccaea5ee6b1a6b96e6c833067fa11c8c596431e0c8c7d",
+      "sizeBytes": 6047
+    },
+    "games/toronto-dispatch/project/assets/fonts/bench-mono.png.gbsres": {
+      "sha256": "acb6a3b673ada695d54fc0f86e19c5eaccf8be87699e7a3cfdd327e7fa2f3921",
+      "sizeBytes": 225
+    },
+    "games/toronto-dispatch/project/assets/music/README.md": {
+      "sha256": "4ea64405fb856e03947f1be834db73b1e3785427298e35ef3f56cc170a31b227",
+      "sizeBytes": 126
+    },
+    "games/toronto-dispatch/project/assets/sounds/README.md": {
+      "sha256": "40589906fa6ff73337406a3c12c48271f88c1fb25eb0f6234d115c5c2c888e5a",
+      "sizeBytes": 146
+    },
+    "games/toronto-dispatch/project/assets/sprites/README.md": {
+      "sha256": "6fffcb09ce378f3bd1572b15104fc9f283a2a8e66c4470ccfec143e433284d0d",
+      "sizeBytes": 130
+    },
+    "games/toronto-dispatch/project/assets/sprites/ambient_aircraft.png": {
+      "sha256": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+      "sizeBytes": 2125
+    },
+    "games/toronto-dispatch/project/assets/sprites/ambient_aircraft.png.gbsres": {
+      "sha256": "a812e93c1838133a43f71e330080294a8f50c2cbc141228b526e04ac2853b1df",
+      "sizeBytes": 25667
+    },
+    "games/toronto-dispatch/project/assets/sprites/ambient_boat.png": {
+      "sha256": "2e689bb7315d3135505b96a1e60374ad1ce123ecddf695a3369e6a5332047b50",
+      "sizeBytes": 260
+    },
+    "games/toronto-dispatch/project/assets/sprites/ambient_boat.png.gbsres": {
+      "sha256": "6ca8cf2891a62abfe6f2d7f50bd90fbb96f01f2aa39f96a9acc1dfc077d2aeeb",
+      "sizeBytes": 3563
+    },
+    "games/toronto-dispatch/project/assets/sprites/city_civilians.png": {
+      "sha256": "ee7a375a55fc5e9bde5e4254f96a69221cddca06d7cbf808520942ae2a932803",
+      "sizeBytes": 329
+    },
+    "games/toronto-dispatch/project/assets/sprites/city_civilians.png.gbsres": {
+      "sha256": "37d671b8d99708986dbbc7be37a72acaacdc4392c5c809c93399bd328a94d47b",
+      "sizeBytes": 12310
+    },
+    "games/toronto-dispatch/project/assets/sprites/city_fleet.png": {
+      "sha256": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
+      "sizeBytes": 536
+    },
+    "games/toronto-dispatch/project/assets/sprites/city_fleet.png.gbsres": {
+      "sha256": "653872c4ae428af085aa7a976110bf792bf150b8b3277df7f3bfd48e7679ed11",
+      "sizeBytes": 18224
+    },
+    "games/toronto-dispatch/project/assets/sprites/dispatch_topdown.png": {
+      "sha256": "e26c64a58fb66f1d1b9e60c12dc614dece566bb0c76ad9358244927ed9ed4922",
+      "sizeBytes": 1732
+    },
+    "games/toronto-dispatch/project/assets/sprites/dispatch_topdown.png.gbsres": {
+      "sha256": "80510bfdb03edd05cedf745ca90b79b357c2e6ea6e26ee46374078357b046d0d",
+      "sizeBytes": 48764
+    },
+    "games/toronto-dispatch/project/assets/sprites/queen_streetcar.png": {
+      "sha256": "66a1469bdeea84935e7ec4e000f18e0060846cd734bac7a8ef9ef80a9651c055",
+      "sizeBytes": 827
+    },
+    "games/toronto-dispatch/project/assets/sprites/queen_streetcar.png.gbsres": {
+      "sha256": "1b453bbc74610339c6410210bd6f383c84d78523346a6faac84468f9bbf0c9c3",
+      "sizeBytes": 17267
+    },
+    "games/toronto-dispatch/project/assets/sprites/workshop_player.png": {
+      "sha256": "51c5a0374686531ae8e35ebeb4dc63f5c0b0f666e6d6abcdb5b8e52776e8766b",
+      "sizeBytes": 695
+    },
+    "games/toronto-dispatch/project/assets/sprites/workshop_player.png.gbsres": {
+      "sha256": "786ab27cda45b6242070c23f116f359fcb5232931e6f50725768355a5ac418ca",
+      "sizeBytes": 5074
+    },
+    "games/toronto-dispatch/project/assets/tilesets/README.md": {
+      "sha256": "9d9596e07276574b38e6e80d7797a5403005ed2ec26e9e845682a8a701916576",
+      "sizeBytes": 123
+    },
+    "games/toronto-dispatch/project/assets/ui/README.md": {
+      "sha256": "aaca4e0da660c9fc7e66ac55e3c0adf56343f8be74bbd3167f3902291a57c11c",
+      "sizeBytes": 128
+    },
+    "games/toronto-dispatch/project/assets/ui/cursor.png": {
+      "sha256": "a1cd08f8a5dc8a0a19c74f9fc36ef3d1e77c25be0746c9de0dc4c7dc5d044b5f",
+      "sizeBytes": 142
+    },
+    "games/toronto-dispatch/project/assets/ui/frame.png": {
+      "sha256": "cdebcc3e1a3a6827db29d6cd74a19d785980a5bef18a87589f8eb878457e311c",
+      "sizeBytes": 199
+    },
+    "games/toronto-dispatch/project/dispatch_topdown.metadata.json": {
+      "sha256": "52ae6b78534e73623f9f622b2436035bda78cb2568cc56d5812350a6f6668d79",
+      "sizeBytes": 48751
+    },
+    "games/toronto-dispatch/project/original-art/README.md": {
+      "sha256": "564f40efcac52e7bf880909c22f089ab0cb9fa7f7c2f00202a1bc35ed4b04733",
+      "sizeBytes": 718
+    },
+    "games/toronto-dispatch/project/original-art/ambient_aircraft.metadata.json": {
+      "sha256": "a624b9f49d9b5efa25e8928692edea79d0a7ffa173effbab21e46594c6de4822",
+      "sizeBytes": 25667
+    },
+    "games/toronto-dispatch/project/original-art/ambient_aircraft.png": {
+      "sha256": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+      "sizeBytes": 2125
+    },
+    "games/toronto-dispatch/project/original-art/ambient_aircraft_art.json": {
+      "sha256": "34820e0a60f7d6a2f8935f52a0f7bcceaf13c73dae1dad15903e2e82097bbd29",
+      "sizeBytes": 5691
+    },
+    "games/toronto-dispatch/project/original-art/ambient_aircraft_preview.png": {
+      "sha256": "c7a91eaa6b077564ddea0fade0bd3b76add21e3bf2fb41f1a3e7550c0f84102b",
+      "sizeBytes": 5133
+    },
+    "games/toronto-dispatch/project/original-art/ambient_boat.metadata.json": {
+      "sha256": "fca0f62947b8d37881c0de3e26271e27f1a33ebac9e7ec7237130c130726a0db",
+      "sizeBytes": 3563
+    },
+    "games/toronto-dispatch/project/original-art/ambient_boat.png": {
+      "sha256": "2e689bb7315d3135505b96a1e60374ad1ce123ecddf695a3369e6a5332047b50",
+      "sizeBytes": 260
+    },
+    "games/toronto-dispatch/project/original-art/ambient_boat_art.json": {
+      "sha256": "8b00968df71254fc40a16cf8d83a5e9799e64a38f575d32e155cd7f1a6329a41",
+      "sizeBytes": 1134
+    },
+    "games/toronto-dispatch/project/original-art/city_attributes.json": {
+      "sha256": "127045a611745d44d520a9d5463056bc6cc00e8c66a238830c0869b90bdb5922",
+      "sizeBytes": 50165
+    },
+    "games/toronto-dispatch/project/original-art/city_civilians.metadata.json": {
+      "sha256": "bbca85da9d9b580ab1fa5129ce8c99b7e3398266427daf15a7554f4b6455464d",
+      "sizeBytes": 12310
+    },
+    "games/toronto-dispatch/project/original-art/city_civilians.png": {
+      "sha256": "ee7a375a55fc5e9bde5e4254f96a69221cddca06d7cbf808520942ae2a932803",
+      "sizeBytes": 329
+    },
+    "games/toronto-dispatch/project/original-art/city_civilians_art.json": {
+      "sha256": "0704e828188887da29f1af90aba5ff58010dd6063cf8a6b5042652d346a76c7c",
+      "sizeBytes": 1108
+    },
+    "games/toronto-dispatch/project/original-art/city_civilians_preview.png": {
+      "sha256": "51d27f026d172a2c221bbc2abd7c05b0c70c3181a62781d7f89722d574bcb8af",
+      "sizeBytes": 547
+    },
+    "games/toronto-dispatch/project/original-art/city_fleet.metadata.json": {
+      "sha256": "be558a6bf05767b0b173d90ff5f37f81bb257be0da5f6173a79173480e3c38e4",
+      "sizeBytes": 18224
+    },
+    "games/toronto-dispatch/project/original-art/city_fleet.png": {
+      "sha256": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
+      "sizeBytes": 536
+    },
+    "games/toronto-dispatch/project/original-art/city_fleet_art.json": {
+      "sha256": "fc7a99396f7e9e11adbf1bc441fe12d30fed24a2c7f2d1424f0ecd2bab73a26a",
+      "sizeBytes": 1090
+    },
+    "games/toronto-dispatch/project/original-art/city_fleet_preview.png": {
+      "sha256": "5651e1f11be2f3ca57d54e198c5278b713107ba83eabda45151b027805ee33f6",
+      "sizeBytes": 857
+    },
+    "games/toronto-dispatch/project/original-art/dispatch_topdown.png": {
+      "sha256": "e26c64a58fb66f1d1b9e60c12dc614dece566bb0c76ad9358244927ed9ed4922",
+      "sizeBytes": 1732
+    },
+    "games/toronto-dispatch/project/original-art/east_attributes.json": {
+      "sha256": "8a0c67e9457b1510bbf3b4043f31729a5088c4753a8c37eea90b7a3bf4b918c4",
+      "sizeBytes": 49627
+    },
+    "games/toronto-dispatch/project/original-art/high_park_attributes.json": {
+      "sha256": "13945deb7dc0f91c87146ddc3fc0241e7bcf523d3cf0ef0a12469a2b590290c9",
+      "sizeBytes": 50499
+    },
+    "games/toronto-dispatch/project/original-art/island_attributes.json": {
+      "sha256": "eac8dccb92823dc75cad4bbe73646fd112704584f975e151cd847a7d6d9d8552",
+      "sizeBytes": 47463
+    },
+    "games/toronto-dispatch/project/original-art/native-cells.json": {
+      "sha256": "854e238f42839764f10bc6046af26336c66db0c241f4c869e15f209ca52abfa1",
+      "sizeBytes": 76044
+    },
+    "games/toronto-dispatch/project/original-art/north_attributes.json": {
+      "sha256": "f76fd6fe43c47570c72be574bcc2ffd38b0a7e7073db8c6f6f95a691787971e6",
+      "sizeBytes": 52183
+    },
+    "games/toronto-dispatch/project/original-art/port_lands_attributes.json": {
+      "sha256": "eb00e7e4c2b9c7790d8f872b1f50bc98486babdb88981deddc3afa0c8b46c90a",
+      "sizeBytes": 49485
+    },
+    "games/toronto-dispatch/project/original-art/queen_streetcar.metadata.json": {
+      "sha256": "18fca25ffe73ef90c6ae3b0f23e75ef195b09d8742c89f465c58bdcfa11492fb",
+      "sizeBytes": 17267
+    },
+    "games/toronto-dispatch/project/original-art/queen_streetcar.png": {
+      "sha256": "66a1469bdeea84935e7ec4e000f18e0060846cd734bac7a8ef9ef80a9651c055",
+      "sizeBytes": 827
+    },
+    "games/toronto-dispatch/project/original-art/queen_streetcar_art.json": {
+      "sha256": "ade442a60a8df80fe2f45a471e9f92a9eff7ab506e0c2a76013c034b9ac2dd87",
+      "sizeBytes": 3889
+    },
+    "games/toronto-dispatch/project/original-art/recipes.mjs": {
+      "sha256": "94c792a276434db59f02e30c4d967e673600e2343fba75f3858f31fd18aa1ca3",
+      "sizeBytes": 8358
+    },
+    "games/toronto-dispatch/project/original-art/toronto_east.png": {
+      "sha256": "f76abe8eb28d4b8e4b8cae8022c84c0d04faa3a817390e3bda68279a8dfeeccc",
+      "sizeBytes": 12129
+    },
+    "games/toronto-dispatch/project/original-art/toronto_islands.png": {
+      "sha256": "001c85bc3d64fbab5406b34a70832f6e9f19c48060634965fc465a85267a6565",
+      "sizeBytes": 14525
+    },
+    "games/toronto-dispatch/project/original-art/toronto_north.png": {
+      "sha256": "9c2f31d7c1c24fd2461a0edf3ff921b0198cb555d43dbd3efc4eb417eb36db7a",
+      "sizeBytes": 18288
+    },
+    "games/toronto-dispatch/project/original-art/toronto_port_lands.png": {
+      "sha256": "9d4e87757ea07ac9b47c8a3429b35399431181377333f8c1b2fa14f695a96ea5",
+      "sizeBytes": 12717
+    },
+    "games/toronto-dispatch/project/original-art/west_attributes.json": {
+      "sha256": "7b293094cacd37d3008ae4e8d070eccfe48515c5daab15b558411ea819a5738c",
+      "sizeBytes": 49423
+    },
+    "games/toronto-dispatch/project/original-audio/city_shift.json": {
+      "sha256": "13a0a84541e0998f2616aaac91b9e2dbee2da6ded8cfdac4746ca44dfe8ea34f",
+      "sizeBytes": 11067
+    },
+    "games/toronto-dispatch/project/plugins/README.md": {
+      "sha256": "6fcd1de584237e28305f21cce86a0999db68de05ca18b87ffa798677e7ef547d",
+      "sizeBytes": 140
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/engine.json": {
+      "sha256": "2723743b200395a85147e87e186f8198499d2376dd2003c75170025a3ac79905",
+      "sizeBytes": 2059
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/states/TORONTO.h": {
+      "sha256": "0f063bc69c68c56400f96696125f1074514738cbfead9be6ec5f91a4bc281520",
+      "sizeBytes": 138
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_aircraft.h": {
+      "sha256": "6fe76629a12a4be002d202a4380f9616dc79a691d18dc1356a7263df2d56f7aa",
+      "sizeBytes": 540
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_aircraft_render.h": {
+      "sha256": "933801f12bba99c37614eff106000f4e278011549c51a2dab75d7453fee58090",
+      "sizeBytes": 489
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_atlas.h": {
+      "sha256": "1a9e0b4347476ecc0c3ef55b8cc590247f3e0200afc1f5213e5062044cb8c264",
+      "sizeBytes": 1424
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_atlas_data.h": {
+      "sha256": "31fc9068aec41784e1b5f98208ced3fac284cc7e217ed3bfa4e73ce15417af2e",
+      "sizeBytes": 357
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_audio.h": {
+      "sha256": "396af14d972126536ea966ec94a6f24b7029019de357ae655076524fdd902fd4",
+      "sizeBytes": 1019
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_boats.h": {
+      "sha256": "daefdfe4e0b0aec9e8d310d666cc0187322061708403d966317f2f241f48ae49",
+      "sizeBytes": 639
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_city_sprites.h": {
+      "sha256": "d6689c3d4d4df0a399305d0e1e0ca4670bb770c5cebb6781894c328776dc2890",
+      "sizeBytes": 754
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_district.h": {
+      "sha256": "6cf4a2ecfb4d14c1d679d63beac4f3cce0c358bead72924829b180d904cadec9",
+      "sizeBytes": 1696
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_district_world.h": {
+      "sha256": "35b42f4b758fd2ddd57b66e488edb9aa98a3255582980b143bc72162acadd16f",
+      "sizeBytes": 3575
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_font.h": {
+      "sha256": "671c8937e86793254007689f95747bce38bbf81e502f3adb92cafcc5a915232b",
+      "sizeBytes": 2398
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_game.h": {
+      "sha256": "6e817f59a4a15287ec76bee5b6f26c919aba545713423b0f475f6670ffc89db6",
+      "sizeBytes": 2498
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_island_legacy.h": {
+      "sha256": "f493ce2d36ea68367427718523b5078c536a4b95b5bee34f2c65726c5adf6ae7",
+      "sizeBytes": 1092
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_north_legacy.h": {
+      "sha256": "c57d51a5d9b89a9de35514dc4b164d16c39d6f65cb6a6e2558b8d435cea469a5",
+      "sizeBytes": 868
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_people.h": {
+      "sha256": "539ad3f67fd2d4efbaff86506dd100be880e0b052a9debc7249a2ceb7acd4d9c",
+      "sizeBytes": 497
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_police.h": {
+      "sha256": "4582bd62eeffa6f3ad21c272450701a9e558f2a1f111c54e92b8d2408adb7017",
+      "sizeBytes": 1091
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_roads.h": {
+      "sha256": "02b097970953cd52dc69d8589b27381c1d75990beb888d591962454e4d85faf6",
+      "sizeBytes": 493
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_streetcar.h": {
+      "sha256": "87067d28cb12c294d81bf72d2ef0cd8c47ae01ecdeadbcbb38533271f50f45e2",
+      "sizeBytes": 3320
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_streetcar_runtime.h": {
+      "sha256": "9793431ff08e6e4a8eb79e630fb7d3cd98b76a8217ea9e3a09e6acb6b045489d",
+      "sizeBytes": 4782
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_terrain.h": {
+      "sha256": "f3e9e8cb346c382a4c09b8d8c949ea3450ffdb6d5ea84b220afa493793f08ba9",
+      "sizeBytes": 848
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_traffic.h": {
+      "sha256": "64412d03134974c7e60f88be9228b16977902da3f1d2ef7312b94f5c1c509c74",
+      "sizeBytes": 6984
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_traffic_lights.h": {
+      "sha256": "6b4ede72155aaf9a5da47a95cf2b7de7ddde970324e73acb62c8b5aec5eabd19",
+      "sizeBytes": 537
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_traffic_signals.h": {
+      "sha256": "37d298ff577b08089f444009ddf1769a298a8e43ba4eda7bd555dabd28cae9f2",
+      "sizeBytes": 6688
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_transit.h": {
+      "sha256": "a7d23986f53db679742e6fe33576e278ade0d4262e4a7137f0506504e3540ae5",
+      "sizeBytes": 2126
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_world.h": {
+      "sha256": "531860d4becc95466762be8bd899367df00e80968acf465737996f40637012af",
+      "sizeBytes": 1755
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_world_routes.h": {
+      "sha256": "0b6efb65fc62b616d48762f2e163c7739408f8320d671c3ffd0728c6b973b11f",
+      "sizeBytes": 10122
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/core/actor.c": {
+      "sha256": "567795869dfb5fad9dba6d55caa42e52e9f09611cebe3ce39f3572cce412b15e",
+      "sizeBytes": 21427
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/states/TORONTO.c": {
+      "sha256": "077eef79c99763dc27dbb0266674ca4af09549802cff3f95e8441a60b7aed34c",
+      "sizeBytes": 43007
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_aircraft.c": {
+      "sha256": "b547686642e504c997be817e0cba4b42a7b44208c99640015b7120c1a95e48e4",
+      "sizeBytes": 2277
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_aircraft_render.c": {
+      "sha256": "21d1a3c5356840213f314a7a2fb5b20f19afe172f894699b08f4d2e4001e6bfd",
+      "sizeBytes": 15170
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_atlas.c": {
+      "sha256": "d2bc95156441f607ad42cf4125ee34588fbd379aa17db8121dfbe96d224039bc",
+      "sizeBytes": 2732
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_atlas_patterns_0.c": {
+      "sha256": "a5de03b3f08241f4463db7cbca45a319d10a029e39c701ed3b0c48e1b87a5461",
+      "sizeBytes": 28293
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_atlas_patterns_1.c": {
+      "sha256": "6d59fc44fceb9ac6bd71097d8e4829a5b58d13571467167b75ce8238e5466dc7",
+      "sizeBytes": 15631
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_atlas_rows_0.c": {
+      "sha256": "1a729f5d5447a2bd2f3928de785f03aa17d33a0859cf2b8ca1f8bcb1aa274a6a",
+      "sizeBytes": 10062
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_audio.c": {
+      "sha256": "2e730d0dda06ffd7a06d3212fc93260f89042a892b60d9dac1e97466de16c020",
+      "sizeBytes": 25561
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_boats.c": {
+      "sha256": "8ae3bfede163396224c42965b4229ea9c5ec2fd95a485ffb538e361ac1e9b217",
+      "sizeBytes": 7554
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_city_sprites.c": {
+      "sha256": "e084cab189210ff3cb437f527025921e0aa77effa5211627e764ee33e1b18dc1",
+      "sizeBytes": 2867
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_content.c": {
+      "sha256": "e08f04a5724bb67770c366ceefad3dcfbc5be81df95f550476eec8a2c351d325",
+      "sizeBytes": 26174
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_district.c": {
+      "sha256": "1546ca583d8d80a714dc69f24086b2f985e14b0799c94d307677a3ff562e0e02",
+      "sizeBytes": 4098
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_people.c": {
+      "sha256": "dff370c9f04b915dd65ca6d4968cfc88e4c51f407157d1f3038791715611f936",
+      "sizeBytes": 8273
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_police.c": {
+      "sha256": "b41de94957e097573f32b65790eacf16b0259d40d773a80c0b0b67f7a081440a",
+      "sizeBytes": 5705
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_roads.c": {
+      "sha256": "b7ad066c560c20c5f7f9ac09affb1895bc56e75335d4f30b307e0279b2468b61",
+      "sizeBytes": 3255
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_routes.c": {
+      "sha256": "b05c62dae2a39eb5a5e845b89c852a8e65529345a8621d946f5d89b07b582a69",
+      "sizeBytes": 3058
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_save.c": {
+      "sha256": "32a220dc92d2952bf20775343b8545dacec2904e7a8ae3701b2112afd8563118",
+      "sizeBytes": 10389
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_streetcar.c": {
+      "sha256": "fe9ebf87b9ce787fe285d6292c9ab5d289162f9bf3e728319c7c97c64e880302",
+      "sizeBytes": 16900
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_streetcar_runtime.c": {
+      "sha256": "43ad97609de8a06cf24cf4ff8a1846471e1769740c33c7d801a38e29959b69a1",
+      "sizeBytes": 25360
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_terrain.c": {
+      "sha256": "44c134b922a9994006f71c25a484b727434140fbd5a630b37f75d1c97e55191e",
+      "sizeBytes": 314
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_traffic.c": {
+      "sha256": "f4f9f3d126e5d48e6f95fadc30941de119cbeb9d9542614585609507112a1c1f",
+      "sizeBytes": 20893
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_traffic_lights.c": {
+      "sha256": "32cb79a3f3ab7f4182c2e5349a50550bb294534da80fbd10463d852fcae59132",
+      "sizeBytes": 2069
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_traffic_signal_stop.c": {
+      "sha256": "10dac1536dcd5894ef885855a4bbcc80ed4ea517116eee268bdc86919f2f4af9",
+      "sizeBytes": 2091
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_transit.c": {
+      "sha256": "f2189636788db9f87f8d00aedbbea7f0b38a0e4ee00ad8b03414915b99cb66e1",
+      "sizeBytes": 7363
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_ui.c": {
+      "sha256": "dd6551d66d5550e0ebcc5ffc3dd58b41ff6ed393834ab8e590140c7e9e877039",
+      "sizeBytes": 18262
+    },
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_world.c": {
+      "sha256": "b6176fa0e0ffccd704c018f0e6ae1eb2361d0288fe8019f331107156be456ce4",
+      "sizeBytes": 7762
+    },
+    "games/toronto-dispatch/project/project.gbsproj": {
+      "sha256": "561db56213a3637629a9a565cc37c10599fd284667b5416eeb468c54927d4b1b",
+      "sizeBytes": 147
+    },
+    "games/toronto-dispatch/project/project/engine_field_values.gbsres": {
+      "sha256": "ee78aa547788ec80cfa8cd49b5fa2813325e86a9747d834abc08244fab23e4a0",
+      "sizeBytes": 557
+    },
+    "games/toronto-dispatch/project/project/palettes/ambulance_fleet.gbsres": {
+      "sha256": "26fc8ed51ab2b840d699bafb4ebb04afb1bc4994a30b109a75a804e3e1f8c622",
+      "sizeBytes": 301
+    },
+    "games/toronto-dispatch/project/project/palettes/city_bus_fleet.gbsres": {
+      "sha256": "bd33fca45bfb92ec475e568a212f13ebc9900f4b20e0717ceac50731928b0b0c",
+      "sizeBytes": 299
+    },
+    "games/toronto-dispatch/project/project/palettes/civilian_ochre.gbsres": {
+      "sha256": "7ca22b3baf9abfc267f69741602d2cd867fc4087a8b2850afca3025c4e9209c1",
+      "sizeBytes": 299
+    },
+    "games/toronto-dispatch/project/project/palettes/civilian_teal.gbsres": {
+      "sha256": "629a62d4470f915f70ff93839ae2b5b4c4a65e45b05924816df0367a958f65bf",
+      "sizeBytes": 297
+    },
+    "games/toronto-dispatch/project/project/palettes/default_bg_1.gbsres": {
+      "sha256": "873cd962bf3da4af5096f6d5890e7d7e29cca18580108836e8e2162f29bfdebf",
+      "sizeBytes": 270
+    },
+    "games/toronto-dispatch/project/project/palettes/default_bg_2.gbsres": {
+      "sha256": "f3ea7576d1af27ebff98647d9932c878127fa0fb99ac61279497c90671d925f3",
+      "sizeBytes": 270
+    },
+    "games/toronto-dispatch/project/project/palettes/default_bg_3.gbsres": {
+      "sha256": "98ea3b863d3d0d96e233e79d155581b89779ad6e6ec164e929dd0068390d1ba9",
+      "sizeBytes": 270
+    },
+    "games/toronto-dispatch/project/project/palettes/default_bg_4.gbsres": {
+      "sha256": "7df1ec312d7c4ff17f0e08b31d5fa9df1ce8bd1e8d3253469df78d8880e76047",
+      "sizeBytes": 270
+    },
+    "games/toronto-dispatch/project/project/palettes/default_bg_5.gbsres": {
+      "sha256": "51c9f4be3acbd6ce4055045bfe7f661ab6ae130ffe218968f6b11297976b019c",
+      "sizeBytes": 270
+    },
+    "games/toronto-dispatch/project/project/palettes/default_bg_6.gbsres": {
+      "sha256": "36522553d30ff0cf3a39d924bb81389316d9fdc8a35c46b002cfbecdbc01fc7e",
+      "sizeBytes": 270
+    },
+    "games/toronto-dispatch/project/project/palettes/default_sprites.gbsres": {
+      "sha256": "bca2913bf7b7770361fe5358887d81869716a5a3b0d6650d21a36e915c09b4fd",
+      "sizeBytes": 278
+    },
+    "games/toronto-dispatch/project/project/palettes/default_ui.gbsres": {
+      "sha256": "00139e8f7f557cc2174943e0166bbcb559e3ffb23260827c5a92792c6f4980c4",
+      "sizeBytes": 265
+    },
+    "games/toronto-dispatch/project/project/palettes/fire_fleet.gbsres": {
+      "sha256": "dee3a653b8557f257914544e38d8221e6f986bdc99debbd04800dfbc91362a54",
+      "sizeBytes": 291
+    },
+    "games/toronto-dispatch/project/project/palettes/harbour_boat.gbsres": {
+      "sha256": "ffbd4e7b85803a1b6927de7778d6126a39d6b34fba7458aaddd1295a20322a2b",
+      "sizeBytes": 295
+    },
+    "games/toronto-dispatch/project/project/palettes/police_fleet.gbsres": {
+      "sha256": "d4d19dbb8f37d6f5c7851936cdcd5f4107fbc6516a7df128e2d46e0bef44fcfd",
+      "sizeBytes": 295
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_architecture_1.gbsres": {
+      "sha256": "923b64c62b309e16ab381feb8db9c2ada06b2f2fc5912d0dbe9563b02ba1fd66",
+      "sizeBytes": 315
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_architecture_2.gbsres": {
+      "sha256": "1f4c81882a31a16f338be97ddfce168184b1f91d0a7d4a33814add73253d2a2b",
+      "sizeBytes": 315
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_architecture_3.gbsres": {
+      "sha256": "6fdb2f9843418a67cb352c78783de1d99c398c0c8020aff306979407f842664c",
+      "sizeBytes": 315
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_architecture_4.gbsres": {
+      "sha256": "3e8ac11b4790c08d9081679317ce329fb43040f665bafce696ea6e837be1e684",
+      "sizeBytes": 315
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_architecture_5.gbsres": {
+      "sha256": "9bf480f81a97b46d403d9e7e565635d272628c322328c87e8afe82cd3c493b43",
+      "sizeBytes": 315
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_architecture_6.gbsres": {
+      "sha256": "41f0c5703691c1e091f657c8a572af440d6c866e1c9afd78a5ab28cebfd0a19e",
+      "sizeBytes": 315
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_islands_park.gbsres": {
+      "sha256": "424d1db9d40f478eaf59e19ee468c3e92041206274b76be772a2a78a5e92c712",
+      "sizeBytes": 311
+    },
+    "games/toronto-dispatch/project/project/palettes/toronto_stone_and_water.gbsres": {
+      "sha256": "75c57d32066198a6aec96c718974c047c732aba6bdf6b54bf1494566fb2f7455",
+      "sizeBytes": 317
+    },
+    "games/toronto-dispatch/project/project/scenes/start/scene.gbsres": {
+      "sha256": "5c5745bf5c2ba784e480b95f5798028288a660f602d1466b3f7c0f7ea6572f0f",
+      "sizeBytes": 898
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_city/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "87a6464bd1490963a35a9eaa0457847eccdf2a6e517254f6e7f828ca00052411",
+      "sizeBytes": 665
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_city/actors/ambient_boat_loader.gbsres": {
+      "sha256": "45e467c0de5c6191b8e015f2979a4258847364989bce61e491cce7fcb01a08ac",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_city/actors/city_civilians_loader.gbsres": {
+      "sha256": "18199f3c71b23c5d075c7d9fa6ac9a3e3e6c0effffb04bf75c5a3dcb53090faa",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_city/actors/city_fleet_loader.gbsres": {
+      "sha256": "52ca139c40ce979dc07a0e09393fb54c6fa3383c1897d193cf57d8c2a487298a",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_city/actors/queen_streetcar_loader.gbsres": {
+      "sha256": "2cfcc420feb277838a729cbc678dd83cd92eab6b27471c93fa7e73e928f657b2",
+      "sizeBytes": 662
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_city/scene.gbsres": {
+      "sha256": "7a39e2f24318a2d3f87937336f798e2f85d59a3571b2545615bc44a4691f1224",
+      "sizeBytes": 7423
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_east/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "05bfac7e0db5abb9d5c46f062a8881aa44fab1efa422d0e0f2f58406aa8d6d65",
+      "sizeBytes": 665
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_east/actors/ambient_boat_loader.gbsres": {
+      "sha256": "622a96a456fb2aa85c2c3ffba8a5c260a67f0ac7665f23d4799429f694f7f0c2",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_east/actors/city_civilians_loader.gbsres": {
+      "sha256": "f8b9fae1c113fa0aa9d2a0df3bb68f64e5bf8835ab92592642379eeebb12311c",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_east/actors/city_fleet_loader.gbsres": {
+      "sha256": "e8a0d54afb15c4410a7ea1135767cfdccd44b8ba55c6b9a9174789c1ba26827a",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_east/actors/queen_streetcar_loader.gbsres": {
+      "sha256": "1c10ce4b3cd5aec42ecea95d43d24f3303fdf1933aebd5356d7c039ea79becb7",
+      "sizeBytes": 662
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_east/scene.gbsres": {
+      "sha256": "74d671f39a963d4a467394b792547e29a1b59c64705509cf9c0b3f23dec7e754",
+      "sizeBytes": 6468
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_high_park/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "f87fe0f5ffead202dc895f4d65647c49ecfbac040c7b0f70d8241b11e32b172e",
+      "sizeBytes": 665
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_high_park/actors/ambient_boat_loader.gbsres": {
+      "sha256": "7efafc63b8bcc2d3136e51709f5af488bdcabe51b6c4b38c4f2cb9f66e1bf8fa",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_high_park/actors/city_civilians_loader.gbsres": {
+      "sha256": "74e69e8888fe14939d0b6888298f81b7914b6646371bb05197bc2075fe016987",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_high_park/actors/city_fleet_loader.gbsres": {
+      "sha256": "1229eb0f3e3206ac3da5f9f3ae2ceadaa9339002c6f63b12ec330b80f72b8960",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_high_park/scene.gbsres": {
+      "sha256": "c4f9c1eda658c693088edc77b73c91782cce379b45276705d088b701da802e25",
+      "sizeBytes": 5803
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_islands/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "7ea5490c45398783d75cac37116be43f454bc0ba6c64fc66fd1c3f68013812b1",
+      "sizeBytes": 673
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_islands/actors/ambient_boat_loader.gbsres": {
+      "sha256": "424864ae0c8290cc3816950eded2a3ad6259793e838cd91ef126890c7947c047",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_islands/actors/city_civilians_loader.gbsres": {
+      "sha256": "47c09e46d937dab660c967dd9174a585b1a17ffbb7a8c67f1fd9996c3872d577",
+      "sizeBytes": 669
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_islands/actors/city_fleet_loader.gbsres": {
+      "sha256": "be1e8684960e2d26ebf770162886b7bbe34471ab844bd033d17ada9601a36882",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_islands/scene.gbsres": {
+      "sha256": "12173dd34e73eb18e224a81ec8e0ac59914e09e13adf1ead4c207891eddcfba9",
+      "sizeBytes": 3823
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_north/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "5a5069a98744dc13efb3f5385acc5d2e844b039379502d0baac9dfc5ee3402ea",
+      "sizeBytes": 665
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_north/actors/city_civilians_loader.gbsres": {
+      "sha256": "d0aada86294bd2fa1b7b934e1490386df053d84c5b4db4208b7c63183fa7a6c3",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_north/actors/city_fleet_loader.gbsres": {
+      "sha256": "bca8cd801d16d96bdfd55b8d576439e709d0b3d8f23da74e76c94f9e50c7c978",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_north/scene.gbsres": {
+      "sha256": "ec44e4435c07c210901689edd0fdd9dc9cde6ee8e72a8de69ea541b1e18c3c50",
+      "sizeBytes": 9447
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_port_lands/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "abb53b0385b724c3205474a7d4a36d6b9d4437a835537c8285b8203715ecba98",
+      "sizeBytes": 668
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_port_lands/actors/ambient_boat_loader.gbsres": {
+      "sha256": "f29aa630c5d593734a4945e87ffc9a866963ce320349af877995cf3696d4547d",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_port_lands/actors/city_civilians_loader.gbsres": {
+      "sha256": "734f306f0fb51de0f4aec8dcc48f06593f3c0fc087a0b234261432849620d885",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_port_lands/actors/city_fleet_loader.gbsres": {
+      "sha256": "b714e683740d20f8e86b4f0663301e913bdda980297d0efbbd32e4fd2d879136",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_port_lands/scene.gbsres": {
+      "sha256": "d86537d60253d415ff8066ec8d8d3df360c815caa3f0f8de698f70cf53d73cad",
+      "sizeBytes": 6759
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_west/actors/ambient_aircraft_loader.gbsres": {
+      "sha256": "b99ec284a0dddcd9492df2bbddd179d415046e0e3d5116877d598d0675621ce0",
+      "sizeBytes": 665
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_west/actors/ambient_boat_loader.gbsres": {
+      "sha256": "bd8f213f89c5e10d0f0207761b2c6aad2348002f309414dcfa31dd2b1303cd87",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_west/actors/city_civilians_loader.gbsres": {
+      "sha256": "36033390ef2ef602159f5117ff567047b0482d9773393dbe5f32c132228533ad",
+      "sizeBytes": 661
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_west/actors/city_fleet_loader.gbsres": {
+      "sha256": "fb9adf92be7710865007e8753be6e8c0120ecf7366b74478e706dbd96e1af7c7",
+      "sizeBytes": 653
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_west/actors/queen_streetcar_loader.gbsres": {
+      "sha256": "645d9ffd5e16f355297513d471d8c40c38f4ac994a4faaf6407ae350ee57e7de",
+      "sizeBytes": 662
+    },
+    "games/toronto-dispatch/project/project/scenes/toronto_west/scene.gbsres": {
+      "sha256": "f1be3404affed305db1283eddf8d58258613afb7e602953d58554f9f862d2ef5",
+      "sizeBytes": 5028
+    },
+    "games/toronto-dispatch/project/project/settings.gbsres": {
+      "sha256": "2f412674e0f0738e79c6d2acb82dcfd185ba227d8f3670d0d31c6cd0cc1c307c",
+      "sizeBytes": 2645
+    },
+    "games/toronto-dispatch/project/project/variables.gbsres": {
+      "sha256": "af73c12caf6ef4e952e53ceeae1b429fd999977349285ac31a3d0e3986a3083b",
+      "sizeBytes": 72
+    }
+  }
+}

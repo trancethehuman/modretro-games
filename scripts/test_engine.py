@@ -86,6 +86,18 @@ def legacy_island_fixture():
     return '\n'.join(rows)
 
 
+def legacy_north_fixture():
+    """Immutable raw old Core oracle, never derived from production overlay."""
+    import hashlib
+    data=json.loads((FIXTURES/'legacy_north_geometry.json').read_text())
+    raw=bytes.fromhex(data['collisionHex'])
+    require(data['sourceSceneSha256']=='c59b93b6c66bf1b8f9b63289f20f2d248de84cbb09d29ab25f6b9ca51a40291c' and
+            (data['width'],data['height'])==(128,122) and len(raw)==128*122 and
+            hashlib.sha256(raw).hexdigest()=='e50f0de9eb501c110162c707836594371b289e3a58ac9ebb6b64e2bc9f24f14e',
+            'Frozen pre-North Core geometry changed.')
+    return 'static const UBYTE td_fixture_north_core_old[15616]={'+','.join(map(str,raw))+'};\n'
+
+
 def native_fixture(game, include):
     """Read every registered scene; never synthesize an unavailable district."""
     validator = load_module(game / "scripts/check_campaign.py", "td_collision_validator")
@@ -197,7 +209,7 @@ def native_fixture(game, include):
     return ("static const unsigned native_widths[TD_DISTRICT_COUNT]={" + ",".join(map(str, widths)) + "};\n"
             "static const unsigned native_heights[TD_DISTRICT_COUNT]={" + ",".join(map(str, heights)) + "};\n"
             "static const UBYTE native_collision[TD_DISTRICT_COUNT][TD_DISTRICT_TILE_WIDTH*TD_DISTRICT_TILE_HEIGHT]={" +
-            ",".join(grids) + "};\n" + "\n".join(content)+legacy_island_fixture())
+            ",".join(grids) + "};\n" + "\n".join(content)+legacy_island_fixture()+legacy_north_fixture())
 
 
 def main():

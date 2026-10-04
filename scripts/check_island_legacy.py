@@ -75,7 +75,7 @@ def check():
     campaign = json.loads((GAME / "content/campaign.json").read_text())
     validate_preserved_campaign(campaign)
     world = json.loads((GAME / 'content/districts/world.json').read_text())
-    assert len(world['districts']) == 6
+    assert len(world['districts']) == 7 and world['districts'][5]['scene']=='toronto_islands' and world['districts'][6]['scene']=='toronto_north'
     validate_relocated_stops(campaign['stops'], read_district_art(world['districts'][5]))
     assert [stop["id"] for stop in data["stops"]] == [20, 21, 22, 24, 25, 26]
     for stop in data["stops"]:

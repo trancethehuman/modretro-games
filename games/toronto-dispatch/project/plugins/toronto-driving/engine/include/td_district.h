@@ -11,7 +11,9 @@
 #define TD_DISTRICT_PORT_LANDS 4
 /* Public paths are ferry-accessed and have no ordinary road seam. */
 #define TD_DISTRICT_ISLANDS 5
-#define TD_DISTRICT_COUNT 6
+/* Appended northern upland scene; existing district IDs/local positions stay stable. */
+#define TD_DISTRICT_NORTH 6
+#define TD_DISTRICT_COUNT 7
 #define TD_DISTRICT_NONE 255
 #define TD_DISTRICT_TILE_WIDTH 128
 #define TD_DISTRICT_TILE_HEIGHT 122

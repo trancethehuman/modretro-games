@@ -4,6 +4,7 @@
 #include "td_district.h"
 #include "td_transit.h"
 #include "td_island_legacy.h"
+#include "td_north_legacy.h"
 #include "compat.h"
 #include "system.h"
 static UBYTE td_save_slot=TD_NONE,td_save_seq;
@@ -19,6 +20,12 @@ static volatile UBYTE *td_save_address(UBYTE slot){return slot?(volatile UBYTE*)
  * invalid candidate cannot be repaired by choosing a safe Island checkpoint. */
 static UBYTE td_valid_fields(td_state_t *s,UBYTE version){
     UBYTE i,bits=0,value;td_job_t job;td_stop_t stop;
+    /* v9 and earlier had exactly6 districts,96 jobs and59 stops. These
+       historical bounds precede content lookups and all map transforms. */
+    if(version<10&&(s->district>=6||s->park_district>=6||
+       (s->job!=TD_NONE&&s->job>=96)))return FALSE;
+    if(version<10&&(s->mode==TD_WAIT||s->mode==TD_RIDE)&&
+       ((s->transit_origin&63)>=59||s->transit_target>=59))return FALSE;
     if(s->wanted>3||s->wanted_left>30||(!s->wanted!=!s->wanted_left))return FALSE;
     if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP)return FALSE;
     if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
@@ -27,6 +34,7 @@ static UBYTE td_valid_fields(td_state_t *s,UBYTE version){
     if(s->reserved&&(s->mode!=TD_RIDE||s->ride_left!=1||td_transit_service(s->transit_origin)!=TD_TRANSIT_STREETCAR))return FALSE;
     for(i=0;i<TD_COMPLETE_BYTES;i++){
         value=s->complete[i];
+        if(version<10&&i>=12&&value)return FALSE;
         if(i>=(TD_QUESTS+7)/8&&value)return FALSE;
 #if (TD_QUESTS & 7)
         if(i==TD_QUESTS/8&&value>>(TD_QUESTS&7))return FALSE;
@@ -85,8 +93,16 @@ static UBYTE td_island_checkpoint(td_state_t *s,UBYTE stop_id){
 }
 static UBYTE td_prepare_state(td_state_t *s,UBYTE version){
     UBYTE region=TD_NONE,origin_region;UWORD u=s->u>>4,v=s->v>>4;
-    if(!td_valid_fields(s,version)||
-       !td_district_drivable(s->park_district,s->park_u>>4,s->park_v>>4))return FALSE;
+    if(!td_valid_fields(s,version))return FALSE;
+    /* Newly opened Core throat tiles must not repair impossible old saves.
+       Preserve historical foot point validation; only cars use half5. */
+    if(version<10){
+        if(s->park_district==TD_DISTRICT_CITY&&
+           !td_north_legacy_clear(s->park_u>>4,s->park_v>>4,5))return FALSE;
+        if(s->district==TD_DISTRICT_CITY&&
+           !td_north_legacy_clear(u,v,s->onfoot?0:5))return FALSE;
+    }
+    if(!td_district_drivable(s->park_district,s->park_u>>4,s->park_v>>4))return FALSE;
     if(version<9&&s->district==TD_DISTRICT_CITY)region=td_legacy_island_region(u,v);
     if(region==254)return FALSE;
     if(region<3){if(!s->onfoot)return FALSE;}
@@ -133,7 +149,7 @@ static void td_migrate_old(td_state_t *dest){
 static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq,UBYTE *source_version){
     UBYTE i,version,length;UWORD crc=0xFFFF;UBYTE *dst=(UBYTE*)dest;volatile UBYTE *ram=td_save_address(slot);
     version=ram[2];length=ram[3];
-    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==TD_SAVE_VERSION||version==8||version==7||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
+    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==TD_SAVE_VERSION||version==9||version==8||version==7||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
     for(i=2;i<=4;i++)crc=td_crc_byte(crc,ram[i]);
     for(i=0;i<length;i++){dst[i]=ram[8+i];crc=td_crc_byte(crc,ram[8+i]);}
     if(crc!=(ram[5]|(UWORD)ram[6]<<8))return FALSE;

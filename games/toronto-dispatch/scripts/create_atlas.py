@@ -180,8 +180,14 @@ def model():
         for b in bounds[i + 1:]:
             require(not (a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]),
                     "Registered atlas districts overlap")
-    require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts[:4]) == EXPECTED_OFFSETS,
-            "Existing atlas layout changed; review geography and generated budgets")
+    north = len(districts) == 7 and districts[6]["scene"] == "toronto_north"
+    expected_offsets = tuple((x, y + (976 if north else 0)) for x, y in EXPECTED_OFFSETS)
+    require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts[:4]) == expected_offsets,
+            "Existing atlas layout changed outside the reviewed northern display translation")
+    if north:
+        require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts[4:]) ==
+                ((3072, 1952), (2048, 1952), (2048, 0)),
+                "Northern atlas must preserve Port/Island relative placement and append North above Core")
     require(len({d['scene'] for d in districts}) == len(districts), "Atlas scenes must be unique")
     width = max(r[2] for r in bounds) // SCALE
     height = max(r[3] for r in bounds) // SCALE

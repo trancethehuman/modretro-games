@@ -62,6 +62,11 @@ static const td_stop_t td_stops[TD_STOPS] = {
   {432,888,"BEACH MAIL",0,4,1},
   {128,576,"POLSON PACKET",0,4,0},
   {352,592,"RIVERBANK PARCEL",0,4,1},
+  {696,416,"SUMMERHILL",1,6,0},
+  {688,176,"ST CLAIR",1,6,0},
+  {296,464,"CASA LOMA PARCEL",0,6,1},
+  {704,552,"SUMMERHILL STOCK",0,6,0},
+  {752,256,"ROSEHILL POST",0,6,1},
 };
 static const td_job_t td_jobs[TD_QUESTS] = {
   {"MARKET START",0,2,255,0,120,86,{0,1,255,255,255,255,255,255,255,255,255,255}},
@@ -160,6 +165,14 @@ static const td_job_t td_jobs[TD_QUESTS] = {
   {"BEACH MAIL",0,3,255,12,180,129,{52,58,56,255,255,255,255,255,255,255,255,255}},
   {"HARBOUR PAPER RUN",2,2,2,6,120,175,{57,1,255,255,255,255,255,255,255,255,255,255}},
   {"STAGE RETURN KIT",6,4,0,12,200,204,{54,51,39,54,255,255,255,255,255,255,255,255}},
+  {"BALDWIN BOOK BOX",0,2,255,3,220,180,{0,61,255,255,255,255,255,255,255,255,255,255}},
+  {"SUMMERHILL GLASS",1,2,0,6,205,172,{5,62,255,255,255,255,255,255,255,255,255,255}},
+  {"HILLTOP FILES",2,2,2,6,170,156,{62,3,255,255,255,255,255,255,255,255,255,255}},
+  {"ST CLAIR STOCK",3,3,1,8,220,202,{0,62,60,255,255,255,255,255,255,255,255,255}},
+  {"NORTH CONNECTION",4,7,255,12,330,252,{0,59,62,60,63,60,0,255,255,255,255,255}},
+  {"NORTH PICKUPS",5,5,0,8,255,230,{0,62,60,17,0,255,255,255,255,255,255,255}},
+  {"ROSEHILL SIGNED",6,4,255,12,310,212,{62,61,63,62,255,255,255,255,255,255,255,255}},
+  {"RIDGE PARCEL ROUND",0,3,255,12,260,195,{61,62,63,255,255,255,255,255,255,255,255,255}},
 };
 static const char td_briefs[TD_QUESTS][37] = {
   "MARKET PARCEL     UNION TO MARKET   ",
@@ -258,10 +271,18 @@ static const char td_briefs[TD_QUESTS][37] = {
   "RIVER AND BEACH   TWO FOOT HANDOFFS ",
   "URGENT PORT FILE  MOTORCYCLE ROUTE  ",
   "YARD RETURN PAPERSORIGINAL BACK YARD",
+  "UNION BOOK PARCEL STAIRS OR UPPER RD",
+  "FRAGILE GLASS KIT BRAKE UNDER RAIL  ",
+  "URGENT NORTH FILE BIKE TO CITY HALL ",
+  "UNION STOCK LOAD  TRUCK TO ST CLAIR ",
+  "TRAIN OR YONGE RD PARK EDGE WALK    ",
+  "NORTH PASSENGERS  KEEP CAR READY    ",
+  "SIGNED PARK PAPERSRETURN TO DESK    ",
+  "SMALL PARCEL ROUNDTWO FOOT HANDOFFS ",
 };
 /* Auxiliary parking cues; client records remain unchanged. */
 typedef struct { UWORD u,v; UBYTE stop; } td_parking_t;
-static const td_parking_t td_parking[7]={
+static const td_parking_t td_parking[9]={
   {736,640,34},
   {224,144,36},
   {816,312,41},
@@ -269,13 +290,15 @@ static const td_parking_t td_parking[7]={
   {192,352,53},
   {352,856,56},
   {192,552,58},
+  {336,576,61},
+  {640,280,63},
 };
 UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED {
  UBYTE i;if(!u||!v)return FALSE;
- for(i=0;i<7;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
+ for(i=0;i<9;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
  return FALSE;
 }
-static const char td_west_street_names[80][19]={
+static const char td_west_street_names[104][19]={
   "BLOOR ST W",
   "DUNDAS ST W",
   "COLLEGE ST",
@@ -356,9 +379,33 @@ static const char td_west_street_names[80][19]={
   "WARD BEACH ACCESS",
   "ALGONQUIN PUBLIC B",
   "SNAKE ISLAND PUBLI",
+  "BATHURST ST",
+  "SPADINA RD SOUTH",
+  "SPADINA RD NORTH",
+  "AVENUE RD",
+  "YONGE ST",
+  "ST CLAIR AVE",
+  "DUPONT ST",
+  "DAVENPORT RD",
+  "WALMER RD SOUTH",
+  "BERNARD AVE",
+  "AUSTIN TERRACE EAS",
+  "AUSTIN TERRACE WES",
+  "SUMMERHILL AVE",
+  "SHAFTESBURY AVE",
+  "ROSEHILL AVE",
+  "PRICE ST",
+  "BALDWIN STEPS",
+  "CASA LOMA PUBLIC E",
+  "SPADINA MUSEUM EDG",
+  "AUSTIN BLVD WALK",
+  "SUMMERHILL ENTRANC",
+  "ST CLAIR ENTRANCE",
+  "ROSEHILL PARK POST",
+  "RAMSDEN PUBLIC SPI",
 };
 typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;
-static const td_street_t td_west_streets[215]={
+static const td_street_t td_west_streets[250]={
   {816,64,1000,64,1,0},
   {816,64,816,112,1,0},
   {512,112,816,112,1,0},
@@ -574,10 +621,45 @@ static const td_street_t td_west_streets[215]={
   {800,368,800,584,5,78},
   {800,368,824,368,5,78},
   {688,480,688,704,5,79},
+  {208,160,208,912,6,80},
+  {336,576,336,976,6,81},
+  {336,160,336,488,6,82},
+  {480,160,480,912,6,83},
+  {640,160,640,976,6,84},
+  {24,160,784,160,6,85},
+  {24,768,408,768,6,86},
+  {408,680,408,768,6,86},
+  {408,680,480,680,6,86},
+  {24,576,408,576,6,87},
+  {408,576,408,784,6,87},
+  {408,784,640,784,6,87},
+  {280,768,280,912,6,88},
+  {280,848,480,848,6,89},
+  {296,488,336,488,6,90},
+  {208,488,232,488,6,91},
+  {640,336,744,336,6,92},
+  {744,336,744,432,6,92},
+  {640,432,744,432,6,93},
+  {640,280,744,280,6,94},
+  {640,552,744,552,6,95},
+  {336,488,336,576,6,96},
+  {296,488,336,488,6,97},
+  {296,464,296,488,6,97},
+  {336,488,392,488,6,98},
+  {392,464,392,488,6,98},
+  {232,488,296,488,6,99},
+  {696,416,696,432,6,100},
+  {688,160,688,176,6,101},
+  {744,256,744,280,6,102},
+  {744,256,752,256,6,102},
+  {568,736,640,736,6,103},
+  {568,640,568,736,6,103},
+  {512,640,568,640,6,103},
+  {480,640,512,640,6,103},
 };
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {
  UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;
- for(i=0;i<215;i++){s=&td_west_streets[i];if(s->district!=district)continue;
+ for(i=0;i<250;i++){s=&td_west_streets[i];if(s->district!=district)continue;
  score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);
  if(score<best){best=score;name=s->name;}
  }memcpy(d,td_west_street_names[name],19);

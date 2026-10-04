@@ -1,5 +1,5 @@
 {
-  "status": "Six registered original native scenes; Islands source integration awaits independent campaign/save migration, official compiled gates and native travel. All-city duration and physical acceptance remain separate.",
+  "status": "Seven registered original native world scenes; North source integration, compiled and ordinary-input gates are in progress. Duration and physical acceptance remain separate.",
   "projection": "North-up local pixels; each scene is 1024 by 976. Distances and seam lanes are original compression.",
   "districts": [
     {
@@ -10,7 +10,7 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 2048,
-      "atlas_y": 0
+      "atlas_y": 976
     },
     {
       "id": 1,
@@ -20,7 +20,7 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 1024,
-      "atlas_y": 0
+      "atlas_y": 976
     },
     {
       "id": 2,
@@ -30,7 +30,7 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 0,
-      "atlas_y": 0
+      "atlas_y": 976
     },
     {
       "id": 3,
@@ -40,7 +40,7 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 3072,
-      "atlas_y": 0
+      "atlas_y": 976
     },
     {
       "id": 4,
@@ -50,7 +50,7 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 3072,
-      "atlas_y": 976
+      "atlas_y": 1952
     },
     {
       "id": 5,
@@ -60,9 +60,21 @@
       "width_pixels": 1024,
       "height_pixels": 976,
       "atlas_x": 2048,
-      "atlas_y": 976,
+      "atlas_y": 1952,
       "art_source": "content/districts/island_art.json",
       "traffic_enabled": false
+    },
+    {
+      "id": 6,
+      "name": "UPTOWN HILLS",
+      "scene": "toronto_north",
+      "symbol": "scene_toronto_north",
+      "width_pixels": 1024,
+      "height_pixels": 976,
+      "atlas_x": 2048,
+      "atlas_y": 0,
+      "art_source": "content/districts/north_art.json",
+      "traffic_enabled": true
     }
   ],
   "portals": [
@@ -334,7 +346,43 @@
         "vehicle"
       ],
       "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Spadina north",
+      "from": {
+        "district": 0,
+        "u": 336,
+        "v": 24
+      },
+      "to": {
+        "district": 6,
+        "u": 336,
+        "v": 952
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
+    },
+    {
+      "name": "Yonge north",
+      "from": {
+        "district": 0,
+        "u": 640,
+        "v": 24
+      },
+      "to": {
+        "district": 6,
+        "u": 640,
+        "v": 952
+      },
+      "access": [
+        "foot",
+        "vehicle"
+      ],
+      "modeled_crossing_pixels": 48
     }
   ],
-  "notice": "Original compressed districts within former Toronto. The appended Port Lands is reached via Leslie; Core Cherry and Carlaw approaches remain withheld. This is not full former-Toronto or Island coverage. Distances, clients, traffic, schedules and art are original game design based on separately attributed facts."
+  "notice": "Original compressed districts within former Toronto. North joins Core through Spadina and Yonge; Port Lands remains reached through Leslie and Islands require ferry. This is not full former-Toronto coverage. Distances, clients, traffic, schedules and art are original game design based on separately attributed facts."
 }

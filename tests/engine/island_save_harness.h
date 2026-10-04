@@ -193,7 +193,7 @@ static void test_island_v4_import(void){
         expected.wanted=expected.wanted_left=0;expected.job=TD_NONE;expected.stage=0;expected.left=0;
         expected.health=100;expected.mode=TD_ROAM;expected.speed=0;
         expect(td_restore()&&!memcmp(&td,&expected,58),"all six genuine v4 Island points keep earnings/completions while retiring changed ancient work at the appropriate new checkpoint");
-        expect(sram_writes==67&&td_save_address(0)[2]==4&&td_save_address(1)[2]==9,
+        expect(sram_writes==67&&td_save_address(0)[2]==4&&td_save_address(1)[2]==TD_SAVE_VERSION,
                "v4's existing immediate upgrade uses the other slot and preserves its committed historical record");
     }
     td_state_t old=island_old_state(560,928);island_v4_record(&old);
@@ -206,7 +206,7 @@ static void test_island_v4_import(void){
         if(setjmp(interrupted_save)==0){td_restore();expect(0,"v4 upgrade interruption must occur at a real SRAM store");}
         sram_interrupt_enabled=0;memset(&td,0,sizeof(td));
         expect(td_restore()&&!memcmp(&td,&expected,58)&&td_save_address(0)[2]==4,
-               "every interrupted immediate v4 upgrade recovers the original valid Island point or final v9 checkpoint without changing old earnings");
+               "every interrupted immediate v4 upgrade recovers the original valid Island point or final current-version checkpoint without changing old earnings");
     }
 }
 
@@ -265,21 +265,21 @@ static void test_island_versions_and_upgrade(void){
     expect(td_restore(),"interrupted upgrade begins with an admitted CRC-valid legacy walker");
     td_state_t migrated=td;UBYTE image[sizeof(td_test_sram)];memcpy(image,td_test_sram,sizeof(image));
     sram_writes=0;td_save();unsigned count=sram_writes;
-    expect(count==67&&td_save_address(td_save_slot)[2]==9&&td_save_address(td_save_slot)[3]==58,
-           "first normal v9 upgrade writes exactly the unchanged payload plus9 metadata stores");
+    expect(count==67&&td_save_address(td_save_slot)[2]==TD_SAVE_VERSION&&td_save_address(td_save_slot)[3]==58,
+           "first normal current-version upgrade writes exactly the unchanged payload plus9 metadata stores");
     for(volatile unsigned cut=1;cut<=count;cut++){
         memcpy(td_test_sram,image,sizeof(image));memset(&td,0,sizeof(td));expect(td_restore(),"each interruption recovers the retained v8 candidate first");
         sram_writes=0;sram_interrupt_after=cut;sram_interrupt_enabled=1;
-        if(setjmp(interrupted_save)==0){td_save();expect(0,"configured v9 interruption must occur at a real store");}
+        if(setjmp(interrupted_save)==0){td_save();expect(0,"configured current-version interruption must occur at a real store");}
         sram_interrupt_enabled=0;memset(&td,0,sizeof(td));
-        expect(td_restore()&&!memcmp(&td,&migrated,58),"every interrupted v9 migration retains all job, cash, car, clock and checkpoint fields without replaying a fare");
+        expect(td_restore()&&!memcmp(&td,&migrated,58),"every interrupted current-version migration retains all job, cash, car, clock and checkpoint fields without replaying a fare");
         expect(td_save_address(0)[2]==8,"the historical source record remains unchanged during every attempted dual-slot upgrade");
     }
 }
 
 static void test_island_save_migration(void){
-    expect(TD_SAVE_VERSION==9&&sizeof(td_state_t)==58&&TD_DISTRICT_COUNT==6,
-           "the real six-scene migration increments only the schema version, keeping58 serialized bytes");
+    expect(TD_SAVE_VERSION==10&&sizeof(td_state_t)==58&&TD_DISTRICT_COUNT==7,
+           "the real seven-scene world keeps58 serialized bytes and the earlier Island migration");
     test_island_historical_geometry();test_island_point_migration();test_island_booking_migration();
     test_island_invalid_and_ordering();test_island_versions_and_upgrade();test_island_v4_import();
 }

@@ -37,14 +37,17 @@ def source():
         scene = json.loads((ROOT / f'project/project/scenes/toronto_{slug}/scene.gbsres').read_text())
         grid = decode(scene['collisions'])
         routes = set()
+        north = district['id'] == 6 and district['scene'] == 'toronto_north'
+        declared_routes = district.get('traffic_enabled', True) is False or north
         if district.get('traffic_enabled', True) is False:
             assert metadata['roads'] == [] and metadata['traffic_loops'] == []
+        if declared_routes:
             for route in metadata['pedestrian_routes']:
                 assert route['axis'] == 'horizontal' and route['length_pixels'] == 63
                 x, y = route['x'], route['y']
-                assert all(free(px, py) for px in range(x - 5, x + 69) for py in range(y - 5, y + 6)), 'Foot-only NPC route lacks a full five-pixel body'
+                assert all(free(px, py) for px in range(x - 5, x + 69) for py in range(y - 5, y + 6)), 'Declared NPC route lacks a full five-pixel body'
                 routes.add((x, y))
-        for route in ([] if district.get('traffic_enabled', True) is False else metadata['roads'] + metadata['footpaths']):
+        for route in ([] if declared_routes else metadata['roads'] + metadata['footpaths']):
             points = route['points']
             for a, b in zip(points, points[1:]):
                 if a[1] != b[1]:

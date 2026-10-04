@@ -33,6 +33,7 @@ static unsigned light_resets;
 static UBYTE audio_fixture_mode;
 void td_traffic_lights_reset(void){light_resets++;}
 static UBYTE initial_font[49][16];
+static void expected_centre(UBYTE district,UWORD u,UWORD v,UBYTE *x,UBYTE *y);
 
 static void expect(int condition,const char *name) {
     checks++;
@@ -253,7 +254,10 @@ static void test_pause_audio_labels_and_map_cache(void){
             open_case();before=snapshot_game();finish_paint();
             expect_window_text(1,riding?"TORONTO EAST END":"TORONTO ISLANDS",
                                "YOU map focus after audio repaint names the actual walking or paid-view district");
-            expect(td_map_x==(riding?40:30)&&td_map_y==(riding?2:16),
+            UBYTE expected_x,expected_y;
+            expected_centre(riding?TD_DISTRICT_EAST:TD_DISTRICT_ISLANDS,
+                            riding?128:512,riding?536:448,&expected_x,&expected_y);
+            expect(td_map_x==expected_x&&td_map_y==expected_y,
                    "YOU map focus after audio repaint preserves exact independent atlas coordinate and clamp expectations");
             expect_game_unchanged(&before);td_map_close();
             expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
@@ -657,13 +661,14 @@ static void test_every_viewport(void) {
 }
 
 static void expected_centre(UBYTE district,UWORD u,UWORD v,UBYTE *x,UBYTE *y) {
-    UWORD point_x=0,point_y=0;
-    expect(td_atlas_position(district,u,v,&point_x,&point_y),"focus fixture uses a valid actual atlas position");
-    int left=(int)(point_x/8)-10,top=(int)(point_y/8)-6;
+    expect(district<sizeof(host_ui_atlas_origins)/sizeof(host_ui_atlas_origins[0])&&u<1024&&v<976,
+           "focus fixture uses a valid independently authored local atlas position");
+    int left=(host_ui_atlas_origins[district][0]+u)/64-10;
+    int top=(host_ui_atlas_origins[district][1]+v)/64-6;
     if(left<0)left=0;
     if(top<0)top=0;
-    if(left>TD_ATLAS_TILE_WIDTH-20)left=TD_ATLAS_TILE_WIDTH-20;
-    if(top>TD_ATLAS_TILE_HEIGHT-12)top=TD_ATLAS_TILE_HEIGHT-12;
+    if(left>HOST_UI_ATLAS_TILE_WIDTH-20)left=HOST_UI_ATLAS_TILE_WIDTH-20;
+    if(top>HOST_UI_ATLAS_TILE_HEIGHT-12)top=HOST_UI_ATLAS_TILE_HEIGHT-12;
     *x=left;*y=top;
 }
 
@@ -854,10 +859,12 @@ static void test_overlap_marker_geometry(void) {
         td.u=(bits&1?560:208)*16;td.v=(bits&1?400:64)*16;
         td.park_u=(bits&2?560:80)*16;td.park_v=(bits&2?400:176)*16;
         td_target.u=bits&4?560:944;td_target.v=bits&4?400:784;
-        open_case();td_map_x=32;td_map_y=0;td_map_begin();td_map_headers();finish_paint();
+        open_case();expected_centre(0,560,400,&td_map_x,&td_map_y);
+        td_map_begin();td_map_headers();finish_paint();
         UWORD x,y;expect(td_atlas_position(0,560,400,&x,&y),"overlap fixture target has a genuine atlas position");
-        expect(x/8>=td_map_x&&x/8<td_map_x+20&&y/8<12,"overlap fixture lies inside the painted ground viewport");
-        expect(window_tiles[0][2+y/8][x/8-td_map_x]==7+bits,
+        expect(x/8>=td_map_x&&x/8<td_map_x+20&&y/8>=td_map_y&&y/8<td_map_y+12,
+               "overlap fixture lies inside the painted ground viewport");
+        expect(window_tiles[0][2+y/8-td_map_y][x/8-td_map_x]==7+bits,
                "all seven real marker overlap combinations map to their distinct reserved glyph tile");
         verify_viewport();verify_marker_patterns();td_map_close();
     }

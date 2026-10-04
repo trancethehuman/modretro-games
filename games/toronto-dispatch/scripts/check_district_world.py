@@ -202,15 +202,49 @@ def check():
     assert len(world['portals']) >= 11
     directed = check_seams(world, resources)
     for district, meta in metadata.items():
-        expected = {(district, p['x'], p['y'], p['target'], p['target_x'], p['target_y'], int(not p['foot_only'])) for p in meta['ports']}
+        # The researched North manifest names its sole registered destination.
+        # Retain historical numeric-port expectations everywhere else.
+        if district == 6:
+            assert all(p['target'] == 'toronto_city' for p in meta['ports']), 'North may only connect to the two Core gateways'
+            expected = {(district, p['x'], p['y'], 0, p['target_x'], p['target_y'], int(not p['foot_only'])) for p in meta['ports']}
+        else:
+            expected = {(district, p['x'], p['y'], p['target'], p['target_x'], p['target_y'], int(not p['foot_only'])) for p in meta['ports']}
         assert expected == {p for p in directed if p[0] == district}, f'{district}: native seams differ from original ports'
         for route in meta['roads']:
             assert route['name'] and len(route['points']) >= 2
-            assert all(footprint(district, u, v, 8) for u, v in cardinal_points(route['points'])), f"Blocked researched road: {route['name']}"
+            points = list(cardinal_points(route['points']))
+            if district == 6:
+                # Two authored south throats paint to the image edge. A
+                # conservative half8 centre ends at967; native half5/half7
+                # reach968 and crossing uses inset952, checked separately.
+                # Admit only these exact paint-only tails, never blocked body
+                # paths or another out-of-bounds road.
+                outside = {(u, v) for u, v in points if v >= 968}
+                if outside:
+                    column = {'SPADINA ROAD SOUTH': 336, 'YONGE STREET': 640}.get(route['name'])
+                    assert column is not None and outside == {(column, v) for v in range(968, 977)}, 'Unexpected North boundary-road extension'
+                    assert footprint(district, column, 968, 7), 'North boundary fails separate full half7 body'
+                    points = [(u, v) for u, v in points if v < 968]
+            assert all(footprint(district, u, v, 8) for u, v in points), f"Blocked researched road: {route['name']}"
         for route in meta['footpaths']:
             points = list(cardinal_points(route['points']))
             assert all(walkable(district, u, v) for u, v in points), f"Blocked footpath: {route['name']}"
-            assert any(tile(district, u // 8, v // 8) == 16 for u, v in points), f"Footpath lacks foot-only terrain: {route['name']}"
+            shared_entrances = {
+                'SUMMERHILL ENTRANCE': [[696, 432], [696, 416]],
+                'ST CLAIR ENTRANCE': [[688, 160], [688, 176]],
+            }
+            if district == 6 and route['name'] in shared_entrances:
+                # These exact curb approaches share Shaftesbury/St Clair
+                # asphalt; unlike the stairs/park paths they do not forbid
+                # vehicles. Check every touched full half5 walking tile.
+                assert route['points'] == shared_entrances[route['name']], 'Changed shared North station approach'
+                assert all(tile(district, u // 8, v // 8) == 0 for u, v in points), 'Shared station approach no longer connects its road curb'
+                assert all(not (tile(district, x, y) & 15)
+                           for u, v in points
+                           for y in range((v - 5) // 8, (v + 5) // 8 + 1)
+                           for x in range((u - 5) // 8, (u + 5) // 8 + 1)), 'North station approach blocks full foot body'
+            else:
+                assert any(tile(district, u // 8, v // 8) == 16 for u, v in points), f"Footpath lacks foot-only terrain: {route['name']}"
         assert len(meta['traffic_loops']) == (0 if district == ISLAND_DISTRICT else 6)
         for loop in meta['traffic_loops']:
             assert 4 <= len(loop) <= 16
@@ -222,7 +256,7 @@ def check():
     # All appended courier clients need car/park-hand-off access.
     # Supplemental Queen transit platforms are walking-only boarding points
     # checked independently by check_streetcar.py, including core platforms.
-    expansion_clients = [stop for stop in campaign['stops'][27:] if stop['transit'] == 0]
+    expansion_clients = [stop for stop in campaign['stops'][27:59] if stop['transit'] == 0]
     for stop in expansion_clients:
         district, u, v = stop['district'], stop['u'], stop['v']
         foot_only = bool(stop.get('foot_only', False))
@@ -240,10 +274,16 @@ def check():
         else:
             assert footprint(district, u, v, 8)
             model.shortest(origin, point(district, u, v), True)
-    for quest in campaign['quests'][72:]:
+    # Keep all legacy expansion estimates on their unchanged strict3x3
+    # model. North's valid StClair curb needs its explicit fullhalf5 model.
+    for quest in campaign['quests'][72:96]:
         for first, last in zip(quest['route'], quest['route'][1:]):
             model.stop_leg(campaign['stops'][first], campaign['stops'][last])
         assert quest['timing_design']['planning_only'] and quest['timing_design']['measured_duration_seconds'] is None
+
+    from create_north_jobs import author as authored_north
+    north = authored_north()
+    assert campaign['stops'][59:64] == north['stops'] and campaign['quests'][96:104] == north['quests'], 'North explicit full-body route/content differs'
 
     # A ferry changes scenes; it is not a navigable mainland edge. Every public
     # Island endpoint uses the same conservative full-foot component, and no

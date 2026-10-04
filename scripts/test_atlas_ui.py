@@ -49,7 +49,17 @@ def content_oracle():
         rows.append(quote("".join(line.ljust(18) for line in job["brief"])) + ",")
     rows.append("};\nstatic const char host_ui_districts[][19]={")
     rows.extend(quote(entry["name"]) + "," for entry in districts)
-    rows.append("};\nstatic const char host_ui_chapters[][21]={")
+    rows.append("};\nstatic const UWORD host_ui_atlas_origins[][2]={")
+    for entry in districts:
+        if any(type(entry[axis]) is not int or entry[axis] < 0 or entry[axis] % 8
+               for axis in ("atlas_x", "atlas_y")):
+            raise ValueError("UI atlas oracle requires nonnegative authored tile-aligned origins")
+        rows.append("{%u,%u}," % (entry["atlas_x"], entry["atlas_y"]))
+    width = max(entry["atlas_x"] + entry["width_pixels"] for entry in districts)
+    height = max(entry["atlas_y"] + entry["height_pixels"] for entry in districts)
+    rows.append("};\n#define HOST_UI_ATLAS_TILE_WIDTH %u\n#define HOST_UI_ATLAS_TILE_HEIGHT %u" %
+                ((width + 63) // 64, (height + 63) // 64))
+    rows.append("static const char host_ui_chapters[][21]={")
     # Compact authored captions are UI requirements. Validate their groups
     # against editable quest metadata instead of reading the renderer table.
     captions = {
@@ -65,14 +75,15 @@ def content_oracle():
         "Western package routes": "WEST ROUTES",
         "Eastern package connections": "EAST ROUTES",
         "Port Lands loading and park rounds": "PORT LANDS",
+        "Northern hills and station rounds": "UPTOWN HILLS",
     }
-    if len(jobs) != 96:
-        raise ValueError("Review the twelve authored dispatch groups after campaign changes")
+    if len(jobs) != 104:
+        raise ValueError("Review the thirteen authored dispatch groups after campaign changes")
     for start in range(0, len(jobs), 8):
         chapter = jobs[start]["chapter"]
         if chapter not in captions or any(job["chapter"] != chapter for job in jobs[start:start + 8]):
             raise ValueError("Dispatch group differs from authored eight-offer chapter metadata")
-        caption = f"{start // 8 + 1:02}/12 {captions[chapter]}"
+        caption = f"{start // 8 + 1:02}/13 {captions[chapter]}"
         if len(caption) > 20:
             raise ValueError("Chapter caption exceeds the native twenty-column row")
         rows.append(quote(caption) + ",")

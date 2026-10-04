@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE_STOPS, CORE_QUESTS = 27, 72
-TOTAL_STOPS, TOTAL_QUESTS = 59, 96
+TOTAL_STOPS, TOTAL_QUESTS = 64, 104
 
 
 def decode(text):
@@ -142,7 +142,7 @@ def check():
     assert all(locations[s['id']] in walk and locations[s['id']] in car
                for s in stops[:CORE_STOPS] if s['id'] not in ISLAND_IDS), 'Disconnected mainland core endpoint'
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
-    assert len(world['districts']) == 6 and world['districts'][ISLAND_DISTRICT]['scene'] == 'toronto_islands'
+    assert len(world['districts']) == 7 and world['districts'][ISLAND_DISTRICT]['scene'] == 'toronto_islands' and world['districts'][6]['scene'] == 'toronto_north'
     island = read_district_art(world['districts'][ISLAND_DISTRICT])
     validate_relocated_stops(stops, island)
     model = RouteModel(world, stops)
@@ -199,8 +199,18 @@ def check():
     preserved_port_prefix(campaign)
     port = json.loads((ROOT / 'content/districts/port_lands_jobs.json').read_text())
     assert port == authored_port(), 'Port Lands content provenance/route estimates are stale'
-    assert stops[51:] == port['stops'] and quests[88:] == port['quests'], 'Port Lands content fusion is stale'
-    assert {i for q in quests[88:] for i in q['route'] if i >= 51} == set(range(51, 59)), 'Every new Port Lands client must serve a contract'
+    assert stops[51:59] == port['stops'] and quests[88:96] == port['quests'], 'Port Lands content fusion is stale'
+    assert {i for q in quests[88:96] for i in q['route'] if i >= 51} == set(range(51,59)), 'Every original Port Lands client must serve a Port contract'
+    from create_north_jobs import author as authored_north, preserved_prefix as preserved_north_prefix
+    preserved_north_prefix(campaign)
+    north = json.loads((ROOT / 'content/districts/north_jobs.json').read_text())
+    assert north == authored_north(), 'North source/body-route provenance is stale'
+    assert stops[59:64] == north['stops'] and quests[96:104] == north['quests'], 'North content fusion is stale'
+    assert {i for q in quests[96:104] for i in q['route'] if i >=59} == set(range(59,64)), 'Every North endpoint must serve a contract'
+    assert campaign['transit']['line1']['stops'] == [0,12,13,14,15,16,17,59,60]
+    assert campaign['transit']['line1']['period_seconds'] == 18 and campaign['transit']['line1']['fare'] == 3
+    assert [s['id'] for s in stops[59:] if s['transit']] == [59,60], 'North clients must not become masked transit aliases'
+    assert len(campaign['chapters']) == 13 and campaign['chapters'] == [quests[i]['chapter'] for i in range(0,104,8)]
     assert campaign['status'] == 'engine-integrated' and campaign['duration_target_minutes'] >= 120
     assert campaign['duration_verified'] is False, 'Elapsed campaign duration requires measured play evidence'
     assert len({q['kind_id'] for q in quests}) == 8

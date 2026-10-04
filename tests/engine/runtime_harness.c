@@ -1823,7 +1823,9 @@ static void test_first_frame_actors(void) {
     /* Port Lands: Leslie's clear road at128, with authored sidewalk route
        (864,92) near the courier at(930,128), rather than the zero-filled
        origin of an omitted fifth initializer. */
-    const UWORD locations[][2]={{560,720},{800,64},{736,640},{224,528},{912,128},{320,280}};
+    /* North Casa Loma parking approach336,576 and nearby authored
+       horizontal sidewalks at548/604 give a real first-frame neighborhood. */
+    const UWORD locations[][2]={{560,720},{800,64},{736,640},{224,528},{912,128},{320,280},{336,576}};
     _Static_assert(sizeof(locations)/sizeof(locations[0])==TD_DISTRICT_COUNT,
                    "Every registered district needs an explicit first-frame neighborhood fixture");
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++) {
@@ -1923,9 +1925,12 @@ static void test_park_delivery_guidance(void) {
     }
     for(unsigned stop=0;stop<=TD_STOPS;stop++) {
         UWORD u=1234,v=5678;UBYTE found=td_get_parking(stop,&u,&v);
-        int expected=stop==34||stop==36||stop==41||stop==52||stop==53||stop==56||stop==58;
+        int expected=stop==34||stop==36||stop==41||stop==52||stop==53||stop==56||stop==58||stop==61||stop==63;
         expect(found==expected&&(expected||(u==1234&&v==5678)),
                "native parking getter leaves ordinary stops and invalid IDs unchanged");
+        if(stop==61||stop==63)
+            expect(found&&u==(stop==61?336:640)&&v==(stop==61?576:280)&&td_district_drivable(TD_DISTRICT_NORTH,u,v),
+                   "the two appended North parking anchors retain exact authored coordinates and real native full-body road clearance");
     }
     UWORD u=1234,v=5678;
     expect(!td_get_parking(36,NULL,&v)&&v==5678&&!td_get_parking(36,&u,NULL)&&u==1234,
@@ -2821,7 +2826,10 @@ static void test_contact_corridor_coverage(void) {
            bridge. Queen-like local y coordinates must not invent service. */
         {{912,128},{672,536},{192,536}},
         /* Actual public ferry checkpoints, not synthetic Island roads. */
-        {{320,280},{512,448},{920,280}}
+        {{320,280},{512,448},{920,280}},
+        /* Actual North parking approach, St Clair and Summerhill curbs;
+           these full native road bodies have no Queen contact corridor. */
+        {{336,576},{688,176},{696,416}}
     };
     _Static_assert(sizeof(clear_points)/sizeof(clear_points[0])==TD_DISTRICT_COUNT,
                    "Every registered district needs explicit off-corridor contact fixtures");
@@ -2834,6 +2842,10 @@ static void test_contact_corridor_coverage(void) {
                                    clear_points[TD_DISTRICT_PORT_LANDS][point][1]),
                "Port Lands off-corridor fixtures use actual clear eleven-pixel native road footprints");
     }
+    for(UBYTE point=0;point<3;point++)
+        expect(td_district_drivable(TD_DISTRICT_NORTH,clear_points[TD_DISTRICT_NORTH][point][0],
+                                   clear_points[TD_DISTRICT_NORTH][point][1]),
+               "North off-corridor fixtures use actual clear eleven-pixel native road footprints");
     for(unsigned phase=0;phase<3840;phase++){
         td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;
         td_streetcar_pose_t pose;td_streetcar_box_t tram;
@@ -2901,7 +2913,10 @@ static const UWORD traffic_probe_points[][6][2]={
     {{192*16,536*16},{672*16,536*16},{912*16,536*16},{912*16,128*16},{352*16,824*16},{736*16,128*16}},
     /* Pure body-query probes at actual foot docks/clients; no Island fleet
        is fabricated or made drivable by these Queen exclusion checks. */
-    {{320*16,280*16},{512*16,448*16},{920*16,280*16},{160*16,600*16},{512*16,744*16},{904*16,440*16}}
+    {{320*16,280*16},{512*16,448*16},{920*16,280*16},{160*16,600*16},{512*16,744*16},{904*16,440*16}},
+    /* Six actual North fleet loop origins; one distinct authored route per
+       slot, independent of the production Queen timetable/path table. */
+    {{200*16,568*16},{272*16,760*16},{328*16,568*16},{472*16,152*16},{200*16,152*16},{632*16,328*16}}
 };
 _Static_assert(sizeof(traffic_probe_points)/sizeof(traffic_probe_points[0])==TD_DISTRICT_COUNT,
                "Every registered district needs explicit traffic lookahead probes");
@@ -3205,8 +3220,10 @@ static void test_dispatch_itinerary_inputs(void) {
 }
 
 /* Explicit chapter-start oracles, independent of the production bitmask. */
-static const UBYTE dispatch_next_chapters[12]={8,16,24,32,40,48,56,64,72,80,88,0};
-static const UBYTE dispatch_previous_chapters[12]={88,0,8,16,24,32,40,48,56,64,72,80};
+static const UBYTE dispatch_next_chapters[13]={8,16,24,32,40,48,56,64,72,80,88,96,0};
+static const UBYTE dispatch_previous_chapters[13]={96,0,8,16,24,32,40,48,56,64,72,80,88};
+_Static_assert(sizeof(dispatch_next_chapters)==TD_QUESTS/8&&sizeof(dispatch_previous_chapters)==TD_QUESTS/8,
+               "every actual eight-offer chapter needs an explicit independent forward/backward oracle");
 static int dispatch_offer_matches(UBYTE job) {
     const td_job_t *expected=&td_fixture_jobs[job];
     return !strcmp(td_offer.title,expected->title)&&td_offer.kind==expected->kind&&
@@ -3224,7 +3241,7 @@ static void dispatch_chapter_offer(UBYTE job) {
 static void test_dispatch_chapter_inputs(void) {
     static const UBYTE chords[]={0,J_A,J_LEFT,J_RIGHT,J_UP,J_DOWN,J_A|J_LEFT|J_RIGHT|J_UP|J_DOWN};
     static const UBYTE exits[]={J_B,J_START,J_B|J_START};
-    expect(TD_QUESTS==96,"the chapter shortcut fixture covers the stable96-offer campaign");
+    expect(TD_QUESTS==104,"the chapter shortcut fixture covers all104 offers including the appended North chapter");
     for(UBYTE job=0;job<TD_QUESTS;job++) {
         UBYTE next=dispatch_next_chapters[job/8];
         const td_job_t *next_offer=&td_fixture_jobs[next];
@@ -3309,7 +3326,7 @@ static void test_dispatch_chapter_eligibility(void) {
     dispatch_offer(95);td.vehicle=0;dispatch_edge(J_A);td.stage=2;td.left=73;td.health=67;td_set_target();
     dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
     td_state_t before=td;td_job_t carried=td_job;td_stop_t target=td_target;
-    stores=sram_writes;td_board_route=3;dispatch_edge(J_SELECT);before.menu=0;
+    stores=sram_writes;td_board_route=3;dispatch_edge(J_SELECT);before.menu=96;
     expect(!memcmp(&td,&before,58)&&!td_board_route&&!memcmp(&td_job,&carried,sizeof(carried))&&
            !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores,
            "chapter browsing while carrying work preserves the active ordered job and its current handoff");
@@ -3608,6 +3625,7 @@ static void test_current_ferry_fare_boundary(void) {
 }
 
 #include "island_save_harness.h"
+#include "north_save_harness.h"
 #include "island_objective_harness.h"
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
@@ -3650,7 +3668,7 @@ int main(void) {
     test_dispatch_itinerary_inputs();test_dispatch_chapter_inputs();test_dispatch_chapter_eligibility();test_dispatch_acceptance_and_reentry();
     test_dispatch_active_preview_resume();test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
     test_reserved_islands_traffic_gates();test_current_ferry_fare_boundary();
-    test_island_save_migration();test_island_objective_guidance();
+    test_island_save_migration();test_north_save_migration();test_island_objective_guidance();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

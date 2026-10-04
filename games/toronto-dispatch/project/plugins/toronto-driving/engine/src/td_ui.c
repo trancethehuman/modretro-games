@@ -30,18 +30,19 @@ static UBYTE td_ui_mode=255;
 static char td_line[40];
 static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
 static const char * const td_chapters[]={
-    "01/12 FIRST SHIFT",
-    "02/12 NEIGHBOURHOODS",
-    "03/12 CITY EVENTS",
-    "04/12 CROSS THE CITY",
-    "05/12 WATERFRONT",
-    "06/12 ARTS/AUDIENCES",
-    "07/12 EVENING",
-    "08/12 NETWORK",
-    "09/12 MASTER COURIER",
-    "10/12 WEST ROUTES",
-    "11/12 EAST ROUTES",
-    "12/12 PORT LANDS",
+    "01/13 FIRST SHIFT",
+    "02/13 NEIGHBOURHOODS",
+    "03/13 CITY EVENTS",
+    "04/13 CROSS THE CITY",
+    "05/13 WATERFRONT",
+    "06/13 ARTS/AUDIENCES",
+    "07/13 EVENING",
+    "08/13 NETWORK",
+    "09/13 MASTER COURIER",
+    "10/13 WEST ROUTES",
+    "11/13 EAST ROUTES",
+    "12/13 PORT LANDS",
+    "13/13 UPTOWN HILLS",
 };
 typedef char td_chapter_offer_count[(TD_QUESTS==8*(sizeof(td_chapters)/sizeof(td_chapters[0])))?1:-1];
 static const char *td_kinds[]={"PARCEL ROUND","FRAGILE: NO CRASH","EXPRESS DEADLINE","TRUCK FREIGHT","TRANSIT FRIENDLY","PASSENGER: SMOOTH","RETURN DOCUMENTS","ISLAND FERRY POST"};

@@ -23,9 +23,19 @@ GAME = Path(__file__).resolve().parents[1] / "games/toronto-dispatch"
 WORLD = GAME / "content/districts/world.json"
 SCENES = tuple("_" + district["symbol"] for district in json.loads(WORLD.read_text())["districts"])
 QUEEN_SCENES = {"_scene_toronto_city", "_scene_toronto_west", "_scene_toronto_east"}
+NORTH_SCENE = "_scene_toronto_north"
 SOURCE_COLOURS = ((101, 255, 0), (224, 248, 207), (134, 192, 108), (7, 24, 33))
 CITY_LAYOUTS = (("city_fleet", 17, 2, 16), ("city_civilians", 11, 2, 14),
                 ("ambient_boat", 3, 1, 6))
+
+
+def city_scene_assets(name: str) -> tuple[str, ...]:
+    """North is inland: it has fleet/civilians, without a boat loader."""
+    return STREETLIFE[:2] if name == NORTH_SCENE else STREETLIFE
+
+
+def city_loader_assets(name: str) -> list[str]:
+    return ([QUEEN] if name in QUEEN_SCENES else []) + [AIRCRAFT] + list(city_scene_assets(name))
 
 
 def rom_offset(symbol: int, size: int) -> int:
@@ -190,7 +200,7 @@ def inspect_city_poses(rom: bytes, symbols: dict[str, int], expected: dict,
 
 def inspect_city_loaders(rom: bytes, symbols: dict[str, int], name: str,
                          scene: bytes, errors: list[str]) -> None:
-    wanted = ([QUEEN] if name in QUEEN_SCENES else []) + [AIRCRAFT] + list(STREETLIFE)
+    wanted = city_loader_assets(name)
     if scene[3] != len(wanted):
         errors.append(f"{name}: native actor count does not match captured loader order")
         return
@@ -209,7 +219,13 @@ def inspect_city_loaders(rom: bytes, symbols: dict[str, int], name: str,
         if actor[14:18] != bytes(4) or actor[18] != 255 or actor[21] or any(actor[41:47]) or actor[51]:
             errors.append(f"{name}: loader {index} changed compiler defaults, scripts, reserve or collision group")
     scene_directory = GAME / "project/project/scenes" / name.removeprefix("_scene_")
-    for asset, count, _, _ in CITY_LAYOUTS:
+    source_layouts = CITY_LAYOUTS
+    if name == NORTH_SCENE:
+        source_layouts = (("ambient_aircraft", 14, 4, 26),) + CITY_LAYOUTS[:2]
+        if {path.name for path in (scene_directory / "actors").glob("*.gbsres")} != {
+                asset + "_loader.gbsres" for asset, _, _, _ in source_layouts}:
+            errors.append(f"{name}: declared North actors must be exactly aircraft/fleet/civilians, without boat or Queen")
+    for asset, count, _, _ in source_layouts:
         resource = json.loads((scene_directory / "actors" / (asset + "_loader.gbsres")).read_text())
         native = json.loads((GAME / "project/assets/sprites" / (asset + ".png.gbsres")).read_text())
         index = wanted.index("_sprite_" + asset)
@@ -286,7 +302,8 @@ def inspect_details(rom: bytes, symbols: dict[str, int], require_streetlife: boo
             rows = read(rom, pointer, scene[6] * 3)
             extra = [far(rows[index:index + 3]) for index in range(0, len(rows), 3)]
         scene_assets = [player] + extra
-        wanted = {symbols[COURIER], symbols[AIRCRAFT]} | {symbols[name] for name in city_names}
+        wanted = {symbols[COURIER], symbols[AIRCRAFT]} | {
+            symbols[asset] for asset in city_names if asset in city_scene_assets(name)}
         if name in QUEEN_SCENES:
             wanted.add(symbols[QUEEN])
         if set(scene_assets) != wanted or len(scene_assets) != len(wanted):
@@ -380,6 +397,32 @@ def self_test() -> int:
         broken = rom.copy();broken[rom_offset(pointer, len(rom)) + relative] = value
         assert inspect(bytes(broken), symbols), "malformed synthetic compiled data was accepted"
         checks += 1
+    if NORTH_SCENE in symbols:
+        # Supply the complete global city-art set while omitting the inland
+        # boat from North's compiled scene list. Other scenes retain all art.
+        for asset in STREETLIFE:
+            pair = tile_set(2), tile_set(2)
+            descriptor = bytearray(23)
+            descriptor[17:20], descriptor[20:23] = fp(pair[0]), fp(pair[1])
+            symbols[asset] = put(descriptor)
+        for name in SCENES:
+            extras = ([QUEEN] if name in QUEEN_SCENES else []) + [AIRCRAFT] + list(
+                STREETLIFE[:2] if name == NORTH_SCENE else STREETLIFE)
+            pointer = put(b"".join(fp(symbols[asset]) for asset in extras))
+            offset = rom_offset(symbols[name], len(rom))
+            rom[offset + 6] = len(extras)
+            rom[offset + 29:offset + 32] = fp(pointer)
+        assert not inspect(bytes(rom), symbols), "valid inland compiled sprite allocation rejected"
+        checks += 1
+        for extras in ([AIRCRAFT, STREETLIFE[0], STREETLIFE[1], STREETLIFE[2]],
+                       [AIRCRAFT, STREETLIFE[0], STREETLIFE[1], QUEEN],
+                       [AIRCRAFT, STREETLIFE[1]]):
+            pointer = put(b"".join(fp(symbols[asset]) for asset in extras))
+            broken = rom.copy();offset = rom_offset(symbols[NORTH_SCENE], len(rom))
+            broken[offset + 6] = len(extras)
+            broken[offset + 29:offset + 32] = fp(pointer)
+            assert inspect(bytes(broken), symbols), "North scene accepted boat/Queen allocation or missing fleet"
+            checks += 1
     print(f"PASS: {checks} synthetic compiled-aircraft gate cases")
     city_self_test()
     return 0
@@ -443,7 +486,7 @@ def city_self_test() -> None:
         expected[name] = poses, maximum
     scenes, actor_pointers = {}, {}
     for name in SCENES:
-        wanted = ([QUEEN] if name in QUEEN_SCENES else []) + [AIRCRAFT] + list(STREETLIFE)
+        wanted = city_loader_assets(name)
         actors = bytearray()
         for asset in wanted:
             actor = bytearray(56);actor[18] = 255;actor[38:41] = fp(symbols[asset])
@@ -452,10 +495,10 @@ def city_self_test() -> None:
         scene = bytearray(35);scene[3] = len(wanted);scene[32:35] = fp(pointer)
         scenes[name] = bytes(scene);symbols[name + "_actors"] = pointer
 
-    def check(data: bytes, names: dict) -> list[str]:
+    def check(data: bytes, names: dict, scene_data: dict | None = None) -> list[str]:
         errors, details = [], []
         inspect_city_poses(data, names, expected, errors, details)
-        for name, scene in scenes.items():
+        for name, scene in (scenes if scene_data is None else scene_data).items():
             inspect_city_loaders(data, names, name, scene, errors)
         return errors
 
@@ -488,6 +531,24 @@ def city_self_test() -> None:
     broken_symbols = dict(symbols);del broken_symbols[STREETLIFE[0] + "_metasprites"]
     assert check(bytes(rom), broken_symbols), "missing native living-city frame table accepted"
     checks += 1
+    if NORTH_SCENE in scenes:
+        # Three packed resource actors are distinct from the courier/player.
+        # An inland boat must fail both excess-count and substituted-owner cases.
+        assert city_loader_assets(NORTH_SCENE) == [AIRCRAFT, STREETLIFE[0], STREETLIFE[1]]
+        checks += 1
+        for asset in (STREETLIFE[2], QUEEN):
+            broken = rom.copy()
+            pointer = actor_pointers[NORTH_SCENE] + 2 * 56 + 38
+            start = rom_offset(pointer, len(broken))
+            broken[start:start + 3] = fp(symbols[asset])
+            assert check(bytes(broken), symbols), "North loader accepted a boat or Queen owner"
+            checks += 1
+        for count in (2, 4):
+            changed = dict(scenes)
+            scene = bytearray(scenes[NORTH_SCENE]);scene[3] = count
+            changed[NORTH_SCENE] = bytes(scene)
+            assert check(bytes(rom), symbols, changed), "North loader accepted missing/excess actor count"
+            checks += 1
     print(f"PASS: {checks} synthetic compiled living-city pose/loader gate cases")
 
 

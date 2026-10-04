@@ -57,7 +57,7 @@ void td_boats_bind(void) BANKED {
     UBYTE district=td_district_current(),index=(district==0||district==1||district==3)?5:4;
     actor_t *loader;metasprite_t hull,scratch;
     td_boats_reset();
-    if(district>=TD_DISTRICT_COUNT||actors_len<=index)return;
+    if(district==TD_DISTRICT_NORTH||district>=TD_DISTRICT_COUNT||actors_len<=index)return;
     loader=&actors[index];
     if(!loader->sprite.bank||!loader->sprite.ptr)return;
     td_boat.sprite=loader->sprite;td_boat.scene=current_scene;td_boat.base=loader->base_tile;td_boat.district=district;

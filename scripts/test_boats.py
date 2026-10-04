@@ -43,16 +43,19 @@ def check_integration():
     bind = function_body((ENGINE / "src/td_boats.c").read_text(), "td_boats_bind")
     assert bind.count("td_boats_reset();") == 1 and bind.index("td_boats_reset();") < bind.index("loader=&actors[index]"), \
         "Boat bind must reset before capturing the new scene loader"
+    assert "district==TD_DISTRICT_NORTH" in bind and \
+        bind.index("td_boats_reset();") < bind.index("district==TD_DISTRICT_NORTH") < bind.index("loader=&actors[index]"), \
+        "North must reset then return before unregistered actor4 capture"
     render = function_body((ENGINE / "src/core/actor.c").read_text(), "actors_render")
     assert render.count("td_boats_render();") == render.count("td_aircraft_render();") == 1
     assert render.index("td_boats_render();") < render.index("td_aircraft_render();"), \
         "Aircraft OAM admission must include the previously appended boat"
 
-    # The appended pedestrian scene still captures the empty resource loader,
-    # but must not invent an Island boat route or displace mainland loaders.
+    # Islands retain their existing empty loader. North has no boat loader:
+    # guard it before actor4 capture while preserving every mainland binding.
     world = json.loads((GAME / "content/districts/world.json").read_text())
     expected_scenes = ("toronto_city", "toronto_west", "toronto_high_park",
-                       "toronto_east", "toronto_port_lands", "toronto_islands")
+                       "toronto_east", "toronto_port_lands", "toronto_islands", "toronto_north")
     assert [(row["id"], row["scene"]) for row in world["districts"]] == \
         list(enumerate(expected_scenes)), "Review boat integration when registered district identities change"
     sprite_id = "22789632-122e-5a80-a195-5c8c6e7caeba"
@@ -62,6 +65,16 @@ def check_integration():
         scene = json.loads((directory / "scene.gbsres").read_text())
         actors = [json.loads(path.read_text()) for path in (directory / "actors").glob("*.gbsres")]
         loaders = [actor for actor in actors if actor["spriteSheetId"] == sprite_id]
+        if name == "toronto_north":
+            assert district == 6 and loaders == [], "North must not register a boat loader"
+            assert len(actors) == 3 and sorted(actor["_index"] for actor in actors) == [0, 1, 2], \
+                "North resource actors must remain aircraft/fleet/civilians only"
+            assert {actor["spriteSheetId"] for actor in actors} == {
+                "48d4a3f8-a6bc-56c9-8956-6e847f0b30f1",
+                "b6ae14b5-e2ae-55b7-b2e4-64cf56d4c012",
+                "e89b6d16-588b-5bfb-ae62-3fe34d537c86"}, \
+                "Review actual shared North loader identities"
+            continue
         assert len(loaders) == 1, f"{name}: capture exactly one authored boat loader"
         loader = loaders[0]
         expected_index = 4 if district in (0, 1, 3) else 3
@@ -78,7 +91,7 @@ def check_integration():
     art = json.loads((GAME / "project/original-art/ambient_boat_art.json").read_text())
     assert art["fictional_routes"] == [{"district": 0, "u": 560, "top": 840, "bottom": 896},
                                       {"district": 4, "u": 464, "top": 64, "bottom": 432}], \
-        "Core harbour and Port water lanes must stay unchanged; Islands have no boat route"
+        "Core harbour and Port water lanes must stay unchanged; Islands/North have no boat route"
     assert art["port_deck_clip_rectangles"] == [[416, 96, 96, 64], [416, 256, 96, 64]]
     assert art["water_full_hull_checks"] == 54528
 
@@ -101,7 +114,7 @@ def main():
         (GAME / "project/original-art/ambient_boat.png").read_bytes(), "Imported boat pixels differ"
     district_count = int(re.search(r"#define TD_DISTRICT_COUNT (\d+)",
                                   (ENGINE / "include/td_district.h").read_text()).group(1))
-    assert district_count == 6, "Review loader slots and water routes when districts change"
+    assert district_count == 7, "Review exact seven scene loader/water identities when districts change"
     compiler = shutil.which(os.environ.get("CC", "cc"))
     if not compiler:
         raise SystemExit("Host C compiler unavailable; boat checks did not run")
@@ -127,6 +140,7 @@ typedef int16_t WORD;
             (work / f"{name}.h").write_text('#include "host_boats.h"\n')
         (work / "td_district.h").write_text('#include "host_boats.h"\n' +
                                           f'#define TD_DISTRICT_COUNT {district_count}\n' +
+                                          '#define TD_DISTRICT_NORTH 6\n' +
                                           'UBYTE td_district_current(void);\n')
         (work / "host_boats.h").write_text("""#ifndef HOST_BOATS_H
 #define HOST_BOATS_H

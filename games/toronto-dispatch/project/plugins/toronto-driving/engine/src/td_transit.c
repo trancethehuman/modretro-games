@@ -10,7 +10,13 @@ typedef char td_transit_queen_timetable_matches_eight_stops[
     (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 64 &&
      TD_TRANSIT_QUEEN_HOP_SECONDS == 4) ? 1 : -1];
 
-static const UBYTE td_transit_train_stops[] = {0, 12, 13, 14, 15, 16, 17};
+/* Preserve all seven historical positions/phases; append the northbound
+ * Summerhill and St Clair endpoints to the fictional18-second service. */
+static const UBYTE td_transit_train_stops[] = {0, 12, 13, 14, 15, 16, 17, 59, 60};
+#define TD_TRANSIT_TRAIN_COUNT 9
+typedef char td_transit_train_phase_fits_period[
+    (sizeof(td_transit_train_stops)==TD_TRANSIT_TRAIN_COUNT &&
+     (TD_TRANSIT_TRAIN_COUNT-1)*2<18)?1:-1];
 static const UBYTE td_transit_bus_stops[] = {18, 16, 19};
 static const UBYTE td_transit_ferry_stops[] = {10, 20, 21, 22};
 static const char td_transit_labels[4][19] = {
@@ -23,7 +29,7 @@ static UBYTE td_transit_service_local(UBYTE origin) {
     UBYTE i;
     if (origin & 128) return TD_TRANSIT_INVALID;
     if (origin & 64) return origin == 80 ? TD_TRANSIT_BUS : TD_TRANSIT_INVALID;
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < TD_TRANSIT_TRAIN_COUNT; i++) {
         if (td_transit_train_stops[i] == origin) return TD_TRANSIT_TRAIN;
     }
     if (origin == 18 || origin == 19) return TD_TRANSIT_BUS;
@@ -43,7 +49,7 @@ static UBYTE td_transit_index_local(UBYTE service, UBYTE stop) {
     }
     if (service == TD_TRANSIT_TRAIN) {
         route = td_transit_train_stops;
-        count = 7;
+        count = TD_TRANSIT_TRAIN_COUNT;
     } else if (service == TD_TRANSIT_BUS) {
         route = td_transit_bus_stops;
         count = 3;
@@ -81,7 +87,7 @@ UBYTE td_transit_valid(UBYTE origin, UBYTE target) BANKED {
 
 UBYTE td_transit_count(UBYTE origin) BANKED {
     UBYTE service = td_transit_service_local(origin);
-    if (service == TD_TRANSIT_TRAIN) return 7;
+    if (service == TD_TRANSIT_TRAIN) return TD_TRANSIT_TRAIN_COUNT;
     if (service == TD_TRANSIT_BUS) return 3;
     if (service == TD_TRANSIT_FERRY) return (origin & 63) == 10 ? 3 : 1;
     if (service == TD_TRANSIT_STREETCAR) return TD_TRANSIT_QUEEN_COUNT;
@@ -90,7 +96,7 @@ UBYTE td_transit_count(UBYTE origin) BANKED {
 
 UBYTE td_transit_stop(UBYTE origin, UBYTE selection) BANKED {
     UBYTE service = td_transit_service_local(origin);
-    if (service == TD_TRANSIT_TRAIN && selection < 7) return td_transit_train_stops[selection];
+    if (service == TD_TRANSIT_TRAIN && selection < TD_TRANSIT_TRAIN_COUNT) return td_transit_train_stops[selection];
     if (service == TD_TRANSIT_BUS && selection < 3) return td_transit_bus_stops[selection];
     if (service == TD_TRANSIT_FERRY) {
         if ((origin & 63) == 10 && selection < 3) return td_transit_ferry_stops[selection + 1];

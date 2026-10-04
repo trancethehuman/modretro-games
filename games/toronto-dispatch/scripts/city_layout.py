@@ -14,6 +14,7 @@ ISLANDS = []
 ROAD_HALF, WALK_HALF = 24, 32
 WEST_PORTS = [64,288,400,528,640]
 EAST_PORTS = [64,400,528]  # Bloor/Danforth, Dundas and Queen; no King/Front bridge.
+NORTH_PORTS = [336,640]  # Spadina and Yonge; two bounded northern throats only.
 
 def interpolate(value, old, new):
     for i in range(len(old)-1):
@@ -25,6 +26,7 @@ def location(u,v):
     return interpolate(u,OLD_COLS,COLS),interpolate(v,OLD_ROWS,NEW_ROWS)
 
 def road(u,v,half=ROAD_HALF):
+    if 0<=v<24 and any(abs(u-c)<half for c in NORTH_PORTS):return True
     if 0<=u<24 and any(abs(v-r)<half for r in WEST_PORTS):return True
     if 992<u<1024 and any(abs(v-r)<half for r in EAST_PORTS):return True
     if not(24<=u<=992 and 24<=v<=808):return False

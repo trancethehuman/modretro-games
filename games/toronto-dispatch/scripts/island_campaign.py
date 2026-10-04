@@ -56,10 +56,12 @@ def historical_stop(stop):
 
 def validate_preserved_campaign(campaign):
     """Pin all 59/96 native fields; planning metadata may be refreshed."""
-    assert len(campaign["stops"]) == 59 and len(campaign["quests"]) == 96
+    # This historical oracle still pins exactly59/96; new appendages have
+    # a separate North64/104 gate and cannot broaden Island exceptions.
+    assert len(campaign["stops"]) >= 59 and len(campaign["quests"]) >= 96
     stops = [{field: historical_stop(stop).get(field, 0) for field in STOP_FIELDS}
-             for stop in campaign["stops"]]
-    quests = [{field: quest[field] for field in QUEST_FIELDS} for quest in campaign["quests"]]
+             for stop in campaign["stops"][:59]]
+    quests = [{field: quest[field] for field in QUEST_FIELDS} for quest in campaign["quests"][:96]]
     assert canonical_sha(stops) == STOPS_SHA256, "Existing 59 stop identities changed outside six geometry exceptions"
     assert canonical_sha(quests) == QUESTS_SHA256, "Existing 96 native contracts/completion ordinals changed"
 

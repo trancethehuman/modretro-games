@@ -23,23 +23,25 @@ static metasprite_t poses[3][2];
 static const metasprite_t *frames[3];
 static spritesheet_t sheet={3,frames,{8,&rom_tiles[0]},{9,&rom_tiles[1]}};
 static UBYTE obj_data[2][128][16];
-static unsigned long checks;
+static unsigned long checks,bank_reads;
+static UBYTE deactivations;
 static void require(int condition,const char *message){
     checks++;
     if(!condition){fprintf(stderr,"FAIL after %lu checks: %s\n",checks,message);exit(1);}
 }
 UBYTE td_district_current(void){return district;}
 void deactivate_actor(actor_t *actor){
+    deactivations++;
     actor->flags&=~ACTOR_FLAG_ACTIVE;
     actor->next=actors_inactive_head;actor->prev=NULL;
     if(actors_inactive_head)actors_inactive_head->prev=actor;
     actors_inactive_head=actor;
 }
 void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank){
-    require(bank>=7&&bank<=9,"Unexpected compiled ROM bank");memcpy(dest,src,length);
+    require(bank>=7&&bank<=9,"Unexpected compiled ROM bank");bank_reads++;memcpy(dest,src,length);
 }
 UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank){
-    require(bank==7,"Frame count must come from the captured metadata bank");return *src;
+    require(bank==7,"Frame count must come from the captured metadata bank");bank_reads++;return *src;
 }
 void set_sprite_data(UBYTE first,UBYTE count,const UBYTE *pixels){
     require(first==34&&count==2&&VBK_REG<2,"Boat upload escaped its independent scratch pair");
@@ -159,7 +161,7 @@ static void capacity_checks(void){
 }
 static void lifecycle_checks(void){
     UBYTE area,mode,index;UWORD period;td_state_t original;td_boat_route_t route,unchanged;
-    for(area=0;area<TD_DISTRICT_COUNT;area++){
+    for(area=0;area<TD_DISTRICT_NORTH;area++){
         fixture(area,0,0);bind_ok();original=td;
         memset(&route,0x5a,sizeof(route));unchanged=route;
         require(td_boat_route(&route)==(area==0||area==4),"Only Core and Port may have a boat route");
@@ -200,6 +202,49 @@ static void lifecycle_checks(void){
     fixture(0,0,0);bind_ok();td_boats_reset();td_boats_update(60);td_boats_render();
     require(!td_boat.bound&&!allocated_hardware_sprites,"Explicit reset retained an old boat binding");
 }
+/* A North scene has three resource loaders only. Even an old, valid Port
+ * actor4 must stay untouched: resetting boat state is the entire bind effect. */
+static void north_no_loader_checks(void){
+    UBYTE scenario,index;actor_t original_actors[21],*head;td_state_t original_td;
+    far_ptr_t original_scene;UBYTE original_len,old_deactivations,old_uploads;
+    unsigned long old_reads;td_boat_state_t zero;td_boat_route_t route,original_route;
+    memset(&zero,0,sizeof(zero));
+    for(scenario=0;scenario<4;scenario++){
+        fixture(4,0,0);bind_ok();
+        require(td_boat.bound,"North fixture must inherit a genuine bound Port boat");
+        district=TD_DISTRICT_NORTH;td.district=TD_DISTRICT_NORTH;
+        current_scene=(far_ptr_t){10,&scene_ids[TD_DISTRICT_NORTH]};
+        index=4;actors[index].sprite=(far_ptr_t){7,&sheet};actors[index].base_tile=32;
+        actors[index].flags=ACTOR_FLAG_ACTIVE|0x40;
+        actors_inactive_head=&actors[1];actors[1].next=&actors[index];
+        actors[index].prev=&actors[1];actors[index].next=&actors[5];actors[5].prev=&actors[index];
+        if(scenario==0)actors_len=4; /* actual authored scene has no slot4 */
+        if(scenario==1)actors_len=16; /* stale, valid Port slot4 before clones */
+        if(scenario==2){actors_len=16;actors[index].flags=0x40;} /* inactive linked */
+        if(scenario==3){actors_len=16;actors[index].sprite.ptr=(void *)(uintptr_t)1;} /* never read */
+        memcpy(original_actors,actors,sizeof(actors));original_td=td;head=actors_inactive_head;
+        original_scene=current_scene;original_len=actors_len;old_reads=bank_reads;
+        old_deactivations=deactivations;old_uploads=uploads;
+        td_boats_bind();
+        require(!memcmp(&td_boat,&zero,sizeof(zero)),"North bind must clear old boat state before returning");
+        require(!memcmp(actors,original_actors,sizeof(actors))&&actors_inactive_head==head&&actors_len==original_len,
+                "North bind read/detached/mutated an unregistered or stale actor4");
+        require(bank_reads==old_reads&&deactivations==old_deactivations,
+                "North no-loader bind performed sprite reads or actor-list deactivation");
+        require(!memcmp(&td,&original_td,sizeof(td))&&current_scene.bank==original_scene.bank&&current_scene.ptr==original_scene.ptr,
+                "North no-loader bind changed courier/save or loaded scene");
+        memset(&route,0x5a,sizeof(route));original_route=route;td_boat.district=TD_DISTRICT_NORTH;
+        require(!td_boat_route(&route)&&!memcmp(&route,&original_route,sizeof(route)),
+                "North must not invent a water lane or overwrite rejected route output");
+        /* Even malicious stale binding fields do not create a North route. */
+        td_boat.bound=1;td_boat.scene=current_scene;td_boat.phase=65535;
+        allocated_hardware_sprites=3;VBK_REG=1;td_boats_update(65535);td_boats_render();
+        require(td_boat.phase==65535&&allocated_hardware_sprites==3&&uploads==old_uploads&&VBK_REG==1&&bank_reads==old_reads,
+                "North update/render touched boat phase, ground OAM, VRAM or ROM");
+        require(!memcmp(actors,original_actors,sizeof(actors))&&!memcmp(&td,&original_td,sizeof(td)),
+                "North no-route update/render changed actors or saved game");
+    }
+}
 static void invalid_binding_checks(void){
     UBYTE scenario;
     for(scenario=0;scenario<14;scenario++){
@@ -236,7 +281,7 @@ static void window_checks(void){
 int main(void){
     require((UBYTE)((UWORD)(uintptr_t)shadow_OAM>>8)!=(UBYTE)((UWORD)(uintptr_t)shadow_OAM2>>8),
             "Host OAM buffers must occupy distinct hardware-page adapters");
-    pixel_checks();capacity_checks();lifecycle_checks();invalid_binding_checks();window_checks();
+    pixel_checks();capacity_checks();lifecycle_checks();north_no_loader_checks();invalid_binding_checks();window_checks();
     printf("Boat production C: %lu checks passed; native allocation/play and hardware remain separate.\n",checks);
     return 0;
 }

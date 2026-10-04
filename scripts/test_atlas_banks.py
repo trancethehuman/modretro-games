@@ -135,6 +135,10 @@ def appended_source_fixture(base):
     (engine / 'include/td_district.h').write_text(re.sub(r'#define TD_DISTRICT_COUNT \d+', '#define TD_DISTRICT_COUNT 5', original_header))
     world = json.loads((GAME / 'content/districts/world.json').read_text())
     world['districts'] = world['districts'][:4]
+    # This fixture deliberately predates North and tests a synthetic fifth
+    # append; use its historical display row, retaining actual local resources.
+    for district in world['districts']:
+        district['atlas_y'] = 0
     world['districts'].append({'id': 4, 'name': 'SYNTHETIC WATER', 'scene': 'toronto_fixture',
                               'symbol': 'scene_toronto_fixture', 'width_pixels': 1024, 'height_pixels': 976,
                               'atlas_x': 4056, 'atlas_y': 3160})
@@ -182,7 +186,9 @@ def appended_source_fixture(base):
         assert pixel(804, 804) == 3 and pixel(516, 804) == 1 and pixel(804, 700) == 2
         assert pixel(204, 204) == 3 and pixel(404, 204) == 0
         cases = []
-        changed = copy.deepcopy(world);changed['districts'][4]['atlas_y'] = 0;changed['districts'][4]['atlas_x'] = 3072
+        east = next(district for district in world['districts'] if district['scene'] == 'toronto_east')
+        changed = copy.deepcopy(world)
+        changed['districts'][4].update(atlas_x=east['atlas_x'], atlas_y=east['atlas_y'])
         cases.append((changed, 'overlap'))
         changed = copy.deepcopy(world);changed['districts'][0]['atlas_y'] = 8
         cases.append((changed, 'Existing atlas layout'))

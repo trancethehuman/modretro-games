@@ -1,0 +1,812 @@
+{
+  "schema_version": 1,
+  "status": "Authored source after registered geometry; exact-ROM campaign/native/hardware pending",
+  "scope": "Eight North contracts and five original public clients/station landings appended after unchanged59/96 prefix",
+  "base_stop_count": 59,
+  "base_quest_count": 96,
+  "result_stop_count": 64,
+  "result_quest_count": 104,
+  "preserved_base_stops_sha256": "de021d3932a406dc75772cf61e330ddb6cc7d56b6956de227ff6aa1f0f349c90",
+  "preserved_base_quests_sha256": "64c3f534bd12c03dd50c825691e555974cc9143384199ea8fb5f0f0edb6bde5e",
+  "preserved_base_stop_fields": [
+    "id",
+    "u",
+    "v",
+    "name",
+    "transit",
+    "district",
+    "reserved"
+  ],
+  "preserved_base_quest_fields": [
+    "id",
+    "title",
+    "brief",
+    "kind_id",
+    "required_vehicle",
+    "min_completed",
+    "route",
+    "time_limit_seconds",
+    "reward"
+  ],
+  "world_sha256": "e74e67e52a7158ef4f554b39d14405fc1c9dfd9f41e5f96104789e5a06d1b713",
+  "collision_resources": [
+    {
+      "district": 0,
+      "scene": "project/project/scenes/toronto_city/scene.gbsres",
+      "collision_sha256": "205f344c966e09bce0d8cd0f52dea33f6bc0b49c942b2cc257c3cf5104311645"
+    },
+    {
+      "district": 1,
+      "scene": "project/project/scenes/toronto_west/scene.gbsres",
+      "collision_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e"
+    },
+    {
+      "district": 2,
+      "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
+      "collision_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c"
+    },
+    {
+      "district": 3,
+      "scene": "project/project/scenes/toronto_east/scene.gbsres",
+      "collision_sha256": "c70340500318d89e5301a3cc94d51e96f534b0fcd6f33ab1ffb73c012e7e1764"
+    },
+    {
+      "district": 4,
+      "scene": "project/project/scenes/toronto_port_lands/scene.gbsres",
+      "collision_sha256": "5d20e96673670728837a481462b0f7e30d76e354579b1ea0427bc73545f73d1d"
+    },
+    {
+      "district": 5,
+      "scene": "project/project/scenes/toronto_islands/scene.gbsres",
+      "collision_sha256": "c2ba2ec0d1a6b0c0c8c8b8fe4015cb04917881b32f7ad4144f84cc4df66711cc"
+    },
+    {
+      "district": 6,
+      "scene": "project/project/scenes/toronto_north/scene.gbsres",
+      "collision_sha256": "5d8ea6a7309cdf6587a74961efd79988ef56f818f0d6e50ca561a90994308a51"
+    }
+  ],
+  "geography_metadata": {
+    "path": "content/districts/north_art.json",
+    "source_layout_sha256": "bcec25cc0bd402bfeef20de4e36ea3be68c38f47fadfcaef12117a3b932b8733",
+    "geometry_sha256": "f5e56c3106604a98e45ca5702a71dc3592016f25792eef679a66b780e81d0297",
+    "notice": "Source facts and original compressed art; no surveyed service doors"
+  },
+  "line1_append": [
+    59,
+    60
+  ],
+  "preserved_line1_prefix": [
+    0,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "new_line1_phases": [
+    14,
+    16
+  ],
+  "train_period_seconds": 18,
+  "train_fare": 3,
+  "forced_transit": false,
+  "foot_parking_walks": [
+    {
+      "stop_id": 61,
+      "full_half5_walking_pixels": 152
+    },
+    {
+      "stop_id": 63,
+      "full_half5_walking_pixels": 136
+    }
+  ],
+  "stops": [
+    {
+      "id": 59,
+      "u": 696,
+      "v": 416,
+      "name": "SUMMERHILL",
+      "transit": 1,
+      "district": 6,
+      "reserved": 0,
+      "foot_only": false,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking"
+    },
+    {
+      "id": 60,
+      "u": 688,
+      "v": 176,
+      "name": "ST CLAIR",
+      "transit": 1,
+      "district": 6,
+      "reserved": 0,
+      "foot_only": false,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking"
+    },
+    {
+      "id": 61,
+      "u": 296,
+      "v": 464,
+      "name": "CASA LOMA PARCEL",
+      "transit": 0,
+      "district": 6,
+      "reserved": 1,
+      "foot_only": true,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking",
+      "parking_anchor": {
+        "u": 336,
+        "v": 576
+      }
+    },
+    {
+      "id": 62,
+      "u": 704,
+      "v": 552,
+      "name": "SUMMERHILL STOCK",
+      "transit": 0,
+      "district": 6,
+      "reserved": 0,
+      "foot_only": false,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking"
+    },
+    {
+      "id": 63,
+      "u": 752,
+      "v": 256,
+      "name": "ROSEHILL POST",
+      "transit": 0,
+      "district": 6,
+      "reserved": 1,
+      "foot_only": true,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking",
+      "parking_anchor": {
+        "u": 640,
+        "v": 280
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "contract-97",
+      "title": "BALDWIN BOOK BOX",
+      "brief": [
+        "UNION BOOK PARCEL",
+        "STAIRS OR UPPER RD"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        61
+      ],
+      "time_limit_seconds": 220,
+      "reward": 180,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect the book box at Union"
+        },
+        {
+          "stop_id": 61,
+          "district": 6,
+          "objective": "Walk to the public Casa Loma Parcel handoff"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1344,
+        "required_full_foot5_parking_walk_pixels": 152,
+        "normalized_moving_seconds_fast": 18.3,
+        "normalized_moving_seconds_slow": 26.1,
+        "assumed_control_and_handoff_seconds": 5,
+        "modeled_nominal_slack_seconds": 188.9,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 61,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1344,
+            "full_foot5_parking_walk_pixels": 152,
+            "modeled_seams": [
+              "Spadina north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-98",
+      "title": "SUMMERHILL GLASS",
+      "brief": [
+        "FRAGILE GLASS KIT",
+        "BRAKE UNDER RAIL"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        5,
+        62
+      ],
+      "time_limit_seconds": 205,
+      "reward": 172,
+      "stages": [
+        {
+          "stop_id": 5,
+          "district": 0,
+          "objective": "Collect the glass kit at AGO / Grange"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Deliver intact at Summerhill Stock"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1192,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 13.8,
+        "normalized_moving_seconds_slow": 13.8,
+        "assumed_control_and_handoff_seconds": 5,
+        "modeled_nominal_slack_seconds": 186.2,
+        "legs": [
+          {
+            "from_stop": 5,
+            "to_stop": 62,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1192,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Spadina north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-99",
+      "title": "HILLTOP FILES",
+      "brief": [
+        "URGENT NORTH FILE",
+        "BIKE TO CITY HALL"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        62,
+        3
+      ],
+      "time_limit_seconds": 170,
+      "reward": 156,
+      "stages": [
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Collect the sealed files at Summerhill Stock"
+        },
+        {
+          "stop_id": 3,
+          "district": 0,
+          "objective": "Reach City Hall before the cutoff"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1096,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 10.8,
+        "normalized_moving_seconds_slow": 10.8,
+        "assumed_control_and_handoff_seconds": 5,
+        "modeled_nominal_slack_seconds": 154.2,
+        "legs": [
+          {
+            "from_stop": 62,
+            "to_stop": 3,
+            "from_district": 6,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 1096,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-100",
+      "title": "ST CLAIR STOCK",
+      "brief": [
+        "UNION STOCK LOAD",
+        "TRUCK TO ST CLAIR"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        0,
+        62,
+        60
+      ],
+      "time_limit_seconds": 220,
+      "reward": 202,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Load the stock at Union"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Handoff the first stock at Summerhill Stock"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Deliver the remaining stock at St Clair"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1744,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 24.5,
+        "normalized_moving_seconds_slow": 24.5,
+        "assumed_control_and_handoff_seconds": 10,
+        "modeled_nominal_slack_seconds": 185.5,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 62,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1288,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 456,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-101",
+      "title": "NORTH CONNECTION",
+      "brief": [
+        "TRAIN OR YONGE RD",
+        "PARK EDGE WALK"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        59,
+        62,
+        60,
+        63,
+        60,
+        0
+      ],
+      "time_limit_seconds": 330,
+      "reward": 252,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect the pocket relay at Union"
+        },
+        {
+          "stop_id": 59,
+          "district": 6,
+          "objective": "Handoff at Summerhill"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Collect the heritage-side packet"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Handoff at St Clair"
+        },
+        {
+          "stop_id": 63,
+          "district": 6,
+          "objective": "Walk to Rosehill Post"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Return to St Clair"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Deliver the relay at Union"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 4048,
+        "required_full_foot5_parking_walk_pixels": 272,
+        "normalized_moving_seconds_fast": 49.0,
+        "normalized_moving_seconds_slow": 72.6,
+        "assumed_control_and_handoff_seconds": 30,
+        "modeled_nominal_slack_seconds": 227.4,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 59,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1416,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 59,
+            "to_stop": 62,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 224,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 456,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 60,
+            "to_stop": 63,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 152,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 63,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 152,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 60,
+            "to_stop": 0,
+            "from_district": 6,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 1648,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-102",
+      "title": "NORTH PICKUPS",
+      "brief": [
+        "NORTH PASSENGERS",
+        "KEEP CAR READY"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        62,
+        60,
+        17,
+        0
+      ],
+      "time_limit_seconds": 255,
+      "reward": 230,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Start the car run at Union"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Handoff at Summerhill Stock"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Stop at St Clair"
+        },
+        {
+          "stop_id": 17,
+          "district": 0,
+          "objective": "Stop at Bloor-Yonge"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Finish at Union"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 3392,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 39.3,
+        "normalized_moving_seconds_slow": 39.3,
+        "assumed_control_and_handoff_seconds": 20,
+        "modeled_nominal_slack_seconds": 195.7,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 62,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1288,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 456,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 60,
+            "to_stop": 17,
+            "from_district": 6,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 912,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 17,
+            "to_stop": 0,
+            "from_district": 0,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 736,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-103",
+      "title": "ROSEHILL SIGNED",
+      "brief": [
+        "SIGNED PARK PAPERS",
+        "RETURN TO DESK"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        62,
+        61,
+        63,
+        62
+      ],
+      "time_limit_seconds": 310,
+      "reward": 212,
+      "stages": [
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Collect the papers at Summerhill Stock"
+        },
+        {
+          "stop_id": 61,
+          "district": 6,
+          "objective": "Walk to the Casa Loma Parcel handoff"
+        },
+        {
+          "stop_id": 63,
+          "district": 6,
+          "objective": "Walk to Rosehill Post"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Return the original papers to Summerhill Stock"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 2096,
+        "required_full_foot5_parking_walk_pixels": 576,
+        "normalized_moving_seconds_fast": 39.9,
+        "normalized_moving_seconds_slow": 52.1,
+        "assumed_control_and_handoff_seconds": 15,
+        "modeled_nominal_slack_seconds": 242.9,
+        "legs": [
+          {
+            "from_stop": 62,
+            "to_stop": 61,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 776,
+            "full_foot5_parking_walk_pixels": 152,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 61,
+            "to_stop": 63,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 984,
+            "full_foot5_parking_walk_pixels": 288,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 63,
+            "to_stop": 62,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 336,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-104",
+      "title": "RIDGE PARCEL ROUND",
+      "brief": [
+        "SMALL PARCEL ROUND",
+        "TWO FOOT HANDOFFS"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        61,
+        62,
+        63
+      ],
+      "time_limit_seconds": 260,
+      "reward": 195,
+      "stages": [
+        {
+          "stop_id": 61,
+          "district": 6,
+          "objective": "Collect the parcel at the public Casa Loma edge"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Handoff at Summerhill Stock"
+        },
+        {
+          "stop_id": 63,
+          "district": 6,
+          "objective": "Walk to Rosehill Post"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1112,
+        "required_full_foot5_parking_walk_pixels": 288,
+        "normalized_moving_seconds_fast": 20.6,
+        "normalized_moving_seconds_slow": 27.0,
+        "assumed_control_and_handoff_seconds": 10,
+        "modeled_nominal_slack_seconds": 223.0,
+        "legs": [
+          {
+            "from_stop": 61,
+            "to_stop": 62,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 776,
+            "full_foot5_parking_walk_pixels": 152,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 63,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 336,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    }
+  ],
+  "duration_target_minutes": 120,
+  "duration_verified": false,
+  "duration_notice": "Counts, route distances, deadlines and waiting do not establish two enjoyable human hours.",
+  "compatibility_notice": "Requires seven scenes/savev10 same58 bytes with explicit oldv9 caps/import; preserve16 completion bytes and all old IDs. IDs59/60 only enter Line1; nontransit61/62/63 never alias service IDs."
+}

@@ -83,12 +83,24 @@ def fixture_header(registered_islands=True):
     require(len(count) == 1 and len(districts) == int(count[0]) and
             [district["id"] for district in districts] == list(range(len(districts))),
             "Atlas oracle requires the actual registered district order/count.")
+    # The accepted northern append translates only atlas display coordinates.
+    # Synthetic appended-source fixtures may retain either historical layout;
+    # all four original identities and their relative placement remain fixed.
+    display_y = 976 if districts and districts[0]['atlas_y'] == 976 else 0
     require(4 <= len(districts) <= 32 and
             [district['scene'] for district in districts[:4]] ==
             ['toronto_city', 'toronto_west', 'toronto_high_park', 'toronto_east'] and
             [(district['atlas_x'], district['atlas_y']) for district in districts[:4]] ==
-            [(2048, 0), (1024, 0), (0, 0), (3072, 0)],
+            [(2048, display_y), (1024, display_y), (0, display_y), (3072, display_y)],
             "Existing atlas district identities and placement must remain append-only.")
+    if registered_islands:
+        require(len(districts) >= 7 and
+                [d['scene'] for d in districts[4:7]] ==
+                ['toronto_port_lands', 'toronto_islands', 'toronto_north'] and
+                [(d['atlas_x'], d['atlas_y']) for d in districts[:7]] ==
+                [(2048, 976), (1024, 976), (0, 976), (3072, 976),
+                 (3072, 1952), (2048, 1952), (2048, 0)],
+                'North must append at district 6 with only the accepted 976-pixel display translation.')
     actual_width = max(district["atlas_x"] + district["width_pixels"] for district in districts) // 8
     actual_height = max(district["atlas_y"] + district["height_pixels"] for district in districts) // 8
     require(20 <= (actual_width + 7) // 8 <= 255 and 12 <= (actual_height + 7) // 8 <= 255,
@@ -120,6 +132,22 @@ def fixture_header(registered_islands=True):
                 'Atlas water source must be a confined public content path.')
         metadata = json.loads((GAME / metadata_path).read_text())
         require(metadata['dimensions'] == [1024, 976], "Atlas oracle water metadata dimensions disagree.")
+        if scene_name == 'toronto_north':
+            # These fixed source probes independently distinguish public roads,
+            # foot-only steps/curbs, closed grounds and the small Yellow Creek.
+            # They do not import the art generator or infer driving from water.
+            for x, y, flag, wet in (
+                    (640, 200, 0, False), (336, 952, 0, False),
+                    (336, 532, 16, False), (264, 488, 16, False),
+                    (296, 464, 16, False), (752, 256, 16, False),
+                    (568, 704, 16, False), (828, 204, 15, True),
+                    (812, 204, 16, False), (844, 204, 16, False),
+                    (828, 188, 16, False), (828, 468, 15, False),
+                    (900, 700, 15, False), (244, 356, 15, False),
+                    (372, 356, 15, False), (600, 464, 15, False)):
+                require(collisions[(y // 8) * 128 + x // 8] == flag and
+                        authored_water(scene_name, (x, y), metadata) == wet,
+                        f'North atlas source probe changed at ({x},{y}).')
         offset_x, offset_y = district["atlas_x"] // 8, district["atlas_y"] // 8
         name = district["name"]
         require(name.isascii() and len(name) <= 18, "District name must fit the native 19-byte output.")
@@ -147,7 +175,7 @@ def fixture_header(registered_islands=True):
     if registered_islands:
         island = next((d for d in districts if d['id'] == 5), None)
         require(island is not None and island['scene'] == 'toronto_islands' and
-                (island['atlas_x'], island['atlas_y']) == (2048, 976),
+                (island['atlas_x'], island['atlas_y']) == (2048, 1952),
                 'Fuller Islands must occupy its registered north-up cell without a road seam.')
         island_art = json.loads((GAME / island['art_source']).read_text())
         require(authored_water('toronto_islands', (20, 20), island_art) and

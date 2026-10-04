@@ -31,12 +31,12 @@
     "time_limit_seconds",
     "reward"
   ],
-  "world_sha256": "2c65f19d445c36bd73be2032c65bacc0c3950a61f4f8764566ef2fc0dcf71d4a",
+  "world_sha256": "e74e67e52a7158ef4f554b39d14405fc1c9dfd9f41e5f96104789e5a06d1b713",
   "collision_resources": [
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "0ef23f9cbb3e4d19cb72b27c6734c9eca6b80706398290281ad8163ac3c6af0f"
+      "collision_sha256": "205f344c966e09bce0d8cd0f52dea33f6bc0b49c942b2cc257c3cf5104311645"
     },
     {
       "district": 1,
@@ -62,6 +62,11 @@
       "district": 5,
       "scene": "project/project/scenes/toronto_islands/scene.gbsres",
       "collision_sha256": "c2ba2ec0d1a6b0c0c8c8b8fe4015cb04917881b32f7ad4144f84cc4df66711cc"
+    },
+    {
+      "district": 6,
+      "scene": "project/project/scenes/toronto_north/scene.gbsres",
+      "collision_sha256": "5d8ea6a7309cdf6587a74961efd79988ef56f818f0d6e50ca561a90994308a51"
     }
   ],
   "geography_metadata": [

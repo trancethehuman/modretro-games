@@ -19,7 +19,7 @@ static void expect_value(unsigned actual, unsigned expected, const char *operati
 static unsigned oracle_service(unsigned origin) {
     if (origin == 80) return 2;
     if (origin >= 64) return 0;
-    if (origin == 0 || (origin >= 12 && origin <= 17)) return 1;
+    if (origin == 0 || (origin >= 12 && origin <= 17) || origin == 59 || origin == 60) return 1;
     if (origin == 18 || origin == 19) return 2;
     if (origin == 10 || (origin >= 20 && origin <= 22)) return 3;
     if (origin >= 43 && origin <= 50) return 4;
@@ -30,6 +30,8 @@ static int oracle_index(unsigned service, unsigned stop) {
     if (service == 1) {
         if (stop == 0) return 0;
         if (stop >= 12 && stop <= 17) return (int)stop - 11;
+        if (stop == 59) return 7;
+        if (stop == 60) return 8;
     } else if (service == 2) {
         if (stop == 18) return 0;
         if (stop == 16) return 1;
@@ -54,7 +56,7 @@ static unsigned oracle_valid(unsigned origin, unsigned target) {
 
 static unsigned oracle_count(unsigned origin) {
     switch (oracle_service(origin)) {
-        case 1: return 7;
+        case 1: return 9;
         case 2: return 3;
         case 3: return (origin & 63) == 10 ? 3 : 1;
         case 4: return 8;
@@ -63,7 +65,7 @@ static unsigned oracle_count(unsigned origin) {
 }
 
 static unsigned oracle_stop(unsigned origin, unsigned selection) {
-    static const unsigned train[] = {0, 12, 13, 14, 15, 16, 17};
+    static const unsigned train[] = {0, 12, 13, 14, 15, 16, 17, 59, 60};
     static const unsigned bus[] = {18, 16, 19};
     if (selection >= oracle_count(origin)) return 255;
     switch (oracle_service(origin)) {
@@ -162,7 +164,8 @@ static void test_every_route_and_phase(void) {
 }
 
 static void test_complete_uword_clock(void) {
-    static const unsigned pairs[][2] = {{0,17}, {80,19}, {22,10}, {43,50}, {50,43}};
+    static const unsigned pairs[][2] = {{0,17}, {80,19}, {22,10}, {43,50}, {50,43},
+                                      {59,0}, {60,59}, {0,60}};
     unsigned pair, clock;
     for (pair = 0; pair < sizeof(pairs) / sizeof(pairs[0]); pair++) {
         unsigned origin = pairs[pair][0], target = pairs[pair][1];
@@ -187,12 +190,12 @@ static void test_complete_uword_clock(void) {
 }
 
 static void test_booking_fares(void) {
-    /* The future enum is queried directly. District5 has no registered scene
-       in this milestone; these tests do not fabricate ferry destinations. */
+    /* Islands retain their no-job, stranded-cash return assistance.
+       North never receives that ferry exemption. */
     static const unsigned fares[]={0,3,2,4,3};
-    static const unsigned jobs[]={255,0,95,254};
-    static const unsigned districts[]={0,1,2,3,4,5,255};
-    static const unsigned targets[]={10,0,20,21,22,63,64,255};
+    static const unsigned jobs[]={255,0,95,96,103,254};
+    static const unsigned districts[]={0,1,2,3,4,5,6,255};
+    static const unsigned targets[]={10,0,20,21,22,59,60,63,64,255};
     for(unsigned origin=0;origin<256;origin++)for(unsigned cash=0;cash<=4;cash++)
         for(unsigned job=0;job<sizeof(jobs)/sizeof(jobs[0]);job++)
             for(unsigned district=0;district<sizeof(districts)/sizeof(districts[0]);district++)

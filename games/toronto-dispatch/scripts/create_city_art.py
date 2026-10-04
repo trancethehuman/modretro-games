@@ -26,8 +26,9 @@ def main(background_only=False):
         d.line((start,v-ROAD_HALF-4,end-1,v-ROAD_HALF-4),fill=COLORS[0]);d.line((start,v+ROAD_HALF+4,end-1,v+ROAD_HALF+4),fill=COLORS[0])
         for u in range(32,end,32):box(u,v,8,1,3)
     for u in COLS:
-        box(u-WALK_HALF,24,WALK_HALF*2,792,3);box(u-ROAD_HALF,24,ROAD_HALF*2,792,1)
-        d.line((u-ROAD_HALF-4,24,u-ROAD_HALF-4,815),fill=COLORS[0]);d.line((u+ROAD_HALF+4,24,u+ROAD_HALF+4,815),fill=COLORS[0])
+        top=0 if u in NORTH_PORTS else 24
+        box(u-WALK_HALF,top,WALK_HALF*2,816-top,3);box(u-ROAD_HALF,top,ROAD_HALF*2,816-top,1)
+        d.line((u-ROAD_HALF-4,top,u-ROAD_HALF-4,815),fill=COLORS[0]);d.line((u+ROAD_HALF+4,top,u+ROAD_HALF+4,815),fill=COLORS[0])
         for v in range(32,816,32):box(u,v,1,8,3)
     box(872,24,40,792,2)
     for v in BRIDGES:

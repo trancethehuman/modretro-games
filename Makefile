@@ -7,6 +7,9 @@ check:
 	python3 scripts/test_atlas_banks.py
 	python3 scripts/check_repository.py
 	python3 games/toronto-dispatch/scripts/check_campaign.py
+	python3 scripts/check_north_campaign.py
+	python3 games/toronto-dispatch/scripts/create_north_jobs.py --check
+	python3 games/toronto-dispatch/scripts/create_north_art.py --check
 	python3 scripts/check_island_legacy.py
 	python3 scripts/check_island_campaign.py
 	python3 games/toronto-dispatch/scripts/create_island_art.py --check

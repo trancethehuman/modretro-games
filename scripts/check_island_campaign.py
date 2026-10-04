@@ -46,14 +46,16 @@ def check():
     require(hashlib.sha256(raw).hexdigest() == 'ed3354c8f0e726f369c86f8f36f4373427a56d2d920bbca078252bed8890053b', 'Immutable 59/96 source oracle changed')
     old = json.loads(raw)
     campaign = json.loads((GAME / 'content/campaign.json').read_text())
-    require((len(campaign['stops']), len(campaign['quests'])) == (59, 96), 'Campaign counts changed')
-    for stop, expected in zip(campaign['stops'], old['stops']):
+    require((len(campaign['stops']), len(campaign['quests'])) == (64,104), 'Only the bounded North append is accepted')
+    from create_north_jobs import preserved_prefix as preserved_north_prefix
+    preserved_north_prefix(campaign)
+    for stop, expected in zip(campaign['stops'][:59], old['stops']):
         fields = {key: stop.get(key, 0) for key in STOP_FIELDS}
         if stop['id'] in NEW:
             require((fields['u'], fields['v'], fields['district']) == NEW[stop['id']], 'Current Island geometry differs from independent expected triple')
             fields.update(zip(('u', 'v', 'district'), OLD[stop['id']]))
         require(fields == expected, 'A field other than the six declared geometries changed')
-    require([{key: quest[key] for key in JOB_FIELDS} for quest in campaign['quests']] == old['quests'], 'A native job/brief/reward/deadline/completion ordinal changed')
+    require([{key: quest[key] for key in JOB_FIELDS} for quest in campaign['quests'][:96]] == old['quests'], 'A native job/brief/reward/deadline/completion ordinal changed')
     validate_preserved_campaign(campaign)
     for index in OLD:
         for geometry in (OLD[index], NEW[index]):
@@ -66,7 +68,7 @@ def check():
                              ('foot_only', True), ('parking_anchor', {'u': 320, 'v': 280})):
             bad = {**stop, field: value}
             rejects(lambda bad=bad: historical_stop(bad), f'Island exception accepted altered {index}/{field}')
-    for index, stop in enumerate(campaign['stops']):
+    for index, stop in enumerate(campaign['stops'][:59]):
         if index not in OLD:
             bad = copy.deepcopy(campaign)
             bad['stops'][index]['u'] += 1
