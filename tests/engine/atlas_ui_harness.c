@@ -340,7 +340,8 @@ static void test_dispatch_board_itineraries(void) {
         unsigned writes=window_writes;td_ui_draw();
         expect(window_writes==writes,"an unchanged board page reuses its actual row cache without redundant tile writes");
         td.complete[job>>3]|=1u<<(job&7);td_ui_draw();expect_window_text(16,"COMPLETE / REPLAY","completed itinerary keeps its replay state");
-        td.complete[job>>3]&=~(1u<<(job&7));td.done=offer->min_done;td_ui_draw();
+        td.complete[job>>3]&=~(1u<<(job&7));td.done=offer->min_done;
+        td.vehicle=offer->vehicle==TD_NONE?0:offer->vehicle;td.onfoot=0;td_ui_draw();
         expect_window_text(16,"READY TO ACCEPT","unlock boundary keeps the current itinerary ready");
         if(offer->min_done) {
             td.done=offer->min_done-1;td_ui_draw();sprintf(expected,"NEEDS %u COMPLETED",offer->min_done);
@@ -404,6 +405,51 @@ static void test_dispatch_active_board_captions(void) {
     expect_board_preserves_game(&before);
     unsigned writes=window_writes;td_ui_draw();
     expect(window_writes==writes,"unchanged active status and controls reuse their native text cache");
+}
+
+static void test_dispatch_vehicle_readiness(void) {
+    for(unsigned job=0;job<TD_QUESTS;job++) {
+        const td_job_t *offer=&host_ui_jobs[job];
+        for(unsigned vehicle=0;vehicle<4;vehicle++)for(unsigned foot=0;foot<2;foot++) {
+            for(unsigned context=0;context<6;context++) {
+                if(context==1&&!offer->min_done)continue;
+                reset_case();td.mode=TD_BOARD;td.menu=job;td_offer=*offer;
+                td.vehicle=vehicle;td.onfoot=foot;td.done=TD_QUESTS;
+                td.job=TD_NONE;td.stage=1;td.msg=2;
+                char expected[40];
+                if(context==1) {
+                    td.done=offer->min_done-1;
+                    sprintf(expected,"NEEDS %u COMPLETED",offer->min_done);
+                }else if(context==2) {
+                    td.complete[job>>3]|=1u<<(job&7);
+                    strcpy(expected,"COMPLETE / REPLAY");
+                }else if(context==3) {
+                    td.job=job;td_job=*offer;
+                    sprintf(expected,"CURRENT STOP 2/%u",offer->count);
+                }else if(context>=4) {
+                    td.job=job?0:1;td_job=host_ui_jobs[td.job];
+                    if(context==5)td.complete[job>>3]|=1u<<(job&7);
+                    strcpy(expected,context==5?"COMPLETE / PREVIEW":"READY AFTER THIS JOB");
+                }else {
+                    const char *required[]={"car","truck","motorcycle","scooter"};
+                    const char *occupied=foot?"foot":required[vehicle];
+                    strcpy(expected,offer->vehicle!=TD_NONE&&strcmp(occupied,required[offer->vehicle])?
+                        "WRONG VEHICLE":"READY TO ACCEPT");
+                }
+                game_snapshot_t before=snapshot_game();td_ui_draw();
+                expect_window_text(16,expected,"authored vehicle/foot eligibility has clear feedback without overriding locks, completion or active-job resume");
+                expect_window_text(15,td.job==TD_NONE?"A ACCEPT  B BACK":"A RESUME  B BACK",
+                    "vehicle warning preserves actual accept or resume controls");
+                expect_board_preserves_game(&before);expect_text_screen_safe();
+                unsigned writes=window_writes;td_ui_draw();
+                expect(window_writes==writes,"unchanged vehicle/foot status reuses the native row cache");
+            }
+        }
+    }
+    reset_case();td.mode=TD_ROAM;td.msg=2;
+    game_snapshot_t before=snapshot_game();td_ui_draw();
+    expect_window_text(0,"WRONG VEHICLE","the shared warning preserves the existing roaming interaction message");
+    expect_game_unchanged(&before);expect_three_row_hud_safe();
 }
 
 static void result_fixture(unsigned job,UBYTE condition,UWORD left,UWORD previous,UBYTE done) {
@@ -658,6 +704,7 @@ static void test_ferry_offer_budgets(void){
             reset_case();td.mode=TD_BOARD;td.menu=job;td_offer=*offer;td_board_route=1;
             td.job=context==2?job:TD_NONE;td_job=*offer;td.stage=offer->count-1;
             td.done=context==1?0:TD_QUESTS;td.cash=3;
+            td.vehicle=offer->vehicle==TD_NONE?0:offer->vehicle;td.onfoot=0;
             if(context==3)td.complete[job>>3]|=1u<<(job&7);
             td_get_stop(offer->route[td_board_route],&td_cursor);
             game_snapshot_t before=snapshot_game();td_ui_draw();char expected[40],brief[19];
@@ -1059,6 +1106,9 @@ int main(void) {
     printf("Ferry clarity UI regressions: %u checks, %u failures.\n",checks-ferry_checks,failures-ferry_failures);
     test_appended_district_focus_and_holes();
     test_dispatch_board_itineraries();test_dispatch_active_board_captions();test_contract_payment_result();
+    unsigned vehicle_checks=checks,vehicle_failures=failures;
+    test_dispatch_vehicle_readiness();
+    printf("Dispatch vehicle UI regressions: %u checks, %u failures.\n",checks-vehicle_checks,failures-vehicle_failures);
     test_pause_audio_labels_and_map_cache();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;

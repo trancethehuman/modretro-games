@@ -28,6 +28,7 @@ static UBYTE td_map_camera_settings,td_map_actor_count,td_map_hidden[TD_ACTORS];
 static UWORD td_map_camera_x,td_map_camera_y;
 static UBYTE td_ui_mode=255;
 static char td_line[40];
+static const char td_wrong_vehicle[]="WRONG VEHICLE";
 static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
 static const char * const td_chapters[]={
     "01/13 FIRST SHIFT",
@@ -209,7 +210,7 @@ void td_ui_draw(void) BANKED {
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         fare=td.msg==4&&td.district==TD_DISTRICT_ISLANDS&&td.job!=TD_NONE&&td.cash<4;
         if(td.msg){
-            const char *m[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE"};
+            const char *m[]={"","STOP TO INTERACT",td_wrong_vehicle,"JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE"};
             td_row(0,fare?"NO FARE: START MENU":td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
         }else {
             if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
@@ -264,7 +265,9 @@ void td_ui_draw(void) BANKED {
         }else if(td.menu<TD_QUESTS&&(td.complete[td.menu>>3]&(1<<(td.menu&7)))){
             td_row(16,td.job!=TD_NONE?"COMPLETE / PREVIEW":"COMPLETE / REPLAY");
         }else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}
-        else td_row(16,td.job!=TD_NONE?"READY AFTER THIS JOB":"READY TO ACCEPT");
+        else td_row(16,td.job!=TD_NONE?"READY AFTER THIS JOB":
+            td.menu<TD_QUESTS&&td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)?
+            td_wrong_vehicle:"READY TO ACCEPT");
         td_row(14,"L/R JOB U/D STOPS");td_row(15,td.job!=TD_NONE?"A RESUME  B BACK":"A ACCEPT  B BACK");
         /* These nine preserved rounds include a normal return from the last
            Island; the longest rounds pay before that final return fare. */

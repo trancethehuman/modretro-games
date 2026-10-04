@@ -1,6 +1,14 @@
 # Native build and preview
 
-## Current ferry-clarity build
+## Current vehicle-feedback build
+
+Selected local ROM **`toronto-dispatch-vehicle-feedback.gbc`** is **1,048,576 bytes**, SHA-256 **`7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`**. Official build with matching debug artifacts succeeds in **59,690 ms**; NOI is `db351f2bc6c419fc5cc3f847ff9858fd5e273cf23ca211c80a147f9d12accaeb`, source fingerprint `27513dd418728409d094aada3bf7dd5e65806bb186a27b6db2ecb06853fc541d`. Full `make check` passes, including 456,380 focused vehicle UI assertions within 43,680,134 total UI checks. Only `td_ui.c` changes among 206 native inputs. [Compiled review](DISPATCH_VEHICLE_BUILD_AUDIT.json) passes 602 focused assertions with zero findings. UI/main/helper banks leave 150/10/1 bytes; the shared warning, 52-byte UI frame, WRAM addresses, save v10 / 58 bytes and 1,096 static reserve are preserved. Deepest stack remains unmeasured.
+
+The [fresh closed replay](NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes four unique jobs 0/2/1/3 with credits 109/123/102/141, checks the visible car-to-truck warning and unchanged rejection, then accepts and completes all four freight stops in the required truck. A funded H3 capture charges 225 from 265, leaving 40, and a genuine in-worker reset restores saved progression. No checkpoint or SRAM history is imported. The older a935 [feedback finding](NATIVE_FERRY_CAMPAIGN_FEEDBACK_FINDING.json) remains needs-review; its earlier ferry-recovery record stays separate. Wider campaign, two enjoyable human hours, browser and hardware remain pending.
+
+Generated ROMs, debug artifacts, raw journals, checkpoints and loading ZIPs remain outside Git. Package only after committing the matching native inputs, using the exact ROM SHA above and freezing instructions/licence/notices at that source commit. Retain all prior binaries and ZIPs unchanged; a local package is separate from a GitHub binary release.
+
+## Retained ferry-clarity build
 
 Selected local ROM **`toronto-dispatch-ferry-clarity.gbc`** is **1,048,576 bytes**, SHA-256 **`a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b`**. Official build with matching debug artifacts succeeds in **56,197 ms**; NOI is `7257787183e0d53689b53a10f043d8694703f95ce278fbc1ef9eb0b0abed4c94`, source fingerprint `cc8e09b92f8debf7ec8769142dea7de18f30be73be1aebd8192eb8078cae5515`. [Focused source/compiled audit](FERRY_CLARITY_BUILD_AUDIT.json) passes 1,116 checks, preserving 205 of 206 inputs and changing only the UI. Full `make check` passes, including 51,257 new ferry UI checks. There are no new saved fields or fare/schedule/penalty changes.
 

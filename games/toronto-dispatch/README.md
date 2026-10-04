@@ -1,12 +1,12 @@
 # Toronto Dispatch
 
-A north-up, top-down pixel-art courier sandbox for ModRetro Chromatic / Game Boy Color. Drive with momentum and braking, park and walk, or pay for scheduled transit while delivering timed jobs through seven compressed Toronto districts. The latest candidate adds clear ferry planning and recovery guidance; older campaign records retain their original ROMs.
+A north-up, top-down pixel-art courier sandbox for ModRetro Chromatic / Game Boy Color. Drive with momentum and braking, park and walk, or pay for scheduled transit while delivering timed jobs through seven compressed Toronto districts. The latest candidate explains vehicle-specific job eligibility; older campaign and ferry records retain their original ROMs.
 
 ## Play and install
 
-Latest local playtest candidate is `project/build/toronto-dispatch-ferry-clarity.gbc`, **1,048,576 bytes**, SHA-256 **`a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b`**. Official build, full source checks and focused compiled review pass. Follow the [Chromatic loading guide](docs/LOADING.md), [build record](docs/BUILD.md) and [fresh native record](docs/NATIVE_FERRY_CLARITY.json). This exact ROM verifies ferry hints, paid travel, low-cash cancellation/free return, original-car walking/entry, one fresh delivery and in-worker reset. Its predecessor's police/three-job outcomes stay separate. Generated ROMs stay out of Git. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) and older local packages retain their own identities.
+Latest local playtest candidate is `project/build/toronto-dispatch-vehicle-feedback.gbc`, **1,048,576 bytes**, SHA-256 **`7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`**. Official build, full source checks and a fresh native four-job replay pass. Follow the [Chromatic loading guide](docs/LOADING.md), [build record](docs/BUILD.md) and [native record](docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json). This exact ROM checks truck eligibility/rejection/acceptance, four condition-scaled deliveries, a funded H3 fine and committed in-worker reset. The older a935 [feedback finding](docs/NATIVE_FERRY_CAMPAIGN_FEEDBACK_FINDING.json) stays needs-review. Generated ROMs stay out of Git. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) and older local packages retain their own identities.
 
-Prepared local `project/build/toronto-dispatch-ferry-clarity.zip` contains the tested ROM, checksums and loading instructions: **146,589 bytes**, SHA-256 `5d2b70221cd411902ad250ec34d35854a93f7a6a4010097c2712b9a050c4735d`, pinned to source `f71d07e39d4f5d61ae06b06468a094d628e8164e`. [BUILD.md](docs/BUILD.md) records its verification scope; the bundle remains local. The retained traffic ZIP still contains e4a9 and keeps its own [package audit](docs/RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json).
+Retained local `project/build/toronto-dispatch-ferry-clarity.zip` contains the tested ROM, checksums and loading instructions: **146,589 bytes**, SHA-256 `5d2b70221cd411902ad250ec34d35854a93f7a6a4010097c2712b9a050c4735d`, pinned to source `f71d07e39d4f5d61ae06b06468a094d628e8164e`. [BUILD.md](docs/BUILD.md) records its verification scope; the bundle remains local. The retained traffic ZIP still contains e4a9 and keeps its own [package audit](docs/RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json).
 
 | Action | Controls |
 | --- | --- |
@@ -20,7 +20,7 @@ Prepared local `project/build/toronto-dispatch-ferry-clarity.zip` contains the t
 | City map | Pause → Scroll City Map; D-pad pans, A centres job/booked stop/depot, Select changes focus, B returns |
 | Save / audio | Pause menu; Audio cycles music + effects, effects only and silent |
 
-When accepting a quest, review every stop and walking/return cue. An active preview shows CURRENT STOP separately from its browsed itinerary; A resumes the carried job without replacing it. Arrival alone does not advance a handoff: use Select. Mainland cars stay parked during transit and Island walking. Island offers show $8/$16/$24 ferry budgets; optional trips and fines need extra cash. If an active job cannot fund the return, follow Start → Cancel Active Job, then B at the dock for scheduled $0 assistance. Cancellation pays nothing and earns no completion; cancelling WAIT alone keeps the job active.
+When accepting a quest, review every stop and walking/return cue. An active preview shows CURRENT STOP separately from its browsed itinerary; A resumes the carried job without replacing it. An eligible incomplete vehicle-specific offer says WRONG VEHICLE when on foot or driving another vehicle. Occupying the required vehicle clears the warning; completed/locked/active previews retain their own status. Arrival alone does not advance a handoff: use Select. Mainland cars stay parked during transit and Island walking. Island offers show $8/$16/$24 ferry budgets; optional trips and fines need extra cash. If an active job cannot fund the return, follow Start → Cancel Active Job, then B at the dock for scheduled $0 assistance. Cancellation pays nothing and earns no completion; cancelling WAIT alone keeps the job active.
 
 ## City and jobs
 
@@ -30,11 +30,15 @@ Jobs include packages, fragile art, freight, signatures/returns and transit rela
 
 ![Core street traffic and courier](docs/native-right-hand-traffic/occupied-police-lane.png) ![St Clair on foot](docs/native-right-hand-traffic/st-clair-on-foot.png)
 
-Original 160 × 144 emulator frames from retained `e4a9…`: Core at frame 7,322 and St Clair at 13,648. Its [native record](docs/NATIVE_RIGHT_HAND_TRAFFIC.json) retains exact provenance. Current a935 frames and the low-cash return are in the separate [ferry recovery record](docs/NATIVE_FERRY_CLARITY.json).
+Original 160 × 144 emulator frames from retained `e4a9…`: Core at frame 7,322 and St Clair at 13,648. Its [native record](docs/NATIVE_RIGHT_HAND_TRAFFIC.json) retains exact provenance. Retained a935 frames and the low-cash return are in the separate [ferry recovery record](docs/NATIVE_FERRY_CLARITY.json).
 
 ## Verified scope
 
-Current `a935…` passes the official build, full `make check` and [focused compiled review](docs/FERRY_CLARITY_BUILD_AUDIT.json). Only UI changes among 206 native inputs; jobs, collision/art, fares, schedules, main/police/save bank bytes and save v10 / 58 are preserved. UI/gameplay/helper banks leave 122/10/1 bytes, with 1,096 static reserve and no peak-stack guarantee.
+Current `7ab28…` passes the official build, full `make check` and [focused compiled review](docs/DISPATCH_VEHICLE_BUILD_AUDIT.json). Independent compiled review passes 602 focused checks. Only `td_ui.c` changes among 206 native inputs, sharing an existing warning string without adding saved state. UI/main/helper banks leave 150/10/1 bytes, with unchanged 1,096 static reserve and no deepest-stack proof. Host UI regressions cover all authored vehicle/foot choices and preserve lock/completed/active priorities.
+
+Its [fresh closed native replay](docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes Market, Distillery, Art and four-stop freight: credits 109/123/102/141, done 4 and cash 265. The car correctly rejects truck work with a visible warning; the required truck then accepts it. A later funded H3 capture charges 225, leaving 40 with stopped speed and cleared attention sampled. Explicit save and genuine button reset restore committed progress. Comparable inputs deliberately retain disclosed controller mistakes; none of this is imported from the predecessor.
+
+Retained `a935…` passes the official build, full `make check` and [focused compiled review](docs/FERRY_CLARITY_BUILD_AUDIT.json). Only UI changes among 206 native inputs; jobs, collision/art, fares, schedules, main/police/save bank bytes and save v10 / 58 are preserved. UI/gameplay/helper banks leave 122/10/1 bytes, with 1,096 static reserve and no peak-stack guarantee.
 
 Its [fresh closed replay](docs/NATIVE_FERRY_CLARITY.json) samples all nine planning budgets, eight paid trains and one paid ferry, then actively rejects a return at $2 with 96 seconds left. Explicit cancellation keeps cash and zero completions; scheduled free assistance returns to the mainland, followed by walking/entry into the original car. A newly accepted Market job credits 108 at full condition, ends $110 / done 1 and survives a genuine in-worker button reset. A transient blank arrival image settles after a later neutral interval. Mistaken controller deadline, marker and mode expectations remain disclosed.
 

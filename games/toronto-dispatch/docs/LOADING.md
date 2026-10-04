@@ -1,8 +1,8 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Select the latest local playtest candidate, **`toronto-dispatch-ferry-clarity.gbc`**, **1,048,576 bytes**, SHA-256 **`a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
+Select the latest local playtest candidate, **`toronto-dispatch-vehicle-feedback.gbc`**, **1,048,576 bytes**, SHA-256 **`7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
 
-This build retains right-hand NPC traffic, escalating pursuit/penalties and menu-button release handling, and adds clear ferry budgets and low-cash return instructions. Its own fresh native replay checks all nine Island offer hints, eight paid train rides, active $2 ferry rejection, explicit cancellation, scheduled $0 return assistance, original-car recovery, one fresh delivery and committed in-worker reset. Official/full source/compiled checks pass. Prior e4a9 police/three-job observations remain assigned to that older ROM. These scoped records do not prove every contract, two enjoyable human hours or physical installation. Detailed [build](BUILD.md), [current native evidence](NATIVE_FERRY_CLARITY.json) and [test scopes](../TESTING.md) remain separate from physical verification.
+This build retains the city, right-hand traffic, escalating pursuit/penalties, menu-button handling and ferry guidance. Its UI-only correction shows WRONG VEHICLE for eligible incomplete jobs until you occupy the required vehicle. Its own fresh native replay completes four unique jobs, checks rejection and truck acceptance, a funded H3 fine and committed in-worker reset. Official build and full source checks pass. The earlier a935 ferry recovery and feedback-finding records remain separate. These scopes do not prove every contract, two enjoyable human hours or physical installation. Detailed [build](BUILD.md), [current native evidence](NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) and [test scopes](../TESTING.md) remain separate from physical verification.
 
 ## 1. Prepare the computer and console
 
@@ -18,30 +18,24 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The selected loading ROM is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The current prepared local bundle is **`project/build/toronto-dispatch-ferry-clarity.zip`**, **146,589 bytes**, SHA-256 **`5d2b70221cd411902ad250ec34d35854a93f7a6a4010097c2712b9a050c4735d`**, pinned to source **`f71d07e39d4f5d61ae06b06468a094d628e8164e`**. Extract it and check SHA256SUMS against the exact a935 ROM digest above, retaining BUILDINFO, instructions, licence and notices. The bundled guide is intentionally frozen at that source commit before these later package details. The ZIP remains local; no new GitHub binary release is claimed.
-
-The current [independent package audit](FERRY_CLARITY_PACKAGE_AUDIT.json) passes 42 bounded assertions with zero findings, checking all six members, ROM/checksums, all 206 committed inputs and immutable guide/licence/notices. These package checks add no physical installation evidence.
-
-The retained local traffic bundle is **`project/build/toronto-dispatch-right-hand-traffic-filter.zip`**, **146,040 bytes**, SHA-256 **`615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc`**, pinned to source **`9b1017d762ac4289b2b66c730ad4c69e07c6b444`**. Its [independent package audit](RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json) passes 1,518 checks with zero findings. It contains the e4a9 traffic ROM, not the newer a935 UI follow-up. Its bundled guide remains frozen at that source commit. This local ZIP has not been published as a GitHub release.
-
-The older prepared local `toronto-dispatch-menu-input-release.zip` is **139,546 bytes**, SHA-256 **`65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f`**, pinned to source **`b7666c784cac0651a3c9f5e22bc28c707eeec667`**. Its [independent package audit](MENU_INPUT_PACKAGE_AUDIT.json) passes 1,337 checks, including all 203 committed build inputs and the six-member allowlist. Its ROM is `7ccfa3b0532b2fa2f65f5198644c8f5ee3dc59df2b2e40034a3f1af954bdbeb9`, not the current traffic ROM. For any current bundle, extract it, check `SHA256SUMS` against its own ROM and retain `BUILDINFO.json`, loading instructions, licence and notices. The bundled guide is frozen at that source commit; these later package checks do not change the archive. The historical `toronto-dispatch-north-initial.zip` belongs to the older ROM.
+The loading bundle filename is **`project/build/toronto-dispatch-vehicle-feedback.zip`**. Extract it and verify `SHA256SUMS` against the selected 7ab28 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching source commit; the bundled guide remains frozen at that revision. [BUILD.md](BUILD.md) records current package verification and retained older bundles. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-ferry-clarity.gbc`, `toronto-dispatch-right-hand-traffic-filter.gbc`, `toronto-dispatch-north-initial.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-vehicle-feedback.gbc`, `toronto-dispatch-ferry-clarity.gbc`, `toronto-dispatch-right-hand-traffic-filter.gbc`, `toronto-dispatch-north-initial.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
