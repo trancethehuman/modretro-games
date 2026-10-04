@@ -268,8 +268,17 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Match 6,463 actual-C snapshots / 3,425,390 fields, including cargo/cash/save, actors, people/fleet, tile-hit markers and modeled bank preservation. Engine 804,856 and roads 2,339,979 checks pass.
 - [x] Repeat the [fresh Core comparison](docs/NATIVE_TERRAIN_CACHE_COMPARISON.json): idle 361→385 loops / 1,080 VBlanks (+6.648%); fixed moving tail 77→80 / 240 (+3.896%). Preserve these modest scopes without whole-city or human-FPS claims.
 - [x] Close a separate [825 gameplay replay](docs/NATIVE_TERRAIN_CACHE_GAMEPLAY.json) for first delivery, fast approach/glancing/solid-rail/reverse controls, H1/H2 contacts, map freeze, walking/car entry and in-worker committed SRAM recovery. Earlier e797 campaign completions are not inherited by this fresh replay.
-- [ ] Fix stale WALK/car controls after completed entry and active-job board acceptance/WRONG VEHICLE feedback, then build/play the new exact ROM. Keep `825…` experimental and the e797 loading bundle unchanged until that next phase.
+- [x] Correct stale WALK/car controls after completed entry and active-job dispatch resume/feedback in the distinct direct UI milestone below; retain the 825 experiment and historical e797 bundle at their own identities.
 - [ ] Broaden scene/crowd/stack/performance and remaining-contract coverage; full Old Toronto, two measured enjoyable human hours, browser and physical cartridge acceptance remain open.
+
+## Direct active-job and entry HUD polish — 03e09 scoped native pass
+
+- [x] Preserve the full pickup-first itinerary while showing the actual CURRENT STOP and A RESUME during work; retain individual offer locks, chapter/exit priority, cancellation and no-job acceptance. Add one completion-event HUD repaint with no new production state.
+- [x] Retain seven engine/eight UI old-source failures, then pass the corrected full source suite: 804,864 engine / 25,110,098 UI. Match 6,463 cached/uncached snapshots / 3,431,853 fields including the host-only redraw observation.
+- [x] Build direct `03e09…` without fallback, with bank 2 at 16,380 / 16,384 bytes and 1,096 static reserve. Close a fresh [native replay](docs/NATIVE_UI_POLISH_SAMPLES.json) for active preview/resume/chords/exits, board/map freeze, immediate car HUD, interrupted-entry freeze/resume, one full-condition Market Start and in-worker SRAM recovery. First Art is accepted but its remote pickup is rejected and stays stage 0.
+- [x] Pass independent compiled/raw native reviews with 597 / 5,253 checks.
+- [x] Audit one separate fresh 03e09 Core timing trial: 385 completed loops / 1,080 VBlanks, then 80 / 240 under A60/A60/B60/neutral60. Its 1,085-check audit retains exact 24 intervals / 92 memory receipts/one OAM; older 825 repeats and gain comparisons remain separate.
+- [ ] Finish public projection review and the new committed loading package. Keep the historical e797 22-completion campaign and 825 performance gains separate; broader contracts/regions/Island jobs, full Old Toronto, measured enjoyable human duration, deepest stack/pacing, browser and physical acceptance remain pending.
 
 ## Device milestone
 

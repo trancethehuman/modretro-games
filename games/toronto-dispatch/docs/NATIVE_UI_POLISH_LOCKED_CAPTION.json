@@ -1,0 +1,3170 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Small independent fresh03e09 ordinary-input locked-caption and carried-job resume companion; no completed contract.",
+  "rom": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+    "bytes": 524288,
+    "sha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6"
+  },
+  "noi": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc.debug/symbols.noi",
+    "bytes": 56431,
+    "sha256": "037dab5b328250b9dff9e508150f1527a5b1f85f0d3e62f0a28981e67c479130"
+  },
+  "sourceFingerprint": "1140f844d78d0f841a94509ad99609e8aac8fc00687b7f9e233da6b983f81744",
+  "baseRuntimeSourceCommit": "db7a1d00c77ecb1acbea2153346588881f1c8a82",
+  "sourceDebugIdentity": {
+    "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+    "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+    "sourceFingerprint": "1140f844d78d0f841a94509ad99609e8aac8fc00687b7f9e233da6b983f81744",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "prefix": {
+    "path": "games/toronto-dispatch/project/build/ui-polish-03e0-locked-caption-closed-prefix.json",
+    "bytes": 139151,
+    "sha256": "fb2351cd3bebee04b269b047527e00ef924ca40d233b99402e30707473e4aebe",
+    "published": false
+  },
+  "sessionId": "54532925d6ff4c8f87ac283a20966285",
+  "startingCondition": {
+    "cgb": true,
+    "initialFrames": 180,
+    "type": "clean-boot"
+  },
+  "archive": {
+    "schemaVersion": 1,
+    "originalPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+    "archivePath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+    "sessionId": "54532925d6ff4c8f87ac283a20966285",
+    "manifestSha256": "4b0672e71afb24c75cedb37e6b4a5b252017919e54d2788e1e7af86cf7cf2be5",
+    "inventory": {
+      "digest": "cff9599f6143815692a3cd2195adc5cd52dfb682380215b07da2b6b584a53b31",
+      "bytes": 68846,
+      "entries": 26
+    },
+    "status": "archived",
+    "reservationReleasedFrom": "games/toronto-dispatch/project/artifacts/playtests",
+    "bytesReclaimed": 0
+  },
+  "journal": {
+    "events": 92,
+    "eventDigest": "a5227aab3006478823a00c5d6f4b32d4ce2ee115e0e0e33a2bbd9147d95a0269",
+    "sha256": "94e2396d43e93ee9255e3bf1acc71ac766d1c87f57f42b70f51e5afbd54e88a7",
+    "eventKinds": {
+      "header": 1,
+      "frame": 26,
+      "boot_complete": 1,
+      "action": 42,
+      "controller": 20,
+      "pause": 1,
+      "finish": 1
+    }
+  },
+  "retainedStop": {
+    "outcome": "passed",
+    "frame": 436,
+    "closed": true,
+    "reason": "Fresh03e09 locked caption companion. Source-authenticated active Market stage1 remainscarried; Select+A chapterpriority opensjob8, neutral60 settles full NEEDS6COMPLETED/A RESUME framebuffer; A resumes Market without replacement/error. Separate from earlier frame584 partialpainting, not a campaign/timing/hardware check."
+  },
+  "counts": {
+    "ordinaryIntervals": 20,
+    "retainedMemoryResponses": 9,
+    "memoryObservationSets": 3,
+    "newSteppedFrames": 256,
+    "freshBootFrames": 180,
+    "internalStepActions": 22,
+    "buttonChanges": 20,
+    "archiveFrameEvents": 26,
+    "archiveUniquePngs": 19,
+    "stepSampleReferences": 20,
+    "checkpointActions": 0
+  },
+  "steps": [
+    {
+      "intentLabel": "help",
+      "request": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 184,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "a"
+        ],
+        "sampledButtons": [
+          "a"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 23.518459,
+          "gameTimeMs": 3080.657958984375
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 184,
+          "totalFrames": 184,
+          "bytesUsed": 10522,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 10,
+          "eventDigest": "80c5d52d1c9c57c8ba1003271dc21b120a33a5a3ba9771ecff0fa1ce836ad6a9",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 184
+            }
+          ]
+        },
+        "startFrame": 180,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "a"
+        ],
+        "samples": [
+          {
+            "frame": 184,
+            "width": 160,
+            "height": 144,
+            "sha256": "fb77fe88beca27c5c25b1e28a83d39d7e751352d60fb40b888feadff3199b12a",
+            "rgbaSha256": "98fa38bd9bf22ea33ef506e84a07fec4f2cf8731521dcd9e9f3533d672df49ba",
+            "sampledButtons": [
+              "a"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/fb77fe88beca27c5c25b1e28a83d39d7e751352d60fb40b888feadff3199b12a.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 0,
+          "toActionIndex": 2,
+          "fromFrame": 180,
+          "toFrame": 184,
+          "fromPrefixPin": {
+            "eventCount": 6,
+            "eventDigest": "9b8480251ad5da12f57c825351f37ca923d3fb44cf793a31c1af77c7312314fb",
+            "byteLength": 3281,
+            "sha256": "f964f3b1db628ecb3304f0981ec64ab523cbf185bf4ef2ddbb8f612f0f473b9b"
+          },
+          "prefixPin": {
+            "eventCount": 10,
+            "eventDigest": "80c5d52d1c9c57c8ba1003271dc21b120a33a5a3ba9771ecff0fa1ce836ad6a9",
+            "byteLength": 4745,
+            "sha256": "73f76428898e30a35dc819066eae10762e6170b074d3fa35613e9eeabe0f8044"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 180,
+          "frame": 184,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "a"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 0,
+            "toActionIndex": 2,
+            "fromFrame": 180,
+            "toFrame": 184,
+            "fromPrefixPin": {
+              "eventCount": 6,
+              "eventDigest": "9b8480251ad5da12f57c825351f37ca923d3fb44cf793a31c1af77c7312314fb",
+              "byteLength": 3281,
+              "sha256": "f964f3b1db628ecb3304f0981ec64ab523cbf185bf4ef2ddbb8f612f0f473b9b"
+            },
+            "prefixPin": {
+              "eventCount": 10,
+              "eventDigest": "80c5d52d1c9c57c8ba1003271dc21b120a33a5a3ba9771ecff0fa1ce836ad6a9",
+              "byteLength": 4745,
+              "sha256": "73f76428898e30a35dc819066eae10762e6170b074d3fa35613e9eeabe0f8044"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "a"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "roam",
+      "request": {
+        "buttons": [],
+        "frames": 56,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 240,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 34.628042,
+          "gameTimeMs": 4018.24951171875
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 240,
+          "totalFrames": 240,
+          "bytesUsed": 13818,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 14,
+          "eventDigest": "80ee6a95fdc39e3d50c2225dc651d37f3061b1b3fa3042a0edd6b76c46f3bc98",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 240
+            }
+          ]
+        },
+        "startFrame": 184,
+        "advancedFrames": 56,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 240,
+            "width": 160,
+            "height": 144,
+            "sha256": "8f4f4e11ddf987820e44c098c9a7ee1b20c74a1315a655cb2eda4fe38b04aeb8",
+            "rgbaSha256": "f2258172f0f6957049ae9192665dc90d2ad3fa3ebaf0f6fdb715b93239756b2e",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8f4f4e11ddf987820e44c098c9a7ee1b20c74a1315a655cb2eda4fe38b04aeb8.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 2,
+          "toActionIndex": 4,
+          "fromFrame": 184,
+          "toFrame": 240,
+          "fromPrefixPin": {
+            "eventCount": 10,
+            "eventDigest": "80c5d52d1c9c57c8ba1003271dc21b120a33a5a3ba9771ecff0fa1ce836ad6a9",
+            "byteLength": 4745,
+            "sha256": "73f76428898e30a35dc819066eae10762e6170b074d3fa35613e9eeabe0f8044"
+          },
+          "prefixPin": {
+            "eventCount": 14,
+            "eventDigest": "80ee6a95fdc39e3d50c2225dc651d37f3061b1b3fa3042a0edd6b76c46f3bc98",
+            "byteLength": 6207,
+            "sha256": "d76150fd85750f42909c24d50c6608d69bd3e86ee312c3f4e87300bffb0cf706"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 56,
+          "startFrame": 184,
+          "frame": 240,
+          "advancedFrames": 56,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 2,
+            "toActionIndex": 4,
+            "fromFrame": 184,
+            "toFrame": 240,
+            "fromPrefixPin": {
+              "eventCount": 10,
+              "eventDigest": "80c5d52d1c9c57c8ba1003271dc21b120a33a5a3ba9771ecff0fa1ce836ad6a9",
+              "byteLength": 4745,
+              "sha256": "73f76428898e30a35dc819066eae10762e6170b074d3fa35613e9eeabe0f8044"
+            },
+            "prefixPin": {
+              "eventCount": 14,
+              "eventDigest": "80ee6a95fdc39e3d50c2225dc651d37f3061b1b3fa3042a0edd6b76c46f3bc98",
+              "byteLength": 6207,
+              "sha256": "d76150fd85750f42909c24d50c6608d69bd3e86ee312c3f4e87300bffb0cf706"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "dispatch",
+      "request": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 244,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "select"
+        ],
+        "sampledButtons": [
+          "select"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 35.965333,
+          "gameTimeMs": 4085.2203369140625
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 244,
+          "totalFrames": 244,
+          "bytesUsed": 16522,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 18,
+          "eventDigest": "6d0ee03b236203dfd51610550066131f2b532992334345715f4547c0b20e4d89",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 244
+            }
+          ]
+        },
+        "startFrame": 240,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "select"
+        ],
+        "samples": [
+          {
+            "frame": 244,
+            "width": 160,
+            "height": 144,
+            "sha256": "2b107f4a6cf3eac72d42004046a6dc97fae2ad62ffb38f8d9638868acff4694b",
+            "rgbaSha256": "2c2b26f093e2464bc112edb5b819c8824302ced0cbc4d5bb48df7119baf13985",
+            "sampledButtons": [
+              "select"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/2b107f4a6cf3eac72d42004046a6dc97fae2ad62ffb38f8d9638868acff4694b.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 4,
+          "toActionIndex": 6,
+          "fromFrame": 240,
+          "toFrame": 244,
+          "fromPrefixPin": {
+            "eventCount": 14,
+            "eventDigest": "80ee6a95fdc39e3d50c2225dc651d37f3061b1b3fa3042a0edd6b76c46f3bc98",
+            "byteLength": 6207,
+            "sha256": "d76150fd85750f42909c24d50c6608d69bd3e86ee312c3f4e87300bffb0cf706"
+          },
+          "prefixPin": {
+            "eventCount": 18,
+            "eventDigest": "6d0ee03b236203dfd51610550066131f2b532992334345715f4547c0b20e4d89",
+            "byteLength": 7689,
+            "sha256": "6bfa11cd947241af3671427c5d093b656948e19507929cfbd9eda95fa09c7420"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 240,
+          "frame": 244,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "select"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 4,
+            "toActionIndex": 6,
+            "fromFrame": 240,
+            "toFrame": 244,
+            "fromPrefixPin": {
+              "eventCount": 14,
+              "eventDigest": "80ee6a95fdc39e3d50c2225dc651d37f3061b1b3fa3042a0edd6b76c46f3bc98",
+              "byteLength": 6207,
+              "sha256": "d76150fd85750f42909c24d50c6608d69bd3e86ee312c3f4e87300bffb0cf706"
+            },
+            "prefixPin": {
+              "eventCount": 18,
+              "eventDigest": "6d0ee03b236203dfd51610550066131f2b532992334345715f4547c0b20e4d89",
+              "byteLength": 7689,
+              "sha256": "6bfa11cd947241af3671427c5d093b656948e19507929cfbd9eda95fa09c7420"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "select"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "release",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 248,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 37.402792,
+          "gameTimeMs": 4152.191162109375
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 248,
+          "totalFrames": 248,
+          "bytesUsed": 20366,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 22,
+          "eventDigest": "cdf785541d7ff028186112f34831ab1cf78ed3e76a7bea7e9e5742cff878a484",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 248
+            }
+          ]
+        },
+        "startFrame": 244,
+        "advancedFrames": 4,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 248,
+            "width": 160,
+            "height": 144,
+            "sha256": "6b114809ae8d56764994f0bf43379409f68c5cc1dc878a5ecf8b2cfcec159fd8",
+            "rgbaSha256": "ef6edb09b9e1fb591d510c54a981e785a9613bf14db720660c3f5551214e0410",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/6b114809ae8d56764994f0bf43379409f68c5cc1dc878a5ecf8b2cfcec159fd8.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 6,
+          "toActionIndex": 8,
+          "fromFrame": 244,
+          "toFrame": 248,
+          "fromPrefixPin": {
+            "eventCount": 18,
+            "eventDigest": "6d0ee03b236203dfd51610550066131f2b532992334345715f4547c0b20e4d89",
+            "byteLength": 7689,
+            "sha256": "6bfa11cd947241af3671427c5d093b656948e19507929cfbd9eda95fa09c7420"
+          },
+          "prefixPin": {
+            "eventCount": 22,
+            "eventDigest": "cdf785541d7ff028186112f34831ab1cf78ed3e76a7bea7e9e5742cff878a484",
+            "byteLength": 9155,
+            "sha256": "3a946340f946cadc8d1ffb47d9c8c8b255f96999ac14a735c9cbecf58d40e1a4"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 244,
+          "frame": 248,
+          "advancedFrames": 4,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 6,
+            "toActionIndex": 8,
+            "fromFrame": 244,
+            "toFrame": 248,
+            "fromPrefixPin": {
+              "eventCount": 18,
+              "eventDigest": "6d0ee03b236203dfd51610550066131f2b532992334345715f4547c0b20e4d89",
+              "byteLength": 7689,
+              "sha256": "6bfa11cd947241af3671427c5d093b656948e19507929cfbd9eda95fa09c7420"
+            },
+            "prefixPin": {
+              "eventCount": 22,
+              "eventDigest": "cdf785541d7ff028186112f34831ab1cf78ed3e76a7bea7e9e5742cff878a484",
+              "byteLength": 9155,
+              "sha256": "3a946340f946cadc8d1ffb47d9c8c8b255f96999ac14a735c9cbecf58d40e1a4"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "accept_market",
+      "request": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 252,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "a"
+        ],
+        "sampledButtons": [
+          "a"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 38.854084,
+          "gameTimeMs": 4219.1619873046875
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 252,
+          "totalFrames": 252,
+          "bytesUsed": 23629,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 26,
+          "eventDigest": "463ccffb0d55dca3876e7ae4f8f4571ce85469fc320429003961776700167ecb",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 252
+            }
+          ]
+        },
+        "startFrame": 248,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "a"
+        ],
+        "samples": [
+          {
+            "frame": 252,
+            "width": 160,
+            "height": 144,
+            "sha256": "5b555ec20fa0cff56f12fe075a7b188addff4155637aae06d1cfff39a87b9652",
+            "rgbaSha256": "f2f24a87442787c8ba7d83e2fa9f09de7f1938c8442f7b17b0e0151980a36920",
+            "sampledButtons": [
+              "a"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/5b555ec20fa0cff56f12fe075a7b188addff4155637aae06d1cfff39a87b9652.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 8,
+          "toActionIndex": 10,
+          "fromFrame": 248,
+          "toFrame": 252,
+          "fromPrefixPin": {
+            "eventCount": 22,
+            "eventDigest": "cdf785541d7ff028186112f34831ab1cf78ed3e76a7bea7e9e5742cff878a484",
+            "byteLength": 9155,
+            "sha256": "3a946340f946cadc8d1ffb47d9c8c8b255f96999ac14a735c9cbecf58d40e1a4"
+          },
+          "prefixPin": {
+            "eventCount": 26,
+            "eventDigest": "463ccffb0d55dca3876e7ae4f8f4571ce85469fc320429003961776700167ecb",
+            "byteLength": 10624,
+            "sha256": "4ef6183bf3ab552ab7d8f137c937183fe36086bc54b8c6b35a2601b1e41ac591"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 248,
+          "frame": 252,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "a"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 8,
+            "toActionIndex": 10,
+            "fromFrame": 248,
+            "toFrame": 252,
+            "fromPrefixPin": {
+              "eventCount": 22,
+              "eventDigest": "cdf785541d7ff028186112f34831ab1cf78ed3e76a7bea7e9e5742cff878a484",
+              "byteLength": 9155,
+              "sha256": "3a946340f946cadc8d1ffb47d9c8c8b255f96999ac14a735c9cbecf58d40e1a4"
+            },
+            "prefixPin": {
+              "eventCount": 26,
+              "eventDigest": "463ccffb0d55dca3876e7ae4f8f4571ce85469fc320429003961776700167ecb",
+              "byteLength": 10624,
+              "sha256": "4ef6183bf3ab552ab7d8f137c937183fe36086bc54b8c6b35a2601b1e41ac591"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "a"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "release",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 256,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 40.230334,
+          "gameTimeMs": 4286.1328125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 256,
+          "totalFrames": 256,
+          "bytesUsed": 26893,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 30,
+          "eventDigest": "8e166d01c878a92776a667bfdf0dde66d392bd90ac0943f4c344c899f8f3b515",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 256
+            }
+          ]
+        },
+        "startFrame": 252,
+        "advancedFrames": 4,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 256,
+            "width": 160,
+            "height": 144,
+            "sha256": "8df20a1014f3262e8857f080eb980a17c90e51ec5f9511900ab65f718ebd7834",
+            "rgbaSha256": "83aca53ea3fb8e527366dbb2e2615b2b5f48c11b733c665ca7fa594dfb992341",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8df20a1014f3262e8857f080eb980a17c90e51ec5f9511900ab65f718ebd7834.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 10,
+          "toActionIndex": 12,
+          "fromFrame": 252,
+          "toFrame": 256,
+          "fromPrefixPin": {
+            "eventCount": 26,
+            "eventDigest": "463ccffb0d55dca3876e7ae4f8f4571ce85469fc320429003961776700167ecb",
+            "byteLength": 10624,
+            "sha256": "4ef6183bf3ab552ab7d8f137c937183fe36086bc54b8c6b35a2601b1e41ac591"
+          },
+          "prefixPin": {
+            "eventCount": 30,
+            "eventDigest": "8e166d01c878a92776a667bfdf0dde66d392bd90ac0943f4c344c899f8f3b515",
+            "byteLength": 12088,
+            "sha256": "61ad02fdac57a6a530cdba06e0a12501be5845578a69888534bcc74b777fbb42"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 252,
+          "frame": 256,
+          "advancedFrames": 4,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 10,
+            "toActionIndex": 12,
+            "fromFrame": 252,
+            "toFrame": 256,
+            "fromPrefixPin": {
+              "eventCount": 26,
+              "eventDigest": "463ccffb0d55dca3876e7ae4f8f4571ce85469fc320429003961776700167ecb",
+              "byteLength": 10624,
+              "sha256": "4ef6183bf3ab552ab7d8f137c937183fe36086bc54b8c6b35a2601b1e41ac591"
+            },
+            "prefixPin": {
+              "eventCount": 30,
+              "eventDigest": "8e166d01c878a92776a667bfdf0dde66d392bd90ac0943f4c344c899f8f3b515",
+              "byteLength": 12088,
+              "sha256": "61ad02fdac57a6a530cdba06e0a12501be5845578a69888534bcc74b777fbb42"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "pickup_market",
+      "request": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 260,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "select"
+        ],
+        "sampledButtons": [
+          "select"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 41.485251,
+          "gameTimeMs": 4353.1036376953125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 260,
+          "totalFrames": 260,
+          "bytesUsed": 28378,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 34,
+          "eventDigest": "798dd44a7bb0aa2d37c37a7aeb49a1ec1001dccea812ed480ac2f2028f7714c9",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 260
+            }
+          ]
+        },
+        "startFrame": 256,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "select"
+        ],
+        "samples": [
+          {
+            "frame": 260,
+            "width": 160,
+            "height": 144,
+            "sha256": "8df20a1014f3262e8857f080eb980a17c90e51ec5f9511900ab65f718ebd7834",
+            "rgbaSha256": "83aca53ea3fb8e527366dbb2e2615b2b5f48c11b733c665ca7fa594dfb992341",
+            "sampledButtons": [
+              "select"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8df20a1014f3262e8857f080eb980a17c90e51ec5f9511900ab65f718ebd7834.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 12,
+          "toActionIndex": 14,
+          "fromFrame": 256,
+          "toFrame": 260,
+          "fromPrefixPin": {
+            "eventCount": 30,
+            "eventDigest": "8e166d01c878a92776a667bfdf0dde66d392bd90ac0943f4c344c899f8f3b515",
+            "byteLength": 12088,
+            "sha256": "61ad02fdac57a6a530cdba06e0a12501be5845578a69888534bcc74b777fbb42"
+          },
+          "prefixPin": {
+            "eventCount": 34,
+            "eventDigest": "798dd44a7bb0aa2d37c37a7aeb49a1ec1001dccea812ed480ac2f2028f7714c9",
+            "byteLength": 13573,
+            "sha256": "42831c420365e54a35a5a534843ff505e1ba05eb7845bf564449ff6b19aca947"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 256,
+          "frame": 260,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "select"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 12,
+            "toActionIndex": 14,
+            "fromFrame": 256,
+            "toFrame": 260,
+            "fromPrefixPin": {
+              "eventCount": 30,
+              "eventDigest": "8e166d01c878a92776a667bfdf0dde66d392bd90ac0943f4c344c899f8f3b515",
+              "byteLength": 12088,
+              "sha256": "61ad02fdac57a6a530cdba06e0a12501be5845578a69888534bcc74b777fbb42"
+            },
+            "prefixPin": {
+              "eventCount": 34,
+              "eventDigest": "798dd44a7bb0aa2d37c37a7aeb49a1ec1001dccea812ed480ac2f2028f7714c9",
+              "byteLength": 13573,
+              "sha256": "42831c420365e54a35a5a534843ff505e1ba05eb7845bf564449ff6b19aca947"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "select"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "release",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 264,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 42.962376,
+          "gameTimeMs": 4420.074462890625
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 264,
+          "totalFrames": 264,
+          "bytesUsed": 31689,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 38,
+          "eventDigest": "84d493f12d22611e52155f6c93c933c41d9920663e9dbf20c66a49100f2eb5fc",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 264
+            }
+          ]
+        },
+        "startFrame": 260,
+        "advancedFrames": 4,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 264,
+            "width": 160,
+            "height": 144,
+            "sha256": "e1d31fcef59fcd4b9098ad94bde782afacf0c3a8617dc41943a699259b7d391e",
+            "rgbaSha256": "caa5c6af6615327b3b6cc8f06b9ac990230624be7b2681feaf6c76c8df0bac00",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/e1d31fcef59fcd4b9098ad94bde782afacf0c3a8617dc41943a699259b7d391e.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 14,
+          "toActionIndex": 16,
+          "fromFrame": 260,
+          "toFrame": 264,
+          "fromPrefixPin": {
+            "eventCount": 34,
+            "eventDigest": "798dd44a7bb0aa2d37c37a7aeb49a1ec1001dccea812ed480ac2f2028f7714c9",
+            "byteLength": 13573,
+            "sha256": "42831c420365e54a35a5a534843ff505e1ba05eb7845bf564449ff6b19aca947"
+          },
+          "prefixPin": {
+            "eventCount": 38,
+            "eventDigest": "84d493f12d22611e52155f6c93c933c41d9920663e9dbf20c66a49100f2eb5fc",
+            "byteLength": 15042,
+            "sha256": "a45b0b0a063038f16b2db401d502822c94c39d23f913134bad5e1d8b34903f0b"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 260,
+          "frame": 264,
+          "advancedFrames": 4,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 14,
+            "toActionIndex": 16,
+            "fromFrame": 260,
+            "toFrame": 264,
+            "fromPrefixPin": {
+              "eventCount": 34,
+              "eventDigest": "798dd44a7bb0aa2d37c37a7aeb49a1ec1001dccea812ed480ac2f2028f7714c9",
+              "byteLength": 13573,
+              "sha256": "42831c420365e54a35a5a534843ff505e1ba05eb7845bf564449ff6b19aca947"
+            },
+            "prefixPin": {
+              "eventCount": 38,
+              "eventDigest": "84d493f12d22611e52155f6c93c933c41d9920663e9dbf20c66a49100f2eb5fc",
+              "byteLength": 15042,
+              "sha256": "a45b0b0a063038f16b2db401d502822c94c39d23f913134bad5e1d8b34903f0b"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "pause",
+      "request": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 268,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "start"
+        ],
+        "sampledButtons": [
+          "start"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 44.288834,
+          "gameTimeMs": 4487.0452880859375
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 268,
+          "totalFrames": 268,
+          "bytesUsed": 34410,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 42,
+          "eventDigest": "57628919ec42ef8f461ae689e6d3407fa00328b9e0261f5df6d6d1aea42cfc3f",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 268
+            }
+          ]
+        },
+        "startFrame": 264,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "start"
+        ],
+        "samples": [
+          {
+            "frame": 268,
+            "width": 160,
+            "height": 144,
+            "sha256": "2af37b97ccb33c949e394f628e553d38909048e5d621e56ac663c125771b5c0f",
+            "rgbaSha256": "e7d5a99197a432de037ee018835630ede60fd460b4f06980a4b4424a3821def0",
+            "sampledButtons": [
+              "start"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/2af37b97ccb33c949e394f628e553d38909048e5d621e56ac663c125771b5c0f.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 16,
+          "toActionIndex": 18,
+          "fromFrame": 264,
+          "toFrame": 268,
+          "fromPrefixPin": {
+            "eventCount": 38,
+            "eventDigest": "84d493f12d22611e52155f6c93c933c41d9920663e9dbf20c66a49100f2eb5fc",
+            "byteLength": 15042,
+            "sha256": "a45b0b0a063038f16b2db401d502822c94c39d23f913134bad5e1d8b34903f0b"
+          },
+          "prefixPin": {
+            "eventCount": 42,
+            "eventDigest": "57628919ec42ef8f461ae689e6d3407fa00328b9e0261f5df6d6d1aea42cfc3f",
+            "byteLength": 16524,
+            "sha256": "0ef92426d6fa46a98a6bdc452fc7ff7f94731ad9e284add7ebe9661780b80363"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 264,
+          "frame": 268,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "start"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 16,
+            "toActionIndex": 18,
+            "fromFrame": 264,
+            "toFrame": 268,
+            "fromPrefixPin": {
+              "eventCount": 38,
+              "eventDigest": "84d493f12d22611e52155f6c93c933c41d9920663e9dbf20c66a49100f2eb5fc",
+              "byteLength": 15042,
+              "sha256": "a45b0b0a063038f16b2db401d502822c94c39d23f913134bad5e1d8b34903f0b"
+            },
+            "prefixPin": {
+              "eventCount": 42,
+              "eventDigest": "57628919ec42ef8f461ae689e6d3407fa00328b9e0261f5df6d6d1aea42cfc3f",
+              "byteLength": 16524,
+              "sha256": "0ef92426d6fa46a98a6bdc452fc7ff7f94731ad9e284add7ebe9661780b80363"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "start"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "release",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 272,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 45.796084,
+          "gameTimeMs": 4554.01611328125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 272,
+          "totalFrames": 272,
+          "bytesUsed": 37942,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 46,
+          "eventDigest": "3e14bb2eece314f4f99b0ef2d8222b5d1d790a284a68970a2a81c0712a86b8d3",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 272
+            }
+          ]
+        },
+        "startFrame": 268,
+        "advancedFrames": 4,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 272,
+            "width": 160,
+            "height": 144,
+            "sha256": "1aed6b3d11006a1233ae1b8311d1d5cbd73c2445079534598efb04abb85dd81c",
+            "rgbaSha256": "6c4cb698a95ce188f4df6884467e69f02ae790bbbeb592daf5cc9a4f5798e30c",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/1aed6b3d11006a1233ae1b8311d1d5cbd73c2445079534598efb04abb85dd81c.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 18,
+          "toActionIndex": 20,
+          "fromFrame": 268,
+          "toFrame": 272,
+          "fromPrefixPin": {
+            "eventCount": 42,
+            "eventDigest": "57628919ec42ef8f461ae689e6d3407fa00328b9e0261f5df6d6d1aea42cfc3f",
+            "byteLength": 16524,
+            "sha256": "0ef92426d6fa46a98a6bdc452fc7ff7f94731ad9e284add7ebe9661780b80363"
+          },
+          "prefixPin": {
+            "eventCount": 46,
+            "eventDigest": "3e14bb2eece314f4f99b0ef2d8222b5d1d790a284a68970a2a81c0712a86b8d3",
+            "byteLength": 17992,
+            "sha256": "5e4defdf5429d147336033c75b337b6ff87ef3b740ee7bca63081b5ac8eab0f1"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 268,
+          "frame": 272,
+          "advancedFrames": 4,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 18,
+            "toActionIndex": 20,
+            "fromFrame": 268,
+            "toFrame": 272,
+            "fromPrefixPin": {
+              "eventCount": 42,
+              "eventDigest": "57628919ec42ef8f461ae689e6d3407fa00328b9e0261f5df6d6d1aea42cfc3f",
+              "byteLength": 16524,
+              "sha256": "0ef92426d6fa46a98a6bdc452fc7ff7f94731ad9e284add7ebe9661780b80363"
+            },
+            "prefixPin": {
+              "eventCount": 46,
+              "eventDigest": "3e14bb2eece314f4f99b0ef2d8222b5d1d790a284a68970a2a81c0712a86b8d3",
+              "byteLength": 17992,
+              "sha256": "5e4defdf5429d147336033c75b337b6ff87ef3b740ee7bca63081b5ac8eab0f1"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "map",
+      "request": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 276,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "down"
+        ],
+        "sampledButtons": [
+          "down"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 47.038876,
+          "gameTimeMs": 4620.9869384765625
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 276,
+          "totalFrames": 276,
+          "bytesUsed": 41487,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 50,
+          "eventDigest": "ee3481a7ba5f5d44abcbfc3f7e616082087eb64409c98f1c105f42ff6dfa2ac2",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 276
+            }
+          ]
+        },
+        "startFrame": 272,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "down"
+        ],
+        "samples": [
+          {
+            "frame": 276,
+            "width": 160,
+            "height": 144,
+            "sha256": "1734930ac11072a82e95c753235fb074f225d44af395bf124b1483ff3dd8e31f",
+            "rgbaSha256": "499b37ce31d5a2bc9b2d0bb5cd0a15629642bef26d63e3bcc852bded47b845b5",
+            "sampledButtons": [
+              "down"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/1734930ac11072a82e95c753235fb074f225d44af395bf124b1483ff3dd8e31f.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 20,
+          "toActionIndex": 22,
+          "fromFrame": 272,
+          "toFrame": 276,
+          "fromPrefixPin": {
+            "eventCount": 46,
+            "eventDigest": "3e14bb2eece314f4f99b0ef2d8222b5d1d790a284a68970a2a81c0712a86b8d3",
+            "byteLength": 17992,
+            "sha256": "5e4defdf5429d147336033c75b337b6ff87ef3b740ee7bca63081b5ac8eab0f1"
+          },
+          "prefixPin": {
+            "eventCount": 50,
+            "eventDigest": "ee3481a7ba5f5d44abcbfc3f7e616082087eb64409c98f1c105f42ff6dfa2ac2",
+            "byteLength": 19471,
+            "sha256": "183adfd018790011a772ee01ca4f5290b27932f23c72153b32655fc4dc2db0c4"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 272,
+          "frame": 276,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "down"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 20,
+            "toActionIndex": 22,
+            "fromFrame": 272,
+            "toFrame": 276,
+            "fromPrefixPin": {
+              "eventCount": 46,
+              "eventDigest": "3e14bb2eece314f4f99b0ef2d8222b5d1d790a284a68970a2a81c0712a86b8d3",
+              "byteLength": 17992,
+              "sha256": "5e4defdf5429d147336033c75b337b6ff87ef3b740ee7bca63081b5ac8eab0f1"
+            },
+            "prefixPin": {
+              "eventCount": 50,
+              "eventDigest": "ee3481a7ba5f5d44abcbfc3f7e616082087eb64409c98f1c105f42ff6dfa2ac2",
+              "byteLength": 19471,
+              "sha256": "183adfd018790011a772ee01ca4f5290b27932f23c72153b32655fc4dc2db0c4"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "down"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "release",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 280,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 48.044501,
+          "gameTimeMs": 4687.957763671875
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 280,
+          "totalFrames": 280,
+          "bytesUsed": 42954,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 54,
+          "eventDigest": "12f6d99a2d774f97be3520cd94e3b298a81cb08c9878399468c560ab01493ffc",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 280
+            }
+          ]
+        },
+        "startFrame": 276,
+        "advancedFrames": 4,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 280,
+            "width": 160,
+            "height": 144,
+            "sha256": "1734930ac11072a82e95c753235fb074f225d44af395bf124b1483ff3dd8e31f",
+            "rgbaSha256": "499b37ce31d5a2bc9b2d0bb5cd0a15629642bef26d63e3bcc852bded47b845b5",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/1734930ac11072a82e95c753235fb074f225d44af395bf124b1483ff3dd8e31f.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 22,
+          "toActionIndex": 24,
+          "fromFrame": 276,
+          "toFrame": 280,
+          "fromPrefixPin": {
+            "eventCount": 50,
+            "eventDigest": "ee3481a7ba5f5d44abcbfc3f7e616082087eb64409c98f1c105f42ff6dfa2ac2",
+            "byteLength": 19471,
+            "sha256": "183adfd018790011a772ee01ca4f5290b27932f23c72153b32655fc4dc2db0c4"
+          },
+          "prefixPin": {
+            "eventCount": 54,
+            "eventDigest": "12f6d99a2d774f97be3520cd94e3b298a81cb08c9878399468c560ab01493ffc",
+            "byteLength": 20938,
+            "sha256": "12e58d57ecc9bc127024594cbaa05d345171e906a1147719d77537eb27f274ee"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 276,
+          "frame": 280,
+          "advancedFrames": 4,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 22,
+            "toActionIndex": 24,
+            "fromFrame": 276,
+            "toFrame": 280,
+            "fromPrefixPin": {
+              "eventCount": 50,
+              "eventDigest": "ee3481a7ba5f5d44abcbfc3f7e616082087eb64409c98f1c105f42ff6dfa2ac2",
+              "byteLength": 19471,
+              "sha256": "183adfd018790011a772ee01ca4f5290b27932f23c72153b32655fc4dc2db0c4"
+            },
+            "prefixPin": {
+              "eventCount": 54,
+              "eventDigest": "12f6d99a2d774f97be3520cd94e3b298a81cb08c9878399468c560ab01493ffc",
+              "byteLength": 20938,
+              "sha256": "12e58d57ecc9bc127024594cbaa05d345171e906a1147719d77537eb27f274ee"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "dispatch_option",
+      "request": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 284,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "down"
+        ],
+        "sampledButtons": [
+          "down"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 49.249334,
+          "gameTimeMs": 4754.9285888671875
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 284,
+          "totalFrames": 284,
+          "bytesUsed": 46498,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 58,
+          "eventDigest": "55c8b0c049408d084ba05d9bfe6b1557b6649a87df2d8fb32db3c4f0124b3cbb",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 284
+            }
+          ]
+        },
+        "startFrame": 280,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "down"
+        ],
+        "samples": [
+          {
+            "frame": 284,
+            "width": 160,
+            "height": 144,
+            "sha256": "bda6f49624cfdaa729e7d6c71a83688dd8bbac1bad0af9251668648c02707a12",
+            "rgbaSha256": "ad3bcd655378820cfcd72cb36f4d8f3dbc0b867b7223aa4f7fa3afe050265a24",
+            "sampledButtons": [
+              "down"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/bda6f49624cfdaa729e7d6c71a83688dd8bbac1bad0af9251668648c02707a12.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 24,
+          "toActionIndex": 26,
+          "fromFrame": 280,
+          "toFrame": 284,
+          "fromPrefixPin": {
+            "eventCount": 54,
+            "eventDigest": "12f6d99a2d774f97be3520cd94e3b298a81cb08c9878399468c560ab01493ffc",
+            "byteLength": 20938,
+            "sha256": "12e58d57ecc9bc127024594cbaa05d345171e906a1147719d77537eb27f274ee"
+          },
+          "prefixPin": {
+            "eventCount": 58,
+            "eventDigest": "55c8b0c049408d084ba05d9bfe6b1557b6649a87df2d8fb32db3c4f0124b3cbb",
+            "byteLength": 22417,
+            "sha256": "cc13528e93f8dc925ebd913a66591b875163be5a6cc7df62939cb3cbb43ef2c4"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 280,
+          "frame": 284,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "down"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 24,
+            "toActionIndex": 26,
+            "fromFrame": 280,
+            "toFrame": 284,
+            "fromPrefixPin": {
+              "eventCount": 54,
+              "eventDigest": "12f6d99a2d774f97be3520cd94e3b298a81cb08c9878399468c560ab01493ffc",
+              "byteLength": 20938,
+              "sha256": "12e58d57ecc9bc127024594cbaa05d345171e906a1147719d77537eb27f274ee"
+            },
+            "prefixPin": {
+              "eventCount": 58,
+              "eventDigest": "55c8b0c049408d084ba05d9bfe6b1557b6649a87df2d8fb32db3c4f0124b3cbb",
+              "byteLength": 22417,
+              "sha256": "cc13528e93f8dc925ebd913a66591b875163be5a6cc7df62939cb3cbb43ef2c4"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "down"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "release",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 288,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 50.213917,
+          "gameTimeMs": 4821.8994140625
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 288,
+          "totalFrames": 288,
+          "bytesUsed": 47965,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 62,
+          "eventDigest": "8eaed515adaf2f75486c6c58b3c9d561312cf1192f8a4340da0e2bdb336b0ab4",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 288
+            }
+          ]
+        },
+        "startFrame": 284,
+        "advancedFrames": 4,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 288,
+            "width": 160,
+            "height": 144,
+            "sha256": "bda6f49624cfdaa729e7d6c71a83688dd8bbac1bad0af9251668648c02707a12",
+            "rgbaSha256": "ad3bcd655378820cfcd72cb36f4d8f3dbc0b867b7223aa4f7fa3afe050265a24",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/bda6f49624cfdaa729e7d6c71a83688dd8bbac1bad0af9251668648c02707a12.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 26,
+          "toActionIndex": 28,
+          "fromFrame": 284,
+          "toFrame": 288,
+          "fromPrefixPin": {
+            "eventCount": 58,
+            "eventDigest": "55c8b0c049408d084ba05d9bfe6b1557b6649a87df2d8fb32db3c4f0124b3cbb",
+            "byteLength": 22417,
+            "sha256": "cc13528e93f8dc925ebd913a66591b875163be5a6cc7df62939cb3cbb43ef2c4"
+          },
+          "prefixPin": {
+            "eventCount": 62,
+            "eventDigest": "8eaed515adaf2f75486c6c58b3c9d561312cf1192f8a4340da0e2bdb336b0ab4",
+            "byteLength": 23884,
+            "sha256": "e9ca9778195be1457c756bec78e3d970c30e1d5f1d6e5e5068028d2c43ab2be7"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 284,
+          "frame": 288,
+          "advancedFrames": 4,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 26,
+            "toActionIndex": 28,
+            "fromFrame": 284,
+            "toFrame": 288,
+            "fromPrefixPin": {
+              "eventCount": 58,
+              "eventDigest": "55c8b0c049408d084ba05d9bfe6b1557b6649a87df2d8fb32db3c4f0124b3cbb",
+              "byteLength": 22417,
+              "sha256": "cc13528e93f8dc925ebd913a66591b875163be5a6cc7df62939cb3cbb43ef2c4"
+            },
+            "prefixPin": {
+              "eventCount": 62,
+              "eventDigest": "8eaed515adaf2f75486c6c58b3c9d561312cf1192f8a4340da0e2bdb336b0ab4",
+              "byteLength": 23884,
+              "sha256": "e9ca9778195be1457c756bec78e3d970c30e1d5f1d6e5e5068028d2c43ab2be7"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "active_board",
+      "request": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 292,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "a"
+        ],
+        "sampledButtons": [
+          "a"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 51.231667,
+          "gameTimeMs": 4888.8702392578125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 292,
+          "totalFrames": 292,
+          "bytesUsed": 49885,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 66,
+          "eventDigest": "4d756fc21bc8e50d4af4a934b20363896f0e5f6b281ca3c50ffc76eb68c64f99",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 292
+            }
+          ]
+        },
+        "startFrame": 288,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "a"
+        ],
+        "samples": [
+          {
+            "frame": 292,
+            "width": 160,
+            "height": 144,
+            "sha256": "5972b4b85770cb86c4e27f3c96874054eecfae9df24fbacc13aa73ec7a57ab67",
+            "rgbaSha256": "27c1520eeda1a2cfba39edcb4840721815c84cc8eefbe9d679f75f436987f701",
+            "sampledButtons": [
+              "a"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/5972b4b85770cb86c4e27f3c96874054eecfae9df24fbacc13aa73ec7a57ab67.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 28,
+          "toActionIndex": 30,
+          "fromFrame": 288,
+          "toFrame": 292,
+          "fromPrefixPin": {
+            "eventCount": 62,
+            "eventDigest": "8eaed515adaf2f75486c6c58b3c9d561312cf1192f8a4340da0e2bdb336b0ab4",
+            "byteLength": 23884,
+            "sha256": "e9ca9778195be1457c756bec78e3d970c30e1d5f1d6e5e5068028d2c43ab2be7"
+          },
+          "prefixPin": {
+            "eventCount": 66,
+            "eventDigest": "4d756fc21bc8e50d4af4a934b20363896f0e5f6b281ca3c50ffc76eb68c64f99",
+            "byteLength": 25354,
+            "sha256": "31d82f8dcb861d1e1b0827e686b3e914793c6e049d194a54e1a6c990fc297105"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 288,
+          "frame": 292,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "a"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 28,
+            "toActionIndex": 30,
+            "fromFrame": 288,
+            "toFrame": 292,
+            "fromPrefixPin": {
+              "eventCount": 62,
+              "eventDigest": "8eaed515adaf2f75486c6c58b3c9d561312cf1192f8a4340da0e2bdb336b0ab4",
+              "byteLength": 23884,
+              "sha256": "e9ca9778195be1457c756bec78e3d970c30e1d5f1d6e5e5068028d2c43ab2be7"
+            },
+            "prefixPin": {
+              "eventCount": 66,
+              "eventDigest": "4d756fc21bc8e50d4af4a934b20363896f0e5f6b281ca3c50ffc76eb68c64f99",
+              "byteLength": 25354,
+              "sha256": "31d82f8dcb861d1e1b0827e686b3e914793c6e049d194a54e1a6c990fc297105"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "a"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "settle_current_board",
+      "request": {
+        "buttons": [],
+        "frames": 60,
+        "includeImages": true,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 352,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 59.299209,
+          "gameTimeMs": 5893.4326171875
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 352,
+          "totalFrames": 352,
+          "bytesUsed": 54634,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 72,
+          "eventDigest": "d3dc5d8ad1bd37ab1f256250baff48a13d78aab494f95c4837bd4c6ee16e2079",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 352
+            }
+          ]
+        },
+        "startFrame": 292,
+        "advancedFrames": 60,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 352,
+            "width": 160,
+            "height": 144,
+            "sha256": "aa056b3c121a4c4015673c9da50e6488fc32cac7d0d11f023770cc5b31189b4a",
+            "rgbaSha256": "df604e271007c7dfaf55499b90550db4b67ad4a54aebfa069c280c358ef7795b",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/aa056b3c121a4c4015673c9da50e6488fc32cac7d0d11f023770cc5b31189b4a.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 30,
+          "toActionIndex": 33,
+          "fromFrame": 292,
+          "toFrame": 352,
+          "fromPrefixPin": {
+            "eventCount": 66,
+            "eventDigest": "4d756fc21bc8e50d4af4a934b20363896f0e5f6b281ca3c50ffc76eb68c64f99",
+            "byteLength": 25354,
+            "sha256": "31d82f8dcb861d1e1b0827e686b3e914793c6e049d194a54e1a6c990fc297105"
+          },
+          "prefixPin": {
+            "eventCount": 72,
+            "eventDigest": "d3dc5d8ad1bd37ab1f256250baff48a13d78aab494f95c4837bd4c6ee16e2079",
+            "byteLength": 27667,
+            "sha256": "6de85f3766f2f365ab282ab4f10c4286b6189c19934df541487e324663a747f7"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 60,
+          "startFrame": 292,
+          "frame": 352,
+          "advancedFrames": 60,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 30,
+            "toActionIndex": 33,
+            "fromFrame": 292,
+            "toFrame": 352,
+            "fromPrefixPin": {
+              "eventCount": 66,
+              "eventDigest": "4d756fc21bc8e50d4af4a934b20363896f0e5f6b281ca3c50ffc76eb68c64f99",
+              "byteLength": 25354,
+              "sha256": "31d82f8dcb861d1e1b0827e686b3e914793c6e049d194a54e1a6c990fc297105"
+            },
+            "prefixPin": {
+              "eventCount": 72,
+              "eventDigest": "d3dc5d8ad1bd37ab1f256250baff48a13d78aab494f95c4837bd4c6ee16e2079",
+              "byteLength": 27667,
+              "sha256": "6de85f3766f2f365ab282ab4f10c4286b6189c19934df541487e324663a747f7"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "available",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "locked_chapter_select_a",
+      "request": {
+        "buttons": [
+          "select",
+          "a"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 356,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "a",
+          "select"
+        ],
+        "sampledButtons": [
+          "a",
+          "select"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 60.856584,
+          "gameTimeMs": 5960.4034423828125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 356,
+          "totalFrames": 356,
+          "bytesUsed": 58651,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 76,
+          "eventDigest": "85cab6517e905a6f6ab169e06dd3bcf60fb30310df018e91dfdbf2b1779360e2",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 356
+            }
+          ]
+        },
+        "startFrame": 352,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "a",
+          "select"
+        ],
+        "samples": [
+          {
+            "frame": 356,
+            "width": 160,
+            "height": 144,
+            "sha256": "8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c",
+            "rgbaSha256": "edd0d607fd4fb2bf2887543dcb852c7d564fff70bef84698c42ddb259080a239",
+            "sampledButtons": [
+              "a",
+              "select"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 33,
+          "toActionIndex": 35,
+          "fromFrame": 352,
+          "toFrame": 356,
+          "fromPrefixPin": {
+            "eventCount": 72,
+            "eventDigest": "d3dc5d8ad1bd37ab1f256250baff48a13d78aab494f95c4837bd4c6ee16e2079",
+            "byteLength": 27667,
+            "sha256": "6de85f3766f2f365ab282ab4f10c4286b6189c19934df541487e324663a747f7"
+          },
+          "prefixPin": {
+            "eventCount": 76,
+            "eventDigest": "85cab6517e905a6f6ab169e06dd3bcf60fb30310df018e91dfdbf2b1779360e2",
+            "byteLength": 29164,
+            "sha256": "c3f04c2b2333bf3efa13c9f0682476e8c5d0dcdd03108a133302d2e553c11c62"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 352,
+          "frame": 356,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "a",
+            "select"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 33,
+            "toActionIndex": 35,
+            "fromFrame": 352,
+            "toFrame": 356,
+            "fromPrefixPin": {
+              "eventCount": 72,
+              "eventDigest": "d3dc5d8ad1bd37ab1f256250baff48a13d78aab494f95c4837bd4c6ee16e2079",
+              "byteLength": 27667,
+              "sha256": "6de85f3766f2f365ab282ab4f10c4286b6189c19934df541487e324663a747f7"
+            },
+            "prefixPin": {
+              "eventCount": 76,
+              "eventDigest": "85cab6517e905a6f6ab169e06dd3bcf60fb30310df018e91dfdbf2b1779360e2",
+              "byteLength": 29164,
+              "sha256": "c3f04c2b2333bf3efa13c9f0682476e8c5d0dcdd03108a133302d2e553c11c62"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "a",
+            "select"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "settle_locked_board",
+      "request": {
+        "buttons": [],
+        "frames": 60,
+        "includeImages": true,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 416,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 67.759709,
+          "gameTimeMs": 6964.9658203125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 416,
+          "totalFrames": 416,
+          "bytesUsed": 60973,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 82,
+          "eventDigest": "bdc013e8a17c884d117cd91ee6be98487d6c6d99c573f64e5185920d0ace9bc9",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 416
+            }
+          ]
+        },
+        "startFrame": 356,
+        "advancedFrames": 60,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 416,
+            "width": 160,
+            "height": 144,
+            "sha256": "8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c",
+            "rgbaSha256": "edd0d607fd4fb2bf2887543dcb852c7d564fff70bef84698c42ddb259080a239",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 35,
+          "toActionIndex": 38,
+          "fromFrame": 356,
+          "toFrame": 416,
+          "fromPrefixPin": {
+            "eventCount": 76,
+            "eventDigest": "85cab6517e905a6f6ab169e06dd3bcf60fb30310df018e91dfdbf2b1779360e2",
+            "byteLength": 29164,
+            "sha256": "c3f04c2b2333bf3efa13c9f0682476e8c5d0dcdd03108a133302d2e553c11c62"
+          },
+          "prefixPin": {
+            "eventCount": 82,
+            "eventDigest": "bdc013e8a17c884d117cd91ee6be98487d6c6d99c573f64e5185920d0ace9bc9",
+            "byteLength": 31486,
+            "sha256": "859c1b30f75562d83d9f37975d506e9bacef40b2fa91e974a87b279999e9b63f"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 60,
+          "startFrame": 356,
+          "frame": 416,
+          "advancedFrames": 60,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 35,
+            "toActionIndex": 38,
+            "fromFrame": 356,
+            "toFrame": 416,
+            "fromPrefixPin": {
+              "eventCount": 76,
+              "eventDigest": "85cab6517e905a6f6ab169e06dd3bcf60fb30310df018e91dfdbf2b1779360e2",
+              "byteLength": 29164,
+              "sha256": "c3f04c2b2333bf3efa13c9f0682476e8c5d0dcdd03108a133302d2e553c11c62"
+            },
+            "prefixPin": {
+              "eventCount": 82,
+              "eventDigest": "bdc013e8a17c884d117cd91ee6be98487d6c6d99c573f64e5185920d0ace9bc9",
+              "byteLength": 31486,
+              "sha256": "859c1b30f75562d83d9f37975d506e9bacef40b2fa91e974a87b279999e9b63f"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "available",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "resume_locked_board",
+      "request": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 420,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [
+          "a"
+        ],
+        "sampledButtons": [
+          "a"
+        ],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 69.115043,
+          "gameTimeMs": 7031.9366455078125
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 420,
+          "totalFrames": 420,
+          "bytesUsed": 64225,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 86,
+          "eventDigest": "0d0ee254ac76f809358d9688edba64a6bb70b88b9df29d6425d2813a3cb83be7",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 420
+            }
+          ]
+        },
+        "startFrame": 416,
+        "advancedFrames": 4,
+        "appliedButtons": [
+          "a"
+        ],
+        "samples": [
+          {
+            "frame": 420,
+            "width": 160,
+            "height": 144,
+            "sha256": "4aab2507e69adcfa2c027da03b45f3cab044e8bd246e3828e85a72417e63cbbb",
+            "rgbaSha256": "c62e5429a5d46c5757730ec68c458df5e39bcc257b99e57518e14bcb0916e870",
+            "sampledButtons": [
+              "a"
+            ],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/4aab2507e69adcfa2c027da03b45f3cab044e8bd246e3828e85a72417e63cbbb.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 38,
+          "toActionIndex": 40,
+          "fromFrame": 416,
+          "toFrame": 420,
+          "fromPrefixPin": {
+            "eventCount": 82,
+            "eventDigest": "bdc013e8a17c884d117cd91ee6be98487d6c6d99c573f64e5185920d0ace9bc9",
+            "byteLength": 31486,
+            "sha256": "859c1b30f75562d83d9f37975d506e9bacef40b2fa91e974a87b279999e9b63f"
+          },
+          "prefixPin": {
+            "eventCount": 86,
+            "eventDigest": "0d0ee254ac76f809358d9688edba64a6bb70b88b9df29d6425d2813a3cb83be7",
+            "byteLength": 32956,
+            "sha256": "5e9d083ec3ddbb1c1a1349e8245f026f3746e6c1d9bca656104cc44e70525359"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 4,
+          "startFrame": 416,
+          "frame": 420,
+          "advancedFrames": 4,
+          "appliedButtons": [
+            "a"
+          ],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 38,
+            "toActionIndex": 40,
+            "fromFrame": 416,
+            "toFrame": 420,
+            "fromPrefixPin": {
+              "eventCount": 82,
+              "eventDigest": "bdc013e8a17c884d117cd91ee6be98487d6c6d99c573f64e5185920d0ace9bc9",
+              "byteLength": 31486,
+              "sha256": "859c1b30f75562d83d9f37975d506e9bacef40b2fa91e974a87b279999e9b63f"
+            },
+            "prefixPin": {
+              "eventCount": 86,
+              "eventDigest": "0d0ee254ac76f809358d9688edba64a6bb70b88b9df29d6425d2813a3cb83be7",
+              "byteLength": 32956,
+              "sha256": "5e9d083ec3ddbb1c1a1349e8245f026f3746e6c1d9bca656104cc44e70525359"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": [
+            "a"
+          ]
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "omitted",
+          "sampleCount": 1
+        }
+      }
+    },
+    {
+      "intentLabel": "settle_locked_resume",
+      "request": {
+        "buttons": [],
+        "frames": 16,
+        "includeImages": true,
+        "sampleCount": 1
+      },
+      "received": {
+        "romPath": "games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc",
+        "frame": 436,
+        "width": 160,
+        "height": 144,
+        "activeButtons": [],
+        "sampledButtons": [],
+        "cgb": true,
+        "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+        "runtime": {
+          "name": "PyBoy",
+          "version": "2.7.0",
+          "protocolVersion": 1,
+          "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+        },
+        "paused": true,
+        "clock": {
+          "mode": "paused",
+          "clockHz": 4194304,
+          "dotsPerFrame": 70224,
+          "executionWallTimeMs": 72.847918,
+          "gameTimeMs": 7299.8199462890625
+        },
+        "recording": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "status": "recording",
+          "branchId": "branch-0001",
+          "frame": 436,
+          "totalFrames": 436,
+          "bytesUsed": 67513,
+          "limits": {
+            "sampleEveryFrames": 60,
+            "recentFrameCount": 16,
+            "maxBytes": 33554432,
+            "maxFrames": 2000,
+            "maxWallTimeMs": 180000
+          },
+          "eventCount": 90,
+          "eventDigest": "a23cc45bb813070b85ceb5d43e1a4a06885eb4690b020bf34869b18642332188",
+          "branches": [
+            {
+              "branchId": "branch-0001",
+              "frame": 436
+            }
+          ]
+        },
+        "startFrame": 420,
+        "advancedFrames": 16,
+        "appliedButtons": [],
+        "samples": [
+          {
+            "frame": 436,
+            "width": 160,
+            "height": 144,
+            "sha256": "b8938128dd120e5c9ce10efcb6487272f6531866e8bef5a2c49a4b2523be43ef",
+            "rgbaSha256": "eb8a9eb6e09f6938fd936ecf6edf20e9f795c78aef7358aabcaba8dd9db74a6a",
+            "sampledButtons": [],
+            "path": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/b8938128dd120e5c9ce10efcb6487272f6531866e8bef5a2c49a4b2523be43ef.png"
+          }
+        ],
+        "recordingSpan": {
+          "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+          "sessionId": "54532925d6ff4c8f87ac283a20966285",
+          "branchId": "branch-0001",
+          "fromActionIndex": 40,
+          "toActionIndex": 42,
+          "fromFrame": 420,
+          "toFrame": 436,
+          "fromPrefixPin": {
+            "eventCount": 86,
+            "eventDigest": "0d0ee254ac76f809358d9688edba64a6bb70b88b9df29d6425d2813a3cb83be7",
+            "byteLength": 32956,
+            "sha256": "5e9d083ec3ddbb1c1a1349e8245f026f3746e6c1d9bca656104cc44e70525359"
+          },
+          "prefixPin": {
+            "eventCount": 90,
+            "eventDigest": "a23cc45bb813070b85ceb5d43e1a4a06885eb4690b020bf34869b18642332188",
+            "byteLength": 34421,
+            "sha256": "4d4ca2d7d167283e17dbeaab8e037e4656c3c34122178a58de48f9813394d783"
+          },
+          "emptyInterval": false
+        },
+        "execution": {
+          "status": "completed",
+          "requestedFrames": 16,
+          "startFrame": 420,
+          "frame": 436,
+          "advancedFrames": 16,
+          "appliedButtons": [],
+          "recordingSpan": {
+            "recordingPath": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording",
+            "sessionId": "54532925d6ff4c8f87ac283a20966285",
+            "branchId": "branch-0001",
+            "fromActionIndex": 40,
+            "toActionIndex": 42,
+            "fromFrame": 420,
+            "toFrame": 436,
+            "fromPrefixPin": {
+              "eventCount": 86,
+              "eventDigest": "0d0ee254ac76f809358d9688edba64a6bb70b88b9df29d6425d2813a3cb83be7",
+              "byteLength": 32956,
+              "sha256": "5e9d083ec3ddbb1c1a1349e8245f026f3746e6c1d9bca656104cc44e70525359"
+            },
+            "prefixPin": {
+              "eventCount": 90,
+              "eventDigest": "a23cc45bb813070b85ceb5d43e1a4a06885eb4690b020bf34869b18642332188",
+              "byteLength": 34421,
+              "sha256": "4d4ca2d7d167283e17dbeaab8e037e4656c3c34122178a58de48f9813394d783"
+            },
+            "emptyInterval": false
+          },
+          "sampledButtons": []
+        },
+        "genuineEmulatorFrames": true,
+        "imageDelivery": {
+          "status": "available",
+          "sampleCount": 1
+        }
+      }
+    }
+  ],
+  "memoryReceipts": [
+    {
+      "intentLabel": "settled_current_board",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "received": {
+        "view": "memory",
+        "frame": 352,
+        "region": "wram",
+        "offset": 502,
+        "length": 256,
+        "address": "0xc1f6",
+        "hex": "0023002d0023002d1e000100780000000000000200000164000f000000000000000000000000000000000000000000000023002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff00000007800e0016801d8033800d80118018800a80278010800600000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_current_board",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2500,
+        "length": 4
+      },
+      "received": {
+        "view": "memory",
+        "frame": 352,
+        "region": "wram",
+        "offset": 2500,
+        "length": 4,
+        "address": "0xd9c4",
+        "hex": "00000000",
+        "bank": 1
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_current_board",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "received": {
+        "view": "memory",
+        "frame": 352,
+        "region": "wram",
+        "offset": 1450,
+        "length": 3,
+        "address": "0xd5aa",
+        "hex": "1a0f7f",
+        "bank": 1
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_locked_board",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "received": {
+        "view": "memory",
+        "frame": 416,
+        "region": "wram",
+        "offset": 502,
+        "length": 256,
+        "address": "0xc1f6",
+        "hex": "0023002d0023002d1e000100780000000000000208000164000f000000000000000000000000000000000000000000000023002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff53484f5046524f4e5420524f554e44000000000008ff06e600d0000001020b04070800ffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff00000007800e0016801d8033800d80118018800a80278010800600000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_locked_board",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2500,
+        "length": 4
+      },
+      "received": {
+        "view": "memory",
+        "frame": 416,
+        "region": "wram",
+        "offset": 2500,
+        "length": 4,
+        "address": "0xd9c4",
+        "hex": "00000000",
+        "bank": 1
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_locked_board",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "received": {
+        "view": "memory",
+        "frame": 416,
+        "region": "wram",
+        "offset": 1450,
+        "length": 3,
+        "address": "0xd5aa",
+        "hex": "1a0f7f",
+        "bank": 1
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_locked_resume",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "offset": 502,
+        "length": 256
+      },
+      "received": {
+        "view": "memory",
+        "frame": 436,
+        "region": "wram",
+        "offset": 502,
+        "length": 256,
+        "address": "0xc1f6",
+        "hex": "0023002d0023002d1e0001007800000000000000080001640022000000000000000000000000000000000000000000000023002d0000000000004d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff53484f5046524f4e5420524f554e44000000000008ff06e600d0000001020b04070800ffffffff0003d0025354204c415752454e434500000000000000000000003002d002554e494f4e204445504f54000000000000000001000001ff00008007000f8016001e8033800d80118018800a80278010000700000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_locked_resume",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 2500,
+        "length": 4
+      },
+      "received": {
+        "view": "memory",
+        "frame": 436,
+        "region": "wram",
+        "offset": 2500,
+        "length": 4,
+        "address": "0xd9c4",
+        "hex": "00000000",
+        "bank": 1
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    },
+    {
+      "intentLabel": "settled_locked_resume",
+      "request": {
+        "view": "memory",
+        "region": "wram",
+        "bank": 1,
+        "offset": 1450,
+        "length": 3
+      },
+      "received": {
+        "view": "memory",
+        "frame": 436,
+        "region": "wram",
+        "offset": 1450,
+        "length": 3,
+        "address": "0xd5aa",
+        "hex": "1a0f7f",
+        "bank": 1
+      },
+      "authentication": "Separately received inert payload, not a journaled inspection"
+    }
+  ],
+  "observations": [
+    {
+      "frame": 352,
+      "state58Hex": "0023002d0023002d1e000100780000000000000200000164000f000000000000000000000000000000000000000000000023002d000000000000",
+      "decodedState": {
+        "u": 560.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 560.0,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 1,
+        "left": 120,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 2,
+        "menu": 0,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 15,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "complete": "00000000000000000000000000000000"
+      },
+      "carriedJob39Hex": "4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff",
+      "offer39Hex": "4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff",
+      "target26Hex": "0003d0025354204c415752454e43450000000000000000000000",
+      "fleet24Hex": "0007800e0016801d8033800d80118018800a802780108006",
+      "inputHex": "00000000",
+      "sceneFarPointerHex": "1a0f7f"
+    },
+    {
+      "frame": 416,
+      "state58Hex": "0023002d0023002d1e000100780000000000000208000164000f000000000000000000000000000000000000000000000023002d000000000000",
+      "decodedState": {
+        "u": 560.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 560.0,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 1,
+        "left": 120,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 2,
+        "menu": 8,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 15,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "complete": "00000000000000000000000000000000"
+      },
+      "carriedJob39Hex": "4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff",
+      "offer39Hex": "53484f5046524f4e5420524f554e44000000000008ff06e600d0000001020b04070800ffffffff",
+      "target26Hex": "0003d0025354204c415752454e43450000000000000000000000",
+      "fleet24Hex": "0007800e0016801d8033800d80118018800a802780108006",
+      "inputHex": "00000000",
+      "sceneFarPointerHex": "1a0f7f"
+    },
+    {
+      "frame": 436,
+      "state58Hex": "0023002d0023002d1e0001007800000000000000080001640022000000000000000000000000000000000000000000000023002d000000000000",
+      "decodedState": {
+        "u": 560.0,
+        "v": 720.0,
+        "parkU": 560.0,
+        "parkV": 720.0,
+        "safeU": 560.0,
+        "safeV": 720.0,
+        "cash": 30,
+        "seconds": 1,
+        "left": 120,
+        "wanted": 0,
+        "wantedLeft": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 8,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 34,
+        "origin": 0,
+        "target": 0,
+        "rideLeft": 0,
+        "cooldown": 0,
+        "message": 0,
+        "reserved": 0,
+        "district": 0,
+        "parkDistrict": 0,
+        "complete": "00000000000000000000000000000000"
+      },
+      "carriedJob39Hex": "4d41524b4554205354415254000000000000000002ff00780056000001ffffffffffffffffffff",
+      "offer39Hex": "53484f5046524f4e5420524f554e44000000000008ff06e600d0000001020b04070800ffffffff",
+      "target26Hex": "0003d0025354204c415752454e43450000000000000000000000",
+      "fleet24Hex": "8007000f8016001e8033800d80118018800a802780100007",
+      "inputHex": "00000000",
+      "sceneFarPointerHex": "1a0f7f"
+    }
+  ],
+  "visibleCaption": {
+    "frame": 416,
+    "offerId": 8,
+    "title": "SHOPFRONT ROUND",
+    "requiredCompleted": 6,
+    "actualCompleted": 0,
+    "caption": "NEEDS6 COMPLETED",
+    "controls": "A RESUME B BACK",
+    "visualVerification": "Independent original pixel inspection; the native font includes normal inter-word spacing."
+  },
+  "nativeImageProvenance": [
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 416,
+      "archiveId": "1518ee5f-0fb5-4257-921d-c565c734a3b2",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c.png",
+      "pngSha256": "8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c",
+      "rgbaSha256": "edd0d607fd4fb2bf2887543dcb852c7d564fff70bef84698c42ddb259080a239",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "settled locked SHOPFRONT ROUND / NEEDS6 COMPLETED / A RESUME",
+      "independentlyViewedOriginalPixels": true
+    }
+  ],
+  "limits": [
+    "Fresh exact03e09 source-debug companion independent of the main run; currentMarket stage1 is carried, not completed. No campaign progress, timing comparison, hardware, browser, human-duration or all96 acceptance is inferred.",
+    "Actual Select+A priority moves current menu0 to locked offer8/min_done6 with done0, followed by60 neutral VBlanks and a fully visible NEEDS6 COMPLETED/A RESUME image at416.",
+    "The original416 PNG/pixels exactly match main584. An earlier independent reviewer partial-paint interpretation of main584 was mistaken and has been withdrawn; raw images/receipts remain unchanged.",
+    "A4 plus16neutral resumes the same carriedMarket stage1 withcash30/left120 and no sampled error; subsequent ROAM time occurs in that native interval, so all58 identity across resume is not claimed.",
+    "All9 paused memory payloads are separately received read-only responses, not journaled inspection events. No checkpoint save/restore/import or field write occurs.",
+    "Independent compiled597 and main native5253 audits remain separate evidence; no extra native tool actions performed by this audit."
+  ],
+  "openFindings": []
+}

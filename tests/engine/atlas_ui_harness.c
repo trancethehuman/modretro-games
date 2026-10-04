@@ -288,7 +288,7 @@ static void test_dispatch_board_itineraries(void) {
            "independent editable-content oracle covers every registered native job and stop");
     UBYTE districts=0,saw_return=0,saw_delivery=0,saw_foot=0;
     for(unsigned job=0;job<TD_QUESTS;job++) {
-        reset_case();td.mode=TD_BOARD;td.menu=job;td_get_job(job,&td_offer);
+        reset_case();td.job=TD_NONE;td.mode=TD_BOARD;td.menu=job;td_get_job(job,&td_offer);
         const td_job_t *offer=&host_ui_jobs[job];char expected[40],brief[19];
         expect(td_offer.count==offer->count&&td_offer.reward==offer->reward&&td_offer.seconds==offer->seconds&&
                td_offer.vehicle==offer->vehicle&&td_offer.kind==offer->kind&&td_offer.min_done==offer->min_done&&
@@ -341,7 +341,7 @@ static void test_dispatch_board_itineraries(void) {
 
     /* A shorter name/role must clear the prior long row even in the same
      * mode. An empty offer must clear all three formerly occupied rows. */
-    reset_case();td.mode=TD_BOARD;td.menu=93;td_get_job(93,&td_offer);td_board_route=1;td_ui_draw();
+    reset_case();td.job=TD_NONE;td.mode=TD_BOARD;td.menu=93;td_get_job(93,&td_offer);td_board_route=1;td_ui_draw();
     expect_window_text(12,"RIVERBANK PARCEL","stale-row fixture begins with a real long Port client name");
     td.menu=0;td_get_job(0,&td_offer);td_board_route=1;td_ui_draw();
     expect_window_text(1,host_ui_chapters[0],"shorter chapter captions clear the previous Port Lands row through the actual cache");
@@ -361,6 +361,34 @@ static void test_dispatch_board_itineraries(void) {
         expect_window_text(16,"READY TO ACCEPT","invalid menu never reads or invents a completed-offer bit outside the actual campaign");
         expect_game_unchanged(&before);expect_text_screen_safe();
     }
+}
+
+static void test_dispatch_active_board_captions(void) {
+    reset_case();td.mode=TD_BOARD;td.job=td.menu=0;td.stage=1;td.done=0;
+    td_get_job(0,&td_job);td_get_job(0,&td_offer);td_board_route=0;
+    game_snapshot_t before=snapshot_game();td_ui_draw();expect_board_stop(0,0);
+    expect_window_text(16,"CURRENT STOP 2/2","active offer identifies the actual next handoff while its full itinerary still opens at pickup");
+    expect_window_text(15,"A RESUME  B BACK","an active preview offers resume rather than another acceptance");
+    expect_board_preserves_game(&before);expect_text_screen_safe();
+    td.complete[0]|=1;td.done=1;td_board_route=1;before=snapshot_game();td_ui_draw();expect_board_stop(0,1);
+    expect_window_text(16,"CURRENT STOP 2/2","a replay's completed bit cannot hide the current carried handoff");
+    expect_board_preserves_game(&before);
+    td.menu=1;td_get_job(1,&td_offer);td_board_route=1;before=snapshot_game();td_ui_draw();expect_board_stop(1,1);
+    expect_window_text(16,"READY AFTER THIS JOB","another eligible offer remains a preview until the carried job ends");
+    expect_window_text(15,"A RESUME  B BACK","another offer cannot advertise replacement of an active job");
+    expect_board_preserves_game(&before);expect_text_screen_safe();
+    td.menu=8;td_get_job(8,&td_offer);td_board_route=0;before=snapshot_game();td_ui_draw();
+    expect_window_text(16,"NEEDS 6 COMPLETED","an active preview preserves each other offer's authored completion lock");
+    expect_window_text(15,"A RESUME  B BACK","a locked preview still resumes the existing job rather than attempting acceptance");
+    expect_board_preserves_game(&before);
+    td.menu=1;td_get_job(1,&td_offer);td.complete[0]|=2;td.done=2;before=snapshot_game();td_ui_draw();
+    expect_window_text(16,"COMPLETE / PREVIEW","another completed contract is previewable but not replayable while work is carried");
+    expect_board_preserves_game(&before);expect_text_screen_safe();
+    td.menu=0;td_get_job(0,&td_offer);before=snapshot_game();td_ui_draw();
+    expect_window_text(16,"CURRENT STOP 2/2","shorter active status clears a previous longer completed caption through the actual row cache");
+    expect_board_preserves_game(&before);
+    unsigned writes=window_writes;td_ui_draw();
+    expect(window_writes==writes,"unchanged active status and controls reuse their native text cache");
 }
 
 static void result_fixture(unsigned job,UBYTE condition,UWORD left,UWORD previous,UBYTE done) {
@@ -423,6 +451,30 @@ static void test_contract_payment_result(void) {
     td.health=0;td.left=0;before=snapshot_game();td_ui_draw();
     expect_window_text(9,"CREDIT $0","failure replaces a defensive negative balance delta");
     expect_window_text(8,"","failure removes stale successful time/bonus text");expect_game_unchanged(&before);
+}
+
+static void test_car_entry_hud_repaint(void) {
+    static const char *const names[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
+    for(UBYTE vehicle=0;vehicle<4;vehicle++){
+        reset_case();td.mode=TD_ROAM;td.job=TD_NONE;td.msg=0;td.vehicle=vehicle;td.onfoot=1;
+        game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"$123 WALK H2","car-entry fixture begins with the actual walking vehicle-status row");
+        expect_window_text(2,"A CAR / B TRANSIT","car-entry fixture begins with the actual walking controls");
+        expect_game_unchanged(&before);
+        /* The engine harness proves completion calls the renderer after the
+           on-foot transition. Exercise that real repaint against its cache. */
+        td.onfoot=0;td.u=td.park_u;td.v=td.park_v;before=snapshot_game();td_ui_draw();
+        char status[21];sprintf(status,"$123 %s H2",names[vehicle]);
+        expect_window_text(1,status,"completed entry immediately displays the actual selected vehicle rather than stale WALK");
+        expect_window_text(2,"SELECT JOBS START UI","completed entry removes stale car-entry and transit controls in the same mode");
+        expect_game_unchanged(&before);
+        unsigned writes=window_writes;td_ui_draw();
+        expect(window_writes==writes,"unchanged occupied-car HUD uses its existing row cache after the completion repaint");
+        td.onfoot=1;before=snapshot_game();td_ui_draw();
+        expect_window_text(1,"$123 WALK H2","a later ordinary exit still restores the walking status without vehicle-name remnants");
+        expect_window_text(2,"A CAR / B TRANSIT","a later ordinary exit restores the walking controls");
+        expect_game_unchanged(&before);
+    }
 }
 
 static void test_wait_contact_hud_and_map_restore(void) {
@@ -858,11 +910,11 @@ int main(void) {
     test_paid_transit_objective_context();test_interrupt_restore_and_idempotence();
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();
     test_sparse_table_full_and_single_holes();
-    test_wait_contact_hud_and_map_restore();
+    test_car_entry_hud_repaint();test_wait_contact_hud_and_map_restore();
     test_reserved_islands_assistance_ui();
     test_island_objective_hud();
     test_appended_district_focus_and_holes();
-    test_dispatch_board_itineraries();test_contract_payment_result();
+    test_dispatch_board_itineraries();test_dispatch_active_board_captions();test_contract_payment_result();
     test_pause_audio_labels_and_map_cache();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;

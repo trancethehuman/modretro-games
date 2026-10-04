@@ -269,7 +269,7 @@ static void td_menu_update(void){
             else if(INPUT_DOWN_PRESSED)td_board_route=td_board_route+1<td_offer.count?td_board_route+1:0;
         }
         if(INPUT_A_PRESSED){
-            if(td.job!=TD_NONE){td_message(2);return;}
+            if(td.job!=TD_NONE){td.mode=TD_ROAM;td_ui_draw();return;}
             if(td.done<td_offer.min_done){td_message(3);return;}
             if(td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)){td_message(2);return;}
             td.job=td.menu;td_job=td_offer;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);td_set_target();td_save();td_ui_draw();return;
@@ -541,7 +541,7 @@ static void td_drive(td_terrain_cache_t *cache){
     if(td_red_cooldown)td_red_cooldown--;
     if(td_entry_timer){
         if(!td_entry_target){td.u=(td.u*3+td.park_u)/4;td.v=(td.v*3+td.park_v)/4;}
-        if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();}
+        if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();td_ui_draw();}
         td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);return;
     }
     if(td.onfoot){

@@ -1,0 +1,22 @@
+{
+  "manifest": "games/toronto-dispatch/docs/NATIVE_UI_POLISH_LOCKED_CAPTION.json",
+  "manifestSha256": "bb85159db003a3cff435786f7cbfd1c09def1dad28735a4872cec44fa20d2e16",
+  "images": [
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 416,
+      "archiveId": "1518ee5f-0fb5-4257-921d-c565c734a3b2",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/1518ee5f-0fb5-4257-921d-c565c734a3b2/recording/frames/8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c.png",
+      "pngSha256": "8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c",
+      "rgbaSha256": "edd0d607fd4fb2bf2887543dcb852c7d564fff70bef84698c42ddb259080a239",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "settled locked SHOPFRONT ROUND / NEEDS6 COMPLETED / A RESUME",
+      "independentlyViewedOriginalPixels": true,
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-locked-caption-416.png"
+    }
+  ]
+}

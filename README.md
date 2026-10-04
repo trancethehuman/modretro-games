@@ -4,25 +4,23 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Current status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, six Toronto districts, 96 contracts, walking/driving and scheduled transit | Native prototype; matching emulator campaign reaches 22 unique completions and all six loaded districts. Full campaign, two enjoyable human hours and hardware remain pending. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, six Toronto districts, 96 contracts, walking/driving and scheduled transit | Native prototype; current UI replay completes one delivery. The retained e797 campaign reaches 22 unique completions. Full campaign, two enjoyable human hours and hardware remain pending. |
 
 Toronto Dispatch contains 241 buildings, 595 pedestrian routes, 59 service points, seven parking anchors and four player vehicles. Explore compressed mainland neighbourhoods, Port Lands industry/bridges and public walking Islands. Momentum/braking, pedestrians and police consequences, scheduled train/bus/Queen/ferry travel, a scrollable atlas, original audio and save v9 progression are implemented.
 
 ![Toronto Dispatch street impact](games/toronto-dispatch/docs/screenshots/courier-clearance-visible-impact.png) ![Delivery result](games/toronto-dispatch/docs/screenshots/courier-clearance-market-result.png)
 
-Unmodified Core emulator frames from current `e797…`; [provenance](games/toronto-dispatch/docs/screenshots/courier-clearance-provenance.json) records their exact frames and hashes.
+Unmodified Core emulator frames from retained `e797…`; [provenance](games/toronto-dispatch/docs/screenshots/courier-clearance-provenance.json) records their exact frames and hashes.
 
 ## Play or load
 
-Read the [controls and features](games/toronto-dispatch/README.md) and [Chromatic loading guide](games/toronto-dispatch/docs/LOADING.md). Current local ROM is `toronto-dispatch-courier-clearance.gbc`, 524,288 bytes, SHA-256 `e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f`. On the dispatch board, Select jumps to the next eight-job chapter. RESULT B closes the receipt without reversing while held; release and press B again to brake/reverse normally.
+Read the [controls and features](games/toronto-dispatch/README.md) and [Chromatic loading guide](games/toronto-dispatch/docs/LOADING.md). Selected local ROM is `toronto-dispatch-ui-polish-direct.gbc`, 524,288 bytes, SHA-256 `03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6`. The new active-job board shows the current stop and resumes with A; completed car entry immediately refreshes the driving HUD. Select on the board jumps to the next eight-job chapter. RESULT B closes the receipt without reversing while held; release and press B again to brake/reverse normally.
 
-This exact ROM's growing emulator campaign reaches [22 distinct completed quests](games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json), including all eight kinds, scheduled train/bus relays, three public Island roundtrips and west/east/Port Lands jobs. The latest continuation verifies three foot-only client handoffs, recovery of the original parked car and three Port Lands road bridges. Imported progress, test-controller corrections and route-checking scope remain explicit. A failed west-end run and successful mixed driving/walking retry are retained. Chapter/control/walker-yield/impact/map checks and a separate same-ROM checkpoint/reset record also pass.
+Official build/resource and full source checks pass. A fresh [scoped native replay](games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json) verifies active-job previews/resume, entry/pause/map controls, one full-condition delivery and in-worker saved-progress reset. Independent compiled/native reviews pass 597 / 5,253 checks; published evidence passes 481 checks. Packaging is verified separately. The earlier [22-completion campaign](games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json) and `825…` [performance comparisons](games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json) retain their own ROM identities; their progress or measured gains are not attributed to this build.
 
-The remaining 74 contracts, fuller Old Toronto, two measured enjoyable human hours, wider pacing/balance, browser recovery and physical stream/flash/cold-boot/save persistence remain unverified. Earlier ROM records retain their own identities in [TESTING.md](games/toronto-dispatch/TESTING.md). No hardware installation is claimed; [published Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is a separate older release.
+Full Old Toronto, all 96 played contracts, two measured enjoyable human hours, wider pacing/balance, browser recovery and physical stream/flash/cold-boot/save persistence remain unverified. [TESTING.md](games/toronto-dispatch/TESTING.md) retains detailed evidence and failures. No hardware installation is claimed; [published Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is a separate older release.
 
 ## Develop
-
-Editable source adds an update-local terrain cache, separately built as `toronto-dispatch-update-terrain-banked.gbc` (`825444a0…`). Repeated [native comparisons](games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json) observe 6.6% more completed updates while parked in Core and 3.9% more during one fixed driving sequence. These are scoped workloads, with no added persistent RAM or save bytes. This source experiment has its own gameplay record; the e797 loading bundle remains selected while active-job prompts and a car-entry HUD lag receive further polish.
 
 Install the ModRetro Chromatic plugin, read [AGENTS.md](AGENTS.md) and the game's design/decisions/roadmap, then select `games/toronto-dispatch/project/project.gbsproj`. Follow [native build instructions](games/toronto-dispatch/docs/BUILD.md). Shared workflows live in [skills/](skills/), also exposed at `.agents/skills`.
 

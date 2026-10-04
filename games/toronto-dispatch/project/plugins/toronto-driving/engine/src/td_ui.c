@@ -256,8 +256,13 @@ void td_ui_draw(void) BANKED {
             td_row(11,td_line);td_row(12,td_cursor.name);
             td_get_district_name(td_cursor.district,td_line);td_row(13,td_line);
         }else{td_row(11,"NO ROUTE");td_row(12,"");td_row(13,"");}
-        if(td.menu<TD_QUESTS&&(td.complete[td.menu>>3]&(1<<(td.menu&7))))td_row(16,"COMPLETE / REPLAY");else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}else td_row(16,"READY TO ACCEPT");
-        td_row(14,"L/R JOB U/D STOPS");td_row(15,"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
+        if(td.job!=TD_NONE&&td.menu==td.job){
+            sprintf(td_line,"CURRENT STOP %u/%u",td.stage+1,td_job.count);td_row(16,td_line);
+        }else if(td.menu<TD_QUESTS&&(td.complete[td.menu>>3]&(1<<(td.menu&7)))){
+            td_row(16,td.job!=TD_NONE?"COMPLETE / PREVIEW":"COMPLETE / REPLAY");
+        }else if(td.done<td_offer.min_done){sprintf(td_line,"NEEDS %u COMPLETED",td_offer.min_done);td_row(16,td_line);}
+        else td_row(16,td.job!=TD_NONE?"READY AFTER THIS JOB":"READY TO ACCEPT");
+        td_row(14,"L/R JOB U/D STOPS");td_row(15,td.job!=TD_NONE?"A RESUME  B BACK":"A ACCEPT  B BACK");td_row(17,"PAUSE FREEZES CLOCK");return;
     }
     if(td.mode==TD_TRANSIT){
         service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);

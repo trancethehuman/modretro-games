@@ -36,6 +36,7 @@ BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 UBYTE td_test_sram[8192];
 
 static unsigned failures,checks,stop_reads,ui_draws;
+static UBYTE ui_last_draw_onfoot;
 static unsigned audio_updates,audio_inits,audio_impacts;
 /* Native compositing has its own actual-source VRAM/OAM harness. */
 void td_aircraft_render_reset(void) {}
@@ -150,7 +151,7 @@ UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank) {
 /* The actual UI initializer's transient-page reset is independently exercised
  * by the production UI harness. Retain that contract in this hardware stub. */
 void td_ui_init(void) { td_board_route=0;ui_draws++; }
-void td_ui_draw(void) { ui_draws++; }
+void td_ui_draw(void) { ui_draws++;ui_last_draw_onfoot=td.onfoot; }
 void td_map_open(void) {
     test_map_opens++;test_map_active=1;
     test_map_camera_x=camera_x;test_map_camera_y=camera_y;test_map_camera_settings=camera_settings;
@@ -225,6 +226,7 @@ static void reset_case(void) {
     td_corner_used=td_contact_episode=td_traffic_retreat_mask=td_vehicle_contact_mask=0;td_traffic_advance=8;td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
+    ui_last_draw_onfoot=0;
     stop0_here=authored_content=0;test_queue_calls=test_reset_calls=0;
     test_map_opens=test_map_updates=test_map_closes=0;
     test_map_active=test_map_buttons=test_map_pressed=test_map_camera_settings=0;
@@ -343,9 +345,19 @@ static void test_entry_collision(void) {
     expect(td.u==before_u&&td.v==before_v,"rejected entry keeps the courier position");
 
     reset_case();td.park_u=500*16;td.park_v=450*16;td.u=518*16;td.v=450*16;td.onfoot=1;
-    td_enter_exit();expect(td_entry_timer>0,"clear door approach begins an entry animation");
-    for(unsigned i=0;i<24;i++)driving_tick(0);
-    expect(!td.onfoot&&td.u==td.park_u&&td.v==td.park_v,"clear entry finishes at the parked vehicle");
+    td_enter_exit();expect(td_entry_timer==12&&ui_last_draw_onfoot,"clear door approach begins an entry animation with its still-walking HUD");
+    unsigned draws=ui_draws,stores=sram_writes;
+    for(unsigned i=0;i<11;i++)driving_tick(0);
+    expect(td.onfoot&&td_entry_timer==1&&ui_draws==draws&&sram_writes==stores,
+           "unfinished car entry retains walking state without repeated redraws or saves");
+    driving_tick(0);
+    expect(!td.onfoot&&!td_entry_timer&&td.u==td.park_u&&td.v==td.park_v&&
+           ui_draws==draws+1&&!ui_last_draw_onfoot&&sram_writes>stores,
+           "the final entry step requests its own HUD repaint only after snapping to the occupied parked car");
+    stores=sram_writes;
+    for(unsigned i=0;i<12;i++)driving_tick(0);
+    expect(ui_draws==draws+1&&sram_writes==stores,
+           "ordinary stopped-car updates do not repeat the completion repaint or save");
 }
 
 static void test_hidden_pedestrian(void) {
@@ -3301,10 +3313,10 @@ static void test_dispatch_chapter_eligibility(void) {
     expect(!memcmp(&td,&before,58)&&!td_board_route&&!memcmp(&td_job,&carried,sizeof(carried))&&
            !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores,
            "chapter browsing while carrying work preserves the active ordered job and its current handoff");
-    dispatch_edge(J_A);before.msg=2;
+    dispatch_edge(J_A);before.mode=TD_ROAM;
     expect(!memcmp(&td,&before,58)&&!memcmp(&td_job,&carried,sizeof(carried))&&
            !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores,
-           "A after an active-job chapter jump still rejects replacing the carried contract");
+           "A after an active-job chapter jump resumes without replacing the carried contract or adding an error");
 }
 
 static void test_dispatch_acceptance_and_reentry(void) {
@@ -3359,16 +3371,36 @@ static void test_dispatch_acceptance_and_reentry(void) {
     expect(td.mode==TD_BOARD&&td.menu==95&&!td_board_route&&td_offer.reward==td_fixture_jobs[95].reward&&
            !memcmp(td_offer.route,td_job.route,12),"opening dispatch from pause during work rebuilds the active job's complete itinerary at pickup");
     dispatch_edge(J_UP);dispatch_edge(J_RIGHT);dispatch_edge(J_DOWN);dispatch_edge(J_A);
-    expect(td.mode==TD_BOARD&&td.msg==2&&td.job==95&&td.stage==active.stage&&td.left==active.left&&
+    expect(td.mode==TD_ROAM&&td.msg==active.msg&&td.job==95&&td.stage==active.stage&&td.left==active.left&&
            td.health==active.health&&td.cash==active.cash&&sram_writes==stores&&
            !memcmp(&td_target,&target,sizeof(target)),
-           "browsing another contract cannot replace the active job or move its current handoff when A is rejected");
+           "A on another contract's preview resumes the carried job without replacing its current handoff or adding an error");
+    dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
     dispatch_edge(J_B);
     expect(td.mode==TD_ROAM&&td.job==95&&td.stage==2&&td.left==73,"B returns from an active-job preview to the unchanged carried job");
     td_board_route=3;dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
     expect(td.mode==TD_BOARD&&td.menu==95&&!td_board_route,"re-entering the active-job board always returns its preview to pickup");
     dispatch_edge(J_START);
     expect(td.mode==TD_ROAM&&td.job==95&&td.stage==2,"Start retains its board-back behaviour without cancelling the carried job");
+}
+
+static void test_dispatch_active_preview_resume(void) {
+    const UBYTE jobs[]={0,6,95};const UBYTE stages[]={1,2,2};
+    for(UBYTE i=0;i<sizeof(jobs);i++){
+        dispatch_offer(jobs[i]);td.vehicle=td_offer.vehicle==TD_NONE?0:td_offer.vehicle;dispatch_edge(J_A);
+        td.stage=stages[i];td.left=73;td.health=67;td.msg=6;td.onfoot=i==0;td_set_target();
+        dispatch_edge(J_START);dispatch_edge(J_DOWN);dispatch_edge(J_DOWN);dispatch_edge(J_A);
+        td_board_route=td_job.count-1;
+        td_state_t before=td;td_job_t carried=td_job;td_stop_t target=td_target;unsigned stores=sram_writes;
+        world_tick(0,360);
+        expect(!memcmp(&td,&before,58)&&!memcmp(&td_job,&carried,sizeof(carried))&&
+               !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores,
+               "active parcel, return and fixed-car previews freeze the carried deadline and all saved fields across six seconds");
+        world_tick(J_A,0);before.mode=TD_ROAM;
+        expect(!memcmp(&td,&before,58)&&!memcmp(&td_job,&carried,sizeof(carried))&&
+               !memcmp(&td_target,&target,sizeof(target))&&sram_writes==stores&&td_board_route==td_job.count-1,
+               "the active-board A edge only resumes and preserves the walking/vehicle state, preview, message, target and ordered job");
+    }
 }
 
 static void test_dispatch_credit_cache_and_order(void) {
@@ -3616,7 +3648,7 @@ int main(void) {
     test_human_impacts_and_police();test_visible_human_reverse_start();
     test_road_police_pursuit();
     test_dispatch_itinerary_inputs();test_dispatch_chapter_inputs();test_dispatch_chapter_eligibility();test_dispatch_acceptance_and_reentry();
-    test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
+    test_dispatch_active_preview_resume();test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
     test_reserved_islands_traffic_gates();test_current_ferry_fare_boundary();
     test_island_save_migration();test_island_objective_guidance();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
