@@ -8,6 +8,8 @@ Gameplay bank 2 is 16,380 / 16,384 bytes, leaving four bytes; no bank workaround
 
 A [fresh native replay](NATIVE_UI_POLISH_SAMPLES.json) checks active-job captions/resume/exit/chord rules, paused board/map and interrupted entry, immediate entry HUD refresh, one condition-100 Market Start (credit 108 / cash 138 / done 1), rejected remote First Art pickup and genuine in-worker SRAM recovery. First Art remains unpicked stage 0; there is no second completion. Independent compiled and raw native reviews pass 597 / 5,253 checks; public projection review passes 481 checks. Packaging has a separate verification record. Detailed timing/provenance and limitations are in [TESTING.md](../TESTING.md). The earlier e797 22-completion campaign and 825 workload gains are not inherited by this exact build.
 
+A [same-ROM continuation](NATIVE_UI_POLISH_ART.json) officially imports that genuine one-job checkpoint and adds First Art at condition 88%, credit 123 / cash 261 / done 2. Active-foot board freeze/resume, walking delivery, original-car recovery and durable in-worker SRAM reset pass 8,129 independent checks. Imported Market progress remains explicit; only First Art is newly completed here. No build inputs, ROM or ZIP change.
+
 Its own [single Core timing trial](NATIVE_UI_POLISH_PERFORMANCE.json) records 385 completed loops / 1,080 VBlanks and 80 / 240 in the driving tail, with 1,085 independent receipt/journal/image checks. These match retained825 values; neither repeated-trial acceptance nor a new whole-city gain is claimed.
 
 ## Retained courier-clearance candidate
