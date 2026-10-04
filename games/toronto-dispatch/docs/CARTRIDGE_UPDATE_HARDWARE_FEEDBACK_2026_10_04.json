@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "status": "failed-outcome-unverified",
+  "rom": {
+    "path": "project/build/toronto-dispatch-hardware-feedback.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+    "title": "TORONTODISPATCH",
+    "colorMode": "gbc-only",
+    "mapper": "MBC5"
+  },
+  "device": {
+    "product": "ModRetro Chromatic",
+    "cartridge": "User-selected writable ModRetro DevDay cartridge",
+    "selection": "Matched the intended device against fresh USB enumeration",
+    "previouslyDetectedCapacityBytes": 4194304,
+    "capacityFreshlyRedetected": false
+  },
+  "authorization": {
+    "updateRequestedByUser": true,
+    "priorCartridgeEraseAndPossibleSaveLossConsentReused": true,
+    "originalROMBackupRequirementWaived": true,
+    "originalROMExported": false
+  },
+  "write": {
+    "operationId": "371f1476e8811520bf0d8409b566c972ddad572d1af642ae692636e7f080ed01",
+    "vendorCLI": "1.2.1",
+    "pluginWriteRequests": 1,
+    "vendorInternalCartClinicCommunicationAttempts": 3,
+    "automaticPluginRetry": false,
+    "exitCode": 1,
+    "processCloseCode": 1,
+    "processClosed": true,
+    "completedAtUTC": "2026-10-04T22:51:29.443Z"
+  },
+  "enumeration": {
+    "exitCode": 0,
+    "processCloseCode": 0
+  },
+  "error": {
+    "code": "CHROMATIC_VENDOR_FAILED",
+    "vendorCode": "flash.write_failed",
+    "message": "Could not write the cartridge flash.",
+    "vendorPhase": "drawing",
+    "reportedDiagnostic": "USB bulk IN transfer timeout; end-of-attempt fence absent"
+  },
+  "verification": {
+    "cartridgeContents": "unknown-after-failed-attempt",
+    "readBack": "not-reported-by-vendor",
+    "physicalColdBoot": "pending",
+    "physicalButtons": "pending",
+    "physicalGameplay": "pending",
+    "physicalSavePersistence": "pending",
+    "physicalAudio": "pending",
+    "physicalFlicker": "pending"
+  },
+  "recovery": {
+    "automaticRetryPerformed": false,
+    "nextStep": "User powers off, reconnects USB, powers on and explicitly requests another write; then rediscover the intended device before a distinct supported request"
+  },
+  "notes": [
+    "The writer is closed with a terminal failure. Installation and cartridge contents are unverified; the earlier 8be1 build is the last user-confirmed physical game, rather than a claim that it remains stored after this attempt.",
+    "Three vendor-internal Cart Clinic communication attempts belong to one plugin write request; no additional flash request was automatically dispatched.",
+    "The ROM, reviewed ZIP and earlier installation record remain unchanged. Raw device identities, selection tokens, activation state, saves and operation journals remain local and ignored."
+  ]
+}

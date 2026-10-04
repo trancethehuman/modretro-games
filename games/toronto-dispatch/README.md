@@ -10,7 +10,7 @@ Original 160 × 144 frames from the retained `7ab28…` ROM. The [North](docs/NA
 
 Use the [Chromatic loading guide](docs/LOADING.md). The selected update is **`toronto-dispatch-hardware-feedback.gbc`**, 1,048,576 bytes, SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. It adds slower driving/trams, four smaller pedestrian types with impact poses, a clearer car, recoverable courier injuries, easier menus and richer street scenery. See the [update and verification record](docs/HARDWARE_FEEDBACK_2026_10_04.md). Generated binaries stay outside Git.
 
-The physical cartridge still contains the prior `8be1…` driving-only build, which the user confirmed boots and plays. Its [installation](docs/CARTRIDGE_INSTALL_2026_10_04.json), reviewed ZIP and the earlier 7ab sixteen-job evidence remain preserved separately. This new update has not been flashed.
+The [user-requested retry](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) installed the 9c155 update with vendor-reported success and a closed writer. No complete cartridge read-back digest was supplied. The user confirmed the new ROM cold-boots with USB disconnected and responds to physical buttons; extended physical gameplay remains pending. The [first failed attempt](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json), prior 8be1 [installation](docs/CARTRIDGE_INSTALL_2026_10_04.json), reviewed ZIPs and earlier 7ab sixteen-job evidence remain preserved separately. The retry followed explicit reconnection/request rather than an automatic write.
 
 The local cartridge bundle is **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`**. Its [independent package check](docs/HARDWARE_FEEDBACK_PACKAGE.json) verifies the exact ROM, committed source, checksums, loading instructions and licences.
 
@@ -45,7 +45,7 @@ Separate genuine checkpoint continuations on retained 7ab reach **16 distinct co
 
 A focused host test reproduces blocked walking after saving/resetting during car entry; near the parked car, press A to finish entering and recover. A repair and native regression remain pending.
 
-The [testing record](TESTING.md) preserves exact build identities, older evidence, failed attempts and controller corrections. Motorcycle job 74 previously finished with one second left and needs replay at the slower speed; all 104 deadlines are unchanged. Full 104-contract play, two measured enjoyable human hours, broader handling/reward/deadline tuning, older-save imports, performance/stack, browser recovery and this update's physical installation/save/audio/flicker checks remain pending. Emulator reset verifies committed in-worker progress, rather than physical battery persistence or every latest live field.
+The [testing record](TESTING.md) preserves exact build identities, older evidence, failed attempts and controller corrections. Motorcycle job 74 previously finished with one second left and needs replay at the slower speed; all 104 deadlines are unchanged. Full 104-contract play, two measured enjoyable human hours, broader handling/reward/deadline tuning, older-save imports, performance/stack, browser recovery and this update's extended physical gameplay/save/audio/flicker checks remain pending. Emulator reset verifies committed in-worker progress, rather than physical battery persistence or every latest live field.
 
 ## Develop
 

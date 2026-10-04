@@ -7,8 +7,12 @@ car, on-foot vehicle injuries, easier menus and richer scenery.
 The distinct tested update is **`project/build/toronto-dispatch-hardware-feedback.gbc`**,
 **1,048,576 bytes**, SHA-256
 **`9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`**.
-The prior installed ROM and reviewed ZIP remain unchanged. This update has not
-been written to the physical cartridge.
+The prior ROM file and reviewed ZIP remain unchanged. The
+[first cartridge write](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json)
+failed and its writer closed. After reconnection and an explicit retry request,
+the [second write](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json)
+completed with vendor-reported success in 52,404 ms. No automatic plugin retry
+was dispatched. The user then confirmed cold boot with USB disconnected and physical button response. Complete read-back and extended physical gameplay remain unverified.
 
 The reviewed local ZIP is **155,795 bytes**, SHA-256
 **`9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570`**,
@@ -97,7 +101,8 @@ archived and retrieved; private logs, saves and generated binaries remain ignore
 ## Remaining checks and limitations
 
 Physical flicker, handling, slower tram appearance, save persistence and audio
-need another Chromatic session. This update has no physical installation claim.
+need the user's new cartridge session. The retry has vendor-reported installation
+evidence and user-confirmed cold boot/buttons; extended physical gameplay remains pending.
 Road-NPC impacts on the courier are covered by the actual-C host fixture; the
 native injury sample above uses the tram. All 104 contracts, two measured enjoyable
 human hours, wider vehicle/deadline tuning, older-save imports and deepest-stack/

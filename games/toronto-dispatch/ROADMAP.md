@@ -8,9 +8,11 @@
 - [x] Clip/admit sprites within hardware limits and inspect crowded native frames; physical flicker recheck remains separate.
 - [x] Simplify pause labels, add held directional navigation and a quick map shortcut without repeated action presses.
 - [x] Add 375 roof modules, 758 street/park props and clearer signal details, preserving 344 footprints and registered geometry.
-- [x] Officially build and playtest distinct 9c155 while preserving the working 8be1 cartridge and package; [measured results](docs/HARDWARE_FEEDBACK_2026_10_04.md) retain exact scopes.
+- [x] Officially build and playtest distinct 9c155 while preserving the prior 8be1 ROM file and package; [measured results](docs/HARDWARE_FEEDBACK_2026_10_04.md) retain exact scopes.
 - [ ] Replay motorcycle 74 and review all 104 deadlines against slower vehicles/transit; human balance and two-hour enjoyment remain unverified.
-- [ ] Install and test the update on Chromatic, including physical flicker, handling, tram pacing, save persistence and audio.
+- [x] Complete the 9c155 cartridge write through the official installer after the user's reconnection and explicit retry request; retain the [first failure](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json) and [successful retry](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) separately. No complete read-back digest was provided.
+- [x] Receive the user's confirmation that 9c155 cold-boots with USB disconnected and responds to physical buttons.
+- [ ] Verify extended new-ROM physical gameplay, flicker, handling, tram pacing, save persistence and audio.
 - [ ] Repair partial-entry save overlap and the small parked-car/pedestrian avoidance mismatch, then give each its own native regression.
 
 ## Initial central prototype — implemented
@@ -335,6 +337,7 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Identify the connected Chromatic and the user's supported writable development cartridge.
 - [x] Load the reviewed `8be1eff0…` build through the official installer; retain [vendor success evidence](docs/CARTRIDGE_INSTALL_2026_10_04.json).
 - [x] Receive the user's confirmation of cold boot, physical button response, and subsequent playable hardware feedback. The vendor reported success; no separate complete read-back digest was available.
+- [x] Load tested 9c155 through a separately user-requested retry after reconnection; retain [vendor write success](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) and the first failed request separately.
 - [ ] Verify a full physical delivery, transit, save recovery and audio, and test the new hardware-feedback build on the cartridge after installation.
 
-The working installed build remains separate from the new update. Record device observations separately from emulator results without private activation or device details.
+The 9c155 write has vendor-reported success and user-confirmed cold boot/buttons. Complete read-back and extended physical gameplay remain unverified. Prior 8be1 observations retain their own scope. Record device observations separately from emulator results without private activation or device details.

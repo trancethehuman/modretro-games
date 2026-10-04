@@ -4,7 +4,7 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven compressed Toronto districts, 104 contracts, walking/driving and scheduled transit | Working 8be1 cartridge; tested 9c155 update adds slower driving/trams, four smaller pedestrian types, impacts, simpler menus and richer scenery. New hardware/balance review remains open. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven compressed Toronto districts, 104 contracts, walking/driving and scheduled transit | 9c155 cartridge write succeeded after an explicitly requested retry. The tested update adds slower driving/trams, four smaller pedestrian types, impacts, simpler menus and richer scenery. The user confirmed cold boot and physical buttons; extended gameplay and balance review remain open. |
 
 ## Toronto Dispatch
 
@@ -16,9 +16,9 @@ The city contains 344 original buildings, 657 pedestrian routes, 64 service poin
 
 Original 160 × 144 frames from the retained `7ab28…` ROM, at frames 63,970 and 82,748 in separate native continuations. Exact provenance is in the [North](games/toronto-dispatch/docs/NATIVE_NORTH_CURRENT_CONTINUATION.json) and [relay/Island](games/toronto-dispatch/docs/NATIVE_RELAY_ISLAND_CURRENT_CONTINUATION.json) records.
 
-Read the [game guide and controls](games/toronto-dispatch/README.md) and [Chromatic loading instructions](games/toronto-dispatch/docs/LOADING.md). The selected 1 MiB update `toronto-dispatch-hardware-feedback.gbc` has SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Generated binaries stay outside Git; the installed 8be1 ROM and all earlier bundles remain preserved separately.
+Read the [game guide and controls](games/toronto-dispatch/README.md) and [Chromatic loading instructions](games/toronto-dispatch/docs/LOADING.md). The selected 1 MiB update `toronto-dispatch-hardware-feedback.gbc` has SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Generated binaries stay outside Git; the prior 8be1 ROM file and all earlier bundles remain preserved separately.
 
-Official compilation and repository checks pass. The [fresh update record](games/toronto-dispatch/docs/NATIVE_HARDWARE_FEEDBACK.json) completes the first delivery at full condition, checks cardinal driving, walking/entry, human impacts, menus/map freeze, scheduled Queen travel, tram injury/recovery and saved in-worker reset. [Update details](games/toronto-dispatch/docs/HARDWARE_FEEDBACK_2026_10_04.md) separate those samples from prior 7ab sixteen-job evidence. The user confirmed the older 8be1 cartridge boots and plays; this new update has not been flashed. Full 104-contract play, two enjoyable measured human hours, slower-speed balance, broader performance/stack and physical update/save/audio/flicker checks remain pending.
+Official compilation and repository checks pass. The [fresh update record](games/toronto-dispatch/docs/NATIVE_HARDWARE_FEEDBACK.json) completes the first delivery at full condition, checks cardinal driving, walking/entry, human impacts, menus/map freeze, scheduled Queen travel, tram injury/recovery and saved in-worker reset. [Update details](games/toronto-dispatch/docs/HARDWARE_FEEDBACK_2026_10_04.md) separate those samples from prior 7ab sixteen-job evidence. The [user-requested retry](games/toronto-dispatch/docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed the 9c155 cartridge write with vendor-reported success after the separately retained first failure. No complete read-back digest was supplied. The user confirmed this new ROM cold-boots with USB disconnected and responds to physical buttons; extended physical gameplay remains pending. Full 104-contract play, two enjoyable measured human hours, slower-speed balance, broader performance/stack and physical save/audio/flicker checks remain pending.
 
 ## Develop
 

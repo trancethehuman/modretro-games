@@ -36,6 +36,18 @@ The supported plugin installed the exact 1,048,576-byte `toronto-dispatch-drivin
 
 After the completed write, the user confirmed that Toronto Dispatch appears and responds to physical buttons after powering off, disconnecting USB and powering on with the cartridge inserted. This establishes a user-reported cartridge cold boot and button response. Gameplay, power-off save persistence, audio and hardware performance remain unverified.
 
+## Hardware feedback retry installation — 2026-10-04
+
+After reconnecting the intended console, the user explicitly requested a retry of the same inspected/native-tested 1,048,576-byte 9c155 ROM. Fresh enumeration matched the intended device; no fresh cartridge-capacity detection was performed. Vendor CLI 1.2.1 reported success after 52,404 ms, and the writer exited/closed with code 0. The operation finished at 23:02:07.282 UTC. See the [sanitized successful retry](../games/toronto-dispatch/docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json).
+
+The first failure below remains historical. These were two separately authorized plugin write requests, with no automatic plugin retry. The vendor supplied no complete cartridge read-back digest and did not verify manual boot/play. The user confirmed the new ROM boots and responds to physical buttons after powering off, disconnecting USB and powering on with the cartridge inserted. Extended physical gameplay, save persistence, audio and flicker remain pending. Source, ROM files, frozen reviewed ZIPs and prior records remain unchanged; private journals and device details remain local and ignored.
+
+## First hardware feedback update attempt — 2026-10-04
+
+The supported plugin attempted to write the inspected/native-tested 1,048,576-byte `toronto-dispatch-hardware-feedback.gbc`, SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`, to the freshly selected intended device. Vendor CLI 1.2.1 returned a terminal `flash.write_failed` error and closed with exit/process-close code 1. Its diagnostic reports a USB bulk IN transfer timeout and absent end-of-attempt fence during phase `drawing`. Three internal vendor communication attempts belonged to one plugin write request; no automatic additional flash request was dispatched.
+
+See the [sanitized failed-attempt record](../games/toronto-dispatch/docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json). Cartridge contents were unverified after this first attempt; the earlier 8be1 was the last user-confirmed physical game. No complete read-back or new-ROM cold boot was claimed. Recovery required the user's power-off/reconnection and explicit retry request, followed by fresh device discovery; that separate successful retry is recorded above. Raw device identities, tokens and journals remain private and ignored.
+
 ## Evidence as of 2026-10-02
 
 The user installed plugin 1.0.33. Official authoring dependencies were prepared outside this repo: GB Studio CLI 4.3.2, GBDK 4.5.0 and PyBoy 2.7.0. Native builds and emulator tests are recorded in [BUILD.md](../games/toronto-dispatch/docs/BUILD.md) and [TESTING.md](../games/toronto-dispatch/TESTING.md).
