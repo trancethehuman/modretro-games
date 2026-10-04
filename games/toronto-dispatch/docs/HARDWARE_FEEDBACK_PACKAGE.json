@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-hardware-feedback-package-review",
+  "result": "passed",
+  "sourceCommit": "538e504453d009ec6246ceca80e8639776ba91d9",
+  "archive": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-hardware-feedback-reviewed.zip",
+    "sizeBytes": 155795,
+    "sha256": "9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570",
+    "members": [
+      "BUILDINFO.json",
+      "LICENSE",
+      "LOADING.md",
+      "ROM_NOTICES.txt",
+      "SHA256SUMS",
+      "toronto-dispatch-hardware-feedback.gbc"
+    ],
+    "CRC": "passed"
+  },
+  "rom": {
+    "filename": "toronto-dispatch-hardware-feedback.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+    "title": "TORONTODISPATCH",
+    "cgbOnly": true,
+    "cartridgeType": "MBC5+RUMBLE+RAM+BATTERY",
+    "ramSizeBytes": 32768,
+    "nintendoLogo": "passed",
+    "headerChecksum": "passed",
+    "globalChecksum": "passed"
+  },
+  "sourceSnapshot": {
+    "files": 173,
+    "committedSourcePins": "passed",
+    "unchangedWorkingPins": "passed",
+    "completeTrackedScope": "passed"
+  },
+  "checks": {
+    "assertions": 518,
+    "BUILDINFO": "passed",
+    "toolchainPins": "passed",
+    "immutableLoadingGuideLinks": "passed",
+    "controlsAndPendingScopes": "passed",
+    "committedLicenceAndNotices": "passed",
+    "privatePayloadExclusion": "passed"
+  },
+  "retainedInstalledArtifacts": {
+    "toronto-dispatch-driving-only.gbc": {
+      "sizeBytes": 1048576,
+      "sha256": "8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb",
+      "unchanged": true
+    },
+    "toronto-dispatch-driving-only-reviewed.zip": {
+      "sizeBytes": 146497,
+      "sha256": "fe672246e433ec6ca48b52c49c61ec833f65d223bfbbce334c0051e47951a0b4",
+      "unchanged": true
+    }
+  },
+  "limitations": [
+    "Packaging review does not rebuild or establish source-to-ROM correspondence independently; retain the separate official build and native records.",
+    "No cartridge update, physical flicker/save/audio acceptance, all-contract balance or measured two-hour enjoyment is established."
+  ]
+}

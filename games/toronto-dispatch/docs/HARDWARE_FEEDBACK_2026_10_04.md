@@ -10,6 +10,13 @@ The distinct tested update is **`project/build/toronto-dispatch-hardware-feedbac
 The prior installed ROM and reviewed ZIP remain unchanged. This update has not
 been written to the physical cartridge.
 
+The reviewed local ZIP is **155,795 bytes**, SHA-256
+**`9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570`**,
+with source **`538e504453d009ec6246ceca80e8639776ba91d9`**. Its
+[independent package check](HARDWARE_FEEDBACK_PACKAGE.json) verifies the exact ROM,
+173 committed build-input pins, checksums, frozen guide and licences. Binaries
+remain local and ignored; this is separate from a GitHub binary release.
+
 ## What changed
 
 | Area | Result |

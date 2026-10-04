@@ -29,6 +29,8 @@ Generated ROMs are excluded from Git. Any later source change needs a distinct o
 
 The loading bundle filename is **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`**. Extract it and verify `SHA256SUMS` against the selected 9c155 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching committed source; the bundled guide stays frozen at that revision. Preserve the installed 8be1 driving-only ROM/reviewed ZIP and all earlier packages unchanged. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
 
+The ZIP is **155,795 bytes**, SHA-256 **`9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570`**, frozen at matching source **`538e504453d009ec6246ceca80e8639776ba91d9`**. Its [independent package check](HARDWARE_FEEDBACK_PACKAGE.json) passes. This current repository guide includes later package metadata; the bundled guide remains frozen at its source commit.
+
 For a source build, ask Codex:
 
 > Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-hardware-feedback.gbc`, the installed `toronto-dispatch-driving-only.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.

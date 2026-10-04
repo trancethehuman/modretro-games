@@ -8,6 +8,8 @@ The [fresh native record](docs/NATIVE_HARDWARE_FEEDBACK.json) completes only Mar
 
 [Changes and practical limits](docs/HARDWARE_FEEDBACK_2026_10_04.md) distinguish implementation, host checks, sampled native evidence and pending hardware. All 104 deadlines remain unchanged; motorcycle 74 needs new-speed replay, and full campaign/two enjoyable human hours/peak stack/performance remain unverified. Partial-entry save overlap and a small parked-car/pedestrian avoidance mismatch remain pending. This new ROM has not been flashed; the physical cartridge retains the working 8be1 build below.
 
+Prepared local `project/build/toronto-dispatch-hardware-feedback-reviewed.zip` is 155,795 bytes / SHA-256 `9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570`, pinned to matching source `538e504453d009ec6246ceca80e8639776ba91d9`. Its [independent package check](docs/HARDWARE_FEEDBACK_PACKAGE.json) passes 518 assertions. The bundled instructions remain frozen before this later package metadata; packaging adds no new gameplay or hardware evidence.
+
 ## Physical cartridge installation — 2026-10-04
 
 The [installation record](docs/CARTRIDGE_INSTALL_2026_10_04.json) binds the exact native-tested `project/build/toronto-dispatch-driving-only.gbc`, 1,048,576 bytes / SHA-256 `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`, to the supported plugin's completed cartridge write. Vendor CLI 1.2.1 reports success after 49,679 ms, with exit and process-close code 0; no automatic or manual write retry occurred. Fresh device selection matched the intended previously detected 4 MiB writable cartridge. The vendor's returned ROM digest identifies the input file; no separate complete cartridge read-back digest was provided.

@@ -12,6 +12,8 @@ Use the [Chromatic loading guide](docs/LOADING.md). The selected update is **`to
 
 The physical cartridge still contains the prior `8be1…` driving-only build, which the user confirmed boots and plays. Its [installation](docs/CARTRIDGE_INSTALL_2026_10_04.json), reviewed ZIP and the earlier 7ab sixteen-job evidence remain preserved separately. This new update has not been flashed.
 
+The local cartridge bundle is **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`**. Its [independent package check](docs/HARDWARE_FEEDBACK_PACKAGE.json) verifies the exact ROM, committed source, checksums, loading instructions and licences.
+
 | Action | Controls |
 | --- | --- |
 | Drive | A accelerates; left/right steer; B brakes and then reverses near rest |
