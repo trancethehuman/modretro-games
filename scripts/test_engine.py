@@ -3,7 +3,8 @@
 The production driver/state-update functions are included unchanged. Thin stubs
 provide input, tiles, actors, UI, clock and SRAM. The sole source adaptation maps
 literal SRAM pointers into a bounded host buffer and observes actual SRAM stores.
-Fixtures include each transit service's two-second departure window, adjacent
+Fixtures include each transit service's departure window (Queen four seconds,
+other services two seconds), adjacent
 closed edges, immediate fares/ride timing, pause/deadline handling and interrupted
 boarding saves against the actual registered collision/content data. Fixture
 counts must match the production headers; the original core content is pinned.
@@ -218,7 +219,9 @@ def main():
         raise SystemExit("Host C compiler unavailable; engine regressions did not run.")
     # First include the real world module's private generated arrays in this
     # shared translation unit so direct portal fixtures inspect production data.
-    original = ((ENGINE / "src/td_transit.c").read_text() + '\n' +
+    original = ((ENGINE / "src/td_motion.c").read_text() + '\n' +
+                (ENGINE / "src/td_menu.c").read_text() + '\n' +
+                (ENGINE / "src/td_transit.c").read_text() + '\n' +
                 (ENGINE / "src/td_world.c").read_text() + '\n' +
                 (ENGINE / "src/td_streetcar.c").read_text() + '\n' +
                 (ENGINE / "src/td_streetcar_runtime.c").read_text() + '\n' +
@@ -259,6 +262,8 @@ def main():
         shutil.copyfile(FIXTURES / "gbvm_stubs.h", work / "gbvm_stubs.h")
         for name in ("actor", "camera", "scroll", "collision", "input", "data_manager", "ui", "compat", "system", "bankdata", "gbs_types"):
             (work / f"{name}.h").write_text('#include "gbvm_stubs.h"\n')
+        (work / "gb").mkdir()
+        (work / "gb/gb.h").write_text('#include "gbvm_stubs.h"\n')
         (work / "gbdk").mkdir()
         (work / "gbdk/platform.h").write_text('#include "gbvm_stubs.h"\n')
         binary = work / "engine-regressions"

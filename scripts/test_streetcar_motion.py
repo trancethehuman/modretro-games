@@ -79,24 +79,24 @@ def progress_probe(source):
     """
     rows = re.findall(r"static\s+const\s+UWORD\s+(td_streetcar_progress_[0-9]+)\[([0-9]+)\]", source)
     require(len(rows) == 6 and len({name for name, _ in rows}) == 6 and
-            all(int(count) == 121 for _, count in rows),
-            "Review the six constant121-tick interpolation resources before changing their native budget.")
+            all(int(count) == 721 for _, count in rows),
+            "Review the six constant721-tick interpolation resources before changing their native budget.")
     require(re.search(r"static\s+const\s+UWORD\s*\*\s*const\s+td_streetcar_progress_routes\[16\]", source),
             "Interpolation route pointers must remain ROM constants in the same compilation unit.")
     require("td_streetcar_progress_near_pointer_fits" in source and
             re.search(r"sizeof\(td_streetcar_progress_routes\[0\]\)\s*==\s*2", source),
             "Native two-byte near-pointer ABI must retain its compile-time guard.")
     stripped = re.sub(r"/\*.*?\*/|//[^\n]*", "", source, flags=re.S)
-    helper = re.search(r"static\s+UWORD\s+td_streetcar_progress\(UBYTE\s+route,UBYTE\s+tick\)\s*\{([^}]+)\}", stripped)
+    helper = re.search(r"static\s+UWORD\s+td_streetcar_progress\(UBYTE\s+route,UWORD\s+tick\)\s*\{([^}]+)\}", stripped)
     require(helper and "/" not in helper[1] and "%" not in helper[1] and
             not re.search(r"\btd_streetcar_length\s*\(", stripped),
             "Private interpolation must not retain runtime division or route-length folding.")
     sizes = "+".join(f"sizeof({name})" for name, _ in rows)
-    print("Streetcar source resource gate: six const121-tick tables,16 same-bank pointers; "
-          "1484 modeled native ROM bytes, no interpolation division or runtime length fold.", flush=True)
+    print("Streetcar source resource gate: six const721-tick tables,16 same-bank pointers; "
+          "8684 modeled native ROM bytes, no interpolation division or runtime length fold.", flush=True)
     return f"""
 /* Host-only private probes. Production source above is unchanged. */
-UWORD host_streetcar_progress(UBYTE route,UBYTE tick){{return td_streetcar_progress(route,tick);}}
+UWORD host_streetcar_progress(UBYTE route,UWORD tick){{return td_streetcar_progress(route,tick);}}
 unsigned host_streetcar_progress_value_bytes(void){{return {sizes};}}
 unsigned host_streetcar_progress_route_count(void){{
     return sizeof(td_streetcar_progress_routes)/sizeof(td_streetcar_progress_routes[0]);

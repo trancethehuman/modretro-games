@@ -16,6 +16,8 @@
 #include "td_boats.h"
 #include "td_roads.h"
 #include "td_terrain.h"
+#include "td_motion.h"
+#include "td_menu.h"
 #include "td_police.h"
 #include "td_traffic_lights.h"
 #include "actor.h"
@@ -36,20 +38,19 @@ UBYTE td_session_live;
 UBYTE td_route_district;
 static UBYTE td_transition_pending,td_transition_district;
 typedef char td_serialized_state_must_be_58_bytes[(sizeof(td_state_t)==58)?1:-1];
-static const BYTE td_dx[]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
-static const BYTE td_dy[]={0,6,11,15,16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6};
 static const UWORD td_rows[]={64,176,288,400,528,640,720,784};
 static const UWORD td_cols[]={80,208,336,480,560,640,720,816,944};
 static UWORD td_traffic_u[6],td_traffic_v[6];
 static td_traffic_sample_t td_traffic_samples[6];
 static UBYTE td_traffic_leg[6];
-static UBYTE td_tick,td_notice_timer,td_red_cooldown,td_turn_tick,td_entry_timer,td_entry_target,td_walk_dir;
+UBYTE td_tick,td_red_cooldown,td_turn_tick,td_entry_timer,td_entry_target,td_walk_dir;
+static UBYTE td_notice_timer;
 UBYTE td_resume_mode;
 UBYTE td_board_route;
-static WORD td_vx,td_vy;
+WORD td_vx,td_vy;
 static UWORD td_last_frame;
-static UBYTE td_corner_used;
-static UBYTE td_contact_episode;
+UBYTE td_corner_used;
+UBYTE td_contact_episode;
 static UBYTE td_traffic_retreat_mask;
 static UBYTE td_vehicle_contact_mask;
 static UWORD td_traffic_advance=8;
@@ -58,10 +59,10 @@ static UWORD td_police_advance;
 static td_police_plan_t td_police_waypoint;
 static UWORD td_police_from_u,td_police_from_v;
 static UBYTE td_police_stuck;
-static UBYTE td_input_edge;
+UBYTE td_input_edge;
 /* Held menu buttons stay consumed until individually released. Reuse the
    original RESULT byte as a bitmask; this remains transient across cold boot. */
-static UBYTE td_result_b_release;
+UBYTE td_result_b_release;
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v);
 
 static UWORD td_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
@@ -241,7 +242,7 @@ static void td_pause_choose(void){
     td_audio_play(TD_AUDIO_MENU);
     td_ui_draw();
 }
-static void td_menu_update(void){
+static void td_menu_update_inner(void){
     if(td.mode==TD_HELP){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=td_resume_mode;td_ui_draw();}return;}
     if(td.mode==TD_MAP){
         if(INPUT_B_PRESSED||INPUT_START_PRESSED){td_map_close();td.mode=TD_PAUSE;td.menu=1;td_ui_draw();}
@@ -252,6 +253,7 @@ static void td_menu_update(void){
         td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;
     }
     if(td.mode==TD_PAUSE){
+        if(INPUT_SELECT_PRESSED){td.mode=TD_MAP;td_map_open();return;}
         if(INPUT_DOWN_PRESSED)td.menu=(td.menu+1)%9;
         if(INPUT_UP_PRESSED)td.menu=(td.menu+8)%9;
         if(INPUT_A_PRESSED){td_pause_choose();return;}
@@ -290,6 +292,13 @@ static void td_menu_update(void){
         }
     }else if(td.mode==TD_RESULT&&INPUT_A_PRESSED){td.mode=TD_BOARD;td_ready_offer();}
     if(INPUT_A_PRESSED||INPUT_UP_PRESSED||INPUT_DOWN_PRESSED||INPUT_LEFT_PRESSED||INPUT_RIGHT_PRESSED)td_ui_draw();
+}
+static void td_menu_update(UWORD elapsed){
+    UBYTE pressed=joy_pressed,mode=td.mode;
+    if(mode==TD_PAUSE||mode==TD_BOARD||mode==TD_TRANSIT)joy_pressed|=td_menu_repeat(joy,elapsed);
+    else td_menu_reset();
+    td_menu_update_inner();joy_pressed=pressed;
+    if(td.mode!=mode)td_menu_reset();
 }
 static UBYTE td_alight_clear(UWORD u,UWORD v){
     if(!td_streetcar_runtime_landing_clear(td_cursor.district,u,v))return FALSE;
@@ -442,15 +451,13 @@ static void td_traffic_motion_inner(UBYTE mask,td_traffic_epoch_t *epoch){
             separating=(td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot&&(td_traffic_retreat_mask&(1<<i));
             if(separating){
                 if(!td_traffic_separate(i,target_u,target_v,&u,&v))continue;
-            }else{
-                // Incoming road users still yield throughout the wider13px margin.
-                if((td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot&&td_distance(td.u,u)<208&&td_distance(td.v,v)<208)continue;
             }
             /* One banked operation retains admission, whole-body terrain,
                future-tram and pending ownership. Only an accepted commit
                advances the snapshot; publish that same endpoint immediately. */
             if(!td_traffic_epoch_move(epoch,i,u,v,
                 !!(td_traffic_retreat_mask&(1<<i)),!!separating))continue;
+            td_motion_player_hit(td_traffic_u[i],td_traffic_v[i],u,v,extents[i]);
             td_traffic_u[i]=u;td_traffic_v[i]=v;
             if(i==2&&td_police_waypoint.valid)td_police_stuck=0;
             else if(u==target_u&&v==target_v){
@@ -480,8 +487,8 @@ static void td_traffic_contacts(void){
         td.speed=0;td_vx=td_vy=0;td.cooldown=120;td_message(20);td_save();
     }
     for(i=0;i<6;i++){
-        if(td_distance(td.u,td_traffic_u[i])>=(5+extents[i])*16||
-           td_distance(td.v,td_traffic_v[i])>=(5+extents[i])*16){td_vehicle_contact_mask&=~(1<<i);continue;}
+        if(td_distance(td.u,td_traffic_u[i])>=(7+extents[i])*16||
+           td_distance(td.v,td_traffic_v[i])>=(7+extents[i])*16){td_vehicle_contact_mask&=~(1<<i);continue;}
         if(td.mode!=TD_ROAM||td.onfoot||td.cooldown||td_contact_episode||
            (td_vehicle_contact_mask&(1<<i)))continue;
         td_vehicle_contact_mask|=1<<i;
@@ -525,80 +532,13 @@ static void td_pedestrians(void){
     if(td.job!=TD_NONE&&!td.health)td_finish(FALSE);else td_save();
 }
 
-static void td_drive(td_terrain_cache_t *cache){
-    WORD nu,nv,target_x,target_y;BYTE walk_x,walk_y;UBYTE limit,turn_period,moving=0,slide=0,speed;UWORD u,v;
-    if(td.cooldown)td.cooldown--;
-    if(td_red_cooldown)td_red_cooldown--;
-    if(td_entry_timer){
-        if(!td_entry_target){td.u=(td.u*3+td.park_u)/4;td.v=(td.v*3+td.park_v)/4;}
-        if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();td_ui_draw();}
-        td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);return;
-    }
-    if(td.onfoot){
-        nu=td.u;nv=td.v;
-        walk_x=!!INPUT_RIGHT-!!INPUT_LEFT;walk_y=!!INPUT_DOWN-!!INPUT_UP;
-        /* Alternate5/6 per axis: diagonal pace stays below cardinal8 Q4. */
-        if(walk_x){nu+=walk_x*(walk_y?5+(td_tick&1):8);td_walk_dir=walk_x>0?0:1;moving=1;}
-        if(walk_y){nv+=walk_y*(walk_x?6-(td_tick&1):8);td_walk_dir=walk_y>0?2:3;moving=1;}
-        if(td_foot_free(nu,nv)){td.u=nu;td.v=nv;}
-        else{if(nu!=(WORD)td.u&&td_foot_free(nu,td.v))td.u=nu;if(nv!=(WORD)td.v&&td_foot_free(td.u,nv))td.v=nv;}
-        td.speed=0;td_frame(&PLAYER,32+td_walk_dir*2+(moving?((td_tick>>3)&1):0));
-        if(td_input_edge&&INPUT_A_PRESSED&&td_near_car())td_enter_exit();
-        if(td_input_edge&&INPUT_B_PRESSED&&!td_entry_timer)td_transit_open();
-        return;
-    }
-    limit=td.vehicle==1?20:td.vehicle==2?28:td.vehicle==3?18:24;
-    speed=td.speed<0?-td.speed:td.speed;
-    turn_period=speed>18?12:speed>8?10:8;
-    if(td.vehicle==1)turn_period+=2;
-    // A dedicated yaw counter keeps turns regular as speed changes.
-    if(!!INPUT_LEFT!=!!INPUT_RIGHT){if(++td_turn_tick>=turn_period){td_turn_tick=0;if(INPUT_LEFT)td.heading=(td.heading+15)&15;else td.heading=(td.heading+1)&15;
-        if(td.job!=TD_NONE&&td.stage&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
-    }}
-    else td_turn_tick=0;
-    if(INPUT_B&&!(td_result_b_release&J_B)){if(td_tick%2==0&&td.speed>-6)td.speed--;}
-    else if(INPUT_A&&!(td_result_b_release&J_A)){if(td_tick%4==0&&td.speed<limit)td.speed++;}
-    else if(td_tick%8==0){if(td.speed>0)td.speed--;else if(td.speed<0)td.speed++;}
-    // Traction eases velocity toward heading instead of instantly rotating momentum.
-    target_x=td_dx[td.heading]*td.speed;target_y=td_dy[td.heading]*td.speed;
-    td_vx+=(target_x-td_vx)/4;td_vy+=(target_y-td_vy)/4;
-    if(!td.speed){td_vx/=2;td_vy/=2;}
-    nu=td.u+td_vx/16;nv=td.v+td_vy/16;u=nu>>4;v=nv>>4;
-    if(!td_streetcar_runtime_car_clear(td.u,td.v,nu,nv)){
-        td.speed=0;td_vx=td_vy=0;
-        if(!td.cooldown&&!td_contact_episode){td_contact_episode=1;td.cooldown=60;if(td.job!=TD_NONE&&td.stage){td.health=td.health>12?td.health-12:0;}td_message(5);}
-        if(td.job!=TD_NONE&&!td.health)td_finish(FALSE);
-        return;
-    }
-    if(td_terrain_drivable(u,v,cache)){
-        if(td.district==0&&!td_red_cooldown&&td.speed>6&&td_distance(u,640)<14&&td_distance(v,528)<14&&
-          (td_distance(td.u>>4,640)>=14||td_distance(td.v>>4,528)>=14)){
-            UBYTE ax=td_dx[td.heading]<0?-td_dx[td.heading]:td_dx[td.heading];
-            UBYTE ay=td_dy[td.heading]<0?-td_dy[td.heading]:td_dy[td.heading];
-            if((ax>ay&&td.seconds%12>=7)||(ax<=ay&&td.seconds%12<7)){if(td.cash>=5)td.cash-=5;td_red_cooldown=120;td_message(7);}
-        }
-        td.u=nu;td.v=nv;
-    }else{
-        // A glancing curb contact slides along the free axis and preserves forward speed.
-        if(nu!=(WORD)td.u&&td_terrain_drivable(nu>>4,td.v>>4,cache)){td.u=nu;td_vy=0;slide=1;}
-        if(nv!=(WORD)td.v&&td_terrain_drivable(td.u>>4,nv>>4,cache)){td.v=nv;td_vx=0;slide=1;}
-        if(!slide){
-            UBYTE held=joy;
-            joy&=~(td_result_b_release&(J_A|J_B));
-            slide=td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,nu,nv);
-            joy=held;
-        }
-        /* Remove only blocked-axis motion. Repeated curb scrapes must not beat the throttle. */
-        if(slide){if(speed>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
-        else{
-            if(td.speed>8&&!td.cooldown){if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);}
-            td.speed=0;td_vx=td_vy=0;
-        }
-    }
-    td.safe_u=td.u;td.safe_v=td.v;
-    td_frame(&PLAYER,td.vehicle*8+((td.heading+1)&15)/2);
-    if(td.job!=TD_NONE&&!td.health)td_finish(FALSE);
-}
+void td_motion_notice(UBYTE message) BANKED {td_message(message);}
+void td_motion_finish(UBYTE success) BANKED {td_finish(success);}
+UBYTE td_motion_foot_clear(UWORD u,UWORD v) BANKED {return td_foot_free(u,v);}
+UBYTE td_motion_near_car(void) BANKED {return td_near_car();}
+void td_motion_enter_exit(void) BANKED {td_enter_exit();}
+void td_motion_transit_open(void) BANKED {td_transit_open();}
+
 void toronto_init(void) BANKED {
     UBYTE i,cold=!td_session_live,current=td_district_current();
     /* Scene loading/allocation is a frozen transition, never a hidden
@@ -649,7 +589,7 @@ void toronto_init(void) BANKED {
     }
     if(td_streetcar_view_district!=TD_DISTRICT_ISLANDS)
         td_world_traffic_init(td_streetcar_view_district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
-    td_people_reset();
+    td_people_reset();td_motion_reset();td_menu_reset();
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);td_traffic_present();td_pedestrians();td_streetcar_runtime_present();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=-16;camera_deadzone_x=8;camera_deadzone_y=8;
@@ -666,7 +606,8 @@ void toronto_update(void) BANKED {
     tram_elapsed=elapsed;
     td_corner_used=0;
     motion=elapsed>4?4:elapsed;
-    if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE){td_result_b_release=joy;td_menu_update();td_sound_update();return;}
+    if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE){td_result_b_release=joy;td_menu_update(elapsed);td_sound_update();return;}
+    td_menu_reset();
     if(INPUT_START_PRESSED){td_resume_mode=td.mode;td.mode=TD_PAUSE;td.menu=0;td_audio_play(TD_AUDIO_MENU);td_ui_draw();td_sound_update();return;}
     /* A deliberate cancel wins over departure on the same input frame. */
     if(td.mode==TD_WAIT&&INPUT_B_PRESSED){td.mode=TD_ROAM;consumed=1;td_save();td_ui_draw();}

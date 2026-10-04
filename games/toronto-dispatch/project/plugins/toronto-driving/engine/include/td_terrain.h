@@ -8,7 +8,7 @@
 typedef struct {UWORD u,v;UBYTE valid,result;} td_terrain_cache_t;
 typedef char td_terrain_cache_must_be_six_bytes[(sizeof(td_terrain_cache_t)==6)?1:-1];
 
-/* Exact whole-pixel centre, full half5 terrain body. The non-NULL cache must
+/* Exact whole-pixel centre, full half7 terrain body. The non-NULL cache must
  * be in WRAM (stack is valid). Misses use the unchanged public road query;
  * hits preserve incoming tile-hit globals without reading collision ROM.
  * Dynamic tram, vehicle and pedestrian clearance is deliberately separate. */

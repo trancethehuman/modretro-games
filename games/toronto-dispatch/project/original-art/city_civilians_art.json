@@ -8,18 +8,18 @@
   "source_png": "original-art/city_civilians.png",
   "source_metadata": "original-art/city_civilians.metadata.json",
   "destination": "assets/sprites/city_civilians.png",
-  "png_sha256": "ee7a375a55fc5e9bde5e4254f96a69221cddca06d7cbf808520942ae2a932803",
-  "metadata_sha256": "bbca85da9d9b580ab1fa5129ce8c99b7e3398266427daf15a7554f4b6455464d",
-  "decoded_rgb_sha256": "a64f52178b735f521bd35d59d628e25097efa7eaf248937ea4a98fd67ce252f5",
-  "visible_frames": 10,
-  "hidden_frame": 10,
-  "objects_per_visible_pose": 2,
+  "png_sha256": "64fe215f55bb8ae3ff10fccdd0ade66efd96b97e251499162853b2efa72421dd",
+  "metadata_sha256": "214e467a44f389e6f147842dcf1cb864da236d2184c198b7955333714f172ec3",
+  "decoded_rgb_sha256": "20490dd3a5ee281cb67d51643992c4f9f23a21755026f004c77eaad66698241c",
+  "visible_frames": 24,
+  "hidden_frame": 24,
+  "objects_per_visible_pose": 1,
   "palette_slots": [
     1,
     2
   ],
-  "source_unique_8x16_patterns": 6,
-  "allocation_target_max_8x8_per_obj_bank": 14,
-  "frame_layout": "teal/ochre each E-step0,E-step1,W-step0,W-step1,stumble",
+  "source_unique_8x16_patterns": 10,
+  "allocation_target_max_8x8_per_obj_bank": 24,
+  "frame_layout": "commuter/worker/backpacker/senior each E0,E1,W0,W1,airborne,prone; palettes1/2 reused",
   "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"
 }

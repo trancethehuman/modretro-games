@@ -21,43 +21,27 @@ GAME = ROOT / 'games/toronto-dispatch'
 HERE = GAME / 'project/build'
 ENGINE = GAME / 'project/plugins/toronto-driving/engine'
 FIXTURES = ROOT / 'tests/engine'
-SOURCE = ENGINE / 'src/states/TORONTO.c'
+SOURCE = ENGINE / 'src/td_motion.c'
 
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def cache_changes():
-    return [
-        ('#include "td_roads.h"', '#include "td_roads.h"\n#include "td_terrain.h"'),
-        ('static UBYTE td_drivable(UWORD u,UWORD v){return td_road_body(u,v,5);}',
-         '/* Terrain cache queries live in their own banked unit. */'),
-        ('static void td_drive(void){', 'static void td_drive(td_terrain_cache_t *cache){'),
-        ('if(td_drivable(u,v)){', 'if(td_terrain_drivable(u,v,cache)){'),
-        ('td_drivable(nu>>4,td.v>>4)', 'td_terrain_drivable(nu>>4,td.v>>4,cache)'),
-        ('td_drivable(td.u>>4,nv>>4)', 'td_terrain_drivable(td.u>>4,nv>>4,cache)'),
-        ('void toronto_update(void) BANKED {\n',
-         'void toronto_update(void) BANKED {\n    td_terrain_cache_t terrain;\n'),
-        ('    for(step=0;step<motion&&', '    terrain.valid=0;\n    for(step=0;step<motion&&'),
-        ('            td_drive();if(!was_entering', '            td_drive(&terrain);if(!was_entering'),
-    ]
-
-
+# Compare the current banked driver against the same source with only its
+# cache queries replaced by direct full half7 body reads. Core still owns
+# and initializes the exact six-byte update-local cache in both variants.
+UNCACHED = """static UBYTE td_proto_uncached(UWORD u,UWORD v,td_terrain_cache_t *cache){
+    (void)cache;return td_road_body(u,v,7);
+}
+"""
 def candidate_source(original):
-    text = original
-    for before, after in cache_changes():
-        assert text.count(before) == 1, before
-        text = text.replace(before, after)
-    return text
-
+    assert original.startswith(UNCACHED)
+    return original[len(UNCACHED):].replace('td_proto_uncached(', 'td_terrain_drivable(')
 
 def baseline_source(candidate):
-    text = candidate
-    for before, after in reversed(cache_changes()):
-        assert text.count(after) == 1, after
-        text = text.replace(after, before)
-    return text
+    assert candidate.count('td_terrain_drivable(')==3
+    return UNCACHED+candidate.replace('td_terrain_drivable(', 'td_proto_uncached(')
 
 
 ADAPTER = '''
@@ -75,11 +59,11 @@ td td_job td_offer td_target td_cursor td_session_live td_route_district
 td_transition_pending td_transition_district td_traffic_u td_traffic_v
 td_traffic_samples td_traffic_leg td_tick td_notice_timer td_red_cooldown
 td_turn_tick td_entry_timer td_entry_target td_walk_dir td_resume_mode
-td_board_route td_vx td_vy td_last_frame td_corner_used td_contact_episode
+td_board_route td_vx td_vy td_last_frame td_corner_used td_contact_episode td_player_hurt td_player_push_x td_player_push_y td_menu_direction td_menu_wait
 td_traffic_retreat_mask td_vehicle_contact_mask td_traffic_advance
 td_traffic_elapsed td_police_elapsed td_police_advance td_police_waypoint
 td_police_from_u td_police_from_v td_police_stuck td_input_edge td_result_b_release
-td_people td_nearby_routes td_ped_route td_ped_refresh td_ped_anchor_u
+td_people td_people_dead td_people_last_tick td_nearby_routes td_ped_route td_ped_refresh td_ped_anchor_u
 td_ped_anchor_v td_people_last_u td_people_last_v td_streetcar_focus_u
 td_streetcar_focus_v td_streetcar_view_district td_streetcar_ride_view
 td_streetcar_display td_streetcar_elapsed td_streetcar_bound td_streetcar_valid
@@ -186,8 +170,8 @@ static void proto_queries(unsigned id,int ground,UBYTE district){
     for(unsigned p=0;p<sizeof(points)/sizeof(points[0]);p++)for(unsigned repeat=0;repeat<2;repeat++){
         UWORD u=points[p][0],v=points[p][1];
         UBYTE expected=u>=8&&v>=8&&u<=1016&&v<=968;
-        if(expected)for(unsigned y=(v-5)/8;y<=(v+5)/8;y++)
-            for(unsigned x=(u-5)/8;x<=(u+5)/8;x++)if(district_tile(district,x,y))expected=0;
+        if(expected)for(unsigned y=(v-7)/8;y<=(v+7)/8;y++)
+            for(unsigned x=(u-7)/8;x<=(u+7)/8;x++)if(district_tile(district,x,y))expected=0;
         unsigned long old_tiles=proto_tile_reads,old_ranges=proto_range_reads,old_bodies=proto_body_calls;
         tile_hit_x=(UBYTE)(200-p);tile_hit_y=(UBYTE)(190-repeat);proto_current_bank=19;
 #ifdef PROTO_CANDIDATE
@@ -271,11 +255,12 @@ def module(path):
 
 
 def host_source(toronto,candidate):
-    sources = ['td_transit.c','td_world.c','td_streetcar.c','td_streetcar_runtime.c',
+    sources = ['td_menu.c','td_transit.c','td_world.c','td_streetcar.c','td_streetcar_runtime.c',
                'td_aircraft.c','td_people.c','td_traffic.c','td_roads.c']
-    if candidate:sources.append('td_terrain.c')
+    sources.append('td_terrain.c')
     text = '\n'.join((ENGINE/'src'/name).read_text() for name in sources)
-    text += '\n' + toronto + '\n' + (ENGINE/'src/td_save.c').read_text()
+    text += '\n' + toronto + '\n' + (ENGINE/'src/states/TORONTO.c').read_text()
+    text += '\n' + (ENGINE/'src/td_save.c').read_text()
     text += '\n' + (ENGINE/'src/td_routes.c').read_text()
     text = text.replace('void toronto_update(void) BANKED {','void td_proto_original_update(void) BANKED {')
     old = 'UBYTE td_road_body(UWORD u,UWORD v,UBYTE half) BANKED {'
@@ -297,8 +282,9 @@ def host_harness(candidate):
     text=text.replace(ADAPTER,'')
     if candidate:
         text='#define PROTO_CANDIDATE 1\n'+text
-    if candidate:
-        text=text.replace('#include "engine_under_test.c"','#include "engine_under_test.c"\n'+ADAPTER,1)
+    text=text.replace('#include "engine_under_test.c"','#include "engine_under_test.c"\n'+ADAPTER,1)
+    if not candidate:
+        text=text.replace('return td_terrain_drivable(u,v,&cache);','return td_proto_uncached(u,v,&cache);')
     text=text.replace('int main(void) {','int proto_retained_main(void) {',1)
     old='UBYTE tile_at(UBYTE x,UBYTE y) {return district_tile(test_current_district,x,y);}'
     assert text.count(old)==1
@@ -338,8 +324,8 @@ def main():
     HERE.mkdir(exist_ok=True)
     (HERE/'TORONTO-update-terrain-banked.candidate.c').write_text(candidate)
     diff=''.join(difflib.unified_diff(original.splitlines(True),candidate.splitlines(True),
-        fromfile='a/games/toronto-dispatch/project/plugins/toronto-driving/engine/src/states/TORONTO.c',
-        tofile='b/games/toronto-dispatch/project/plugins/toronto-driving/engine/src/states/TORONTO.c'))
+        fromfile='a/games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_motion.c',
+        tofile='b/games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_motion.c'))
     (HERE/'update-terrain-banked.candidate.diff').write_text(diff)
     source_paths=[p for p in ENGINE.rglob('*') if p.is_file() and p.suffix in ('.c','.h')]
     before={str(p.relative_to(ROOT)):sha(p.read_bytes()) for p in source_paths}
@@ -353,6 +339,8 @@ def main():
         shutil.copyfile(FIXTURES/'gbvm_stubs.h',work/'gbvm_stubs.h')
         for name in ('actor','camera','scroll','collision','input','data_manager','ui','compat','system','bankdata','gbs_types'):
             (work/f'{name}.h').write_text('#include "gbvm_stubs.h"\n')
+        (work/'gb').mkdir()
+        (work/'gb/gb.h').write_text('#include "gbvm_stubs.h"\n')
         (work/'gbdk').mkdir()
         (work/'gbdk/platform.h').write_text('#include "gbvm_stubs.h"\n')
         for label,text in [('baseline',original),('candidate',candidate)]:

@@ -25,7 +25,7 @@ SCENES = tuple("_" + district["symbol"] for district in json.loads(WORLD.read_te
 QUEEN_SCENES = {"_scene_toronto_city", "_scene_toronto_west", "_scene_toronto_east"}
 NORTH_SCENE = "_scene_toronto_north"
 SOURCE_COLOURS = ((101, 255, 0), (224, 248, 207), (134, 192, 108), (7, 24, 33))
-CITY_LAYOUTS = (("city_fleet", 17, 2, 16), ("city_civilians", 11, 2, 14),
+CITY_LAYOUTS = (("city_fleet", 17, 2, 16), ("city_civilians", 25, 1, 24),
                 ("ambient_boat", 3, 1, 6))
 
 
@@ -130,7 +130,8 @@ def source_city_poses() -> dict[str, tuple[list[list[tuple]], int]]:
                     raise ValueError(f"{name}: original visible/empty frame footprint changed")
                 cells = []
                 for part, tile in enumerate(frame["tiles"]):
-                    if (tile["x"], tile["y"]) != (part * 8, 0) or tile["priority"]:
+                    authored_x = 4 if name == "city_civilians" else part * 8
+                    if (tile["x"], tile["y"]) != (authored_x, 0) or tile["priority"]:
                         raise ValueError(f"{name}: original fixed OBJ footprint changed")
                     pixels = [image.getpixel((tile["sliceX"] + x, tile["sliceY"] + y))
                               for y in range(16) for x in range(8)]
@@ -463,7 +464,7 @@ def city_self_test() -> None:
             bank = (frame // 2) & 1 if objects == 2 else frame & 1
             flip_x, flip_y = bool(frame & 2), bool(frame & 4)
             palette = (3 + frame // 4 if asset == "city_fleet" else
-                       1 + frame // 5 if asset == "city_civilians" else 0)
+                       1 + (frame // 6) % 2 if asset == "city_civilians" else 0)
             x = 0
             if frame != count - 1:
                 for part in range(objects):
@@ -514,7 +515,7 @@ def city_self_test() -> None:
         original = rom[rom_offset(allocations[name][0], len(rom)) + 2]
         corruptions.append((allocations[name][0], 2, original ^ 1))  # exact source pixels
     corruptions.extend(((frame_pointers[STREETLIFE[0]][3], 3, 3),  # missing flip/bank
-                        (frame_pointers[STREETLIFE[1]][5], 3, 1),  # wrong variant palette
+                        (frame_pointers[STREETLIFE[1]][6], 3, 1),  # wrong variant palette
                         (frame_pointers[STREETLIFE[2]][1], 3, 0),  # writable hull alias
                         (allocations[STREETLIFE[0]][0], 0, 17),   # allocation limit/evenness
                         (allocations[STREETLIFE[1]][1], 0, 0),    # absent selected bank

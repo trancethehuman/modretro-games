@@ -17575,11 +17575,11 @@
     "solid": 15
   },
   "background_filename": "toronto_high_park.png",
-  "background_sha256": "0fb03c15925113143e514e8243ed79fafa91a2e010ec0e3675c379873fcce518",
+  "background_sha256": "4d8eb0d6552187b0c82db1226d72fefa0ebd3c1acb8b3b56000c0c3568be5141",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 89,
-    "flip_canonical_unique_tiles": 75,
+    "raw_unique_tiles": 99,
+    "flip_canonical_unique_tiles": 85,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
     "traffic_swept_all_overlapped_tiles_clear": true,
@@ -17591,5 +17591,1220 @@
     "all_foot_clients_and_ports_connected": true,
     "native_build_verified": false,
     "measured_gameplay_duration_verified": false
+  },
+  "scenery": {
+    "source": "scripts/street_scenery.py",
+    "original_pixels": true,
+    "decorative_game_placements_not_surveyed": true,
+    "counts": {
+      "bench": 49,
+      "bin": 41,
+      "flowers": 40,
+      "park_sign": 41,
+      "roof_module": 68
+    },
+    "placements": [
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 152,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 200,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 296,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 344,
+        "y": 56
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 152,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 168,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 264,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 344,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 360,
+        "y": 104
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 200,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 216,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 296,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 312,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 200
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 200
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 248
+      },
+      {
+        "kind": "roof_module",
+        "x": 488,
+        "y": 248
+      },
+      {
+        "kind": "roof_module",
+        "x": 504,
+        "y": 248
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 296
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 296
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 296
+      },
+      {
+        "kind": "roof_module",
+        "x": 264,
+        "y": 296
+      },
+      {
+        "kind": "roof_module",
+        "x": 344,
+        "y": 296
+      },
+      {
+        "kind": "roof_module",
+        "x": 360,
+        "y": 296
+      },
+      {
+        "kind": "roof_module",
+        "x": 488,
+        "y": 392
+      },
+      {
+        "kind": "roof_module",
+        "x": 536,
+        "y": 392
+      },
+      {
+        "kind": "roof_module",
+        "x": 552,
+        "y": 392
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 440
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 440
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 440
+      },
+      {
+        "kind": "roof_module",
+        "x": 344,
+        "y": 440
+      },
+      {
+        "kind": "roof_module",
+        "x": 488,
+        "y": 440
+      },
+      {
+        "kind": "roof_module",
+        "x": 504,
+        "y": 440
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 488
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 488
+      },
+      {
+        "kind": "roof_module",
+        "x": 152,
+        "y": 488
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 152,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 168,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 264,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 440,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 456,
+        "y": 584
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 104,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 152,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 200,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 296,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 680
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 680
+      },
+      {
+        "kind": "roof_module",
+        "x": 152,
+        "y": 680
+      },
+      {
+        "kind": "roof_module",
+        "x": 168,
+        "y": 680
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 680
+      },
+      {
+        "kind": "roof_module",
+        "x": 264,
+        "y": 680
+      },
+      {
+        "kind": "bench",
+        "x": 624,
+        "y": 352
+      },
+      {
+        "kind": "bench",
+        "x": 784,
+        "y": 352
+      },
+      {
+        "kind": "bench",
+        "x": 624,
+        "y": 384
+      },
+      {
+        "kind": "bench",
+        "x": 784,
+        "y": 384
+      },
+      {
+        "kind": "bench",
+        "x": 752,
+        "y": 416
+      },
+      {
+        "kind": "bench",
+        "x": 624,
+        "y": 448
+      },
+      {
+        "kind": "bench",
+        "x": 784,
+        "y": 448
+      },
+      {
+        "kind": "bench",
+        "x": 688,
+        "y": 480
+      },
+      {
+        "kind": "bench",
+        "x": 816,
+        "y": 512
+      },
+      {
+        "kind": "bench",
+        "x": 848,
+        "y": 544
+      },
+      {
+        "kind": "bin",
+        "x": 840,
+        "y": 40
+      },
+      {
+        "kind": "park_sign",
+        "x": 872,
+        "y": 40
+      },
+      {
+        "kind": "flowers",
+        "x": 904,
+        "y": 40
+      },
+      {
+        "kind": "bench",
+        "x": 936,
+        "y": 40
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 40
+      },
+      {
+        "kind": "bin",
+        "x": 424,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 456,
+        "y": 72
+      },
+      {
+        "kind": "flowers",
+        "x": 488,
+        "y": 72
+      },
+      {
+        "kind": "bench",
+        "x": 520,
+        "y": 72
+      },
+      {
+        "kind": "bin",
+        "x": 552,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 584,
+        "y": 72
+      },
+      {
+        "kind": "flowers",
+        "x": 616,
+        "y": 72
+      },
+      {
+        "kind": "bench",
+        "x": 648,
+        "y": 72
+      },
+      {
+        "kind": "bin",
+        "x": 808,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 392,
+        "y": 136
+      },
+      {
+        "kind": "park_sign",
+        "x": 904,
+        "y": 136
+      },
+      {
+        "kind": "bench",
+        "x": 168,
+        "y": 168
+      },
+      {
+        "kind": "flowers",
+        "x": 264,
+        "y": 168
+      },
+      {
+        "kind": "park_sign",
+        "x": 360,
+        "y": 168
+      },
+      {
+        "kind": "flowers",
+        "x": 392,
+        "y": 168
+      },
+      {
+        "kind": "park_sign",
+        "x": 552,
+        "y": 232
+      },
+      {
+        "kind": "flowers",
+        "x": 584,
+        "y": 232
+      },
+      {
+        "kind": "bench",
+        "x": 616,
+        "y": 232
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 232
+      },
+      {
+        "kind": "park_sign",
+        "x": 680,
+        "y": 232
+      },
+      {
+        "kind": "flowers",
+        "x": 712,
+        "y": 232
+      },
+      {
+        "kind": "bench",
+        "x": 744,
+        "y": 232
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 232
+      },
+      {
+        "kind": "park_sign",
+        "x": 808,
+        "y": 232
+      },
+      {
+        "kind": "flowers",
+        "x": 840,
+        "y": 232
+      },
+      {
+        "kind": "bench",
+        "x": 872,
+        "y": 232
+      },
+      {
+        "kind": "bin",
+        "x": 904,
+        "y": 232
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 264
+      },
+      {
+        "kind": "bin",
+        "x": 232,
+        "y": 264
+      },
+      {
+        "kind": "park_sign",
+        "x": 264,
+        "y": 264
+      },
+      {
+        "kind": "flowers",
+        "x": 296,
+        "y": 264
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 264
+      },
+      {
+        "kind": "bin",
+        "x": 360,
+        "y": 264
+      },
+      {
+        "kind": "park_sign",
+        "x": 392,
+        "y": 264
+      },
+      {
+        "kind": "flowers",
+        "x": 552,
+        "y": 264
+      },
+      {
+        "kind": "bench",
+        "x": 584,
+        "y": 264
+      },
+      {
+        "kind": "bin",
+        "x": 616,
+        "y": 264
+      },
+      {
+        "kind": "flowers",
+        "x": 136,
+        "y": 296
+      },
+      {
+        "kind": "bin",
+        "x": 40,
+        "y": 328
+      },
+      {
+        "kind": "park_sign",
+        "x": 712,
+        "y": 328
+      },
+      {
+        "kind": "flowers",
+        "x": 744,
+        "y": 328
+      },
+      {
+        "kind": "bench",
+        "x": 776,
+        "y": 328
+      },
+      {
+        "kind": "bin",
+        "x": 808,
+        "y": 328
+      },
+      {
+        "kind": "park_sign",
+        "x": 840,
+        "y": 328
+      },
+      {
+        "kind": "flowers",
+        "x": 872,
+        "y": 328
+      },
+      {
+        "kind": "bench",
+        "x": 904,
+        "y": 328
+      },
+      {
+        "kind": "park_sign",
+        "x": 40,
+        "y": 360
+      },
+      {
+        "kind": "bench",
+        "x": 488,
+        "y": 360
+      },
+      {
+        "kind": "bin",
+        "x": 520,
+        "y": 360
+      },
+      {
+        "kind": "park_sign",
+        "x": 552,
+        "y": 360
+      },
+      {
+        "kind": "flowers",
+        "x": 584,
+        "y": 360
+      },
+      {
+        "kind": "bench",
+        "x": 616,
+        "y": 360
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 360
+      },
+      {
+        "kind": "bin",
+        "x": 904,
+        "y": 360
+      },
+      {
+        "kind": "bench",
+        "x": 72,
+        "y": 392
+      },
+      {
+        "kind": "bin",
+        "x": 104,
+        "y": 392
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 392
+      },
+      {
+        "kind": "flowers",
+        "x": 168,
+        "y": 392
+      },
+      {
+        "kind": "bench",
+        "x": 200,
+        "y": 392
+      },
+      {
+        "kind": "flowers",
+        "x": 296,
+        "y": 392
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 392
+      },
+      {
+        "kind": "bin",
+        "x": 360,
+        "y": 392
+      },
+      {
+        "kind": "park_sign",
+        "x": 392,
+        "y": 392
+      },
+      {
+        "kind": "bin",
+        "x": 200,
+        "y": 424
+      },
+      {
+        "kind": "bench",
+        "x": 296,
+        "y": 424
+      },
+      {
+        "kind": "flowers",
+        "x": 392,
+        "y": 424
+      },
+      {
+        "kind": "flowers",
+        "x": 904,
+        "y": 424
+      },
+      {
+        "kind": "park_sign",
+        "x": 200,
+        "y": 456
+      },
+      {
+        "kind": "bin",
+        "x": 296,
+        "y": 456
+      },
+      {
+        "kind": "bench",
+        "x": 392,
+        "y": 456
+      },
+      {
+        "kind": "bin",
+        "x": 552,
+        "y": 456
+      },
+      {
+        "kind": "park_sign",
+        "x": 584,
+        "y": 456
+      },
+      {
+        "kind": "bench",
+        "x": 904,
+        "y": 456
+      },
+      {
+        "kind": "flowers",
+        "x": 200,
+        "y": 488
+      },
+      {
+        "kind": "bench",
+        "x": 200,
+        "y": 520
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 520
+      },
+      {
+        "kind": "park_sign",
+        "x": 904,
+        "y": 520
+      },
+      {
+        "kind": "park_sign",
+        "x": 232,
+        "y": 552
+      },
+      {
+        "kind": "flowers",
+        "x": 264,
+        "y": 552
+      },
+      {
+        "kind": "bench",
+        "x": 296,
+        "y": 552
+      },
+      {
+        "kind": "bin",
+        "x": 328,
+        "y": 552
+      },
+      {
+        "kind": "bench",
+        "x": 424,
+        "y": 552
+      },
+      {
+        "kind": "bin",
+        "x": 456,
+        "y": 552
+      },
+      {
+        "kind": "park_sign",
+        "x": 488,
+        "y": 552
+      },
+      {
+        "kind": "flowers",
+        "x": 520,
+        "y": 552
+      },
+      {
+        "kind": "park_sign",
+        "x": 328,
+        "y": 584
+      },
+      {
+        "kind": "bench",
+        "x": 520,
+        "y": 584
+      },
+      {
+        "kind": "park_sign",
+        "x": 712,
+        "y": 584
+      },
+      {
+        "kind": "bench",
+        "x": 904,
+        "y": 584
+      },
+      {
+        "kind": "park_sign",
+        "x": 424,
+        "y": 616
+      },
+      {
+        "kind": "bin",
+        "x": 520,
+        "y": 616
+      },
+      {
+        "kind": "flowers",
+        "x": 424,
+        "y": 648
+      },
+      {
+        "kind": "bench",
+        "x": 456,
+        "y": 648
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 648
+      },
+      {
+        "kind": "park_sign",
+        "x": 520,
+        "y": 648
+      },
+      {
+        "kind": "bin",
+        "x": 328,
+        "y": 680
+      },
+      {
+        "kind": "park_sign",
+        "x": 616,
+        "y": 680
+      },
+      {
+        "kind": "flowers",
+        "x": 648,
+        "y": 680
+      },
+      {
+        "kind": "bench",
+        "x": 680,
+        "y": 680
+      },
+      {
+        "kind": "flowers",
+        "x": 776,
+        "y": 680
+      },
+      {
+        "kind": "bench",
+        "x": 808,
+        "y": 680
+      },
+      {
+        "kind": "bin",
+        "x": 840,
+        "y": 680
+      },
+      {
+        "kind": "park_sign",
+        "x": 872,
+        "y": 680
+      },
+      {
+        "kind": "flowers",
+        "x": 904,
+        "y": 680
+      },
+      {
+        "kind": "bench",
+        "x": 936,
+        "y": 680
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 680
+      },
+      {
+        "kind": "flowers",
+        "x": 104,
+        "y": 712
+      },
+      {
+        "kind": "flowers",
+        "x": 616,
+        "y": 712
+      },
+      {
+        "kind": "bin",
+        "x": 680,
+        "y": 712
+      },
+      {
+        "kind": "bench",
+        "x": 776,
+        "y": 712
+      },
+      {
+        "kind": "bench",
+        "x": 200,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 232,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 264,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 296,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 360,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 392,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 424,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 456,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 520,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 552,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 584,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 616,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 648,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 680,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 776,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 808,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 840,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 904,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 936,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 968,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 200,
+        "y": 808
+      },
+      {
+        "kind": "park_sign",
+        "x": 232,
+        "y": 808
+      },
+      {
+        "kind": "flowers",
+        "x": 264,
+        "y": 808
+      },
+      {
+        "kind": "bench",
+        "x": 296,
+        "y": 808
+      },
+      {
+        "kind": "bin",
+        "x": 328,
+        "y": 808
+      },
+      {
+        "kind": "park_sign",
+        "x": 424,
+        "y": 872
+      },
+      {
+        "kind": "flowers",
+        "x": 456,
+        "y": 872
+      },
+      {
+        "kind": "bench",
+        "x": 488,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 520,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 552,
+        "y": 872
+      },
+      {
+        "kind": "flowers",
+        "x": 584,
+        "y": 872
+      },
+      {
+        "kind": "bench",
+        "x": 616,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 680,
+        "y": 872
+      },
+      {
+        "kind": "flowers",
+        "x": 712,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 808,
+        "y": 872
+      },
+      {
+        "kind": "flowers",
+        "x": 840,
+        "y": 872
+      },
+      {
+        "kind": "bench",
+        "x": 872,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 904,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 936,
+        "y": 872
+      },
+      {
+        "kind": "flowers",
+        "x": 968,
+        "y": 872
+      },
+      {
+        "kind": "flowers",
+        "x": 40,
+        "y": 904
+      }
+    ],
+    "new_oam_objects": 0,
+    "new_runtime_state_bytes": 0,
+    "collision_bytes_changed": 0,
+    "palette_priority_bytes_changed": 0,
+    "building_footprints_changed": 0,
+    "formal_corridors_protected": true
   }
 }

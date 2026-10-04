@@ -7,8 +7,8 @@
 typedef char td_transit_queen_ids_fit_origin[
     (TD_TRANSIT_QUEEN_FIRST + TD_TRANSIT_QUEEN_COUNT <= 64) ? 1 : -1];
 typedef char td_transit_queen_timetable_matches_eight_stops[
-    (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 64 &&
-     TD_TRANSIT_QUEEN_HOP_SECONDS == 4) ? 1 : -1];
+    (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 256 &&
+     TD_TRANSIT_QUEEN_HOP_SECONDS == 16) ? 1 : -1];
 
 /* Preserve all seven historical positions/phases; append the northbound
  * Summerhill and St Clair endpoints to the fictional18-second service. */
@@ -109,7 +109,8 @@ UBYTE td_transit_stop(UBYTE origin, UBYTE selection) BANKED {
 }
 
 UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED {
-    UBYTE service = td_transit_service_local(origin), period, phase, source_index, target_index, elapsed;
+    UBYTE service = td_transit_service_local(origin), source_index, target_index;
+    UWORD period,phase,elapsed;
     /* A self target asks only for this origin's timetable. It never permits
      * boarding, including at a ferry island with mainland-only service. */
     if (!(service && target == (origin & 63)) &&
@@ -127,11 +128,12 @@ UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED {
     } else {
         period = TD_TRANSIT_QUEEN_PERIOD;
         target_index = td_transit_index_local(service, target);
-        phase = target_index >= source_index ? source_index * 4 : 32 + (7 - source_index) * 4;
+        phase = target_index >= source_index ? source_index * 16 : 128 + (7 - source_index) * 16;
     }
-    /* Reduce the UWORD first: all subsequent arithmetic stays below128. */
+    /* Queen period256 requires WORD temporaries; valid closed countdowns
+     * are at most252, distinct from the255 invalid sentinel. */
     elapsed = (seconds % period + period - phase) % period;
-    return elapsed < 2 ? 0 : period - elapsed;
+    return elapsed < (service==TD_TRANSIT_STREETCAR?4:2) ? 0 : period - elapsed;
 }
 
 static UBYTE td_transit_fare_local(UBYTE origin) {

@@ -2,7 +2,7 @@
 """Author original compact fleet and civilian PNG/native-metadata pairs.
 
 The public native_metadata importer registers these sources separately. Each
-visible pose uses two 8x16 objects; palette variants and opposite headings reuse
+fleet pose uses two 8x16 objects; each compact human uses one; palette variants and opposite headings reuse
 the same source patterns. --check reads generated/imported resources only.
 Source checks are not compiled allocation, native rendering or hardware proof.
 """
@@ -85,50 +85,53 @@ def fleet_east(kind):
     return image
 
 
-def civilian_east(step):
+def civilian_east(step,kind=0):
     image = Image.new("RGB", (16, 16), TRANSPARENT)
     d = ImageDraw.Draw(image)
-    # A face, neck, separate shoulders/arms, trousers and alternating shoes.
-    d.rectangle((6, 2, 9, 5), fill=DARK)
-    d.rectangle((7, 3, 9, 5), fill=LIGHT)
-    d.point((10, 4), fill=LIGHT)
-    d.point((9, 3), fill=DARK)
-    d.line((7, 6, 8, 6), fill=LIGHT)
-    d.rectangle((5, 7, 10, 10), fill=MID)
-    d.line((5, 7, 5, 10), fill=DARK)
-    d.line((10, 7, 10, 9), fill=DARK)
-    d.rectangle((6, 11, 9, 12), fill=DARK)
-    if step == 0:
-        d.line((4, 8, 3, 11), fill=LIGHT)
-        d.line((11, 8, 12, 7), fill=LIGHT)
-        d.line((6, 12, 5, 14), fill=DARK)
-        d.line((9, 12, 10, 13), fill=DARK)
-        d.point((4, 14), fill=DARK)
-        d.point((11, 13), fill=DARK)
-    else:
-        d.line((4, 8, 3, 7), fill=LIGHT)
-        d.line((11, 8, 12, 11), fill=LIGHT)
-        d.line((6, 12, 6, 13), fill=DARK)
-        d.line((9, 12, 9, 14), fill=DARK)
-        d.point((5, 13), fill=DARK)
-        d.point((10, 14), fill=DARK)
+    # Six by ten readable pixels, centred inside a single 8x16 hardware OBJ.
+    d.rectangle((6, 3, 9, 5), fill=DARK)
+    d.rectangle((7, 4, 9, 5), fill=LIGHT)
+    d.point((9, 4), fill=DARK)
+    d.rectangle((6, 6, 9, 9), fill=MID)
+    d.point((5, 7 if step else 8), fill=LIGHT)
+    d.point((10, 8 if step else 7), fill=LIGHT)
+    d.line((6, 10, 6+step, 12), fill=DARK)
+    d.line((9, 10, 9-step, 12), fill=DARK)
+    if kind==1:  # Worker: broad hardhat and dark work-overall straps.
+        d.line((5,3,10,3),fill=MID)
+        d.point((6,7),fill=DARK);d.point((9,7),fill=DARK)
+    elif kind==2:  # Backpacker: visible bag, strap and a darker long jacket.
+        d.rectangle((5,6,6,8),fill=DARK)
+        d.point((6,7),fill=LIGHT);d.line((9,6,9,9),fill=DARK)
+    elif kind==3:  # Senior: pale hair, cardigan front and a long cane.
+        d.line((6,3,9,3),fill=LIGHT)
+        d.line((8,6,8,9),fill=LIGHT)
+        d.line((10,8,10,12),fill=DARK)
     return image
 
 
-def stumble():
+def airborne():
     image = Image.new("RGB", (16, 16), TRANSPARENT)
     d = ImageDraw.Draw(image)
-    # Bent knee and extended hands show a non-graphic loss of balance.
-    d.rectangle((9, 4, 12, 7), fill=DARK)
-    d.rectangle((10, 5, 12, 7), fill=LIGHT)
-    d.point((12, 5), fill=DARK)
-    d.polygon(((5, 8), (9, 7), (10, 10), (6, 11)), fill=MID)
-    d.line((9, 9, 13, 11), fill=LIGHT)
-    d.line((5, 9, 3, 11), fill=LIGHT)
-    d.line((6, 11, 8, 13), fill=DARK)
-    d.line((8, 13, 11, 13), fill=DARK)
-    d.line((5, 11, 3, 13), fill=DARK)
-    d.point((2, 13), fill=DARK)
+    d.rectangle((8, 3, 10, 5), fill=DARK)
+    d.rectangle((9, 4, 10, 5), fill=LIGHT)
+    d.polygon(((6, 6), (9, 6), (9, 9), (6, 10)), fill=MID)
+    d.line((5, 6, 4, 4), fill=LIGHT)
+    d.line((10, 7, 11, 6), fill=LIGHT)
+    d.line((6, 10, 4, 12), fill=DARK)
+    d.line((8, 10, 10, 11), fill=DARK)
+    return image
+
+
+def prone():
+    image = Image.new("RGB", (16, 16), TRANSPARENT)
+    d = ImageDraw.Draw(image)
+    # Still, non-graphic ground pose: face, jacket and separated shoes.
+    d.rectangle((4, 9, 5, 11), fill=DARK)
+    d.rectangle((6, 8, 8, 11), fill=MID)
+    d.rectangle((9, 8, 11, 10), fill=DARK)
+    d.rectangle((10, 9, 11, 10), fill=LIGHT)
+    d.point((7, 12), fill=LIGHT)
     return image
 
 
@@ -139,10 +142,10 @@ def resource(name, models, poses):
     frames = []
     for frame, (model, flip_x, flip_y, palette) in enumerate(poses):
         objects = []
-        for part in range(2):
+        for part in range(1 if name == "city_civilians" else 2):
             objects.append({"id": ident(f"{name}.frame-{frame}.object-{part}"),
-                "x": part * 8, "y": 0,
-                "sliceX": model * 16 + (1 - part if flip_x else part) * 8,
+                "x": 4 if name == "city_civilians" else part * 8, "y": 0,
+                "sliceX": model * 16 + (4 if name == "city_civilians" else (1 - part if flip_x else part) * 8),
                 "sliceY": 0, "flipX": flip_x, "flipY": flip_y,
                 "palette": 0, "paletteIndex": palette,
                 "objPalette": "OBP0", "priority": False})
@@ -151,8 +154,8 @@ def resource(name, models, poses):
     animations = [{"id": ident(f"{name}.poses"), "frames": frames}]
     animations += [{"id": ident(f"{name}.animation-{i}"), "frames": [
         {"id": ident(f"{name}.empty-{i}"), "tiles": []}]} for i in range(1, 8)]
-    patterns = {sheet.crop((i * 16 + part * 8, 0, i * 16 + part * 8 + 8, 16)).tobytes()
-                for i in range(len(models)) for part in range(2)}
+    patterns = {sheet.crop((tile["sliceX"],tile["sliceY"],tile["sliceX"]+8,tile["sliceY"]+16)).tobytes()
+                for frame in frames for tile in frame["tiles"]}
     meta = {"_resourceType": "sprite", "id": ident(name + ".source"),
         "name": name.replace("_", " ").title(), "symbol": "sprite_" + name,
         "filename": name + ".png", "width": sheet.width, "height": 16,
@@ -175,12 +178,14 @@ def artwork():
                             (kind * 2 + 1, False, False, kind + 3),
                             (kind * 2, True, False, kind + 3),
                             (kind * 2 + 1, False, True, kind + 3)))
-    civilian_models = [civilian_east(0), civilian_east(1), stumble()]
+    civilian_models = [civilian_east(step,kind) for kind in range(4) for step in range(2)] + [airborne(),prone()]
     civilian_poses = []
-    for variant in range(2):
-        civilian_poses.extend(((0, False, False, variant + 1),
-            (1, False, False, variant + 1), (0, True, False, variant + 1),
-            (1, True, False, variant + 1), (2, False, False, variant + 1)))
+    for variant in range(4):
+        palette=1+(variant&1)
+        civilian_poses.extend(((variant*2, False, False, palette),
+            (variant*2+1, False, False, palette), (variant*2, True, False, palette),
+            (variant*2+1, True, False, palette), (8, False, False, palette),
+            (9, False, False, palette)))
     return {"city_fleet": resource("city_fleet", fleet_models, fleet_poses),
             "city_civilians": resource("city_civilians", civilian_models, civilian_poses)}
 
@@ -199,6 +204,13 @@ def check_registered(name, meta, png):
     native = json.loads(native_path.with_suffix(".png.gbsres").read_text())
     assert native["id"] == ident(name + ".native")
     assert normalized(native) == normalized(meta), f"{name}: imported poses differ"
+    def native_ids(value):
+        if isinstance(value,dict):
+            if "id" in value:yield value["id"]
+            for child in value.values():yield from native_ids(child)
+        elif isinstance(value,list):
+            for child in value:yield from native_ids(child)
+    ids=list(native_ids(native));assert len(ids)==len(set(ids)),f"{name}: duplicate native resource IDs"
     loader_name = name + "_loader.gbsres"
     for scene in SCENES:
         actors = PROJECT / "project/scenes" / scene / "actors"
@@ -234,7 +246,7 @@ def check_poses(name, sheet, meta):
     for frame in frames[:-1]:
         image = Image.new("RGB", (16, 16), TRANSPARENT)
         for tile in frame["tiles"]:
-            assert tile["x"] in (0, 8) and tile["y"] == 0
+            assert tile["x"] in ((4,) if name == "city_civilians" else (0, 8)) and tile["y"] == 0
             crop = sheet.crop((tile["sliceX"], tile["sliceY"],
                                tile["sliceX"] + 8, tile["sliceY"] + 16))
             if tile["flipX"]:
@@ -253,14 +265,17 @@ def check_poses(name, sheet, meta):
                     for t in f["tiles"]} == {kind + 3}
         assert len({rendered[kind * 4].tobytes() for kind in range(4)}) == 4
     else:
-        for variant in range(2):
-            east0, east1, west0, west1, hit = rendered[variant * 5:variant * 5 + 5]
+        for variant in range(4):
+            east0, east1, west0, west1, hit, fallen = rendered[variant * 6:variant * 6 + 6]
             assert west0.tobytes() == east0.transpose(Image.Transpose.FLIP_LEFT_RIGHT).tobytes()
             assert west1.tobytes() == east1.transpose(Image.Transpose.FLIP_LEFT_RIGHT).tobytes()
-            assert len({east0.tobytes(), east1.tobytes(), hit.tobytes()}) == 3
-            assert {t["paletteIndex"] for f in frames[variant * 5:variant * 5 + 5]
-                    for t in f["tiles"]} == {variant + 1}
-        assert [image.tobytes() for image in rendered[:5]] == [image.tobytes() for image in rendered[5:]]
+            assert len({east0.tobytes(), east1.tobytes(), hit.tobytes(), fallen.tobytes()}) == 4
+            assert {t["paletteIndex"] for f in frames[variant * 6:variant * 6 + 6]
+                    for t in f["tiles"]} == {1+(variant&1)}
+        assert len({rendered[variant*6].tobytes() for variant in range(4)})==4
+        for variant in range(4):
+            assert rendered[variant*6+4].tobytes()==rendered[4].tobytes()
+            assert rendered[variant*6+5].tobytes()==rendered[5].tobytes()
 
 
 def main():
@@ -280,7 +295,8 @@ def main():
         meta["checksum"] = hashlib.sha1(png).hexdigest()
         meta_bytes = encoded(meta)
         frames = meta["states"][0]["animations"][0]["frames"]
-        assert [len(f["tiles"]) for f in frames] == [2] * (len(frames) - 1) + [0]
+        objects = 1 if name == "city_civilians" else 2
+        assert [len(f["tiles"]) for f in frames] == [objects] * (len(frames) - 1) + [0]
         assert {sheet.getpixel((x, y)) for y in range(sheet.height)
                 for x in range(sheet.width)} <= set(COLOURS)
         check_poses(name, sheet, meta)
@@ -294,12 +310,12 @@ def main():
             "metadata_sha256": hashlib.sha256(meta_bytes).hexdigest(),
             "decoded_rgb_sha256": hashlib.sha256(sheet.tobytes()).hexdigest(),
             "visible_frames": len(frames) - 1, "hidden_frame": len(frames) - 1,
-            "objects_per_visible_pose": 2, "palette_slots": sorted({
+            "objects_per_visible_pose": objects, "palette_slots": sorted({
                 t["paletteIndex"] for f in frames for t in f["tiles"]}),
             "source_unique_8x16_patterns": meta["numTiles"],
-            "allocation_target_max_8x8_per_obj_bank": 16 if name == "city_fleet" else 14,
+            "allocation_target_max_8x8_per_obj_bank": 16 if name == "city_fleet" else 24,
             "frame_layout": "police/fire/ambulance/bus each E,S,W,N" if name == "city_fleet" else
-                "teal/ochre each E-step0,E-step1,W-step0,W-step1,stumble",
+                "commuter/worker/backpacker/senior each E0,E1,W0,W1,airborne,prone; palettes1/2 reused",
             "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"}
         for path, content in ((ART / (name + ".metadata.json"), meta_bytes),
                               (ART / (name + "_art.json"), encoded(info))):
@@ -316,7 +332,7 @@ def main():
                 check_registered(name, meta, png)
         else:
             preview.save(preview_path, compress_level=9)
-        print(f"{name}: {len(frames)-1} visible + empty, 2 OBJ, {meta['numTiles']} source 8x16 patterns; ID {info['native_asset_id']}")
+        print(f"{name}: {len(frames)-1} visible + empty, {objects} OBJ, {meta['numTiles']} source 8x16 patterns; ID {info['native_asset_id']}")
     if args.check and not args.sources_only:
         check_palettes()
 

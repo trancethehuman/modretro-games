@@ -72,14 +72,14 @@ static void presentation(void){
             require(actor->pos_x==before.pos_x&&actor->pos_y==before.pos_y&&
                     actor->flags==before.flags&&actor->prev==before.prev&&actor->next==before.next,"Motion/flags/list unchanged");
         }
-        for(variant=0;variant<2;variant++)for(pose=0;pose<5;pose++){
+        for(variant=0;variant<4;variant++)for(pose=0;pose<6;pose++){
             td_civilian_present(actor,variant,pose);
             require(actor->sprite.bank==9&&actor->sprite.ptr==&civilian_data&&actor->base_tile==108,"Civilian allocation");
-            require(actor->frame==variant*5+pose&&actor->frame_end==actor->frame+1,"Civilian palette/pose ID");
+            require(actor->frame==variant*6+pose&&actor->frame_end==actor->frame+1,"Civilian palette/pose ID");
         }
         {actor_t before=*actor;
          td_fleet_present(actor,6,0);td_fleet_present(actor,0,4);
-         td_civilian_present(actor,2,0);td_civilian_present(actor,0,5);
+         td_civilian_present(actor,4,0);td_civilian_present(actor,0,6);
          require(!memcmp(actor,&before,sizeof(before)),"Invalid pose leaves actor unchanged");}
     }
 }
@@ -92,7 +92,7 @@ static void reset_and_banks(void){
     td_city_sprites_bind();td_fleet_present(&actors[18],2,1);
     require(actors[18].sprite.bank==8&&actors[18].frame==1,"Same address different bank still fleet");
     td_civilian_present(&actors[18],1,4);
-    require(actors[18].sprite.bank==9&&actors[18].frame==9,"Same address different bank still civilian");
+    require(actors[18].sprite.bank==9&&actors[18].frame==10,"Same address different bank still civilian");
     init(4,0);actors[2].sprite.bank=0;td_city_sprites_bind();
     td_fleet_present(&actors[18],5,3);td_civilian_present(&actors[19],1,4);
     require(actors[18].sprite.bank==4&&actors[18].frame==6,"Invalid binding discards previous fleet cache");

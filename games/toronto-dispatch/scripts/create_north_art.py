@@ -12,6 +12,7 @@ import io
 import json
 from pathlib import Path
 from PIL import Image, ImageDraw
+from street_scenery import decorate
 from north_layout import (WIDTH, HEIGHT, ROAD_HALF, WALK_HALF,
                           FOOT_HALF, RAIL_HALF, read_layout,
                           pairs, pixel_points)
@@ -421,6 +422,7 @@ def validate(image,attrs,grid,blocks,canopies,layout,layout_sha,rail_cells,rose_
                       'native_half3_and_conservative_half5_all_q4_stopped_tolerance_candidates':robust,
                       'q4_stopped_offsets_each_axis':[-48,48],'q4_positions_per_cardinal_exit':9409,
                       'exact_q4_parked_exclusion':168,'source_collision_only':True,'native_exit_or_actor_traffic_unverified':True})
+    scenery=decorate(image,grid,attrs,blocks,canopies,'north',layout)
     raw=set();canonical=set();blank_priority=0
     for ty in range(TH):
         for tx in range(TW):
@@ -460,6 +462,7 @@ def validate(image,attrs,grid,blocks,canopies,layout,layout_sha,rail_cells,rose_
             'all_client_foot_and_car_or_park_paths_connected':True,'all_private_grounds_solid':True,'no_blank_public_grass_priority':True,
             'native_registration_verified':False,'native_build_verified':False,'native_play_verified':False,
             'compiled_background_bank1_gate_verified':False,'compiled_sprite_budget_verified':False,'hardware_verified':False,'measured_duration_verified':False}}
+    metadata['scenery']=scenery
     return png,attrs,metadata
 
 

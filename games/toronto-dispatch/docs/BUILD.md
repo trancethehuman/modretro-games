@@ -1,6 +1,12 @@
 # Native build and preview
 
-## Current driving-only warning build
+## Current hardware feedback build
+
+Selected update **`toronto-dispatch-hardware-feedback.gbc`** is **1,048,576 bytes**, SHA-256 **`9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`**. Official source-debug build succeeds in **67,663 ms**; source fingerprint **`b45d7dbb0b2d9f384ff70e412b549e3cf9c636c8ad3ae8efa9f7d7fe35e0e5fb`**, NOI **`171956c8796e7b5664361d30e9aa036166455917fad5cb9e68adab693ca03818`**. Full `make check`, source graphics analysis, compiled city poses/progress tables and native memory guards pass. [Build record](HARDWARE_FEEDBACK_BUILD.json) retains exact identity and the failed/intermediate attempts. Static reserve is 1,046 bytes; save v10 remains 58 bytes. Scene allocation peaks at 120/128 OBJ tiles per bank; maximum runtime stack/performance remain unmeasured.
+
+The [fresh scoped native replay](NATIVE_HARDWARE_FEEDBACK.json) completes Market Start at full condition, samples stable cardinal driving and reverse, walking/entry, smaller varied civilians with visible flight/prone poses, menu repeat/map freeze, one paid Queen trip, natural tram injury/recovery and saved in-worker reset. [Update details](HARDWARE_FEEDBACK_2026_10_04.md) retain the limitations and controller corrections. Physical cartridge still contains 8be1; no new hardware write is claimed. Preserve all earlier binaries and packages unchanged.
+
+## Retained installed driving-only warning build
 
 Selected local ROM **`toronto-dispatch-driving-only.gbc`** is **1,048,576 bytes**, SHA-256 **`8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`**. Official build with matching debug artifacts succeeds in **60,735 ms**; NOI `db351f2bc6c419fc5cc3f847ff9858fd5e273cf23ca211c80a147f9d12accaeb`, fingerprint `61c6df9f7434398181491ee8e00dc5ad74d354edc4e8b4dc7fb0cdda1095605e`. Full `make check` passes. [Compiled review](DRIVING_ONLY_BUILD_AUDIT.json) verifies one same-length HUD literal among 206 inputs; all other ROM bytes match 7ab except generated stock-save-signature/global-checksum bytes. UI/main/helper headroom remains 150/10/1, static reserve 1,096, save v10/58 bytes and 52-byte UI frame unchanged.
 
@@ -181,7 +187,7 @@ The plugin manages dependencies outside the repo. Start with its setup skill and
 ## Plugin operations
 
 1. Select the existing native project, inspect its health, then edit native scenes/scripts with the plugin's revision-aware tools.
-2. Build source using `rom_build`, a distinct `outputPath` under `build/`, and `captureDebugArtifacts: true` for authenticated matching symbols. Current local playtest output is `build/toronto-dispatch-right-hand-traffic-filter.gbc`; retain the older `build/toronto-dispatch-ui-polish-direct.gbc` and its package as separate historical artifacts. Use a new name after later changes. Paths are relative to the selected project; each ROM needs its own NOI/source identity and replay. The plugin invokes GB Studio CLI `make:rom`.
+2. Build source using `rom_build`, a distinct `outputPath` under `build/`, and `captureDebugArtifacts: true` for authenticated matching symbols. Current local playtest output is `build/toronto-dispatch-hardware-feedback.gbc`; retain the installed `build/toronto-dispatch-driving-only.gbc` and all older packages as separate historical artifacts. Use a new name after later changes. Paths are relative to the selected project; each ROM needs its own NOI/source identity and replay. The plugin invokes GB Studio CLI `make:rom`.
 3. Inspect ROM headers and digest, then run the explicit native memory guard below against that build's `symbols.noi`. A successful compile alone does not establish a safe WRAM layout.
 4. Run `emulator_run` on that exact ROM, then use `emulator_step` / `emulator_observe` to test native frames. Retain the returned recording paths; stop, close and archive through the public plugin without deleting the original evidence.
 5. Use `web_preview` to create the official GB Studio / Binjgb export (`make:web`) and open its returned URL in Codex's built-in browser. Keep the user preview available; do not reload during human play. Browser export and native ROM may have different digests and must be tracked separately.

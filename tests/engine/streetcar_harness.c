@@ -11,7 +11,7 @@
 
 /* These host-only wrappers expose actual private C, not a replacement lookup.
  * No generated interpolation values are included in this oracle's inputs. */
-UWORD host_streetcar_progress(UBYTE route,UBYTE tick);
+UWORD host_streetcar_progress(UBYTE route,UWORD tick);
 unsigned host_streetcar_progress_value_bytes(void);
 unsigned host_streetcar_progress_route_count(void);
 
@@ -55,15 +55,15 @@ static void oracle_corridor(unsigned direction,unsigned distance,td_streetcar_po
 }
 static void oracle_pose(unsigned tick,td_streetcar_pose_t *pose){
     static const unsigned stations[2][8]={{0,256,512,816,1120,1244,1928,2028},{0,100,784,908,1212,1516,1772,2028}};
-    unsigned direction=tick>=1920,local=tick%1920,leg=local/240,phase=local%240;
-    if(phase<120){oracle_dwell(direction?7-leg:leg,direction,pose);return;}
+    unsigned direction=tick>=7680,local=tick%7680,leg=local/960,phase=local%960;
+    if(phase<240){oracle_dwell(direction?7-leg:leg,direction,pose);return;}
     if(leg==7){
         oracle_dwell(direction?0:7,direction,pose);
         pose->doors=0;pose->stop=255;pose->heading=direction?4:12;pose->frame=direction?1:3;
-        if(direction)pose->v+=256*(phase-120)/120;else pose->v-=256*(phase-120)/120;
+        if(direction)pose->v+=256*(phase-240)/720;else pose->v-=256*(phase-240)/720;
     }else{
         unsigned distance=stations[direction][leg]*16+
-            (unsigned)((uint64_t)(stations[direction][leg+1]-stations[direction][leg])*16*(phase-120)/120);
+            (unsigned)((uint64_t)(stations[direction][leg+1]-stations[direction][leg])*16*(phase-240)/720);
         oracle_corridor(direction,distance,pose);
     }
 }
@@ -86,7 +86,7 @@ static void check_terrain(const td_streetcar_pose_t *pose,unsigned tick){
 }
 static void test_clock_and_poses(void){
     unsigned tick,direction,index,sub;td_streetcar_pose_t pose,expected,edge;td_streetcar_box_t box;
-    for(tick=0;tick<3840;tick++){
+    for(tick=0;tick<15360;tick++){
         expect(td_streetcar_pose(tick/60,tick%60,&pose),1,"pose query",tick,0);
         oracle_pose(tick,&expected);pose_equal(&pose,&expected,tick,"global corridor oracle");
         check_terrain(&pose,tick);
@@ -95,15 +95,15 @@ static void test_clock_and_poses(void){
         expect(td_streetcar_sweep(tick/60,tick%60,0,&box),1,"static centre hit",tick,0);
         box=point(2,pose.u/16,pose.v/16);
         expect(td_streetcar_sweep(tick/60,tick%60,0,&box),0,"other district clear",tick,0);
-        expect(td_streetcar_pose(65472+tick/60,tick%60,&edge),1,"high clock query",tick,0);
+        expect(td_streetcar_pose(65280+tick/60,tick%60,&edge),1,"high clock query",tick,0);
         pose_equal(&edge,&pose,tick,"high clock same phase");
         if(pose.doors&&((!pose.direction&&pose.stop<50)||(pose.direction&&pose.stop>43))){
             expect(td_transit_departure(pose.stop,pose.direction?(pose.stop>43?43:pose.stop):(pose.stop<50?50:pose.stop),tick/60),0,
                    "doors match actual timetable",tick,pose.stop);
         }
     }
-    for(direction=0;direction<2;direction++)for(index=0;index<8;index++)for(sub=0;sub<120;sub++){
-        unsigned second=direction?32+(7-index)*4:index*4;
+    for(direction=0;direction<2;direction++)for(index=0;index<8;index++)for(sub=0;sub<240;sub++){
+        unsigned second=direction?128+(7-index)*16:index*16;
         expect(td_streetcar_pose(second+sub/60,sub%60,&pose),1,"platform pose",second,index);
         expect(pose.u,host_platforms[index].u*16,"authored platform longitude",second,index);
         expect(pose.v,(host_platforms[index].v-(direction?36:20))*16,"shared south platform offset",second,index);
@@ -117,12 +117,12 @@ static void test_clock_and_poses(void){
     expect(edge.v-pose.v<=3,1,"rollover subpixel continuity",0,0);
     /* The last stop in each direction opens for alighting, not a nonexistent
      * outbound destination. Return service starts after the lane turnaround. */
-    expect(td_streetcar_pose(28,0,&pose),1,"east terminal arrival",0,0);
+    expect(td_streetcar_pose(112,0,&pose),1,"east terminal arrival",0,0);
     expect(pose.stop,50,"east terminal doors",0,0);
-    expect(td_transit_departure(50,49,28),4,"east terminal return wait",0,0);
-    expect(td_streetcar_pose(60,0,&pose),1,"west terminal arrival",0,0);
+    expect(td_transit_departure(50,49,112),16,"east terminal return wait",0,0);
+    expect(td_streetcar_pose(240,0,&pose),1,"west terminal arrival",0,0);
     expect(pose.stop,43,"west terminal doors",0,0);
-    expect(td_transit_departure(43,44,60),4,"west terminal return wait",0,0);
+    expect(td_transit_departure(43,44,240),16,"west terminal return wait",0,0);
 }
 static void test_exact_interpolation_resources(void){
     /* Whole-pixel distances from the independently stitched corridor above.
@@ -131,14 +131,14 @@ static void test_exact_interpolation_resources(void){
      * quotient decomposition and the new generated table implementation. */
     static const unsigned pixels[16]={256,256,304,304,124,684,100,100,
                                       684,124,304,304,256,256,16,16};
-    for(unsigned route=0;route<16;route++)for(unsigned tick=0;tick<=120;tick++){
-        unsigned expected=(unsigned)((uint64_t)pixels[route]*16*tick/120);
+    for(unsigned route=0;route<16;route++)for(unsigned tick=0;tick<=720;tick++){
+        unsigned expected=(unsigned)((uint64_t)pixels[route]*16*tick/720);
         expect(host_streetcar_progress(route,tick),expected,
                "actual private progress versus independent wide corridor interpolation",tick,route);
     }
-    expect(host_streetcar_progress_value_bytes(),1452,"six actual UWORD table resources",0,0);
+    expect(host_streetcar_progress_value_bytes(),8652,"six actual UWORD table resources",0,0);
     expect(host_streetcar_progress_route_count(),16,"actual same-bank route pointer count",0,0);
-    expect(host_streetcar_progress_value_bytes()+host_streetcar_progress_route_count()*2,1484,
+    expect(host_streetcar_progress_value_bytes()+host_streetcar_progress_route_count()*2,8684,
            "native table budget models guarded two-byte pointers rather than host pointer size",0,0);
 }
 
@@ -146,8 +146,8 @@ static void test_section_endpoint_sweeps(void){
     static const int offsets[]={-225,-224,-223,-97,-96,-95,0,95,96,97,223,224,225};
     td_streetcar_pose_t last,arrival;td_streetcar_box_t obstacle;
     for(unsigned section=0;section<16;section++){
-        unsigned clock=(section+1)*240;
-        oracle_pose(clock-1,&last);oracle_pose(clock%3840,&arrival);
+        unsigned clock=(section+1)*960;
+        oracle_pose(clock-1,&last);oracle_pose(clock%15360,&arrival);
         unsigned hu=last.heading==0||last.heading==8?224:96;
         unsigned hv=hu==224?96:224;
         /* All authored final edges are longer than a last-tick advance. Thus
@@ -178,20 +178,20 @@ static void test_riding(void){
     unsigned origin,target,tick,left;td_streetcar_pose_t pose,expected,prior;
     for(origin=43;origin<=50;origin++)for(target=43;target<=50;target++){
         if(origin==target)continue;
-        unsigned reverse=origin>target,first=(reverse?32+(50-origin)*4:(origin-43)*4)*60;
-        unsigned duration=(origin>target?origin-target:target-origin)*4;
-        expect(td_transit_duration(origin,target),duration,"unchanged actual duration",first,origin);
+        unsigned reverse=origin>target,first=(reverse?128+(50-origin)*16:(origin-43)*16)*60;
+        unsigned duration=(origin>target?origin-target:target-origin)*16;
+        expect(td_transit_duration(origin,target),duration,"slower actual duration",first,origin);
         expect(td_transit_fare(origin),3,"unchanged actual fare",first,origin);
-        for(tick=0;tick<3840;tick++)for(left=1;left<=2;left++){
+        for(tick=0;tick<15360;tick++)for(left=1;left<=2;left++){
             unsigned progress=first+(duration-left)*60;
-            unsigned accepted=tick>=progress&&tick<progress+120;
+            unsigned accepted=tick>=progress&&tick<progress+240;
             memset(&pose,0xA5,sizeof(pose));prior=pose;
             expect(td_streetcar_ride(origin,target,left,tick/60,tick%60,&pose),accepted||left==1,"ride interval/retry",tick,origin*64+target);
             if(accepted){oracle_pose(tick,&expected);pose_equal(&pose,&expected,tick,"ride follows clock");}
             else if(left==1){oracle_dwell(target-43,reverse,&expected);pose_equal(&pose,&expected,tick,"retry holds target doors");}
             else expect(memcmp(&pose,&prior,sizeof(pose)),0,"invalid phase output unchanged",tick,origin);
         }
-        expect(td_streetcar_ride(origin,target,28,first/60,0,&pose),duration==28,"remaining time fits actual trip",first,origin);
+        expect(td_streetcar_ride(origin,target,112,first/60,0,&pose),duration==112,"remaining time fits actual trip",first,origin);
         expect(td_streetcar_ride(origin,target,1,65535,59,&pose),1,"restored retry rollover",0,origin);
         oracle_dwell(target-43,reverse,&expected);pose_equal(&pose,&expected,0,"restored destination pose");
     }
@@ -204,9 +204,9 @@ static void test_destination_and_real_ride_history(void){
         expect(td_streetcar_destination(origin,target,&pose),valid,"pure destination membership",0,origin*256+target);
         if(!valid){expect(memcmp(&pose,&prior,sizeof(pose)),0,"destination failure unchanged",0,origin*256+target);continue;}
         oracle_dwell(target-43,origin>target,&expected);pose_equal(&pose,&expected,0,"pure directional doors");
-        unsigned first=origin>target?32+(50-origin)*4:(origin-43)*4;
-        unsigned duration=(origin>target?origin-target:target-origin)*4;
-        for(offset=0;offset<2;offset++)for(progress=0;progress<duration;progress++){
+        unsigned first=origin>target?128+(50-origin)*16:(origin-43)*16;
+        unsigned duration=(origin>target?origin-target:target-origin)*16;
+        for(offset=0;offset<4;offset++)for(progress=0;progress<duration;progress++){
             unsigned seconds=first+offset+progress,left=duration-progress;
             expect(td_streetcar_ride(origin,target,left,seconds,59,&pose),1,"actual boarded countdown history",seconds,origin);
             oracle_pose(seconds*60+59,&expected);pose_equal(&pose,&expected,seconds,"normal ride follows unit");
@@ -219,7 +219,7 @@ static void test_destination_and_real_ride_history(void){
         for(cycle=0;cycle<8;cycle++){
             expect(td_streetcar_destination(origin,target,&pose),1,"held destination repeated cycles",cycle,origin);
             pose_equal(&pose,&expected,cycle,"held destination never rewinds");
-            expect(td_streetcar_ride(origin,target,1,first+cycle*64,0,&pose),1,"retry at origin cycle phase",cycle,origin);
+            expect(td_streetcar_ride(origin,target,1,first+cycle*256,0,&pose),1,"retry at origin cycle phase",cycle,origin);
             pose_equal(&pose,&expected,cycle,"narrow retry pins target");
         }
     }
@@ -247,15 +247,15 @@ static void test_full_corridor(void){
     oracle_mark_line(3,880,488,880,504);
     for(district=0;district<HOST_DISTRICTS;district++)for(y=464;y<=560;y++)for(x=0;x<1024;x++){
         box=point(district,x,y);
-        expect(td_streetcar_sweep(0,0,3840,&box),occupied[district][y][x],"axis exact full corridor",y*1024+x,district);
+        expect(td_streetcar_sweep(0,0,15360,&box),occupied[district][y][x],"axis exact full corridor",y*1024+x,district);
         if(x%19==0&&y%7==0){
             expect(td_streetcar_sweep(65535,59,65535,&box),occupied[district][y][x],"bounded long catchup",y*1024+x,district);
-            expect(td_streetcar_sweep(31,47,3841,&box),occupied[district][y][x],"full corridor phase invariant",y*1024+x,district);
+            expect(td_streetcar_sweep(31,47,15361,&box),occupied[district][y][x],"full corridor phase invariant",y*1024+x,district);
         }
     }
     for(district=0;district<HOST_DISTRICTS;district++)for(y=0;y<976;y+=31)for(x=0;x<1024;x+=29){
         box=point(district,x,y);
-        expect(td_streetcar_sweep(63,59,3840,&box),occupied[district][y][x],"outside corridor",y*1024+x,district);
+        expect(td_streetcar_sweep(63,59,15360,&box),occupied[district][y][x],"outside corridor",y*1024+x,district);
     }
     /* Car-sized and long crossing rectangles require any covered cell, not
      * just a centre/corner check. Their oracle reads the independent raster. */
@@ -266,47 +266,47 @@ static void test_full_corridor(void){
         for(unsigned sy=y;sy<=bottom;sy++)for(unsigned sx=x;sx<=right;sx++)
             if(occupied[district][sy][sx])expected=1;
         box.left=x*16;box.right=right*16+15;box.top=y*16;box.bottom=bottom*16+15;box.district=district;
-        expect(td_streetcar_sweep(17,41,3840,&box),expected,"whole obstacle rectangle",n,district);
+        expect(td_streetcar_sweep(17,41,15360,&box),expected,"whole obstacle rectangle",n,district);
     }
 }
 static void test_temporal_sweeps(void){
     td_streetcar_box_t box;td_streetcar_pose_t pose;
-    unsigned tick,back,sample,j;static const unsigned elapsed[]={1,2,4,7,60,121,239,700,3839};
+    unsigned tick,back,sample,j;static const unsigned elapsed[]={1,2,4,7,60,121,239,700,15359};
     box=point(3,145,536);
-    expect(td_streetcar_sweep(22,0,0,&box),0,"jump start misses",0,0);
-    expect(td_streetcar_sweep(22,6,0,&box),0,"jump end misses",0,0);
-    expect(td_streetcar_sweep(22,6,6,&box),1,"full elapsed jump hits",0,0);
+    expect(td_streetcar_sweep(84,0,0,&box),0,"jump start misses",0,0);
+    expect(td_streetcar_sweep(84,42,0,&box),0,"jump end misses",0,0);
+    expect(td_streetcar_sweep(84,42,42,&box),1,"full elapsed jump hits",0,0);
     box=point(3,400,504);
-    expect(td_streetcar_sweep(23,59,119,&box),0,"bend does not fill interior",0,0);
+    expect(td_streetcar_sweep(95,59,719,&box),0,"bend does not fill interior",0,0);
     box=point(1,512,536);
-    expect(td_streetcar_sweep(3,30,90,&box),0,"seam never bridges west coordinates",0,0);
+    expect(td_streetcar_sweep(13,0,540,&box),0,"seam never bridges west coordinates",0,0);
     box=point(0,512,536);
-    expect(td_streetcar_sweep(3,30,90,&box),0,"seam never bridges core coordinates",0,0);
+    expect(td_streetcar_sweep(13,0,540,&box),0,"seam never bridges core coordinates",0,0);
     box=point(0,40,536);
-    expect(td_streetcar_sweep(3,30,90,&box),1,"seam reaches actual core entrance",0,0);
+    expect(td_streetcar_sweep(13,0,540,&box),1,"seam reaches actual core entrance",0,0);
     box=point(1,836,536);
     expect(td_streetcar_sweep(0,0,1,&box),1,"rollover includes endpoint",0,0);
     box=point(0,130,536);
-    expect(td_streetcar_sweep(4,0,0,&box),0,"body exclusive right boundary",0,0);
+    expect(td_streetcar_sweep(16,0,0,&box),0,"body exclusive right boundary",0,0);
     box.left=box.right=130*16-1;
-    expect(td_streetcar_sweep(4,0,0,&box),1,"body final fractional unit",0,0);
+    expect(td_streetcar_sweep(16,0,0,&box),1,"body final fractional unit",0,0);
     box.left=130*16;box.right=140*16+15;box.top=531*16;box.bottom=541*16+15;
-    expect(td_streetcar_sweep(4,0,0,&box),0,"eleven pixel car clear edge",0,0);
+    expect(td_streetcar_sweep(16,0,0,&box),0,"eleven pixel car clear edge",0,0);
     box.left--;
-    expect(td_streetcar_sweep(4,0,0,&box),1,"eleven pixel car touching edge",0,0);
+    expect(td_streetcar_sweep(16,0,0,&box),1,"eleven pixel car touching edge",0,0);
     /* Every independently sampled body point in an elapsed interval must be
      * reported. This proves lower-bound sweep coverage without pretending a
      * per-tick oracle captures unsampled corner motion. Static checks below
      * prove exact current-body bounds, not merely the centre. */
-    for(tick=0;tick<3840;tick+=17)for(j=0;j<sizeof(elapsed)/sizeof(elapsed[0]);j++){
+    for(tick=0;tick<15360;tick+=17)for(j=0;j<sizeof(elapsed)/sizeof(elapsed[0]);j++){
         back=elapsed[j];
         for(sample=0;sample<=back;sample+=back/4+1){
-            unsigned phase=(tick+3840-sample)%3840;
+            unsigned phase=(tick+15360-sample)%15360;
             oracle_pose(phase,&pose);box=point(pose.district,pose.u/16,pose.v/16);
             expect(td_streetcar_sweep(tick/60,tick%60,back,&box),1,"elapsed includes intermediate body",tick,sample);
         }
     }
-    for(tick=0;tick<3840;tick+=7){
+    for(tick=0;tick<15360;tick+=7){
         int x,y;
         oracle_pose(tick,&pose);
         for(y=-16;y<=16;y++)for(x=-16;x<=16;x++){
@@ -385,8 +385,8 @@ static void test_lookup_public_validation_boundaries(void){
     }
     for(unsigned origin=43;origin<=50;origin++)for(unsigned target=43;target<=50;target++){
         if(origin==target)continue;
-        unsigned duration=(origin>target?origin-target:target-origin)*4;
-        static const unsigned malformed_left[]={0,29,255};
+        unsigned duration=(origin>target?origin-target:target-origin)*16;
+        static const unsigned malformed_left[]={0,113,255};
         for(unsigned i=0;i<sizeof(malformed_left)/sizeof(malformed_left[0]);i++){
             memset(&pose,0xA5,sizeof(pose));prior=pose;
             expect(td_streetcar_ride(origin,target,malformed_left[i],65535,59,&pose),0,
@@ -395,7 +395,7 @@ static void test_lookup_public_validation_boundaries(void){
         }
         memset(&pose,0xA5,sizeof(pose));prior=pose;
         expect(td_streetcar_ride(origin,target,duration+1,65535,59,&pose),0,
-               "remaining time exceeding the actual booked distance is rejected even inside the global28-second bound",duration,origin*64+target);
+               "remaining time exceeding the actual booked distance is rejected even inside the global112-second bound",duration,origin*64+target);
         expect(memcmp(&pose,&prior,sizeof(pose)),0,"distance-inconsistent booking leaves outputs unchanged",duration,origin*64+target);
     }
 }

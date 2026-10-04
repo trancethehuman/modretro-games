@@ -1,5 +1,18 @@
 # Roadmap
 
+## Hardware feedback update — 2026-10-04
+
+- [x] Slow and stabilise player driving; actual-C motion tests and native cardinal runs/braking/reverse pass. Human corner feel remains open.
+- [x] Slow autonomous Queen trams and matching paid service; native wait/map/fare/arrival and tram contact/recovery pass.
+- [x] Improve car silhouette, shrink pedestrians, add four original pedestrian types and non-graphic airborne/prone poses; actual-C on-foot road impacts and native tram injury/recovery pass.
+- [x] Clip/admit sprites within hardware limits and inspect crowded native frames; physical flicker recheck remains separate.
+- [x] Simplify pause labels, add held directional navigation and a quick map shortcut without repeated action presses.
+- [x] Add 375 roof modules, 758 street/park props and clearer signal details, preserving 344 footprints and registered geometry.
+- [x] Officially build and playtest distinct 9c155 while preserving the working 8be1 cartridge and package; [measured results](docs/HARDWARE_FEEDBACK_2026_10_04.md) retain exact scopes.
+- [ ] Replay motorcycle 74 and review all 104 deadlines against slower vehicles/transit; human balance and two-hour enjoyment remain unverified.
+- [ ] Install and test the update on Chromatic, including physical flicker, handling, tram pacing, save persistence and audio.
+- [ ] Repair partial-entry save overlap and the small parked-car/pedestrian avoidance mismatch, then give each its own native regression.
+
 ## Initial central prototype — implemented
 
 - [x] Public MIT collection repository, one folder per game, README, AGENTS.md and workflow skills.
@@ -319,8 +332,9 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 
 ## Device milestone
 
-- [ ] Identify the connected Chromatic and supported writable cartridge; establish Developer Mode readiness.
-- [ ] Stream if supported, then load the user's identified writable development cartridge through the official workflow.
-- [ ] Verify write/read-back where available, manual cold boot, driving/braking, a full delivery, transit, save recovery and audio.
+- [x] Identify the connected Chromatic and the user's supported writable development cartridge.
+- [x] Load the reviewed `8be1eff0…` build through the official installer; retain [vendor success evidence](docs/CARTRIDGE_INSTALL_2026_10_04.json).
+- [x] Receive the user's confirmation of cold boot, physical button response, and subsequent playable hardware feedback. The vendor reported success; no separate complete read-back digest was available.
+- [ ] Verify a full physical delivery, transit, save recovery and audio, and test the new hardware-feedback build on the cartridge after installation.
 
-No physical streaming or cartridge write has been attempted. Record device observations separately from emulator results without private activation or device details.
+The working installed build remains separate from the new update. Record device observations separately from emulator results without private activation or device details.

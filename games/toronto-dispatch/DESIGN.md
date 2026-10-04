@@ -2,6 +2,8 @@
 
 ## Player experience
 
+The 2026-10-04 hardware feedback accepts a slower, more controllable driving pace, slower visually scheduled Queen trams, clearer menu navigation, smaller pedestrians and a broader car silhouette. NPC impacts gain non-graphic flight/prone death poses within the loaded district; the on-foot courier gets recoverable vehicle impacts. Added street/park/background details must preserve usable roads and collision footprints. This supersedes the first prototype's temporary stumble-only presentation; see [DECISIONS.md](DECISIONS.md) for the accepted scope and [TESTING.md](TESTING.md) for implementation evidence.
+
 You are a Toronto courier working a shift. Accept a job, collect the package, find a route, handle traffic, park, and deliver. The tension comes from route planning and controlled driving: braking early, choosing a usable lane, waiting for a streetcar, or taking a legal shortcut can outperform constant acceleration.
 
 The city remains open between jobs. Landmarks help navigation; neighbourhoods change in building shapes, density, road width, trees, and industrial character. A compact readable city is the starting point for a larger world, not the full Toronto map on day one. The accepted direction includes a GTA-inspired street simulation around the courier: visible civilian pedestrians, collision consequences, service vehicles, drivers obeying lights and activity on the waterfront. The user selected chaotic sandbox play with escalating police pursuits and tougher penalties. Current source integrates bounded road pursuits and the first street systems below; scoped native street functionality passes, while broader pacing/gameplay and hardware remain pending. Geographic scope stays within Old Toronto.

@@ -542,8 +542,8 @@ static void test_wait_contact_hud_and_map_restore(void) {
     /* Fixed output examples exercise the shared WAIT layout, not another
      * timetable oracle. Transit arithmetic has its own independent suite. */
     const struct {UBYTE origin,target,wait;UWORD seconds;const char *service;} cases[]={
-        {46,48,62,14,"501 QUEEN"},
-        {46,44,62,50,"501 QUEEN"},
+        {46,48,252,52,"501 QUEEN"},
+        {46,44,252,196,"501 QUEEN"},
         {0,12,16,2,"LINE 1 TRAIN"},
         {80,19,22,6,"94 WELLESLEY BUS"},
         {10,20,28,2,"ISLAND FERRY"}
@@ -782,10 +782,10 @@ static void test_island_no_fare_guidance(void){
     reset_case();td.job=7;td.district=TD_DISTRICT_ISLANDS;td.cash=0;td.mode=TD_ROAM;
     td_get_job(7,&td_job);td_get_stop(25,&td_target);
     static const UBYTE notices[]={1,5,19};
-    static const char *const text[]={"STOP TO INTERACT","CRASH: CARGO HURT","HUMAN HIT: FINE + H"};
+    static const char *const text[]={"STOP TO INTERACT","VEHICLE HIT: RECOVER","HUMAN HIT: FINE + H"};
     for(unsigned i=0;i<sizeof(notices);i++){
         td.msg=notices[i];game_snapshot_t before=snapshot_game();td_ui_draw();
-        expect_window_text(0,text[i],"other active Island notices keep their original safety/penalty text");
+        expect_window_text(0,text[i],"active Island notices retain the appropriate safety/penalty text without fare advice");
         expect_window_text(2,"CENTRE PARK POST","other notices retain the Island client objective");
         expect_game_unchanged(&before);
     }
@@ -1093,7 +1093,19 @@ static void test_sparse_table_full_and_single_holes(void) {
     }
 }
 
+static void test_walking_vehicle_hit_caption(void) {
+    for(UBYTE carrying=0;carrying<2;carrying++){
+        reset_case();td.mode=TD_ROAM;td.onfoot=1;td.msg=5;
+        if(carrying){td.job=0;td.stage=1;td_job.count=2;}
+        game_snapshot_t before=snapshot_game();
+        td_ui_draw();
+        expect_window_text(0,"VEHICLE HIT: RECOVER","on-foot vehicle impact explains recovery with and without cargo");
+        expect_game_unchanged(&before);
+    }
+}
+
 int main(void) {
+    test_walking_vehicle_hit_caption();
     test_every_viewport();test_focus_and_partial_restart();test_panning_and_bounds();
     test_paid_transit_objective_context();test_interrupt_restore_and_idempotence();
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();

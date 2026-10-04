@@ -75,7 +75,13 @@
         "src/td_police.c",
         "include/td_police_lanes.h",
         "include/td_police_road_data.h",
-        "src/td_police_lanes.c"
+        "src/td_police_lanes.c",
+        "include/td_menu.h",
+        "src/td_menu.c",
+        "include/td_motion.h",
+        "src/td_motion.c",
+        "include/td_actor_render.h",
+        "src/td_actor_render.c"
       ]
     }
   ]

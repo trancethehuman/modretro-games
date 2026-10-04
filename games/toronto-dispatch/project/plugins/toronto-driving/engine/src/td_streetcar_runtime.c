@@ -3,6 +3,7 @@
 #include "td_streetcar_runtime.h"
 #include "td_streetcar.h"
 #include "td_game.h"
+#include "td_motion.h"
 #include "td_transit.h"
 #include "td_district.h"
 #include "td_world.h"
@@ -179,13 +180,13 @@ UBYTE td_streetcar_runtime_pedestrian_clear(UBYTE district,UWORD u,UWORD v) BANK
 }
 UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v) BANKED {
     td_streetcar_box_t box;
-    if(!td_streetcar_runtime_box(u,v,5*16,5*16,td.district,&box)||old_u>=1024*16||old_v>=976*16||
-       old_u<5*16||old_v<5*16||
-       old_u+5*16>=1024*16||old_v+5*16>=976*16)return FALSE;
-    if(old_u-5*16<box.left)box.left=old_u-5*16;
-    if(old_u+5*16>box.right)box.right=old_u+5*16;
-    if(old_v-5*16<box.top)box.top=old_v-5*16;
-    if(old_v+5*16>box.bottom)box.bottom=old_v+5*16;
+    if(!td_streetcar_runtime_box(u,v,7*16,7*16,td.district,&box)||old_u>=1024*16||old_v>=976*16||
+       old_u<7*16||old_v<7*16||
+       old_u+7*16>=1024*16||old_v+7*16>=976*16)return FALSE;
+    if(old_u-7*16<box.left)box.left=old_u-7*16;
+    if(old_u+7*16>box.right)box.right=old_u+7*16;
+    if(old_v-7*16<box.top)box.top=old_v-7*16;
+    if(old_v+7*16>box.bottom)box.bottom=old_v+7*16;
     return td.subsecond<60&&(!td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(td.seconds,td.subsecond,td_streetcar_elapsed,&box)==TD_STREETCAR_CLEAR);
 }
@@ -284,7 +285,7 @@ UBYTE td_streetcar_runtime_traffic_retreat(UBYTE district,UWORD old_u,UWORD old_
     return td_streetcar_runtime_traffic_retreat_extent(district,old_u,old_v,u,v,5);
 }
 UBYTE td_streetcar_runtime_parking_allowed(UBYTE district,UWORD u,UWORD v) BANKED {
-    return td_streetcar_runtime_clear(u,v,5*16,district,TD_STREETCAR_PERIOD_TICKS);
+    return td_streetcar_runtime_clear(u,v,7*16,district,TD_STREETCAR_PERIOD_TICKS);
 }
 
 static UBYTE td_streetcar_runtime_terrain(const scene_t *scene,UWORD u,UWORD v,UBYTE foot){
@@ -297,7 +298,7 @@ static UBYTE td_streetcar_runtime_terrain(const scene_t *scene,UWORD u,UWORD v,U
     }
     else{
         if(u<8||v<8||u>1016||v>968)return FALSE;
-        left=(u-5)>>3;right=(u+5)>>3;top=(v-5)>>3;bottom=(v+5)>>3;
+        left=(u-7)>>3;right=(u+7)>>3;top=(v-7)>>3;bottom=(v+7)>>3;
     }
     for(y=top;y<=bottom;y++)for(x=left;x<=right;x++){
         value=ReadBankedUBYTE((const UBYTE*)scene->collisions.ptr+(UWORD)y*scene->width+x,scene->collisions.bank);
@@ -371,7 +372,7 @@ static UBYTE td_streetcar_runtime_anchor_path(const scene_t *scene,UBYTE distric
     nu=a->u*16;nv=a->v*16;
     return td_streetcar_runtime_path(scene,district,u,v,nu,v,foot)&&
         td_streetcar_runtime_path(scene,district,nu,v,nu,nv,foot)&&
-        td_streetcar_runtime_clear(nu,nv,foot?3*16:5*16,district,TD_STREETCAR_PERIOD_TICKS);
+        td_streetcar_runtime_clear(nu,nv,foot?3*16:7*16,district,TD_STREETCAR_PERIOD_TICKS);
 }
 static UBYTE td_streetcar_runtime_find_anchor(const scene_t *scene,UBYTE district,UWORD u,UWORD v,
                                     UBYTE foot,UWORD *out_u,UWORD *out_v){
@@ -402,7 +403,7 @@ UBYTE td_streetcar_runtime_recover_park(void) BANKED {
 static UBYTE td_streetcar_runtime_separate(const scene_t *scene,const td_streetcar_box_t *tram,
                                  WORD dx,WORD dy,UBYTE foot,UWORD *out_u,UWORD *out_v){
     WORD u=(WORD)td.u+dx*16,v=(WORD)td.v+dy*16;td_streetcar_box_t candidate;
-    if(u<0||v<0||!td_streetcar_runtime_box(u,v,foot?3*16:5*16,foot?3*16:5*16,td.district,&candidate)||
+    if(u<0||v<0||!td_streetcar_runtime_box(u,v,foot?3*16:7*16,foot?3*16:7*16,td.district,&candidate)||
        td_streetcar_runtime_overlap(&candidate,tram)||!td_streetcar_runtime_path(scene,td.district,td.u,td.v,u,v,foot))return FALSE;
     *out_u=u;*out_v=v;return TRUE;
 }
@@ -411,8 +412,8 @@ UBYTE td_streetcar_runtime_recover_contact(UBYTE onfoot) BANKED {
     WORD radius,dx,dy;UWORD u,v;
     if(onfoot>1||onfoot!=td.onfoot)return TD_STREETCAR_CONTACT_INVALID;
     if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT)return TD_STREETCAR_PARK_UNCHANGED;
-    if(td.subsecond>=60||!td_streetcar_runtime_box(td.u,td.v,onfoot?3*16:5*16,
-       onfoot?3*16:5*16,td.district,&body))return TD_STREETCAR_CONTACT_INVALID;
+    if(td.subsecond>=60||!td_streetcar_runtime_box(td.u,td.v,onfoot?3*16:7*16,
+       onfoot?3*16:7*16,td.district,&body))return TD_STREETCAR_CONTACT_INVALID;
     /* This conservative corridor contains every authored current tram body,
        including the East bend and endpoint turnarounds. A valid player box
        outside it cannot contact the tram; avoid two nested banked queries. */
@@ -420,6 +421,9 @@ UBYTE td_streetcar_runtime_recover_contact(UBYTE onfoot) BANKED {
     if(!td_streetcar_pose(td.seconds,td.subsecond,&pose)||!td_streetcar_bounds(&pose,&tram))return TD_STREETCAR_CONTACT_INVALID;
     if(!td_streetcar_runtime_overlap(&tram,&body))return TD_STREETCAR_PARK_UNCHANGED;
     if(!td_streetcar_runtime_scene(td.district,&scene))return TD_STREETCAR_CONTACT_INVALID;
+    if(onfoot&&!pose.doors&&td_streetcar_elapsed)
+        td_motion_player_knockback(pose.heading==0?1:pose.heading==8?-1:0,
+                                  pose.heading==4?1:pose.heading==12?-1:0);
     /* Manhattan rings visit the nearest connected4px-grid escape first.
      * Four axes are included; mixed candidates handle a blocked corner. */
     for(radius=4;radius<=48;radius+=4)for(dx=-radius;dx<=radius;dx+=4){

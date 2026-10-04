@@ -1,6 +1,6 @@
 """Check the exact compiled streetcar interpolation data in a matching ROM/NOI.
 
-Independently derives six 121-word floor(length*tick/120) sequences and the
+Independently derives six 721-word floor(length*tick/720) sequences and the
 16-entry near-pointer order. Every sequence and the pointer table must occur
 exactly once in the whole supplied ROM, fit in one switchable 16-KiB bank, and
 share that bank with the linked pose/bounds/sweep APIs and their b_ annotations.
@@ -26,7 +26,7 @@ LENGTHS = (256, 1600, 1984, 4096, 4864, 10944)
 ROUTE_LENGTHS = (4096, 4096, 4864, 4864, 1984, 10944, 1600, 1600,
                 10944, 1984, 4864, 4864, 4096, 4096, 256, 256)
 APIS = ("td_streetcar_pose", "td_streetcar_bounds", "td_streetcar_sweep")
-TICKS = 121
+TICKS = 721
 TABLE_BYTES = TICKS * 2
 POINTER_BYTES = len(ROUTE_LENGTHS) * 2
 NATIVE_DATA_BYTES = len(LENGTHS) * TABLE_BYTES + POINTER_BYTES
@@ -48,7 +48,7 @@ class Report:
 
 def words(length: int) -> bytes:
     """Wide Python arithmetic oracle, independent of generated C literals."""
-    return b"".join((length * tick // 120).to_bytes(2, "little")
+    return b"".join((length * tick // 720).to_bytes(2, "little")
                     for tick in range(TICKS))
 
 
@@ -111,11 +111,11 @@ def inspect(rom: bytes, symbols: dict[str, int]) -> Report:
 
 def fixture() -> tuple[bytearray, dict[str, int], dict[int, int], int]:
     rom = bytearray(b"\xA5" * (4 * BANK_SIZE))
-    tables = {length: 2 * BANK_SIZE + 0x300 + index * 0x100
+    tables = {length: 2 * BANK_SIZE + 0x300 + index * 0x600
               for index, length in enumerate(LENGTHS)}
     for length, start in tables.items():
         rom[start:start + TABLE_BYTES] = words(length)
-    routes = 2 * BANK_SIZE + 0xA00
+    routes = 2 * BANK_SIZE + 0x2800
     rom[routes:routes + POINTER_BYTES] = b"".join(
         (0x4000 + tables[length] % BANK_SIZE).to_bytes(2, "little")
         for length in ROUTE_LENGTHS)
@@ -155,7 +155,7 @@ def self_test() -> int:
     rom, symbols, tables, routes = fixture()
     report = accepted(rom, symbols)
     assert report.bank == 2 and len(report.tables) == 6
-    assert report.routes.address == 0x4A00 and NATIVE_DATA_BYTES == 1484
+    assert report.routes.address == 0x6800 and NATIVE_DATA_BYTES == 8684
     checks += 2
 
     # Every value (including exact start/end) and every route pointer is tested
@@ -165,7 +165,7 @@ def self_test() -> int:
             damaged = rom.copy()
             damaged[tables[length] + tick * 2] ^= 1
             rejected(damaged, symbols, f"progress[{length}]: exact compiled bytes are missing")
-        for duplicate in (BANK_SIZE + 0x1200, 2 * BANK_SIZE + 0x1200):
+        for duplicate in (BANK_SIZE + 0x1200, 2 * BANK_SIZE + 0x3000):
             damaged = rom.copy()
             damaged[duplicate:duplicate + TABLE_BYTES] = words(length)
             rejected(damaged, symbols, f"progress[{length}]: exact compiled bytes are ambiguous")
@@ -180,7 +180,7 @@ def self_test() -> int:
             damaged = rom.copy()
             damaged[routes + index * 2:routes + index * 2 + 2] = value.to_bytes(2, "little")
             rejected(damaged, symbols, "16-route near-pointer table: exact compiled bytes are missing")
-    for duplicate in (BANK_SIZE + 0x1200, 2 * BANK_SIZE + 0x1200):
+    for duplicate in (BANK_SIZE + 0x1200, 2 * BANK_SIZE + 0x3000):
         damaged = rom.copy()
         damaged[duplicate:duplicate + POINTER_BYTES] = rom[routes:routes + POINTER_BYTES]
         rejected(damaged, symbols, "16-route near-pointer table: exact compiled bytes are ambiguous")
@@ -294,7 +294,7 @@ def main(argv: list[str] | None = None) -> int:
     for length, table in report.tables:
         print(f"  progress[{length}]: bank {table.bank:02X}, near {table.address:04X}, {TABLE_BYTES} bytes")
     print(f"  route pointers: bank {report.routes.bank:02X}, near {report.routes.address:04X}, {POINTER_BYTES} bytes")
-    print(f"PASS: six exact 121-word progress tables and 16 ordered near pointers ({NATIVE_DATA_BYTES} bytes), "
+    print(f"PASS: six exact 721-word progress tables and 16 ordered near pointers ({NATIVE_DATA_BYTES} bytes), "
           f"unique in ROM and co-banked with linked pose/bounds/sweep APIs in bank {report.bank:02X}")
     print("Compiled data/placement only; native execution, pacing, stack use and hardware remain separate checks")
     return 0

@@ -4,6 +4,7 @@
  * Upstream file SHA-256: b7360f4e84c720090e127aa047daa21f7d70517a4a2d9512d2a96f568e9ee5f5
  * Changes: restore aircraft at actors_render entry; after ground actors,
  * render signal tiles, capacity-admitted harbour boats, then ambient aircraft.
+ * Ground poses now use signed clipping and whole-pose scanline admission.
  *
  * MIT License
  * Copyright (c) 2020 Toxa
@@ -32,6 +33,7 @@
 #include "td_aircraft_render.h"
 #include "td_boats.h"
 #include "td_traffic_lights.h"
+#include "td_actor_render.h"
 
 #include <gbdk/platform.h>
 #include <gbdk/metasprites.h>
@@ -200,6 +202,7 @@ void actors_update(void) BANKED {
 void actors_render(void) NONBANKED {
     UBYTE _save = CURRENT_BANK;
     static actor_t *actor;
+    UBYTE ground_index;
 
     td_aircraft_render_restore();
 
@@ -243,22 +246,16 @@ void actors_render(void) NONBANKED {
 
 
         if (!(window_hide_actors && (screen_x + 8 > WX_REG) && (screen_y - 8 > WY_REG))) {
-            SWITCH_ROM(PLAYER.sprite.bank);
-            spritesheet_t *sprite = PLAYER.sprite.ptr;
-
-            allocated_hardware_sprites += move_metasprite(
-                *(sprite->metasprites + PLAYER.frame),
-                PLAYER.base_tile,
-                allocated_hardware_sprites,
-                screen_x,
-                screen_y
-            );
+            td_actor_render_actor(&PLAYER);
         }
     }
 
-    // Render all actors
-    for (actor = PLAYER.prev; (actor); actor = actor->prev){
-        if (CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
+    // Stable runtime slot order: fleet/parked car, people, tram, then marker.
+    // The stock activation-list order can rotate when actors enter/leave view.
+    for (ground_index = 2; ground_index <= MAX_ACTORS; ground_index++) {
+        actor = &actors[ground_index == MAX_ACTORS ? 1 : ground_index];
+        if (!CHK_FLAG(actor->flags, ACTOR_FLAG_ACTIVE) ||
+            CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
            continue;
         }
 
@@ -273,16 +270,7 @@ void actors_render(void) NONBANKED {
         if (((window_hide_actors) && (((screen_x + 8) > WX_REG) && ((screen_y - 8) > WY_REG)))) {
             continue;
         }
-        SWITCH_ROM(actor->sprite.bank);
-        spritesheet_t *sprite = actor->sprite.ptr;
-
-        allocated_hardware_sprites += move_metasprite(
-            *(sprite->metasprites + actor->frame),
-            actor->base_tile,
-            allocated_hardware_sprites,
-            screen_x,
-            screen_y
-        );
+        td_actor_render_actor(actor);
     }
 
     SWITCH_ROM(_save);

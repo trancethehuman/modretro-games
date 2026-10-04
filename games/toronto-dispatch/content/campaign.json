@@ -7244,29 +7244,29 @@
         49,
         50
       ],
-      "period_seconds": 64,
-      "boarding_window_seconds": 2,
-      "segment_seconds": 4,
+      "period_seconds": 256,
+      "boarding_window_seconds": 4,
+      "segment_seconds": 16,
       "fare": 3,
       "eastbound_phases": [
         0,
-        4,
-        8,
-        12,
         16,
-        20,
-        24,
-        28
+        32,
+        48,
+        64,
+        80,
+        96,
+        112
       ],
       "westbound_phases": [
-        60,
-        56,
-        52,
-        48,
-        44,
-        40,
-        36,
-        32
+        240,
+        224,
+        208,
+        192,
+        176,
+        160,
+        144,
+        128
       ],
       "notice": "Normal-corridor fictional game operation; shared directional platforms, original fare and schedule; current construction detours omitted, era unadopted.",
       "source_refs": [

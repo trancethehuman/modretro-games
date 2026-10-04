@@ -15,6 +15,7 @@ from collections import deque
 from pathlib import Path
 
 from PIL import Image, ImageDraw
+from street_scenery import decorate
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "project/original-art"
@@ -442,6 +443,7 @@ def render():
     for x,y in peds:
         sweep([[x,y],[x+63,y]])
 
+    scenery=decorate(image,collisions,attrs,blocks,canopies,'islands',ISLAND)
     raw_patterns, patterns = set(), set()
     for ty in range(TH):
         for tx in range(TW):
@@ -502,6 +504,7 @@ def render():
                        "native_registration_verified":False,"native_build_verified":False,
                        "native_foot_travel_verified":False,"save_migration_implemented":False,
                        "physical_execution_verified":False,"measured_gameplay_duration_verified":False}}
+    metadata['scenery']=scenery
     return png,attrs,metadata
 
 

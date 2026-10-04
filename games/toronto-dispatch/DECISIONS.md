@@ -1,5 +1,19 @@
 # Decisions
 
+## Pedestrian variety — accepted 2026-10-04
+
+The user requests varied kinds of pedestrians. Use several original small silhouettes with distinct clothes, hair and accessories, including commuters, workers, backpackers and older pedestrians. Each keeps the same collision size and non-graphic airborne/prone response. Variation must fit native sprite/palette limits; do not add new saved identity fields.
+
+## Hardware feedback update — accepted 2026-10-04
+
+The user played the installed 8be1 cartridge and reports that it works well, with driving-direction/speed problems, excessively fast trams and occasional flicker. Accept slower momentum-based driving with controlled steering and stable cardinal motion, and slower Queen streetcar movement with a matching paid timetable. Keep the north-up view and real street/stop geography.
+
+Accept a slightly larger, recognisable car and smaller human sprites. Courier–pedestrian impacts should show a brief non-graphic airborne knockback followed by a prone/dead pose, with no repeated charges from a grounded person. NPC deaths are transient within the loaded district; saved money, cargo and police consequences remain durable. The on-foot courier can be struck by moving vehicles, with a recoverable knockback rather than permanently ending the open-world session. Preserve visible walking and entering/leaving the original vehicle.
+
+Accept clearer context-sensitive pause labels, held directional menu navigation and a quick map shortcut, retaining separate one-press actions and release consumption for A/B. Add original building details, street signs, signal scenery, park details and benches using background tiles where possible. Preserve collision footprints, traversable sidewalks, mission entrances and existing Toronto geography. Sprite admission and clipping must respect hardware limits; a source fix alone does not establish that the reported physical flicker is gone.
+
+Build and test a distinct ROM before replacing the working cartridge. Original 8be1 binaries, source-pinned ZIP and installation evidence remain historical and unchanged. Record new-ROM build, gameplay and later physical verification separately.
+
 ## Ferry budget and recovery cues — compiled and scoped native milestone, 2026-10-04
 
 Explain the existing ferry rules without changing them. The nine preserved Island rounds need two/four/five paid legs before completion; show budgets $8/$16/$24 on their offer screen, with the final amount including a normal $4 homeward trip after the on-Island payout. Optional positioning trips and penalties are outside the budget. Do not reserve cash, introduce an acceptance lock, change any brief/mission field, or make active-job fares free.

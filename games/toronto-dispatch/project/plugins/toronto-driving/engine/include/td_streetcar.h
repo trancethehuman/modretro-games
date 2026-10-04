@@ -2,7 +2,7 @@
 #define TD_STREETCAR_H
 #include <gbdk/platform.h>
 
-#define TD_STREETCAR_PERIOD_TICKS 3840
+#define TD_STREETCAR_PERIOD_TICKS 15360
 #define TD_STREETCAR_CLEAR 0
 #define TD_STREETCAR_HIT 1
 #define TD_STREETCAR_INVALID 255
@@ -23,11 +23,11 @@ typedef struct {
 /* Pure BANKED queries; no persistent WRAM, scene loads, fares or save writes.
  * Output buffers must be in WRAM. Invalid/null queries leave them unchanged.
  * Subsecond is 0..59 VBlanks; seconds is the persisted unsigned world clock.
- * Its 65,536-second rollover preserves this exactly 64-second timetable. */
+ * Its 65,536-second rollover preserves this exactly 256-second timetable. */
 UBYTE td_streetcar_pose(UWORD seconds,UBYTE subsecond,
                        td_streetcar_pose_t *pose) BANKED;
 /* A booked direction follows its remaining-time phase: elapsed whole seconds
- * are trip duration minus ride_left, with the two boarding-offset seconds.
+ * are trip duration minus ride_left, with the four boarding-offset seconds.
  * Outside that interval, remaining time 1 pins a retrying/restored rider to
  * the destination doors. Remaining time must fit the actual trip duration;
  * other inconsistent phases fail, so callers can retain their existing view.
@@ -50,7 +50,7 @@ UBYTE td_streetcar_bounds(const td_streetcar_pose_t *pose,
  * swept from elapsed VBlanks ago to the supplied current clock, endpoints
  * included. Checks each cardinal path separately, never a rectangle covering
  * the empty East-bend interior or a discontinuity between local scene seams.
- * Work is bounded by one 64-second cycle even for elapsed >=3840; that query
+ * Work is bounded by one 256-second cycle even for elapsed >=15360; that query
  * also identifies the entire occupied rail corridor for parking/traffic.
  * A static box can be a parked car, desired walking footprint, or a conservative
  * player-motion union. This does not resolve collisions or simulate impulses. */

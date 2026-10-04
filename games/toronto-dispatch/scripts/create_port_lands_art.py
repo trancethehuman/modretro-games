@@ -11,6 +11,7 @@ import json
 from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
+from street_scenery import decorate
 from port_lands_layout import PORT_LANDS, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -294,6 +295,7 @@ def render():
     if len(peds)>128:peds=[peds[i*len(peds)//128] for i in range(128)]
     for x,y in peds:sweep([[x,y],[x+63,y]],half=2,car=False)
 
+    scenery=decorate(image,collisions,attrs,blocks,canopies,'port_lands',PORT_LANDS)
     raw_patterns,patterns=set(),set()
     for ty in range(TH):
         for tx in range(TW):
@@ -329,6 +331,7 @@ def render():
             "all_car_clients_and_park_anchors_conservatively_connected":True,"fixed_pedestrian_routes":len(peds),
             "compiled_background_bank1_limit":32,"compiled_background_bank1_gate_verified":False,
             "native_registration_verified":False,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
+    metadata['scenery']=scenery
     return png,attrs,metadata
 
 

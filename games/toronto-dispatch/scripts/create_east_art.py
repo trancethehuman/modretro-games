@@ -10,6 +10,7 @@ import json
 from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
+from street_scenery import decorate
 from east_layout import EAST, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 from streetcar_art import paint_streetcar_stops
 
@@ -235,6 +236,7 @@ def render():
     for x,y in peds:sweep([[x,y],[x+63,y]],half=2,car=False)
 
     paint_streetcar_stops(d,EAST['id'],COLORS)
+    scenery=decorate(img,collisions,attrs,blocks,canopies,'east',EAST)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
         for tx in range(TW):
@@ -250,6 +252,7 @@ def render():
     assert all((a&7)<=6 and not(a&128) for a,c in zip(attrs,collisions) if c==0)
     buffer=io.BytesIO();img.save(buffer,format="PNG");png=buffer.getvalue()
     metadata={**EAST,"projection":"Original compressed orthogonal north-up; not projected GIS coordinates or a complete municipal map.","dimensions":[WIDTH,HEIGHT],"tile_dimensions":[TW,TH],"road_half_width":ROAD_HALF,"walk_half_width":WALK_HALF,"blocks":blocks,"canopies":canopies,"collisions":collisions,"collision_rules":{"road":0,"foot_only":16,"solid":15},"background_filename":"toronto_east.png","source_png":"project/original-art/toronto_east.png","background_sha256":hashlib.sha256(png).hexdigest(),"source_research":"docs/EAST_DISTRICT.md","source_research_details":"Reviewed facts, query hashes and licence in the research object of this metadata","research":RESEARCH,"pedestrian_routes":[{"x":x,"y":y,"axis":"horizontal","length_pixels":63} for x,y in peds],"validation":{"raw_unique_tiles":len(raw_patterns),"flip_canonical_unique_tiles":len(patterns),"tile_budget":320,"traffic_loops":6,"traffic_footprint_half_pixels":8,"traffic_swept_all_overlapped_tiles_clear":True,"portal_native_car_half_pixels":5,"portal_car_offsets_verified":list(range(-18,19)),"portal_foot_offsets_verified":list(range(-28,29)),"portal_swept_approach_x_verified":[20,28],"conditional_port_arrival_only_x_verified":24,"all_foot_clients_and_ports_connected":True,"all_car_clients_and_park_anchors_conservatively_connected":True,"fixed_pedestrian_routes":len(peds),"pape_rail_crossing_foot_only":True,"native_registration_verified":False,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
+    metadata['scenery']=scenery
     return png,attrs,metadata
 
 

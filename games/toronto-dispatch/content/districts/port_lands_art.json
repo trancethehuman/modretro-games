@@ -17348,7 +17348,7 @@
   },
   "background_filename": "toronto_port_lands.png",
   "source_png": "project/original-art/toronto_port_lands.png",
-  "background_sha256": "9d4e87757ea07ac9b47c8a3429b35399431181377333f8c1b2fa14f695a96ea5",
+  "background_sha256": "a46cdd43ea23db5ea147948a6d7d9a1e2e59a8223d84d1cceb4dee41a46bbbf6",
   "source_research": "docs/PORT_LANDS_PLAN.md",
   "research": {
     "reviewed_on": "2026-10-02",
@@ -17877,8 +17877,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 117,
-    "flip_canonical_unique_tiles": 98,
+    "raw_unique_tiles": 127,
+    "flip_canonical_unique_tiles": 108,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
@@ -17999,5 +17999,881 @@
     "native_registration_verified": false,
     "native_build_verified": false,
     "measured_gameplay_duration_verified": false
+  },
+  "scenery": {
+    "source": "scripts/street_scenery.py",
+    "original_pixels": true,
+    "decorative_game_placements_not_surveyed": true,
+    "counts": {
+      "bench": 11,
+      "bin": 35,
+      "bollard": 31,
+      "park_sign": 36,
+      "roof_module": 25,
+      "yard_crate": 33
+    },
+    "placements": [
+      {
+        "kind": "roof_module",
+        "x": 536,
+        "y": 344
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 344
+      },
+      {
+        "kind": "roof_module",
+        "x": 728,
+        "y": 376
+      },
+      {
+        "kind": "roof_module",
+        "x": 536,
+        "y": 408
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 408
+      },
+      {
+        "kind": "roof_module",
+        "x": 728,
+        "y": 408
+      },
+      {
+        "kind": "roof_module",
+        "x": 792,
+        "y": 408
+      },
+      {
+        "kind": "roof_module",
+        "x": 536,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 728,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 792,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 536,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 760,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 776,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 792,
+        "y": 536
+      },
+      {
+        "kind": "roof_module",
+        "x": 536,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 248,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 264,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 280,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 344,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 408,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 472,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 728,
+        "y": 760
+      },
+      {
+        "kind": "bench",
+        "x": 104,
+        "y": 320
+      },
+      {
+        "kind": "bench",
+        "x": 384,
+        "y": 560
+      },
+      {
+        "kind": "bench",
+        "x": 320,
+        "y": 592
+      },
+      {
+        "kind": "bench",
+        "x": 176,
+        "y": 888
+      },
+      {
+        "kind": "bench",
+        "x": 304,
+        "y": 888
+      },
+      {
+        "kind": "bench",
+        "x": 560,
+        "y": 888
+      },
+      {
+        "kind": "bench",
+        "x": 688,
+        "y": 888
+      },
+      {
+        "kind": "bench",
+        "x": 208,
+        "y": 920
+      },
+      {
+        "kind": "bench",
+        "x": 336,
+        "y": 920
+      },
+      {
+        "kind": "bench",
+        "x": 464,
+        "y": 920
+      },
+      {
+        "kind": "bench",
+        "x": 592,
+        "y": 920
+      },
+      {
+        "kind": "bollard",
+        "x": 136,
+        "y": 40
+      },
+      {
+        "kind": "yard_crate",
+        "x": 232,
+        "y": 40
+      },
+      {
+        "kind": "yard_crate",
+        "x": 616,
+        "y": 40
+      },
+      {
+        "kind": "bin",
+        "x": 40,
+        "y": 72
+      },
+      {
+        "kind": "yard_crate",
+        "x": 72,
+        "y": 72
+      },
+      {
+        "kind": "bollard",
+        "x": 104,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 72
+      },
+      {
+        "kind": "bollard",
+        "x": 232,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 264,
+        "y": 72
+      },
+      {
+        "kind": "bin",
+        "x": 296,
+        "y": 72
+      },
+      {
+        "kind": "yard_crate",
+        "x": 328,
+        "y": 72
+      },
+      {
+        "kind": "bollard",
+        "x": 360,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 392,
+        "y": 72
+      },
+      {
+        "kind": "bin",
+        "x": 424,
+        "y": 72
+      },
+      {
+        "kind": "park_sign",
+        "x": 520,
+        "y": 72
+      },
+      {
+        "kind": "bin",
+        "x": 552,
+        "y": 72
+      },
+      {
+        "kind": "yard_crate",
+        "x": 584,
+        "y": 72
+      },
+      {
+        "kind": "bollard",
+        "x": 616,
+        "y": 72
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 104
+      },
+      {
+        "kind": "yard_crate",
+        "x": 808,
+        "y": 104
+      },
+      {
+        "kind": "bollard",
+        "x": 840,
+        "y": 104
+      },
+      {
+        "kind": "park_sign",
+        "x": 872,
+        "y": 104
+      },
+      {
+        "kind": "bollard",
+        "x": 968,
+        "y": 104
+      },
+      {
+        "kind": "yard_crate",
+        "x": 776,
+        "y": 136
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 136
+      },
+      {
+        "kind": "park_sign",
+        "x": 968,
+        "y": 136
+      },
+      {
+        "kind": "bin",
+        "x": 584,
+        "y": 168
+      },
+      {
+        "kind": "yard_crate",
+        "x": 616,
+        "y": 168
+      },
+      {
+        "kind": "bollard",
+        "x": 648,
+        "y": 168
+      },
+      {
+        "kind": "park_sign",
+        "x": 680,
+        "y": 168
+      },
+      {
+        "kind": "bollard",
+        "x": 776,
+        "y": 168
+      },
+      {
+        "kind": "park_sign",
+        "x": 808,
+        "y": 168
+      },
+      {
+        "kind": "bin",
+        "x": 840,
+        "y": 168
+      },
+      {
+        "kind": "yard_crate",
+        "x": 872,
+        "y": 168
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 168
+      },
+      {
+        "kind": "yard_crate",
+        "x": 968,
+        "y": 200
+      },
+      {
+        "kind": "bin",
+        "x": 136,
+        "y": 232
+      },
+      {
+        "kind": "park_sign",
+        "x": 232,
+        "y": 232
+      },
+      {
+        "kind": "bollard",
+        "x": 968,
+        "y": 232
+      },
+      {
+        "kind": "yard_crate",
+        "x": 136,
+        "y": 264
+      },
+      {
+        "kind": "bin",
+        "x": 232,
+        "y": 264
+      },
+      {
+        "kind": "bollard",
+        "x": 808,
+        "y": 264
+      },
+      {
+        "kind": "park_sign",
+        "x": 840,
+        "y": 264
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 264
+      },
+      {
+        "kind": "park_sign",
+        "x": 968,
+        "y": 264
+      },
+      {
+        "kind": "bollard",
+        "x": 136,
+        "y": 296
+      },
+      {
+        "kind": "yard_crate",
+        "x": 232,
+        "y": 296
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 296
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 328
+      },
+      {
+        "kind": "park_sign",
+        "x": 392,
+        "y": 328
+      },
+      {
+        "kind": "bin",
+        "x": 424,
+        "y": 328
+      },
+      {
+        "kind": "yard_crate",
+        "x": 968,
+        "y": 328
+      },
+      {
+        "kind": "park_sign",
+        "x": 104,
+        "y": 360
+      },
+      {
+        "kind": "bin",
+        "x": 392,
+        "y": 360
+      },
+      {
+        "kind": "bollard",
+        "x": 968,
+        "y": 360
+      },
+      {
+        "kind": "bin",
+        "x": 232,
+        "y": 392
+      },
+      {
+        "kind": "yard_crate",
+        "x": 264,
+        "y": 392
+      },
+      {
+        "kind": "bin",
+        "x": 360,
+        "y": 392
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 392
+      },
+      {
+        "kind": "park_sign",
+        "x": 968,
+        "y": 392
+      },
+      {
+        "kind": "yard_crate",
+        "x": 232,
+        "y": 424
+      },
+      {
+        "kind": "yard_crate",
+        "x": 360,
+        "y": 424
+      },
+      {
+        "kind": "yard_crate",
+        "x": 872,
+        "y": 424
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 424
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 456
+      },
+      {
+        "kind": "bollard",
+        "x": 232,
+        "y": 456
+      },
+      {
+        "kind": "yard_crate",
+        "x": 328,
+        "y": 456
+      },
+      {
+        "kind": "bollard",
+        "x": 872,
+        "y": 456
+      },
+      {
+        "kind": "yard_crate",
+        "x": 968,
+        "y": 456
+      },
+      {
+        "kind": "park_sign",
+        "x": 872,
+        "y": 488
+      },
+      {
+        "kind": "bollard",
+        "x": 968,
+        "y": 488
+      },
+      {
+        "kind": "park_sign",
+        "x": 712,
+        "y": 520
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 520
+      },
+      {
+        "kind": "park_sign",
+        "x": 968,
+        "y": 520
+      },
+      {
+        "kind": "yard_crate",
+        "x": 872,
+        "y": 552
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 552
+      },
+      {
+        "kind": "bollard",
+        "x": 744,
+        "y": 584
+      },
+      {
+        "kind": "bollard",
+        "x": 872,
+        "y": 584
+      },
+      {
+        "kind": "yard_crate",
+        "x": 968,
+        "y": 584
+      },
+      {
+        "kind": "park_sign",
+        "x": 104,
+        "y": 616
+      },
+      {
+        "kind": "bin",
+        "x": 136,
+        "y": 616
+      },
+      {
+        "kind": "park_sign",
+        "x": 232,
+        "y": 616
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 616
+      },
+      {
+        "kind": "yard_crate",
+        "x": 680,
+        "y": 616
+      },
+      {
+        "kind": "bollard",
+        "x": 712,
+        "y": 616
+      },
+      {
+        "kind": "park_sign",
+        "x": 872,
+        "y": 616
+      },
+      {
+        "kind": "bollard",
+        "x": 968,
+        "y": 616
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 648
+      },
+      {
+        "kind": "park_sign",
+        "x": 968,
+        "y": 648
+      },
+      {
+        "kind": "yard_crate",
+        "x": 872,
+        "y": 680
+      },
+      {
+        "kind": "bin",
+        "x": 968,
+        "y": 680
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 712
+      },
+      {
+        "kind": "bollard",
+        "x": 872,
+        "y": 712
+      },
+      {
+        "kind": "yard_crate",
+        "x": 968,
+        "y": 712
+      },
+      {
+        "kind": "bin",
+        "x": 136,
+        "y": 744
+      },
+      {
+        "kind": "bollard",
+        "x": 968,
+        "y": 744
+      },
+      {
+        "kind": "yard_crate",
+        "x": 136,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 232,
+        "y": 776
+      },
+      {
+        "kind": "yard_crate",
+        "x": 264,
+        "y": 776
+      },
+      {
+        "kind": "bollard",
+        "x": 296,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 328,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 360,
+        "y": 776
+      },
+      {
+        "kind": "yard_crate",
+        "x": 392,
+        "y": 776
+      },
+      {
+        "kind": "bollard",
+        "x": 424,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 456,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 776
+      },
+      {
+        "kind": "yard_crate",
+        "x": 520,
+        "y": 776
+      },
+      {
+        "kind": "yard_crate",
+        "x": 776,
+        "y": 776
+      },
+      {
+        "kind": "park_sign",
+        "x": 968,
+        "y": 776
+      },
+      {
+        "kind": "bollard",
+        "x": 136,
+        "y": 808
+      },
+      {
+        "kind": "bollard",
+        "x": 904,
+        "y": 808
+      },
+      {
+        "kind": "park_sign",
+        "x": 936,
+        "y": 808
+      },
+      {
+        "kind": "park_sign",
+        "x": 136,
+        "y": 840
+      },
+      {
+        "kind": "park_sign",
+        "x": 904,
+        "y": 840
+      },
+      {
+        "kind": "bin",
+        "x": 136,
+        "y": 872
+      },
+      {
+        "kind": "yard_crate",
+        "x": 168,
+        "y": 872
+      },
+      {
+        "kind": "bollard",
+        "x": 200,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 232,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 264,
+        "y": 872
+      },
+      {
+        "kind": "yard_crate",
+        "x": 296,
+        "y": 872
+      },
+      {
+        "kind": "bollard",
+        "x": 456,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 488,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 520,
+        "y": 872
+      },
+      {
+        "kind": "yard_crate",
+        "x": 552,
+        "y": 872
+      },
+      {
+        "kind": "bollard",
+        "x": 584,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 616,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 872
+      },
+      {
+        "kind": "yard_crate",
+        "x": 680,
+        "y": 872
+      },
+      {
+        "kind": "bollard",
+        "x": 712,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 744,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 872
+      },
+      {
+        "kind": "bollard",
+        "x": 840,
+        "y": 872
+      },
+      {
+        "kind": "park_sign",
+        "x": 872,
+        "y": 872
+      },
+      {
+        "kind": "bin",
+        "x": 104,
+        "y": 904
+      },
+      {
+        "kind": "park_sign",
+        "x": 712,
+        "y": 904
+      }
+    ],
+    "new_oam_objects": 0,
+    "new_runtime_state_bytes": 0,
+    "collision_bytes_changed": 0,
+    "palette_priority_bytes_changed": 0,
+    "building_footprints_changed": 0,
+    "formal_corridors_protected": true
   }
 }

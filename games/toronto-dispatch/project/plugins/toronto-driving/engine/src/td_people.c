@@ -4,12 +4,14 @@
 #include "td_game.h"
 #include "td_city_sprites.h"
 #include "td_streetcar_runtime.h"
+#include "td_roads.h"
 #include "actor.h"
 
-/* Preserve route identity across nearby-list refreshes. Five bytes per slot:
- * identity, six-second recovery, frozen triangle phase, accumulated walk lag,
- * and recovery flag. A recovered human resumes from the same position. */
-typedef struct { UBYTE route,stun,phase,lag,recover; } td_person_t;
+/* Seven transient bytes per nearby person. A struck identity flies briefly
+ * then stays prone; a district-local bitset prevents route refresh respawns.
+ * Neither corpses nor animation state is part of the 58-byte cartridge save. */
+typedef struct { UBYTE route,stun,phase,lag,recover; signed char dx,dy; } td_person_t;
+static UBYTE td_people_dead[32],td_people_last_tick;
 static td_person_t td_people[6];
 static UWORD td_nearby_routes[6][2];
 static UBYTE td_ped_route[6],td_ped_refresh;
@@ -34,12 +36,13 @@ static UBYTE td_person_road_clear(UWORD u,UWORD v){
  * human; a driver causing an overlap must not erase that human's history. */
 static UBYTE td_person_courier_blocks(UWORD u,UWORD v){
     return !td.onfoot&&!td_streetcar_ride_view&&td.district==td_streetcar_view_district&&
-        td_people_distance(u*16,td.u)<160&&
-        td_people_distance(v*16,td.v)<160;
+        td_people_distance(u*16,td.u)<176&&
+        td_people_distance(v*16,td.v)<176;
 }
 
 void td_people_reset(void) BANKED {
-    UBYTE i;memset(td_people,0,sizeof(td_people));
+    UBYTE i;memset(td_people,0,sizeof(td_people));memset(td_people_dead,0,sizeof(td_people_dead));
+    td_people_last_tick=0;
     for(i=0;i<6;i++)td_ped_route[i]=td_people[i].route=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_people_last_u=td.u;td_people_last_v=td.v;
@@ -75,10 +78,11 @@ static UBYTE td_person_sweep(UWORD u,UWORD v,UBYTE radius){
     }
     return FALSE;
 }
-static UBYTE td_person_contact(UWORD u,UWORD v){return td_person_sweep(u,v,128);}
+static UBYTE td_person_contact(UWORD u,UWORD v){return td_person_sweep(u,v,160);}
 
 UBYTE td_people_present(UBYTE tick) BANKED {
-    UBYTE i,route,phase,raw,refresh,hits=0,visible,continuous,clock_phase;UWORD u,v;
+    UBYTE i,route,phase,raw,refresh,hits=0,visible,continuous,clock_phase,elapsed,pose,lift;UWORD u,v;
+    WORD du,dv;
     UWORD player_u=(td_streetcar_ride_view?td_streetcar_focus_u:td.u)>>4;
     UWORD player_v=(td_streetcar_ride_view?td_streetcar_focus_v:td.v)>>4;
     td_person_t *person;
@@ -88,6 +92,8 @@ UBYTE td_people_present(UBYTE tick) BANKED {
         td_refresh_routes(td_ped_route,td_nearby_routes);
     }
     clock_phase=(td.seconds*12+td.subsecond/5)&127;
+    elapsed=tick-td_people_last_tick;td_people_last_tick=tick;
+    if(elapsed>24)elapsed=24;
     for(i=0;i<6;i++){
         route=td_ped_route[i];person=&td_people[i];
         continuous=person->route==route&&!(actors[9+i].flags&ACTOR_FLAG_HIDDEN);
@@ -97,7 +103,14 @@ UBYTE td_people_present(UBYTE tick) BANKED {
             person->phase=raw;
         }
         if(route==TD_NONE){actors[9+i].flags|=ACTOR_FLAG_HIDDEN;continue;}
-        if(person->recover){person->lag=(raw-person->phase)&127;person->recover=0;}
+        /* A dead route whose local visual slot was replaced cannot reappear as
+         * a fresh walking human before the next district/reset load. */
+        if(!person->stun&&(td_people_dead[route>>3]&(1<<(route&7)))){
+            actors[9+i].flags|=ACTOR_FLAG_HIDDEN;continue;
+        }
+        if(person->stun&&person->recover<24){
+            person->recover=person->recover+elapsed>24?24:person->recover+elapsed;
+        }
         phase=person->stun?person->phase:(raw-person->lag)&127;
         u=td_nearby_routes[i][0]+(phase<64?phase:127-phase);v=td_nearby_routes[i][1];
         if(!person->stun&&(!td_person_road_clear(u,v)||td_person_courier_blocks(u,v))){
@@ -109,13 +122,14 @@ UBYTE td_people_present(UBYTE tick) BANKED {
         visible=td_people_distance(player_u,u)<112&&td_people_distance(player_v,v)<96;
         /* A new identity or hidden human has no visible crossing history.
          * Defer appearance inside the occupied courier or its prior sweep;
-         * half7 vehicle + half3 human gives strict10px Q4 admission. The
+         * half7 vehicle + half3 human gives a10px impact envelope;
+         * one more pixel keeps newly appearing people clear of that edge. The
          * endpoint check also protects stationary/discontinuous movement.
          * A paid remote view must not inherit the origin's car occupancy. */
         if(visible&&!continuous&&!td.onfoot&&!td_streetcar_ride_view&&
            td.district==td_streetcar_view_district&&
-           ((td_people_distance(td.u,u*16)<160&&td_people_distance(td.v,v*16)<160)||
-            td_person_sweep(u,v,160))){
+           ((td_people_distance(td.u,u*16)<176&&td_people_distance(td.v,v*16)<176)||
+            td_person_sweep(u,v,176))){
             volatile actor_t *appearing=&actors[9+i];
             /* Reload the actual actor after the context/query predicates;
              * avoid the pinned SDCC conditional compound-store pattern. */
@@ -124,16 +138,37 @@ UBYTE td_people_present(UBYTE tick) BANKED {
         if(visible)actors[9+i].flags&=~ACTOR_FLAG_HIDDEN;else actors[9+i].flags|=ACTOR_FLAG_HIDDEN;
         if(visible&&continuous&&!person->stun&&td.mode==TD_ROAM&&!td.onfoot&&
            (td.speed>2||td.speed<-2)&&td_person_contact(u,v)){
-            person->stun=6;person->phase=phase;hits++;
+            person->stun=6;person->phase=phase;person->recover=person->lag=0;
+            du=(WORD)td.u-td_people_last_u;dv=(WORD)td.v-td_people_last_v;
+            person->dx=du>0?1:du<0?-1:0;person->dy=dv>0?1:dv<0?-1:0;
+            td_people_dead[route>>3]|=1<<(route&7);hits++;
         }
-        actors[9+i].pos.x=u*32;actors[9+i].pos.y=v*32;
-        td_civilian_present(&actors[9+i],route%2,person->stun?4:(phase<64?0:2)+((tick>>3)&1));
+        pose=(phase<64?0:2)+((tick>>3)&1);lift=0;
+        if(person->stun){
+            /* Twelve ground pixels at most, with a four-pixel visual arc.
+             * Stop displacement before solid land/water/rail tiles. The
+             * frozen route phase and lag never advance again in this load. */
+            raw=person->recover>>1;
+            while(person->lag<raw){
+                du=(WORD)u+person->dx*(person->lag+1);
+                dv=(WORD)v+person->dy*(person->lag+1);
+                if(du<3||dv<3||du>1020||dv>972||!td_road_walkable(du,dv))break;
+                person->lag++;
+            }
+            u=(WORD)u+person->dx*person->lag;v=(WORD)v+person->dy*person->lag;
+            if(person->recover<24){
+                lift=person->recover<12?person->recover/3:(24-person->recover)/3;
+                pose=TD_CIVILIAN_HIT;
+            }else pose=TD_CIVILIAN_PRONE;
+        }
+        actors[9+i].pos.x=u*32;actors[9+i].pos.y=(v-lift)*32;
+        td_civilian_present(&actors[9+i],route%4,pose);
     }
     td_people_last_u=td.u;td_people_last_v=td.v;return hits;
 }
 
 UBYTE td_people_second(void) BANKED {
-    UBYTE i;for(i=0;i<6;i++)if(td_people[i].stun&&!--td_people[i].stun)td_people[i].recover=1;
+    /* Corpses remain down until district load; police time still advances. */
     if(td.wanted&&td.wanted_left&&!--td.wanted_left){
         td.wanted--;if(td.wanted)td.wanted_left=30;
         td_save();return TRUE;

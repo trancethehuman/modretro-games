@@ -34,6 +34,7 @@ void td_refresh_routes(UBYTE *routes,UWORD (*nearby)[2]){
     }
 }
 void td_save(void){}
+UBYTE td_road_walkable(UWORD u,UWORD v){return u>=3&&u<=1020&&v>=3&&v<=972;}
 #include "rail_queries_under_test.c"
 void td_civilian_present(actor_t *actor,UBYTE variant,UBYTE pose){
     ptrdiff_t index=actor-&actors[9];require(index>=0&&index<6,"Civilian actor slot remains bounded");
@@ -160,7 +161,7 @@ static int reference_contact(UWORD u,UWORD v){
     for(unsigned n=0;n<=steps;n++){
         uint16_t x=(uint16_t)((int32_t)td_people_last_u+du*(int32_t)n/(int32_t)steps);
         uint16_t y=(uint16_t)((int32_t)td_people_last_v+dv*(int32_t)n/(int32_t)steps);
-        if(distance16(x,target_u)<128&&distance16(y,target_v)<128)return 1;
+        if(distance16(x,target_u)<160&&distance16(y,target_v)<160)return 1;
     }
     return 0;
 }
@@ -216,7 +217,7 @@ static void phases(void){
                 require(td_people[i].phase==expected,"Hoisted clock matches full old phase across seconds wrap");
                 require(actors[9+i].pos.x==(100+i*90+(expected<64?expected:127-expected))*32&&
                         actors[9+i].pos.y==(100+i*80)*32,"Phase preserves exact authored-path presentation");
-                require(variants[i]==route%2&&poses[i]==(expected<64?0:2)+1,"Direction, step and outfit unchanged");
+                require(variants[i]==route%4&&poses[i]==(expected<64?0:2)+1,"Direction, step and outfit unchanged");
             }
         }
 }
@@ -330,20 +331,20 @@ static void paid_parked_presentation(void){
      * held arrival. Core Broadview parking944,548 is clear of the rails;
      * West's selected route70 walks at y556 within the old8px exclusion. */
     td.reserved=0;td.u=980*16;td.v=556*16;td.transit_origin=47;td.transit_target=43;
-    td.seconds=59;td.subsecond=25;td.park_u=944*16;td.park_v=548*16;
-    fixture_routes[0]=70;
-    require(td_district_routes[TD_DISTRICT_WEST][70][0]==928&&
-            td_district_routes[TD_DISTRICT_WEST][70][1]==556,"Ordinary paid fixture uses the registered West route70");
+    td.seconds=239;td.subsecond=25;td.park_u=850*16;td.park_v=548*16;
+    fixture_routes[0]=69;
+    require(td_district_routes[TD_DISTRICT_WEST][69][0]==800&&
+            td_district_routes[TD_DISTRICT_WEST][69][1]==556,"Ordinary paid fixture uses the registered West route70");
     td_people_reset();
     for(UBYTE sample=0;sample<7;sample++){
         td.subsecond=25+sample*5;
-        require(td_streetcar_ride(47,43,1,59,td.subsecond,&pose)&&pose.district==TD_DISTRICT_WEST,
+        require(td_streetcar_ride(47,43,1,239,td.subsecond,&pose)&&pose.district==TD_DISTRICT_WEST,
                 "Every ordinary approach sample is an actual paid West pose");
         td_streetcar_focus_u=pose.u;td_streetcar_focus_v=pose.v;before=td;
         require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
-                actors[9].pos.x==(952-sample)*32&&actors[9].pos.y==556*32,
+                actors[9].pos.x==(850+sample)*32&&actors[9].pos.y==556*32,
                 "Ordinary paid view permits the moving West human through the origin-car exclusion");
-        require(td_people[0].phase==103+sample&&td_people[0].lag==0&&poses[0]==3&&variants[0]==0,
+        require(td_people[0].phase==50+sample&&td_people[0].lag==0&&poses[0]==1&&variants[0]==1,
                 "Ordinary paid view retains every walk step without false yielding or stumble");
         require(!memcmp(&td,&before,sizeof(td)),"Ordinary paid-view presentation preserves every saved byte");
     }
@@ -351,9 +352,9 @@ static void paid_parked_presentation(void){
     /* A car parked earlier in Core must remain occupancy while a West-origin
      * paid ride shows Core. This is a real moving pose, not a synthetic view. */
     td.reserved=0;td.district=TD_DISTRICT_WEST;td.u=836*16;td.v=556*16;
-    td.transit_origin=43;td.transit_target=47;td.ride_left=1;td.seconds=15;td.subsecond=0;
+    td.transit_origin=43;td.transit_target=47;td.ride_left=8;td.seconds=56;td.subsecond=0;
     td.park_district=TD_DISTRICT_CITY;td.park_u=800*16;td.park_v=556*16;
-    require(td_streetcar_ride(43,47,1,15,0,&pose)&&pose.district==TD_DISTRICT_CITY,
+    require(td_streetcar_ride(43,47,8,56,0,&pose)&&pose.district==TD_DISTRICT_CITY,
             "The actual paid Queen path supplies a logical-West/loaded-Core pose");
     td_streetcar_view_district=pose.district;td_streetcar_focus_u=pose.u;td_streetcar_focus_v=pose.v;
     fixture_routes[0]=68;
@@ -362,11 +363,11 @@ static void paid_parked_presentation(void){
     td_people_reset();before=td;
     require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN),
             "A view-local parked car still blocks a Core pedestrian despite the saved West origin");
-    require(td_people[0].phase==8,"Blocked presentation retains the actual Core route phase");
+    require(td_people[0].phase==116,"Blocked presentation retains the actual Core route phase");
     require(!memcmp(&td,&before,sizeof(td)),"View-local blocked presentation preserves paid state");
     td.park_district=TD_DISTRICT_WEST;td.subsecond=5;before=td;
     require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
-            actors[9].pos.x==793*32&&actors[9].pos.y==556*32,
+            actors[9].pos.x==794*32&&actors[9].pos.y==556*32,
             "A cleared view-local occupancy resumes the same Core pedestrian without relocation");
     require(!memcmp(&td,&before,sizeof(td)),"Resumed Core presentation preserves paid state");
     fixture_authored_routes=0;
@@ -429,7 +430,7 @@ static void appearance_admission(void){
             UWORD cu=(UWORD)(817*16+(axis?0:sign*gap));
             UWORD cv=(UWORD)(148*16+(axis?sign*gap:0));
             appearance_case(cu,cv);td.vehicle=vehicle;before=td;
-            int clear=reference_fleet_clear(817,148,cu,cv,7);
+            int clear=reference_fleet_clear(817,148,cu,cv,8);
             require(td_people_present(24)==0,"Stationary fractional-boundary admission never charges a hit");
             require(!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!clear,
                     "Appearance visibility follows independent exact Q4 maximum-body rectangles");
@@ -438,9 +439,9 @@ static void appearance_admission(void){
         }
 
     /* A new route must not inherit an old route's visible history. */
-    appearance_case(827*16,148*16);
+    appearance_case(828*16,148*16);
     require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
-            "Exactly10px separated first appearance is admitted without a delay");
+            "Exactly11px separated first appearance is admitted without a delay");
     require(td_district_routes[0][26][0]==784&&td_district_routes[0][26][1]==204,
             "Replacement case uses the registered Core route26");
     fixture_routes[0]=26;td_ped_refresh=1;td.u=826*16;td.v=204*16;before=td;
@@ -458,7 +459,7 @@ static void appearance_admission(void){
     /* Endpoint rectangles are independently clear. The middle point of the
      * cardinal sweep tests fractional tangency of the same full bodies. */
     for(UBYTE axis=0;axis<2;axis++)for(int sign=-1;sign<=1;sign+=2)
-        for(int gap=159;gap<=161;gap++){
+        for(int gap=175;gap<=177;gap++){
             UWORD start_u=(UWORD)(817*16+(axis?sign*gap:-12*16));
             UWORD start_v=(UWORD)(148*16+(axis?-12*16:sign*gap));
             UWORD end_u=(UWORD)(817*16+(axis?sign*gap:12*16));
@@ -466,12 +467,12 @@ static void appearance_admission(void){
             UWORD middle_u=(UWORD)(817*16+(axis?sign*gap:0));
             UWORD middle_v=(UWORD)(148*16+(axis?0:sign*gap));
             appearance_case(start_u,start_v);td.u=end_u;td.v=end_v;
-            require(reference_fleet_clear(817,148,start_u,start_v,7)&&
-                    reference_fleet_clear(817,148,end_u,end_v,7),
+            require(reference_fleet_clear(817,148,start_u,start_v,8)&&
+                    reference_fleet_clear(817,148,end_u,end_v,8),
                     "Tangential prior-sweep fixture has independently clear start and end bodies");
-            int clear=reference_fleet_clear(817,148,middle_u,middle_v,7);
+            int clear=reference_fleet_clear(817,148,middle_u,middle_v,8);
             require(td_people_present(24)==0&&!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!clear,
-                    "Prior-sweep admission retains strict159/160/161Q4 tangency on both axes and signs");
+                    "Prior-sweep admission retains strict175/176/177Q4 tangency on both axes and signs");
             require(!td_people[0].stun,"Tangential first appearances never produce a retrospective stumble");
         }
     appearance_case(805*16,136*16);td.u=829*16;td.v=160*16;
@@ -485,24 +486,22 @@ static void appearance_admission(void){
     require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN),
             "A rejected remote sweep still cannot bypass current occupied-body admission");
 
-    /* Continuously visible crossings retain the actual swept impact/recovery
-     * rules; only the first appearance is admitted at the10px edge. */
-    appearance_case(827*16,148*16);
-    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),"Continuous control begins with a truly presented human");
-    td.u=824*16;before=td;
-    require(td_people_present(24)==1&&td_people[0].stun==6&&poses[0]==4&&
-            !(actors[9].flags&ACTOR_FLAG_HIDDEN),"A real continuously visible swept contact still produces one stumble");
-    require(!memcmp(&td,&before,sizeof(td)),"People returns the genuine hit without independently rewriting higher-level penalties");
-    require(td_people_present(24)==0&&td_people[0].stun==6,"The same recovering human cannot be charged twice");
-    for(unsigned second=0;second<6;second++){td.seconds++;td_people_second();}
-    require(td_people_present(24)==0&&!td_people[0].stun&&actors[9].pos.x==817*32&&
-            !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Continuously visible recovery resumes its original position after six active seconds");
-    td.speed=0;td.seconds++;
-    require(td_people_present(24)==0&&actors[9].pos.x==817*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
-            "Recovered humans preserve visible history while the courier still occupies their proposed step");
-    td.u=839*16;td.subsecond+=5;
-    require(td_people_present(24)==0&&actors[9].pos.x==818*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
-            "Recovered humans continue the unchanged authored route as soon as the next clear step is due");
+    /* A genuine continuous ten-pixel sweep marks exactly one dead route. */
+    appearance_case(828*16,148*16);
+    require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),"Continuous control begins outside the eleven-pixel appearance edge");
+    td.u=825*16;before=td;
+    require(td_people_present(24)==1&&td_people[0].stun==6&&poses[0]==TD_CIVILIAN_HIT,
+            "A real continuously visible swept contact begins a single knockback");
+    require(!memcmp(&td,&before,sizeof(td)),"People returns a hit without independently rewriting higher-level penalties");
+    require(td_people_present(24)==0,"The same struck identity cannot be charged twice");
+    for(UBYTE frame=25;frame<=48;frame++)require(td_people_present(frame)==0,"Knockback never repeats the impact");
+    require(td_people[0].stun==6&&td_people[0].recover==24&&poses[0]==TD_CIVILIAN_PRONE,
+            "After twenty-four active motion ticks the person remains prone");
+    UWORD corpse_u=actors[9].pos.x,corpse_v=actors[9].pos.y;
+    for(unsigned second=0;second<60;second++){td.seconds++;td_people_second();}
+    td_people_present(49);
+    require(td_people[0].stun==6&&poses[0]==TD_CIVILIAN_PRONE&&actors[9].pos.x==corpse_u&&actors[9].pos.y==corpse_v,
+            "Active seconds do not revive the corpse or move its ground pose");
     td.seconds=8;td.subsecond=10;td.u=817*16;td.v=148*16;
     td_people_reset();before=td;
     require(td_people_present(24)==0&&(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun,
@@ -522,7 +521,7 @@ static void idle_courier_case(void){
      * clear of all six bodies, rather than relying on hidden traffic. */
     static const UWORD cu[6]={80,200,320,440,824,216};
     static const UWORD cv[6]={280,392,168,632,240,72};
-    appearance_case(827*16,147*16+7);
+    appearance_case(828*16,147*16+7);
     td.speed=0;td.park_u=560*16;td.park_v=720*16;
     for(UBYTE i=0;i<6;i++){
         actors[2+i].flags=0;actors[2+i].pos.x=cu[i]*32;actors[2+i].pos.y=cv[i]*32;
@@ -531,13 +530,13 @@ static void idle_courier_case(void){
 static void idle_courier_boundaries(void){
     static const int speeds[]={-6,-3,-2,0,2,3,24};
     for(UBYTE vehicle=0;vehicle<4;vehicle++)for(UBYTE axis=0;axis<2;axis++)
-        for(int sign=-1;sign<=1;sign+=2)for(int gap=152;gap<=168;gap++)
+        for(int sign=-1;sign<=1;sign+=2)for(int gap=168;gap<=184;gap++)
             for(unsigned n=0;n<sizeof(speeds)/sizeof(speeds[0]);n++){
             idle_courier_case();td.vehicle=vehicle;td.speed=speeds[n];
             td.u=(UWORD)(817*16+(axis?0:sign*gap));
             td.v=(UWORD)(148*16+(axis?sign*gap:0));
             td_state_t before=td;
-            int clear=reference_fleet_clear(817,148,td.u,td.v,7);
+            int clear=reference_fleet_clear(817,148,td.u,td.v,8);
             require(td_person_courier_blocks(817,148)==!clear,
                     "The proposed-step guard matches independent fractional maximum-body rectangles at every tested speed");
             require(!memcmp(&td,&before,sizeof(td)),"Courier yielding guard preserves all58 saved bytes");
@@ -568,20 +567,27 @@ static void idle_courier_impacts_and_recovery(void){
     static const int speeds[]={-6,-3,3,12,24};
     for(unsigned n=0;n<sizeof(speeds)/sizeof(speeds[0]);n++){
         idle_courier_case();td.speed=speeds[n];td_people_present(24);
-        td.u=824*16;td.v=148*16+3;
-        require(td_people_present(24)==1&&td_people[0].stun==6&&poses[0]==4&&
-                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Both moving directions retain genuine continuous8px driving impacts");
-        td.speed=0;td.subsecond=25;
-        require(td_people_present(24)==0&&td_people[0].stun==6&&actors[9].pos.x==817*32&&
-                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"An already stumbled overlapping human stays visible with the original recovery pose");
-        for(unsigned second=0;second<6;second++){td.seconds++;td_people_second();}
-        require(td_people_present(24)==0&&!td_people[0].stun&&actors[9].pos.x==817*32&&
-                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"Six-second recovery retains visible history while a slow courier still occupies its old position");
-        td.u=839*16;td.subsecond=30;
-        require(td_people_present(24)==0&&actors[9].pos.x==818*32&&
-                !(actors[9].flags&ACTOR_FLAG_HIDDEN),"A recovered person resumes without a new appearance delay once the courier moves clear");
+        td.u=825*16;td.v=148*16+3;
+        require(td_people_present(24)==1&&td_people[0].stun==6&&poses[0]==TD_CIVILIAN_HIT,
+                "Moving car sweeps start one non-graphic flying pose");
+        td.speed=0;
+        for(UBYTE tick=25;tick<=48;tick++)require(!td_people_present(tick),"The animation does not repeat a penalty");
+        require(poses[0]==TD_CIVILIAN_PRONE&&td_people[0].stun==6,"The person stays down after the short flight");
+        require(actors[9].pos.x==805*32&&actors[9].pos.y==160*32,
+                "Actual movement direction displaces the body twelve pixels per axis");
+        UWORD x=actors[9].pos.x,y=actors[9].pos.y;
+        for(unsigned second=0;second<60;second++){td.seconds++;td_people_second();}
+        td_people_present(49);
+        require(actors[9].pos.x==x&&actors[9].pos.y==y&&poses[0]==TD_CIVILIAN_PRONE,
+                "A corpse never resumes its walking route within the loaded scene");
+        fixture_routes[0]=20;td_ped_refresh=1;td_people_present(50);
+        fixture_routes[0]=19;td_ped_refresh=1;td_people_present(51);
+        require(actors[9].flags&ACTOR_FLAG_HIDDEN,"Replacing a nearby slot cannot respawn the dead route identity");
+        td_people_reset();td.u=850*16;
+        require(!td_people_present(0)&&!td_people[0].stun,"District reset discards only transient route death state");
     }
 }
+
 static void idle_courier_context_controls(void){
     for(UBYTE context=0;context<3;context++){
         idle_courier_case();td_people_present(24);
@@ -593,9 +599,9 @@ static void idle_courier_context_controls(void){
                 "Walking, remote paid focus and foreign loaded views retain their original human motion");
         require(!memcmp(&td,&before,sizeof(td)),"Nonlocal/foot controls preserve complete saved state");
     }
-    idle_courier_case();td.u=828*16;td_people_present(24);td.subsecond=15;
+    idle_courier_case();td.u=829*16;td_people_present(24);td.subsecond=15;
     require(td_people_present(24)==0&&actors[9].pos.x==818*32&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
-            "An exact10px ordinary step is admitted immediately without a grace timer");
+            "An exact11px ordinary step is admitted immediately without a grace timer");
 }
 static void idle_courier_resume_regression(void){
     static const int held_speeds[]={-2,0,2};
@@ -639,18 +645,18 @@ static void reversing_courier_route83(void){
         require(td_people_present(24)==0&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
                 "The native approach clock advances while the visible human waits beside the occupied car");
     }
-    require(td_people[0].phase==36&&td_people[0].lag==19&&actors[9].pos.x==556*32,
-            "At26:00 the actual route/clock preserves native phase36 and accumulated lag19");
+    require(td_people[0].phase==35&&td_people[0].lag==20&&actors[9].pos.x==555*32,
+            "At26:00 the actual route/clock preserves native phase35 and accumulated lag19");
     td.v=697*16+12;td.speed=-6;td.subsecond=16;
-    require(!reference_contact(556,692)&&reference_contact(559,692),
+    require(!reference_contact(555,692)&&reference_contact(559,692),
             "The independent8px sweep clears the original human but intersects the newly advanced phase39 human");
     td_state_t before=td;UBYTE hits=td_people_present(24);
-    if(hits||td_people[0].phase!=36)fprintf(stderr,
+    if(hits||td_people[0].phase!=35)fprintf(stderr,
       "route83 reverse diagnostic: phase=%u lag=%u human=%u,%u stun=%u hits=%u\n",
       td_people[0].phase,td_people[0].lag,actors[9].pos.x>>5,actors[9].pos.y>>5,td_people[0].stun,hits);
-    require(!hits&&td_people[0].phase==36&&actors[9].pos.x==556*32&&
+    require(!hits&&td_people[0].phase==35&&actors[9].pos.x==555*32&&
             !td_people[0].stun&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),
-            "A visible phase36 human cannot walk into the still-occupied reverse-start body at phase39");
+            "A visible phase35 human cannot walk into the still-occupied reverse-start body at phase39");
     require(!memcmp(&td,&before,sizeof(td)),
             "A clear reverse start cannot invent a cash/cargo/attention penalty");
 }

@@ -51,9 +51,13 @@ void td_fleet_present(actor_t *actor,UBYTE kind,UBYTE orientation) BANKED {
 }
 
 void td_civilian_present(actor_t *actor,UBYTE variant,UBYTE pose) BANKED {
-    if(variant>=2||pose>=5)return;
+    if(variant>=4||pose>=6)return;
     if(td_city_civilian.sprite.bank==td_city_player.sprite.bank&&
        td_city_civilian.sprite.ptr==td_city_player.sprite.ptr)
         td_city_pose(actor,&td_city_player,32+(pose<4?pose:0));
-    else td_city_pose(actor,&td_city_civilian,variant*5+pose);
+    else td_city_pose(actor,&td_city_civilian,variant*6+pose);
+}
+
+void td_player_sprite_restore(void) BANKED {
+    PLAYER.sprite=td_city_player.sprite;PLAYER.base_tile=td_city_player.base;
 }

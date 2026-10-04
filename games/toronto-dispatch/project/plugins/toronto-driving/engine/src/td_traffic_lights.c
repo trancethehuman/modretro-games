@@ -10,8 +10,8 @@ typedef struct { UWORD u,v; UBYTE arms,tile_x,tile_y; } td_signal_t;
 #define TD_TRAFFIC_SIGNALS_HORIZONTAL_ONLY
 #include "td_traffic_signals.h"
 
-/* Horizontal pair at(1,1)/(2,1), vertical pair at(5,1)/(5,2), pole3. */
-static const UBYTE td_light_patterns[32]={0,0,96,4,96,100,4,4,4,4,28,28,0,0,0,0,0,0,4,96,100,96,4,4,4,4,28,28,0,0,0,0};
+/* Original two-head signals/pole; create_signal_art.py. Left EW, right NS. */
+static const UBYTE td_light_patterns[32]={255,255,249,255,255,255,255,159,255,255,126,126,24,24,24,24,255,255,159,255,255,255,255,249,255,255,126,126,24,24,24,24};
 static UBYTE td_light_patterns_ready;
 
 void td_traffic_lights_reset(void) BANKED {td_light_patterns_ready=0;}

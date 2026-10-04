@@ -28,6 +28,9 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *data){
     memcpy(patterns[VBK_REG&1][first],data,count*16);uploads++;
 }
 static void expect(int ok,const char *message){checks++;if(!ok){if(failures<15)fprintf(stderr,"FAIL: %s\n",message);failures++;}}
+static unsigned light_pixel(const UBYTE *tile,unsigned x,unsigned y){
+    return ((tile[y*2]>>(7-x))&1)|(((tile[y*2+1]>>(7-x))&1)<<1);
+}
 static void check_view(void){
     UBYTE expected[2][1024],old_patterns[2][256][16];unsigned visible=0;
     memset(map[0],77,1024);memset(map[1],128,1024);memset(patterns,59,sizeof(patterns));
@@ -50,9 +53,14 @@ static void check_view(void){
     if(visible){
         for(unsigned phase=0;phase<2;phase++){
             const UBYTE *tile=patterns[1][47+phase];
-            unsigned horizontal=((tile[2]>>6)&1)|(((tile[3]>>6)&1)<<1);
-            unsigned vertical=((tile[2]>>2)&1)|(((tile[3]>>2)&1)<<1);
+            unsigned horizontal=light_pixel(tile,1,phase?1:3);
+            unsigned vertical=light_pixel(tile,5,phase?3:1);
             expect(horizontal==(phase?2u:1u)&&vertical==(phase?1u:2u),"original horizontal and vertical lamps show opposing green/red indices");
+            expect(light_pixel(tile,1,phase?3:1)==3&&light_pixel(tile,5,phase?1:3)==3,
+                   "unlit opposite lamps stay dark rather than implying both directions can proceed");
+            expect(light_pixel(tile,0,0)==3&&light_pixel(tile,7,4)==3&&
+                   light_pixel(tile,3,7)==3&&light_pixel(tile,4,7)==3&&light_pixel(tile,0,7)==0,
+                   "two readable signal heads connect to a dark post on pale pavement");
         }
         memset(patterns[1][47],59,32);
     }

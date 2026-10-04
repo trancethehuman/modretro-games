@@ -4,6 +4,7 @@ check:
 	python3 games/toronto-dispatch/scripts/create_atlas.py --check
 	python3 scripts/test_atlas.py
 	python3 scripts/test_atlas_ui.py
+	python3 scripts/test_menu_repeat.py
 	python3 scripts/test_atlas_banks.py
 	python3 scripts/check_repository.py
 	python3 games/toronto-dispatch/scripts/check_campaign.py
@@ -23,6 +24,7 @@ check:
 	python3 scripts/test_aircraft.py
 	python3 scripts/check_aircraft_rom.py --self-test
 	python3 scripts/test_aircraft_render.py
+	python3 scripts/test_actor_render.py
 	python3 games/toronto-dispatch/scripts/check_district_world.py
 	python3 scripts/test_district_seams.py
 	python3 games/toronto-dispatch/scripts/create_district_world.py --check
@@ -34,8 +36,10 @@ check:
 	python3 games/toronto-dispatch/scripts/create_world_routes.py --check
 	python3 games/toronto-dispatch/scripts/create_audio.py --check
 	python3 games/toronto-dispatch/scripts/create_city_sprites.py --check
+	python3 games/toronto-dispatch/scripts/create_player_sprites.py --check
 	python3 games/toronto-dispatch/scripts/create_boat_sprite.py --check
 	python3 games/toronto-dispatch/scripts/create_traffic_signals.py --check
+	python3 games/toronto-dispatch/scripts/create_signal_art.py --check
 	python3 scripts/test_boats.py
 	python3 scripts/test_city_sprites.py
 	python3 scripts/test_people_hotspots.py

@@ -140,9 +140,12 @@ static void test_signals(void){
 }
 static void test_body_truth(void){
     for(int kind=0;kind<3;kind++)for(int axis=0;axis<2;axis++)for(int direction=-1;direction<=1;direction+=2)
-    for(int escape=0;escape<2;escape++)for(int along=-170;along<=170;along+=5)for(int across=-170;across<=170;across+=7){
+    for(int escape=0;escape<2;escape++)for(int along=-210;along<=210;along+=5)for(int across=-210;across<=210;across+=7){
         reset();int bx=8000+(axis?across:along),by=8000+(axis?along:across);
-        int u=8000+(axis?0:direction*8),v=8000+(axis?direction*8:0),margin=kind==2?128:160;
+        /* A default fleet car is5px; the parked courier is7px and a
+         * pedestrian is3px. Compute each independent Minkowski extent. */
+        int u=8000+(axis?0:direction*8),v=8000+(axis?direction*8:0);
+        int margin=(5+(kind==1?7:kind==2?3:5))*16;
         if(kind==0){us[1]=bx;vs[1]=by;}
         else if(kind==1){ctx.parked_active=1;ctx.park_u=bx;ctx.park_v=by;}
         else{people[0].flags=0;people[0].pos.x=bx*2;people[0].pos.y=by*2;}
@@ -282,7 +285,7 @@ static void test_admit_sweeps(void){
         else{people[0].flags=0;people[0].pos.x=bx*2;people[0].pos.y=by*2;}
         td_traffic_context_t before=ctx;UWORD before_u[6],before_v[6];actor_t before_people[6];
         memcpy(before_u,us,sizeof(us));memcpy(before_v,vs,sizeof(vs));memcpy(before_people,people,sizeof(people));
-        int margin=kind==2?128:160;
+        int margin=(5+(kind==1?7:kind==2?3:5))*16;
         expect(admit_checked(&ctx,0,0,0,8000,8000,u,v,escape)==obstacle_oracle(8000,8000,u,v,bx,by,margin,margin,escape),
                "combined admission retains exact full-body and monotonic escape truth for every1..128Q4 cardinal sweep");
         expect(!memcmp(&before,&ctx,sizeof(ctx))&&!memcmp(before_u,us,sizeof(us))&&!memcmp(before_v,vs,sizeof(vs))&&

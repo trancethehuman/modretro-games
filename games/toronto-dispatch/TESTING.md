@@ -1,14 +1,22 @@
 # Testing record
 
+## Current hardware feedback update — 2026-10-04
+
+Exact new ROM `project/build/toronto-dispatch-hardware-feedback.gbc` is 1,048,576 bytes / SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Official source-debug build and full `make check` pass. [Build evidence](docs/HARDWARE_FEEDBACK_BUILD.json) records compiled artwork/timetable guards, save v10/58 bytes, peak 120/128 OBJ tiles per bank and 1,046 static reserve. The initial fixed-bank failure and intermediate metadata-repair build remain separate.
+
+The [fresh native record](docs/NATIVE_HARDWARE_FEEDBACK.json) completes only Market Start at condition 100/111 seconds for $108, observes stable cardinal car motion, braking/reverse, visible walking/entry, airborne/prone civilians and police consequences, held menu navigation, exact 58-byte map freezing, a single-fare Queen 46→47 journey, natural tram knockback/courier recovery and explicit-save in-worker reset. It imports no checkpoints/SRAM, edits no game memory and retains controller/curation corrections. It stops scoped-passed at 11,786 VBlanks / 6,650 events, closes, archives and retrieves its original-path mapping. Eleven public PNGs are byte-original native frames.
+
+[Changes and practical limits](docs/HARDWARE_FEEDBACK_2026_10_04.md) distinguish implementation, host checks, sampled native evidence and pending hardware. All 104 deadlines remain unchanged; motorcycle 74 needs new-speed replay, and full campaign/two enjoyable human hours/peak stack/performance remain unverified. Partial-entry save overlap and a small parked-car/pedestrian avoidance mismatch remain pending. This new ROM has not been flashed; the physical cartridge retains the working 8be1 build below.
+
 ## Physical cartridge installation — 2026-10-04
 
 The [installation record](docs/CARTRIDGE_INSTALL_2026_10_04.json) binds the exact native-tested `project/build/toronto-dispatch-driving-only.gbc`, 1,048,576 bytes / SHA-256 `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`, to the supported plugin's completed cartridge write. Vendor CLI 1.2.1 reports success after 49,679 ms, with exit and process-close code 0; no automatic or manual write retry occurred. Fresh device selection matched the intended previously detected 4 MiB writable cartridge. The vendor's returned ROM digest identifies the input file; no separate complete cartridge read-back digest was provided.
 
 The user had explicitly accepted cartridge erasure, possible save loss and no automatic backup, then waived the unavailable original-ROM preservation prerequisite. Updater's available 32 KiB `.sav` export is local and ignored; it contains save data rather than the original game ROM. Activation state and raw device identities/journals are excluded from this public record.
 
-After the write, the user reports Toronto Dispatch boots and responds to the physical buttons after power-off, USB disconnection and power-on with the cartridge inserted. Cartridge cold boot and button response are therefore manually confirmed by the user. Physical gameplay, audio, power-off save persistence and hardware performance remain pending; no physical capture or broad hardware acceptance is claimed.
+After the write, the user reports Toronto Dispatch boots and responds to the physical buttons after power-off, USB disconnection and power-on with the cartridge inserted. The user subsequently reports that it plays well, with driving-speed/direction problems, very fast trams and occasional flicker; that feedback motivates the distinct update above. Cold boot, buttons and sampled physical play are manually confirmed. Audio, power-off save persistence and broader hardware acceptance remain pending; no physical capture is claimed.
 
-## Current driving-only warning candidate — 2026-10-04
+## Retained installed driving-only warning candidate — 2026-10-04
 
 Exact ROM `project/build/toronto-dispatch-driving-only.gbc` is 1,048,576 bytes / SHA `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`. Official source-debug build succeeds in 60,735 ms, source fingerprint `61c6df9f7434398181491ee8e00dc5ad74d354edc4e8b4dc7fb0cdda1095605e`. [Compiled review](docs/DRIVING_ONLY_BUILD_AUDIT.json) verifies 291 finite checks: one 18-character warning replacement among 206 inputs, all other ROM bytes identical apart from four generated stock-save-signature bytes and one global-checksum byte. NOI/globals, ABI, UI/main/helper headroom 150/10/1, 52-byte UI frame, static reserve 1,096 and save v10 / 58 bytes are unchanged. Full `make check` passes. Capacity is separate from deepest-stack/performance acceptance.
 

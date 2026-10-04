@@ -43,6 +43,7 @@ void td_aircraft_render_reset(void) {}
 void td_aircraft_render_bind(void) {}
 void td_aircraft_render_restore(void) {}
 void td_city_sprites_bind(void) {}
+void td_player_sprite_restore(void) {}
 void td_boats_bind(void){}
 void td_boats_reset(void){}
 void td_boats_update(UWORD elapsed){(void)elapsed;}
@@ -221,7 +222,7 @@ static void reset_case(void) {
     td_tick=td_notice_timer=td_red_cooldown=td_turn_tick=td_entry_timer=td_result_b_release=0;
     td_entry_target=td_walk_dir=td_input_edge=0;
     td_session_live=td_transition_pending=test_current_district=test_queue_fail=0;test_queued_district=TD_DISTRICT_NONE;
-    td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;td_board_route=0;
+    td_motion_reset();td_menu_reset();td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;td_board_route=0;
     td_route_district=TD_DISTRICT_NONE;memset(td_traffic_samples,0,sizeof(td_traffic_samples));
     td_corner_used=td_contact_episode=td_traffic_retreat_mask=td_vehicle_contact_mask=0;td_traffic_advance=8;td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
@@ -277,11 +278,11 @@ static void test_acceleration_and_turning(void) {
 
 static void test_glancing_contact(void) {
     reset_case();WORD baseline=prime_car();
-    td.u=300*16;td.v=394*16;td.heading=1;geometry=SOUTH_CURB;
+    td.u=300*16;td.v=392*16;td.heading=1;geometry=SOUTH_CURB;
     UWORD start=td.u;WORD minimum=td.speed;
     for(unsigned i=0;i<80;i++) {
         driving_tick(J_A);if(td.speed<minimum)minimum=td.speed;
-        expect(td.v>>4<395,"glancing contact remains outside curb footprint");
+        expect(td.v>>4<393,"glancing contact remains outside curb footprint");
     }
     expect(td.u>start+32*16,"glancing contact slides forward beside curb");
     expect(minimum>=baseline*3/4,"continuous glancing contact does not repeatedly drain speed");
@@ -649,10 +650,10 @@ static void test_city_routes_and_walking(void) {
 
     reset_case();td.onfoot=1;td.u=184*16;td.v=280*16;
     td_traffic_u[0]=197*16;td_traffic_v[0]=280*16;player_u=td_traffic_u[0];
-    td_traffic_step();expect(td_traffic_u[0]==player_u,"approaching traffic yields to a courier crossing on foot");
+    td_traffic_step();expect(td_traffic_u[0]<player_u,"moving traffic approaches the on-foot courier without an invincible13px exclusion");
     td.v+=40*16;td_traffic_step();expect(td_traffic_u[0]<player_u,"yielding westbound traffic continues once the courier clears");
     td.v=280*16;td.mode=TD_WAIT;player_u=td_traffic_u[0];td_traffic_step();
-    expect(td_traffic_u[0]==player_u,"traffic also yields to a stationary courier waiting for transit");
+    expect(td_traffic_u[0]<player_u,"waiting for transit does not grant immunity from approaching traffic");
 
     reset_case();td_traffic_u[0]=400*16;td_traffic_v[0]=468*16;
     td_traffic_u[1]=418*16;td_traffic_v[1]=450*16;td_enter_exit();
@@ -684,7 +685,7 @@ static void test_audio_event_integration(void) {
 
 static void test_bounded_corner_assist(void) {
     for(unsigned shift=1;shift<=7;shift++) {
-        reset_case();geometry=SOUTHWEST_CORNER;td.u=(405-shift)*16;td.v=394*16;
+        reset_case();geometry=SOUTHWEST_CORNER;td.u=(407-shift)*16;td.v=392*16;
         td.heading=4;td.speed=16;td_vx=0;td_vy=256;
         UWORD old_u=td.u,old_v=td.v;driving_tick(J_A);
         if(shift<=6) {
@@ -694,15 +695,15 @@ static void test_bounded_corner_assist(void) {
     }
     const UBYTE prohibited[]={0,J_A|J_B,J_B};
     for(unsigned input=0;input<3;input++) {
-        reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;td.speed=16;td_vy=256;joy=prohibited[input];
-        expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,395*16),"coasting and braking do not invoke throttle corner assistance");
+        reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;td.speed=16;td_vy=256;joy=prohibited[input];
+        expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,393*16),"coasting and braking do not invoke throttle corner assistance");
     }
-    reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;td.speed=-6;td_vy=256;joy=J_A;
-    expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,395*16),"reverse does not invoke forward corner assistance");
+    reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;td.speed=-6;td_vy=256;joy=J_A;
+    expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,393*16),"reverse does not invoke forward corner assistance");
     td.speed=16;td_vx=td_vy=256;
-    expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,395*16),"equal diagonal velocity has no arbitrary assistance axis");
+    expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,393*16),"equal diagonal velocity has no arbitrary assistance axis");
     td_vx=0;td_vy=256;td_corner_used=1;
-    expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,395*16),"catch-up steps cannot apply multiple lateral assists in one rendered update");
+    expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,393*16),"catch-up steps cannot apply multiple lateral assists in one rendered update");
     reset_case();joy=J_A;td.speed=16;td_vy=256;td.v=968*16;
     expect(!td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,td.u,td.v+16),"corner assistance cannot push the car beyond the southern map bound");
 }
@@ -1003,12 +1004,12 @@ static void test_pickup_damage_lifecycle(void) {
             expect(td.u==394*16&&td.speed==0&&!td_vx&&!td_vy&&td.cooldown==45&&td.msg==5,
                    "a broad wall still stops the vehicle and applies collision cooldown before and after pickup");
         }else if(hazard==2) {
-            geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;td.heading=1;td_vy=128;
+            geometry=EAST_WALL;td.u=392*16;td.safe_u=td.u;td.heading=1;td_vy=128;
             driving_tick(0);damage=kind==1?4:1;
-            expect(td.u==394*16&&td.v>450*16&&td.speed==24&&!td_vx&&td_vy>0&&td.cooldown==30&&td.msg==5,
+            expect(td.u==392*16&&td.v>450*16&&td.speed==24&&!td_vx&&td_vy>0&&td.cooldown==30&&td.msg==5,
                    "glancing curb recovery keeps forward speed and its warning independently of cargo occupancy");
         }else {
-            geometry=CLEAR_GROUND;td_turn_tick=11;driving_tick(J_RIGHT);
+            geometry=CLEAR_GROUND;td_turn_tick=13;driving_tick(J_RIGHT);
             damage=kind==2?1:0;
             expect(td.heading==1&&td.speed==24,
                    "the same high-speed steering input turns empty, occupied and retired cars normally");
@@ -1332,15 +1333,15 @@ static void test_menu_held_drive_buttons(void) {
     expect(!td.onfoot&&!td_entry_timer&&td.speed>0,
            "ordinary ROAM A entry still finishes and accelerates while A remains held");
 
-    reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;
+    reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
     td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
     world_tick(J_A,1);world_tick(J_A,1);
-    expect(!td_corner_used&&td.u==404*16&&td.v==394*16&&td.speed==0&&joy==J_A,
+    expect(!td_corner_used&&td.u==406*16&&td.v==392*16&&td.speed==0&&joy==J_A,
            "consumed menu A cannot trigger throttle-only corner assistance while the car coasts into a wall");
-    reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;
+    reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
     td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
     world_tick(J_B,1);world_tick(J_A|J_B,1);
-    expect(td_corner_used&&td.u==405*16&&td.v>394*16&&td.speed==16&&joy==(J_A|J_B),
+    expect(td_corner_used&&td.u==407*16&&td.v>392*16&&td.speed==16&&joy==(J_A|J_B),
            "fresh A retains corner assistance despite a consumed menu B and restores the sampled hardware input");
 
     reset_case();stop0_here=1;td.onfoot=1;td.mode=TD_TRANSIT;
@@ -1621,7 +1622,11 @@ static void test_safe_transit_alighting(void) {
             td_traffic_u[0]=560*16;td_traffic_v[0]=720*16;
             td_traffic_u[1]=572*16;td_traffic_v[1]=720*16;
         }
-        world_tick(J_A,1);world_tick(0,240);
+        world_tick(J_A,1);
+        /* Isolate the actual second/alighting commit from the subsequent
+           live fleet quantum: road traffic can now strike an alighted walker,
+           covered by the separate swept moving-body regression. */
+        UBYTE remaining=td.ride_left;while(remaining--)td_second();
         UWORD expected_u=(traffic?548:572)*16;
         expect(td.mode==TD_ROAM&&td.onfoot&&td.cash==27&&td.u==expected_u&&td.v==720*16&&
                td.safe_u==td.u&&td.safe_v==td.v&&td_foot_free(td.u,td.v)&&td_near(&depot),
@@ -1747,15 +1752,15 @@ static void test_safe_transit_alighting(void) {
 static void test_cross_district_streetcar(void) {
     for(UBYTE index=0;index<8;index++)for(UBYTE scenario=0;scenario<3;scenario++) {
         UBYTE origin_id=43+index,target_id=origin_id<48?50:43;
-        UBYTE phase=target_id>origin_id?index*4:32+(7-index)*4;
-        UBYTE duration=(target_id>origin_id?target_id-origin_id:origin_id-target_id)*4;
+        UBYTE phase=target_id>origin_id?index*16:128+(7-index)*16;
+        UBYTE duration=(target_id>origin_id?target_id-origin_id:origin_id-target_id)*16;
         UBYTE waiting=scenario==1,failing=scenario==2;
         td_stop_t origin,destination,depot;
         native_case();td_get_stop(origin_id,&origin);td_get_stop(target_id,&destination);td_get_stop(0,&depot);
         test_current_district=td.district=origin.district;td_session_live=1;td.onfoot=1;
         td.u=td.safe_u=origin.u*16;td.v=td.safe_v=origin.v*16;
         td.mode=TD_TRANSIT;td.transit_origin=origin_id;td.transit_target=target_id;
-        td_cursor=destination;td.seconds=64*2+phase+(waiting?2:0);td.subsecond=13;
+        td_cursor=destination;td.seconds=256*2+phase+(waiting?4:0);td.subsecond=13;
         if(failing){td.job=0;td_get_job(td.job,&td_job);td.stage=1;td.left=2;td_set_target();}
         expect(origin.transit==4&&destination.transit==4&&origin.district!=destination.district&&
                td_district_walkable(origin.district,origin.u,origin.v)&&
@@ -1776,7 +1781,7 @@ static void test_cross_district_streetcar(void) {
         expect(td.mode==(waiting?TD_WAIT:TD_RIDE)&&td.seconds==second&&td.subsecond==subsecond&&
                td.cash==(waiting?30:27)&&td.ride_left==ride_left,
                "closing Queen map and pause resumes the same origin trip without time advancement or another fare");
-        if(waiting)world_tick(0,62*60-td.subsecond);
+        if(waiting)world_tick(0,252*60-td.subsecond);
         expect(td.mode==TD_RIDE&&td.cash==27&&td.ride_left==duration&&td.district==origin.district,
                "scheduled Queen boarding commits one fare while keeping the paid rider in the origin district");
         /* Atlas navigation changes the unsaved menu selection. The paid
@@ -2322,17 +2327,17 @@ static void test_atlas_driver_handoff_and_freeze(void) {
 static void queen_runtime_case(UBYTE closed) {
     native_case();td_stop_t origin;td_get_stop(46,&origin);td_get_stop(48,&td_cursor);
     td_session_live=1;td.onfoot=1;td.u=td.safe_u=origin.u*16;td.v=td.safe_v=origin.v*16;
-    td.seconds=12+(closed?2:0);td.subsecond=0;
+    td.seconds=48+(closed?4:0);td.subsecond=0;
     load_authored_scene_fixture();toronto_init();
     td.mode=TD_TRANSIT;td.transit_origin=46;td.transit_target=48;td_get_stop(48,&td_cursor);
     td_streetcar_runtime_reset();td_streetcar_runtime_prepare(0);
     world_tick(J_A,1);
-    expect(td.mode==(closed?TD_WAIT:TD_RIDE)&&td.cash==(closed?30:27)&&td.ride_left==(closed?0:8),
-           "visual Queen fixture books the real Yonge-to-Saulter trip with its exact fare and eight ride seconds");
+    expect(td.mode==(closed?TD_WAIT:TD_RIDE)&&td.cash==(closed?30:27)&&td.ride_left==(closed?0:32),
+           "visual Queen fixture books the real Yonge-to-Saulter trip with its exact fare and 32 ride seconds");
 }
 
 static void advance_queen_to_east_view(void) {
-    for(unsigned second=0;second<8&&!td_transition_pending;second++)world_tick(0,60);
+    for(unsigned second=0;second<32&&!td_transition_pending;second++)world_tick(0,60);
     expect(td_transition_pending==1&&test_queued_district==3&&td.mode==TD_RIDE&&td.ride_left,
            "ordinary paid Queen updates queue the actual East scene before alighting");
 }
@@ -2402,9 +2407,31 @@ static void test_queen_cold_derived_view(void) {
            "warm visual entry does not restore twice and presents the recovered paid rider on the correct native tram");
 }
 
+static void test_queen_prior_timetable_paid_save(void) {
+    /* This is the exact old Yonge eastbound departure: second12, eight
+       seconds left to Saulter. The payload remains v10/58 after the
+       timetable change, so preserve its already-paid remaining duration. */
+    queen_runtime_case(0);td.seconds=12;td.subsecond=1;td.ride_left=8;td_save();
+    td_state_t paid=td;unsigned writes=sram_writes;
+    memset(&td,0,sizeof(td));td_session_live=0;test_current_district=0;
+    load_authored_scene_fixture();toronto_init();
+    expect(td.mode==TD_HELP&&td_resume_mode==TD_RIDE&&td.ride_left==8&&td.cash==27&&
+           td.seconds==12&&td.subsecond==1&&td.transit_origin==46&&td.transit_target==48&&
+           td.park_district==paid.park_district&&td.park_u==paid.park_u&&td.park_v==paid.park_v&&
+           sram_writes==writes&&!td_streetcar_ride_view,
+           "a prior-timetable paid58-byte save keeps its clock, remaining ride, fare and car despite lacking a current visual pose");
+    world_tick(0,1);world_tick(J_A,1);
+    for(unsigned update=0;update<20&&td.mode==TD_RIDE;update++){
+        if(td_transition_pending)apply_queued_scene();else world_tick(0,60);
+    }
+    expect(td.mode==TD_ROAM&&td.onfoot&&td.district==3&&td.cash==27&&!td.ride_left&&
+           td.park_district==paid.park_district&&td.park_u==paid.park_u&&td.park_v==paid.park_v,
+           "the old paid duration safely reaches its booked native destination without a second fare or loss of the remotely parked car");
+}
+
 static void test_queen_visual_queue_retry_clock(void) {
     queen_runtime_case(0);test_queue_fail=1;
-    for(unsigned second=0;second<8&&!td_transition_pending;second++)world_tick(0,60);
+    for(unsigned second=0;second<32&&!td_transition_pending;second++)world_tick(0,60);
     expect(td_transition_pending==2&&td.mode==TD_RIDE&&td.district==0&&td.cash==27&&
            td_streetcar_view_district==3&&test_queued_district==TD_DISTRICT_NONE,
            "failed visual scene allocation preserves the paid origin trip and records the derived East retry");
@@ -2474,7 +2501,7 @@ static void test_streetcar_contacts_and_future_traffic_yield(void) {
     for(UBYTE foot=0;foot<2;foot++)for(UBYTE carrying=0;carrying<2;carrying++){
         native_case();td.job=0;td.left=120;td_get_job(0,&td_job);td_set_target();
         if(carrying){td_interact();expect(td.stage==1,"the tram cargo-contact fixture actually collects its Union parcel before testing carrying damage");}
-        td.onfoot=foot;td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=12;
+        td.onfoot=foot;td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=48;
         td_state_t before=td;world_tick(0,1);td_streetcar_runtime_prepare(0);
         expect(td.u!=before.u||td.v!=before.v,"a stationary car or walker overlapping the autonomous tram is separated on its first ordinary update");
         expect(td.district==before.district&&td.cash==before.cash&&td.job==before.job&&td.stage==before.stage&&
@@ -2487,15 +2514,15 @@ static void test_streetcar_contacts_and_future_traffic_yield(void) {
                     (td.park_u==td.u&&td.park_v==td.v),
                "foot separation leaves the parked car unchanged while occupied-car separation carries that vehicle");
     }
-    native_case();td.seconds=14;td.subsecond=0;td_streetcar_runtime_prepare(0);
-    td_streetcar_box_t ahead={735*16,531*16,745*16,541*16,0};
+    native_case();td.seconds=52;td.subsecond=0;td_streetcar_runtime_prepare(0);
+    td_streetcar_box_t ahead={699*16,531*16,709*16,541*16,0};
     expect(td_streetcar_sweep(td.seconds,td.subsecond,0,&ahead)==TD_STREETCAR_CLEAR&&
-           !td_streetcar_runtime_traffic_clear(0,740*16,536*16),
+           !td_streetcar_runtime_traffic_clear(0,704*16,536*16),
            "traffic yields to the upcoming one-second Queen body sweep before an actual present overlap");
-    td_traffic_u[0]=740*16;td_traffic_v[0]=536*16;td_traffic_leg[0]=0;
+    td_traffic_u[0]=704*16;td_traffic_v[0]=536*16;td_traffic_leg[0]=0;
     UWORD u=td_traffic_u[0],v=td_traffic_v[0];td_traffic_step();
     expect(td_traffic_u[0]==u&&td_traffic_v[0]==v,"the production autonomous traffic step respects future tram occupancy instead of entering its path");
-    expect(td_streetcar_runtime_traffic_clear(0,740*16,520*16),
+    expect(td_streetcar_runtime_traffic_clear(0,704*16,520*16),
            "opposite-lane road traffic retains a usable passing lane beside the single tram");
 }
 
@@ -2536,7 +2563,7 @@ static void test_queen_hold_v7_recovery_and_invalid_flags(void) {
 static void displaced_queen_wait_case(UBYTE obstructed) {
     native_case();td_get_stop(48,&td_cursor);
     td.onfoot=1;td.mode=TD_WAIT;td.transit_origin=46;td.transit_target=48;
-    td.u=td.safe_u=690*16;td.v=td.safe_v=542*16;td.seconds=12;
+    td.u=td.safe_u=690*16;td.v=td.safe_v=542*16;td.seconds=48;
     for(unsigned i=9;i<15;i++)actors[i].flags|=ACTOR_FLAG_HIDDEN;
     if(obstructed){
         /* A real walkable pedestrian position blocks the nearer downward
@@ -2576,7 +2603,7 @@ static void test_displaced_streetcar_wait(void) {
            td.transit_origin==booked.transit_origin&&td.transit_target==booked.transit_target,
            "contact recovery still inside the platform preserves an ordinary valid wait and its uncharged fare");
     world_tick(0,60-td.subsecond);
-    expect(td.mode==TD_RIDE&&td.cash==booked.cash-3&&td.ride_left==8,
+    expect(td.mode==TD_RIDE&&td.cash==booked.cash-3&&td.ride_left==32,
            "the retained valid wait boards once during the next open second with the original destination and duration");
 
     for(unsigned service=0;service<sizeof(transit_cases)/sizeof(transit_cases[0]);service++)
@@ -2609,7 +2636,7 @@ static void test_streetcar_cue_and_blocked_contact(void) {
     for(unsigned i=0;i<4;i++)for(UBYTE cue=1;cue<=12;cue++){
         native_case();td.u=origins[i][0];td.v=origins[i][1];td.onfoot=1;td.mode=TD_RIDE;
         td_streetcar_ride_view=1;td_streetcar_cue=cue;
-        expect(td_streetcar_pose(12,0,&td_streetcar_display),"cue fixture samples the actual Queen Yonge doors");
+        expect(td_streetcar_pose(48,0,&td_streetcar_display),"cue fixture samples the actual Queen Yonge doors");
         td_streetcar_focus_u=td_streetcar_display.u;td_streetcar_focus_v=td_streetcar_display.v;
         td_state_t saved=td;td_streetcar_runtime_present();
         long x=td_streetcar_display.u,y=td_streetcar_display.v+14*16;
@@ -2619,7 +2646,7 @@ static void test_streetcar_cue_and_blocked_contact(void) {
                "actual courier presentation matches independent wide-arithmetic endpoints without mutating the saved ride");
     }
     native_case();td.onfoot=1;td.mode=TD_WAIT;td.transit_origin=46;td.transit_target=48;
-    td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=12;
+    td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=48;
     actors[2].pos.x=676*32;actors[2].pos.y=536*32;
     td_state_t trapped=td;
     expect(td_streetcar_runtime_recover_contact(1)==TD_STREETCAR_PARK_BLOCKED&&
@@ -2629,7 +2656,7 @@ static void test_streetcar_cue_and_blocked_contact(void) {
 
 static void contact_blocked_case(UBYTE foot) {
     native_case();td.onfoot=foot;td.job=0;td_get_job(0,&td_job);td.stage=1;td.left=120;
-    td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=12;
+    td.u=td.safe_u=676*16;td.v=td.safe_v=536*16;td.seconds=48;
     td_traffic_u[0]=td.u;td_traffic_v[0]=td.v;td_traffic_leg[0]=0;
     td_traffic_present();
 }
@@ -2639,7 +2666,7 @@ static void test_contact_episode_and_invalid(void) {
         for(unsigned frame=0;frame<180;frame++){
             /* Hold the body pose fixed to isolate a contact episode from
                timetable departure; real update/motion/cooldown still run. */
-            td.seconds=12;td.subsecond=0;world_tick(foot?J_DOWN:J_A,1);
+            td.seconds=48;td.subsecond=0;world_tick(foot?J_DOWN:J_A,1);
         }
         expect(td.u==before.u&&td.v==before.v&&td.safe_u==before.safe_u&&td.safe_v==before.safe_v&&
                td.cash==before.cash&&td.left==before.left&&td.stage==before.stage,
@@ -2652,7 +2679,7 @@ static void test_contact_episode_and_invalid(void) {
                "a failed contact separation cannot relocate the parked vehicle");
         td.u=600*16;td.v=556*16;world_tick(0,1);
         expect(!td_contact_episode,"only a valid clear contact result releases the impact episode latch");
-        td.u=before.u;td.v=before.v;td.seconds=12;td.subsecond=0;td.cooldown=0;world_tick(0,1);
+        td.u=before.u;td.v=before.v;td.seconds=48;td.subsecond=0;td.cooldown=0;world_tick(0,1);
         expect(td.health==(foot?100:76)&&audio_impacts==(foot?0:2),
                "a later independently reacquired blocked contact starts exactly one fresh impact episode");
     }
@@ -2676,7 +2703,7 @@ static void test_contact_episode_and_invalid(void) {
 }
 
 static void reverse_retreat_case(void) {
-    native_case();td.onfoot=1;td.u=824*16;td.v=537*16;td.seconds=14;td.subsecond=58;
+    native_case();td.onfoot=1;td.u=824*16;td.v=537*16;td.seconds=57;td.subsecond=48;
     td_traffic_u[4]=824*16;td_traffic_v[4]=536*16;td_traffic_leg[4]=1;
     td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
     td_streetcar_runtime_prepare(0);td_traffic_present();
@@ -2760,7 +2787,7 @@ static void test_connected_traffic_retreat(void) {
     td_streetcar_pose_t pose;td_streetcar_box_t tram;
     expect(td_streetcar_pose(td.seconds,td.subsecond,&pose)&&td_streetcar_bounds(&pose,&tram)&&
            tram.district==0&&tram.left<=824*16+80&&tram.right>=824*16-80,
-           "coherent Core slot4 northbound leg1 meets the actual moving Queen tram at14 seconds58 ticks");
+           "coherent Core slot4 northbound leg1 meets the actual moving Queen tram at57 seconds48 ticks");
     expect(!td_streetcar_runtime_traffic_clear(0,824*16,536*16-8),
            "ordinary future yield alone forbids a still-overlapping half-pixel retreat");
     td_traffic_step();
@@ -2838,8 +2865,8 @@ static int retreat_future_oracle(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,
 static void test_retreat_future_truth(void) {
     const WORD offsets[3][2]={{0,0},{64,-64},{-64,64}};
     native_case();unsigned allowed=0,rejected=0;
-    for(unsigned phase=0;phase<3840;phase++){
-        td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;td_streetcar_pose_t current;
+    for(unsigned phase=0;phase<15360;phase++){
+        td.seconds=(UWORD)(65280+phase/60);td.subsecond=phase%60;td_streetcar_pose_t current;
         expect(td_streetcar_pose(td.seconds,td.subsecond,&current),"retreat oracle spans every native route pose through rollover");
         for(unsigned offset=0;offset<3;offset++)for(unsigned direction=0;direction<4;direction++){
             UWORD old_u=current.u+offsets[offset][0],old_v=current.v+offsets[offset][1];
@@ -2877,8 +2904,8 @@ static void test_booked_landing_and_held_occupancy(void) {
             expect(!memcmp(&td,&before,58),"booked landing queries leave every paid-origin and save byte unchanged");
         }
         td.reserved=TD_STREETCAR_HOLD;td.ride_left=1;
-        for(unsigned phase=0;phase<3840;phase++){
-            td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;
+        for(unsigned phase=0;phase<15360;phase++){
+            td.seconds=(UWORD)(65280+phase/60);td.subsecond=phase%60;
             td_state_t before=td;
             expect(!td_streetcar_runtime_traffic_clear(booked.district,booked.u,booked.v),
                    "a held paid tram occupies exactly its booked destination body throughout timetable and16-bit clock rollover");
@@ -2914,7 +2941,7 @@ static void test_booked_landing_and_held_occupancy(void) {
 static void test_streetcar_native_q5_bounds(void) {
     native_case();td_streetcar_bound=td_streetcar_valid=1;
     unsigned bad_pose=0,bad_size=0,bad_scaled=0,bad_state=0;UBYTE headings=0;
-    for(unsigned phase=0;phase<64*60;phase++){
+    for(unsigned phase=0;phase<256*60;phase++){
         td.seconds=phase/60;td.subsecond=phase%60;
         if(!td_streetcar_pose(td.seconds,td.subsecond,&td_streetcar_display)){bad_pose++;continue;}
         test_current_district=td_streetcar_display.district;
@@ -2933,7 +2960,7 @@ static void test_streetcar_native_q5_bounds(void) {
            (long)tram->pos.y+tram->bounds.bottom!=(long)physical.bottom*2+1)bad_scaled++;
         if(memcmp(&td,&saved,58))bad_state++;
     }
-    expect(!bad_pose&&headings==15,"one actual64-second streetcar cycle exercises all four native actor orientations");
+    expect(!bad_pose&&headings==15,"one actual256-second streetcar cycle exercises all four native actor orientations");
     expect(!bad_size,"every native tram presentation uses exact28x12 or12x28 inclusive Q5 actor bounds");
     expect(!bad_scaled,"every Q5 actor endpoint agrees with the actual Q4 physical body including the last half-subpixel");
     expect(!bad_state,"all autonomous Q5-bound presentations preserve the serialized game state");
@@ -2966,8 +2993,8 @@ static void test_contact_corridor_coverage(void) {
         expect(td_district_drivable(TD_DISTRICT_NORTH,clear_points[TD_DISTRICT_NORTH][point][0],
                                    clear_points[TD_DISTRICT_NORTH][point][1]),
                "North off-corridor fixtures use actual clear eleven-pixel native road footprints");
-    for(unsigned phase=0;phase<3840;phase++){
-        td.seconds=(UWORD)(65472+phase/60);td.subsecond=phase%60;
+    for(unsigned phase=0;phase<15360;phase++){
+        td.seconds=(UWORD)(65280+phase/60);td.subsecond=phase%60;
         td_streetcar_pose_t pose;td_streetcar_box_t tram;
         expect(td_streetcar_pose(td.seconds,td.subsecond,&pose)&&td_streetcar_bounds(&pose,&tram),
                "corridor coverage samples all current bodies at bends, seams and turnarounds through clock rollover");
@@ -3051,8 +3078,8 @@ static void test_traffic_lookahead_truth(void) {
     native_case();
     for(UBYTE district=0;district<TD_DISTRICT_COUNT;district++){
         td_streetcar_box_t boxes[6];traffic_probe_boxes(district,boxes);
-        for(unsigned phase=0;phase<64*60;phase++){
-            td.seconds=65472+phase/60;td.subsecond=phase%60;td_state_t before=td;
+        for(unsigned phase=0;phase<256*60;phase++){
+            td.seconds=65280+phase/60;td.subsecond=phase%60;td_state_t before=td;
             for(UBYTE i=0;i<6;i++){
                 UBYTE clear=td_streetcar_sweep((UWORD)(td.seconds+1),td.subsecond,60,&boxes[i])==TD_STREETCAR_CLEAR;
                 expect(td_streetcar_runtime_traffic_clear(district,traffic_probe_points[district][i][0],
@@ -3074,21 +3101,46 @@ static void test_traffic_lookahead_truth(void) {
            "scalar traffic rejects actual footprint-bound failures including unsigned overflow coordinates");
 }
 
-static void test_sweep_section_scan_equivalence(void) {
-    const UWORD intervals[]={0,1,59,60,61,119,120,121,239,240,241,3839,3840,65535};
-    /* Recorded from the original full16-section scan before narrowing it.
-       Existing independent corridor/body fixtures establish that baseline. */
-    const uint32_t golden[4]={0x496959e1u,0x6ca5fcfeu,0xb8588dc5u,0x3321d730u};
-    for(UBYTE district=0;district<4;district++){
-        td_streetcar_box_t boxes[6];traffic_probe_boxes(district,boxes);uint32_t digest=2166136261u;
-        for(unsigned phase=0;phase<64*60;phase++)for(unsigned n=0;n<sizeof(intervals)/sizeof(intervals[0]);n++)
-            for(unsigned i=0;i<6;i++){
-                UBYTE value=td_streetcar_sweep(65472+phase/60,phase%60,intervals[n],&boxes[i]);
-                digest=(digest^value)*16777619u;
-            }
-        if(digest!=golden[district])fprintf(stderr,"Section scan baseline district%u digest%08x\n",district,digest);
-        expect(digest==golden[district],"all phases, short-window endpoints and bounded long sweeps retain the original full-scan result digest");
+/* Retained old64sec/half5 digest identity: 496959e1 /6ca5fcfe /b8588dc5 /3321d730.
+ * The new16sec timetable gets a same-source full16-section reference rather
+ * than copying new implementation output into an alleged independent golden. */
+static UBYTE full_section_reference(UWORD first,UWORD last,const td_streetcar_box_t *box){
+    td_streetcar_pose_t pose;td_streetcar_box_t body;UWORD a,b;
+    for(UBYTE section=0;section<16;section++){
+        UWORD base=section*960;
+        if(first<=base+239&&last>=base){
+            td_streetcar_dwell(section>=8?15-section:section,section>=8,&pose);
+            td_streetcar_bounds_local(&pose,&body);
+            if(td_streetcar_boxes_hit(&body,box))return TRUE;
+        }
+        if(first<=base+960&&last>=base+240){
+            a=first>base+240?first-base-240:0;b=last<base+960?last-base-240:720;
+            if(td_streetcar_travel_hit(td_streetcar_route(section),a,b,box))return TRUE;
+        }
     }
+    return FALSE;
+}
+static UBYTE full_sweep_reference(UWORD seconds,UBYTE subsecond,UWORD elapsed,const td_streetcar_box_t *box){
+    UWORD phase=(seconds%256)*60+subsecond,first;
+    td_streetcar_pose_t pose;td_streetcar_box_t body;
+    if(!elapsed){td_streetcar_pose_local(phase,&pose);td_streetcar_bounds_local(&pose,&body);return td_streetcar_boxes_hit(&body,box);}
+    if(elapsed>=15360)return full_section_reference(0,15360,box);
+    first=(phase+15360-elapsed)%15360;
+    return first<=phase?full_section_reference(first,phase,box):
+        full_section_reference(first,15360,box)||full_section_reference(0,phase,box);
+}
+static void test_sweep_section_scan_equivalence(void) {
+    const UWORD intervals[]={0,1,59,60,61,239,240,241,719,720,721,959,960,961,15359,15360,65535};
+    unsigned mismatches=0;
+    for(UBYTE district=0;district<4;district++){
+        td_streetcar_box_t boxes[6];traffic_probe_boxes(district,boxes);
+        for(unsigned phase=0;phase<256*60;phase++)for(unsigned n=0;n<sizeof(intervals)/sizeof(intervals[0]);n++)
+            for(unsigned i=0;i<6;i++){
+                UWORD clock=(UWORD)(65280+phase/60);UBYTE sub=phase%60;
+                if(td_streetcar_sweep(clock,sub,intervals[n],&boxes[i])!=full_sweep_reference(clock,sub,intervals[n],&boxes[i]))mismatches++;
+            }
+    }
+    expect(!mismatches,"new timetable optimized section admission agrees with a complete16-section reference through rollover");
 }
 
 static void test_aircraft_world_freezing(void) {
@@ -3132,19 +3184,19 @@ static void test_human_impacts_and_police(void){
     for(UBYTE r=0;r<td_route_counts[0]&&!found;r++)for(UWORD t=0;t<12&&!found;t++){
         UBYTE phase=(t*12+r*37)&127;
         UWORD x=td_district_routes[0][r][0]+(phase<64?phase:127-phase),y=td_district_routes[0][r][1];
-        if(x>20&&td_drivable(x-10,y)&&td_drivable(x+8,y)){
+        if(x>20&&td_drivable(x-11,y)&&td_drivable(x+11,y)){
             found=1;route=r;u=x;v=y;clock=t;
         }
     }
     expect(found,"impact fixture uses a real registered pedestrian route through a usable road footprint");
     if(!found)return;
-    td.u=(u-10)*16;td.v=v*16;td.seconds=clock;td.speed=24;td_vx=384;
+    td.u=(u-11)*16;td.v=v*16;td.seconds=clock;td.speed=24;td_vx=384;
     td_people_reset();td_ped_refresh=16;td_ped_route[0]=route;
     td_nearby_routes[0][0]=td_district_routes[0][route][0];td_nearby_routes[0][1]=v;
     td_pedestrians();
     expect(!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&!td_people[0].stun&&td.cash==30&&!td.wanted,
-           "the real route is presented at the clear ten-pixel edge before the courier crosses it");
-    td.u=(u+8)*16;td_pedestrians();
+           "the real route is presented at the clear eleven-pixel edge before the courier crosses it");
+    td.u=(u+11)*16;td_pedestrians();
     expect(td_people[0].stun==6&&actors[9].frame_start==36,
            "swept movement knocks down the actual human even when the final car endpoint clears the hit box");
     expect(td.cash==10&&td.wanted==1&&td.wanted_left==30&&td.speed==12&&td.msg==19,
@@ -3152,23 +3204,23 @@ static void test_human_impacts_and_police(void){
     td_state_t charged=td;td_pedestrians();
     expect(td.cash==charged.cash&&td.wanted==charged.wanted&&td_people[0].stun==6,
            "holding contact against a recovering person cannot repeat the penalty");
+    UWORD impact_u=actors[9].pos.x,impact_v=actors[9].pos.y;
+    td_tick+=24;td_pedestrians();
     UWORD human_u=actors[9].pos.x,human_v=actors[9].pos.y;
+    expect(td_people[0].stun==6&&td_people[0].recover==24&&human_u>=impact_u&&
+           human_u-impact_u<=12*32&&human_v==impact_v&&actors[9].frame_start==37,
+           "a struck human makes a bounded twelve-pixel flight then becomes a prone non-graphic body");
     for(unsigned second=0;second<6;second++){td.seconds++;td_people_second();}
     td.speed=0;td_pedestrians();
-    expect(!td_people[0].stun&&actors[9].pos.x==human_u&&actors[9].pos.y==human_v,
-           "a human visibly resumes from the impact position after six active-world seconds");
+    expect(td_people[0].stun==6&&actors[9].pos.x==human_u&&actors[9].pos.y==human_v,
+           "six active-world seconds leave the struck person down rather than reviving them");
     td.seconds++;td_pedestrians();
     expect(actors[9].pos.x==human_u&&actors[9].pos.y==human_v&&!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&
            td.cash==charged.cash&&td.wanted==charged.wanted,
-           "a recovered visible human waits before stepping into the stopped courier without another penalty");
-    /* Return to the independently drivable position validated above. Clear
-       the courier body before expecting ordinary forward walking again. */
-    td.u=(u-10)*16;td_pedestrians();
-    expect(!(actors[9].flags&ACTOR_FLAG_HIDDEN)&&actors[9].pos.x==human_u,
-           "clearing the courier preserves the recovered human's visible phase without a new admission delay");
-    td.seconds++;td_pedestrians();
-    expect(actors[9].pos.x!=human_u&&actors[9].pos.y==human_v,
-           "recovered humans return to normal walking along the same sidewalk route");
+           "a visible prone body cannot repeat the collision fine or resume walking");
+    td.u=(u-11)*16;td_pedestrians();td.seconds++;td_pedestrians();
+    expect(actors[9].pos.x==human_u&&actors[9].pos.y==human_v&&td_people[0].stun==6,
+           "clearing the courier leaves the same district-local corpse in place");
     td.wanted=3;td.wanted_left=30;td.cash=500;td_save();
     memset(&td,0,sizeof(td));expect(td_restore()&&td.wanted==3&&td.wanted_left==30&&td.cash==500,
            "version8 dual-slot restore retains actual fines and active police attention");
@@ -3214,8 +3266,8 @@ static void test_visible_human_reverse_start(void){
     slot=route83_slot();expect(slot!=TD_NONE,"ordinary refreshes retain the physically visible route83 identity");
     if(slot==TD_NONE)return;
     expect(td.seconds==26&&!td.subsecond&&td.u==566*16&&td.v==695*16+3&&!td.speed&&
-           td_people[slot].phase==36&&td_people[slot].lag==19&&actors[9+slot].pos.x==556*32,
-           "actual world updates reproduce native26:00 phase36/lag19 waiting beside the stationary car");
+           td_people[slot].phase==35&&td_people[slot].lag==20&&actors[9+slot].pos.x==555*32,
+           "actual world updates reproduce new26:00 phase35/lag20 waiting beside the stationary car");
     for(unsigned update=0;update<4;update++)world_tick(J_B,4);
     slot=route83_slot();expect(slot!=TD_NONE,"ordinary16-VBlank reversing does not unload the existing human");
     if(slot==TD_NONE)return;
@@ -3223,15 +3275,15 @@ static void test_visible_human_reverse_start(void){
       "engine reverse diagnostic: car=%u/%u speed=%d clock=%u:%u human=%u/%u phase=%u lag=%u stun=%u cash=%u H=%u\n",
       td.u,td.v,td.speed,td.seconds,td.subsecond,actors[9+slot].pos.x>>5,actors[9+slot].pos.y>>5,
       td_people[slot].phase,td_people[slot].lag,td_people[slot].stun,td.cash,td.wanted);
-    expect(td.u==566*16&&td.v==697*16+12&&td.speed==-6&&td.seconds==26&&td.subsecond==16,
-           "four actual held-B updates produce the native2.5625px reverse-start endpoint and speed minus6");
-    expect(td_people[slot].phase==36&&actors[9+slot].pos.x==556*32&&!td_people[slot].stun&&
+    expect(td.u==566*16&&td.v>695*16+3&&td.v<698*16&&td.speed==-4&&td.seconds==26&&td.subsecond==16,
+           "four actual held-B updates produce the slower bounded reverse-start displacement and speed minus4");
+    expect(td_people[slot].phase==35&&actors[9+slot].pos.x==555*32&&!td_people[slot].stun&&
            !(actors[9+slot].flags&ACTOR_FLAG_HIDDEN)&&td.cash==138&&!td.wanted&&!td.cooldown&&td.msg!=19,
            "a human stays visible at its safe old position instead of advancing into the reversing car and charging20dollars");
-    for(unsigned update=0;update<7;update++)world_tick(J_B,4);
+    for(unsigned update=0;update<11;update++)world_tick(J_B,4);
     slot=route83_slot();expect(slot!=TD_NONE,"continued ordinary reverse travel retains the same visible human route");
     if(slot==TD_NONE)return;
-    expect(td.v>=702*16&&td_people[slot].phase>36&&actors[9+slot].pos.x>556*32&&
+    expect(td.v>=702*16&&td_people[slot].phase>35&&actors[9+slot].pos.x>555*32&&
            !(actors[9+slot].flags&ACTOR_FLAG_HIDDEN)&&!td_people[slot].stun&&
            td.cash==138&&!td.wanted&&!td.cooldown,
            "the walker resumes its ordinary route after actual reverse motion clears the full occupied body");
@@ -3315,9 +3367,10 @@ static void test_dispatch_itinerary_inputs(void) {
         expect(td_board_route==0,"a complete upward itinerary cycle returns to pickup");
         dispatch_edge(J_DOWN);UBYTE held_page=td_board_route;
         world_tick(J_DOWN,255);
-        expect(td_board_route==held_page&&!memcmp(&td,&paused,58),"holding Down does not repeat the pressed itinerary action or consume the paused deadline");
+        expect(td_board_route==(held_page+1)%expected->count&&!memcmp(&td,&paused,58),"holding Down repeats one itinerary step after the delay without consuming the paused deadline");
+        UBYTE prior_page=td_board_route;
         dispatch_edge(J_UP|J_DOWN);
-        expect(td_board_route==0,"simultaneous Up and Down retains the existing Up-first menu policy");
+        expect(td_board_route==(prior_page?prior_page-1:expected->count-1),"fresh simultaneous Up and Down retains the existing Up-first menu policy");
         td_board_route=expected->count-1;dispatch_edge(J_RIGHT);
         UBYTE next=(job+1)%TD_QUESTS;
         expect(td.menu==next&&!td_board_route&&td_offer.reward==td_fixture_jobs[next].reward&&
@@ -3747,7 +3800,51 @@ static void test_current_ferry_fare_boundary(void) {
 #include "island_save_harness.h"
 #include "north_save_harness.h"
 #include "island_objective_harness.h"
+static void test_hardware_motion_feedback(void){
+    static const UBYTE limits[4]={14,12,16,10};
+    for(UBYTE vehicle=0;vehicle<4;vehicle++){
+        reset_case();td.vehicle=vehicle;UWORD origin=td.u;
+        for(unsigned tick=0;tick<180;tick++)driving_tick(J_A);
+        expect(td.speed==limits[vehicle]&&td.u>origin,"new vehicle pacing keeps four distinct slower reachable cruise limits");
+        td_vy=71;td.heading=0;
+        for(unsigned tick=0;tick<30;tick++)driving_tick(J_A);
+        UWORD northing=td.v;driving_tick(J_A);
+        expect(td_vy==0&&td.v==northing&&td.u>origin,"straight east heading settles lateral momentum exactly without vertical drift");
+        td.heading=4;driving_tick(J_A);
+        expect(td_vx>0&&td_vy>0&&td.speed==limits[vehicle],"a turn retains momentum and acceleration rather than abruptly stopping");
+        for(unsigned tick=0;tick<30;tick++)driving_tick(J_A);
+        expect(td_vx==0&&td_vy>0,"south heading settles old eastward slip exactly");
+        for(unsigned tick=0;tick<180;tick++)driving_tick(J_B);
+        expect(td.speed==-4,"held brake stops before reaching a slower bounded reverse");
+    }
+    reset_case();td.onfoot=1;td.park_u=600*16;td.park_v=600*16;
+    td.job=0;td.stage=1;td.health=100;td.left=300;
+    expect(!td_motion_player_hit(390*16,450*16,390*16,450*16,5),"a parked car cannot injure the on-foot courier");
+    expect(td_motion_player_hit(390*16,450*16,410*16,450*16,5),"a moving swept road body hits the courier even with clear separated endpoints");
+    expect(td.health==85&&td.onfoot&&td.mode==TD_ROAM&&td_player_hurt==72,"a moving hit damages only carried cargo and starts bounded recoverable foot injury");
+    expect(!td_motion_player_hit(390*16,450*16,410*16,450*16,5)&&td.health==85,"one vehicle impact cannot repeatedly drain cargo during recovery");
+    UWORD origin=td.u;for(unsigned tick=0;tick<72;tick++)driving_tick(J_LEFT);
+    expect(!td_player_hurt&&td.onfoot&&td.u==origin+24*16&&td.health==85,"input is held during24px knockback and72tick fall/get-up recovery");
+    UWORD recovered=td.u;driving_tick(J_RIGHT);
+    expect(td.u>recovered,"on-foot controls resume immediately after getting up");
+    reset_case();td.onfoot=1;td.park_u=600*16;td.park_v=600*16;geometry=EAST_WALL;td.u=392*16;
+    expect(td_motion_player_knockback(1,0),"on-foot body starts knockback beside a solid wall");
+    for(unsigned tick=0;tick<72;tick++)driving_tick(J_RIGHT);
+    expect(td.u<400*16&&!td_player_hurt,"knockback clips against solid ground and still recovers without crossing a building");
+    reset_case();td.onfoot=1;td.mode=TD_PAUSE;
+    expect(!td_motion_player_knockback(1,0),"paused menus cannot trigger a hidden player injury");
+    reset_case();td.onfoot=1;td.park_u=600*16;td.park_v=600*16;
+    td_traffic_u[0]=td.u-176;td_traffic_v[0]=td.v;
+    td_traffic_samples[0].u=600*16;td_traffic_samples[0].v=td.v;
+    td_traffic_advance=128;UWORD moving_from=td_traffic_u[0];
+    td_traffic_motion(1);
+    expect(td_traffic_u[0]==moving_from+128&&td_player_hurt==72&&td.cooldown==120&&td.onfoot,
+           "an actual admitted NPC movement batch injures the unprotected foot courier as it crosses the human body");
+}
+
 int main(void) {
+    if(getenv("TD_HARDWARE_MOTION_ONLY")){test_hardware_motion_feedback();printf("Hardware motion actual-C regressions: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+    test_hardware_motion_feedback();
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
     test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_clock_boundaries();
@@ -3775,7 +3872,7 @@ int main(void) {
     test_port_freight_transit_and_riverbank_walk();
     test_atlas_driver_handoff_and_freeze();
     test_streetcar_loader_binding();test_queen_visual_save_follow_and_loaded_arrival();
-    test_queen_cold_derived_view();test_queen_visual_queue_retry_clock();test_streetcar_pause_and_map_pose();
+    test_queen_cold_derived_view();test_queen_prior_timetable_paid_save();test_queen_visual_queue_retry_clock();test_streetcar_pause_and_map_pose();
     test_streetcar_rail_parking_and_v6_recovery();test_streetcar_contacts_and_future_traffic_yield();
     test_queen_hold_v7_recovery_and_invalid_flags();
     test_displaced_streetcar_wait();

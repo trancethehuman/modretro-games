@@ -35,18 +35,52 @@ def fixture():
 def check_actor_override():
     source = (ENGINE / "src/core/actor.c").read_text()
     tail = source[source.index("#pragma bank 255"):]
+    player_before="            td_actor_render_actor(&PLAYER);"
+    player_after="""            SWITCH_ROM(PLAYER.sprite.bank);
+            spritesheet_t *sprite = PLAYER.sprite.ptr;
+
+            allocated_hardware_sprites += move_metasprite(
+                *(sprite->metasprites + PLAYER.frame),
+                PLAYER.base_tile,
+                allocated_hardware_sprites,
+                screen_x,
+                screen_y
+            );"""
+    actor_before="        td_actor_render_actor(actor);"
+    actor_after="""        SWITCH_ROM(actor->sprite.bank);
+        spritesheet_t *sprite = actor->sprite.ptr;
+
+        allocated_hardware_sprites += move_metasprite(
+            *(sprite->metasprites + actor->frame),
+            actor->base_tile,
+            allocated_hardware_sprites,
+            screen_x,
+            screen_y
+        );"""
+    order_before="""    // Stable runtime slot order: fleet/parked car, people, tram, then marker.
+    // The stock activation-list order can rotate when actors enter/leave view.
+    for (ground_index = 2; ground_index <= MAX_ACTORS; ground_index++) {
+        actor = &actors[ground_index == MAX_ACTORS ? 1 : ground_index];
+        if (!CHK_FLAG(actor->flags, ACTOR_FLAG_ACTIVE) ||
+            CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {"""
+    order_after="""    // Render all actors
+    for (actor = PLAYER.prev; (actor); actor = actor->prev){
+        if (CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {"""
     edits = [("#include \"td_aircraft_render.h\"\n", ""),
              ("    td_aircraft_render_restore();\n\n", ""),
              ("    td_aircraft_render();\n", ""),
              ('#include "td_boats.h"\n', ""),
              ('#include "td_traffic_lights.h"\n', ""),
              ("    td_traffic_lights_render();\n", ""),
-             ("    td_boats_render();\n", "")]
+             ("    td_boats_render();\n", ""),
+             ('#include "td_actor_render.h"\n', ""),
+             ("    UBYTE ground_index;\n", ""),
+             (player_before, player_after),(actor_before,actor_after),(order_before,order_after)]
     for before, after in edits:
         assert tail.count(before) == 1, "Actor override must contain each scoped living-city addition exactly once"
         tail = tail.replace(before, after)
     assert hashlib.sha256(tail.encode()).hexdigest() == "b7360f4e84c720090e127aa047daa21f7d70517a4a2d9512d2a96f568e9ee5f5", \
-        "Actor override changed beyond the pinned living-city includes and render hooks"
+        "Actor override changed beyond the audited living-city and signed-admission hooks"
     assert "Copyright (c) 2020 Toxa" in source and "THE SOFTWARE IS PROVIDED" in source
 
 

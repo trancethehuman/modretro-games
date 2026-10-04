@@ -86,7 +86,7 @@ static unsigned oracle_duration(unsigned origin, unsigned target) {
     if (distance < 0) distance = -distance;
     if (service == 1) return 1 + (unsigned)distance / 2;
     if (service == 2) return 2 + 2 * (unsigned)distance;
-    return 4 * (unsigned)distance;
+    return 16 * (unsigned)distance;
 }
 
 static unsigned oracle_departure(unsigned origin, unsigned target, unsigned clock) {
@@ -97,14 +97,14 @@ static unsigned oracle_departure(unsigned origin, unsigned target, unsigned cloc
     else if (service == 2) { period = 24; phase = index * 4; }
     else if (service == 3) { period = 30; phase = index * 7; }
     else {
-        period = 64;
-        phase = oracle_index(service, target) >= index ? index * 4 : 32 + 4 * (7 - index);
+        period = 256;
+        phase = oracle_index(service, target) >= index ? index * 16 : 128 + 16 * (7 - index);
     }
     /* Signed remainder is deliberately unlike the implementation's unsigned
      * period-offset expression, including clocks before a stop's phase. */
     elapsed = ((int)clock - phase) % period;
     if (elapsed < 0) elapsed += period;
-    return elapsed < 2 ? 0 : (unsigned)(period - elapsed);
+    return elapsed < (service==4?4:2) ? 0 : (unsigned)(period - elapsed);
 }
 
 static void test_encodings_and_routes(void) {
@@ -151,7 +151,7 @@ static void test_every_route_and_phase(void) {
         if (!oracle_service(origin)) continue;
         for (target = 0; target < 64; target++) {
             if (target != (origin & 63) && !oracle_target(origin, target)) continue;
-            for (clock = 0; clock < 128; clock++) {
+            for (clock = 0; clock < 512; clock++) {
                 expect_value(td_transit_departure((UBYTE)origin, (UBYTE)target, (UWORD)clock),
                              oracle_departure(origin, target, clock), "route-phase", origin, target, clock);
             }
@@ -182,9 +182,9 @@ static void test_complete_uword_clock(void) {
     expect_value(td_transit_departure(20, 20, 7), 0, "ferry-self-timetable", 20, 20, 7);
     expect_value(td_transit_valid(20, 20), 0, "ferry-self-unboardable", 20, 20, 7);
     expect_value(td_transit_valid(20, 21), 0, "ferry-no-island-shortcut", 20, 21, 0);
-    expect_value(td_transit_departure(50, 43, 32), 0, "queen-west-window", 50, 43, 32);
+    expect_value(td_transit_departure(50, 43, 128), 0, "queen-west-window", 50, 43, 128);
     expect_value(td_transit_departure(43, 50, 0), 0, "queen-east-window", 43, 50, 0);
-    expect_value(td_transit_duration(43, 50), 28, "queen-end-to-end", 43, 50, 0);
+    expect_value(td_transit_duration(43, 50), 112, "queen-end-to-end", 43, 50, 0);
     expect_value(td_transit_departure(43, 50, (UWORD)(65535U + 1U)), 0,
                  "uword-modulo-reset", 43, 50, 0);
 }

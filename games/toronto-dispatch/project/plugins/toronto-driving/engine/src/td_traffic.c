@@ -87,9 +87,9 @@ static UBYTE td_traffic_bodies(const td_traffic_context_t *ctx,UBYTE slot,const 
         }
     }
     if(ctx->parked_active){
-        if(!td_traffic_body_valid(ctx->park_u,ctx->park_v,5,5))return FALSE;
-        if(!td_traffic_outside(m,ctx->park_u,ctx->park_v,5,5)&&
-           !td_traffic_obstacle(m,ctx->park_u,ctx->park_v,5,5,escape))return FALSE;
+        if(!td_traffic_body_valid(ctx->park_u,ctx->park_v,7,7))return FALSE;
+        if(!td_traffic_outside(m,ctx->park_u,ctx->park_v,7,7)&&
+           !td_traffic_obstacle(m,ctx->park_u,ctx->park_v,7,7,escape))return FALSE;
     }
     if(ctx->peds)for(i=0;i<TD_TRAFFIC_PEOPLE;i++){
         if(ctx->peds[i].flags&ACTOR_FLAG_HIDDEN)continue;
@@ -131,8 +131,8 @@ UBYTE td_traffic_junction_clear(const td_traffic_context_t *ctx,UBYTE district,
                (td_traffic_distance(ctx->u[other],signals[i].u*16)<24*16&&
                 td_traffic_distance(ctx->v[other],signals[i].v*16)<24*16))return FALSE;
         }
-        if(ctx->parked_active&&(!td_traffic_body_valid(ctx->park_u,ctx->park_v,5,5)||
-           td_traffic_overlap(ctx->park_u,ctx->park_v,5,5,signals[i].u*16,signals[i].v*16,18,18)))return FALSE;
+        if(ctx->parked_active&&(!td_traffic_body_valid(ctx->park_u,ctx->park_v,7,7)||
+           td_traffic_overlap(ctx->park_u,ctx->park_v,7,7,signals[i].u*16,signals[i].v*16,18,18)))return FALSE;
         if(ctx->peds)for(other=0;other<TD_TRAFFIC_PEOPLE;other++){
             if(ctx->peds[other].flags&ACTOR_FLAG_HIDDEN)continue;
             if(!td_traffic_body_valid(ctx->peds[other].pos.x>>1,ctx->peds[other].pos.y>>1,3,3)||
@@ -149,7 +149,7 @@ static UBYTE td_traffic_entry_clear(const td_traffic_context_t *ctx,UBYTE slot,U
     UBYTE i;UWORD other_u,other_v;
     for(i=0;i<TD_TRAFFIC_SLOTS;i++)if(i!=slot&&
        td_traffic_distance(ctx->u[i],u)<24*16&&td_traffic_distance(ctx->v[i],v)<24*16)return FALSE;
-    if(ctx->parked_active&&td_traffic_overlap(ctx->park_u,ctx->park_v,5,5,u,v,18,18))return FALSE;
+    if(ctx->parked_active&&td_traffic_overlap(ctx->park_u,ctx->park_v,7,7,u,v,18,18))return FALSE;
     if(ctx->peds)for(i=0;i<TD_TRAFFIC_PEOPLE;i++){
         if(ctx->peds[i].flags&ACTOR_FLAG_HIDDEN)continue;
         other_u=ctx->peds[i].pos.x>>1;other_v=ctx->peds[i].pos.y>>1;
@@ -221,7 +221,7 @@ UBYTE td_traffic_epoch_begin(const td_traffic_context_t *ctx,UBYTE district,
     }
     epoch->parked_active=ctx->parked_active;epoch->priority_mask=ctx->priority_mask;
     epoch->park_u=ctx->park_u;epoch->park_v=ctx->park_v;epoch->people_mask=0;
-    if(ctx->parked_active&&!td_traffic_body_valid(ctx->park_u,ctx->park_v,5,5))return FALSE;
+    if(ctx->parked_active&&!td_traffic_body_valid(ctx->park_u,ctx->park_v,7,7))return FALSE;
     if(ctx->peds)for(i=0,bit=1;i<TD_TRAFFIC_PEOPLE;i++,bit<<=1){
         if(ctx->peds[i].flags&ACTOR_FLAG_HIDDEN)continue;
         u=ctx->peds[i].pos.x>>1;v=ctx->peds[i].pos.y>>1;
@@ -257,8 +257,8 @@ static UBYTE td_traffic_epoch_bodies(const td_traffic_epoch_t *epoch,UBYTE slot,
                td_traffic_overlap(m->u,m->v,m->hu,m->hv,u,v,hu+18,hv+18))return FALSE;
         }
     }
-    if(epoch->parked_active&&!td_traffic_outside(m,epoch->park_u,epoch->park_v,5,5)&&
-       !td_traffic_obstacle(m,epoch->park_u,epoch->park_v,5,5,escape))return FALSE;
+    if(epoch->parked_active&&!td_traffic_outside(m,epoch->park_u,epoch->park_v,7,7)&&
+       !td_traffic_obstacle(m,epoch->park_u,epoch->park_v,7,7,escape))return FALSE;
     for(i=0,bit=1;i<TD_TRAFFIC_PEOPLE;i++,bit<<=1)if(epoch->people_mask&bit){
         u=epoch->ped_u[i];v=epoch->ped_v[i];
         if(!td_traffic_outside(m,u,v,3,3)&&!td_traffic_obstacle(m,u,v,3,3,escape))return FALSE;
@@ -269,7 +269,7 @@ static UBYTE td_traffic_epoch_entry(const td_traffic_epoch_t *epoch,UBYTE slot,U
     UBYTE i,bit;
     for(i=0;i<TD_TRAFFIC_SLOTS;i++)if(i!=slot&&
        td_traffic_distance(epoch->u[i],u)<24*16&&td_traffic_distance(epoch->v[i],v)<24*16)return FALSE;
-    if(epoch->parked_active&&td_traffic_overlap(epoch->park_u,epoch->park_v,5,5,u,v,18,18))return FALSE;
+    if(epoch->parked_active&&td_traffic_overlap(epoch->park_u,epoch->park_v,7,7,u,v,18,18))return FALSE;
     for(i=0,bit=1;i<TD_TRAFFIC_PEOPLE;i++,bit<<=1)if((epoch->people_mask&bit)&&
        td_traffic_overlap(epoch->ped_u[i],epoch->ped_v[i],3,3,u,v,18,18))return FALSE;
     return TRUE;

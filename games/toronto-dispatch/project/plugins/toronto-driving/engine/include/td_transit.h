@@ -10,8 +10,8 @@
 #define TD_TRANSIT_NONE 255
 #define TD_TRANSIT_QUEEN_FIRST 43
 #define TD_TRANSIT_QUEEN_COUNT 8
-#define TD_TRANSIT_QUEEN_PERIOD 64
-#define TD_TRANSIT_QUEEN_HOP_SECONDS 4
+#define TD_TRANSIT_QUEEN_PERIOD 256
+#define TD_TRANSIT_QUEEN_HOP_SECONDS 16
 
 /* Pure timetable/route queries. Origins are plain six-bit stop IDs except
  * 80 (16|64), the preserved Wellesley bus selector. Bit7 and other bit6
@@ -23,7 +23,7 @@ UBYTE td_transit_valid(UBYTE origin, UBYTE target) BANKED;
 UBYTE td_transit_count(UBYTE origin) BANKED;
 /* Invalid origin/selection returns TD_TRANSIT_NONE; no automatic wrapping. */
 UBYTE td_transit_stop(UBYTE origin, UBYTE selection) BANKED;
-/* Returns seconds until the two-second boarding window, or NONE on failure.
+/* Returns seconds until the boarding window (Queen4sec, other services2sec), or NONE on failure.
  * A self selection can display any valid service origin's timetable;
  * valid() still rejects boarding it. Queen self selection defaults east.
  * This samples a UWORD clock modulo its period; it stores no absolute time. */

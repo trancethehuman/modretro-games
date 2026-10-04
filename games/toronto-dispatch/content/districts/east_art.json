@@ -17033,7 +17033,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "f76abe8eb28d4b8e4b8cae8022c84c0d04faa3a817390e3bda68279a8dfeeccc",
+  "background_sha256": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -18250,8 +18250,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 98,
-    "flip_canonical_unique_tiles": 76,
+    "raw_unique_tiles": 106,
+    "flip_canonical_unique_tiles": 85,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
@@ -18367,5 +18367,655 @@
     "native_registration_verified": false,
     "native_build_verified": false,
     "measured_gameplay_duration_verified": false
+  },
+  "scenery": {
+    "source": "scripts/street_scenery.py",
+    "original_pixels": true,
+    "decorative_game_placements_not_surveyed": true,
+    "counts": {
+      "bench": 18,
+      "bin": 21,
+      "flowers": 20,
+      "roof_module": 47,
+      "street_sign": 20
+    },
+    "placements": [
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 120
+      },
+      {
+        "kind": "roof_module",
+        "x": 440,
+        "y": 120
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 120
+      },
+      {
+        "kind": "roof_module",
+        "x": 616,
+        "y": 120
+      },
+      {
+        "kind": "roof_module",
+        "x": 760,
+        "y": 120
+      },
+      {
+        "kind": "roof_module",
+        "x": 824,
+        "y": 120
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 440,
+        "y": 152
+      },
+      {
+        "kind": "roof_module",
+        "x": 824,
+        "y": 184
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 216
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 216
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 216
+      },
+      {
+        "kind": "roof_module",
+        "x": 136,
+        "y": 216
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 344
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 344
+      },
+      {
+        "kind": "roof_module",
+        "x": 440,
+        "y": 344
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 344
+      },
+      {
+        "kind": "roof_module",
+        "x": 280,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 440,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 456,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 472
+      },
+      {
+        "kind": "roof_module",
+        "x": 728,
+        "y": 568
+      },
+      {
+        "kind": "roof_module",
+        "x": 744,
+        "y": 568
+      },
+      {
+        "kind": "roof_module",
+        "x": 888,
+        "y": 568
+      },
+      {
+        "kind": "roof_module",
+        "x": 952,
+        "y": 568
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 136,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 280,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 664,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 728,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 888,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 952,
+        "y": 600
+      },
+      {
+        "kind": "roof_module",
+        "x": 280,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 600,
+        "y": 632
+      },
+      {
+        "kind": "roof_module",
+        "x": 56,
+        "y": 664
+      },
+      {
+        "kind": "roof_module",
+        "x": 72,
+        "y": 664
+      },
+      {
+        "kind": "roof_module",
+        "x": 120,
+        "y": 664
+      },
+      {
+        "kind": "roof_module",
+        "x": 888,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 952,
+        "y": 728
+      },
+      {
+        "kind": "roof_module",
+        "x": 440,
+        "y": 760
+      },
+      {
+        "kind": "roof_module",
+        "x": 504,
+        "y": 760
+      },
+      {
+        "kind": "roof_module",
+        "x": 568,
+        "y": 760
+      },
+      {
+        "kind": "roof_module",
+        "x": 632,
+        "y": 760
+      },
+      {
+        "kind": "roof_module",
+        "x": 696,
+        "y": 760
+      },
+      {
+        "kind": "bench",
+        "x": 256,
+        "y": 120
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 104
+      },
+      {
+        "kind": "bench",
+        "x": 648,
+        "y": 104
+      },
+      {
+        "kind": "bin",
+        "x": 872,
+        "y": 104
+      },
+      {
+        "kind": "bench",
+        "x": 904,
+        "y": 104
+      },
+      {
+        "kind": "bench",
+        "x": 488,
+        "y": 136
+      },
+      {
+        "kind": "flowers",
+        "x": 648,
+        "y": 136
+      },
+      {
+        "kind": "street_sign",
+        "x": 264,
+        "y": 168
+      },
+      {
+        "kind": "bin",
+        "x": 296,
+        "y": 168
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 168
+      },
+      {
+        "kind": "flowers",
+        "x": 488,
+        "y": 168
+      },
+      {
+        "kind": "bench",
+        "x": 584,
+        "y": 168
+      },
+      {
+        "kind": "street_sign",
+        "x": 648,
+        "y": 168
+      },
+      {
+        "kind": "street_sign",
+        "x": 904,
+        "y": 168
+      },
+      {
+        "kind": "bench",
+        "x": 168,
+        "y": 200
+      },
+      {
+        "kind": "flowers",
+        "x": 584,
+        "y": 200
+      },
+      {
+        "kind": "street_sign",
+        "x": 744,
+        "y": 200
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 200
+      },
+      {
+        "kind": "street_sign",
+        "x": 872,
+        "y": 200
+      },
+      {
+        "kind": "bin",
+        "x": 904,
+        "y": 200
+      },
+      {
+        "kind": "flowers",
+        "x": 168,
+        "y": 232
+      },
+      {
+        "kind": "street_sign",
+        "x": 584,
+        "y": 232
+      },
+      {
+        "kind": "bin",
+        "x": 616,
+        "y": 232
+      },
+      {
+        "kind": "flowers",
+        "x": 744,
+        "y": 296
+      },
+      {
+        "kind": "street_sign",
+        "x": 776,
+        "y": 296
+      },
+      {
+        "kind": "bench",
+        "x": 168,
+        "y": 328
+      },
+      {
+        "kind": "bin",
+        "x": 264,
+        "y": 328
+      },
+      {
+        "kind": "street_sign",
+        "x": 488,
+        "y": 328
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 328
+      },
+      {
+        "kind": "street_sign",
+        "x": 744,
+        "y": 328
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 328
+      },
+      {
+        "kind": "bin",
+        "x": 904,
+        "y": 328
+      },
+      {
+        "kind": "flowers",
+        "x": 168,
+        "y": 360
+      },
+      {
+        "kind": "flowers",
+        "x": 296,
+        "y": 360
+      },
+      {
+        "kind": "street_sign",
+        "x": 328,
+        "y": 360
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 360
+      },
+      {
+        "kind": "flowers",
+        "x": 744,
+        "y": 424
+      },
+      {
+        "kind": "street_sign",
+        "x": 776,
+        "y": 424
+      },
+      {
+        "kind": "bench",
+        "x": 40,
+        "y": 456
+      },
+      {
+        "kind": "bench",
+        "x": 168,
+        "y": 456
+      },
+      {
+        "kind": "flowers",
+        "x": 328,
+        "y": 456
+      },
+      {
+        "kind": "bin",
+        "x": 648,
+        "y": 456
+      },
+      {
+        "kind": "street_sign",
+        "x": 744,
+        "y": 456
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 456
+      },
+      {
+        "kind": "flowers",
+        "x": 40,
+        "y": 488
+      },
+      {
+        "kind": "flowers",
+        "x": 168,
+        "y": 488
+      },
+      {
+        "kind": "street_sign",
+        "x": 328,
+        "y": 488
+      },
+      {
+        "kind": "flowers",
+        "x": 328,
+        "y": 584
+      },
+      {
+        "kind": "street_sign",
+        "x": 328,
+        "y": 616
+      },
+      {
+        "kind": "bench",
+        "x": 776,
+        "y": 616
+      },
+      {
+        "kind": "bin",
+        "x": 328,
+        "y": 648
+      },
+      {
+        "kind": "street_sign",
+        "x": 424,
+        "y": 648
+      },
+      {
+        "kind": "bin",
+        "x": 456,
+        "y": 648
+      },
+      {
+        "kind": "bench",
+        "x": 488,
+        "y": 648
+      },
+      {
+        "kind": "flowers",
+        "x": 648,
+        "y": 648
+      },
+      {
+        "kind": "bin",
+        "x": 168,
+        "y": 680
+      },
+      {
+        "kind": "street_sign",
+        "x": 264,
+        "y": 680
+      },
+      {
+        "kind": "bin",
+        "x": 296,
+        "y": 680
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 680
+      },
+      {
+        "kind": "bench",
+        "x": 40,
+        "y": 712
+      },
+      {
+        "kind": "street_sign",
+        "x": 744,
+        "y": 712
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 712
+      },
+      {
+        "kind": "flowers",
+        "x": 40,
+        "y": 744
+      },
+      {
+        "kind": "bench",
+        "x": 776,
+        "y": 744
+      },
+      {
+        "kind": "bin",
+        "x": 72,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 136,
+        "y": 776
+      },
+      {
+        "kind": "street_sign",
+        "x": 168,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 200,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 232,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 264,
+        "y": 776
+      },
+      {
+        "kind": "street_sign",
+        "x": 296,
+        "y": 776
+      },
+      {
+        "kind": "bin",
+        "x": 328,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 360,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 392,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 776,
+        "y": 776
+      },
+      {
+        "kind": "bench",
+        "x": 872,
+        "y": 776
+      },
+      {
+        "kind": "flowers",
+        "x": 104,
+        "y": 808
+      },
+      {
+        "kind": "street_sign",
+        "x": 776,
+        "y": 808
+      },
+      {
+        "kind": "flowers",
+        "x": 872,
+        "y": 808
+      }
+    ],
+    "new_oam_objects": 0,
+    "new_runtime_state_bytes": 0,
+    "collision_bytes_changed": 0,
+    "palette_priority_bytes_changed": 0,
+    "building_footprints_changed": 0,
+    "formal_corridors_protected": true
   }
 }

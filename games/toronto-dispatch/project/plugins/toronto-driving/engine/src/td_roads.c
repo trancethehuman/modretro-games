@@ -24,7 +24,7 @@ UBYTE td_road_body(UWORD u,UWORD v,UBYTE half) BANKED {
     return td_road_rectangle(left,right,top,bottom);
 }
 
-static UBYTE td_road_drivable(UWORD u,UWORD v){return td_road_body(u,v,5);}
+static UBYTE td_road_drivable(UWORD u,UWORD v){return td_road_body(u,v,7);}
 
 UBYTE td_road_sweep(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
     UBYTE left,right,top,bottom;
