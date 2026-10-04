@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "outcome": "passed-independent-dispatch-vehicle-package-audit",
+  "checks": 1621,
+  "checksByGroup": {
+    "source": 422,
+    "identity": 9,
+    "evidence": 42,
+    "limits": 7,
+    "package": 30,
+    "header": 3,
+    "resources": 56,
+    "licences": 12,
+    "guide": 7,
+    "toolchain": 8,
+    "privacy": 6,
+    "preservation": 5
+  },
+  "readOnlyObjectAndGuideChecks": {
+    "Git": 487,
+    "links": 70,
+    "documents": 45,
+    "source": 412
+  },
+  "findings": [],
+  "sourceCommit": "6e9cd46cc2a8af40a87dfc696283c08632261e28",
+  "projectTree": "b999c764870c8dc3aaaf5d8802b338264ea4f395",
+  "committedProjectInputs": 206,
+  "committedInputsEqualActualFrozenBuild": true,
+  "unchangedPredecessorInputs": 205,
+  "changedNativeFiles": [
+    "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_ui.c"
+  ],
+  "sourceFingerprint": "27513dd418728409d094aada3bf7dd5e65806bb186a27b6db2ecb06853fc541d",
+  "compilerSHA256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+  "engineABI": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f",
+  "package": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback-reviewed.zip",
+    "sizeBytes": 146249,
+    "sha256": "f897d7bf93eeb2c9baaed7304f10aea9c24e8af0c73173f1d42584f15f7b9b38",
+    "members": [
+      "BUILDINFO.json",
+      "LICENSE",
+      "LOADING.md",
+      "ROM_NOTICES.txt",
+      "SHA256SUMS",
+      "toronto-dispatch-vehicle-feedback.gbc"
+    ],
+    "memberSizes": {
+      "BUILDINFO.json": 1393,
+      "LICENSE": 1084,
+      "LOADING.md": 22232,
+      "ROM_NOTICES.txt": 6889,
+      "SHA256SUMS": 104,
+      "toronto-dispatch-vehicle-feedback.gbc": 1048576
+    },
+    "CRCVerified": true,
+    "localAndCentralRecordsVerified": true
+  },
+  "rom": {
+    "filename": "toronto-dispatch-vehicle-feedback.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0"
+  },
+  "noiSHA256": "db351f2bc6c419fc5cc3f847ff9858fd5e273cf23ca211c80a147f9d12accaeb",
+  "header": {
+    "CGBOnly": true,
+    "mapper": "MBC5+RUMBLE+RAM+BATTERY",
+    "ROMBytes": 1048576,
+    "SRAMBytes": 32768,
+    "headerChecksum": 232,
+    "globalChecksum": 22543
+  },
+  "frozenSourcePins": {
+    "path": "games/toronto-dispatch/project/build/dispatch-vehicle-source-pins.json",
+    "sizeBytes": 41613,
+    "sha256": "2d22e25334e69702b4ee38f365d00c897fdbff19086403ed1a71d5752932c9c9"
+  },
+  "officialBuildReceipt": {
+    "path": "games/toronto-dispatch/project/build/dispatch-vehicle-build.json",
+    "sizeBytes": 14036,
+    "sha256": "3fe034dc6e57b2c1aa8b8bee57a63bf1bf173ec5ba3969b195935b7afb3c8960"
+  },
+  "retainedCompiledAudit": {
+    "path": "games/toronto-dispatch/docs/DISPATCH_VEHICLE_BUILD_AUDIT.json",
+    "sizeBytes": 22469,
+    "sha256": "a2e106daf7e57e0d72f108ff93da070cc787683bad3f293d2cb83bfd080b6eef",
+    "checks": 602,
+    "rerun": false
+  },
+  "retainedNativeReview": {
+    "path": "games/toronto-dispatch/project/build/DISPATCH_VEHICLE_NATIVE_REVIEW.json",
+    "sizeBytes": 17410,
+    "sha256": "01c7b7516418775cca63ecf3f41e23c840c49005c748a130e0dbf271e5888ece",
+    "checks": 50,
+    "rerun": false
+  },
+  "nativePublicProjection": {
+    "path": "games/toronto-dispatch/docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json",
+    "sizeBytes": 305942,
+    "sha256": "9cf2c06831cb108d23d58c6926afcd3c74b45283e670aac55930ce69b8b007d4",
+    "jobs": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "credits": [
+      109,
+      123,
+      102,
+      141
+    ],
+    "curationChecks": 17791,
+    "nativeExecutionPerformedByPackageAudit": false
+  },
+  "loadingGuide": {
+    "committedSHA256": "5ff64a746368e59c7e4072021e49683766690ba27567dee9758e32bc975bd082",
+    "packagedSHA256": "14a0232ea592a2dc0598d4aead9a2240f7b29679c06fb1d46d94b2e7afc9ae4c",
+    "immutableRelativeLinksConverted": 25,
+    "targets": [
+      "games/toronto-dispatch/docs/BUILD.md",
+      "games/toronto-dispatch/docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json",
+      "games/toronto-dispatch/TESTING.md",
+      "docs/HARDWARE.md",
+      "games/toronto-dispatch/docs/BUILD.md",
+      "games/toronto-dispatch/TESTING.md",
+      "games/toronto-dispatch/docs/DISPATCH_VEHICLE_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json",
+      "games/toronto-dispatch/docs/FERRY_CLARITY_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json",
+      "games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json",
+      "games/toronto-dispatch/docs/NATIVE_TRAFFIC_INITIAL_REVIEW.json",
+      "games/toronto-dispatch/docs/MENU_INPUT_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json",
+      "games/toronto-dispatch/docs/NORTH_PACKAGE_AUDIT.json",
+      "games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json",
+      "games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json",
+      "games/toronto-dispatch/docs/NATIVE_NORTH_SUPPLEMENT.json",
+      "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+      "games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+      "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json",
+      "games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json",
+      "games/toronto-dispatch/TESTING.md"
+    ],
+    "frozenBeforeLaterPackageMetadata": true
+  },
+  "licences": {
+    "rootMITExact": true,
+    "ROMNoticesExact": true,
+    "completeMITSourcePaths": [
+      "LICENSE",
+      "games/toronto-dispatch/project/LICENSE",
+      "games/toronto-dispatch/project/ASSET_LICENSE",
+      "games/toronto-dispatch/docs/licenses/GBVM-MIT.txt"
+    ],
+    "CityOpenGovernmentLicenceAndDatasetsRetained": true
+  },
+  "capacity": {
+    "UIBank": 26,
+    "UIBytes": 16234,
+    "UIFreeBytes": 150,
+    "UIBankDeltaBytes": -28,
+    "mainBank": 25,
+    "mainFreeBytes": 10,
+    "policeHelperBank": 1,
+    "policeHelperFreeBytes": 1,
+    "allPackedBanksWithinLimit": true
+  },
+  "memory": {
+    "heapEnd": "0xdab8",
+    "stackBase": "0xdf00",
+    "staticReserveBytes": 1096,
+    "requiredReserveBytes": 1024,
+    "saveVersion": 10,
+    "savedStateBytes": 58,
+    "UIAutomaticFrameBytes": 52,
+    "exportedWRAMNamesCompared": 226,
+    "allExportedNamesAndAddressesUnchanged": true,
+    "DATABytes": 6621,
+    "INITIALIZEDBytes": 59,
+    "noTemporaryDiagnostics": true,
+    "maximumRuntimeStackMeasured": false
+  },
+  "predecessorZIPs": [
+    {
+      "filename": "toronto-dispatch-ferry-clarity.zip",
+      "sizeBytes": 146589,
+      "sha256": "5d2b70221cd411902ad250ec34d35854a93f7a6a4010097c2712b9a050c4735d",
+      "unchanged": true
+    },
+    {
+      "filename": "toronto-dispatch-right-hand-traffic-filter.zip",
+      "sizeBytes": 146040,
+      "sha256": "615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc",
+      "unchanged": true
+    },
+    {
+      "filename": "toronto-dispatch-menu-input-release.zip",
+      "sizeBytes": 139546,
+      "sha256": "65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f",
+      "unchanged": true
+    },
+    {
+      "filename": "toronto-dispatch-north-initial.zip",
+      "sizeBytes": 138530,
+      "sha256": "c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac",
+      "unchanged": true
+    }
+  ],
+  "limits": [
+    "Filesystem and immutable Git object reads only; no packaging, ROM rebuild, native/plugin/browser/device action, source/test edit or Git mutation.",
+    "All206 committed native inputs equal the actual frozen official build snapshot. Packaging itself does not establish an independent reproducible ROM build.",
+    "The existing602 compiled audit,17791 curation and50 independent native review remain separately pinned, not new checks or new native execution by this audit.",
+    "Native acceptance remains the exact four fresh jobs and disclosed caption/capture/reset scope in the linked record; older a935/e4a9 campaign evidence is separate.",
+    "No all104, two human hours, whole-city performance, peak runtime stack, native old-SRAM migration, cartridge writing, physical boot or physical save persistence acceptance.",
+    "Exactly six root files: no debug bundle, private raw evidence, opaque checkpoint/save state, activation or device state."
+  ],
+  "guideCorrection": {
+    "priorSourceCommit": "82840bc2e744381f67fe114265c7fbeaa3e3ad6a",
+    "priorZIP": {
+      "filename": "toronto-dispatch-vehicle-feedback.zip",
+      "sizeBytes": 146161,
+      "sha256": "58c0e89863e80e091db2ca994e77d1bddb1f3497321904976460f79a6d0dda35",
+      "preserved": true
+    },
+    "priorTechnicalAssertions": 1607,
+    "priorNeedsReviewReceipt": {
+      "path": "games/toronto-dispatch/project/build/DISPATCH_VEHICLE_PACKAGE_GUIDE_NEEDS_REVIEW.json",
+      "sizeBytes": 1948,
+      "sha256": "167d62f0c05b25f2259cb0b06743fb8bc1975644399edbe77cae015c4ce508ad"
+    },
+    "resolved": "Both stale selected-ferry descriptions are removed from the corrected committed guide; the exact same tested ROM is retained."
+  },
+  "ignoredAuditProvenance": {
+    "path": "games/toronto-dispatch/project/build/DISPATCH_VEHICLE_REVIEWED_PACKAGE_AUDIT.json",
+    "sizeBytes": 9146,
+    "sha256": "7e333505bfbdd4cce403730a098dc80298e5e217ea1b85a855d59dece5e2d5e8",
+    "published": false
+  }
+}
