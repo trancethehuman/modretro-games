@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "outcome": "passed-bounded-independent-ferry-package-audit",
+  "checks": 42,
+  "checksByGroup": {
+    "source": 8,
+    "build": 7,
+    "zip": 5,
+    "rom": 3,
+    "metadata": 3,
+    "guide": 3,
+    "licences": 4,
+    "native": 6,
+    "preservation": 2,
+    "privacy": 1
+  },
+  "findings": [],
+  "readOnly": true,
+  "sourceCommit": "f71d07e39d4f5d61ae06b06468a094d628e8164e",
+  "projectTree": "ed77d376b81930b4662dac5eaf0ff37292644193",
+  "committedProjectInputCount": 206,
+  "committedInputsEqualFrozenBuild": true,
+  "package": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.zip",
+    "bytes": 146589,
+    "sha256": "5d2b70221cd411902ad250ec34d35854a93f7a6a4010097c2712b9a050c4735d"
+  },
+  "rom": {
+    "filename": "toronto-dispatch-ferry-clarity.gbc",
+    "bytes": 1048576,
+    "sha256": "a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b"
+  },
+  "sourceFingerprint": "cc8e09b92f8debf7ec8769142dea7de18f30be73be1aebd8192eb8078cae5515",
+  "noiSha256": "7257787183e0d53689b53a10f043d8694703f95ce278fbc1ef9eb0b0abed4c94",
+  "memberInventory": [
+    {
+      "filename": "BUILDINFO.json",
+      "bytes": 1390,
+      "compressedBytes": 719,
+      "crc32": "0b20e334",
+      "sha256": "973a79fa5d679d5b208cdbb7e1aaf4ffd47ae9d51e61f28584d454cffd950394"
+    },
+    {
+      "filename": "LICENSE",
+      "bytes": 1084,
+      "compressedBytes": 638,
+      "crc32": "6d7c07ba",
+      "sha256": "bc3f699e44cae9cf4617aeea98254e0002e2264806742530e815e310a70f6710"
+    },
+    {
+      "filename": "LOADING.md",
+      "bytes": 22794,
+      "compressedBytes": 8628,
+      "crc32": "4ae792bc",
+      "sha256": "e0e5fd2c72eb4f5bdd078fc151c5e76b411224a5ae62458c5747d5ca1c4b717f"
+    },
+    {
+      "filename": "ROM_NOTICES.txt",
+      "bytes": 6889,
+      "compressedBytes": 1619,
+      "crc32": "358b878c",
+      "sha256": "a1c15d5f485f911e3f6166c826416be58f01f24a5f082257c41c5203355180d5"
+    },
+    {
+      "filename": "SHA256SUMS",
+      "bytes": 101,
+      "compressedBytes": 90,
+      "crc32": "e7421452",
+      "sha256": "b6fe3dda1108737a26844e5400e06ec72b4715548ff992d794bd2ca51c383764"
+    },
+    {
+      "filename": "toronto-dispatch-ferry-clarity.gbc",
+      "bytes": 1048576,
+      "compressedBytes": 134237,
+      "crc32": "1c1f263f",
+      "sha256": "a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b"
+    }
+  ],
+  "header": {
+    "title": "TORONTODISPATCH",
+    "cgbFlag": 192,
+    "mapperType": 30,
+    "romBytes": 1048576,
+    "ramBytes": 32768,
+    "headerChecksum": 232,
+    "globalChecksum": 19189,
+    "bothValid": true
+  },
+  "guide": {
+    "sourcePath": "games/toronto-dispatch/docs/LOADING.md",
+    "sourceSha256": "2e87aede734ecae0f86f11228c8a276ed6d1ba9d79bfc1ed87fd87ca490e2b8f",
+    "bundledSha256": "e0e5fd2c72eb4f5bdd078fc151c5e76b411224a5ae62458c5747d5ca1c4b717f",
+    "relativeLinkCount": 24,
+    "transformedCommittedGuideByteExact": true,
+    "links": [
+      {
+        "sourceTarget": "BUILD.md",
+        "committedPath": "games/toronto-dispatch/docs/BUILD.md",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/BUILD.md"
+      },
+      {
+        "sourceTarget": "NATIVE_FERRY_CLARITY.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json"
+      },
+      {
+        "sourceTarget": "../TESTING.md",
+        "committedPath": "games/toronto-dispatch/TESTING.md",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/TESTING.md"
+      },
+      {
+        "sourceTarget": "../../../docs/HARDWARE.md",
+        "committedPath": "docs/HARDWARE.md",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/docs/HARDWARE.md"
+      },
+      {
+        "sourceTarget": "RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json"
+      },
+      {
+        "sourceTarget": "MENU_INPUT_PACKAGE_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/MENU_INPUT_PACKAGE_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/MENU_INPUT_PACKAGE_AUDIT.json"
+      },
+      {
+        "sourceTarget": "../TESTING.md",
+        "committedPath": "games/toronto-dispatch/TESTING.md",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/TESTING.md"
+      },
+      {
+        "sourceTarget": "FERRY_CLARITY_BUILD_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/FERRY_CLARITY_BUILD_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/FERRY_CLARITY_BUILD_AUDIT.json"
+      },
+      {
+        "sourceTarget": "NATIVE_FERRY_CLARITY.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json"
+      },
+      {
+        "sourceTarget": "RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json"
+      },
+      {
+        "sourceTarget": "NATIVE_RIGHT_HAND_TRAFFIC.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json"
+      },
+      {
+        "sourceTarget": "NATIVE_TRAFFIC_INITIAL_REVIEW.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_TRAFFIC_INITIAL_REVIEW.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_TRAFFIC_INITIAL_REVIEW.json"
+      },
+      {
+        "sourceTarget": "MENU_INPUT_BUILD_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/MENU_INPUT_BUILD_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/MENU_INPUT_BUILD_AUDIT.json"
+      },
+      {
+        "sourceTarget": "NATIVE_MENU_INPUT_RELEASE.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json"
+      },
+      {
+        "sourceTarget": "NORTH_PACKAGE_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/NORTH_PACKAGE_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NORTH_PACKAGE_AUDIT.json"
+      },
+      {
+        "sourceTarget": "NORTH_BUILD_AUDIT.json",
+        "committedPath": "games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json"
+      },
+      {
+        "sourceTarget": "NATIVE_NORTH_FRESH.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json"
+      },
+      {
+        "sourceTarget": "NATIVE_NORTH_CONTINUED.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json"
+      },
+      {
+        "sourceTarget": "NATIVE_NORTH_SUPPLEMENT.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_NORTH_SUPPLEMENT.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_NORTH_SUPPLEMENT.json"
+      },
+      {
+        "sourceTarget": "NATIVE_UI_POLISH_SAMPLES.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json"
+      },
+      {
+        "sourceTarget": "NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json"
+      },
+      {
+        "sourceTarget": "NATIVE_TERRAIN_CACHE_COMPARISON.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json"
+      },
+      {
+        "sourceTarget": "NATIVE_COURIER_CHAIN_SAMPLES.json",
+        "committedPath": "games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json"
+      },
+      {
+        "sourceTarget": "../TESTING.md",
+        "committedPath": "games/toronto-dispatch/TESTING.md",
+        "url": "https://github.com/trancethehuman/modretro-games/blob/f71d07e39d4f5d61ae06b06468a094d628e8164e/games/toronto-dispatch/TESTING.md"
+      }
+    ],
+    "frozenBeforePackageMetadata": true
+  },
+  "licenses": {
+    "fullMITSources": [
+      "LICENSE",
+      "games/toronto-dispatch/project/LICENSE",
+      "games/toronto-dispatch/project/ASSET_LICENSE",
+      "games/toronto-dispatch/docs/licenses/GBVM-MIT.txt"
+    ],
+    "sourceNoticesPath": "games/toronto-dispatch/docs/ROM_NOTICES.txt",
+    "sourceNoticesSha256": "a1c15d5f485f911e3f6166c826416be58f01f24a5f082257c41c5203355180d5",
+    "fullUpstreamAndOGLRetained": true
+  },
+  "nativeBinding": {
+    "publicManifest": {
+      "path": "games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json",
+      "bytes": 302464,
+      "sha256": "a611fa2389b9b33e4bee06e991c5a84677f4d85612dd4051058a46511bdf8074"
+    },
+    "independentReview": {
+      "path": "games/toronto-dispatch/project/build/FERRY_CLARITY_NATIVE_REVIEW.json",
+      "bytes": 16704,
+      "sha256": "e5f0b16e277d58aef98ac42895cc6b1003b2bde086d6e9757bf4c2107998449f"
+    },
+    "sessionId": "ac9751ebc2f34590ac169aee69a3ad39",
+    "frames": 12525,
+    "events": 1462,
+    "eventDigest": "71e9087f53991bb7c99572a635b6b4d37fa923f729679287aebb7806cede3648",
+    "nativeAssertionsPreviouslyReviewed": 91,
+    "publishedOriginalPNGs": 8,
+    "scope": "Fresh exact-a935 ordinary-button ferry budgeting, low-cash recovery and one Market completion; independent from predecessor records.",
+    "notVerified": [
+      "whole 104-contract campaign",
+      "two measured enjoyable human hours",
+      "full Old Toronto",
+      "new-ROM police captures / North contract completion",
+      "browser UI",
+      "peak stack",
+      "physical cartridge write/boot/save/audio"
+    ]
+  },
+  "protectedPreviousPackages": [
+    {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.zip",
+      "bytes": 146040,
+      "sha256": "615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc",
+      "romSha256": "e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6",
+      "unchanged": true
+    },
+    {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-menu-input-release.zip",
+      "bytes": 139546,
+      "sha256": "65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f",
+      "romSha256": "7ccfa3b0532b2fa2f65f5198644c8f5ee3dc59df2b2e40034a3f1af954bdbeb9",
+      "unchanged": true
+    },
+    {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-north-initial.zip",
+      "bytes": 138530,
+      "sha256": "c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac",
+      "romSha256": "22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95",
+      "unchanged": true
+    }
+  ],
+  "limits": [
+    "Read-only local Git/blob, ZIP/source and retained evidence inspection only; no rebuild, packaging rewrite, native execution, browser or device actions.",
+    "Frozen guide/licences/notices stay at source f71d07e39d4f5d61ae06b06468a094d628e8164e and intentionally precede later package metadata; links were resolved from local committed blobs, without requiring remote publication.",
+    "206 committed inputs equal frozen official-build inputs. Packaging does not rebuild the ROM or prove reproducibility.",
+    "Fresh a935 native acceptance is limited to nine budget hints/locks, eight paid train fares, paid ferry/rejection/cancellation/scheduled assistance, original car, one Market delivery and genuine reset; predecessor police/campaign evidence is separate.",
+    "Native review retains missed-window wait, transient white arrival, wrong exact deadline/mode assertions and mistaken marker attempt; this package audit adds no executed frames.",
+    "Whole 104-contract campaign, two enjoyable human hours, full Old Toronto, peak runtime stack/performance and physical cartridge write/boot/save/audio remain unverified."
+  ],
+  "sourcePins": {
+    "path": "games/toronto-dispatch/project/build/ferry-clarity-source-pins.json",
+    "bytes": 41617,
+    "sha256": "e0df2193f223a195463012323b5836206d04945ed38284a9a1c429938ad4a86d"
+  },
+  "officialBuildReceipt": {
+    "path": "games/toronto-dispatch/project/build/ferry-clarity-build.json",
+    "bytes": 14019,
+    "sha256": "4f2cfa403a23ba1e9d79444c70a9380f69a7913bcc63e39861ab66e22e320210"
+  },
+  "publicBuildAudit": {
+    "path": "games/toronto-dispatch/docs/FERRY_CLARITY_BUILD_AUDIT.json",
+    "bytes": 19293,
+    "sha256": "3a9863f0d161e8c75314d9f3880b0954198d464c03c5d28f286c5c177dc0c492"
+  },
+  "resourceLimits": {
+    "savedStateBytes": 58,
+    "saveVersion": 10,
+    "staticReserveBytes": 1096,
+    "UIAutomaticFrameBytes": 52,
+    "UIBankFreeBytes": 122,
+    "mainBankFreeBytes": 10,
+    "policeHelperBankFreeBytes": 1,
+    "maximumRuntimeStackMeasured": false
+  },
+  "compiledProofSpans": {
+    "stopJobTransitTables": 6,
+    "UIAndFarCallSpans": 8
+  },
+  "ignoredAuditProvenance": {
+    "path": "games/toronto-dispatch/project/build/FERRY_CLARITY_PACKAGE_REVIEW.json",
+    "bytes": 23777,
+    "sha256": "9c1420fb9e037991626a783e4e2b6cb61b5f83cdaa5231f56d6f7690f6446ddb"
+  }
+}

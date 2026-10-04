@@ -23,7 +23,9 @@ games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The current ferry-clarity ROM has passed its own build/native gates; its distinct source-pinned loading bundle is prepared after the matching source is committed. Check that bundle's SHA256SUMS against the exact a935 digest above, and retain BUILDINFO, instructions, licence and notices.
+The current prepared local bundle is **`project/build/toronto-dispatch-ferry-clarity.zip`**, **146,589 bytes**, SHA-256 **`5d2b70221cd411902ad250ec34d35854a93f7a6a4010097c2712b9a050c4735d`**, pinned to source **`f71d07e39d4f5d61ae06b06468a094d628e8164e`**. Extract it and check SHA256SUMS against the exact a935 ROM digest above, retaining BUILDINFO, instructions, licence and notices. The bundled guide is intentionally frozen at that source commit before these later package details. The ZIP remains local; no new GitHub binary release is claimed.
+
+The current [independent package audit](FERRY_CLARITY_PACKAGE_AUDIT.json) passes 42 bounded assertions with zero findings, checking all six members, ROM/checksums, all 206 committed inputs and immutable guide/licence/notices. These package checks add no physical installation evidence.
 
 The retained local traffic bundle is **`project/build/toronto-dispatch-right-hand-traffic-filter.zip`**, **146,040 bytes**, SHA-256 **`615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc`**, pinned to source **`9b1017d762ac4289b2b66c730ad4c69e07c6b444`**. Its [independent package audit](RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json) passes 1,518 checks with zero findings. It contains the e4a9 traffic ROM, not the newer a935 UI follow-up. Its bundled guide remains frozen at that source commit. This local ZIP has not been published as a GitHub release.
 
