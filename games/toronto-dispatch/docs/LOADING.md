@@ -23,7 +23,7 @@ games/toronto-dispatch/project/build/toronto-dispatch-ui-polish-direct.gbc
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-For a supplied loading bundle, use `toronto-dispatch-ui-polish-direct.zip`. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the actual committed source and instructions. Do not substitute the older courier-clearance ZIP for this selected hash. Published Prototype 6 remains the separate older release linked under Evidence and older builds below.
+The prepared local loading bundle is `toronto-dispatch-ui-polish-direct.zip`, **130,616 bytes**, SHA-256 **`67b7412321d04d9385f9201451fcb8f2755084262042fcfcecc6c26aeb238c21`**, with source commit `9816ac43b9c6163882098189c5ac9c93943a70d6`. Its separate packaging audit passes 4,052 checks. Match the ROM inside it to the digest above and its `SHA256SUMS`; `BUILDINFO.json` identifies the actual committed source and instructions. Do not substitute the older courier-clearance ZIP for this selected hash. Published Prototype 6 remains the separate older release linked under Evidence and older builds below.
 
 For a source build, ask Codex:
 

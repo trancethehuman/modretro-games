@@ -278,7 +278,7 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [x] Build direct `03e09…` without fallback, with bank 2 at 16,380 / 16,384 bytes and 1,096 static reserve. Close a fresh [native replay](docs/NATIVE_UI_POLISH_SAMPLES.json) for active preview/resume/chords/exits, board/map freeze, immediate car HUD, interrupted-entry freeze/resume, one full-condition Market Start and in-worker SRAM recovery. First Art is accepted but its remote pickup is rejected and stays stage 0.
 - [x] Pass independent compiled/raw native reviews with 597 / 5,253 checks.
 - [x] Audit one separate fresh 03e09 Core timing trial: 385 completed loops / 1,080 VBlanks, then 80 / 240 under A60/A60/B60/neutral60. Its 1,085-check audit retains exact 24 intervals / 92 memory receipts/one OAM; older 825 repeats and gain comparisons remain separate.
-- [ ] Finish public projection review and the new committed loading package. Keep the historical e797 22-completion campaign and 825 performance gains separate; broader contracts/regions/Island jobs, full Old Toronto, measured enjoyable human duration, deepest stack/pacing, browser and physical acceptance remain pending.
+- [x] Public projection review passes 481 checks; the prepared source-pinned loading ZIP passes 4,052 independent package checks. Keep the historical e797 22-completion campaign and 825 performance gains separate; broader contracts/regions/Island jobs, full Old Toronto, measured enjoyable human duration, deepest stack/pacing, browser and physical acceptance remain pending.
 
 ## Device milestone
 
