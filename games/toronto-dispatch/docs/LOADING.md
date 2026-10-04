@@ -27,7 +27,7 @@ games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The loading bundle filename is **`project/build/toronto-dispatch-driving-only-reviewed.zip`**. Extract it and verify `SHA256SUMS` against the selected 8be1 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching source commit; the bundled guide remains frozen at that revision. Preserve the earlier 7ab vehicle-feedback reviewed ZIP unchanged. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
+The loading bundle filename is **`project/build/toronto-dispatch-driving-only-reviewed.zip`**. The reviewed ZIP is **146,497 bytes**, SHA-256 **`fe672246e433ec6ca48b52c49c61ec833f65d223bfbbce334c0051e47951a0b4`**, frozen at matching source **`de96a675e90d0941c0ac4acc62d62223e6cdcc5f`**; its [package check](DRIVING_ONLY_PACKAGE_AUDIT.json) passes 300 bounded assertions. Extract it and verify `SHA256SUMS` against the selected 8be1 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching source commit; the bundled guide remains frozen at that revision. Preserve the earlier 7ab vehicle-feedback reviewed ZIP unchanged. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
 
 For a source build, ask Codex:
 

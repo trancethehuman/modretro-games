@@ -8,7 +8,7 @@ Original 160 × 144 frames from the retained `7ab28…` ROM. The [North](docs/NA
 
 ## Play and install
 
-Use the [Chromatic loading guide](docs/LOADING.md). The selected local ROM is **`toronto-dispatch-driving-only.gbc`**, 1,048,576 bytes, SHA-256 `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`, with distinct **`project/build/toronto-dispatch-driving-only-reviewed.zip`** instructions/checksums/licences. Generated binaries stay outside Git. The prior 7ab reviewed bundle and its sixteen-job evidence remain preserved at their original identities.
+Use the [Chromatic loading guide](docs/LOADING.md). The selected local ROM is **`toronto-dispatch-driving-only.gbc`**, 1,048,576 bytes, SHA-256 `8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`, with reviewed **`project/build/toronto-dispatch-driving-only-reviewed.zip`**, 146,497 bytes, SHA-256 `fe672246e433ec6ca48b52c49c61ec833f65d223bfbbce334c0051e47951a0b4`, containing instructions/checksums/licences frozen at source `de96a675e90d0941c0ac4acc62d62223e6cdcc5f`. The [package check](docs/DRIVING_ONLY_PACKAGE_AUDIT.json) passes. Generated binaries stay outside Git. The prior 7ab reviewed bundle and its sixteen-job evidence remain preserved at their original identities.
 
 | Action | Controls |
 | --- | --- |

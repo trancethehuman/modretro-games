@@ -6,7 +6,7 @@ Selected local ROM **`toronto-dispatch-driving-only.gbc`** is **1,048,576 bytes*
 
 The [fresh native replay](NATIVE_DRIVING_ONLY_WARNING.json) completes four unique jobs 0/2/1/3, renders DRIVE FOR THIS JOB before/after freight pickup, preserves original truck entry, and verifies the later funded H3 fine and committed in-worker reset. Passenger-specific new-ROM refusal, the full 104 campaign, two enjoyable measured human hours, wider stack/performance and hardware remain pending. Earlier7ab sixteen-job/all-eight-kind/seven-scene tests retain their own identity; no checkpoint crosses this rebuild.
 
-Prepare the distinct local `project/build/toronto-dispatch-driving-only-reviewed.zip` after committing matching inputs, freezing the [loading guide](LOADING.md), licences and build identity at that source revision. Preserve all prior ROMs and ZIPs.
+Prepared local **`project/build/toronto-dispatch-driving-only-reviewed.zip`** is **146,497 bytes**, SHA-256 **`fe672246e433ec6ca48b52c49c61ec833f65d223bfbbce334c0051e47951a0b4`**, frozen at matching source **`de96a675e90d0941c0ac4acc62d62223e6cdcc5f`**. It contains the exact tested 8be1 ROM, checksums, BUILDINFO, the loading guide and licences. All 206 committed native inputs match the build snapshot; the [independent package check](DRIVING_ONLY_PACKAGE_AUDIT.json) passes 300 bounded assertions. The bundled guide stays frozen at that source commit, before these later package metadata. Prior binaries/ZIPs remain unchanged; this is a local bundle, separate from a GitHub binary release.
 
 ## Retained vehicle-feedback build
 

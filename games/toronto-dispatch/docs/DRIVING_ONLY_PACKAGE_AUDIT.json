@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "local-reviewed-loading-package-only",
+  "outcome": "passed",
+  "checks": 300,
+  "archive": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-driving-only-reviewed.zip",
+    "sizeBytes": 146497,
+    "sha256": "fe672246e433ec6ca48b52c49c61ec833f65d223bfbbce334c0051e47951a0b4"
+  },
+  "rom": {
+    "filename": "toronto-dispatch-driving-only.gbc",
+    "sha256": "8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb",
+    "sizeBytes": 1048576
+  },
+  "sourceCommit": "de96a675e90d0941c0ac4acc62d62223e6cdcc5f",
+  "committedNativeInputsVerified": 206,
+  "members": [
+    {
+      "name": "BUILDINFO.json",
+      "sizeBytes": 1389,
+      "sha256": "0c7a841f72eb422698bbf5378b4b6f98cbc2b7c4a66b49a9464f46f956b654a0"
+    },
+    {
+      "name": "LICENSE",
+      "sizeBytes": 1084,
+      "sha256": "bc3f699e44cae9cf4617aeea98254e0002e2264806742530e815e310a70f6710"
+    },
+    {
+      "name": "LOADING.md",
+      "sizeBytes": 22740,
+      "sha256": "27a5b1cb7f8197ac3aae344da0aa9d78537bf45e1d9cd91512104dbccb70722b"
+    },
+    {
+      "name": "ROM_NOTICES.txt",
+      "sizeBytes": 6889,
+      "sha256": "a1c15d5f485f911e3f6166c826416be58f01f24a5f082257c41c5203355180d5"
+    },
+    {
+      "name": "SHA256SUMS",
+      "sizeBytes": 100,
+      "sha256": "be33a67802600c3557a8d6577a9671d8db1328b3bc55d12a2f3ee59089a732f5"
+    },
+    {
+      "name": "toronto-dispatch-driving-only.gbc",
+      "sizeBytes": 1048576,
+      "sha256": "8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb"
+    }
+  ],
+  "portableFrozenSourceLinks": [
+    "games/toronto-dispatch/docs/NATIVE_DRIVING_ONLY_WARNING.json",
+    "games/toronto-dispatch/docs/BUILD.md",
+    "games/toronto-dispatch/TESTING.md",
+    "docs/HARDWARE.md",
+    "games/toronto-dispatch/TESTING.md",
+    "games/toronto-dispatch/docs/DRIVING_ONLY_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_DRIVING_ONLY_WARNING.json",
+    "games/toronto-dispatch/docs/FERRY_CLARITY_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_FERRY_CLARITY.json",
+    "games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json",
+    "games/toronto-dispatch/docs/NATIVE_TRAFFIC_INITIAL_REVIEW.json",
+    "games/toronto-dispatch/docs/MENU_INPUT_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json",
+    "games/toronto-dispatch/docs/NORTH_PACKAGE_AUDIT.json",
+    "games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_SUPPLEMENT.json",
+    "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+    "games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+    "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json",
+    "games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json",
+    "games/toronto-dispatch/TESTING.md"
+  ],
+  "limits": [
+    "Packages exact tested ROM; does not build or add native gameplay evidence",
+    "Current8be1 fresh four jobs; predecessor7ab sixteen-job record remains separate",
+    "Native older-save imports/full104/two enjoyable human hours/browser/performance/hardware pending",
+    "Known host-reproduced partial-entry reset overlap documented with A recovery",
+    "No physical stream or cartridge write dispatched"
+  ]
+}
