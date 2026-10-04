@@ -59,7 +59,8 @@ static td_police_plan_t td_police_waypoint;
 static UWORD td_police_from_u,td_police_from_v;
 static UBYTE td_police_stuck;
 static UBYTE td_input_edge;
-/* Closing a result consumes its brake button until the player releases it. */
+/* Held menu buttons stay consumed until individually released. Reuse the
+   original RESULT byte as a bitmask; this remains transient across cold boot. */
 static UBYTE td_result_b_release;
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v);
 
@@ -70,7 +71,7 @@ static void td_position(actor_t *a,UWORD u,UWORD v){
 }
 static void td_frame(actor_t *a,UBYTE f){if(a->frame_start!=f||a->frame_end!=f+1)actor_set_frames(a,f,f+1);a->anim_tick=255;}
 static void td_message(UBYTE m){td.msg=m;td_notice_timer=90;if(m==5||m==13||m==19)td_audio_play(TD_AUDIO_IMPACT);td_ui_draw();}
-static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!(INPUT_B&&!td_result_b_release),td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
+static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!(INPUT_B&&!(td_result_b_release&J_B)),td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
 static UBYTE td_near(td_stop_t *s){return s->district==td.district&&td_distance(td.u>>4,s->u)<15&&td_distance(td.v>>4,s->v)<15;}
 
 /* Terrain cache queries live in their own banked unit. */
@@ -248,7 +249,6 @@ static void td_menu_update(void){
         return;
     }
     if(INPUT_B_PRESSED||INPUT_START_PRESSED){
-        if(td.mode==TD_RESULT&&INPUT_B_PRESSED)td_result_b_release=1;
         td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;
     }
     if(td.mode==TD_PAUSE){
@@ -566,8 +566,8 @@ static void td_drive(td_terrain_cache_t *cache){
         if(td.job!=TD_NONE&&td.stage&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
     }}
     else td_turn_tick=0;
-    if(INPUT_B&&!td_result_b_release){if(td_tick%2==0&&td.speed>-6)td.speed--;}
-    else if(INPUT_A){if(td_tick%4==0&&td.speed<limit)td.speed++;}
+    if(INPUT_B&&!(td_result_b_release&J_B)){if(td_tick%2==0&&td.speed>-6)td.speed--;}
+    else if(INPUT_A&&!(td_result_b_release&J_A)){if(td_tick%4==0&&td.speed<limit)td.speed++;}
     else if(td_tick%8==0){if(td.speed>0)td.speed--;else if(td.speed<0)td.speed++;}
     // Traction eases velocity toward heading instead of instantly rotating momentum.
     target_x=td_dx[td.heading]*td.speed;target_y=td_dy[td.heading]*td.speed;
@@ -592,7 +592,12 @@ static void td_drive(td_terrain_cache_t *cache){
         // A glancing curb contact slides along the free axis and preserves forward speed.
         if(nu!=(WORD)td.u&&td_terrain_drivable(nu>>4,td.v>>4,cache)){td.u=nu;td_vy=0;slide=1;}
         if(nv!=(WORD)td.v&&td_terrain_drivable(td.u>>4,nv>>4,cache)){td.v=nv;td_vx=0;slide=1;}
-        if(!slide)slide=td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,nu,nv);
+        if(!slide){
+            UBYTE held=joy;
+            joy&=~(td_result_b_release&(J_A|J_B));
+            slide=td_road_corner(&td,&td_vx,&td_vy,&td_corner_used,nu,nv);
+            joy=held;
+        }
         /* Remove only blocked-axis motion. Repeated curb scrapes must not beat the throttle. */
         if(slide){if(speed>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
         else{
@@ -671,11 +676,11 @@ void toronto_update(void) BANKED {
     td_aircraft_render_restore();
     if(td_transition_pending){td_last_frame=sys_time;if(td_transition_pending==2&&td_district_queue(td_transition_district))td_transition_pending=1;return;}
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
-    if(td_result_b_release&&!INPUT_B)td_result_b_release=0;
+    td_result_b_release&=joy;
     tram_elapsed=elapsed;
     td_corner_used=0;
     motion=elapsed>4?4:elapsed;
-    if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE){td_menu_update();td_sound_update();return;}
+    if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE){td_result_b_release=joy;td_menu_update();td_sound_update();return;}
     if(INPUT_START_PRESSED){td_resume_mode=td.mode;td.mode=TD_PAUSE;td.menu=0;td_audio_play(TD_AUDIO_MENU);td_ui_draw();td_sound_update();return;}
     /* A deliberate cancel wins over departure on the same input frame. */
     if(td.mode==TD_WAIT&&INPUT_B_PRESSED){td.mode=TD_ROAM;consumed=1;td_save();td_ui_draw();}

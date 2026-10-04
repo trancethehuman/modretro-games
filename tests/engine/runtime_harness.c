@@ -1158,10 +1158,13 @@ static void test_result_b_release(void) {
 
     /* B is released while a frozen menu is open, before its B exit handler. */
     world_tick(0,1);world_tick(J_B,1);
-    expect(td.mode==TD_ROAM&&td.speed==0&&audio_braking,
-           "release sampled in PAUSE permits its fresh B exit without arming a RESULT guard");
+    expect(td.mode==TD_ROAM&&td.speed==0&&!audio_braking,
+           "a fresh PAUSE B exit consumes its own held brake input after the earlier RESULT release");
     for(unsigned update=0;update<8;update++)world_tick(J_B,4);
-    expect(td.speed<0,"B held after an ordinary PAUSE exit retains the existing reverse control");
+    expect(td.speed==0&&!audio_braking,"ordinary PAUSE B stays consumed until its physical release");
+    world_tick(0,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"a fresh brake press after PAUSE B release restores reverse control");
 
     result_input_case(FALSE,0);
     world_tick(J_B,1);world_tick(J_B|J_START,1);
@@ -1174,7 +1177,10 @@ static void test_result_b_release(void) {
     world_tick(J_B,1);world_tick(J_B|J_START,1);
     expect(td.mode==TD_ROAM,"fresh map B and pause START preserve the existing two-stage map exit");
     for(unsigned update=0;update<8;update++)world_tick(J_B,4);
-    expect(td.speed<0&&audio_braking,"map-sampled B release restores reverse when gameplay resumes");
+    expect(td.speed==0&&!audio_braking,"the map-close B remains consumed through the subsequent PAUSE START exit");
+    world_tick(0,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"a newly pressed brake after map and pause exits still reverses normally");
 
     result_input_case(TRUE,0);world_tick(J_START,1);
     expect(td.mode==TD_ROAM,"RESULT START retains its ordinary free-roam exit");
@@ -1185,8 +1191,11 @@ static void test_result_b_release(void) {
     expect(td.mode==TD_BOARD&&td.job==TD_NONE,"RESULT A still opens dispatch without automatically accepting work");
     world_tick(J_B,1);
     for(unsigned update=0;update<8;update++)world_tick(J_B,4);
-    expect(td.mode==TD_ROAM&&td.speed<0&&audio_braking,
-           "ordinary dispatch B exit does not inherit RESULT-only brake suppression");
+    expect(td.mode==TD_ROAM&&td.speed==0&&!audio_braking,
+           "ordinary dispatch B exit consumes its own held brake input");
+    world_tick(0,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"a released and newly pressed dispatch brake still restores reverse");
 
     result_input_case(TRUE,1);world_tick(J_B,1);
     UWORD foot_u=td.u,foot_v=td.v;
@@ -1227,13 +1236,120 @@ static void test_result_release_initialization_and_save(void) {
     memset(&td,0,sizeof(td));td_session_live=0;actors_inactive_head=NULL;toronto_init();
     expect(td.mode==TD_HELP&&td.cash==saved_cash&&td.done==saved_done&&td.job==TD_NONE&&td.speed==0,
            "cold initialization restores the committed result outcome behind ordinary help");
-    /* No sampled B release: A is newly pressed while B remains held. Cold
-       initialization must not recover a transient guard from the save. */
+    /* Cold initialization clears transient input state; the new HELP exit
+       must consume its own A/B chord rather than reconstructing it from SRAM. */
     world_tick(J_A|J_B,1);
     expect(td.mode==TD_ROAM,"ordinary help A dismisses the cold-start screen with B still held");
     for(unsigned update=0;update<8;update++)world_tick(J_B,4);
-    expect(td.speed<0&&audio_braking&&td.cash==saved_cash&&td.done==saved_done,
-           "cold reset clears transient RESULT suppression without losing saved earnings or completion");
+    expect(td.speed==0&&!audio_braking&&td.cash==saved_cash&&td.done==saved_done,
+           "cold HELP consumes its own dismissal chord without losing saved earnings or completion");
+    world_tick(0,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.speed<0&&audio_braking,"a fresh brake after cold HELP release still restores reverse");
+}
+
+static void test_menu_held_drive_buttons(void) {
+    const struct { UBYTE mode,menu,buttons,active; } cases[]={
+        {TD_PAUSE,0,J_B,1},{TD_PAUSE,0,J_A,1},
+        {TD_PAUSE,0,J_A|J_B,1},{TD_PAUSE,0,J_B|J_START,1},
+        {TD_PAUSE,0,J_A|J_START,1},{TD_PAUSE,6,J_A,1},
+        {TD_PAUSE,7,J_A,1},{TD_BOARD,0,J_B,1},
+        {TD_BOARD,0,J_A,1},{TD_BOARD,0,J_A,0},
+        {TD_HELP,0,J_A,1},{TD_HELP,0,J_B,1},{TD_HELP,0,J_A|J_B,1}
+    };
+    /* Actual menu/driver/clock/traffic/audio functions on clear ground with
+       distant bodies isolate input leakage from collision consequences. */
+    for(unsigned index=0;index<sizeof(cases)/sizeof(cases[0]);index++) {
+        reset_case();td.mode=cases[index].mode;td.menu=cases[index].menu;
+        td_resume_mode=TD_ROAM;td_get_job(0,&td_job);td_offer=td_job;
+        if(cases[index].active){td.job=0;td.stage=1;td.left=180;td.health=68;}
+        td_traffic_u[0]=100*16;td_traffic_v[0]=280*16;
+        UWORD u=td.u,v=td.v,cash=td.cash,fleet_u=td_traffic_u[0];
+        world_tick(cases[index].buttons,1);
+        expect(td.mode==TD_ROAM&&td.speed==0&&!audio_braking,
+               "menu exit returns to stopped ROAM without treating its held button as a brake");
+        UBYTE job=td.job,stage=td.stage,health=td.health;UWORD deadline=td.left;
+        if(cases[index].mode==TD_BOARD&&!cases[index].active)
+            expect(job==0&&stage==0&&health==100&&deadline==120,
+                   "held-A dispatch fixture accepts a real fresh contract through the menu handler");
+        for(unsigned update=0;update<30;update++) {
+            world_tick(cases[index].buttons&(J_A|J_B),4);
+            expect(td.mode==TD_ROAM&&td.u==u&&td.v==v&&td.speed==0&&td_vx==0&&td_vy==0,
+                   "held menu A/B never accelerates or reverses a stopped courier after returning to ROAM");
+            expect(audio_active&&!audio_braking,
+                   "consumed menu inputs retain active world audio without brake audio");
+        }
+        expect(td.seconds==2&&td.subsecond==0&&td_traffic_u[0]>fleet_u&&
+               td.cash==cash&&td.job==job&&td.stage==stage&&td.health==health&&
+               (job==TD_NONE||td.left==deadline-2),
+               "consumed menu input leaves traffic and the deadline live without changing cargo or money");
+        world_tick(0,1);
+        for(unsigned update=0;update<8;update++)world_tick(J_A,4);
+        expect(td.speed>0&&td.u>u&&!audio_braking,
+               "release followed by fresh A restores acceleration after every menu exit");
+        world_tick(0,1);
+        for(unsigned update=0;update<24;update++)world_tick(J_B,4);
+        expect(td.speed<0&&audio_braking,
+               "fresh B brakes through rest and restores reverse after every menu exit");
+    }
+
+    /* Reproduce the native North rejection/close inputs and exact pose;
+       registered job data is real, while clear terrain/distant fleet keeps
+       this regression about the input contract rather than native rendering. */
+    native_case();geometry=CLEAR_GROUND;test_current_district=td.district=TD_DISTRICT_NORTH;
+    td.u=td.safe_u=406*16+9;td.v=td.safe_v=637*16+8;td.heading=4;
+    td.job=97;td_get_job(td.job,&td_job);td.stage=1;td.health=68;td.left=150;
+    td.mode=TD_PAUSE;td.menu=4;td_resume_mode=TD_ROAM;
+    UWORD north_u=td.u,north_v=td.v;UBYTE vehicle=td.vehicle;
+    world_tick(J_A,8);
+    expect(td.mode==TD_PAUSE&&td.msg==2&&td.vehicle==vehicle&&td.health==68,
+           "active North fragile work rejects the actual vehicle selector without altering its condition");
+    world_tick(0,8);world_tick(J_B,8);world_tick(0,8);
+    expect(td.mode==TD_ROAM&&td.u==north_u&&td.v==north_v&&td.speed==0&&td.health==68,
+           "North vehicle rejection followed by B8 and neutral8 never produces inherited reverse");
+
+    reset_case();td.mode=TD_HELP;td_resume_mode=TD_ROAM;
+    world_tick(J_A|J_B,1);world_tick(J_B,4);
+    for(unsigned update=0;update<8;update++)world_tick(J_A|J_B,4);
+    expect(td.speed>0&&!audio_braking,
+           "fresh A works while only the unreleased menu B remains consumed");
+    reset_case();td.mode=TD_HELP;td_resume_mode=TD_ROAM;
+    world_tick(J_A|J_B,1);world_tick(J_A,4);
+    for(unsigned update=0;update<8;update++)world_tick(J_A|J_B,4);
+    expect(td.speed<0&&audio_braking,
+           "fresh B works while only the unreleased menu A remains consumed");
+
+    reset_case();td.speed=24;td_vx=384;UWORD moving_u=td.u;
+    world_tick(J_START,1);world_tick(0,1);world_tick(J_A|J_RIGHT,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_A|J_RIGHT,4);
+    expect(td.mode==TD_ROAM&&td.u>moving_u&&td.speed>0&&td.speed<24&&td.heading!=0&&td.subsecond==32,
+           "consumed resume throttle preserves coasting, steering and the active world clock");
+
+    reset_case();td.onfoot=1;td.park_u=td.u;td.park_v=td.v;
+    world_tick(J_A,4);
+    for(unsigned update=0;update<12;update++)world_tick(J_A,4);
+    expect(!td.onfoot&&!td_entry_timer&&td.speed>0,
+           "ordinary ROAM A entry still finishes and accelerates while A remains held");
+
+    reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;
+    td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
+    world_tick(J_A,1);world_tick(J_A,1);
+    expect(!td_corner_used&&td.u==404*16&&td.v==394*16&&td.speed==0&&joy==J_A,
+           "consumed menu A cannot trigger throttle-only corner assistance while the car coasts into a wall");
+    reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;
+    td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
+    world_tick(J_B,1);world_tick(J_A|J_B,1);
+    expect(td_corner_used&&td.u==405*16&&td.v>394*16&&td.speed==16&&joy==(J_A|J_B),
+           "fresh A retains corner assistance despite a consumed menu B and restores the sampled hardware input");
+
+    reset_case();stop0_here=1;td.onfoot=1;td.mode=TD_TRANSIT;
+    td.transit_origin=0;td.transit_target=12;
+    world_tick(J_B,1);
+    for(unsigned update=0;update<8;update++)world_tick(J_B,4);
+    expect(td.mode==TD_ROAM&&td.onfoot&&td.cash==30,
+           "held transit-menu B returns to walking without reopening the menu or charging a fare");
+    world_tick(0,1);world_tick(J_B,1);
+    expect(td.mode==TD_TRANSIT,"fresh B after transit-menu cancellation still opens a nearby service");
 }
 
 /* Independently authored expectations for every boarding origin, including
@@ -3643,6 +3759,7 @@ int main(void) {
     test_pickup_damage_lifecycle();
     test_finished_job_target();
     test_result_b_release();test_result_release_initialization_and_save();
+    test_menu_held_drive_buttons();
     test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
     test_safe_transit_alighting();
     test_cross_district_streetcar();
