@@ -6,6 +6,8 @@ A north-up, top-down pixel-art courier sandbox for ModRetro Chromatic / Game Boy
 
 Latest local playtest candidate is `project/build/toronto-dispatch-right-hand-traffic-filter.gbc`, **1,048,576 bytes**, SHA-256 **`e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6`**. Official build, full source checks and compiled lane/ABI review pass. Follow the [Chromatic loading guide](docs/LOADING.md), [build record](docs/BUILD.md) and [fresh native record](docs/NATIVE_RIGHT_HAND_TRAFFIC.json). This exact ROM completes three unique deliveries and samples escalating pursuit, cash-zero recovery, paid North train trips, walking/car entry, map controls and in-worker save restoration. Generated ROMs stay out of Git. Published [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) and older local packages retain their own identities.
 
+Prepared local `project/build/toronto-dispatch-right-hand-traffic-filter.zip` contains this tested ROM, checksums and loading instructions. It is 146,040 bytes / SHA-256 `615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc`, pinned to source `9b1017d762ac4289b2b66c730ad4c69e07c6b444`. [Independent package review](docs/RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json) passes 1,518 checks; the bundle remains local rather than a published GitHub release.
+
 | Action | Controls |
 | --- | --- |
 | Drive | A accelerates; left/right steer; B brakes and then reverses near rest |
