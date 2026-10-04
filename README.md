@@ -4,7 +4,7 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven compressed Toronto districts, 104 contracts, walking/driving and scheduled transit | Playable local candidate. Native tests reach 14 distinct completions across separate same-ROM checkpoint continuations, representing all eight job types. Full campaign, human pacing and hardware testing remain open. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven compressed Toronto districts, 104 contracts, walking/driving and scheduled transit | Playable local candidate. Native tests reach 16 distinct completions across separate same-ROM checkpoint continuations, representing all eight job types. Full campaign, human pacing and hardware testing remain open. |
 
 ## Toronto Dispatch
 
@@ -18,7 +18,7 @@ Original 160 × 144 frames from the current `7ab28…` ROM, at frames 63,970 and
 
 Read the [game guide and controls](games/toronto-dispatch/README.md) and [Chromatic loading instructions](games/toronto-dispatch/docs/LOADING.md). The reviewed local loading bundle is `games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback-reviewed.zip`; generated binaries stay outside Git. It contains the tested 1 MiB `toronto-dispatch-vehicle-feedback.gbc`, SHA-256 `7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`.
 
-Official compilation and repository checks pass. A [fresh native run](games/toronto-dispatch/docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes four jobs; later continuations add vehicle, passenger, North, relay and Island coverage. The [testing record](games/toronto-dispatch/TESTING.md) separates exact-ROM results, retained failures and controller corrections. All 104 played contracts, two measured enjoyable human hours, wider performance/stack, browser recovery and physical stream/flash/cold-boot/save persistence remain pending. [Published Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is an older, separate build.
+Official compilation and repository checks pass. A [fresh native run](games/toronto-dispatch/docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes four jobs; later continuations add vehicle, passenger, North, relay, Island and [East/Port coverage](games/toronto-dispatch/docs/NATIVE_EAST_PORT_CURRENT_CONTINUATION.json). The [testing record](games/toronto-dispatch/TESTING.md) separates exact-ROM results, retained failures and controller corrections. All 104 played contracts, two measured enjoyable human hours, wider performance/stack, browser recovery and physical stream/flash/cold-boot/save persistence remain pending. [Published Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is an older, separate build.
 
 ## Develop
 
