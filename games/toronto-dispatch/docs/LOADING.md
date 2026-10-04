@@ -4,6 +4,8 @@ Select the latest local playtest candidate, **`toronto-dispatch-vehicle-feedback
 
 This build retains the city, right-hand traffic, escalating pursuit/penalties, menu-button handling and ferry guidance. Its UI-only correction shows WRONG VEHICLE for eligible incomplete jobs until you occupy the required vehicle. Its own fresh native replay completes four unique jobs, checks rejection and truck acceptance, a funded H3 fine and committed in-worker reset. Official build and full source checks pass. The earlier a935 ferry recovery and feedback-finding records remain separate. These scopes do not prove every contract, two enjoyable human hours or physical installation. Detailed [build](BUILD.md), [current native evidence](NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) and [test scopes](../TESTING.md) remain separate from physical verification.
 
+A separate [same-ROM continuation](NATIVE_DISPATCH_WEST_CONTINUATION.json) restores the genuine four-job checkpoint and adds only Signed and Sealed and West Window Run. It verifies the ordered Union return, both Core–West crossings with carried cargo, and recovery after a police stop drains the remaining cash. Credits are 131 and 74, ending with six unique completions / $74 and a neutral continuation checkpoint. This adds no new reset, performance, human-duration or hardware evidence. The ROM and source-pinned loading bundle remain unchanged.
+
 ## 1. Prepare the computer and console
 
 1. Install the ModRetro Chromatic plugin in Codex on the Mac connected to the console. It is already installed in this project owner's current setup. Open this repository as the project.

@@ -4,7 +4,7 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Current status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven authored Toronto districts, 104 contracts, walking/driving and scheduled transit | Vehicle feedback candidate passes a fresh four-job replay, clear truck eligibility, funded police fine and saved-progress reset. Full campaign, two enjoyable human hours and hardware remain pending. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven authored Toronto districts, 104 contracts, walking/driving and scheduled transit | Vehicle feedback candidate passes a fresh four-job replay, truck eligibility, police fine and saved-progress reset; a separate same-ROM continuation adds signed-return and West work for six unique completions. Full campaign, two enjoyable human hours and hardware remain pending. |
 
 Current editable source contains 344 buildings, 657 pedestrian routes, 64 service points, nine parking anchors and four player vehicles. Explore compressed mainland neighbourhoods, Port Lands industry/bridges, public walking Islands and Casa Loma/Summerhill/St Clair. Momentum/braking, pedestrians and police consequences, scheduled train/bus/Queen/ferry travel, a scrollable atlas, original audio and save v10 / 58-byte progression are implemented. The old 96 contracts and 59 stops remain unchanged.
 
@@ -15,6 +15,8 @@ Original 160 × 144 emulator frames from the retained `e4a9…` traffic ROM: Cor
 ## Play or load
 
 Read the [controls and features](games/toronto-dispatch/README.md) and [Chromatic loading guide](games/toronto-dispatch/docs/LOADING.md). Latest local playtest candidate is `toronto-dispatch-vehicle-feedback.gbc`, 1,048,576 bytes, SHA-256 `7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`. Official build and full `make check` pass. Its [fresh native record](games/toronto-dispatch/docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes four unique jobs, verifies the truck-only warning and acceptance, a funded level-three police fine and genuine in-worker save reset. The [focused build audit](games/toronto-dispatch/docs/DISPATCH_VEHICLE_BUILD_AUDIT.json) records the UI-only correction; the [old a935 feedback finding](games/toronto-dispatch/docs/NATIVE_FERRY_CAMPAIGN_FEEDBACK_FINDING.json) stays needs-review. Generated ROMs stay local; package details are in BUILD.md.
+
+A separate [same-ROM continuation](games/toronto-dispatch/docs/NATIVE_DISPATCH_WEST_CONTINUATION.json) restores the genuine four-job checkpoint and adds only Signed and Sealed and West Window Run. It verifies the ordered Union return, both Core–West crossings with carried cargo, and recovery after a police stop drains the remaining cash. Credits are 131 and 74, ending with six unique completions / $74 and a neutral continuation checkpoint. This adds no new reset, performance, human-duration or hardware evidence. The ROM and source-pinned loading bundle remain unchanged.
 
 Menu-used A/B must be released before they accelerate or brake/reverse in the city. Dispatch keeps the full route preview, current-stop cue and A resume; Select jumps chapters. An eligible incomplete vehicle-specific offer shows WRONG VEHICLE until you occupy the required vehicle. Island offers show $8/$16/$24 ferry budgets. When an active Island job cannot fund a return, the HUD explains cancellation; abandoning the job allows the existing scheduled $0 assistance, with no payout or completion.
 
