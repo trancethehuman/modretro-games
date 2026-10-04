@@ -4,7 +4,7 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Current status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven authored Toronto districts, 104 contracts, walking/driving and scheduled transit | Vehicle feedback candidate passes a fresh four-job replay, truck eligibility, police fine and saved-progress reset; a separate same-ROM continuation adds signed-return and West work for six unique completions. Full campaign, two enjoyable human hours and hardware remain pending. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven authored Toronto districts, 104 contracts, walking/driving and scheduled transit | Vehicle feedback candidate passes a fresh four-job replay, truck eligibility, police fine and saved-progress reset. Separate same-ROM continuations reach eight unique jobs; the newest motorcycle return leaves one second. Full campaign, two enjoyable human hours and hardware remain pending. |
 
 Current editable source contains 344 buildings, 657 pedestrian routes, 64 service points, nine parking anchors and four player vehicles. Explore compressed mainland neighbourhoods, Port Lands industry/bridges, public walking Islands and Casa Loma/Summerhill/St Clair. Momentum/braking, pedestrians and police consequences, scheduled train/bus/Queen/ferry travel, a scrollable atlas, original audio and save v10 / 58-byte progression are implemented. The old 96 contracts and 59 stops remain unchanged.
 

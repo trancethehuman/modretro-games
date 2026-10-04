@@ -6,6 +6,8 @@ This build retains the city, right-hand traffic, escalating pursuit/penalties, m
 
 A separate [same-ROM continuation](NATIVE_DISPATCH_WEST_CONTINUATION.json) restores the genuine four-job checkpoint and adds only Signed and Sealed and West Window Run. It verifies the ordered Union return, both Core–West crossings with carried cargo, and recovery after a police stop drains the remaining cash. Credits are 131 and 74, ending with six unique completions / $74 and a neutral continuation checkpoint. This adds no new reset, performance, human-duration or hardware evidence. The ROM and source-pinned loading bundle remain unchanged.
 
+Later [scooter/express evidence](NATIVE_SCOOTER_EXPRESS_REVIEW.json) imports those six jobs and adds only Parkdale Art for $70, while its motorcycle attempt times out and remains needs-review. A new [motorcycle return](NATIVE_MOTORCYCLE_RETURN.json) imports the genuine seven-job checkpoint and completes only that motorcycle contract: condition 80 / one second left pays $212, reaching eight unique completions. Explicit save retains eight / $212. The narrow deadline margin still needs human pacing review. All native inputs, the selected ROM and reviewed loading bundle remain unchanged; these continuations add no new reset or hardware evidence.
+
 ## 1. Prepare the computer and console
 
 1. Install the ModRetro Chromatic plugin in Codex on the Mac connected to the console. It is already installed in this project owner's current setup. Open this repository as the project.
