@@ -1,6 +1,14 @@
 # Native build and preview
 
-## Current vehicle-feedback build
+## Current driving-only warning build
+
+Selected local ROM **`toronto-dispatch-driving-only.gbc`** is **1,048,576 bytes**, SHA-256 **`8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`**. Official build with matching debug artifacts succeeds in **60,735 ms**; NOI `db351f2bc6c419fc5cc3f847ff9858fd5e273cf23ca211c80a147f9d12accaeb`, fingerprint `61c6df9f7434398181491ee8e00dc5ad74d354edc4e8b4dc7fb0cdda1095605e`. Full `make check` passes. [Compiled review](DRIVING_ONLY_BUILD_AUDIT.json) verifies one same-length HUD literal among 206 inputs; all other ROM bytes match 7ab except generated stock-save-signature/global-checksum bytes. UI/main/helper headroom remains 150/10/1, static reserve 1,096, save v10/58 bytes and 52-byte UI frame unchanged.
+
+The [fresh native replay](NATIVE_DRIVING_ONLY_WARNING.json) completes four unique jobs 0/2/1/3, renders DRIVE FOR THIS JOB before/after freight pickup, preserves original truck entry, and verifies the later funded H3 fine and committed in-worker reset. Passenger-specific new-ROM refusal, the full 104 campaign, two enjoyable measured human hours, wider stack/performance and hardware remain pending. Earlier7ab sixteen-job/all-eight-kind/seven-scene tests retain their own identity; no checkpoint crosses this rebuild.
+
+Prepare the distinct local `project/build/toronto-dispatch-driving-only-reviewed.zip` after committing matching inputs, freezing the [loading guide](LOADING.md), licences and build identity at that source revision. Preserve all prior ROMs and ZIPs.
+
+## Retained vehicle-feedback build
 
 Selected local ROM **`toronto-dispatch-vehicle-feedback.gbc`** is **1,048,576 bytes**, SHA-256 **`7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`**. Official build with matching debug artifacts succeeds in **59,690 ms**; NOI is `db351f2bc6c419fc5cc3f847ff9858fd5e273cf23ca211c80a147f9d12accaeb`, source fingerprint `27513dd418728409d094aada3bf7dd5e65806bb186a27b6db2ecb06853fc541d`. Full `make check` passes, including 456,380 focused vehicle UI assertions within 43,680,134 total UI checks. Only `td_ui.c` changes among 206 native inputs. [Compiled review](DISPATCH_VEHICLE_BUILD_AUDIT.json) passes 602 focused assertions with zero findings. UI/main/helper banks leave 150/10/1 bytes; the shared warning, 52-byte UI frame, WRAM addresses, save v10 / 58 bytes and 1,096 static reserve are preserved. Deepest stack remains unmeasured.
 

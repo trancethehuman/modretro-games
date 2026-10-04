@@ -10,6 +10,10 @@ The city remains open between jobs. Landmarks help navigation; neighbourhoods ch
 
 An unlocked incomplete vehicle-specific offer shows WRONG VEHICLE when the courier is on foot or driving another vehicle, before and after a rejected acceptance. Occupying the required vehicle clears the warning. Active current-stop/resume, other active previews, completed and locked captions keep their existing priority. The correction shares the existing roaming warning string and adds no game state. Distinct `7ab28…` builds and passes full source checks plus a fresh four-job native replay, including the exact car rejection and required truck acceptance. [The retained a935 finding](docs/NATIVE_FERRY_CAMPAIGN_FEEDBACK_FINDING.json) stays needs-review; [corrected evidence](docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) has its own identity. All contracts, two enjoyable human hours and physical checks remain pending.
 
+## Driving-only transit feedback — 2026-10-04
+
+Freight and passenger jobs share the short warning DRIVE FOR THIS JOB when an on-foot courier attempts transit. This replaces the misleading heavy-cargo caption without changing eligibility, routes, fares or save state. Distinct8be1 verifies both actual freight stages and four fresh deliveries; passenger-specific runtime evidence remains assigned to 7ab. [Testing](TESTING.md) retains the separate identities.
+
 ## Driving
 
 Maintain ground-plane position, heading, signed speed, and collision footprint in a straight north-up top-down world. Acceleration changes speed over time. Releasing A allows rolling deceleration. B brakes; reverse becomes available only near rest. Turning has a speed-dependent limit. Trucks should require earlier braking; scooters should feel nimble but slower; motorcycles trade speed for vulnerability; cars provide the balanced baseline.

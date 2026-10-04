@@ -1,0 +1,735 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-driving-only-source-and-compiled-audit",
+  "result": "passed",
+  "checks": 291,
+  "assertions": [
+    {
+      "label": "Official distinct build succeeded",
+      "passed": true
+    },
+    {
+      "label": "Exact new ROM receipt bytes/hash",
+      "passed": true
+    },
+    {
+      "label": "Exact frozen7ab baseline and602 reference",
+      "passed": true
+    },
+    {
+      "label": "Old source snapshot bound by reference/new snapshot",
+      "passed": true
+    },
+    {
+      "label": "Exactly206 identical native-input path sets",
+      "passed": true
+    },
+    {
+      "label": "Onlytd_ui source changes",
+      "passed": true
+    },
+    {
+      "label": "Exact18-character single literal inverse matches frozen7ab source",
+      "passed": true
+    },
+    {
+      "label": "Message caller unchanged and supports both active kinds",
+      "passed": true
+    },
+    {
+      "label": "Existing20-column uppercase/space glyph handling",
+      "passed": true
+    },
+    {
+      "label": "NOI byte-identical/fresh receipt binding",
+      "passed": true
+    },
+    {
+      "label": "Globals byte-identical/fresh receipt binding",
+      "passed": true
+    },
+    {
+      "label": "Source-debug ABI/compiler/projectrevision unchanged",
+      "passed": true
+    },
+    {
+      "label": "Memory guard1096staticreserve/no errors",
+      "passed": true
+    },
+    {
+      "label": "Same allocatedDATA/INITIALIZED sizes",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _td",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _td_job",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _td_offer",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _actors",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _frame_joy",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _game_time",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _current_scene",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _td_ui_draw",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _td_ui_init",
+      "passed": true
+    },
+    {
+      "label": "Same exported ABI _toronto_update",
+      "passed": true
+    },
+    {
+      "label": "Packedbank0 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank255 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank33 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank32 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank31 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank29 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank30 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank26 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank27 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank28 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank17 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank24 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank25 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank15 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank20 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank6 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank18 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank16 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank22 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank1 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank19 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank2 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank10 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank11 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank12 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank13 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank14 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank21 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank23 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank3 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank4 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank5 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank7 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank8 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "Packedbank9 below16KiB",
+      "passed": true
+    },
+    {
+      "label": "UI/main/helper packing unchanged",
+      "passed": true
+    },
+    {
+      "label": "Unique old/new literal and unchanged null/address",
+      "passed": true
+    },
+    {
+      "label": "Actual literal bank26 matchesUI BANKEDunit",
+      "passed": true
+    },
+    {
+      "label": "Actual delta fully authenticated includes signature/text/checksum",
+      "passed": true
+    },
+    {
+      "label": "Every byte elsewhere exact frozen7ab",
+      "passed": true
+    },
+    {
+      "label": "Complete header/logo unchanged except globalchecksum",
+      "passed": true
+    },
+    {
+      "label": "old valid header/global checksums",
+      "passed": true
+    },
+    {
+      "label": "old CGB-only/MBC5rumble1MiB32KiBSRAM",
+      "passed": true
+    },
+    {
+      "label": "new valid header/global checksums",
+      "passed": true
+    },
+    {
+      "label": "new CGB-only/MBC5rumble1MiB32KiBSRAM",
+      "passed": true
+    },
+    {
+      "label": "Actual preserved compiled ABI proof draw_frame",
+      "passed": true
+    },
+    {
+      "label": "Actual preserved compiled ABI proof bounded_menu_reused_complete_guard",
+      "passed": true
+    },
+    {
+      "label": "Actual preserved compiled ABI proof idle_offer_foot_vehicle_warning_and_row16",
+      "passed": true
+    },
+    {
+      "label": "Actual preserved compiled ABI proof shared_roam_message_pointer",
+      "passed": true
+    },
+    {
+      "label": "Actual preserved compiled ABI proof unchanged_far_call_bank_restore",
+      "passed": true
+    },
+    {
+      "label": "Unchanged52byteUIautomaticframe",
+      "passed": true
+    },
+    {
+      "label": "Compiled message8 literal pointer initializer unchanged",
+      "passed": true
+    },
+    {
+      "label": "Actual unchanged resource table all64Stops",
+      "passed": true
+    },
+    {
+      "label": "Actual unchanged resource table all104Jobs",
+      "passed": true
+    },
+    {
+      "label": "Actual unchanged resource table Line1Stops",
+      "passed": true
+    },
+    {
+      "label": "Actual unchanged resource table BusStops",
+      "passed": true
+    },
+    {
+      "label": "Actual unchanged resource table FerryStops",
+      "passed": true
+    },
+    {
+      "label": "Actual unchanged resource table TransitLabels",
+      "passed": true
+    },
+    {
+      "label": "Installed compiler generates four-byte save_signature fromprojectData",
+      "passed": true
+    },
+    {
+      "label": "CustomToronto save independent of stock generatedsignature",
+      "passed": true
+    },
+    {
+      "label": "Portable report excludes machinepaths/blob payloads",
+      "passed": true
+    }
+  ],
+  "findings": [],
+  "inputs": {
+    "officialBuild": {
+      "path": "games/toronto-dispatch/project/build/driving-only-build.json",
+      "bytes": 14013,
+      "sha256": "8532a9fd0e43af5251a212d9e3012a6b451464ba34f855b3ad9b9bbaafa7a744"
+    },
+    "sourceSnapshot": {
+      "path": "games/toronto-dispatch/project/build/driving-only-source-pins.json",
+      "bytes": 41449,
+      "sha256": "1766083e9ae7806e2b7c79a2e89fa650d1aaf2f16a8f618ec0a72299c2daaf05"
+    },
+    "predecessorSourceSnapshot": {
+      "path": "games/toronto-dispatch/project/build/dispatch-vehicle-source-pins.json",
+      "bytes": 41613,
+      "sha256": "2d22e25334e69702b4ee38f365d00c897fdbff19086403ed1a71d5752932c9c9"
+    },
+    "reference602Audit": {
+      "path": "games/toronto-dispatch/docs/DISPATCH_VEHICLE_BUILD_AUDIT.json",
+      "bytes": 22469,
+      "sha256": "a2e106daf7e57e0d72f108ff93da070cc787683bad3f293d2cb83bfd080b6eef"
+    },
+    "predecessorBuild": {
+      "path": "games/toronto-dispatch/project/build/dispatch-vehicle-build.json",
+      "bytes": 14036,
+      "sha256": "3fe034dc6e57b2c1aa8b8bee57a63bf1bf173ec5ba3969b195935b7afb3c8960"
+    }
+  },
+  "identity": {
+    "rom": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc",
+      "bytes": 1048576,
+      "sha256": "8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb"
+    },
+    "noi": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc.debug/symbols.noi",
+      "bytes": 57883,
+      "sha256": "db351f2bc6c419fc5cc3f847ff9858fd5e273cf23ca211c80a147f9d12accaeb"
+    },
+    "globals": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc.debug/globals.i",
+      "bytes": 1477,
+      "sha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a"
+    },
+    "sourceDebug": {
+      "romSha256": "8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb",
+      "projectRevision": "c612cd5f51e737d7d4b998422167daee41ce38c3700004d9444d3ad0c88598e7",
+      "sourceFingerprint": "61c6df9f7434398181491ee8e00dc5ad74d354edc4e8b4dc7fb0cdda1095605e",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "predecessorROM": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc",
+      "bytes": 1048576,
+      "sha256": "7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0"
+    },
+    "baseSourceCommit": "93eaf28844bfd00cfb68364d7c5587948dafe7d7"
+  },
+  "sourceChange": {
+    "nativeInputs": 206,
+    "unchangedInputs": 205,
+    "changedInputs": [
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_ui.c"
+    ],
+    "newUI": {
+      "path": "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_ui.c",
+      "bytes": 18933,
+      "sha256": "44665ee75e1e87d6fbbb658ca195f6b47c8875f6904a25ffd8cfb95173171a3c"
+    },
+    "inversePredecessorSHA256": "ac391a65d9ab4146ebd5db5098175c7b5e4f5efc0b06865d380cb551addd0601",
+    "oldLiteral": "HEAVY CARGO: DRIVE",
+    "newLiteral": "DRIVE FOR THIS JOB",
+    "visibleColumns": 18,
+    "literalBytesIncludingNUL": 19,
+    "newPersistentBytes": 0,
+    "newVarargsCalls": 0,
+    "newSavedFields": 0
+  },
+  "ROMDelta": {
+    "differingByteCount": 20,
+    "changedOffsets": [
+      "0x14f",
+      "0x200",
+      "0x201",
+      "0x202",
+      "0x203",
+      "0x69e49",
+      "0x69e4a",
+      "0x69e4b",
+      "0x69e4d",
+      "0x69e4f",
+      "0x69e50",
+      "0x69e52",
+      "0x69e53",
+      "0x69e54",
+      "0x69e55",
+      "0x69e56",
+      "0x69e57",
+      "0x69e58",
+      "0x69e59",
+      "0x69e5a"
+    ],
+    "message8": {
+      "romOffset": "0x69e49",
+      "bank": 26,
+      "nearAddress": "0x5e49",
+      "oldHex": "484541565920434152474f3a20445249564500",
+      "newHex": "445249564520464f522054484953204a4f4200",
+      "differingBytes": 15,
+      "compiledPointerInitializer": {
+        "bank": 26,
+        "address": "0x5251",
+        "bytes": "3e49223e5e22",
+        "unchanged": true
+      }
+    },
+    "generatedStockSignature": {
+      "symbol": "_save_signature",
+      "romOffset": "0x200",
+      "bytes": 4,
+      "oldHex": "27725b87",
+      "newHex": "4870ce0a",
+      "oldU32": "0x875b7227",
+      "newU32": "0xace7048"
+    },
+    "globalChecksum": {
+      "old": "0x580f",
+      "new": "0x581b",
+      "changedByteOffsets": [
+        "0x14f"
+      ]
+    },
+    "allOtherROMBytesIdentical": true,
+    "expectedDeltaCorrection": "The expectation of only text plus checksum is false: four generated stock save-signature bytes also differ. All20 actual differing bytes are explicitly identified; no relocation or executable opcode difference is present."
+  },
+  "header": {
+    "title": "TORONTODISPATCH",
+    "cgbFlag": 192,
+    "cartridgeType": 30,
+    "romSizeCode": 5,
+    "ramSizeCode": 3,
+    "headerChecksum": 232,
+    "computedHeaderChecksum": 232,
+    "globalChecksum": 22555,
+    "computedGlobalChecksum": 22555
+  },
+  "memory": {
+    "heapEnd": "0xdab8",
+    "stackBase": "0xdf00",
+    "staticReserveBytes": 1096,
+    "DATABytes": 6621,
+    "INITIALIZEDBytes": 59,
+    "UIAutomaticFrameBytes": 52,
+    "saveVersion": 10,
+    "savedBytes": 58,
+    "maximumStackMeasured": false
+  },
+  "capacity": {
+    "UIBank": 26,
+    "UIBytes": 16234,
+    "UIFreeBytes": 150,
+    "mainFreeBytes": 10,
+    "helperFreeBytes": 1,
+    "packedBanks": [
+      {
+        "bank": 0,
+        "codeBytes": 0,
+        "freeBytes": 16384
+      },
+      {
+        "bank": 255,
+        "codeBytes": 0,
+        "freeBytes": 16384
+      },
+      {
+        "bank": 33,
+        "codeBytes": 15532,
+        "freeBytes": 852
+      },
+      {
+        "bank": 32,
+        "codeBytes": 15897,
+        "freeBytes": 487
+      },
+      {
+        "bank": 31,
+        "codeBytes": 16059,
+        "freeBytes": 325
+      },
+      {
+        "bank": 29,
+        "codeBytes": 16109,
+        "freeBytes": 275
+      },
+      {
+        "bank": 30,
+        "codeBytes": 16177,
+        "freeBytes": 207
+      },
+      {
+        "bank": 26,
+        "codeBytes": 16234,
+        "freeBytes": 150
+      },
+      {
+        "bank": 27,
+        "codeBytes": 16238,
+        "freeBytes": 146
+      },
+      {
+        "bank": 28,
+        "codeBytes": 16351,
+        "freeBytes": 33
+      },
+      {
+        "bank": 17,
+        "codeBytes": 16374,
+        "freeBytes": 10
+      },
+      {
+        "bank": 24,
+        "codeBytes": 16374,
+        "freeBytes": 10
+      },
+      {
+        "bank": 25,
+        "codeBytes": 16374,
+        "freeBytes": 10
+      },
+      {
+        "bank": 15,
+        "codeBytes": 16378,
+        "freeBytes": 6
+      },
+      {
+        "bank": 20,
+        "codeBytes": 16378,
+        "freeBytes": 6
+      },
+      {
+        "bank": 6,
+        "codeBytes": 16380,
+        "freeBytes": 4
+      },
+      {
+        "bank": 18,
+        "codeBytes": 16381,
+        "freeBytes": 3
+      },
+      {
+        "bank": 16,
+        "codeBytes": 16382,
+        "freeBytes": 2
+      },
+      {
+        "bank": 22,
+        "codeBytes": 16382,
+        "freeBytes": 2
+      },
+      {
+        "bank": 1,
+        "codeBytes": 16383,
+        "freeBytes": 1
+      },
+      {
+        "bank": 19,
+        "codeBytes": 16383,
+        "freeBytes": 1
+      },
+      {
+        "bank": 2,
+        "codeBytes": 16383,
+        "freeBytes": 1
+      },
+      {
+        "bank": 10,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 11,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 12,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 13,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 14,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 21,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 23,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 3,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 4,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 5,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 7,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 8,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      },
+      {
+        "bank": 9,
+        "codeBytes": 16384,
+        "freeBytes": 0
+      }
+    ]
+  },
+  "preservation": {
+    "NOIAndGlobalsByteIdentical": true,
+    "addressesAndAllocationsUnchanged": true,
+    "allExecutableOpcodesIdentical": true,
+    "allSevenSceneResourcesAndGeometryIdentical": true,
+    "allTablesAndArtIdentical": true,
+    "all206CurrentInputsMatch": true,
+    "reference602ManualSpansChecked": 5,
+    "referenceTableHashesChecked": 6
+  },
+  "stockSignatureSource": [
+    {
+      "installedSource": "GBStudio:src/lib/compiler/generateGBVMData.ts",
+      "bytes": 41117,
+      "sha256": "da337b61bf57a14f860d4bacd45b09f3c4ffd92ff66917ac5ca79d69e6ecd599"
+    },
+    {
+      "installedSource": "GBStudio:src/lib/compiler/compileData.ts",
+      "bytes": 59453,
+      "sha256": "f34b55bf5ca467c655bbced9124e67016fbc99daa66b4b37b2351fc15aa3c67c"
+    },
+    {
+      "installedSource": "GBStudio:appData/engine/gbvm/src/core/load_save.c",
+      "bytes": 5189,
+      "sha256": "d57054fc86d37153c75d0d5c744b4366a2988f21ed1c15dca99436c6f5bffa39"
+    }
+  ],
+  "limitations": [
+    "Read-only compiled/source equivalence audit; no new native input, screenshot, gameplay completion, timing, hardware or physical-persistence acceptance.",
+    "The generated stock save signature hashes compiler projectData; its exact intermediate input was not retained/recomputed, so the cause of the different hash value is not traced. StockGBVM data_load uses this signature; customToronto58-byte v10 CRC save code is unchanged and does not reference it. No cross-ROM stock save/checkpoint portability is claimed.",
+    "Linked1096-byte static reserve and unchanged52-byteUI frame do not prove maximum runtime stack. The old602 audit is a pinned preservation reference, not602 newly rerun checks.",
+    "Fresh native readability/refusal verification on8be1 remains root-owned; predecessor7ab artifacts/evidence/loading ZIP are preserved, not relabelled."
+  ],
+  "checksByGroup": {
+    "sourcePinFiles": 206,
+    "otherFiniteAssertions": 85
+  },
+  "sourcePinValidation": {
+    "filesIndividuallyChecked": 206,
+    "mismatches": []
+  },
+  "auditHelper": {
+    "path": "games/toronto-dispatch/project/build/audit_driving_only_compiled.py",
+    "bytes": 13446,
+    "sha256": "1401cc19d6b6299fd4703f1e09811d7a5ed7a1d47ab2e38253b66702a5111cfb"
+  }
+}

@@ -1,10 +1,12 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Select the tested local playtest candidate, **`toronto-dispatch-vehicle-feedback.gbc`**, **1,048,576 bytes**, SHA-256 **`7ab28b84c242f7f2c8f9e02338e2d81ab6d789fb1d7997d0aa33e99baadd8dc0`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
+Select the tested local playtest candidate, **`toronto-dispatch-driving-only.gbc`**, **1,048,576 bytes**, SHA-256 **`8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
 
-Use **`project/build/toronto-dispatch-vehicle-feedback-reviewed.zip`**, described in step 2. Official compilation and repository checks pass. A [fresh native run](NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes four jobs; separate genuine same-ROM continuations reach sixteen distinct completions across all eight job types. The latest [North](NATIVE_NORTH_CURRENT_CONTINUATION.json) and [relay/Island](NATIVE_RELAY_ISLAND_CURRENT_CONTINUATION.json) records add underpass/foot/vehicle work, scheduled train/bus/ferry delivery, map panning/freezing, original-vehicle recovery and committed in-worker reset. The [East/Port child](NATIVE_EAST_PORT_CURRENT_CONTINUATION.json) then adds a full-condition East round and required-truck Port freight, ending sixteen /$1,247 with a saved-only neutral checkpoint. Source inputs, the tested ROM and reviewed ZIP remain unchanged; the bundled guide stays frozen at its matching source commit. Detailed [build identity](BUILD.md) and [test scopes](../TESTING.md) preserve older results and failed attempts.
+Use **`project/build/toronto-dispatch-driving-only-reviewed.zip`**, described in step 2. Official compilation and repository checks pass. The [fresh current native run](NATIVE_DRIVING_ONLY_WARNING.json) completes four jobs and verifies freight driving-only feedback, original-truck recovery, funded police penalty and committed in-worker reset. The retained 7ab ROM has separate genuine sixteen-job/all-eight-kind/seven-district tests; those totals are not transferred to 8be1. Detailed [build identity](BUILD.md) and [test scopes](../TESTING.md) preserve older results and failed attempts.
 
 This candidate still needs full 104-contract play, measured two-hour human enjoyment and hardware checks. Motorcycle pacing and broader balance remain open. Emulator reset proves committed in-worker progress, with periodic saves, rather than physical cold-boot/battery persistence or every latest live field. No physical installation has been performed.
+
+A focused host test reproduces blocked walking after saving/resetting during car entry. If this occurs beside your parked vehicle, press A to finish entering and recover; avoid saving mid-entry until the repair and native test are complete. This is host reproduction, separate from the current native playtest.
 
 ## 1. Prepare the computer and console
 
@@ -20,12 +22,12 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The selected loading ROM is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The loading bundle filename is **`project/build/toronto-dispatch-vehicle-feedback-reviewed.zip`**. Extract it and verify `SHA256SUMS` against the selected 7ab28 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching source commit; the bundled guide remains frozen at that revision. The reviewed local ZIP is 146,249 bytes / SHA `f897d7bf93eeb2c9baaed7304f10aea9c24e8af0c73173f1d42584f15f7b9b38`, pinned to source `6e9cd46cc2a8af40a87dfc696283c08632261e28`; its [independent package audit](DISPATCH_VEHICLE_PACKAGE_AUDIT.json) passes 1,621 finite assertions. The earlier ZIP is preserved with a stale-guide finding; select this reviewed filename. [BUILD.md](BUILD.md) records current package verification and retained older bundles. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
+The loading bundle filename is **`project/build/toronto-dispatch-driving-only-reviewed.zip`**. Extract it and verify `SHA256SUMS` against the selected 8be1 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching source commit; the bundled guide remains frozen at that revision. Preserve the earlier 7ab vehicle-feedback reviewed ZIP unchanged. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
 
 For a source build, ask Codex:
 
@@ -36,8 +38,8 @@ Use `rom_inspect` on the final file. Match its digest to the tested build in [TE
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-vehicle-feedback.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-driving-only.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -94,11 +96,11 @@ Keep a note of the ROM SHA-256 and any problem's location/action. Save v10 prese
 
 A host-streamed `play` demo is optional and never writes the cartridge. It can help assess the screen/buttons, but it cannot replace the cold-boot and save checks above.
 
-Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected vehicle-feedback ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
+Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected driving-only ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
 
 ## Evidence and older builds
 
-The selected vehicle-feedback build's [focused audit](DISPATCH_VEHICLE_BUILD_AUDIT.json) authenticates 206 inputs with only UI changed from a935. Its [fresh scoped replay](NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) completes four unique deliveries, checks WRONG VEHICLE rejection and required-truck acceptance, then samples a funded H3 fine and committed in-worker reset. UI/helper/gameplay banks have 150/1/10 free bytes, reserve 1,096, deepest stack unmeasured. Supported discovery on 2026-10-04 found zero connected Chromatics; no physical loading is claimed.
+The selected driving-only build's [focused audit](DRIVING_ONLY_BUILD_AUDIT.json) authenticates 206 inputs with only one same-length UI literal changed from 7ab. Its [fresh scoped replay](NATIVE_DRIVING_ONLY_WARNING.json) completes four unique deliveries, verifies both freight stages' visible warning, required-truck handoffs, funded H3 fine and later committed in-worker reset. UI/helper/gameplay banks have 150/1/10 free bytes, reserve 1,096, deepest stack unmeasured. Source inspection shows the custom Toronto bank 3 journal does not use the changed stock-save signature; native cross-ROM import and physical persistence remain untested. Supported discovery on 2026-10-04 found zero connected Chromatics; no physical loading is claimed.
 
 The retained a935 ferry-clarity build's [focused audit](FERRY_CLARITY_BUILD_AUDIT.json) and [fresh scoped replay](NATIVE_FERRY_CLARITY.json) keep their own identities. That separate replay ends with one new completion/$110 after paid travel, low-cash cancellation, scheduled assistance and car recovery. Its UI/helper/gameplay banks have 122/1/10 free bytes. Native reset proves committed in-worker SRAM restoration, not physical cold-boot persistence.
 
@@ -111,7 +113,7 @@ The historical menu-input build's [resource audit](MENU_INPUT_BUILD_AUDIT.json) 
 
 ### Historical initial North build
 
-The old `toronto-dispatch-north-initial.zip` remains unchanged: 138,530 bytes, SHA-256 `c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac`, ROM `22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95`, source `8290eefba2c909ef004970669b05588c471b2d10`. Its [package audit](NORTH_PACKAGE_AUDIT.json) passes 1,235 checks. This older build has the reproduced Pause B-input leak; select the current vehicle-feedback candidate above for current playtesting. Its bundled guide and same-ROM evidence retain their original identities.
+The old `toronto-dispatch-north-initial.zip` remains unchanged: 138,530 bytes, SHA-256 `c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac`, ROM `22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95`, source `8290eefba2c909ef004970669b05588c471b2d10`. Its [package audit](NORTH_PACKAGE_AUDIT.json) passes 1,235 checks. This older build has the reproduced Pause B-input leak; select the current driving-only candidate above for current playtesting. Its bundled guide and same-ROM evidence retain their original identities.
 
 The historical `22157…` North build's [compiled audit](NORTH_BUILD_AUDIT.json) verifies 47,502 assertions and 203 frozen project inputs. Its [fresh record](NATIVE_NORTH_FRESH.json) completes three Core jobs and loads North while carrying job 96. Its [separately recorded continuation](NATIVE_NORTH_CONTINUED.json) completes the Baldwin stairs delivery, verifies two train trips and map/reset/car retention, and exercises reciprocal northern seams. Progress imported from the fresh same-ROM checkpoint is disclosed. Independent fresh and continued reviews pass 37,871 and 55,785 evidence checks, respectively; the continuation also passes 359 documentation/link/privacy checks. A [third scoped record](NATIVE_NORTH_SUPPLEMENT.json) imports those four genuine completions and adds only jobs 3 and 6: undamaged truck pay 157 and condition-80 signed-return pay 120, ending cash 455 / done 6 after $20/$40/$60 pedestrian fines and a $225 H3 police fine. Its independent evidence review passes 31,888 checks. It adds no other northern job or measured campaign-duration proof. Wider regional jobs and performance remain pending. Main code bank 2 is full, UI bank 1 has three bytes free and save bank 29 has fifteen; further code changes require a fresh capacity review. The linked 1,096-byte static reserve does not measure deepest stack use.
 
