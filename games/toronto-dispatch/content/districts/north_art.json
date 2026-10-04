@@ -887,16 +887,16 @@
         568
       ],
       [
-        344,
-        568
-      ],
-      [
-        344,
-        776
-      ],
-      [
         200,
         776
+      ],
+      [
+        344,
+        776
+      ],
+      [
+        344,
+        568
       ]
     ],
     [
@@ -905,16 +905,16 @@
         760
       ],
       [
-        344,
-        760
-      ],
-      [
-        344,
-        856
-      ],
-      [
         272,
         856
+      ],
+      [
+        344,
+        856
+      ],
+      [
+        344,
+        760
       ]
     ],
     [
@@ -923,24 +923,24 @@
         568
       ],
       [
-        416,
-        568
-      ],
-      [
-        416,
-        776
-      ],
-      [
-        488,
-        776
-      ],
-      [
-        488,
-        856
-      ],
-      [
         328,
         856
+      ],
+      [
+        488,
+        856
+      ],
+      [
+        488,
+        776
+      ],
+      [
+        416,
+        776
+      ],
+      [
+        416,
+        568
       ]
     ],
     [
@@ -949,16 +949,16 @@
         152
       ],
       [
-        648,
-        152
-      ],
-      [
-        648,
-        792
-      ],
-      [
         472,
         792
+      ],
+      [
+        648,
+        792
+      ],
+      [
+        648,
+        152
       ]
     ],
     [
@@ -967,24 +967,24 @@
         152
       ],
       [
-        488,
-        152
-      ],
-      [
-        488,
-        792
-      ],
-      [
-        400,
-        792
-      ],
-      [
-        400,
-        584
-      ],
-      [
         200,
         584
+      ],
+      [
+        400,
+        584
+      ],
+      [
+        400,
+        792
+      ],
+      [
+        488,
+        792
+      ],
+      [
+        488,
+        152
       ]
     ],
     [
@@ -993,16 +993,16 @@
         328
       ],
       [
-        752,
-        328
-      ],
-      [
-        752,
-        440
-      ],
-      [
         632,
         440
+      ],
+      [
+        752,
+        440
+      ],
+      [
+        752,
+        328
       ]
     ]
   ],
@@ -1415,6 +1415,309 @@
   "licence_notice": "Selected City data facts only. All map artwork, photos and trademarks remain reference-only; new sprites/backgrounds must be original.",
   "geography_query_report": "north-geography-query-report.json",
   "source_research": "docs/NORTH_DISTRICT.md",
+  "traffic_lane_segments": [
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BATHURST STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DUPONT STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "SPADINA ROAD SOUTH",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "WALMER ROAD SOUTH",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BERNARD AVENUE",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "SPADINA ROAD SOUTH",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DUPONT STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "SPADINA ROAD SOUTH",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BERNARD AVENUE",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "AVENUE ROAD",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 2
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 1
+          },
+          {
+            "road": "DUPONT STREET",
+            "segment": 1
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "AVENUE ROAD",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 2
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "YONGE STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "ST CLAIR AVENUE",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BATHURST STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 1
+          },
+          {
+            "road": "DUPONT STREET",
+            "segment": 1
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DAVENPORT ROAD",
+            "segment": 2
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "AVENUE ROAD",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "ST CLAIR AVENUE",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "YONGE STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "SHAFTESBURY AVENUE",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "SUMMERHILL AVENUE",
+            "segment": 1
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "SUMMERHILL AVENUE",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      }
+    ]
+  ],
+  "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps.",
   "projection": "Original orthogonal north-up game compression, not converted City geometry or artwork.",
   "background_filename": "toronto_north.png",
   "source_png": "project/original-art/toronto_north.png",
@@ -1423,7 +1726,7 @@
     128,
     122
   ],
-  "source_layout_sha256": "bcec25cc0bd402bfeef20de4e36ea3be68c38f47fadfcaef12117a3b932b8733",
+  "source_layout_sha256": "2eda9cea61dd34211457331e3336ad7d433bccdc834173bfa97459863644d4d4",
   "background_sha256": "9c2f31d7c1c24fd2461a0edf3ff921b0198cb555d43dbd3efc4eb417eb36db7a",
   "background_pixel_sha256": "983379e513e4c44b17d2d522434e0f2b92b5832a51a8522e67d21a381aa46405",
   "blocks": [

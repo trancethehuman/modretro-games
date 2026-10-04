@@ -14,6 +14,7 @@ from district_sources import read_district_art
 from island_campaign import ISLAND_DISTRICT, ISLAND_IDS
 import create_district_world
 import create_world_routes
+import check_traffic_lanes
 
 SOURCE_COLORS = {tuple(bytes.fromhex(value)) for value in ('071821', '306850', '86c06c', 'e0f8cf')}
 
@@ -301,6 +302,9 @@ def check():
                 model.service_leg(campaign['stops'][first], campaign['stops'][last])
 
     assert create_district_world.HEADER.read_text() == create_district_world.source(), 'Compiled reciprocal seams/traffic differ'
+    # Core now shares the authored banked patrol model; include its lanes and
+    # full service footprints rather than validating only expansion metadata.
+    check_traffic_lanes.check()
     ped_header = create_world_routes.HEADER.read_text()
     assert ped_header == create_world_routes.source(), 'Compiled pedestrian routes differ from registered grids'
     counts = list(map(int, re.search(rf'td_route_counts\[{district_count}\]=\{{([\d,]+)\}}', ped_header).group(1).split(',')))
@@ -312,7 +316,7 @@ def check():
         assert len(rows) == count and len(set(rows)) == count
         assert all(walkable(district, u + offset, v) for u, v in rows for offset in range(64)), 'Compiled NPC path crosses solid terrain'
     report = ', '.join(f'{slug}:{raw} raw/{flipped} flipped tiles' for slug, raw, flipped in budgets)
-    traffic_loops = sum(len(meta['traffic_loops']) for meta in metadata.values())
+    traffic_loops = len(read(ROOT / 'content/core_traffic.json')['traffic_loops']) + sum(len(meta['traffic_loops']) for meta in metadata.values())
     print(f'Native district resource source: {district_count} scenes, {len(world["portals"])} reciprocal seam pairs, {len(expansion_clients)} mainland expansion clients, {traffic_loops} swept-clear traffic loops, ferry-only Island access and {sum(counts)} fixed pedestrian routes passed; {report}. Build, gameplay duration, full-city and hardware evidence remain separate.')
 
 

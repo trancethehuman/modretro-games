@@ -140,14 +140,52 @@ EAST = {
         {"key":"ashbridge_queen","name":"Ashbridge Queen","x":880,"y":496,"foot_only":False,"fictional_service_point":True},
     ],
     "traffic_loops": [
-        [[224,64],[384,64],[384,208],[224,208]],
-        [[384,64],[544,64],[544,208],[384,208]],
-        [[224,288],[384,288],[384,400],[224,400]],
-        [[384,288],[544,288],[544,400],[384,400]],
-        # Short opposing-lane circuits leave Queen's scheduled rail lanes clear.
-        [[696,368],[712,368],[712,464],[696,464]],
-        [[376,560],[392,560],[392,688],[376,688]],
+        [[232,72],[376,72],[376,200],[232,200]],
+        [[392,72],[536,72],[536,200],[392,200]],
+        [[232,296],[376,296],[376,392],[232,392]],
+        [[392,296],[536,296],[536,392],[392,392]],
+        [[696,368],[696,464],[712,464],[712,368]],
+        [[376,560],[376,688],[392,688],[392,560]],
     ],
+    "traffic_lane_segments": [
+        [
+            {"kind":"lane","road_sections":[{"road":"Danforth Avenue","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Bain Avenue","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Logan Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Danforth Avenue","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Pape Avenue north fragment","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Bain Avenue","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Gerrard Street East","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Dundas Street East","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Logan Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Gerrard Street East","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Pape Avenue south fragment","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Dundas Street East","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Jones Avenue","segment":0}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Jones Avenue","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Jones Avenue","segment":0}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Jones Avenue","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+    ],
+    "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps.",
     "traffic_identity": "Six original circulation loops, not literal TTC or live traffic routes.",
 }
 

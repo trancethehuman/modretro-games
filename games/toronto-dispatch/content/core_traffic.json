@@ -1,0 +1,538 @@
+{
+  "schema_version": 1,
+  "district": 0,
+  "traffic_identity": "Six fictional service-role patrols on existing compressed streets; not a TTC route or timetable.",
+  "road_scope": "Only streets used by these patrols; not a complete city/police road graph.",
+  "roads": [
+    {
+      "name": "BLOOR STREET",
+      "points": [
+        [
+          0,
+          64
+        ],
+        [
+          1024,
+          64
+        ]
+      ]
+    },
+    {
+      "name": "WELLESLEY / HARBORD",
+      "points": [
+        [
+          24,
+          176
+        ],
+        [
+          992,
+          176
+        ]
+      ]
+    },
+    {
+      "name": "COLLEGE / CARLTON",
+      "points": [
+        [
+          0,
+          288
+        ],
+        [
+          992,
+          288
+        ]
+      ]
+    },
+    {
+      "name": "DUNDAS STREET",
+      "points": [
+        [
+          0,
+          400
+        ],
+        [
+          1024,
+          400
+        ]
+      ]
+    },
+    {
+      "name": "KING STREET",
+      "points": [
+        [
+          24,
+          640
+        ],
+        [
+          848,
+          640
+        ]
+      ]
+    },
+    {
+      "name": "BATHURST STREET",
+      "points": [
+        [
+          208,
+          24
+        ],
+        [
+          208,
+          816
+        ]
+      ]
+    },
+    {
+      "name": "PARLIAMENT STREET",
+      "points": [
+        [
+          816,
+          24
+        ],
+        [
+          816,
+          816
+        ]
+      ]
+    }
+  ],
+  "traffic_loops": [
+    [
+      [
+        840,
+        280
+      ],
+      [
+        48,
+        280
+      ],
+      [
+        48,
+        296
+      ],
+      [
+        840,
+        296
+      ]
+    ],
+    [
+      [
+        840,
+        392
+      ],
+      [
+        48,
+        392
+      ],
+      [
+        48,
+        408
+      ],
+      [
+        840,
+        408
+      ]
+    ],
+    [
+      [
+        840,
+        168
+      ],
+      [
+        48,
+        168
+      ],
+      [
+        48,
+        184
+      ],
+      [
+        840,
+        184
+      ]
+    ],
+    [
+      [
+        832,
+        632
+      ],
+      [
+        48,
+        632
+      ],
+      [
+        48,
+        648
+      ],
+      [
+        832,
+        648
+      ]
+    ],
+    [
+      [
+        824,
+        792
+      ],
+      [
+        824,
+        48
+      ],
+      [
+        808,
+        48
+      ],
+      [
+        808,
+        792
+      ]
+    ],
+    [
+      [
+        640,
+        72
+      ],
+      [
+        808,
+        72
+      ],
+      [
+        808,
+        168
+      ],
+      [
+        640,
+        168
+      ],
+      [
+        216,
+        168
+      ],
+      [
+        216,
+        72
+      ]
+    ]
+  ],
+  "traffic_initial": [
+    {
+      "u": 80,
+      "v": 280,
+      "leg": 1
+    },
+    {
+      "u": 200,
+      "v": 392,
+      "leg": 1
+    },
+    {
+      "u": 320,
+      "v": 168,
+      "leg": 1
+    },
+    {
+      "u": 440,
+      "v": 632,
+      "leg": 1
+    },
+    {
+      "u": 824,
+      "v": 240,
+      "leg": 1
+    },
+    {
+      "u": 216,
+      "v": 72,
+      "leg": 0
+    }
+  ],
+  "design_changes": [
+    "Core fire-truck east turnaround uses x832 for full half8 clearance before the King cutline at848.",
+    "Bus patrol now follows right-hand Bloor east/Wellesley-Harbord west lanes; paid TTC schedules remain separate."
+  ],
+  "traffic_lane_segments": [
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "COLLEGE / CARLTON",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "S",
+        "road_sections": [
+          {
+            "road": "COLLEGE / CARLTON",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "COLLEGE / CARLTON",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "N",
+        "road_sections": [
+          {
+            "road": "COLLEGE / CARLTON",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DUNDAS STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "S",
+        "road_sections": [
+          {
+            "road": "DUNDAS STREET",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "DUNDAS STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "N",
+        "road_sections": [
+          {
+            "road": "DUNDAS STREET",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "WELLESLEY / HARBORD",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "S",
+        "road_sections": [
+          {
+            "road": "WELLESLEY / HARBORD",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "WELLESLEY / HARBORD",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "N",
+        "road_sections": [
+          {
+            "road": "WELLESLEY / HARBORD",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "KING STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "S",
+        "road_sections": [
+          {
+            "road": "KING STREET",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "KING STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "N",
+        "road_sections": [
+          {
+            "road": "KING STREET",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "PARLIAMENT STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "W",
+        "road_sections": [
+          {
+            "road": "PARLIAMENT STREET",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "PARLIAMENT STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "E",
+        "road_sections": [
+          {
+            "road": "PARLIAMENT STREET",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BLOOR STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "PARLIAMENT STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "WELLESLEY / HARBORD",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "WELLESLEY / HARBORD",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BATHURST STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "BLOOR STREET",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      }
+    ]
+  ],
+  "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps."
+}

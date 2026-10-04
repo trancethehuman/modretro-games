@@ -266,6 +266,7 @@ def main():
                    "-Wno-unknown-pragmas", "-Wno-parentheses", "-fsanitize=address,undefined",
                    "-I", str(work), "-I", str(ENGINE / "include"),
                    str(FIXTURES / "runtime_harness.c"), str(ENGINE / "src/td_police.c"),
+                   str(ENGINE / "src/td_police_lanes.c"),
                    str(ENGINE / "src/td_traffic_signal_stop.c"), "-o", str(binary)]
         subprocess.run(command, check=True)
         result = subprocess.run([str(binary)], check=False)

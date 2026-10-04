@@ -27,6 +27,13 @@ def main():
     source = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(source)
     nodes = source.model()
+    road_spec = importlib.util.spec_from_file_location("police_roads", GAME / "scripts/create_police_roads.py")
+    road_source = importlib.util.module_from_spec(road_spec)
+    road_spec.loader.exec_module(road_source)
+    road_data = road_source.model()
+    assert (ENGINE / "include/td_police_road_data.h").read_text() == road_source.source(road_data)
+    assert sum(len(d["vertices"]) for d in road_data) < 32768
+    assert road_data[5]["vertices"] == [] and road_data[5]["goals"] == []
     world = json.loads((GAME / "content/districts/world.json").read_text())
     count = int(re.search(r"^#define TD_DISTRICT_COUNT (\d+)$",
                          (ENGINE / "include/td_district.h").read_text(), re.M)[1])
@@ -45,6 +52,34 @@ def main():
     fixture += "static const UWORD oracle_nodes[][3]={\n"
     fixture += "".join("{%d,%d,%d},\n" % (district, *node[:2])
                        for district, values in enumerate(nodes) for node in values)
+    fixture += "};\nstatic const UWORD oracle_vertices[][3]={\n"
+    fixture += "".join("{%d,%d,%d},\n" % (district, row[0]*8, row[1]*8)
+                       for district, data in enumerate(road_data) for row in data["vertices"])
+    fixture += "};\nstatic const UWORD oracle_patrol[][TD_POLICE_MAX_GOALS][2]={\n"
+    fixture = "#define TD_POLICE_MAX_GOALS 8\n" + fixture
+    for data in road_data:
+        fixture += "{" + ",".join("{%d,%d}" % point for point in data["goals"]) + "},\n"
+    fixture += "};\nstatic const UBYTE oracle_patrol_counts[]={" + ",".join(str(len(d["goals"])) for d in road_data) + "};\n"
+    fixture += "static const UWORD oracle_edges[][5]={\n"
+    fixture += "".join("{%d,%d,%d,%d,%d},\n" % (district, *a, *b)
+                       for district, data in enumerate(road_data) for a,b,_ in data["edges"])
+    fixture += "};\nstatic const UWORD oracle_roads[][5]={\n"
+    for district in world["districts"]:
+        roads, _ = road_source.road_source(district)
+        for road in roads:
+            for a,b in zip(road["points"],road["points"][1:]):
+                fixture += "{%d,%d,%d,%d,%d},\n" % (district["id"],*a,*b)
+    fixture += "};\nstatic const UWORD oracle_junctions[][3]={\n"
+    for district in world["districts"]:
+        roads, _ = road_source.road_source(district)
+        segments = [(a,b) for road in roads for a,b in zip(road["points"],road["points"][1:])]
+        crossings = {(c[0],a[1]) for a,b in segments for c,d in segments if a[1]==b[1] and c[0]==d[0]
+                     and min(a[0],b[0])<=c[0]<=max(a[0],b[0]) and min(c[1],d[1])<=a[1]<=max(c[1],d[1])}
+        fixture += "".join("{%d,%d,%d},\n" % (district["id"],*p) for p in sorted(crossings))
+    fixture += "};\nstatic const UWORD oracle_endcaps[][5]={\n"
+    fixture += "".join("{%d,%d,%d,%d,%d},\n" % (district,*a,*b)
+                       for district,data in enumerate(road_data) for a,b,owners in data["edges"]
+                       if any(owner[0] in ("endcap","patrol_endcap") for owner in owners))
     fixture += "};\n"
     compiler = shutil.which(os.environ.get("CC", "cc"))
     if not compiler:
@@ -66,7 +101,8 @@ def main():
                         "-Wno-unknown-pragmas", "-fsanitize=address,undefined",
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(ROOT / "tests/engine/police_harness.c"),
-                        str(ENGINE / "src/td_police.c"), str(ENGINE / "src/td_roads.c"),
+                        str(Path(sys.argv[sys.argv.index("--source")+1]) if "--source" in sys.argv else ENGINE / "src/td_police.c"),
+                        str(ENGINE / "src/td_police_lanes.c"), str(ENGINE / "src/td_roads.c"),
                         str(ENGINE / "src/td_traffic.c"), "-o", str(binary)], check=True)
         subprocess.run([str(binary)], check=True)
 

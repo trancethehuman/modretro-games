@@ -628,161 +628,590 @@
   "traffic_loops": [
     [
       [
-        848,
-        96
+        856,
+        104
       ],
       [
-        960,
-        96
+        952,
+        104
       ],
       [
-        960,
-        192
+        952,
+        168
       ],
       [
-        944,
-        192
-      ],
-      [
-        944,
-        176
-      ],
-      [
-        848,
-        176
+        856,
+        168
       ]
     ],
     [
       [
-        432,
-        112
+        440,
+        120
       ],
       [
-        848,
-        112
+        840,
+        120
       ],
       [
-        848,
-        176
+        840,
+        184
       ],
       [
-        944,
-        176
-      ],
-      [
-        944,
-        192
-      ],
-      [
-        432,
-        192
+        440,
+        184
       ]
     ],
     [
       [
-        432,
-        224
+        440,
+        216
       ],
       [
-        176,
-        224
+        168,
+        216
       ],
       [
-        176,
-        352
+        168,
+        360
       ],
       [
-        432,
-        352
+        440,
+        360
       ]
     ],
     [
       [
-        432,
+        440,
         304
       ],
       [
-        432,
-        496
+        424,
+        304
       ],
       [
-        576,
-        496
+        424,
+        504
       ],
       [
-        576,
-        688
+        568,
+        504
       ],
       [
-        384,
-        688
+        568,
+        680
       ],
       [
-        384,
+        376,
+        680
+      ],
+      [
+        376,
         736
       ],
       [
-        384,
-        512
+        392,
+        736
       ],
       [
-        256,
-        512
+        392,
+        504
       ],
       [
-        256,
-        352
+        264,
+        504
       ],
       [
-        432,
-        352
+        264,
+        360
+      ],
+      [
+        440,
+        360
       ]
     ],
     [
       [
-        960,
-        96
+        968,
+        88
       ],
       [
-        848,
-        96
+        840,
+        88
       ],
       [
-        848,
-        176
+        840,
+        184
       ],
       [
-        944,
-        176
+        936,
+        184
       ],
       [
-        944,
-        192
+        936,
+        200
       ],
       [
-        960,
-        192
+        968,
+        200
       ]
     ],
     [
       [
-        432,
-        352
+        424,
+        344
       ],
       [
-        176,
-        352
+        184,
+        344
       ],
       [
-        176,
-        224
+        184,
+        232
       ],
       [
-        432,
-        224
+        424,
+        232
       ]
     ]
   ],
+  "traffic_lane_segments": [
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street West",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Keele Street",
+            "segment": 1
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street West",
+            "segment": 1
+          },
+          {
+            "road": "Keele Street",
+            "segment": 2
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street West",
+            "segment": 2
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street West",
+            "segment": 1
+          },
+          {
+            "road": "Keele Street",
+            "segment": 2
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 1
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Runnymede Road",
+            "segment": 0
+          },
+          {
+            "road": "Annette Street",
+            "segment": 2
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 3
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 4
+          },
+          {
+            "road": "Jane Street",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Bloor Street West",
+            "segment": 6
+          },
+          {
+            "road": "South Kingsway",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Runnymede Road",
+            "segment": 0
+          },
+          {
+            "road": "Annette Street",
+            "segment": 2
+          },
+          {
+            "road": "Bloor Street West",
+            "segment": 5
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "turnaround",
+        "direction": "W",
+        "road_sections": [
+          {
+            "road": "Runnymede Road",
+            "segment": 0
+          },
+          {
+            "road": "Bloor Street West",
+            "segment": 5
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Runnymede Road",
+            "segment": 0
+          },
+          {
+            "road": "Bloor Street West",
+            "segment": 5
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Morningside Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Ellis Avenue",
+            "segment": 0
+          },
+          {
+            "road": "The Queensway",
+            "segment": 1
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "The Queensway",
+            "segment": 2
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "South Kingsway",
+            "segment": 3
+          },
+          {
+            "road": "The Queensway",
+            "segment": 3
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "E",
+        "road_sections": [
+          {
+            "road": "South Kingsway",
+            "segment": 3
+          },
+          {
+            "road": "The Queensway",
+            "segment": 3
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "South Kingsway",
+            "segment": 3
+          },
+          {
+            "road": "The Queensway",
+            "segment": 3
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "South Kingsway",
+            "segment": 2
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "South Kingsway",
+            "segment": 1
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Bloor Street West",
+            "segment": 6
+          },
+          {
+            "road": "South Kingsway",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Runnymede Road",
+            "segment": 0
+          },
+          {
+            "road": "Bloor Street West",
+            "segment": 5
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street West",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street West",
+            "segment": 1
+          },
+          {
+            "road": "Keele Street",
+            "segment": 2
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Keele Street",
+            "segment": 1
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Keele Street",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 1
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Bloor Street West",
+            "segment": 6
+          },
+          {
+            "road": "South Kingsway",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 4
+          },
+          {
+            "road": "Jane Street",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Annette Street",
+            "segment": 3
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Runnymede Road",
+            "segment": 0
+          },
+          {
+            "road": "Annette Street",
+            "segment": 2
+          },
+          {
+            "road": "Bloor Street West",
+            "segment": 5
+          }
+        ],
+        "direction": "S"
+      }
+    ]
+  ],
+  "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps.",
   "projection": "original compressed orthogonal north-up; not GIS coordinates",
   "dimensions": [
     1024,

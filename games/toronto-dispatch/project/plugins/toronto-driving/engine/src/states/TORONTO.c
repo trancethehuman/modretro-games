@@ -364,7 +364,7 @@ static UBYTE td_traffic_retreat_clear(UBYTE i,UWORD u,UWORD v){
 }
 static UBYTE td_traffic_separate(UBYTE i,UWORD target_u,UWORD target_v,UWORD *u,UWORD *v){
     UWORD from_u,from_v,old_u=td_traffic_u[i],old_v=td_traffic_v[i];
-    UBYTE count=td_streetcar_view_district?td_traffic_samples[i].count:i==5?6:4;
+    UBYTE count=td_traffic_samples[i].count;
     if(i==2&&td_police_waypoint.valid){
         from_u=td_police_from_u;from_v=td_police_from_v;
         if(from_u==target_u){
@@ -386,9 +386,7 @@ static UBYTE td_traffic_separate(UBYTE i,UWORD target_u,UWORD target_v,UWORD *u,
 }
 static void td_traffic_contacts(void);
 static void td_traffic_motion_inner(UBYTE mask,td_traffic_epoch_t *epoch){
-    /* Keep opposing vehicle centres 16px apart on the existing road lanes. */
-    static const UWORD bus_u[]={640,216,216,640,808,808};
-    static const UWORD bus_v[]={72,72,168,168,168,72};
+    /* All enabled districts use the same authored right-hand route cache. */
     UBYTE i,leg,blocked,separating,dirty=0,extents[6]={5,6,5,7,6,7};
     UWORD u,v,target_u,target_v,amount;
     UBYTE pursuit=td.wanted&&td.mode!=TD_RIDE&&!td_streetcar_ride_view&&td.district==td_streetcar_view_district;
@@ -410,19 +408,13 @@ static void td_traffic_motion_inner(UBYTE mask,td_traffic_epoch_t *epoch){
         if(td_distance(td.u,u)>=196||td_distance(td.v,v)>=196)td_traffic_retreat_mask&=~(1<<i);
         if((td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot&&
            td_distance(td.u,u)<168&&td_distance(td.v,v)<168)td_traffic_retreat_mask|=1<<i;
-        if(td_streetcar_view_district){
-            target_u=td_traffic_samples[i].u;target_v=td_traffic_samples[i].v;
-        }else if(i<4){
-            target_u=(leg<2?840:48)*16;target_v=((i==2?176:td_rows[2+i])+(leg==0||leg==3?-8:8))*16;
-        }else if(i==4){
-            target_u=(leg==0||leg==3?824:808)*16;target_v=(leg<2?792:48)*16;
-        }else {target_u=bus_u[leg]*16;target_v=bus_v[leg]*16;}
+        target_u=td_traffic_samples[i].u;target_v=td_traffic_samples[i].v;
         if(i==2&&(pursuit||td_police_waypoint.valid)){
             if(!pursuit&&u==target_u&&v==target_v)td_police_waypoint.valid=0;
             else{
                 if(!td_police_waypoint.valid||(u==td_police_waypoint.u&&v==td_police_waypoint.v)||td_police_stuck>=64){
                     UBYTE heading=td_police_waypoint.valid?td_police_waypoint.heading:
-                        td_streetcar_view_district?(td_traffic_samples[i].frame&7)/2:leg;
+                        (td_traffic_samples[i].frame&7)/2;
                     if(td_police_plan(td_streetcar_view_district,pursuit?td.wanted:0,u,v,
                         pursuit?td.u:target_u,pursuit?td.v:target_v,heading,&td_police_waypoint)){
                         td_police_from_u=u;td_police_from_v=v;td_police_stuck=0;
@@ -462,9 +454,9 @@ static void td_traffic_motion_inner(UBYTE mask,td_traffic_epoch_t *epoch){
             td_traffic_u[i]=u;td_traffic_v[i]=v;
             if(i==2&&td_police_waypoint.valid)td_police_stuck=0;
             else if(u==target_u&&v==target_v){
-                td_traffic_leg[i]=(leg+1)%(td_streetcar_view_district?td_traffic_samples[i].count:i==5?6:4);
+                td_traffic_leg[i]=(leg+1)%td_traffic_samples[i].count;
                 /* Banked targets and frames are cached between junctions. */
-                if(td_streetcar_view_district)dirty=1;
+                dirty=1;
             }
         }
     }
@@ -499,7 +491,7 @@ static void td_traffic_contacts(void){
     }
 }
 static void td_traffic_present(void){
-    UBYTE i,leg,frame,parked_hidden;
+    UBYTE i,frame,parked_hidden;
     volatile actor_t *parked=&actors[8];
     if(td_streetcar_view_district==TD_DISTRICT_ISLANDS){
         /* The six cached mainland positions do not represent Island actors.
@@ -508,9 +500,7 @@ static void td_traffic_present(void){
         return;
     }
     for(i=0;i<6;i++){
-        leg=td_traffic_leg[i];
-        if(td_streetcar_view_district)frame=td_traffic_samples[i].frame;
-        else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg<2?4:leg==5?6:0);
+        frame=td_traffic_samples[i].frame;
         if(i==2&&td_police_waypoint.valid)frame=td_police_waypoint.heading*2;
         actors[i+2].flags&=~ACTOR_FLAG_HIDDEN;
         /* Preserve Q4 collision centres in native Q5 actor coordinates. */
@@ -657,12 +647,8 @@ void toronto_init(void) BANKED {
         actors[i].next=actors_inactive_head; if(actors_inactive_head)actors_inactive_head->prev=&actors[i];actors_inactive_head=&actors[i];
         activate_actor(&actors[i]);
     }
-    if(td_streetcar_view_district&&td_streetcar_view_district!=TD_DISTRICT_ISLANDS)
+    if(td_streetcar_view_district!=TD_DISTRICT_ISLANDS)
         td_world_traffic_init(td_streetcar_view_district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
-    for(i=0;i<6;i++){
-        if(!td_streetcar_view_district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:216)*16;td_traffic_v[i]=(i<4?(i==2?176:td_rows[2+i])-8:i==4?240:72)*16;td_traffic_leg[i]=i==5?2:0;}
-
-    }
     td_people_reset();
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);td_traffic_present();td_pedestrians();td_streetcar_runtime_present();

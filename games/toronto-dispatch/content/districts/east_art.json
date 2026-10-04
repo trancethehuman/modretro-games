@@ -562,74 +562,74 @@
   "traffic_loops": [
     [
       [
-        224,
-        64
+        232,
+        72
       ],
       [
-        384,
-        64
+        376,
+        72
       ],
       [
-        384,
-        208
+        376,
+        200
       ],
       [
-        224,
-        208
+        232,
+        200
       ]
     ],
     [
       [
-        384,
-        64
+        392,
+        72
       ],
       [
-        544,
-        64
+        536,
+        72
       ],
       [
-        544,
-        208
+        536,
+        200
       ],
       [
-        384,
-        208
+        392,
+        200
       ]
     ],
     [
       [
-        224,
-        288
+        232,
+        296
       ],
       [
-        384,
-        288
+        376,
+        296
       ],
       [
-        384,
-        400
+        376,
+        392
       ],
       [
-        224,
-        400
+        232,
+        392
       ]
     ],
     [
       [
-        384,
-        288
+        392,
+        296
       ],
       [
-        544,
-        288
+        536,
+        296
       ],
       [
-        544,
-        400
+        536,
+        392
       ],
       [
-        384,
-        400
+        392,
+        392
       ]
     ],
     [
@@ -638,16 +638,16 @@
         368
       ],
       [
-        712,
-        368
-      ],
-      [
-        712,
-        464
-      ],
-      [
         696,
         464
+      ],
+      [
+        712,
+        464
+      ],
+      [
+        712,
+        368
       ]
     ],
     [
@@ -656,19 +656,294 @@
         560
       ],
       [
-        392,
-        560
-      ],
-      [
-        392,
-        688
-      ],
-      [
         376,
         688
+      ],
+      [
+        392,
+        688
+      ],
+      [
+        392,
+        560
       ]
     ]
   ],
+  "traffic_lane_segments": [
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Danforth Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Bain Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Logan Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Danforth Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Pape Avenue north fragment",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Bain Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Gerrard Street East",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street East",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Logan Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Gerrard Street East",
+            "segment": 0
+          }
+        ],
+        "direction": "E"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Pape Avenue south fragment",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Dundas Street East",
+            "segment": 0
+          }
+        ],
+        "direction": "W"
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Jones Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "E",
+        "road_sections": [
+          {
+            "road": "Jones Avenue",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Jones Avenue",
+            "segment": 0
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "W",
+        "road_sections": [
+          {
+            "road": "Jones Avenue",
+            "segment": 0
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ],
+    [
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          },
+          {
+            "road": "Eastern Avenue",
+            "segment": 1
+          }
+        ],
+        "direction": "S"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "E",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          },
+          {
+            "road": "Eastern Avenue",
+            "segment": 1
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      },
+      {
+        "kind": "lane",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          },
+          {
+            "road": "Eastern Avenue",
+            "segment": 1
+          }
+        ],
+        "direction": "N"
+      },
+      {
+        "kind": "turnaround",
+        "direction": "W",
+        "road_sections": [
+          {
+            "road": "Carlaw Avenue",
+            "segment": 0
+          },
+          {
+            "road": "Eastern Avenue",
+            "segment": 1
+          }
+        ],
+        "reason": "Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."
+      }
+    ]
+  ],
+  "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps.",
   "traffic_identity": "Six original circulation loops, not literal TTC or live traffic routes.",
   "projection": "Original compressed orthogonal north-up; not projected GIS coordinates or a complete municipal map.",
   "dimensions": [

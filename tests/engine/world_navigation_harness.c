@@ -190,13 +190,15 @@ static void test_crossings(void){
 
 static void test_traffic_and_names(void){
     UWORD u[6],v[6];UBYTE legs[6];td_traffic_sample_t samples[6],prior[6];
-    for(unsigned district=1;district<TD_DISTRICT_COUNT;district++){
+    const UWORD core_spawns[6][2]={{80,280},{200,392},{320,168},{440,632},{824,240},{216,72}};
+    const UBYTE core_legs[6]={1,1,1,1,1,0},core_heading[6]={2,2,2,2,3,0};
+    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++){
         if(district==TD_DISTRICT_ISLANDS){
             UWORD saved_u[6],saved_v[6];UBYTE saved_legs[6];
             memset(u,0xA5,sizeof(u));memset(v,0x5A,sizeof(v));memset(legs,0xA5,sizeof(legs));
             memset(samples,0xA5,sizeof(samples));memcpy(saved_u,u,sizeof(u));memcpy(saved_v,v,sizeof(v));
             memcpy(saved_legs,legs,sizeof(legs));memcpy(prior,samples,sizeof(samples));
-            for(unsigned i=0;i<6;i++)expect(!td_west_traffic_counts[district-1][i],
+            for(unsigned i=0;i<6;i++)expect(!td_traffic_counts[district][i],
                                           "the foot-only district has six explicitly disabled traffic slots");
             expect(!td_world_traffic_init(district,u,v,legs,samples)&&
                    !memcmp(u,saved_u,sizeof(u))&&!memcmp(v,saved_v,sizeof(v))&&
@@ -209,29 +211,34 @@ static void test_traffic_and_names(void){
             }
             continue;
         }
-        expect(td_world_traffic_init(district,u,v,legs,samples),"all six western actors initialize in one query");
+        expect(td_world_traffic_init(district,u,v,legs,samples),"all six enabled-district actors initialize in one query");
         for(unsigned i=0;i<6;i++){
-            expect(u[i]==td_west_traffic[district-1][i][0][0]*16&&v[i]==td_west_traffic[district-1][i][0][1]*16&&
-                   legs[i]==1&&samples[i].count==td_west_traffic_counts[district-1][i],"initial pose and route count preserve generated traffic");
+            expect(u[i]==(district?td_traffic_paths[district][i][0][0]:core_spawns[i][0])*16&&
+                   v[i]==(district?td_traffic_paths[district][i][0][1]:core_spawns[i][1])*16&&
+                   legs[i]==(district?1:core_legs[i])&&samples[i].count==td_traffic_counts[district][i],
+                   "initial pose and target leg bind the authored routes without dropping Core");
+            if(!district)expect((samples[i].frame&7)/2==core_heading[i],
+                   "Core cold headings face west on north lanes, north on the east lane and east on Bloor's south lane");
         }
         for(unsigned step=0;step<16;step++){
-            for(unsigned i=0;i<6;i++)legs[i]=step%td_west_traffic_counts[district-1][i];
+            for(unsigned i=0;i<6;i++)legs[i]=step%td_traffic_counts[district][i];
             expect(td_world_traffic_samples(district,legs,samples),"batched traffic query accepts all valid leg combinations");
-            for(unsigned i=0;i<6;i++)expect(samples[i].u==td_west_traffic[district-1][i][legs[i]][0]*16&&
-                  samples[i].v==td_west_traffic[district-1][i][legs[i]][1]*16,"batched targets cover closed-loop wrap and exact Q4 coordinates");
+            for(unsigned i=0;i<6;i++)expect(samples[i].u==td_traffic_paths[district][i][legs[i]][0]*16&&
+                  samples[i].v==td_traffic_paths[district][i][legs[i]][1]*16,"batched targets cover closed-loop wrap and exact Q4 coordinates");
         }
     }
     memset(samples,0xA5,sizeof(samples));memcpy(prior,samples,sizeof(samples));memset(legs,0,sizeof(legs));legs[5]=255;
     expect(!td_world_traffic_samples(1,legs,samples)&&!memcmp(samples,prior,sizeof(samples)),
            "invalid final actor leg cannot partially replace earlier cached samples");
-    expect(!td_world_traffic_samples(0,legs,samples),"core signal-specific loops stay with the driver");
+    expect(!td_world_traffic_samples(0,legs,samples)&&!memcmp(samples,prior,sizeof(samples)),
+           "invalid Core target leg cannot partially publish any cached route");
     expect(!td_world_traffic_samples(TD_DISTRICT_COUNT,legs,samples),"unknown traffic district rejected");
     expect(!td_world_traffic_samples(1,NULL,samples)&&!td_world_traffic_samples(1,legs,NULL),"missing traffic query buffers rejected");
     expect(!td_world_traffic_init(1,NULL,v,legs,samples)&&!td_world_traffic_init(1,u,NULL,legs,samples)&&
            !td_world_traffic_init(1,u,v,NULL,samples)&&!td_world_traffic_init(1,u,v,legs,NULL),"missing traffic init buffers rejected");
     td_world_traffic_init(1,u,v,legs,samples);
-    expect(u[0]==800*16&&v[0]==64*16&&samples[0].u==912*16&&samples[0].v==64*16&&samples[0].frame==0,
-           "known west loop starts east with original vehicle frame");
+    expect(u[0]==808*16&&v[0]==72*16&&samples[0].u==904*16&&samples[0].v==72*16&&samples[0].frame==0,
+           "known west loop starts east on Bloor's right-hand south lane");
     legs[0]=0;td_world_traffic_samples(1,legs,samples);
     expect(samples[0].frame==6,"wrapped loop leg0 faces north toward its starting point");
     char name[21];memset(name,0xA5,sizeof(name));

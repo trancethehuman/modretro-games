@@ -72,7 +72,7 @@
   "geography_metadata": [
     {
       "path": "content/districts/port_lands_art.json",
-      "sha256": "3057d9ad9b43f27618c9fdfa8d871eccfc303fb9d0a6a86199769cd3d13e6d46",
+      "sha256": "fcf2f971e935ee25a7aefdfcd6a461ba61efbd59cefddd78321547699998fb6e",
       "notice": "Source-derived geography and original compressed artwork; retain source attribution and distribution notices"
     }
   ],

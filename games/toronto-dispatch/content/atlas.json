@@ -35,7 +35,7 @@
       "collision_encoding_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e",
       "collision_bytes_sha256": "ab4d0215477aa433df3824a4b3131b193bea42ba3ea8c837f10f69e936a56891",
       "art_metadata": "content/districts/west_art.json",
-      "art_metadata_sha256": "b5c99a38b64c8393e755fdc5cd7bc106b7b3506c6a3db59e28989246ad81afc1"
+      "art_metadata_sha256": "994d12e254dc9b453a1ca96cf7cd393c40aade356b8c461eb91ebdd71bc20dba"
     },
     {
       "district": 2,
@@ -44,7 +44,7 @@
       "collision_encoding_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c",
       "collision_bytes_sha256": "4c89e9ff15874e740988156e2f0f0786ec98ccefce83437963718055115b4de4",
       "art_metadata": "content/districts/high_park_art.json",
-      "art_metadata_sha256": "9af2bbc171a92d45b788dddb37cfaeaaa94020c2a720ce825f1c5d43324a1db5"
+      "art_metadata_sha256": "1eba9a70cfc97a93729b75bbe138121c29a76d41c4c216e49ff5a0e387bcfcda"
     },
     {
       "district": 3,
@@ -53,7 +53,7 @@
       "collision_encoding_sha256": "c70340500318d89e5301a3cc94d51e96f534b0fcd6f33ab1ffb73c012e7e1764",
       "collision_bytes_sha256": "ff13b8ab29a9591b2d30f8e390f95d6321a6ec21f0169d9e84e40e23ca0f667b",
       "art_metadata": "content/districts/east_art.json",
-      "art_metadata_sha256": "5ad7cf7bf70d3885442de74ea5b0bf5066b7c7a928cb04f60097383cf99dda8c"
+      "art_metadata_sha256": "343ca433216156f68512e4f3fc3562a7e908de5b31faee877df9ca90c8ca238d"
     },
     {
       "district": 4,
@@ -62,7 +62,7 @@
       "collision_encoding_sha256": "5d20e96673670728837a481462b0f7e30d76e354579b1ea0427bc73545f73d1d",
       "collision_bytes_sha256": "1fc75a2a83c18ebf1153745719992aef618213851bc91e13f1c5e27ffba6795e",
       "art_metadata": "content/districts/port_lands_art.json",
-      "art_metadata_sha256": "1cb51b841782ba474d00c523aa4840118e7c7df3ce8ec21bbea5eefe014a547e"
+      "art_metadata_sha256": "9169013280b96b6c0e2cf1f2ceb8ce2d72dd085c20a00aa5194f1e29ae86f7dd"
     },
     {
       "district": 5,
@@ -80,7 +80,7 @@
       "collision_encoding_sha256": "5d8ea6a7309cdf6587a74961efd79988ef56f818f0d6e50ca561a90994308a51",
       "collision_bytes_sha256": "61554d1677edfd92dd3b86bfb3e82a5efbe9444dfb85e7b6423c03ffaa8ecf69",
       "art_metadata": "content/districts/north_art.json",
-      "art_metadata_sha256": "f5a8b63910e9317467478228f988cb8de8724e61a49e2b95ab222fe80a8245bc"
+      "art_metadata_sha256": "77031324f04673557035cd24ff612b13fd74624553f8345da96b5ecd7ad4cb85"
     }
   ],
   "districts": [

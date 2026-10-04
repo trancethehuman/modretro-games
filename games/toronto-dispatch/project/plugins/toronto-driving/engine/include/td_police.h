@@ -12,7 +12,9 @@ typedef struct { UWORD u,v; UBYTE heading,valid; } td_police_plan_t;
  * target, while wanted1..3 pursue the supplied courier target. There is no
  * persistent module RAM, position write, actor spawn or save mutation.
  * Inputs/output must be WRAM (stack is valid); failure preserves out exactly.
- * This bounded local road planner is not a whole-city shortest-path search.
+ * Pursuit is a bounded local road planner, not a whole-city shortest-path
+ * search. Return uses finite ROM policies to an exact authored patrol target;
+ * no near-target lateral shortcut or centre-line chase is permitted.
  * The caller must still admit EVERY movement through terrain, traffic,
  * courier and future tram sweeps, and must obey red lights. */
 UBYTE td_police_plan(UBYTE district,UBYTE wanted,UWORD u,UWORD v,

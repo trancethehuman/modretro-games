@@ -212,29 +212,14 @@ UBYTE td_streetcar_runtime_traffic_clear(UBYTE district,UWORD u,UWORD v) BANKED 
 UBYTE td_streetcar_runtime_traffic_segment(UBYTE district,UBYTE slot,UBYTE count,
     const UBYTE *current_legs,UWORD u,UWORD v,UWORD target_u,UWORD target_v,
     UWORD *from_u,UWORD *from_v) BANKED {
-    static const UWORD core_rows[]={288,400,176,640};
-    static const UWORD bus_u[]={640,216,216,640,808,808};
-    static const UWORD bus_v[]={72,72,168,168,168,72};
     UBYTE previous,leg,legs[6];td_traffic_sample_t samples[6];
     if(district>=TD_DISTRICT_COUNT||slot>=6||!current_legs||!from_u||!from_v||count<2)return FALSE;
     leg=current_legs[slot];if(leg>=count)return FALSE;
     previous=leg?leg-1:count-1;
-    if(district){
-        memcpy(legs,current_legs,sizeof(legs));legs[slot]=previous;
-        if(!td_world_traffic_samples(district,legs,samples))return FALSE;
-        if(samples[slot].count!=count)return FALSE;
-        *from_u=samples[slot].u;*from_v=samples[slot].v;
-    }else if(slot<4){
-        if(count!=4)return FALSE;
-        *from_u=(previous<2?840:48)*16;
-        *from_v=(core_rows[slot]+(previous==0||previous==3?-8:8))*16;
-    }else if(slot==4){
-        if(count!=4)return FALSE;
-        *from_u=(previous==0||previous==3?824:808)*16;*from_v=(previous<2?792:48)*16;
-    }else{
-        if(count!=6)return FALSE;
-        *from_u=bus_u[previous]*16;*from_v=bus_v[previous]*16;
-    }
+    memcpy(legs,current_legs,sizeof(legs));legs[slot]=previous;
+    if(!td_world_traffic_samples(district,legs,samples))return FALSE;
+    if(samples[slot].count!=count)return FALSE;
+    *from_u=samples[slot].u;*from_v=samples[slot].v;
     /* Off-route coordinates never acquire a new escape route. A reverse
        step remains on this segment without changing its cached leg/frame. */
     if(*from_u==target_u)return u==target_u&&

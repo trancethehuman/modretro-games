@@ -23,7 +23,8 @@ COLORS = ['#071821', '#306850', '#86c06c', '#e0f8cf']
 RGB = [tuple(bytes.fromhex(c[1:])) for c in COLORS]
 TW, TH = WIDTH//8, HEIGHT//8
 FLEET_HALVES = (5, 6, 5, 7, 6, 7)
-EXPECTED_LAYOUT = 'bcec25cc0bd402bfeef20de4e36ea3be68c38f47fadfcaef12117a3b932b8733'
+# Reviewed traffic-only reversal/provenance; registered pixels/terrain remain unchanged.
+EXPECTED_LAYOUT = '2eda9cea61dd34211457331e3336ad7d433bccdc834173bfa97459863644d4d4'
 
 
 def paint_path(draw, points, half, fill):

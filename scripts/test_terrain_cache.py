@@ -362,7 +362,7 @@ def main():
             command=[compiler,'-std=c11','-O1','-g','-Wall','-Wextra','-Werror',
                      '-Wno-unknown-pragmas','-Wno-parentheses','-fsanitize=address,undefined',
                      '-I',str(work),'-I',str(ENGINE/'include'),'-I',str(FIXTURES),
-                     str(work/'harness.c'),str(ENGINE/'src/td_police.c'),
+                     str(work/'harness.c'),str(ENGINE/'src/td_police.c'),str(ENGINE/'src/td_police_lanes.c'),
                      str(ENGINE/'src/td_traffic_signal_stop.c'),'-o',str(binary)]
             subprocess.run(command,check=True)
             output=subprocess.check_output([str(binary),str(work/f'{label}.state'),str(work/f'{label}.counts')],text=True)

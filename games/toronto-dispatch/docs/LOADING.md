@@ -1,8 +1,8 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Select the latest local playtest candidate, **`toronto-dispatch-menu-input-release.gbc`**, **1,048,576 bytes**, SHA-256 **`7ccfa3b0532b2fa2f65f5198644c8f5ee3dc59df2b2e40034a3f1af954bdbeb9`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
+Select the latest local playtest candidate, **`toronto-dispatch-right-hand-traffic-filter.gbc`**, **1,048,576 bytes**, SHA-256 **`e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes. The supported target is your **writable ModRetro DevDay cartridge**; it can be empty. This is a CGB-only homebrew ROM.
 
-This build fixes held A/B from menus accidentally accelerating or reversing the car. Release the menu button, then press it again to drive; existing momentum still coasts after resuming. Official build/resource and full source checks pass. A fresh native run completes Market Start, checks menu exits and independent button releases, loads North through Yonge, walks and re-enters the car, freezes the map, selects a truck and recovers later automatically saved progress after reset. Earlier eight-job northern progress belongs to the old `22157…` ROM below. These scoped records do not prove every contract or two enjoyable human hours. No physical installation has been attempted. Detailed [build](BUILD.md) and [test evidence](../TESTING.md) remain separate from physical verification.
+This build retains menu-button release handling and corrects 36 NPC traffic circuits to right-hand lanes with connected police chase/return. Its fresh native replay completes three unique jobs, samples all three attention levels and cash-zero recovery, takes paid Union–St Clair train trips, preserves the parked car, walks/re-enters it, freezes/controls the map and restores committed progress by in-worker reset. Official/full source/compiled checks pass. Test-route mistakes and the initial needs-review record remain disclosed. These scoped records do not prove every contract, two enjoyable human hours or physical installation. Detailed [build](BUILD.md), [current native evidence](NATIVE_RIGHT_HAND_TRAFFIC.json) and [test scopes](../TESTING.md) remain separate from physical verification.
 
 ## 1. Prepare the computer and console
 
@@ -18,24 +18,24 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The selected loading ROM is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-menu-input-release.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The prepared local `toronto-dispatch-menu-input-release.zip` is **139,546 bytes**, SHA-256 **`65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f`**, pinned to source **`b7666c784cac0651a3c9f5e22bc28c707eeec667`**. Its [independent package audit](MENU_INPUT_PACKAGE_AUDIT.json) passes 1,337 checks, including all 203 committed build inputs and the six-member allowlist. Extract it, check `SHA256SUMS` against the ROM above and retain `BUILDINFO.json`, loading instructions, licence and notices. The bundled guide is frozen at that source commit; these later package checks do not change the archive. The historical `toronto-dispatch-north-initial.zip` belongs to the older ROM.
+The older prepared local `toronto-dispatch-menu-input-release.zip` is **139,546 bytes**, SHA-256 **`65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f`**, pinned to source **`b7666c784cac0651a3c9f5e22bc28c707eeec667`**. Its [independent package audit](MENU_INPUT_PACKAGE_AUDIT.json) passes 1,337 checks, including all 203 committed build inputs and the six-member allowlist. Its ROM is `7ccfa3b0532b2fa2f65f5198644c8f5ee3dc59df2b2e40034a3f1af954bdbeb9`, not the current traffic ROM. For any current bundle, extract it, check `SHA256SUMS` against its own ROM and retain `BUILDINFO.json`, loading instructions, licence and notices. The bundled guide is frozen at that source commit; these later package checks do not change the archive. The historical `toronto-dispatch-north-initial.zip` belongs to the older ROM.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-menu-input-release.gbc`, `toronto-dispatch-north-initial.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-right-hand-traffic-filter.gbc`, `toronto-dispatch-north-initial.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-menu-input-release.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-menu-input-release.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -75,6 +75,7 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Islands | Park on the mainland, walk to the ferry terminal and travel to Hanlan's, Centre or Ward's; follow public paths/bridges, with no car teleport. A no-job courier with cash below $4 can return from an Island dock for $0 on the normal schedule |
 | Northern district | Follow Spadina or Yonge north of Bloor. Complete three starter jobs to unlock chapter 13's Baldwin Book Box, collect at Union and park below Baldwin Steps; walk the public stair route to deliver |
 | Northern train stops | Walk to Summerhill or St Clair, press B, choose the other stop and board with A. Each trip costs $3; the parked car stays at its original location |
+| Street consequences | Human impacts have non-graphic recovery, condition loss after pickup, $20/$40/$60 escalation and H1/H2/H3 pursuit. Capture clears attention and clamps its $25/$100/$225 fine at available cash. A car blocking a lane makes NPCs wait; move it clear and check police return |
 | Saving | Use the pause menu's Save action, record cash and completed count, power off/on and confirm both persist |
 | Audio | Start → Audio, then A cycles music + effects, effects only and silent; B returns. Check the city score, engine and braking sounds, short delivery/transit cues, and silence in silent mode. Menu/world pause stops music and engine; short interface/result cues may finish. The mode defaults on each boot |
 | Readability/performance | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input |
@@ -91,15 +92,20 @@ Keep a note of the ROM SHA-256 and any problem's location/action. Save v10 prese
 
 A host-streamed `play` demo is optional and never writes the cartridge. It can help assess the screen/buttons, but it cannot replace the cold-boot and save checks above.
 
-Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected menu-input ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
+Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected traffic ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
 
 ## Evidence and older builds
 
-The selected menu-input build's [resource audit](MENU_INPUT_BUILD_AUDIT.json) passes 219,647 checks; a separate linked instruction review passes 231. Its [fresh native record](NATIVE_MENU_INPUT_RELEASE.json) covers the controls and one delivery described above, with no progress imported from old ROMs. Curation passes 13,669 checks and independent native/prose comparison passes 34,355 with zero findings. Fresh plugin discovery on 2026-10-04 found no connected Chromatic; physical loading remains pending. The stopped Core / uncrowded North samples count 345 / 686 completed updates across separate 1,080-VBlank windows. They do not establish whole-city pacing or crowded performance. Gameplay bank 2 has one byte free, UI bank 1 three and save bank 29 fifteen; static reserve is 1,096 bytes, with deepest stack use unmeasured.
+The selected traffic build's [source/build audit](RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json) authenticates 206 inputs and actual compiled lane/police/ABI guards. The [fresh scoped native replay](NATIVE_RIGHT_HAND_TRAFFIC.json) ends with three completions/$101 after $20/$40/$60 human fines, underfunded H3 capture, recovery delivery and two $3 train fares. Native reset proves committed in-worker SRAM restoration, not physical cold-boot persistence. The [initial traffic replay](NATIVE_TRAFFIC_INITIAL_REVIEW.json) remains needs-review. Synthetic coordinate-filter work reduction does not establish a native/whole-city speedup. Helper/gameplay banks have 1/10 free bytes, reserve 1,096, deepest stack unmeasured. Supported discovery on 2026-10-04 found zero connected Chromatics; no physical loading is claimed.
+
+### Historical menu-input build
+
+
+The historical menu-input build's [resource audit](MENU_INPUT_BUILD_AUDIT.json) passes 219,647 checks; a separate linked instruction review passes 231. Its [fresh native record](NATIVE_MENU_INPUT_RELEASE.json) covers the controls and one delivery described above, with no progress imported from old ROMs. Curation passes 13,669 checks and independent native/prose comparison passes 34,355 with zero findings. Fresh plugin discovery on 2026-10-04 found no connected Chromatic; physical loading remains pending. The stopped Core / uncrowded North samples count 345 / 686 completed updates across separate 1,080-VBlank windows. They do not establish whole-city pacing or crowded performance. Gameplay bank 2 has one byte free, UI bank 1 three and save bank 29 fifteen; static reserve is 1,096 bytes, with deepest stack use unmeasured.
 
 ### Historical initial North build
 
-The old `toronto-dispatch-north-initial.zip` remains unchanged: 138,530 bytes, SHA-256 `c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac`, ROM `22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95`, source `8290eefba2c909ef004970669b05588c471b2d10`. Its [package audit](NORTH_PACKAGE_AUDIT.json) passes 1,235 checks. This older build has the reproduced Pause B-input leak; select the corrected menu-input candidate above for current playtesting. Its bundled guide and same-ROM evidence retain their original identities.
+The old `toronto-dispatch-north-initial.zip` remains unchanged: 138,530 bytes, SHA-256 `c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac`, ROM `22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95`, source `8290eefba2c909ef004970669b05588c471b2d10`. Its [package audit](NORTH_PACKAGE_AUDIT.json) passes 1,235 checks. This older build has the reproduced Pause B-input leak; select the current traffic candidate above for current playtesting. Its bundled guide and same-ROM evidence retain their original identities.
 
 The historical `22157…` North build's [compiled audit](NORTH_BUILD_AUDIT.json) verifies 47,502 assertions and 203 frozen project inputs. Its [fresh record](NATIVE_NORTH_FRESH.json) completes three Core jobs and loads North while carrying job 96. Its [separately recorded continuation](NATIVE_NORTH_CONTINUED.json) completes the Baldwin stairs delivery, verifies two train trips and map/reset/car retention, and exercises reciprocal northern seams. Progress imported from the fresh same-ROM checkpoint is disclosed. Independent fresh and continued reviews pass 37,871 and 55,785 evidence checks, respectively; the continuation also passes 359 documentation/link/privacy checks. A [third scoped record](NATIVE_NORTH_SUPPLEMENT.json) imports those four genuine completions and adds only jobs 3 and 6: undamaged truck pay 157 and condition-80 signed-return pay 120, ending cash 455 / done 6 after $20/$40/$60 pedestrian fines and a $225 H3 police fine. Its independent evidence review passes 31,888 checks. It adds no other northern job or measured campaign-duration proof. Wider regional jobs and performance remain pending. Main code bank 2 is full, UI bank 1 has three bytes free and save bank 29 has fifteen; further code changes require a fresh capacity review. The linked 1,096-byte static reserve does not measure deepest stack use.
 
@@ -109,4 +115,4 @@ The [retained e797 22-job campaign](NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json) and
 
 The retained `964f…` [five-job continuation](NATIVE_COURIER_CHAIN_SAMPLES.json), earlier matched-route, bus/heat/patrol, Queen and Island records retain their own identities in [TESTING.md](../TESTING.md). Their wider acceptance is not inherited by this ROM. Failed `c4fa…`, `8a96…` and `cf2f…` candidates must not be selected. Downloadable [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) remains an older separate release.
 
-Full Old Toronto, remaining Island jobs, all contracts/balance, two enjoyable human hours, wider vehicle/crowd/pacing/stack checks, native older-save imports, human handling/audio, browser recovery and hardware remain open. The source audit also identifies wrong-side and centreline NPC traffic routes awaiting correction; native permanent deadlock has not been established. Host migration checks and emulator resets do not establish physical power-off persistence.
+Full Old Toronto, remaining Island jobs, all contracts/balance, two enjoyable human hours, wider vehicle/crowd/pacing/stack checks, native older-save imports, human handling/audio, browser recovery and hardware remain open. All 36 traffic circuits now use authored right-hand lanes; broader queue/performance behavior and permanent-deadlock hypotheses remain separate. Host migration checks and emulator resets do not establish physical power-off persistence.

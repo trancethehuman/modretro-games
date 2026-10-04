@@ -72,7 +72,10 @@
         "include/td_terrain.h",
         "src/td_terrain.c",
         "include/td_police.h",
-        "src/td_police.c"
+        "src/td_police.c",
+        "include/td_police_lanes.h",
+        "include/td_police_road_data.h",
+        "src/td_police_lanes.c"
       ]
     }
   ]

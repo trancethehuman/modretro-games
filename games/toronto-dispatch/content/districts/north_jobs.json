@@ -68,8 +68,8 @@
   ],
   "geography_metadata": {
     "path": "content/districts/north_art.json",
-    "source_layout_sha256": "bcec25cc0bd402bfeef20de4e36ea3be68c38f47fadfcaef12117a3b932b8733",
-    "geometry_sha256": "f5e56c3106604a98e45ca5702a71dc3592016f25792eef679a66b780e81d0297",
+    "source_layout_sha256": "2eda9cea61dd34211457331e3336ad7d433bccdc834173bfa97459863644d4d4",
+    "geometry_sha256": "cd2d68b830f87ca906519b65e1d7d260f47d00a3c055eb8207c613d430e89022",
     "notice": "Source facts and original compressed art; no surveyed service doors"
   },
   "line1_append": [

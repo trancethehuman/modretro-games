@@ -22,7 +22,8 @@ STOP_FIELDS = ('id', 'u', 'v', 'name', 'transit', 'district', 'reserved')
 PREFIX_STOPS_SHA256 = 'de021d3932a406dc75772cf61e330ddb6cc7d56b6956de227ff6aa1f0f349c90'
 PREFIX_QUESTS_SHA256 = '64c3f534bd12c03dd50c825691e555974cc9143384199ea8fb5f0f0edb6bde5e'
 GEOMETRY_FIELDS = ('dimensions', 'roads', 'footpaths', 'rails', 'rail_crossings', 'landmarks', 'parks', 'water', 'blocked_ravines', 'private_ground', 'forced_foot_masks', 'closed_frontiers', 'ports', 'core_throat_proposal', 'stop_candidates', 'traffic_loops', 'road_half_width', 'walk_half_width', 'footpath_half_width', 'rail_half_width')
-GEOMETRY_SHA256 = 'f5e56c3106604a98e45ca5702a71dc3592016f25792eef679a66b780e81d0297'
+# Reviewed traffic-only handedness change; mission/stop fields and terrain are unchanged.
+GEOMETRY_SHA256 = 'cd2d68b830f87ca906519b65e1d7d260f47d00a3c055eb8207c613d430e89022'
 CHAPTER = 'Northern hills and station rounds'
 STOP_POINTS = ((696,416,'SUMMERHILL',1,0),
                (688,176,'ST CLAIR',1,0),

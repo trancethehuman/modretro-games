@@ -1,0 +1,864 @@
+{
+  "schemaVersion": 1,
+  "outcome": "passed-scoped-source-and-compiled-build-audit",
+  "purpose": "Source geometry, collision-backed police planning, single-filter equivalence and exact compiled ROM/ABI evidence. This audit assigns no native gameplay acceptance.",
+  "build": {
+    "rom": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc",
+      "bytes": 1048576,
+      "sha256": "e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6"
+    },
+    "noi": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc.debug/symbols.noi",
+      "bytes": 57883,
+      "sha256": "449e832e380619a252ca72891278a19aa8506a970ae81d769b9f43e4f5d5ce8d"
+    },
+    "globals": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc.debug/globals.i",
+      "bytes": 1477,
+      "sha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a"
+    },
+    "sourceFingerprint": "c4fa1cedbe63204b43b8c467fb777468476568f5f61c8f7b6c921e76068d90c0",
+    "projectRevision": "c612cd5f51e737d7d4b998422167daee41ce38c3700004d9444d3ad0c88598e7",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f",
+    "builder": "gb-studio-cli",
+    "exitCode": 0,
+    "durationMs": 52039,
+    "receipt": {
+      "path": "games/toronto-dispatch/project/build/right-hand-traffic-filter-build.json",
+      "bytes": 13815,
+      "sha256": "d5d168c73b3ea04067191d8ee05cb4546225da95de4b1cade94106ef819d9bf4"
+    },
+    "header": {
+      "title": "TORONTODISPATCH",
+      "colorMode": "gbc-only",
+      "colorFlag": 192,
+      "mapper": "MBC5",
+      "cartridgeType": 30,
+      "cartridgeTypeName": "MBC5+RUMBLE+RAM+BATTERY",
+      "romSizeCode": 5,
+      "declaredRomSizeBytes": 1048576,
+      "ramSizeCode": 3,
+      "declaredRamSizeBytes": 32768,
+      "headerChecksum": 232,
+      "computedHeaderChecksum": 232,
+      "headerChecksumValid": true,
+      "nintendoLogoValid": true
+    },
+    "globalChecksumVerified": true,
+    "structuredWarnings": [
+      {
+        "code": "DEP0190",
+        "category": "node-deprecation",
+        "source": "gb-studio-cli-process",
+        "message": "Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated."
+      }
+    ],
+    "stderrWarningsRetainedInOriginalReceipt": true
+  },
+  "sourceCorrespondence": {
+    "frozenSnapshot": {
+      "path": "games/toronto-dispatch/project/build/right-hand-traffic-filter-source-pins.json",
+      "bytes": 41285,
+      "sha256": "d402b6c603eeabd1116f5892875856e9ff61558821613fcfa237f386dde34d5b"
+    },
+    "baseComparisonCommit": "11328bf423878ba780866977cfb9b32780294f0e",
+    "candidatePublicationCommit": null,
+    "beforeProjectFiles": 203,
+    "currentProjectFiles": 206,
+    "allCurrentSnapshotFilesVerified": true,
+    "changedNativeFiles": [
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/engine.json",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_district_world.h",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_police.h",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_world.h",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/states/TORONTO.c",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_police.c",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_streetcar_runtime.c",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_world.c"
+    ],
+    "addedNativeFiles": [
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_police_lanes.h",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/include/td_police_road_data.h",
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_police_lanes.c"
+    ],
+    "initialSnapshot": {
+      "path": "games/toronto-dispatch/project/build/right-hand-traffic-initial-source-pins.json",
+      "bytes": 41178,
+      "sha256": "02afac5688aaae72eb01fc97b8113c9f21dc8438dc74204a026addc2a28b16ac"
+    },
+    "onlyChangeFromInitial": [
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_police_lanes.c"
+    ],
+    "previousHelperSha256": "3ae10ed33afbfc0183d39a085a47c3d0ff358a7015d6a913d31f2eade8640b58",
+    "filteredHelperSha256": "4e96da4a562f44e1c120f6d4382fa6e4b0b0870f868a5f0ba541b10affac680f",
+    "quests": 104,
+    "stops": 64,
+    "districts": 7,
+    "saveVersion": 10,
+    "saveBytes": 58,
+    "persistentBytesAdded": 0
+  },
+  "independentAuthoredLanes": {
+    "checks": 244003,
+    "failures": 0,
+    "roles": 36,
+    "closedEdges": 170,
+    "wholeBodySamples": 55124,
+    "actualSquareHalfPixels": [
+      5,
+      6,
+      5,
+      7,
+      6,
+      7
+    ],
+    "conservativeHalfPixels": 8,
+    "rightHandOffsetPixels": 8,
+    "checksScope": "Named principal roads, exact bounded junction/endcap exceptions, collision sweep, opposing lanes, spawn/heading and final native source tables; meaningful malformed/mutated cases run by default.",
+    "currentCheckerAndFixture": [
+      {
+        "path": "games/toronto-dispatch/scripts/check_traffic_lanes.py",
+        "bytes": 32768,
+        "sha256": "b2b102e744df6104507a4c09e9d3a37443c4a51ad08fa3ba5c57855839aa1d8a"
+      },
+      {
+        "path": "tests/fixtures/traffic_lanes.json",
+        "bytes": 104682,
+        "sha256": "799c9bdb5529773f1ce86e9ae5fa179705a66c12d084b63da65b6ea20f06566e"
+      }
+    ],
+    "preservedContent": {
+      "bytePinnedFiles": 120,
+      "missionStopFieldsUnchanged": true,
+      "westEastPortFreshGeographyHashLeavesOnly": 4,
+      "normalizedRows": [
+        {
+          "path": "content/districts/west_jobs.json",
+          "authenticated_original_sha256": "57e9a45be00da05cedf1df78dc15ce24218957fa7a0476814f7224ccbfa1d46c",
+          "semantic_sha256": "5642ad4e7935509ab87f085577c07357cf5de2d5dbdb9fc95e7c448745a1fc27",
+          "allowed_changes": [
+            "/geography_metadata/0/sha256",
+            "/geography_metadata/1/sha256"
+          ],
+          "current_sha256": "1d877edec865147397fb09e2567ae1ec1a40b1d629bfc60b1d7005cfa9096d26"
+        },
+        {
+          "path": "content/districts/east_jobs.json",
+          "authenticated_original_sha256": "602c83e1852a1adde536f681664ee314d76bbda2db71cf24dba2039bd975050a",
+          "semantic_sha256": "050765373542e58bc6328d10775e86a4cefd99c3e6e486ca9aedcdd79295c990",
+          "allowed_changes": [
+            "/geography_metadata/0/sha256"
+          ],
+          "current_sha256": "90044a62b402abbe85cb4c6ccb16d65d78f6b05dc4fd5f47be7221cc55aaf0e1"
+        },
+        {
+          "path": "content/districts/port_lands_jobs.json",
+          "authenticated_original_sha256": "aee4e0c0bff036de9e6452f393d95f6a55b924d244604667babf05959ade43d0",
+          "semantic_sha256": "d493176661d90a79af55bd85042a07c729ed62c67a1e0f4aed857433ab24fa18",
+          "allowed_changes": [
+            "/geography_metadata/0/sha256"
+          ],
+          "current_sha256": "5e78ab1ac563fd005a45636629c5ca7b5b6dc9b6fb41118312c7f1724bef0cbf"
+        }
+      ],
+      "northException": "Only source-layout and geometry provenance hashes; all actual stop/mission fields canonically pinned."
+    },
+    "predecessor": {
+      "commit": "b7666c784cac0651a3c9f5e22bc28c707eeec667",
+      "authenticatedChecks": 46230,
+      "wrongOrCentreLanePatrolsRejected": 36,
+      "alreadyLegalPatrols": 0,
+      "qualification": "Source route rejection, not an inherited native jam or collision claim."
+    }
+  },
+  "independentPoliceGraph": {
+    "sourceChecks": 132625,
+    "failures": 0,
+    "nativeDataBytes": 9372,
+    "vertices": 1148,
+    "districts": [
+      {
+        "district": 0,
+        "vertices": 376,
+        "goals": 4,
+        "edges": 658,
+        "third_edges": 0,
+        "max_return_distance_pixels": 1872
+      },
+      {
+        "district": 1,
+        "vertices": 182,
+        "goals": 4,
+        "edges": 290,
+        "third_edges": 2,
+        "max_return_distance_pixels": 1312
+      },
+      {
+        "district": 2,
+        "vertices": 156,
+        "goals": 4,
+        "edges": 251,
+        "third_edges": 7,
+        "max_return_distance_pixels": 1912
+      },
+      {
+        "district": 3,
+        "vertices": 178,
+        "goals": 4,
+        "edges": 301,
+        "third_edges": 0,
+        "max_return_distance_pixels": 1328
+      },
+      {
+        "district": 4,
+        "vertices": 124,
+        "goals": 4,
+        "edges": 192,
+        "third_edges": 0,
+        "max_return_distance_pixels": 1304
+      },
+      {
+        "district": 5,
+        "vertices": 0,
+        "goals": 0,
+        "edges": 0
+      },
+      {
+        "district": 6,
+        "vertices": 132,
+        "goals": 6,
+        "edges": 213,
+        "third_edges": 0,
+        "max_return_distance_pixels": 1352
+      }
+    ],
+    "semantics": {
+      "between_nodes": "Strict Q4 cardinal interval with exact unchanged lateral coordinate and matching heading; normalized serialized edges have no same-heading overlap.",
+      "chase": "Finite iterative local walk; explores at most four graph edges when predecessor edges are <=16px. Chooses actual first edge, then only shortens its longitudinal coordinate toward target; there is no lateral snap.",
+      "return": "All supported serialized vertices reach each exact authored role2 target. Every packed return step strictly decreases an independently recomputed weighted potential; between-node heading follows its existing directed edge first.",
+      "caller": "Original cached patrol target/leg remain intact during pursuit. Continuous return begins after the current cached cardinal chase segment; waypoint is cleared only at exact original target, then ordinary leg advancement resumes. Actual movement is still committed only by traffic epoch admission/terrain/future-tram guards.",
+      "failure": "Public td_police_plan validates district/current scene/Islands/heat/heading/bounds/body/arrived and delegates. td_police_lanes_next publishes only local result after successful sweep, so rejection preserves caller output."
+    },
+    "lookupWorkBound": {
+      "maxCoreNodes": 376,
+      "maxDirectedExitsPerNode": 3,
+      "chaseLookaheadEdges": 4,
+      "maxChaseEdgeVisits": 120
+    },
+    "islandsGraphEmpty": true,
+    "generatorFreshAndDeterministic": true,
+    "returnPolicy": "All supported vertices reach every exact district role-2 patrol goal; every packed return choice strictly decreases an independently recomputed weighted distance potential."
+  },
+  "filterDifferential": {
+    "results": {
+      "cases": 3306549,
+      "checks": 31805771,
+      "failures": 0,
+      "successes": 2005726,
+      "rejected": 1300823,
+      "vertices": 1148,
+      "edges": 1905,
+      "all_q4_interiors": 1590927,
+      "old_nodes": 434005963,
+      "new_nodes": 434005963,
+      "old_exit_calls": 1166344743,
+      "new_exit_calls": 61601380,
+      "old_lookup_exits": 1165339088,
+      "new_lookup_exits": 60595725
+    },
+    "lookupExitReductionPercentInSyntheticCases": 94.800164,
+    "sourceChange": "One exact origin-coordinate early continue plus comment, authenticated against immutable old source bytes; no other runtime tokens change.",
+    "coverage": [
+      "All 1,148 exact vertices, every local patrol target plus three arbitrary/arrival targets, all four wanted levels and four headings.",
+      "Every one of 1,590,927 open Q4 coordinates along all 1,905 directed edges, with rotated valid heat and exact/arbitrary targets.",
+      "Seven fractional/start/middle/end positions per edge with complete local target/wanted/heading matrix; signed one-Q4 lateral deviations.",
+      "All 256 district, wanted and heading encodings; coordinate/target bounds and rollover encodings; null output, wrong loaded district, solid old body, and blocked long-edge middle after membership proving failed full sweep preserves output.",
+      "Both actual public wrappers and unchanged actual td_roads.c execute against registered collision grids; all terrain read order/count, hit markers, result bytes, return flags and guarded failure output compare exactly.",
+      "Instrumentation counts membership nodes, all private exit calls and membership-only exit extraction; other chase/return extraction remains equal on every case."
+    ],
+    "instrumentationScope": "Counters exist only in temporary host copies. Work reduction is not native cycles, frame rate or latency. Node visits and all nonmembership chase/return extraction remain equal per query."
+  },
+  "compiled": {
+    "checks": 115700,
+    "checksByGroup": {
+      "identity": 15,
+      "source": 424,
+      "memory": 12,
+      "capacity": 37,
+      "abi": 39,
+      "bounds": 126,
+      "tables": 26,
+      "geometry": 101464,
+      "graph": 3819,
+      "policy": 9738
+    },
+    "policeTables": {
+      "td_police_offsets": {
+        "bank": 1,
+        "pc": "0x4ecf",
+        "bytes": 16,
+        "sha256": "8151bfee96c0b5af77e25da710ebaddb5a8f41b7b5be9a2144e1f1720431429b"
+      },
+      "td_police_third_offsets": {
+        "bank": 1,
+        "pc": "0x4edf",
+        "bytes": 16,
+        "sha256": "a011c5947adffe69ed9183a741d76def2058b087e03074a270ee50fcbbeb575d"
+      },
+      "td_police_goal_offsets": {
+        "bank": 1,
+        "pc": "0x4eef",
+        "bytes": 16,
+        "sha256": "ec2ef36f8c811013f135563e7f8a1d9ee586de58349a6f2bcdf69103459215f1"
+      },
+      "td_police_vertices": {
+        "bank": 1,
+        "pc": "0x4eff",
+        "bytes": 9184,
+        "sha256": "d49900b824b93a91f10a52ee6f97be6d3013e909c779839ca39a29200f945278"
+      },
+      "td_police_thirds": {
+        "bank": 1,
+        "pc": "0x72df",
+        "bytes": 36,
+        "sha256": "6713cc874a10c76d6c8052486e903767d65528d2cf4075bac55cefc870f8be91"
+      },
+      "td_police_goals": {
+        "bank": 1,
+        "pc": "0x7303",
+        "bytes": 104,
+        "sha256": "d72781aed08368f557e4723e190dc16c92224eda636f16781af54756af9b8c68"
+      }
+    },
+    "finiteReturnPolicyEdgesChecked": 4830,
+    "callSites": {
+      "publicPlan": [
+        {
+          "bank": 25,
+          "pc": "0x6110",
+          "bytes": "1e0921fc7ecd7d3e"
+        }
+      ],
+      "laneHelper": [
+        {
+          "bank": 9,
+          "pc": "0x7ff5",
+          "bytes": "1e01216a77cd7d3e"
+        }
+      ],
+      "currentDistrictQuery": {
+        "bank": 25,
+        "pc": "0x7d0a"
+      },
+      "laneRoadSweep": [
+        {
+          "bank": 1,
+          "pc": "0x7c48",
+          "bytes": "1e20215055cd7d3e"
+        }
+      ]
+    },
+    "mainStateBank": 25,
+    "policeHelperBank": 1,
+    "mainPackedBytes": 16374,
+    "mainFreeBytes": 10,
+    "helperBankPackedBytes": 16383,
+    "helperBankFreeBytes": 1,
+    "allPackedBankLengths": {
+      "33": 15532,
+      "32": 15897,
+      "26": 15992,
+      "31": 16059,
+      "29": 16109,
+      "30": 16177,
+      "27": 16238,
+      "28": 16351,
+      "17": 16374,
+      "24": 16374,
+      "25": 16374,
+      "15": 16378,
+      "20": 16378,
+      "6": 16380,
+      "18": 16381,
+      "16": 16382,
+      "22": 16382,
+      "1": 16383,
+      "19": 16383,
+      "2": 16383,
+      "10": 16384,
+      "11": 16384,
+      "12": 16384,
+      "13": 16384,
+      "14": 16384,
+      "21": 16384,
+      "23": 16384,
+      "3": 16384,
+      "4": 16384,
+      "5": 16384,
+      "7": 16384,
+      "8": 16384,
+      "9": 16384
+    },
+    "memory": {
+      "heapEnd": "0xdab8",
+      "stackBase": "0xdf00",
+      "staticReserveBytes": 1096,
+      "exportedWRAMNamesUnchanged": true,
+      "gameOwnedExportedWRAMAddressesUnchanged": true,
+      "stockWRAMRelocations": {
+        "_sfx_play_bank": {
+          "before": "0xc0b7",
+          "after": "0xc0b1"
+        },
+        "_sfx_play_sample": {
+          "before": "0xc0b8",
+          "after": "0xc0b2"
+        },
+        "_sfx_frame_skip": {
+          "before": "0xc0ba",
+          "after": "0xc0b4"
+        },
+        "_SIO_status": {
+          "before": "0xc0b4",
+          "after": "0xc0b5"
+        },
+        "_link_byte_sent": {
+          "before": "0xc0b5",
+          "after": "0xc0b6"
+        },
+        "_link_next_mode": {
+          "before": "0xc0b6",
+          "after": "0xc0b7"
+        },
+        ".image_tile_width": {
+          "before": "0xc0bb",
+          "after": "0xc0b8"
+        },
+        "_game_time": {
+          "before": "0xc0bc",
+          "after": "0xc0b9"
+        },
+        "__is_CGB": {
+          "before": "0xc0b1",
+          "after": "0xc0ba"
+        },
+        "__is_SGB": {
+          "before": "0xc0b2",
+          "after": "0xc0bb"
+        },
+        "__current_ram_bank": {
+          "before": "0xc0b3",
+          "after": "0xc0bc"
+        },
+        "_link_operation_mode": {
+          "before": "0xd9c8",
+          "after": "0xd9bf"
+        },
+        "_link_packet": {
+          "before": "0xd9c9",
+          "after": "0xd9c0"
+        },
+        "_link_packet_len": {
+          "before": "0xd9e9",
+          "after": "0xd9e0"
+        },
+        "_link_packet_ptr": {
+          "before": "0xd9ea",
+          "after": "0xd9e1"
+        },
+        "_link_packet_received": {
+          "before": "0xd9ec",
+          "after": "0xd9e3"
+        },
+        "_link_packet_snd_len": {
+          "before": "0xd9ed",
+          "after": "0xd9e4"
+        },
+        "_link_packet_snd_ptr": {
+          "before": "0xd9ee",
+          "after": "0xd9e5"
+        },
+        "_link_packet_sent": {
+          "before": "0xd9f0",
+          "after": "0xd9e7"
+        },
+        "_joypads": {
+          "before": "0xd9bf",
+          "after": "0xd9e8"
+        },
+        "_frame_joy": {
+          "before": "0xd9c4",
+          "after": "0xd9ed"
+        },
+        "_last_joy": {
+          "before": "0xd9c5",
+          "after": "0xd9ee"
+        },
+        "_recent_joy": {
+          "before": "0xd9c6",
+          "after": "0xd9ef"
+        },
+        "_joy_pressed": {
+          "before": "0xd9c7",
+          "after": "0xd9f0"
+        }
+      },
+      "persistentGrowthBytes": 0,
+      "deepestRuntimeStackMeasured": false
+    },
+    "manualTrace": {
+      "original": {
+        "path": "games/toronto-dispatch/project/build/TRAFFIC_LANE_FILTER_MANUAL_ABI_TRACE.json",
+        "bytes": 15141,
+        "sha256": "71d13130b24933cdc1e0453e917a1ff6caeafdae1b1bf8e180dddc7eaa7f6f23"
+      },
+      "reviewedScopes": [
+        "banked-input-layout",
+        "caller-output-pointer",
+        "output-written-only-on-success",
+        "automatic-frames-and-SP-offsets",
+        "private-toronto-field-operands",
+        "unrelated-node-filter-and-loop-bound"
+      ],
+      "freshByteSpans": [
+        {
+          "name": "public-plan-argument-and-failure-validation",
+          "bank": 9,
+          "pc": "0x7efc",
+          "bytes": "f8123ab6cacb7ff8067efe07d2cb7fd605cacb7f1e19210a7dcd7d3e4ff8067e91c2cb7f3e03f80796dacb7f3e03f81096dacb7f",
+          "review": "BANKED entry has no local frame; district/wanted/u/v/target_u/target_v/heading/out at SP+6,+7,+8,+10,+12,+14,+16,+17. Null, count7, Islands5, loaded-district, heat3 and heading3 failures branch to 7FCB, with no output store."
+        },
+        {
+          "name": "public-plan-world-bounds-and-body-failures",
+          "bank": 9,
+          "pc": "0x7f30",
+          "bytes": "f8082ad6807ede00dacb7f2b3e8096233e3f9edacb7ff80a2ad6807ede00387b2b3e8096233e3c9e3871f80c2ad6007ede403067232ad6007ede3d305ef80a2a5f3a2b2b57cb3acb1bcb3acb1bcb3acb1bcb3acb1b2a4f46cb38cb19cb38cb19cb38cb19cb38cb193e05f533d5c51e20218954cd7d3ee805b72820f8087ef80c96201af8097ef80d962012f80a7ef80e96200af80b7ef80f962002afc9",
+          "review": "All coordinate, already-at-goal and actual road_body-half5 failures reach XOR A;RET at7FCB. Body query is actual bank32:5489. No caller-output writes occur in this function."
+        },
+        {
+          "name": "public-plan-forwards-exact13-byte-input-and-cleans",
+          "bank": 9,
+          "pc": "0x7fcd",
+          "bytes": "f8112a5f3a2b57d53a2bf5332a5f56d5f8112a5f56d5f8112a5f56d5f8112a5f3a2b57d53a575ed51e01216a77cd7d3ee80dc9",
+          "review": "Pushes out2,heading1,target_v2,target_u2,v2,u2,wanted1,district1; calls bank1:776A through stock far wrapper then ADD SP,13;RET. All values retain original order/width."
+        },
+        {
+          "name": "caller-actual-waypoint-buffer-and-return-test",
+          "bank": 25,
+          "pc": "0x60ec",
+          "bytes": "7d110fc3d5f80366e533f8355e2356d5c5f8365e2356d5f8365e2356d5f533fae8c4f5331e0921fc7ecd7d3ee80db7281ef82d7eea15c3f82e7eea16c3f82f7eea17c3f8307eea18c3afea19c318052114c33600fa14c3b7ca4964",
+          "review": "Pushes actual WRAM C30F output pointer, one-byte heading, two-byte targets and actual current u/v, wanted and loaded-view district; invokes bank9:7EFC and discards13args. Failure clears only waypoint.valid C314; success stores from_u/v C315..318, then resets stuck C319. Main caller does not publish an unaccepted road move."
+        },
+        {
+          "name": "lane-helper-frame-and-own-input-validation",
+          "bank": 1,
+          "pc": "0x776a",
+          "bytes": "e8e2f80a3eff22223eff2236ffaff8002222af2277f8247ed6073006f8303ab62004afc39d7c",
+          "review": "ADD SP,-30; district at SP+36, output pointer at SP+47/48. Invalid district/null return only through frame cleanup7C9D. These positions equal the public13-byte BANKED ABI plus30 automatic bytes."
+        },
+        {
+          "name": "lane-helper-chase-input-and-return",
+          "bank": 1,
+          "pc": "0x797d",
+          "bytes": "f8257eb72822f82e3a2bf5332a5f56d5f82d2a5f56d5f8172a5f56f8297ecd3674f80a792270182e",
+          "review": "Private chase receives current district and vertex through registers, with target_u,target_v and heading passed unchanged on stack. The private callee consumes its five stacked bytes; returned next vertex BC is stored in local SP+10/11."
+        },
+        {
+          "name": "lane-helper-full-body-sweep-and-accepted-result-copy",
+          "bank": 1,
+          "pc": "0x7c22",
+          "bytes": "f8262a5f56cb3acb1bcb3acb1bcb3acb1bcb3acb1b3e05f533c5f81d4e234623c54e2346c5d51e20215055cd7d3ee809b72003af1845f8044d445950f8002a12132a127ef80677f8037ef80777c5f8042a5f56d5f8042a5f56d5f82e2a4f46f82c2a5f56cd6b73c1f808223601f82f2a5f56210600e5cd2e153e01e81ec9",
+          "review": "Converts actual Q4 current/proposed positions to whole pixels, passes four UWORDs plus half5 into road_sweep bank32:5550. False returns without touching out. True constructs u/v/heading/valid in local SP+4..9; loads original out from SP+47/48 into DE and passes length6 with local source BC to fixed memcpy152E. The only caller-output mutation is this six-byte copy after successful sweep."
+        },
+        {
+          "name": "output-copy-fixed-routine",
+          "bank": 0,
+          "pc": "0x152e",
+          "bytes": "d5f8053a6e60477d69cb381f4f30032a1213cb38cb19040c300e18062a12132a12132a12132a12130d20f10520eec1e1f1e9",
+          "review": "Actual stock memcpy: DE destination and BC source, two-byte length stack argument, count-controlled copies, callee consumes the length. Caller length6 preserves exactly the six-byte ABI and cannot write adjacent bytes."
+        },
+        {
+          "name": "private-exit-frame-and-callee-cleanup",
+          "bank": 1,
+          "pc": "0x4e03",
+          "bytes": "e8f9f806322b7b227a22",
+          "review": "Private exit allocates7 local bytes; source district/index in A/DE are copied to SP+6 and SP+4/5. Choice is stacked at SP+9."
+        },
+        {
+          "name": "private-exit-cleanup",
+          "bank": 1,
+          "pc": "0x4eca",
+          "bytes": "e807e133e9",
+          "review": "ADD SP,7;POP HL;INC SP;JP HL restores seven locals, consumes one stacked choice and returns through saved address."
+        },
+        {
+          "name": "chase-automatic-frame",
+          "bank": 1,
+          "pc": "0x7436",
+          "bytes": "e8e0f81e774b42f8103eff22223eff22223eff2236fff81f36003333c5",
+          "review": "Private iterative chase allocates32 automatic bytes. It is not recursive. Stack-resident path[4]/choices[4] have bounded depth0..3."
+        },
+        {
+          "name": "chase-depth-bound",
+          "bank": 1,
+          "pc": "0x7585",
+          "bytes": "f81f7ed603d23476",
+          "review": "Unsigned depth compared to3 and skips descent when >=3; outgoing-corner lookahead remains finite4edges."
+        },
+        {
+          "name": "chase-cleanup",
+          "bank": 1,
+          "pc": "0x775f",
+          "bytes": "f8124e2346e820e1e805e9",
+          "review": "ADD SP,32;POP HL;ADD SP,5;JP HL restores locals and five stacked inputs. It returns selected index BC."
+        },
+        {
+          "name": "projection-frame",
+          "bank": 1,
+          "pc": "0x73ce",
+          "bytes": "e8fcf8027b22723333c5",
+          "review": "Private projection allocates4 automatic bytes and stores the register-origin coordinate; destination pointers are caller automatic WRAM."
+        },
+        {
+          "name": "projection-cleanup",
+          "bank": 1,
+          "pc": "0x7430",
+          "bytes": "e804e1e808e9",
+          "review": "ADD SP,4;POP HL;ADD SP,8;JP HL restores its own locals and consumes eight stacked arguments. No persistent scratch state."
+        },
+        {
+          "name": "stock-far-call-bank-restoration",
+          "bank": 0,
+          "pc": "0x3e7d",
+          "bytes": "f090f57be090ea0020e7e16f7ce090ea00207dc9",
+          "review": "Saves current ROM bank from HRAM90, switches to target bank E, invokes RST20, restores saved bank to HRAM/MBC, returns result through A. Nested public/helper/roads calls restore the owning bank."
+        },
+        {
+          "name": "actual-game-state58-reset",
+          "bank": 25,
+          "pc": "0x73ac",
+          "bytes": "113a00d5110000d511f6c1d5cdee3de806",
+          "review": "Cold uninitialised path calls memset destination C1F6 with exact0x3A length58; public symbol td alsoC1F6."
+        },
+        {
+          "name": "actual-traffic-init-pointer-allocation",
+          "bank": 25,
+          "pc": "0x7630",
+          "bytes": "fae8c4d605281f11cec2d511f2c2d511c2c2d511b6c2d5fae8c4f5331e1c218b7acd7d3ee809",
+          "review": "Non-Islands init pushes sample arrayC2CE, six legsC2F2, six V WORDsC2C2, six U WORDsC2B6 and loaded-view byte into actual td_world_traffic_init bank28:7A8B. Cleanup9bytes matches four pointers+district."
+        },
+        {
+          "name": "actual-cold-motion-initialisation",
+          "bank": 25,
+          "pc": "0x7374",
+          "bytes": "afeafbc2eafcc2afeafac2eaf9c2afeaf8c22103c32277af2101c32277faa3c0ea05c3faa4c0ea06c3afea07c3",
+          "review": "Clears turnC2FB,entryC2FC,redC2FA,noticeC2F9,tickC2F8; zeroes vyC303/304 and vxC301/302; snapshots sys_timeC0A3/4 into lastFrameC305/306; zeroes cornerC307."
+        },
+        {
+          "name": "actual-entry-target",
+          "bank": 25,
+          "pc": "0x457c",
+          "bytes": "21fdc23601",
+          "review": "Entry/exit path explicitly loads destinationC2FD and stores one-byte entryTarget1. The frame source later reads C2FD at6932/6984; no resume-mode confusion."
+        },
+        {
+          "name": "actual-walk-direction-write",
+          "bank": 25,
+          "pc": "0x6ab6",
+          "bytes": "eafec2",
+          "review": "Actual walking X-direction path stores selected direction A intoC2FE. Exported resume_mode is C2FF and board_routeC300."
+        },
+        {
+          "name": "actual-entry-timer-and-target-read",
+          "bank": 25,
+          "pc": "0x692b",
+          "bytes": "fafcc2b7caee69fafdc2b72046",
+          "review": "Entry animation reads timerC2FC then targetC2FD before performing the exact original interpolated car-entry sequence."
+        },
+        {
+          "name": "actual-update-automatic-frame",
+          "bank": 25,
+          "pc": "0x7705",
+          "bytes": "e8f0f80636001e1d21b861cd7d3e",
+          "review": "Current toronto_update still allocates16 bytes; source caller-owned terrain cache remains update-local."
+        },
+        {
+          "name": "actual-current-input-operand",
+          "bank": 25,
+          "pc": "0x7772",
+          "bytes": "21edd9",
+          "review": "Current toronto_update reads live input from actual frame_joyD9ED. Public symbols put last/recent/pressed atD9EE/D9EF/D9F0."
+        },
+        {
+          "name": "unrelated-node-alignment-filter",
+          "bank": 1,
+          "pc": "0x793f",
+          "bytes": "f8267ef81496200af8277ef815963e012801af47f8287ef81696200af8297ef817963e012801af4fcb402005cb41ca0d7bf818707eb7ca2f7a79b7ca2f7a",
+          "review": "Compares both16-bit current axes with origin axes: B=equal_u,C=equal_v. BIT0,B accepts equal_u; otherwise BIT0,C; when neither matches JP Z,7B0D advancesindex without directed-exit lookup. Exactnode acceptance requires bothB/C true and enters original branch. An aligned edge retains originalheading/between validation."
+        },
+        {
+          "name": "filter-skipped-node-loop-advance",
+          "bank": 1,
+          "pc": "0x7b0d",
+          "bytes": "f81b3420022334f81b7ef81277f81c7ef81377c3dc78",
+          "review": "Original node increment atSP+27/28 updates index atSP+18/19 and jumps to78DC count bound. Filter does not mutate coordinates, output or waypoint; it only omits ineligibleorigin exits."
+        },
+        {
+          "name": "current-district-query-relocation",
+          "bank": 9,
+          "pc": "0x7f10",
+          "bytes": "1e19210a7dcd7d3e",
+          "review": "Fresh public planner calls actual NOI td_district_current atbank25:7D0A; its onlythree changed bytes vs initial publicplanner are relocated bank/low/high operands. Validation/output ABI remains unchanged."
+        }
+      ],
+      "actualLocalFrameBytes": {
+        "lane_next": 30,
+        "chase": 32,
+        "exit": 7,
+        "projection": 4
+      },
+      "nestedLocalFrameSumBytes": 69,
+      "nestedLocalFrameSumExcludes": "arguments,returnaddresses,farwrapper,registers,caller,interrupts,roadhelpers and temporary pushes; not peakstackproof",
+      "privateFields": {
+        "td": {
+          "address": "0xC1F6",
+          "bytes": 58,
+          "evidence": "NOI+exactmemset58"
+        },
+        "fleet_u": {
+          "address": "0xC2B6",
+          "bytes": 12,
+          "tdOffset": 192
+        },
+        "fleet_v": {
+          "address": "0xC2C2",
+          "bytes": 12,
+          "tdOffset": 204
+        },
+        "traffic_samples": {
+          "address": "0xC2CE",
+          "bytes": 36,
+          "stride": 6
+        },
+        "traffic_legs": {
+          "address": "0xC2F2",
+          "bytes": 6,
+          "tdOffset": 252
+        },
+        "motion15": {
+          "address": "0xC2F8",
+          "bytes": 15,
+          "fields": {
+            "tick": "0xC2F8",
+            "notice": "0xC2F9",
+            "redCooldown": "0xC2FA",
+            "turnTick": "0xC2FB",
+            "entryTimer": "0xC2FC",
+            "entryTarget": "0xC2FD",
+            "walkDir": "0xC2FE",
+            "resumeMode": "0xC2FF",
+            "boardRoute": "0xC300",
+            "vx": "0xC301",
+            "vy": "0xC303",
+            "lastFrame": "0xC305"
+          }
+        },
+        "police_waypoint": {
+          "address": "0xC30F",
+          "bytes": 6,
+          "valid": "0xC314"
+        },
+        "input4": {
+          "address": "0xD9ED",
+          "bytes": 4,
+          "evidence": "NOI+updateinputoperand"
+        },
+        "current_scene": {
+          "address": "0xD5AA",
+          "bytes": 3,
+          "evidence": "actualNOIsymbol"
+        },
+        "completed_loop_counter": {
+          "address": "0xC0B9",
+          "bytes": 1,
+          "evidence": "actualNOIsymbol"
+        }
+      },
+      "filterCodeGrowthBytes": 13,
+      "unchangedPrivateFunctionsFreshCompared": [
+        "direction",
+        "between",
+        "projection",
+        "chase",
+        "exit"
+      ],
+      "publicPlannerChangedBytes": [
+        "0x7f11",
+        "0x7f13",
+        "0x7f14"
+      ],
+      "currentDistrictQueryRelocation": {
+        "initialBank": 33,
+        "initialPC": "0x766C",
+        "filterBank": 25,
+        "filterPC": "0x7D0A"
+      },
+      "fullSweepAndOutput": "The planner's sole accepted output store copies exactly six bytes to caller WRAM after the real half-5 road sweep succeeds; planner rejection preserves out. TORONTO explicitly clears only waypoint.valid after rejection. Successful planning alone does not publish movement: real traffic/light/courier/future-tram admission must still pass before committing position.",
+      "farCallRestoration": "Exact stock wrapper saves/restores the owning ROM bank around public/helper/road calls; same-unit const graph pointers remain valid on return.",
+      "neighborWrites": "Fresh compiled argument, output pointer, bounded copy and private state stores are inspected against the matching NOI; no prior instruction addresses are inherited."
+    }
+  },
+  "originalAuditArtifacts": [
+    {
+      "path": "games/toronto-dispatch/project/build/POLICE_ALIGNMENT_DIFFERENTIAL_AUDIT.json",
+      "bytes": 5345,
+      "sha256": "34ab10756680d90789f96541f41a47f9fe7143aad9f3aa9eee7bc6a1a58005c1",
+      "published": false
+    },
+    {
+      "path": "games/toronto-dispatch/project/build/POLICE_LANES_SOURCE_REVIEW.json",
+      "bytes": 5818,
+      "sha256": "1965214a429b5ca6bf7e01652f953b61aa016d5fe16f916a9cfd58a2d193d1e5",
+      "published": false
+    },
+    {
+      "path": "games/toronto-dispatch/project/build/TRAFFIC_LANE_FILTER_COMPILED_AUDIT.json",
+      "bytes": 9192,
+      "sha256": "8382d57b977aadc01a07a6daca162abc4fc0a683e37c9ba062bb0e92987626c8",
+      "published": false
+    },
+    {
+      "path": "games/toronto-dispatch/project/build/TRAFFIC_LANE_FILTER_MANUAL_ABI_TRACE.json",
+      "bytes": 15141,
+      "sha256": "71d13130b24933cdc1e0453e917a1ff6caeafdae1b1bf8e180dddc7eaa7f6f23",
+      "published": false
+    },
+    {
+      "path": "games/toronto-dispatch/project/build/TRAFFIC_LANES_INDEPENDENT_AUDIT.json",
+      "bytes": 23375,
+      "sha256": "ee6c6fcd8f911218a4f011047c216a650024939b69f8e65d154eb6ba38932f4f",
+      "published": false
+    }
+  ],
+  "limitations": [
+    "This is source, host-equivalence and static compiled-byte evidence only. Native gameplay, timing and loading acceptance remain separate.",
+    "Pursuit uses bounded local lookahead; it is not a whole-city shortest path, universally terminating chase or proof of capture from every position.",
+    "Only graph fragments that can legally return to every patrol target are supported; coverage is not asserted for every traversable road.",
+    "Synthetic 94.800164% membership-exit work reduction does not establish a native speedup, frame rate, input latency or whole-city performance.",
+    "One-byte helper-bank and ten-byte main-bank headroom leave little room for edits; every subsequent build needs its own capacity/source/ABI audit.",
+    "The 1,096-byte linked static reserve and decoded 30/32/7/4-byte local frames do not prove deepest runtime stack high-water.",
+    "Use this artifact's relocated stock WRAM addresses for reads. Unchanged game-owned fields do not imply all WRAM addresses stayed unchanged.",
+    "No all-104-campaign, two human hours, browser usability, streamed-console or physical cartridge boot claim is assigned here."
+  ],
+  "acceptance": {
+    "nativeGameplayAssignedByThisAudit": false,
+    "nativePerformanceMeasuredByThisAudit": false,
+    "wholeCityFrameRateVerified": false,
+    "fullCampaignVerified": false,
+    "twoHumanHoursVerified": false,
+    "hardwareVerified": false,
+    "cartridgeBootVerified": false
+  }
+}

@@ -135,13 +135,52 @@ PORT_LANDS = {
         {"key":"south_park","name":"Riverbank Parcel","x":352,"y":592,"foot_only":True,"parking_anchor":[192,552],"fictional_service_point":True},
     ],
     "traffic_loops": [
-        [[184,248],[200,248],[200,320],[184,320]],
-        [[376,280],[408,280],[408,296],[376,296]],
-        [[536,160],[552,160],[552,248],[536,248]],
-        [[904,272],[920,272],[920,408],[904,408]],
-        [[280,816],[440,816],[440,832],[280,832]],
-        [[752,216],[832,216],[832,232],[752,232]],
+        [[184,248],[184,320],[200,320],[200,248]],
+        [[376,280],[376,296],[408,296],[408,280]],
+        [[536,160],[536,248],[552,248],[552,160]],
+        [[904,272],[904,408],[920,408],[920,272]],
+        [[280,816],[280,832],[440,832],[440,816]],
+        [[752,216],[752,232],[832,232],[832,216]],
     ],
+    "traffic_lane_segments": [
+        [
+            {"kind":"lane","road_sections":[{"road":"Cherry Street","segment":0}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Cherry Street","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Cherry Street","segment":0}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Cherry Street","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+        [
+            {"kind":"turnaround","direction":"S","road_sections":[{"road":"Commissioners Street","segment":2}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Commissioners Street","segment":2}],"direction":"E"},
+            {"kind":"turnaround","direction":"N","road_sections":[{"road":"Commissioners Street","segment":2}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Commissioners Street","segment":2}],"direction":"W"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Don Roadway","segment":0}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Don Roadway","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Don Roadway","segment":0}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Don Roadway","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Leslie Street","segment":0}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Leslie Street","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Leslie Street","segment":0}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Leslie Street","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+        [
+            {"kind":"turnaround","direction":"S","road_sections":[{"road":"Unwin Avenue","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Unwin Avenue","segment":0}],"direction":"E"},
+            {"kind":"turnaround","direction":"N","road_sections":[{"road":"Unwin Avenue","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Unwin Avenue","segment":0}],"direction":"W"},
+        ],
+        [
+            {"kind":"turnaround","direction":"S","road_sections":[{"road":"Commissioners Street","segment":4}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Commissioners Street","segment":4}],"direction":"E"},
+            {"kind":"turnaround","direction":"N","road_sections":[{"road":"Commissioners Street","segment":4}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Commissioners Street","segment":4}],"direction":"W"},
+        ],
+    ],
+    "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps.",
     "traffic_identity":"Six original lane circulation loops; no literal TTC/live road traffic route.",
 }
 

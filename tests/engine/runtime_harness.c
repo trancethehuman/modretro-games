@@ -235,7 +235,8 @@ static void reset_case(void) {
     sram_writes=sram_interrupt_after=0;sram_interrupt_enabled=0;
     geometry=CLEAR_GROUND;
     td_audio_init();audio_updates=audio_inits=audio_impacts=0;
-    for(unsigned i=0;i<6;i++) { td_traffic_u[i]=(800+i*32)*16;td_traffic_v[i]=928*16;td_traffic_leg[i]=0;td_ped_route[i]=TD_NONE; }
+    td_world_traffic_init(0,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
+    for(unsigned i=0;i<6;i++) { td_traffic_u[i]=(800+i*32)*16;td_traffic_v[i]=928*16;td_ped_route[i]=TD_NONE; }
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_streetcar_runtime_reset();
     td_people_reset();
@@ -399,28 +400,30 @@ static void test_pedestrian_phase_reuse(void) {
 
 static void test_signal_and_autonomous_traffic(void) {
     reset_case();td.onfoot=1;td.seconds=8;
-    td_traffic_u[0]=184*16;td_traffic_v[0]=288*16;UWORD before=td_traffic_u[0];
+    td_traffic_leg[0]=3;td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
+    td_traffic_u[0]=184*16;td_traffic_v[0]=296*16;UWORD before=td_traffic_u[0];
     td_traffic_step();expect(td_traffic_u[0]==before,"red traffic stops before the Bathurst intersection in world units");
     td.seconds=0;td_traffic_step();expect(td_traffic_u[0]>before,"green traffic leaves the stop line");
 
     td.seconds=8;td_traffic_u[0]=182*16+6;before=td_traffic_u[0];
     td_traffic_step();expect(td_traffic_u[0]>before,"red traffic does not stop at arbitrary eight-pixel intervals");
 
-    td.seconds=0;td_traffic_u[4]=824*16;td_traffic_v[4]=376*16;before=td_traffic_v[4];
+    td.seconds=0;td_traffic_u[4]=824*16;td_traffic_v[4]=424*16;before=td_traffic_v[4];
     td_traffic_step();expect(td_traffic_v[4]==before,"vertical red traffic stops before Dundas");
-    td.seconds=8;td_traffic_step();expect(td_traffic_v[4]>before,"vertical green traffic resumes");
+    td.seconds=8;td_traffic_step();expect(td_traffic_v[4]<before,"northbound green traffic resumes in Parliament's east lane");
 
     reset_case();td.mode=TD_WAIT;td.onfoot=1;td_traffic_u[0]=100*16;td_traffic_v[0]=280*16;before=td_traffic_u[0];sys_time=4;
     toronto_update();expect(td_traffic_u[0]==before,"four elapsed VBlanks accrue without premature autonomous movement");
     sys_time=8;toronto_update();expect(td_traffic_u[0]==before,"eight elapsed VBlanks remain below the ordinary road quantum");
-    sys_time=16;toronto_update();expect(td_traffic_u[0]==before+128,"a sixteen-VBlank autonomous quantum advances eight fully swept pixels during transit waiting");
+    sys_time=16;toronto_update();expect(td_traffic_u[0]==before-128,"a sixteen-VBlank autonomous quantum advances eight fully swept pixels west during transit waiting");
     expect(actors[9].pos.x||actors[9].pos.y,"pedestrians update during unpaused transit waiting");
 
     reset_case();td.mode=TD_WAIT;td.onfoot=1;td_traffic_u[0]=100*16;td_traffic_v[0]=280*16;
     before=td_traffic_u[0];sys_time=30;toronto_update();
-    expect(td_traffic_u[0]==before+128,"large elapsed gaps cap one autonomous sweep at eight pixels instead of repeating it for courier substeps");
+    expect(td_traffic_u[0]==before-128,"large elapsed gaps cap one autonomous sweep at eight pixels instead of repeating it for courier substeps");
     reset_case();td.seconds=8;td_traffic_advance=128;
-    td_traffic_u[0]=182*16;td_traffic_v[0]=288*16;before=td_traffic_u[0];
+    td_traffic_leg[0]=3;td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
+    td_traffic_u[0]=182*16;td_traffic_v[0]=296*16;before=td_traffic_u[0];
     td_traffic_step();expect(td_traffic_u[0]==before,"elapsed traffic cannot sweep across a red stop line with clear endpoints");
 }
 
@@ -459,15 +462,16 @@ static void test_parked_visibility_context(void) {
 static void test_fractional_fleet_presentation(void) {
     const UWORD positions[6][2]={{80,280},{200,392},{320,168},{440,632},{824,240},{808,138}};
     /* Each offset remains on a genuine straight Core route segment. The
-       bus is northbound leg5, immediately above the real route19 crossing. */
+       bus is southbound leg2, immediately above the real route19 crossing. */
     for(unsigned fraction=0;fraction<16;fraction++) {
         native_case();td.onfoot=1;td.u=816*16;td.v=112*16;
         td.park_u=560*16;td.park_v=720*16;td.seconds=7;td.subsecond=20;
         for(unsigned i=0;i<6;i++) {
             td_traffic_u[i]=positions[i][0]*16+(i<4?fraction:0);
             td_traffic_v[i]=positions[i][1]*16+(i>=4?fraction:0);
-            td_traffic_leg[i]=i==5?5:0;
+            td_traffic_leg[i]=i==5?2:1;
         }
+        td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
         td_state_t before=td;
         UBYTE view=td_streetcar_view_district,ride=td_streetcar_ride_view;
         td_traffic_present();
@@ -532,14 +536,14 @@ static void test_route_selection_invalid_context(void) {
 }
 
 static void test_core_bus_lane_joint_loop(void) {
-    const UWORD loop[6][2]={{640,72},{216,72},{216,168},{640,168},{808,168},{808,72}};
-    const UBYTE facing[6]={2,2,1,0,0,3};
+    const UWORD loop[6][2]={{640,72},{808,72},{808,168},{640,168},{216,168},{216,72}};
+    const UBYTE facing[6]={0,0,1,2,2,3};
     native_case();
-    UBYTE legs[6]={0,0,2,0,0,4};UWORD from_u=0,from_v=0;
+    UBYTE legs[6]={1,1,1,1,1,4};UWORD from_u=0,from_v=0;
     UBYTE separated=td_streetcar_runtime_traffic_segment(0,5,6,legs,
-        696*16,168*16,808*16,168*16,&from_u,&from_v);
+        600*16,168*16,216*16,168*16,&from_u,&from_v);
     expect(separated&&from_u==640*16&&from_v==168*16,
-           "the actual Core bus route uses its eastbound lane rather than the opposing police body corridor");
+           "the Core bus follows the westbound right-hand Wellesley lane");
     /* Inspect every full7px body along the six independently specified
        cardinal lane segments, including each shared corner and closing leg. */
     for(unsigned leg=0;leg<6;leg++) {
@@ -547,7 +551,8 @@ static void test_core_bus_lane_joint_loop(void) {
         int x=loop[prior][0],y=loop[prior][1];
         int tx=loop[leg][0],ty=loop[leg][1];
         legs[5]=leg;
-        td_traffic_leg[5]=leg;td_traffic_u[5]=x*16;td_traffic_v[5]=y*16;td_traffic_present();
+        td_traffic_leg[5]=leg;td_traffic_u[5]=x*16;td_traffic_v[5]=y*16;
+        td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);td_traffic_present();
         expect(actors[7].frame_start==12+facing[leg],"each actual bus leg presents its cardinal direction including the westward split");
         expect((x==tx)!=(y==ty),"each proposed bus leg is nonzero and cardinal");
         for(;;) {
@@ -559,18 +564,17 @@ static void test_core_bus_lane_joint_loop(void) {
             if(x<tx)x++;else if(x>tx)x--;else if(y<ty)y++;else y--;
         }
     }
-    /* Exact native jam: bus696,176 east and police712,184 west. On old
-       source retain that original pose; on the corrected route put the bus
-       at the same progress on its authored168px lane. Never teleport during
-       the actual600-VBlank gameplay update below. */
+    /* Independent lawful-following fixture: the bus trails police by16px
+       in their shared westbound lane. No fixture writes occur during the
+       actual600-VBlank update sequence below. Old passing records stay old. */
     native_case();td.mode=TD_ROAM;td.onfoot=1;td.u=840*16;td.v=147*16;
     td.park_u=560*16;td.park_v=720*16;td.seconds=70;
-    const UWORD positions[6][2]={{80,280},{200,392},{712,184},{440,632},{824,240},{696,176}};
+    const UWORD positions[6][2]={{80,280},{200,392},{696,168},{440,632},{824,240},{712,168}};
     for(unsigned i=0;i<6;i++) {
         td_traffic_u[i]=positions[i][0]*16;td_traffic_v[i]=positions[i][1]*16;
-        td_traffic_leg[i]=i==2?2:i==5?4:0;
+        td_traffic_leg[i]=i==5?3:1;
     }
-    if(separated)td_traffic_v[5]=168*16;
+    td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
     td_traffic_present();
     UWORD bus_u=td_traffic_u[5],police_u=td_traffic_u[2];
     UBYTE peak_overlap=0,bus_passed=0,police_passed=0;
@@ -582,18 +586,15 @@ static void test_core_bus_lane_joint_loop(void) {
         int32_t pl=(int32_t)td_traffic_u[2]-80,pr=(int32_t)td_traffic_u[2]+80;
         int32_t pt=(int32_t)td_traffic_v[2]-80,pb=(int32_t)td_traffic_v[2]+80;
         if(bl<pr&&pl<br&&bt<pb&&pt<bb)peak_overlap=1;
-        if(td_traffic_u[5]>=728*16&&td_traffic_v[5]==168*16)bus_passed=1;
-        if(td_traffic_u[2]<=680*16&&td_traffic_v[2]==184*16)police_passed=1;
+        if(td_traffic_u[5]<bus_u&&td_traffic_v[5]==168*16)bus_passed=1;
+        if(td_traffic_u[2]<police_u&&td_traffic_v[2]==168*16)police_passed=1;
     }
-    if(!separated)expect(td_traffic_u[5]==696*16&&td_traffic_v[5]==176*16&&
-        td_traffic_u[2]==712*16&&td_traffic_v[2]==184*16,
-        "the actual predecessor engine reproduces the exact native pair remaining stationary for600VBlanks");
     expect(td.seconds==80&&td.cash==30&&td.health==100&&td.mode==TD_ROAM,
            "the coherent bus/police replay advances ten real game seconds without fines or invented impacts");
     expect(td_traffic_u[5]!=bus_u&&td_traffic_u[2]!=police_u,
            "the native bus/police pair both progress rather than remaining mutually stopped for600VBlanks");
-    expect(bus_passed&&police_passed,"both opposing drivers pass completely beyond the original head-on conflict");
-    expect(!peak_overlap,"opposing bus and police never overlap their complete bodies during the joint-loop replay");
+    expect(bus_passed&&police_passed,"both lawful same-direction vehicles make progress over the stated interval");
+    expect(!peak_overlap,"following bus and police never overlap their complete bodies during the joint-loop replay");
 }
 
 static void test_city_routes_and_walking(void) {
@@ -610,8 +611,8 @@ static void test_city_routes_and_walking(void) {
 
     reset_case();geometry=NATIVE_GRID;toronto_init();td.mode=TD_ROAM;
     td.u=560*16;td.v=720*16;td.onfoot=0;
-    expect(td_traffic_u[5]==216*16&&td_traffic_v[5]==72*16&&td_traffic_leg[5]==2,
-           "fresh Core initialization starts the bus at its valid southbound lane corner");
+    expect(td_traffic_u[5]==216*16&&td_traffic_v[5]==72*16&&td_traffic_leg[5]==0,
+           "fresh Core initialization starts the bus toward Bloor's right-hand eastbound lane");
     int usable=1,continuous=1;unsigned bus_circuits=0;
     UBYTE initial_bus_leg=td_traffic_leg[5],previous_bus_leg=initial_bus_leg;
     for(unsigned step=0;step<12000;step++) {
@@ -647,9 +648,9 @@ static void test_city_routes_and_walking(void) {
     expect(td.u==player_u&&td.v==player_v,"opposing walking inputs cancel on both axes");
 
     reset_case();td.onfoot=1;td.u=184*16;td.v=280*16;
-    td_traffic_u[0]=171*16;td_traffic_v[0]=280*16;player_u=td_traffic_u[0];
+    td_traffic_u[0]=197*16;td_traffic_v[0]=280*16;player_u=td_traffic_u[0];
     td_traffic_step();expect(td_traffic_u[0]==player_u,"approaching traffic yields to a courier crossing on foot");
-    td.v+=40*16;td_traffic_step();expect(td_traffic_u[0]>player_u,"yielding traffic continues once the courier clears");
+    td.v+=40*16;td_traffic_step();expect(td_traffic_u[0]<player_u,"yielding westbound traffic continues once the courier clears");
     td.v=280*16;td.mode=TD_WAIT;player_u=td_traffic_u[0];td_traffic_step();
     expect(td_traffic_u[0]==player_u,"traffic also yields to a stationary courier waiting for transit");
 
@@ -1279,7 +1280,7 @@ static void test_menu_held_drive_buttons(void) {
             expect(audio_active&&!audio_braking,
                    "consumed menu inputs retain active world audio without brake audio");
         }
-        expect(td.seconds==2&&td.subsecond==0&&td_traffic_u[0]>fleet_u&&
+        expect(td.seconds==2&&td.subsecond==0&&td_traffic_u[0]<fleet_u&&
                td.cash==cash&&td.job==job&&td.stage==stage&&td.health==health&&
                (job==TD_NONE||td.left==deadline-2),
                "consumed menu input leaves traffic and the deadline live without changing cargo or money");
@@ -2676,17 +2677,18 @@ static void test_contact_episode_and_invalid(void) {
 
 static void reverse_retreat_case(void) {
     native_case();td.onfoot=1;td.u=824*16;td.v=537*16;td.seconds=14;td.subsecond=58;
-    td_traffic_u[4]=824*16;td_traffic_v[4]=536*16;td_traffic_leg[4]=0;
+    td_traffic_u[4]=824*16;td_traffic_v[4]=536*16;td_traffic_leg[4]=1;
+    td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
     td_streetcar_runtime_prepare(0);td_traffic_present();
 }
 static void test_banked_traffic_segments(void) {
     const UWORD core[6][6][2]={
-        {{840,280},{840,296},{48,296},{48,280}},
-        {{840,392},{840,408},{48,408},{48,392}},
-        {{840,168},{840,184},{48,184},{48,168}},
-        {{840,632},{840,648},{48,648},{48,632}},
-        {{824,792},{808,792},{808,48},{824,48}},
-        {{640,72},{216,72},{216,168},{640,168},{808,168},{808,72}}
+        {{840,280},{48,280},{48,296},{840,296}},
+        {{840,392},{48,392},{48,408},{840,408}},
+        {{840,168},{48,168},{48,184},{840,184}},
+        {{832,632},{48,632},{48,648},{832,648}},
+        {{824,792},{824,48},{808,48},{808,792}},
+        {{640,72},{808,72},{808,168},{640,168},{216,168},{216,72}}
     };
     native_case();UBYTE legs[6]={0};UWORD from_u,from_v;
     for(UBYTE slot=0;slot<6;slot++)for(UBYTE leg=0;leg<(slot==5?6:4);leg++){
@@ -2746,23 +2748,24 @@ static void test_connected_traffic_retreat(void) {
     /* Native ordinary save/reset reproduced this exact valid cold slot4
        obstruction without debugger writes: courier824,238; NPC824,240. */
     native_case();td.onfoot=1;td.u=824*16;td.v=238*16;td.seconds=34;td.subsecond=30;
-    td_traffic_u[4]=824*16;td_traffic_v[4]=240*16;td_traffic_leg[4]=0;td_traffic_present();
+    td_traffic_u[4]=824*16;td_traffic_v[4]=240*16;td_traffic_leg[4]=1;
+    td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);td_traffic_present();
     td_state_t reset_overlap=td;
     for(unsigned frame=0;frame<120;frame++)world_tick(J_DOWN,1);
     expect(td.v>reset_overlap.v&&td.u==reset_overlap.u&&td.cash==reset_overlap.cash&&td.health==100&&
-           td_traffic_v[4]>240*16&&td_traffic_leg[4]==0,
-           "the ordinary native cold-reset overlap releases through forward route motion while held walking resumes");
+           td_traffic_v[4]>240*16&&td_traffic_leg[4]==1,
+           "the right-hand cold-pose obstruction separates through connected backup while held walking resumes");
 
     reverse_retreat_case();td_state_t courier=td;UWORD start=td_traffic_v[4];
     td_streetcar_pose_t pose;td_streetcar_box_t tram;
     expect(td_streetcar_pose(td.seconds,td.subsecond,&pose)&&td_streetcar_bounds(&pose,&tram)&&
            tram.district==0&&tram.left<=824*16+80&&tram.right>=824*16-80,
-           "coherent Core slot4 leg0 meets the actual moving Queen tram at14 seconds58 ticks");
+           "coherent Core slot4 northbound leg1 meets the actual moving Queen tram at14 seconds58 ticks");
     expect(!td_streetcar_runtime_traffic_clear(0,824*16,536*16-8),
            "ordinary future yield alone forbids a still-overlapping half-pixel retreat");
     td_traffic_step();
-    expect(td_traffic_v[4]==start-8&&td_traffic_u[4]==824*16&&td_traffic_leg[4]==0,
-           "a courier behind a real vertical-route NPC selects a bounded reverse step that separates from both bodies");
+    expect(td_traffic_v[4]==start-8&&td_traffic_u[4]==824*16&&td_traffic_leg[4]==1,
+           "a courier behind a real northbound NPC permits a bounded connected separating step");
     UWORD previous=td_traffic_v[4];
     for(unsigned step=0;step<40;step++){
         td_traffic_step();
@@ -2772,14 +2775,15 @@ static void test_connected_traffic_retreat(void) {
     }
     td_traffic_present();
     expect(!td_traffic_retreat_mask&&td_traffic_free(td.u,td.v)&&td_distance(td.v,actors[6].pos.y>>1)>=180&&
-           td_traffic_leg[4]==0&&actors[6].frame_start==9&&actors[6].pos.x==824*32,
+           td_traffic_leg[4]==1&&actors[6].frame_start==11&&actors[6].pos.x==824*32,
            "retreat clears both cached walking and rounded actor recovery margins without changing route leg or facing");
     expect(td_streetcar_runtime_recover_contact(1)==TD_STREETCAR_PARK_MOVED&&
            td_streetcar_runtime_foot_clear(td.u,td.v)&&td.cash==courier.cash&&td.health==courier.health,
            "after the coherent NPC retreats the real connected contact solver releases the walker safely");
 
     native_case();td.onfoot=1;td.u=409*16;td.v=280*16;
-    td_traffic_u[0]=400*16;td_traffic_v[0]=280*16;td_traffic_leg[0]=0;
+    td_traffic_u[0]=400*16;td_traffic_v[0]=280*16;td_traffic_leg[0]=1;
+    td_world_traffic_samples(0,td_traffic_leg,td_traffic_samples);
     expect(td_distance(td.u,td_traffic_u[0])==144&&!td_traffic_free(td.u,td.v),
            "a9px courier offset exceeds an8.5px visible-body margin but remains inside the actual10.5px walking exclusion");
     for(unsigned step=0;step<40;step++)td_traffic_step();
@@ -2798,8 +2802,8 @@ static void test_connected_traffic_retreat(void) {
         expect(td_traffic_v[4]==start,"retreat retains parked-car, other-vehicle, visible pedestrian and full-road guards");
     }
     native_case();td.onfoot=1;td.u=57*16;td.v=280*16;
-    td_traffic_u[0]=48*16;td_traffic_v[0]=280*16;td_traffic_step();
-    expect(td_traffic_u[0]==48*16,"a reverse retreat cannot drive beyond its authored segment endpoint");
+    td_traffic_u[0]=840*16;td_traffic_v[0]=280*16;td.u=831*16;td_traffic_step();
+    expect(td_traffic_u[0]==840*16,"separation cannot back up beyond the authored right-hand segment start");
     native_case();td.onfoot=1;td.u=545*16;td.v=280*16;td.seconds=7;
     td_traffic_u[0]=536*16;td_traffic_v[0]=280*16;td_traffic_step();
     expect(td_traffic_u[0]==536*16-8,"a validated overlapping retreat moves away from the courier and the red entry line without entering the junction");
@@ -3262,10 +3266,10 @@ static void test_road_police_pursuit(void){
 
     for(UBYTE heat=1;heat<=3;heat++){
         reset_case();td.wanted=heat;td.wanted_left=30;td.u=500*16;td.v=450*16;
-        td_traffic_u[2]=400*16;td_traffic_v[2]=400*16;
+        td_traffic_u[2]=400*16;td_traffic_v[2]=392*16;
         UWORD other_u=td_traffic_u[0];sys_time=4;toronto_update();
-        expect(td_traffic_u[2]==400*16+(8+4*heat)*4&&td_traffic_v[2]==400*16,
-               "four-VBlank pursuit motion escalates across all three attention levels");
+        expect(td_traffic_u[2]==400*16-(8+4*heat)*4&&td_traffic_v[2]==392*16,
+               "four-VBlank pursuit motion escalates on the legal westbound Dundas lane across all three attention levels");
         expect(td_traffic_u[0]==other_u,"police cadence does not accelerate ordinary traffic between its sixteen-VBlank quanta");
     }
     reset_case();td.job=0;td.stage=1;td.health=100;td_traffic_u[0]=td.u+9*16;td_traffic_v[0]=td.v;
