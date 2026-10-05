@@ -764,7 +764,7 @@ Core hospital `(504,344)`, cash $35 after the $40 fee, HP 100/ammo 12/heat 0
 and preserved parked vehicle. The zero-health/downed moment was not directly
 WRAM-sampled; retained R6 separately establishes that earlier sequence.
 
-R8's source-pinned ZIP awaits source commit/audit. Supported discovery finds
+R8's [source-pinned ZIP audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes at committed source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`: 299,675 bytes, SHA-256 `5ec9679d58957968afb9e542d7165126bbefd3f41bdd4b06bb7f79d2b8af663b`, all 246 native inputs and six allowed members. Its guide remains frozen before later package metadata. Supported discovery finds
 zero connected consoles and dispatches no write. Preserve R6's audited bundle,
 R2 and physical 9c155 independently. All 104 jobs, three scooter-exclusive
 contracts, later chapters, remote recovery, native older-save imports, deepest

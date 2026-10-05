@@ -34,7 +34,7 @@ compiled ground assets total 110 poses. Dedicated actual-C scooter checks pass
 633,765 assertions, the integrated sandbox 554,672, campus protection 246 and
 the sprite-extension proof 118. Allocation checks do not measure deepest stack.
 
-A source-pinned R8 ZIP awaits the source commit and separate package audit.
+The [R8 package audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes all 246 committed/working native inputs, six allowlisted ZIP members, exact ROM/checksums/licences, 36 immutable guide links and retained installed baselines. `toronto-dispatch-campus-scooters-r8-reviewed.zip` is 299,675 bytes, SHA-256 `5ec9679d58957968afb9e542d7165126bbefd3f41bdd4b06bb7f79d2b8af663b`, pinned to source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`. Its guide is frozen before these later metadata; packaging does not rebuild or certify hardware.
 [Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
 found zero connected consoles, so no R8 write was dispatched. Cartridge boot,
 power-off save persistence, physical audio/flicker, browser recovery, native

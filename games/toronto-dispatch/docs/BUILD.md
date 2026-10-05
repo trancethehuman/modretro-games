@@ -33,8 +33,7 @@ notice and recovery fields are observed; the zero-health/downed moment was
 not directly WRAM-sampled. R6's separate hospital/arrest, arrow and timing
 acceptance remains tied to R6.
 
-Select the raw R8 ROM locally; its source-pinned ZIP awaits the source commit
-and independent audit. [Supported USB discovery](CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
+The [audited R8 bundle](CAMPUS_SCOOTERS_PACKAGE.json), `toronto-dispatch-campus-scooters-r8-reviewed.zip`, is 299,675 bytes, SHA-256 `5ec9679d58957968afb9e542d7165126bbefd3f41bdd4b06bb7f79d2b8af663b`, pinned to committed source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`. All 246 committed/working native inputs, six members and 36 immutable guide links pass; the bundled guide remains frozen before later package metadata. [Supported USB discovery](CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
 found zero consoles and dispatched no write. Full campaign/two-hour human play,
 three scooter-exclusive jobs, later chapters, native older-save imports,
 remote recovery, deepest stack, browser and cartridge/audio checks remain open.

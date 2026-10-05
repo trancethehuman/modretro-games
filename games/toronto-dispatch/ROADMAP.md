@@ -6,8 +6,7 @@ Current local ROM: `toronto-dispatch-campus-scooters-r8.gbc`, SHA-256
 `bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [Official build](docs/CAMPUS_SCOOTERS_BUILD.json),
 full `make check`, compiled guards and [fresh native play](docs/NATIVE_CAMPUS_SCOOTERS.json)
 pass in their recorded scope. [Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
-found no connected console and dispatched no write. The R8 source-pinned ZIP
-awaits the source commit/audit; retained R6/R2 and physical 9c155 stay separate.
+found no connected console and dispatched no write. The [R8 source-pinned ZIP audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes at source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`; retained R6/R2 and physical 9c155 stay separate.
 
 ## Second physical feedback batch — accepted, implementation in progress
 
@@ -422,5 +421,5 @@ Keep the retained sandbox-stable R2 package and all older build/hardware evidenc
 - [x] Preserve R7's failed bank placement/no-ROM outcome; build distinct R8 with only the new rider helper in a separate bank and original traffic byte-identical R6. All 246 native inputs remain unchanged.
 - [x] Native-test A/B Union scooter entry, one Market Start delivery on vehicle 3, campus views, exact 58-byte map freezing and genuine committed-campus save/reset. Retain the final hospital-outcome observation separately from the unsampled downed/zero-HP moment.
 - [ ] Play the three scooter-exclusive contracts and native occupied/vacant scooter ramming, other districts/queues and sustained crowded camera cases; review human handling and visual quality.
-- [ ] Commit matching R8 source and audit its new source-pinned loading ZIP.
+- [x] Commit matching R8 source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04` and independently audit its 299,675-byte loading ZIP, SHA-256 `5ec9679d58957968afb9e542d7165126bbefd3f41bdd4b06bb7f79d2b8af663b`; 246 native inputs, six members and 36 immutable guide links pass. The guide remains frozen at that source.
 - [ ] Install on the identified development cartridge when connected; verify cold boot, physical controls, power-off saves, audio and flicker independently.
