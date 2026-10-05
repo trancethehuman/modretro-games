@@ -10,6 +10,9 @@ permissions:
 jobs:
   content:
     runs-on: ubuntu-latest
+    # Host sanitizer gates use Clang; native ROMs use the separate ModRetro SDCC build.
+    env:
+      CC: clang
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,6 +20,8 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: 'requirements-dev.txt'
+      - name: Report host compiler
+        run: clang --version
       - name: Install validation dependencies
         run: python -m pip install --requirement requirements-dev.txt
       - run: make check
