@@ -14,6 +14,8 @@ The same run boards a boat, drives/brakes and exits at a valid dock with Down+A,
 
 The failed `668727…` [native corruption diagnostic](docs/NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains failed and ineligible for loading. The selected 096862 ROM has not yet been flashed; the last physically confirmed 9c155 build and its historical ZIP/write evidence below remain separate. Full 104-contract coverage, motorcycle 74's slower-speed deadline, two enjoyable measured human hours, broader collision/pursuit cases, older-save imports, deepest stack/whole-city performance and physical cold boot/save/audio/flicker remain pending.
 
+Fresh [supported USB discovery](docs/CARTRIDGE_SANDBOX_STABLE_DISCOVERY_2026_10_05.json) on 2026-10-05 succeeds with zero connected consoles, conflicts, unmatched functions or diagnostics. No replacement write was dispatched; connection remains the prerequisite. The reviewed local [package](docs/SANDBOX_STABLE_PACKAGE.json) is ready and preserves its source-pinned guide.
+
 ## Retained hardware feedback update — 2026-10-04
 
 Exact new ROM `project/build/toronto-dispatch-hardware-feedback.gbc` is 1,048,576 bytes / SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Official source-debug build and full `make check` pass. [Build evidence](docs/HARDWARE_FEEDBACK_BUILD.json) records compiled artwork/timetable guards, save v10/58 bytes, peak 120/128 OBJ tiles per bank and 1,046 static reserve. The initial fixed-bank failure and intermediate metadata-repair build remain separate.

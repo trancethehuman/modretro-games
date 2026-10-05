@@ -89,7 +89,7 @@
     "nativeGameplay": "scoped-passed; see NATIVE_SANDBOX_STABLE.json",
     "nativeTiming": "scoped; see SANDBOX_STABLE_TIMING.json",
     "physicalCartridge": "not-yet-written",
-    "package": "not-yet-recorded"
+    "package": "reviewed; see SANDBOX_STABLE_PACKAGE.json"
   },
   "retainedEvidence": {
     "failedCandidateSha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
