@@ -1,8 +1,47 @@
 # Native build and preview
 
-## Selected story/combat R6 build — 2026-10-05
+## Selected campus and scooter R8 build — 2026-10-05
 
-Select **`toronto-dispatch-story-combat-r6.gbc`**, **1,048,576 bytes**, SHA-256
+Select **`toronto-dispatch-campus-scooters-r8.gbc`**, **1,048,576 bytes**, SHA-256
+**`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`**. Official source-debug compilation
+exits 0 in **164,830 ms**. The [build record](CAMPUS_SCOOTERS_BUILD.json)
+binds matching debug artifacts and **246 [native input pins](CAMPUS_SCOOTERS_SOURCE_PINS.json)**,
+SHA-256 `358b9b1ce8ca76eaac6ecfcfa561b78a45ef2f8b6e8a9764ebf680c0bdc7a3ac`. All pins remain unchanged
+after compilation and native play. Full `make check` and the four compiled
+memory, graphics/isolation, streetcar-frame and timetable guards pass.
+
+Two independent scooter riders add exactly **16 transient native bytes**;
+save **v11 / 58 bytes** and the atomic journal are unchanged. Heap `DCEC` to
+stack origin `DF00` leaves **532 static bytes**, passing the 512-byte minimum.
+Fixed HOME has **207 bytes free**. Scenes peak at **126/128 OBJ tiles** per bank;
+Core uses **46/47 bank-1 background tiles** and West 44/47 before signal scratch.
+The source campus adds 15 canonical patterns; two original empty-scooter poses
+49/50 retain every preceding 49 pose's metadata and pixels. Compiled ground
+art totals 110 poses. These are allocation proofs, not deepest-stack or
+physical flicker measurements.
+
+The first combined R7 attempt [failed bank placement](CAMPUS_SCOOTERS_R7_FINDING.json)
+and produced no ROM. R8 places only the new rider admission helper and its
+private read-only tables in a separate bank; original `td_traffic.c` remains
+byte-for-byte R6. No population, collision guard, palette or old artwork was
+removed to fit the extension.
+
+[Fresh native play](NATIVE_CAMPUS_SCOOTERS.json), ending at frame 17,224, verifies
+A/B scooter entry, one scooter delivery, campus clock/dome and Robarts views,
+58-byte map freezing and genuine committed-save reset. The final hospital
+notice and recovery fields are observed; the zero-health/downed moment was
+not directly WRAM-sampled. R6's separate hospital/arrest, arrow and timing
+acceptance remains tied to R6.
+
+Select the raw R8 ROM locally; its source-pinned ZIP awaits the source commit
+and independent audit. [Supported USB discovery](CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
+found zero consoles and dispatched no write. Full campaign/two-hour human play,
+three scooter-exclusive jobs, later chapters, native older-save imports,
+remote recovery, deepest stack, browser and cartridge/audio checks remain open.
+
+## Retained story/combat R6 build — 2026-10-05
+
+Retain **`toronto-dispatch-story-combat-r6.gbc`**, **1,048,576 bytes**, SHA-256
 **`71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`**.
 Official source-debug compilation exits 0 in **125,496 ms**. The [build record](STORY_COMBAT_BUILD.json)
 binds source fingerprint `6cb70b49233b540daf605afe7e77076cbbfd2ba2ca4f6bc39fa5c6d3f9ebd9b3`,
@@ -33,8 +72,7 @@ and 160/840 active updates in separate scoped workloads. Later chapters,
 all seven recovery districts, fatal-job overlap and interrupted SRAM commits
 are host coverage, rather than additional native play.
 
-The local raw ROM is selected. A new source-pinned ZIP awaits the source commit
-and package audit; no ZIP hash or CI result is assigned yet. Cartridge write,
+The retained R6 [package audit](STORY_COMBAT_PACKAGE.json) verifies the local 293,707-byte `toronto-dispatch-story-combat-r6-reviewed.zip`, SHA-256 `6b718a78115a583fa840ff8bc04eab8dfdfd2b040e03ab5111e91f997bbc7b13`, pinned to source `fb589599f6411d517fe8e2af9d8c43dbf6d89144`. Its guide and ROM remain frozen; this package is separate from R8. Cartridge write,
 cold boot, power-off saves, audio listening, browser acceptance, all 104
 contracts and two measured enjoyable human hours remain pending. Prior stable
 and hardware identities below stay separate and immutable.

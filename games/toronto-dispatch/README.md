@@ -2,25 +2,25 @@
 
 A north-up, top-down pixel-art courier sandbox for ModRetro Chromatic / Game Boy Color. Deliver timed jobs through seven compressed Toronto districts: drive with momentum and braking, park and walk to clients, or pay for scheduled transit to take a shortcut.
 
-![Original newcomer story](docs/playtest-story-combat-r6/intro-204.png) ![Road guidance during a delivery](docs/playtest-story-combat-r6/road-navigation-3066.png)
+![Original University College and Convocation Hall](docs/playtest-campus-scooters-r8/campus-clock-dome.png) ![Delivery scooter near Union](docs/playtest-campus-scooters-r8/scooter-entry.png)
 
-Original 160 × 144 frames from the selected R6 ROM. The [native record](docs/NATIVE_STORY_COMBAT.json) binds their frame numbers and checksums.
+Original 160 × 144 frames from the selected R8 ROM. The [native record](docs/NATIVE_CAMPUS_SCOOTERS.json) binds their frame numbers and checksums.
 
 ## Play and install
 
-Use the [Chromatic loading guide](docs/LOADING.md). The selected build is **`toronto-dispatch-story-combat-r6.gbc`**, 1,048,576 bytes, SHA-256 `71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`. [Official compilation](docs/STORY_COMBAT_BUILD.json), four compiled guards, full `make check` and [scoped native play](docs/NATIVE_STORY_COMBAT.json) pass. Select that raw ROM locally; a new source-pinned ZIP awaits the source commit and package audit. Cartridge write and physical cold boot remain pending. Generated binaries stay outside Git.
+Use the [Chromatic loading guide](docs/LOADING.md). The selected build is **`toronto-dispatch-campus-scooters-r8.gbc`**, 1,048,576 bytes, SHA-256 `bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [Official compilation](docs/CAMPUS_SCOOTERS_BUILD.json), four compiled guards, full `make check` and [scoped native play](docs/NATIVE_CAMPUS_SCOOTERS.json) pass. Select that raw ROM locally; its source-pinned ZIP awaits the source commit and package audit. [Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json) found zero connected consoles, so no R8 cartridge write was dispatched. Generated binaries stay outside Git.
 
 The last physically confirmed baseline is **`toronto-dispatch-hardware-feedback.gbc`**, SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Its [user-requested retry](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed with vendor-reported success and a closed writer. No complete cartridge read-back digest was supplied. The user confirmed that ROM cold-boots with USB disconnected and responds to physical buttons; extended physical gameplay remains pending. The [first failed attempt](docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json), prior 8be1 [installation](docs/CARTRIDGE_INSTALL_2026_10_04.json), reviewed ZIPs and earlier 7ab sixteen-job evidence remain preserved separately. The retry followed explicit reconnection/request rather than an automatic write.
 
 The preserved baseline cartridge bundle is **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`**. Its [independent package check](docs/HARDWARE_FEEDBACK_PACKAGE.json) verifies the exact ROM, committed source, checksums, loading instructions and licences.
 
-The controls below describe R6, including story chapters, road guidance, health and on-foot combat. The older sandbox-stable build and installed 9c155 baseline keep their own evidence.
+The controls below describe R8, including scooters, story chapters, road guidance, health and on-foot combat. The older sandbox-stable build and installed 9c155 baseline keep their own evidence.
 
 | Action | Controls |
 | --- | --- |
 | Drive | A accelerates; left/right steer while moving; B brakes and then reverses near rest. Cars can mount sidewalks |
 | Park and walk | Stop, then Start → Get out of car; D-pad walks. On foot, A or B enters a nearby parked vehicle |
-| Take a street vehicle | On foot, approach a parked car or occupied road vehicle and press A or B; an occupied vehicle shows its driver being dragged out before entry |
+| Take a street vehicle | On foot, approach a parked car, vacant scooter or occupied road vehicle and press A or B; an occupied vehicle shows its driver being dragged out before entry |
 | Enter a shop | On foot, A at a marked doorway opens a separate grocery, corner-store or repair-shop room. D-pad walks; A talks to the keeper; B leaves, or walk through the bottom doorway. Start explains how to leave for the menu |
 | Restore health / ammo | If supplies are needed, A near a shopkeeper spends $10 for up to 25 health and at least 12 rounds; entry displays the price |
 | Fire on foot | B fires in your walking direction when a nearby vehicle or TTC interaction does not take priority. Each fresh shot uses one round and increases police attention |
@@ -46,6 +46,21 @@ Mainland vehicles remain parked during transit and Island walking. Trains cost $
 
 Explore compressed Core, western neighbourhoods, High Park/Junction, eastern neighbourhoods, Port Lands, public Islands and Uptown Hills. The game contains **344 buildings, 657 pedestrian routes, 104 contracts, 64 service points and nine mainland parking anchors**. Four player vehicles, wide roads and sidewalks, varied original buildings, roof/canopy occlusion, walking/car entry, a scrollable atlas, original chiptune music and saved progression are implemented. Bright park foliage, turquoise water, striped crossings, bus poles, parking bays/lots and varied brick, glass, civic and warehouse details make each district easier to read. The [city art and shop record](docs/CITY_ART_AND_SHOPS_2026_10_04.md) describes the original artwork, three native shop levels and bounded geographic audit.
 
+The original University of Toronto area features a clock/arcade/UT sign at
+University College, Convocation Hall's dome/columns and Robarts Library's angular
+concrete/glass façade, with paved forecourts. This is a researched, compressed
+St. George campus interpretation, west of University and between Bloor and
+College. Existing roads and collision footprints remain intact.
+
+A parked delivery scooter waits on Union's sidewalk southeast of the starting
+car. A or B enters it on foot; taking a found vehicle uses the existing theft
+attention rule. Two independent riders travel authored road and sidewalk loops
+in each loaded mainland district without replacing traffic or pedestrians.
+Cars can push vacant scooters and knock riders into non-graphic crash poses,
+with speed/mass momentum and the existing human-impact consequences. Three
+existing jobs require a scooter; Campus Envelopes separately serves the
+University area. [Scooter controls and jobs](docs/SCOOTERS.md) explain the gates.
+
 Eight job types cover parcel rounds, fragile art, express files, truck freight, transit relays, passenger rides, ordered returns and Island post. Cargo starts after pickup; damage reduces the base payment, while remaining time adds a bonus. Fast steering also reduces passenger comfort. Port Lands routes use Leslie access and authored bridges; Island deliveries use ferries and public walking paths. North includes railway underpasses, foot-only Baldwin Steps and public Casa Loma/Rosehill handoffs.
 
 Eight road vehicle identities include cars, taxis, trucks, buses, police, ambulance and fire vehicles, following their lanes, queues and fictional red/green signals. Ordinary drivers yield to the visible walking courier; pursuing police remain dangerous. Varied human pedestrians arrive from outside the camera, walk and pause to converse; original helmeted workers near the fictional FIRE garage supply ambient fire crew activity. Parked cars and occupied street vehicles can be taken with a quick A/B interaction. The approved courier and pedestrian artwork is retained.
@@ -54,21 +69,48 @@ Cars keep momentum through steering and cannot spin at rest. Vehicle collisions 
 
 Driving into a pedestrian slows the car and shows non-graphic flight and a prone body, with carried-cargo damage, escalating fines and police pursuit. Vehicles can knock down the walking courier. The courier has separate health and ammunition: walls and nearer vehicles block shots. At one star, arrest charges up to $25 and briefly holds the courier in a normal pose. At two/three stars, armed police fire with greater damage and pursue faster; close captures retain $100/$225 penalties. Wanted stars blink while cooling; stay outside patrol/helicopter observation for 30 active game seconds per level to escape. Shops and roof/bridge cover can help break observation, while delivery deadlines continue.
 
-Zero health sends the courier to a fictional Toronto General forecourt in Core after a short downed period. Look for the original mint medical badge east of University and south of College. Hospital recovery restores 100 health and 12 rounds, clears police attention, charges up to $40 and fails active work once. Your car remains parked where you left it. R6's native sample verifies Core recovery and one-star arrest; transitions from all seven districts and fatal-job overlap have host checks. Cartridge checks remain pending.
+Zero health sends the courier to a fictional Toronto General forecourt in Core after a short downed period. Look for the original mint medical badge east of University and south of College. Hospital recovery restores 100 health and 12 rounds, clears police attention, charges up to $40 and fails active work once. Your car remains parked where you left it. R8 observes the Core hospital recovery outcome and $40 fee; its zero-health/downed moment was not directly WRAM-sampled. R6 separately verifies injury through zero, recovery and one-star arrests. Remote district transitions and fatal-job overlap have host checks. Cartridge checks remain pending.
 
 Planes and helicopters fly into view, with occasional larger jet shadows crossing the ground; increased police attention can bring a pursuing helicopter. Larger boats show occupants and animated wakes, with a controllable launch and boarding and safe dock exits in Core and Port Lands. Boats travel beneath the supported bridge decks; road vehicles remain parked while the courier takes a boat. Shops are genuine separate playable rooms. Borrowed fleet identities, boat motion, displaced traffic and destroyed furniture use transient session state; a cold reload restores safe courier progress and intact scenery.
 
 The existing original 8-bit City Shift song plays alongside engine pitches, braking noise and impact, pickup, delivery, transit and menu cues. Settings chooses which sounds play; physical listening and speaker/headphone quality still need review.
 
-The story follows a newcomer with a borrowed car, rent to pay and a first shift, through friendships, a rival's scheme and a community courier business. Eight original over-the-shoulder chapters contain 41 pages and become eligible at 0, 1, 8, 16, 32, 56, 80 and 104 unique deliveries. Welcome opens the introduction; later delivery results queue one unseen chapter at a time. Save v11 keeps the same 58-byte payload and adds saved health, ammo and chapter flags while migrating older v4–v10 career layouts. The existing 45 courier poses remain intact, with four original sidearm poses appended; city art and the north-up camera stay unchanged.
+The story follows a newcomer with a borrowed car, rent to pay and a first shift, through friendships, a rival's scheme and a community courier business. Eight original over-the-shoulder chapters contain 41 pages and become eligible at 0, 1, 8, 16, 32, 56, 80 and 104 unique deliveries. Welcome opens the introduction; later delivery results queue one unseen chapter at a time. Save v11 keeps the same 58-byte payload and adds saved health, ammo and chapter flags while migrating older v4–v10 career layouts. The preceding 49 courier/vehicle/beacon/armed poses remain intact; R8 adds two original empty-scooter poses and the confined campus artwork while retaining the north-up camera.
 
 Visible road traffic and paid transit schedules use separate game abstractions. Geography is a researched compression of Old Toronto, the waterfront and public Islands; service times/fares, courier handoffs, fire garage, shops and parking courts are fictional game design. Native samples cover selected sandbox features; broader play and physical verification remain open.
 
 ## Verification and remaining work
 
+R8's [build record](docs/CAMPUS_SCOOTERS_BUILD.json) binds 246 unchanged native
+inputs and matching debug artifacts. Linked static reserve is 532 bytes,
+HOME has 207 bytes free, Core backgrounds use 46/47 bank-1 tiles and compiled
+scenes peak at 126/128 OBJ tiles. Full `make check` includes 633,765 scooter,
+554,672 sandbox, 246 campus and 118 sprite-extension assertions. These prove
+source behavior and allocation bounds, rather than deepest stack or physical
+flicker.
+
+The [fresh R8 native run](docs/NATIVE_CAMPUS_SCOOTERS.json) uses ordinary buttons
+through frame 17,224. It enters the Union scooter with A and B, completes Market
+Start on it at condition 70/cash $75/done 1, shows the first-pay chapter and
+walks to the campus clock/dome and Robarts views. A 240-frame map interval freezes
+all 58 game bytes. Genuine save/reset recovers the committed campus career,
+HP/ammo, story flags and parked scooter. The final Core hospital outcome restores
+HP 100/ammo 12, clears heat and charges $40 while preserving the parked vehicle;
+the zero-health/downed moment was not directly WRAM-sampled.
+
+R8 has no separate FPS/timing-gain claim. All 104 contracts, three scooter-only
+jobs, later chapters, remote hospital recovery, native older-save imports,
+two measured enjoyable human hours, deepest stack, browser recovery and
+cartridge boot/save/audio/flicker remain pending. Older records below retain
+their exact ROM identities.
+
+## Retained verification
+
 R6's [build record](docs/STORY_COMBAT_BUILD.json) binds 243 unchanged native inputs and matching debug artifacts. Linked static reserve is 548 bytes, fixed HOME has 207 bytes free and scenes peak at 124/128 OBJ tiles per bank. These checks establish allocation limits, not deepest stack use.
 
 The [fresh R6 native run](docs/NATIVE_STORY_COMBAT.json) ends passed at frame 12,974 without imported progress or game-memory writes. It completes the first job at full condition for $129, checks introduction/first-pay dialogue freezing and skipping, sees the arrow in 30/30 sampled views, cycles all three sound settings and freezes the map. Three fresh shots and a held-button check lead to H3 injury, a prone pose and hospital recovery at `(504,344)`: cash $129→$89, health 100 and ammo 12, with the parked car unchanged. Two $25 H1 arrests, blocked firing during arrest and genuine explicit/automatic-save resets preserve the checked career, hospital position, health, ammo and story flags.
+
+The retained R6 [package audit](docs/STORY_COMBAT_PACKAGE.json) verifies the local 293,707-byte `toronto-dispatch-story-combat-r6-reviewed.zip`, SHA-256 `6b718a78115a583fa840ff8bc04eab8dfdfd2b040e03ab5111e91f997bbc7b13`, pinned to source `fb589599f6411d517fe8e2af9d8c43dbf6d89144`. Its guide and ROM remain frozen; this package is separate from R8.
 
 Actual-C host checks cover all 107 route goals, later chapter thresholds, all seven hospital transitions, fatal-job overlap, blocked exits, failed scene queues and interrupted SRAM journal commits. Native hospital play starts and ends in Core; later chapters and other district recoveries have not been played in R6.
 

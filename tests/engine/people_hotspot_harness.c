@@ -11,6 +11,12 @@
 #include "td_world_routes.h"
 td_state_t td;
 static UBYTE police_observed;
+/* Independent rider-body fixture for this people's-only differential.
+   The dedicated scooter suite executes the actual occupancy implementation. */
+static UBYTE scooter_fixture_active;
+UBYTE td_scooter_foot_clear(UWORD u,UWORD v){
+    return !scooter_fixture_active||u!=500*16||v!=400*16;
+}
 UBYTE td_police_observed(void){return police_observed;}
 actor_t actors[22];
 UBYTE td_streetcar_ride_view,td_streetcar_view_district,td_resume_mode;
@@ -232,7 +238,7 @@ static void fleet_bucket_differential(void){
             int32_t dx=(int32_t)pu-cu,dy=(int32_t)pv-cv;
             if(!(actors[idx].flags&ACTOR_FLAG_HIDDEN)&&abs(dx)<(int)radii[i]&&abs(dy)<(int)radii[i])expected=0;
         }
-        if(expected)expected=td_streetcar_runtime_pedestrian_clear(0,pu,pv);
+        if(expected)expected=td_scooter_foot_clear(pu,pv)&&td_streetcar_runtime_pedestrian_clear(0,pu,pv);
         require(td_person_road_clear(u,v)==expected,
                 "byte fleet broad phase matches independent signed Q4 distances for fractional actors, hidden bodies, malformed wrapped points and every radius");
     }
@@ -926,4 +932,13 @@ static void attention_observation_checks(void){
     }
     require(td.cash==121&&td.job==4&&td.health==82,"Attention countdown changes no cash/cargo/active-job state");
 }
-int main(void){social_body_terrain_differential();fleet_bucket_differential();attention_observation_checks();fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();appearance_admission();idle_courier_boundaries();idle_courier_wait_and_resume();idle_courier_impacts_and_recovery();idle_courier_context_controls();idle_courier_resume_regression();reversing_courier_route83();camera_admission_bounds();social_pairs();eight_visible_people();actual_route_retention();route_selector_differential();byte_first_word_work();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}
+static void rider_foot_gate(void){
+    memset(&td,0,sizeof(td));td.mode=TD_ROAM;td_streetcar_view_district=0;td_streetcar_ride_view=0;
+    for(unsigned i=0;i<22;i++)actors[i].flags|=ACTOR_FLAG_HIDDEN;
+    scooter_fixture_active=1;
+    require(!td_person_road_clear(500,400)&&td_person_road_clear(501,400),
+            "An otherwise-clear walker yields to the independent actual rider occupancy query");
+    scooter_fixture_active=0;
+    require(td_person_road_clear(500,400),"Removing the rider permits the same pedestrian route position");
+}
+int main(void){rider_foot_gate();social_body_terrain_differential();fleet_bucket_differential();attention_observation_checks();fleet_extent_guards();contacts();phases();loaded_rails();parked_district_queries();paid_parked_presentation();appearance_admission();idle_courier_boundaries();idle_courier_wait_and_resume();idle_courier_impacts_and_recovery();idle_courier_context_controls();idle_courier_resume_regression();reversing_courier_route83();camera_admission_bounds();social_pairs();eight_visible_people();actual_route_retention();route_selector_differential();byte_first_word_work();printf("People hotspot harness: %lu checks, 0 failures\n",checks);return 0;}

@@ -79,6 +79,7 @@ td_police_from_u td_police_from_v td_police_stuck td_input_edge td_result_b_rele
 td_people td_people_dead td_people_last_tick td_people_boot td_people_last_clock td_nearby_routes td_ped_route td_ped_refresh td_ped_anchor_u
 td_ped_anchor_v td_people_last_u td_people_last_v td_streetcar_focus_u
 td_streetcar_focus_v td_streetcar_view_district td_streetcar_ride_view
+td_scooter_riders td_scooter_district td_scooter_elapsed
 td_sandbox_parked td_sandbox_seed td_sandbox_district td_sandbox_mask td_sandbox_owner td_sandbox_skin td_sandbox_drivers td_sandbox_headings td_sandbox_custom_player td_sandbox_ready td_sandbox_last_u td_sandbox_last_v td_inside_shop
 td_broken td_prop_flashes td_prop_flash_next
 td_ram_anchor_u td_ram_anchor_v td_ram_state
@@ -282,8 +283,8 @@ def module(path):
 
 def host_source(toronto,candidate):
     sources = ['td_combat.c','td_story.c','td_story_control.c','td_menu.c','td_menu_actions.c','td_transit.c','td_world.c','td_streetcar.c','td_streetcar_runtime.c',
-               'td_aircraft.c','td_people.c','td_traffic.c','td_roads.c']
-    sources.extend(['td_terrain.c','td_sandbox.c','td_scenery.c','td_ramming.c'])
+               'td_aircraft.c','td_people.c','td_traffic.c','td_rider_traffic.c','td_roads.c']
+    sources.extend(['td_terrain.c','td_sandbox.c','td_scooter.c','td_scenery.c','td_ramming.c'])
     bodies=[]
     for name in sources:
         body=(ENGINE/'src'/name).read_text()

@@ -1,8 +1,16 @@
 # Toronto Dispatch — design
 
-The [Oct5 source summary](#current-quest-story-and-combat-source--2026-10-05)
-describes the latest gameplay additions. Earlier milestone descriptions retain
-their own ROM scope; later source changes do not upgrade their evidence.
+Selected local build: **`toronto-dispatch-campus-scooters-r8.gbc`**, SHA-256
+`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [R8 build](docs/CAMPUS_SCOOTERS_BUILD.json)
+and [native campus/scooter evidence](docs/NATIVE_CAMPUS_SCOOTERS.json) select this
+extension separately from retained R6 story/combat and physical 9c155 evidence.
+The raw ROM is ready for local testing; its source-pinned ZIP and physical
+installation remain separate gates.
+
+The accepted [campus](#university-of-toronto-campus--accepted-source-extension-2026-10-05)
+and [scooter additions](#scooter-deliveries-and-street-activity--accepted-2026-10-05)
+extend the retained story/combat implementation. Earlier milestone descriptions
+keep their own ROM scope; later source changes do not upgrade their evidence.
 
 ## Player experience
 
@@ -276,7 +284,7 @@ Read genuine old v4–v10 layouts, validate old word high bytes before conversio
 then initialize health/ammo while preserving old progress. Keep atomic journal
 writes and distinguish native/host/physical save evidence.
 
-## Current quest, story and combat build — 2026-10-05
+## Retained R6 quest, story and combat implementation — 2026-10-05
 
 Dispatch retains one active contract. Its existing beacon and map are joined
 by a small ground arrow toward the next collision-backed local waypoint or
@@ -354,3 +362,64 @@ clear attention, and fresh B during the hold spends no ammunition. Genuine game
 resets preserve committed health/ammo, story/career and the hospital/car
 positions. No other district hospital transition or active-job death is claimed
 as native play; physical power-off persistence and listening remain pending.
+
+## University of Toronto campus — accepted source extension, 2026-10-05
+
+The user requests a recognisable, nicely designed University of Toronto area.
+The original St. George campus interpretation now gives three existing Core
+building bodies a Romanesque University College clock/arcade and UT sign,
+Convocation Hall dome/columns and angular Robarts Library roof. Two reachable
+forecourt sidewalks gain repeated stone paving. Existing palette families
+provide cream stone, blue roof accents and warm autumn details.
+
+Official UofT map/address/architecture facts and deliberately compressed game
+anchors are separated in `content/campus_area.json` and [geography](docs/GEOGRAPHY.md).
+This preserves all existing collision, attribute/priority and road bytes,
+the ROM building, every other city pixel outside the exact campus cells,
+all 77 Core footprints and current routes. An authenticated pre-campus source
+PNG reconstructs the immutable historical feedback proof. Fifteen added
+canonical motifs bring source art to 174 flip-canonical patterns; R8
+compiled allocation checks pass with Core 46/47 background tiles and native
+walking shows the clock/dome and library. Physical/human visual acceptance
+remains separate; the source-only checkpoint in campus metadata stays frozen.
+
+
+## Scooter deliveries and street activity — accepted 2026-10-05
+
+The user requests parked scooters that the courier can enter and drive, scooter
+delivery work, car impacts and NPC riders on sidewalks and streets. Retain the
+original fictional seated delivery scooter rather than treating its sprite as
+a real-world access rule. The existing 104 contracts remain unchanged: Parkdale
+Art (74, after six completions), West Closing Round (80, after eighteen) and
+Cross City Bundles (88, after eighteen) require vehicle 3. Campus Envelopes (21,
+after twelve) separately serves the University area and permits any vehicle.
+
+A or B enters a nearby vacant scooter on foot through the existing vehicle
+interaction/entry flow. Seed one scooter in an existing validated mainland curb
+bay, with Union's southeast sidewalk `(584,744)` tried first and the same
+terrain, streetcar and furniture guards determining any fallback. Preserve
+owned and protected abandoned vehicles. Taking a found scooter uses the
+existing vehicle-theft attention rule; returning to the courier's own vehicle
+is a separate interaction path.
+
+Two independent rider identities use separate authored road/sidewalk circuits
+in the loaded mainland district; Islands have none. Full-pose admission occurs
+outside the camera guard, movement is continuous and signal/body/pedestrian/
+terrain/tram/furniture guards remain active. Use eight active-VBlank quanta
+with bounded catch-up and freeze riders during menus/dialogue/interiors/queued
+scene mismatch. Do not replace the eight road slots or eight pedestrians.
+
+Relative speed and vehicle mass transfer momentum before an occupied scooter
+impact's existing attention, fine and carried-condition consequences, once
+per fresh collision. Original human airborne/prone poses accompany the empty
+bike; avoid a duplicate pedestrian slowdown. Vacant scooters can be shoved
+without a human-impact fine. Rider wrecks retire offscreen; parked damaged bikes
+follow their eligible later scene seeding. Checked whole-body sweeps retain
+wall, road-object, person, fleet and streetcar admission.
+
+Two original one-OBJ empty poses append at 49/50, preserving all 49 preceding
+pose metadata and pixels. Two rider structs and their counters use exactly
+16 transient native bytes without changing save v11/58. Separate the new rider
+admission helper/read-only tables into a bank while retaining original traffic
+code byte-for-byte. The R7 [bank-placement failure](docs/CAMPUS_SCOOTERS_R7_FINDING.json)
+produced no ROM; R8 supplies distinct compiled/native evidence.

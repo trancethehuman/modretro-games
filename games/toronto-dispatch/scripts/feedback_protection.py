@@ -41,6 +41,15 @@ def historical_json(relative,value,proof=None):
  return value
 
 def raw_sha(relative,payload,old_expected,proof=None):
+ from scooter_protection import PNG_FILES as scooter_pngs,META_FILES as scooter_meta,png_history as scooter_png_history,meta_history as scooter_meta_history
+ try:
+  if relative in scooter_pngs:payload=scooter_png_history(relative,payload)
+  elif relative in scooter_meta:payload=(json.dumps(scooter_meta_history(relative,json.loads(payload)),indent=2)+'\n').encode()
+ except (AssertionError,OSError,ValueError):return False
+ if relative=='project/assets/backgrounds/toronto_city.png':
+  from campus_protection import png_history
+  try:payload=png_history(payload)
+  except (AssertionError,OSError):return False
  proof=fixture() if proof is None else proof;scope=proof['raw_scopes'].get(relative)
  if scope is None:return hashlib.sha256(payload).hexdigest()==old_expected
  assert scope['before_sha256']==old_expected,('Predecessor pin changed',relative)
@@ -136,6 +145,8 @@ def courier_frames(meta):
 
 def courier_meta_history(relative,meta,scope,traffic):
  """Remove only the four approved poses, reconstructing every prior field."""
+ from scooter_protection import meta_history
+ meta=meta_history(relative,meta)
  meta=copy.deepcopy(meta);pin=scope['metadata'][relative];frames=courier_frames(meta)
  assert (meta['width'],meta['height'],meta['numTiles'],len(frames))==(256,64,0,49),'Courier append dimensions/count changed'
  assert digest(frames[:45])==pin['original_frames_sha256'],'Original courier frame0..44 IDs/cells changed'
@@ -154,6 +165,8 @@ def courier_meta_history(relative,meta,scope,traffic):
 
 def courier_pixels_check(image,scope):
  from PIL import Image
+ from scooter_protection import pixels_history
+ image=pixels_history(image)
  image=image.convert('RGB');assert image.size==(256,64),'Courier sheet must append only one row'
  previous=zlib.decompress(base64.b64decode(scope['previous_png_zlib']))
  assert scope['previous_png_sha256']=='5b563d78676e165c4487e4332a59de0eff2a828ca1f2f572f4c49ff3613ef972','Pre-extension accepted PNG pin changed'
@@ -290,6 +303,10 @@ def save_extension_negatives(game,save,proof):
 def semantic_check(traffic,proof=None):
  from PIL import Image
  proof=fixture() if proof is None else proof
+ from campus_protection import check as campus_check,negatives as campus_negatives
+ campus_negatives(campus_check())
+ from scooter_protection import check as scooter_check
+ scooter_check()
  assert proof['predecessor_commit']=='8ea5ec413c3650cd3441ee588ba15f87a98889fa'
  assert proof['historical_fixture_sha256']==hashlib.sha256((REPO/'tests/fixtures/traffic_lanes.json').read_bytes()).hexdigest()
  aircraft_extension_check(traffic,proof);aircraft_extension_negatives(traffic,proof)

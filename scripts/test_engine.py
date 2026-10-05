@@ -236,9 +236,11 @@ def main():
                 (ENGINE / "src/td_aircraft.c").read_text() + '\n' +
                 (ENGINE / "src/td_people.c").read_text() + '\n' +
                 (ENGINE / "src/td_traffic.c").read_text() + '\n' +
+                (ENGINE / "src/td_rider_traffic.c").read_text() + '\n' +
                 (ENGINE / "src/td_roads.c").read_text() + '\n' +
                 (ENGINE / "src/td_terrain.c").read_text() + '\n' +
                 (ENGINE / "src/td_sandbox.c").read_text() + '\n' +
+                (ENGINE / "src/td_scooter.c").read_text() + '\n' +
                 (ENGINE / "src/td_scenery.c").read_text() + '\n' +
                 (ENGINE / "src/td_ramming.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +

@@ -313,14 +313,16 @@ def source_city_poses() -> dict[str, tuple[list[list[tuple]], int]]:
 
 
 def source_courier_poses() -> dict[str, tuple[list[list[tuple]], int]]:
-    """All45 retained native poses plus four one-OBJ original sidearm poses."""
+    """All49 retained native poses plus two original one-OBJ empty scooters."""
     from PIL import Image
     meta = json.loads((GAME / "project/assets/sprites/dispatch_topdown.png.gbsres").read_text())
     frames = [frame for state in meta["states"] for frame in state["animations"][0]["frames"]]
-    if len(frames) != 49 or hashlib.sha256(json.dumps(frames[:45], sort_keys=True,
+    if len(frames) != 51 or hashlib.sha256(json.dumps(frames[:45], sort_keys=True,
             separators=(",", ":")).encode()).hexdigest() != \
             "447809e9dae652940d4d86c8feaa421127487e55af8b17431d34663ad2621125":
-        raise ValueError("Retained courier frame identities/meanings or appended armed pose count changed")
+        raise ValueError("Retained courier frame identities/meanings or appended scooter pose count changed")
+    if hashlib.sha256(json.dumps(frames[:49], sort_keys=True, separators=(",", ":")).encode()).hexdigest() != "c7e56bdbc36a4aa85cc5790feabc0e8b9679b3b3fa3f178faef4938ddb66abe1":
+        raise ValueError("Approved original49 courier frame metadata changed")
     poses = []
     with Image.open(GAME / "project/original-art/dispatch_topdown.png") as source:
         image = source.convert("RGB")
@@ -330,6 +332,9 @@ def source_courier_poses() -> dict[str, tuple[list[list[tuple]], int]]:
                                   (n // 16+1)*16)).tobytes() for n in range(45))
         if hashlib.sha256(old).hexdigest() != "2d21d95ded6713698785b0e0ba8f7ece1268dda32e05f3983b2e4031c4b1b1aa":
             raise ValueError("Approved courier/vehicle/beacon pixels0..44 changed")
+        original49 = b"".join(image.crop(((n % 16)*16, (n // 16)*16, (n % 16+1)*16, (n // 16+1)*16)).tobytes() for n in range(49))
+        if hashlib.sha256(original49).hexdigest() != "30e4f1b4a629bbe4088d8e3cf9d37352226fa9fd11ba1b81e7164ba94e5234fb":
+            raise ValueError("Approved original49 courier pixels changed")
         for index, frame in enumerate(frames):
             cells = []
             if index >= 45 and (len(frame["tiles"]) != 1 or frame["tiles"][0]["x"] != 4):
@@ -339,7 +344,7 @@ def source_courier_poses() -> dict[str, tuple[list[list[tuple]], int]]:
                                for y in range(16) for x in range(8))
                 cells.append((part["x"], -part["y"], part["paletteIndex"], pixels))
             poses.append(cells)
-    return {COURIER: (poses, 48)}
+    return {COURIER: (poses, 52)}
 
 
 def aircraft_cells(frame: int) -> list[tuple[int, int]]:
@@ -1104,7 +1109,7 @@ def main() -> int:
         if args.require_streetlife:
             print("PASS: exact original fleet/civilian/boat OBJ poses, palettes, empty frames and independent boat reserve")
     if not errors and args.require_combat:
-        print("PASS: all45 preserved courier poses and four exact one-OBJ armed poses within scene allocations<=128")
+        print("PASS: all49 preserved courier poses and two exact one-OBJ parked scooter poses within scene allocations<=128")
     return bool(errors)
 
 

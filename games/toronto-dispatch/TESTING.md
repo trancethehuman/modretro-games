@@ -1,6 +1,49 @@
 # Testing record
 
-## Selected story/combat R6 — 2026-10-05
+## Selected campus and scooter R8 — 2026-10-05
+
+Select **`toronto-dispatch-campus-scooters-r8.gbc`**, **1,048,576 bytes**, SHA-256
+**`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`**. The [official build](docs/CAMPUS_SCOOTERS_BUILD.json)
+exits 0 in **164,830 ms**, with **246 unchanged native inputs** in
+[the source pins](docs/CAMPUS_SCOOTERS_SOURCE_PINS.json), SHA-256
+`358b9b1ce8ca76eaac6ecfcfa561b78a45ef2f8b6e8a9764ebf680c0bdc7a3ac`. Full `make check` and the four
+compiled guards pass. R7's [traffic-bank failure](docs/CAMPUS_SCOOTERS_R7_FINDING.json)
+produced no ROM and remains ineligible.
+
+The [fresh R8 native record](docs/NATIVE_CAMPUS_SCOOTERS.json) covers ordinary
+buttons through **frame 17,224**, without imported progress or game-memory
+writes. A and B enter the Union scooter; Market Start finishes on vehicle 3 at
+condition 70, cash $75 and one unique completion. The earned first-pay chapter
+leaves story flags 3. Walking reaches the campus clock/dome and Robarts views.
+The map freezes all 58 game bytes over frames 15,087–15,327. Explicit saving
+and a genuine four-button reset recover the committed campus courier at
+`(418,144.125)`, parked vehicle at `(775,725.625)`, cash $75, done 1, HP 100,
+ammo 11, story flags 3 and vehicle 3.
+
+The final idle sample ends at the Core hospital `(504,344)`, cash $35,
+HP 100/ammo 12/heat 0, with the parked vehicle preserved and the visible
+`HOSPITAL: $40 FEE` notice. The downed/zero-health moment was not directly
+sampled in WRAM; this is recovery-outcome evidence. The recording closes
+before archiving as `a56afea0-127a-4594-bc20-c2711d041897`, manifest
+`27f1d69a54f2a18746a858a15b8785def12c90268c4a09f10e875e49dc5c5292`.
+
+R8 leaves **532 static bytes** below stack origin, **207 HOME bytes** free,
+**46/47 Core bank-1 background tiles** and **126/128 OBJ tiles** at the compiled
+scene peak. Two new empty-scooter poses preserve all 49 preceding poses;
+compiled ground assets total 110 poses. Dedicated actual-C scooter checks pass
+633,765 assertions, the integrated sandbox 554,672, campus protection 246 and
+the sprite-extension proof 118. Allocation checks do not measure deepest stack.
+
+A source-pinned R8 ZIP awaits the source commit and separate package audit.
+[Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
+found zero connected consoles, so no R8 write was dispatched. Cartridge boot,
+power-off save persistence, physical audio/flicker, browser recovery, native
+old-save imports, all 104 jobs, the three scooter-exclusive contracts, later
+chapters, remote hospital transitions, deepest stack and two measured enjoyable
+human hours remain pending. Earlier R6, R2 and physical 9c155 evidence retains
+its own identity; emulator SRAM reset does not establish physical persistence.
+
+## Retained story/combat R6 — 2026-10-05
 
 Exact ROM `project/build/toronto-dispatch-story-combat-r6.gbc` is **1,048,576 bytes**,
 SHA-256 **`71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`**.
@@ -52,8 +95,7 @@ They are scoped observations, not display FPS or a causal whole-game gain.
 R5's earlier 24/30 arrow finding remains needs-review for that separate ROM;
 R6's passing sample does not relabel its outcome.
 
-The local raw R6 ROM is selected; the new source-pinned ZIP awaits source commit
-and package audit. No new CI/package hash or supported USB discovery is implied.
+The retained R6 [package audit](docs/STORY_COMBAT_PACKAGE.json) verifies the local 293,707-byte `toronto-dispatch-story-combat-r6-reviewed.zip`, SHA-256 `6b718a78115a583fa840ff8bc04eab8dfdfd2b040e03ab5111e91f997bbc7b13`, pinned to source `fb589599f6411d517fe8e2af9d8c43dbf6d89144`. Its guide and ROM remain frozen; this package is separate from R8. No R8 CI or hardware result follows from that package.
 Cartridge write/cold boot, power-off save persistence, audio listening, physical
 flicker, browser recovery, later chapters, all 104 contracts, native legacy
 imports, deepest stack/whole-city pacing and two measured enjoyable human hours

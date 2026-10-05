@@ -16,7 +16,7 @@ _Alignas(256) volatile OAM_item_t shadow_OAM[40],shadow_OAM2[40];
 static const metasprite_t person[]={{8,4,0,1},{metasprite_end,0,0,0}};
 static const metasprite_t *const frames[]={person};
 static spritesheet_t sheets[22];
-static unsigned checks,order[32],used,boat_calls,boat_after_count,post_order[8],post_count,pre_order[4],pre_count;
+static unsigned checks,order[32],used,boat_calls,boat_after_count,post_order[9],post_count,pre_order[4],pre_count;
 static UBYTE boat_active,guide_owned;
 static unsigned guide_force_calls;
 static void require(int ok,const char *message){checks++;if(!ok){fprintf(stderr,"FAIL %s\n",message);exit(1);}}
@@ -34,18 +34,19 @@ UBYTE move_metasprite(const metasprite_t *pose,UBYTE base,UBYTE index,WORD x,WOR
 }
 void td_guidance_road_prepare(void){require(pre_count<4&&used==0&&CURRENT_BANK==5,"Normal guidance preparation precedes ground");pre_order[pre_count++]=3;}
 void td_guidance_road_restore(void){require(used==0&&CURRENT_BANK==5,"Forced guidance release precedes modal reuse");guide_force_calls++;guide_owned=0;if(pre_count<4)pre_order[pre_count++]=3;}
-void td_hospital_render(void){require(post_count<8,"Hospital facade dispatch bounded");post_order[post_count++]=8;}
+void td_hospital_render(void){require(post_count<9,"Hospital facade dispatch bounded");post_order[post_count++]=8;}
 void td_combat_render_restore(void){require(pre_count<4&&used==0&&CURRENT_BANK==5,"Muzzle restore precedes ground");pre_order[pre_count++]=4;}
-void td_guidance_road_render(void){require(post_count<8,"Guidance dispatch bounded");post_order[post_count++]=6;}
-void td_combat_render(void){require(post_count<8,"Muzzle dispatch bounded");post_order[post_count++]=7;}
+void td_guidance_road_render(void){require(post_count<9,"Guidance dispatch bounded");post_order[post_count++]=6;}
+void td_combat_render(void){require(post_count<9,"Muzzle dispatch bounded");post_order[post_count++]=7;}
 void td_scenery_restore(void){require(pre_count<4&&used==0&&CURRENT_BANK==5,"Scenery restore precedes ground and preserves saved bank");pre_order[pre_count++]=2;}
-void td_scenery_render(void){require(post_count<8,"Post-ground log bounded");post_order[post_count++]=2;}
+void td_scenery_render(void){require(post_count<9,"Post-ground log bounded");post_order[post_count++]=2;}
 void td_aircraft_render_restore(void){require(pre_count<4&&used==0&&CURRENT_BANK==5,"Aircraft restore precedes ground and preserves saved bank");pre_order[pre_count++]=1;}
-void td_aircraft_render(void){require(post_count<8,"Post-ground log bounded");post_order[post_count++]=5;}
-void td_traffic_lights_render(void){require(CURRENT_BANK==5,"Core restores saved bank before banked overlay dispatch");require(post_count<8,"Post-ground log bounded");post_order[post_count++]=1;}
-void td_sandbox_render(void){require(post_count<8,"Post-ground log bounded");post_order[post_count++]=4;}
+void td_aircraft_render(void){require(post_count<9,"Post-ground log bounded");post_order[post_count++]=5;}
+void td_traffic_lights_render(void){require(CURRENT_BANK==5,"Core restores saved bank before banked overlay dispatch");require(post_count<9,"Post-ground log bounded");post_order[post_count++]=1;}
+void td_scooter_render(void){require(post_count<9,"Scooter post-ground log bounded");post_order[post_count++]=9;}
+void td_sandbox_render(void){require(post_count<9,"Post-ground log bounded");post_order[post_count++]=4;}
 UBYTE td_boats_controlled(void){return boat_active;}
-void td_boats_render(void){boat_calls++;boat_after_count=used;if(post_count){require(post_count<8,"Post-ground log bounded");post_order[post_count++]=3;}}
+void td_boats_render(void){boat_calls++;boat_after_count=used;if(post_count){require(post_count<9,"Post-ground log bounded");post_order[post_count++]=3;}}
 static void reset(UBYTE length,UBYTE buffer){
     memset(actors,0,sizeof(actors));memset((void*)shadow_OAM,0,sizeof(shadow_OAM));memset((void*)shadow_OAM2,0,sizeof(shadow_OAM2));
     for(unsigned i=0;i<22;i++){
@@ -79,7 +80,7 @@ static void counts(void){
             require(objects<=10,"Ground scene rendering preserves10 objects on every scanline");
         }
         require(boat_calls==1&&boat_after_count==used,"Ambient boat remains behind all admitted ground roles");
-        require(post_count==8&&post_order[0]==1&&post_order[1]==2&&post_order[2]==8&&post_order[3]==3&&post_order[4]==4&&post_order[5]==6&&post_order[6]==7&&post_order[7]==5,
+        require(post_count==9&&post_order[0]==1&&post_order[1]==2&&post_order[2]==8&&post_order[3]==3&&post_order[4]==4&&post_order[5]==9&&post_order[6]==6&&post_order[7]==7&&post_order[8]==5,
                 "Actual banked dispatch keeps lights/scenery/ambientboat/sandbox/aircraft order after all ground actors");
     }
 }
@@ -95,13 +96,13 @@ static void prepared_before_scroll(void){
         guide_owned=1;guide_force_calls=0;td_actor_render_before();
         require(!guide_owned&&guide_force_calls==1&&pre_count==4,"A modal force releases a retained arrow even after normal preparation");
         actors_render();
-        require(pre_count==4&&post_count==8,"Core fallback keeps the prepared underlay and still composes every overlay");
+        require(pre_count==4&&post_count==9,"Core fallback keeps the prepared underlay and still composes every overlay");
         require(used==4&&allocated_hardware_sprites==4&&CURRENT_BANK==5,"Earlier preparation does not change ground actors or caller bank");
         used=post_count=pre_count=boat_calls=boat_after_count=0;allocated_hardware_sprites=0;
         /* VM lock may skip state_update on the next frame. Core must then
          * restore the last completed overlays itself, before ground OAM. */
         actors_render();
-        require(pre_count==4&&post_count==8,"Post-ground completion rearms the skipped-state-update fallback");
+        require(pre_count==4&&post_count==9,"Post-ground completion rearms the skipped-state-update fallback");
     }
 }
 static void shop_and_roles(void){
@@ -110,7 +111,7 @@ static void shop_and_roles(void){
             "Native shop player and keeper are isolated from ACTIVE outdoor cars, people, drivers and tram tail");
     reset(22,1);actors[0].flags|=ACTOR_FLAG_HIDDEN;boat_active=1;actors_render();
     require(used==21&&boat_calls==1&&boat_after_count==0,"Controlled boat retains priority before every outdoor ground role");
-    require(post_count==7&&post_order[0]==1&&post_order[1]==2&&post_order[2]==8&&post_order[3]==4&&post_order[4]==6&&post_order[5]==7&&post_order[6]==5,
+    require(post_count==8&&post_order[0]==1&&post_order[1]==2&&post_order[2]==8&&post_order[3]==4&&post_order[4]==9&&post_order[5]==6&&post_order[6]==7&&post_order[7]==5,
             "Controlled launch remains before ground and is never duplicated by banked post-ground dispatch");
     require(order[15]==17&&order[16]==18&&order[17]==19&&order[18]==20&&order[19]==21&&order[20]==1,
             "Full outdoor scene keeps both extra cars, both drivers and separate tram21 before beacon1");

@@ -1,6 +1,30 @@
 # Native performance record
 
-Updated 2026-10-05. Preserve gameplay and graphical fidelity while removing repeated work. Selected ROM `toronto-dispatch-story-combat-r6.gbc`, SHA-256 `71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`, has [matched build](STORY_COMBAT_BUILD.json), [native play](NATIVE_STORY_COMBAT.json) and [optimization evidence](STORY_COMBAT_OPTIMIZATION.json). Its 243 native inputs remain unchanged. The linked heap `DCDC` leaves **548 static bytes** below stack origin `DF00`; HOME has 207 bytes free and scenes peak at 124/128 OBJ tiles. Static separation is not a deepest-stack measurement.
+Updated 2026-10-05. Preserve gameplay and graphical fidelity while removing
+repeated work. Selected ROM **`toronto-dispatch-campus-scooters-r8.gbc`**, SHA-256
+`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`, has [matched build](CAMPUS_SCOOTERS_BUILD.json)
+and [fresh native play](NATIVE_CAMPUS_SCOOTERS.json). All 246 native inputs remain
+unchanged. The two independent riders use exactly 16 transient bytes, reducing
+linked reserve from R6's 548 to **532 bytes** (`DCEC` below `DF00`), above the
+512-byte minimum. HOME remains **207 bytes** free, Core backgrounds use **46/47**
+and scenes peak at **126/128 OBJ tiles**. These allocation checks do not measure
+deepest stack or universal smoothness.
+
+Scooter movement and crash phases use eight active-VBlank quanta with a bounded
+catch-up budget. Actual-C equal-time partitions retain behavior; paused/modal
+and scene-mismatch guards freeze their state. The bank split adds only new
+rider code/read-only tables, leaving old traffic unchanged. Existing population,
+collision guards, artwork and palettes are retained. Campus artwork and scooter
+activity are requested additions, rather than optimizations of identical content.
+
+R8 native play verifies the specific city, delivery, campus, map, reset and
+hospital-outcome samples in its record. No new R8 completed-loop timing or FPS
+gain is claimed. Older timing values below remain attached to their ROMs;
+physical audio/flicker, wider pacing and deepest stack remain pending.
+
+## Retained R6 navigation and timing — 2026-10-05
+
+Updated 2026-10-05. Preserve gameplay and graphical fidelity while removing repeated work. Retained ROM `toronto-dispatch-story-combat-r6.gbc`, SHA-256 `71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`, has [matched build](STORY_COMBAT_BUILD.json), [native play](NATIVE_STORY_COMBAT.json) and [optimization evidence](STORY_COMBAT_OPTIMIZATION.json). Its 243 native inputs remain unchanged. The linked heap `DCDC` leaves **548 static bytes** below stack origin `DF00`; HOME has 207 bytes free and scenes peak at 124/128 OBJ tiles. Static separation is not a deepest-stack measurement.
 
 Current navigation's generated ROM prefix counts preserve exact mask ordinals
 and reduce counted ordinal byte operations by **79.72%** in the scoped host

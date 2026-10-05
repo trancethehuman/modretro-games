@@ -59,6 +59,15 @@ UBYTE td_traffic_junction_clear(const td_traffic_context_t *ctx,UBYTE district,
 UBYTE td_traffic_admit(const td_traffic_context_t *ctx,UBYTE district,UWORD seconds,
     UBYTE slot,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE escape) BANKED;
 
+/* Independent small mover; no fleet slot is substituted or mutated. All eight
+ * fleet bodies, people, parked ownership, priority, lights and junction entry
+ * retain the ordinary admission policy. The sidewalk signal corridor extends
+ * to32px from the same junction centre, preventing a curb-lane red bypass.
+ * Cardinal steps <=8Q4, half1..8px.
+ * Terrain, additional street bodies and the tram remain caller-owned. */
+UBYTE td_traffic_external_admit(const td_traffic_context_t *ctx,UBYTE district,
+    UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED;
+
 /* Caller-owned transient WRAM/stack snapshot, never serialized. Fields are
  * implementation-private: only begin/admit/commit may write them. A fresh
  * begin is required each motion epoch and after scene/time/people/park/pose/

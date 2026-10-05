@@ -78,6 +78,7 @@ void td_scenery_render(void){}
 UBYTE td_boats_controlled(void){return 0;}
 void td_boats_render(void){}
 void td_sandbox_render(void){}
+void td_scooter_render(void){}
 void td_aircraft_render(void){}
 static void actor_viewport_cull_checks(void){
     const metasprite_t edge[]={{0,-8,0,0},{16,24,2,8},{metasprite_end,0,0,0}};

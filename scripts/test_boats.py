@@ -54,7 +54,7 @@ def check_render_integration(core,helpers):
         "if(force)td_guidance_road_restore();elsetd_guidance_road_prepare();td_scenery_restore();", \
         "Normal preparation retains an unchanged arrow; forced reuse releases it in reverse overlay ownership order"
     assert compact(after)=="td_traffic_lights_render();td_scenery_render();td_hospital_render();"+ambient+ \
-        "td_sandbox_render();td_guidance_road_render();td_combat_render();"+ \
+        "td_sandbox_render();td_scooter_render();td_guidance_road_render();td_combat_render();"+ \
         "td_aircraft_render();td_actor_render_restored=0;","Banked post-ground overlay contents and order stay exact"
     assert render.count("td_actor_render_prepare();")==render.count("td_actor_render_after();")==1
     assert compact(render).count(controlled)==1 and not compact(render).count(ambient)
@@ -86,7 +86,7 @@ def check_integration():
     for changed_core,changed_helpers in (
         (core.replace("if(td_boats_controlled())td_boats_render();","td_boats_render();"),helpers),
         (core,helpers.replace("if(!td_boats_controlled())td_boats_render();","if(td_boats_controlled())td_boats_render();")),
-        (core,helpers.replace("    td_sandbox_render();td_guidance_road_render();td_combat_render();\n    td_aircraft_render();","    td_aircraft_render();\n    td_sandbox_render();td_guidance_road_render();td_combat_render();")),
+        (core,helpers.replace("    td_sandbox_render();td_scooter_render();td_guidance_road_render();td_combat_render();\n    td_aircraft_render();","    td_aircraft_render();\n    td_sandbox_render();td_scooter_render();td_guidance_road_render();td_combat_render();")),
         (core.replace("    SWITCH_ROM(_save);\n    td_actor_render_after();","    td_actor_render_after();\n    SWITCH_ROM(_save);"),helpers),
         (core,helpers.replace("    td_scenery_restore();\n","")),
         (core,helpers.replace("td_aircraft_render_restore();td_combat_render_restore();","td_combat_render_restore();td_aircraft_render_restore();")),

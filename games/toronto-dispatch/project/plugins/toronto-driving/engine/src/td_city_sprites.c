@@ -62,6 +62,10 @@ void td_vehicle_present(actor_t *actor,UBYTE vehicle,UBYTE heading) BANKED {
     if(vehicle<4&&heading<16)td_city_pose(actor,&td_city_player,vehicle*8+((heading+1)&15)/2);
 }
 
+void td_scooter_parked_present(actor_t *actor,UBYTE heading) BANKED {
+    if(heading<16)td_city_pose(actor,&td_city_player,49+((((heading+1)&15)/4)&1));
+}
+
 void td_player_sprite_restore(void) BANKED {
     PLAYER.sprite=td_city_player.sprite;PLAYER.base_tile=td_city_player.base;
 }

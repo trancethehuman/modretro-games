@@ -76,6 +76,7 @@ UBYTE td_shops_interact(void){return FALSE;}
 UBYTE td_shops_pending(void){return test_shop_pending;}
 void td_shops_reset(void){test_shop_pending=0;}
 void td_actor_render_actor(actor_t *a){(void)a;sandbox_render_calls++;}
+void td_scooter_parked_present(actor_t *a,UBYTE heading){sandbox_pose_calls++;UBYTE f=49+((((heading+1)&15)/4)&1);actor_set_frames(a,f,f+1);}
 void td_vehicle_present(actor_t *a,UBYTE vehicle,UBYTE heading){UBYTE f=vehicle*8+((heading+1)&15)/2;sandbox_pose_calls++;actor_set_frames(a,f,f+1);}
 void td_boats_bind(void){}
 void td_boats_reset(void){}
@@ -294,7 +295,7 @@ static void reset_case(void) {
     test_map_camera_x=test_map_camera_y=0;
     td_save_slot=TD_NONE;td_save_seq=0;actors_inactive_head=test_actors_active_head=NULL;actors_len=0;
     sram_writes=sram_interrupt_after=0;sram_interrupt_enabled=0;
-    geometry=CLEAR_GROUND;test_boat_shore_active=test_boat_active=test_shop_pending=test_boat_cover=0;test_aircraft_exposed=1;test_boat_shore_u=test_boat_shore_v=0;sandbox_render_calls=0;td_inside_shop=0;td_sandbox_reset();td_scenery_reset();td_ramming_reset();test_refresh_scene();test_road_tile_reads=0;
+    geometry=CLEAR_GROUND;test_boat_shore_active=test_boat_active=test_shop_pending=test_boat_cover=0;test_aircraft_exposed=1;test_boat_shore_u=test_boat_shore_v=0;sandbox_render_calls=0;td_inside_shop=0;td_sandbox_reset();td_scooter_reset();td_scenery_reset();td_ramming_reset();test_refresh_scene();test_road_tile_reads=0;
     td_audio_init();audio_updates=audio_inits=audio_impacts=0;
     td_world_traffic_init(0,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
     for(unsigned i=0;i<8;i++) { td_traffic_u[i]=(i<6?800+i*32:704+(i-6)*32)*16;td_traffic_v[i]=928*16;td_ped_route[i]=TD_NONE; }

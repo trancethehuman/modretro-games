@@ -48,3 +48,42 @@ Recovery must additionally check live vehicles and use a clear full-body positio
 The badge keeps existing roof priority. This addition does not change the base
 city pixels, collision grid, 64 quest stops or generated navigation goals.
 Source checks do not establish native recovery or physical visual acceptance.
+
+## University of Toronto — St. George campus, 2026-10-05
+
+The [official 2018–19 campus map](https://my.alumni.utoronto.ca/s/731/images/editor_documents/reunion/alumnireunion2019/utsg_campus_map.pdf)
+names Bloor, College, St. George, University/Queen's Park and King's College
+Circle, and places Robarts in grid B2, University College in D3 and Convocation
+Hall in E3. This historical map's text/grid supports relative orientation,
+not a current campus access survey. Current official pages identify
+[University College's Romanesque Revival exterior](https://www.fs.utoronto.ca/news/five-iconic-buildings-on-the-st-george-campus/),
+[Robarts at 130 St. George](https://library.utoronto.ca/library/robarts), its
+[triangular shape](https://library.utoronto.ca/space/robarts/robarts-library-stacks),
+and [Convocation Hall's dome and columns](https://www.utoronto.ca/news/convocation-hall-close-u-t-carpenters-share-iconic-building-s-quirks).
+All were reviewed on 2026-10-05. Official imagery and geometry are not imported.
+
+`content/campus_area.json` records the original compressed interpretation west
+of University/Queen's Park, south of Bloor and north of College. Robarts reuses
+the existing `(368,96,32,40)` body, University College `(408,208,32,40)`, and
+Convocation Hall `(368,208,32,40)`. UC's tower anchor `(424,208)` is north/east
+of the Con Hall dome `(384,224)`; Robarts `(384,108)` is northwest. This is
+architectural compression, not their real footprint sizes or entrance locations.
+The entire King's College Circle and St. George street graph are not newly
+simulated. The existing Royal Ontario Museum remains unchanged.
+
+Original stone paving follows the two already reachable sidewalk forecourts,
+with a short original UT sign, clock/arcade, domed rotunda and angular library
+roof. Existing native palette families give cream stonework, blue roof accents
+and warm autumn details. All collision and palette/priority bytes remain exact;
+decorative building interiors remain solid. The source checks admit 15 added
+canonical tile patterns, with final compiled/native/hardware acceptance separate.
+
+## Scooter geography and fictional street behavior — 2026-10-05
+
+The [City's electric-scooter page](https://www.toronto.ca/services-payments/streets-parking-transportation/transportation-projects/micromobility/electric-bicycles-e-bikes-e-scooters/),
+modified 2026-08-11 and reviewed 2026-10-05, states that electric kick scooters
+cannot be ridden or parked on Toronto public streets, sidewalks, paths or parks.
+The user's accepted sidewalk/road scooter activity is a fictional sandbox rule.
+Existing player vehicle 3 is an original fictional seated delivery scooter,
+with no rental branding. Campus placement, missions and rider routes must keep
+their researched orientation without implying real-world transport permission.

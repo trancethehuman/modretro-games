@@ -429,5 +429,47 @@
     "reviewed": "2026-10-05",
     "scope": "UHN directions explicitly identify Toronto General at 200 Elizabeth Street, east of University Avenue just south of College, with Elizabeth entrances between College and Gerrard. Supports relative compressed game hospital placement only; fictional University-side recovery forecourt is not a surveyed entrance, and current construction is not adopted.",
     "rights": "Factual reference only. No maps, floor plans, photographs, logos, hospital marks, artwork or geometry imported. The new mint medical badge and building representation are original game art; the root MIT licence does not license UHN website material."
+  },
+  {
+    "id": "uoft-stgeorge-campus-map-2018-reviewed20261005",
+    "url": "https://my.alumni.utoronto.ca/s/731/images/editor_documents/reunion/alumnireunion2019/utsg_campus_map.pdf",
+    "reviewed": "2026-10-05",
+    "scope": "Official St. George 2018–19 campus map text/grid: Robarts B2, University College D3, Convocation Hall E3; Bloor, College, St. George, University/Queen's Park and King's College Circle named. Historical factual reference for relative orientation only; no map image/geometry imported. Current interactive map requires JavaScript and was not executed.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-campus-architecture-20261005",
+    "url": "https://www.fs.utoronto.ca/news/five-iconic-buildings-on-the-st-george-campus/",
+    "reviewed": "2026-10-05",
+    "scope": "Official facilities article identifies University College at 15 King's College Circle and its 19th-century Romanesque Revival exterior. Supports original arcade/tower architectural interpretation; game pixels/clock/sign are independently authored.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-robarts-library-20261005",
+    "url": "https://library.utoronto.ca/library/robarts",
+    "reviewed": "2026-10-05",
+    "scope": "Official library page identifies Robarts Library at 130 St George Street, St. George campus. Supports real landmark identity/address; game roof, vertical bays and placement are compressed original art.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-robarts-triangle-20261005",
+    "url": "https://library.utoronto.ca/space/robarts/robarts-library-stacks",
+    "reviewed": "2026-10-05",
+    "scope": "Official library-space page describes Robarts triangular shape and apex names St. George/Harbord/Sussex. Supports angular original roof motif only; no floor-plan access or exact outline is simulated.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-convocation-20261005",
+    "url": "https://www.utoronto.ca/news/convocation-hall-close-u-t-carpenters-share-iconic-building-s-quirks",
+    "reviewed": "2026-10-05",
+    "scope": "Official June12 2026 UofT article describes Convocation Hall columns/domed roof and oculus. Supports independently authored symmetric dome/columns; the game is not a building survey.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "toronto-electric-scooter-rules-20261005",
+    "url": "https://www.toronto.ca/services-payments/streets-parking-transportation/transportation-projects/micromobility/electric-bicycles-e-bikes-e-scooters/",
+    "reviewed": "2026-10-05",
+    "scope": "City page, modified2026-08-11 and reviewed2026-10-05, states electric kick scooters cannot be operated on public streets, lanes, cycle tracks, trails, paths, sidewalks or parks, or left/stored/parked on public property. User-authorized road/sidewalk scooter activity is fictional sandbox design; existing vehicle3 is an original fictional seated delivery scooter and not a branded rental. This is a geographic/design distinction, not game navigation guidance.",
+    "rights": "Official City factual/legal reference only; no public-safety poster, logo, photography, map or artwork imported. Original scooter art and fictional traffic behavior do not claim real-world legality."
   }
 ]

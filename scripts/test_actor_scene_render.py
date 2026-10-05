@@ -101,7 +101,7 @@ UBYTE ReadBankedUBYTE(const UBYTE *,UBYTE);
 UBYTE move_metasprite(const metasprite_t *,UBYTE,UBYTE,WORD,WORD);
 void td_scenery_restore(void);void td_scenery_render(void);
 void td_aircraft_render_restore(void);void td_aircraft_render(void);
-void td_traffic_lights_render(void);void td_sandbox_render(void);void td_boats_render(void);
+void td_traffic_lights_render(void);void td_sandbox_render(void);void td_scooter_render(void);void td_boats_render(void);
 UBYTE td_boats_controlled(void);
 void host_actor_pose_probe(const spritesheet_t *);
 #endif

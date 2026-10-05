@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Author the original native courier/vehicle sheet without repainting the city.
 
-Frame IDs 0..44 retain their gameplay meanings. Original armed poses45..48 append. Cars use two hardware objects;
+Frame IDs 0..48 retain their gameplay meanings. Empty scooters49..50 append. Cars use two hardware objects;
 walking courier poses use one centred 8x16 object, matching smaller civilians.
 """
 from pathlib import Path
@@ -86,6 +86,21 @@ def armed_courier(direction):
         d.line((8,1,8,4),fill=COLOURS[0]);d.point((7,3),fill=COLOURS[3])
     return image
 
+def parked_scooter(vertical):
+    """Original vacant two-wheeler within one centred8x16 hardware object."""
+    image=Image.new('RGB',(16,16),TRANSPARENT);d=ImageDraw.Draw(image)
+    if vertical:
+        d.rectangle((7,2,9,4),fill=COLOURS[0]);d.rectangle((7,12,9,14),fill=COLOURS[0])
+        d.rectangle((6,5,9,11),fill=COLOURS[2]);d.line((7,5,7,10),fill=COLOURS[3])
+        d.line((4,5,11,5),fill=COLOURS[0]);d.rectangle((6,8,9,10),fill=COLOURS[0])
+        d.point((8,11),fill=COLOURS[3]);d.point((10,6),fill=COLOURS[3])
+    else:
+        d.rectangle((4,8,5,10),fill=COLOURS[0]);d.rectangle((10,8,11,10),fill=COLOURS[0])
+        d.line((5,8,10,8),fill=COLOURS[2],width=3)
+        d.rectangle((6,6,7,7),fill=COLOURS[0]);d.line((9,5,9,10),fill=COLOURS[0])
+        d.line((8,7,9,7),fill=COLOURS[3]);d.point((10,6),fill=COLOURS[3])
+    return image
+
 def artwork():
     sheet=Image.new('RGB',(256,64),TRANSPARENT);sd=ImageDraw.Draw(sheet)
     for frame in range(45):
@@ -103,8 +118,11 @@ def artwork():
     for direction in range(4):
         frame=45+direction
         sheet.paste(armed_courier(direction),((frame%16)*16,(frame//16)*16))
+    for vertical in range(2):
+        frame=49+vertical
+        sheet.paste(parked_scooter(vertical),((frame%16)*16,(frame//16)*16))
     frames=[]
-    for n in range(49):
+    for n in range(51):
         frames.append({'id':ident(f'frame-{n}'),'tiles':[{'id':ident(f'tile-{n}-{x}'),'x':x,'y':0,'sliceX':(n%16)*16+x,'sliceY':(n//16)*16,'flipX':False,'flipY':False,'palette':0,'paletteIndex':0,'objPalette':'OBP0','priority':False} for x in ((4,) if 32<=n<40 or n>=45 else (0,8))]})
     states=[]
     for name,subset in [('vehicles',frames[:32]),('courier',frames[32:])]:
@@ -135,13 +153,20 @@ def check():
     native=json.loads((PROJECT/'assets/sprites/dispatch_topdown.png.gbsres').read_text())
     assert normalized(native)==normalized(meta)
     native_frames=[f for state in native['states'] for f in state['animations'][0]['frames']]
-    assert len(native_frames)==49
+    assert len(native_frames)==51
+    assert hashlib.sha256(json.dumps(native_frames[:49],sort_keys=True,separators=(',',':')).encode()).hexdigest()=='c7e56bdbc36a4aa85cc5790feabc0e8b9679b3b3fa3f178faef4938ddb66abe1','Approved R6 native0..48 frames changed'
     assert hashlib.sha256(json.dumps(native_frames[:45],sort_keys=True,separators=(',',':')).encode()).hexdigest()=='447809e9dae652940d4d86c8feaa421127487e55af8b17431d34663ad2621125','Approved native frame identities or meanings changed'
     old_pixels=b''.join(sheet.crop(((n%16)*16,(n//16)*16,(n%16+1)*16,(n//16+1)*16)).tobytes() for n in range(45))
     assert hashlib.sha256(old_pixels).hexdigest()=='2d21d95ded6713698785b0e0ba8f7ece1268dda32e05f3983b2e4031c4b1b1aa','Approved0..44 pixels changed'
+    r6_pixels=b''.join(sheet.crop(((n%16)*16,(n//16)*16,(n%16+1)*16,(n//16+1)*16)).tobytes() for n in range(49))
+    assert hashlib.sha256(r6_pixels).hexdigest()=='30e4f1b4a629bbe4088d8e3cf9d37352226fa9fd11ba1b81e7164ba94e5234fb','Approved R6 pixels0..48 changed'
     frames=meta['states'][1]['animations'][0]['frames']
     assert [len(f['tiles']) for f in frames[:8]]==[1]*8
-    assert [len(f['tiles']) for f in frames[13:]]==[1]*4
+    assert [len(f['tiles']) for f in frames[13:17]]==[1]*4
+    assert [len(f['tiles']) for f in frames[17:]]==[1]*2
+    for n in (49,50):
+        crop=sheet.crop(((n%16)*16,(n//16)*16,(n%16+1)*16,(n//16+1)*16))
+        assert all(4<=x<=11 for y in range(16) for x in range(16) if crop.getpixel((x,y))!=(101,255,0)), 'Empty scooter exceeds one OBJ'
     for frame in range(32,40):
         crop=sheet.crop(((frame%16)*16,32,(frame%16+1)*16,48))
         occupied=[(x,y) for y in range(16) for x in range(16) if crop.getpixel((x,y))!=(101,255,0)]
@@ -150,7 +175,7 @@ def check():
     assert {sheet.getpixel((x,y)) for x in range(256) for y in range(64)}<=set(((101,255,0),(7,24,33),(134,192,108),(224,248,207)))
     with Image.open(PROJECT/'original-art/dispatch_topdown_preview.png') as preview:
         assert preview.convert('RGB').tobytes()==sheet.resize((1024,256),Image.Resampling.NEAREST).tobytes()
-    print('Courier/car source and native pose checks passed: 45 preserved frame meanings/pixels/native IDs, four appended one-OBJ armed poses, 6x10 walker')
+    print('Courier/car source and native pose checks passed:49 preserved R6 frame meanings/pixels/native IDs, two appended one-OBJ empty scooters,6x10 walker')
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true')

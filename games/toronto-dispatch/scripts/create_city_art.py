@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw
 from city_layout import *
 from streetcar_art import paint_streetcar_stops
 from street_scenery import decorate
+from campus_art import paint as paint_campus
 ROOT=Path(__file__).resolve().parents[1]; PROJECT=ROOT/'project'
 COLORS=['#071821','#306850','#86c06c','#e0f8cf']; TRANSPARENT='#65ff00'
 def ident(name):return str(uuid.uuid5(uuid.NAMESPACE_URL,'toronto-dispatch/topdown/'+name))
@@ -126,6 +127,7 @@ def main(background_only=False):
     service_points=[{'x':s['u'],'y':s['v'],'name':s['name']} for s in campaign['stops']
                     if s['district']==0 and s['transit']]
     scenery=decorate(img,grid,attrs,blocks,canopies,'city',{'roads':roads,'stop_candidates':service_points})
+    paint_campus(img,blocks)
     img.save(PROJECT/'assets/backgrounds/toronto_city.png')
     content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto mainland and harbour; public Island paths are in their separate ferry-only scene. Full Old Toronto boundaries remain a release check'}
     content['scenery']=scenery

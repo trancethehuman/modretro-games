@@ -16,6 +16,7 @@
 #include "td_boats.h"
 #include "td_shops.h"
 #include "td_sandbox.h"
+#include "td_scooter.h"
 #include "td_scenery.h"
 #include "td_ramming.h"
 #include "td_roads.h"
@@ -510,9 +511,12 @@ static void td_traffic_present(void){
     parked->flags=(parked->flags&~ACTOR_FLAG_HIDDEN)|parked_hidden;
 }
 static void td_pedestrians(void){
-    UBYTE hits=td_sandbox_human_hits()+td_people_present(td_tick);UWORD fine;
+    UBYTE walkers=td_sandbox_human_hits()+td_people_present(td_tick);
+    UBYTE hits=walkers+td_scooter_take_hits();UWORD fine;
     if(!hits)return;
-    td_motion_impact();td.cooldown=45;
+    /* Scooter contact already transferred mass and momentum. Ordinary
+       walker contact still applies its original independent slowdown. */
+    if(walkers)td_motion_impact();td.cooldown=45;
     td.wanted=td.wanted+hits>3?3:td.wanted+hits;td.wanted_left=30;
     fine=20*hits*td.wanted;td.cash=td.cash>fine?td.cash-fine:0;
     if(td.job!=TD_NONE&&td.stage)td.health=td.health>10*hits?td.health-10*hits:0;
@@ -551,7 +555,7 @@ UBYTE td_motion_vehicle_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v) BANKED {
            (td_traffic_v[i]<lv&&lv-td_traffic_v[i]>=radius)||(td_traffic_v[i]>hv&&td_traffic_v[i]-hv>=radius))continue;
         return td_ramming_try(i,u,v);
     }
-    return FALSE;
+    return td_scooter_ram(old_u,old_v,u,v);
 }
 UBYTE td_shop_world_seconds(UWORD elapsed) BANKED {
     UWORD seconds=elapsed/60;elapsed%=60;elapsed+=td.subsecond;
@@ -574,7 +578,7 @@ void toronto_init(void) BANKED {
     td_contact_episode=td_traffic_retreat_mask=td_vehicle_contact_mask=0;td_traffic_advance=8;
     td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     if(cold){
-        td_district_reset();td_transition_pending=0;td_sandbox_reset();td_shops_reset();td_boats_reset();td_scenery_reset();td_ramming_reset();
+        td_district_reset();td_transition_pending=0;td_sandbox_reset();td_scooter_reset();td_shops_reset();td_boats_reset();td_scenery_reset();td_ramming_reset();
         td_tick=td_notice_timer=td_red_cooldown=td_entry_timer=td_turn_tick=td_result_b_release=0;td_vx=td_vy=0;td_last_frame=sys_time;td_corner_used=0;
         if(!td_restore()){
             memset(&td,0,sizeof(td));td.u=560*16;td.v=720*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;td.vitality=100;td.ammo=12;
@@ -623,6 +627,7 @@ void toronto_init(void) BANKED {
         }
     }
     td_sandbox_bind(td_traffic_u,td_traffic_v,td_streetcar_view_district);
+    td_scooter_bind(td_streetcar_view_district);
     td_people_reset();td_motion_reset();td_combat_reset();if(!td.vitality)td_combat_resume_downed();td_menu_reset();
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);td_traffic_present();td_pedestrians();td_streetcar_runtime_present();td_sandbox_present();
@@ -696,6 +701,9 @@ void toronto_update(void) BANKED {
             return;
         }
     }
+    /* Bind and modal/transition guards precede autonomous riders. Their
+       accepted motion precedes construction of this render's body cache. */
+    td_scooter_update(tram_elapsed);
     terrain.valid=terrain.stationary_valid=terrain.stationary_results=0;
     if(td.onfoot&&!td_boats_controlled()&&!td_combat_locked())td_player_sprite_restore();
     for(step=0;step<motion&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);step++){

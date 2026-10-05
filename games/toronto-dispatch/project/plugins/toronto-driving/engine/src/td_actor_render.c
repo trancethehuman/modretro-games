@@ -12,6 +12,7 @@
 #include "td_scenery.h"
 #include "td_boats.h"
 #include "td_sandbox.h"
+#include "td_scooter.h"
 #include "td_aircraft_render.h"
 #include "td_combat_render.h"
 #include "td_guidance.h"
@@ -173,7 +174,7 @@ void td_actor_render_after(void) BANKED {
     td_traffic_lights_render();
     td_scenery_render();td_hospital_render();
     if(!td_boats_controlled())td_boats_render();
-    td_sandbox_render();td_guidance_road_render();td_combat_render();
+    td_sandbox_render();td_scooter_render();td_guidance_road_render();td_combat_render();
     td_aircraft_render();
     td_actor_render_restored=0;
 }

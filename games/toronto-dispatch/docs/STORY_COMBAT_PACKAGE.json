@@ -1,0 +1,51 @@
+{
+  "archiveSha256": "6b718a78115a583fa840ff8bc04eab8dfdfd2b040e03ab5111e91f997bbc7b13",
+  "header": {
+    "CGBOnly": true,
+    "ROMBytes": 1048576,
+    "SRAMBytes": 32768,
+    "globalChecksum": 51929,
+    "headerChecksum": 232
+  },
+  "immutableGuideLinksChecked": 34,
+  "limits": [
+    "Complete assets/plugins/project/project.gbsproj scope, not every repository file.",
+    "Frozen pins supplied by caller; separate official build/native evidence must authenticate their origin.",
+    "No rebuild/source-to-ROM proof, native behavior, performance, cartridge write or physical acceptance.",
+    "Privacy allowlist/pattern review does not certify absence of every possible secret."
+  ],
+  "members": [
+    "BUILDINFO.json",
+    "LICENSE",
+    "LOADING.md",
+    "ROM_NOTICES.txt",
+    "SHA256SUMS",
+    "toronto-dispatch-story-combat-r6.gbc"
+  ],
+  "nativeInputs": 243,
+  "nativeInputsByScope": {
+    "assets": 50,
+    "plugins": 122,
+    "project": 70,
+    "project.gbsproj": 1
+  },
+  "result": "passed-scoped-package-source-audit",
+  "retainedBaselines": [
+    {
+      "filename": "toronto-dispatch-hardware-feedback.gbc",
+      "sha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+      "sizeBytes": 1048576
+    },
+    {
+      "filename": "toronto-dispatch-hardware-feedback-reviewed.zip",
+      "sha256": "9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570",
+      "sizeBytes": 155795
+    }
+  ],
+  "romSha256": "71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8",
+  "sourceCommit": "fb589599f6411d517fe8e2af9d8c43dbf6d89144",
+  "sourcePinsSha256": "29dee66f6b42a96b3672d04e639376084ebe3664d9f22b415d81f57e38dd6a4a",
+  "archiveFilename": "toronto-dispatch-story-combat-r6-reviewed.zip",
+  "archiveSizeBytes": 293707,
+  "auditedBeforeCampusAndScooterEdits": true
+}

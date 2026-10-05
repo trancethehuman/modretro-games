@@ -9,6 +9,8 @@
 #include "td_actor_render.h"
 #include "td_motion.h"
 #include "td_streetcar_runtime.h"
+#include "td_scooter.h"
+#include "td_scenery.h"
 #include "input.h"
 #include "collision.h"
 #include "scroll.h"
@@ -23,6 +25,15 @@ static td_driver_t td_sandbox_drivers[2];
 static UBYTE td_sandbox_custom_player,td_sandbox_ready;
 static UWORD td_sandbox_last_u,td_sandbox_last_v;
 static UBYTE td_sandbox_headings[8];
+static UBYTE td_sandbox_body_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UWORD cu,UWORD cv,UBYTE radius);
+static UBYTE td_sandbox_scooter_people(UWORD ou,UWORD ov,UWORD u,UWORD v){
+    UBYTE i;
+    if(td.onfoot&&td.district==td_streetcar_view_district&&!td_streetcar_ride_view&&
+       !td_sandbox_body_clear(ou,ov,u,v,td.u,td.v,5))return FALSE;
+    for(i=0;i<8;i++)if(!(actors[9+i].flags&ACTOR_FLAG_HIDDEN)&&
+       !td_sandbox_body_clear(ou,ov,u,v,actors[9+i].pos.x>>1,actors[9+i].pos.y>>1,5))return FALSE;
+    return TRUE;
+}
 /* Generated from original art's validated half8 curb-bay candidates. */
 static const UWORD td_sandbox_curbs[7][8][3]={
 {{280,40,0},{408,40,0},{152,152,0},{280,152,0},{152,264,0},{280,264,0},{152,376,0},{280,376,0}},
@@ -66,15 +77,20 @@ void td_sandbox_bind(UWORD *u,UWORD *v,UBYTE district) BANKED {
         if(td_sandbox_parked[i].protected)continue;
         for(j=0;j<8;j++){
             index=(td_sandbox_random()+j)&7;pu=td_sandbox_curbs[district][index][0]*16;pv=td_sandbox_curbs[district][index][1]*16;
+            /* Deterministic Union-sidewalk scooter; all full-body rail and
+             * furniture guards still run. Other districts use existing bays. */
+            if(i==1&&district==0&&!j){pu=584*16;pv=744*16;}
             if(!pu||!pv||!td_sandbox_parkable(pu>>4,pv>>4))continue;
+            if(i==1&&(!td_streetcar_runtime_parking_allowed(district,pu,pv)||
+               td_scenery_contact(pu,pv,pu,pv,7,0)!=TD_SCENERY_CLEAR))continue;
             /* Residents are seeded with a new scene. Later reassignments
              * remain offscreen; protected abandoned vehicles are never replaced. */
             if(td_sandbox_parked[i].active&&td_sandbox_parked[i].district==district&&td_sandbox_in_view(td_sandbox_parked[i].u,td_sandbox_parked[i].v))continue;
             if(i&&td_sandbox_parked[0].active&&td_sandbox_parked[0].district==district&&
                 td_sandbox_distance(pu,td_sandbox_parked[0].u)<320&&td_sandbox_distance(pv,td_sandbox_parked[0].v)<320)continue;
             td_sandbox_parked[i].u=pu;td_sandbox_parked[i].v=pv;td_sandbox_parked[i].district=district;
-            td_sandbox_parked[i].heading=td_sandbox_curbs[district][index][2];td_sandbox_parked[i].skin=td_sandbox_random()&1;
-            td_sandbox_parked[i].vehicle=td_sandbox_parked[i].skin;td_sandbox_parked[i].active=1;break;
+            td_sandbox_parked[i].heading=td_sandbox_curbs[district][index][2];td_sandbox_parked[i].skin=i==1?TD_NONE:td_sandbox_random()&1;
+            td_sandbox_parked[i].vehicle=i==1?3:td_sandbox_parked[i].skin;td_sandbox_parked[i].active=1;break;
         }
     }
 }
@@ -116,7 +132,7 @@ UBYTE td_sandbox_interact(void) BANKED {
         score=td_sandbox_distance(td.u,td_sandbox_u[i])+td_sandbox_distance(td.v,td_sandbox_v[i]);
         if(score<min&&td_sandbox_distance(td.u,td_sandbox_u[i])<26*16&&td_sandbox_distance(td.v,td_sandbox_v[i])<26*16){min=score;best=i;}
     }
-    for(i=0;i<TD_SANDBOX_PARKED;i++)if(td_sandbox_parked[i].active&&td_sandbox_parked[i].district==td.district&&td_sandbox_owner!=i+8){
+    for(i=0;i<TD_SANDBOX_PARKED;i++)if(td_sandbox_parked[i].active&&!(td_sandbox_parked[i].active&2)&&td_sandbox_parked[i].district==td.district&&td_sandbox_owner!=i+8){
         score=td_sandbox_distance(td.u,td_sandbox_parked[i].u)+td_sandbox_distance(td.v,td_sandbox_parked[i].v);
         if(score<min&&td_sandbox_distance(td.u,td_sandbox_parked[i].u)<26*16&&td_sandbox_distance(td.v,td_sandbox_parked[i].v)<26*16){min=score;best=i+8;}
     }
@@ -184,6 +200,24 @@ void td_sandbox_tick(void) BANKED {
         if(person->timer>60)person->timer--;
     }
 }
+UBYTE td_sandbox_scooter_step(void) BANKED {
+    UBYTE i,dirty=FALSE;UWORD u,v;BYTE dx,dy;
+    if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE)return FALSE;
+    if(td_district_current()!=td_streetcar_view_district)return FALSE;
+    for(i=0;i<TD_SANDBOX_PARKED;i++){
+        td_parked_t *car=&td_sandbox_parked[i];UBYTE phase=car->active>>5;
+        if(!phase||car->vehicle!=3||car->district!=td_streetcar_view_district||td_sandbox_owner==i+8)continue;
+        dx=((car->heading>>4)&3)==0?1:((car->heading>>4)&3)==2?-1:0;
+        dy=((car->heading>>4)&3)==1?1:((car->heading>>4)&3)==3?-1:0;
+        u=car->u+dx*((car->active>>2)&7)*2;v=car->v+dy*((car->active>>2)&7)*2;
+        if(td_sandbox_parkable(u>>4,v>>4)&&td_sandbox_clear(car->u,car->v,u,v,2,8+i)&&
+           td_sandbox_scooter_people(car->u,car->v,u,v)&&
+           td_streetcar_runtime_traffic_clear_extent(car->district,u,v,5)&&
+           td_scenery_contact(car->u,car->v,u,v,2,0)==TD_SCENERY_CLEAR){car->u=u;car->v=v;dirty=TRUE;}
+        car->active=(car->active&31)|((phase-1)<<5);
+    }
+    return dirty;
+}
 void td_sandbox_prepare(void) BANKED {
     if(td_sandbox_custom_player){td_player_sprite_restore();td_sandbox_custom_player=0;}
 }
@@ -195,6 +229,7 @@ void td_sandbox_present(void) BANKED {
     }
     if(td.onfoot){
         if(td_sandbox_skin<7&&td.vehicle==td_sandbox_class(td_sandbox_skin))td_fleet_present(&actors[8],td_sandbox_skin,((td.heading+1)&15)/4);
+        else if(td.vehicle==3)td_scooter_parked_present(&actors[8],td.heading);
         else td_vehicle_present(&actors[8],td.vehicle,td.heading);
     }
     for(i=0;i<2;i++){
@@ -246,12 +281,12 @@ UBYTE td_sandbox_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half,UBYTE 
            !td_sandbox_body_clear(old_u,old_v,u,v,cu,cv,half+body))return FALSE;
     }
     for(i=0;i<TD_SANDBOX_PARKED;i++)if(td_sandbox_parked[i].active&&td_sandbox_parked[i].district==td_streetcar_view_district){
-        if(skip==TD_NONE&&td_sandbox_owner==i+8)continue;
+        if((skip==i+8&&td_sandbox_parked[i].vehicle==3)||(skip==TD_NONE&&td_sandbox_owner==i+8))continue;
         cu=td_sandbox_parked[i].u;cv=td_sandbox_parked[i].v;bu=cu>>8;bv=cv>>8;
         if(td_sandbox_bucket_outside(bu,bv))continue;
-        radius=(half+7)*16;
+        body=td_sandbox_parked[i].vehicle==3&&(td_sandbox_parked[i].active&2)?2:7;radius=(half+body)*16;
         if(!td_sandbox_outside(cu,cv,radius)&&
-           !td_sandbox_body_clear(old_u,old_v,u,v,cu,cv,half+7))return FALSE;
+           !td_sandbox_body_clear(old_u,old_v,u,v,cu,cv,half+body))return FALSE;
     }
     if(skip<8)for(i=0;i<2;i++)if(td_sandbox_drivers[i].timer&&!(td_sandbox_drivers[i].kind&128)){
         cu=td_sandbox_drivers[i].u;cv=td_sandbox_drivers[i].v;bu=cu>>8;bv=cv>>8;
@@ -260,7 +295,7 @@ UBYTE td_sandbox_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half,UBYTE 
         if(!td_sandbox_outside(cu,cv,radius)&&
            !td_sandbox_body_clear(old_u,old_v,u,v,cu,cv,half+3))return FALSE;
     }
-    return TRUE;
+    return td_scooter_clear(old_u,old_v,u,v,half,skip);
 }
 UBYTE td_sandbox_foot_clear(UWORD u,UWORD v) BANKED {
     UBYTE i;
@@ -270,7 +305,7 @@ UBYTE td_sandbox_foot_clear(UWORD u,UWORD v) BANKED {
         if(td_sandbox_distance(u,td_sandbox_u[i])<168&&td_sandbox_distance(v,td_sandbox_v[i])<168)return FALSE;
     for(i=0;i<TD_SANDBOX_PARKED;i++)if(td_sandbox_parked[i].active&&td_sandbox_parked[i].district==td_streetcar_view_district&&
         td_sandbox_distance(u,td_sandbox_parked[i].u)<168&&td_sandbox_distance(v,td_sandbox_parked[i].v)<168)return FALSE;
-    return TRUE;
+    return td_scooter_foot_clear(u,v);
 }
 void td_sandbox_render(void) BANKED {
     UBYTE i;WORD x,y;actor_t car;
@@ -285,7 +320,33 @@ void td_sandbox_render(void) BANKED {
         if(x<=-8||x>=168||y<=0||y>=160)continue;
         car=PLAYER;car.pos.x=td_sandbox_parked[i].u*2;car.pos.y=td_sandbox_parked[i].v*2;car.flags=0;
         if(td_sandbox_parked[i].skin<7)td_fleet_present(&car,td_sandbox_parked[i].skin,td_sandbox_parked[i].heading/4);
-        else td_vehicle_present(&car,td_sandbox_parked[i].vehicle,td_sandbox_parked[i].heading);
+        else if(td_sandbox_parked[i].vehicle==3)td_scooter_parked_present(&car,td_sandbox_parked[i].heading&15);
+        else td_vehicle_present(&car,td_sandbox_parked[i].vehicle,td_sandbox_parked[i].heading&15);
         td_actor_render_actor(&car);
     }
+}
+
+UBYTE td_sandbox_scooter_ram(UWORD ou,UWORD ov,UWORD u,UWORD v) BANKED {
+    UBYTE i,dir,amount,pm,impulse,keep,hit=FALSE;WORD du=(WORD)u-ou,dv=(WORD)v-ov;
+    UWORD pu,pv;BYTE speed=td.speed<0?-td.speed:td.speed;td_parked_t *car;
+    if(td.onfoot||td.mode!=TD_ROAM||speed<3||td_motion_rebounding()||
+       (!du&&!dv)||(du&&dv)||du>16||du< -16||dv>16||dv< -16)return FALSE;
+    dir=du?du>0?0:2:dv>0?1:3;amount=du?du<0?-du:du:dv<0?-dv:dv;
+    for(i=0;i<TD_SANDBOX_PARKED;i++){
+        car=&td_sandbox_parked[i];
+        if(!car->active||car->vehicle!=3||car->district!=td_streetcar_view_district||td_sandbox_owner==8+i||
+           td_sandbox_body_clear(ou,ov,u,v,car->u,car->v,7+((car->active&2)?2:7)))continue;
+        pu=car->u+(dir==0?amount:dir==2?-(WORD)amount:0);
+        pv=car->v+(dir==1?amount:dir==3?-(WORD)amount:0);
+        if(!td_sandbox_parkable(pu>>4,pv>>4)||!td_sandbox_clear(car->u,car->v,pu,pv,2,8+i)||
+           !td_sandbox_scooter_people(car->u,car->v,pu,pv)||
+           !td_streetcar_runtime_traffic_clear_extent(car->district,pu,pv,5)||
+           td_scenery_contact(car->u,car->v,pu,pv,2,0)!=TD_SCENERY_CLEAR)continue;
+        pm=td.vehicle==1?7:td.vehicle>=2?2:4;impulse=(speed*pm)/(pm+1);impulse=(impulse+1)/2;
+        if(impulse<1)impulse=1;if(impulse>7)impulse=7;
+        if(!(car->active&2)){keep=(speed*pm)/(pm+1);td_motion_transfer(keep?keep:1);}
+        car->u=pu;car->v=pv;car->heading=(car->heading&15)|(dir<<4);
+        car->active=3|(impulse<<2)|(7<<5);hit=TRUE;
+    }
+    return hit;
 }

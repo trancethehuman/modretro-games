@@ -662,9 +662,9 @@ during down/recovery/other combat locks. The arrest timer adds one transient
 byte; the official R6 build leaves 548 linked static bytes below the stack
 origin. This is allocation evidence, not a deepest-stack measurement.
 
-## Select matched story/combat R6 — 2026-10-05
+## Retained matched story/combat R6 — 2026-10-05
 
-Select `toronto-dispatch-story-combat-r6.gbc`, 1,048,576 bytes, SHA-256
+Retain `toronto-dispatch-story-combat-r6.gbc`, 1,048,576 bytes, SHA-256
 `71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`.
 [Build evidence](docs/STORY_COMBAT_BUILD.json) binds 243 unchanged native inputs,
 matching debug artifacts, full `make check` and four compiled guards. HOME has
@@ -681,5 +681,92 @@ during arrest is blocked. Explicit and automatic-save resets restore the
 observed committed career, story flags, health/ammo and hospital/car positions.
 Host coverage of later chapters, other hospital districts and fatal-job overlap
 does not become native acceptance. R6 has no new cartridge, browser, listening,
-all-104-contract or measured two-hour human acceptance. A new source-pinned ZIP
-awaits the source commit and its own package audit; prior packages stay frozen.
+all-104-contract or measured two-hour human acceptance. The retained R6 [package audit](docs/STORY_COMBAT_PACKAGE.json) verifies the local 293,707-byte `toronto-dispatch-story-combat-r6-reviewed.zip`, SHA-256 `6b718a78115a583fa840ff8bc04eab8dfdfd2b040e03ab5111e91f997bbc7b13`, pinned to source `fb589599f6411d517fe8e2af9d8c43dbf6d89144`. Its guide and ROM remain frozen; this package is separate from R8.
+
+## University of Toronto campus — accepted source extension, 2026-10-05
+
+The user accepts a nicely designed University of Toronto area alongside new
+scooter delivery and street activity. Use the recognisable St. George campus
+west of University/Queen's Park, south of Bloor and north of College, while
+preserving the current roads, collision-backed routes, ROM and city footprint.
+Original UC clock/arcade/UT lettering, Convocation dome/columns and Robarts
+angular concrete motifs now occupy three existing generic building bodies.
+Original stone paving follows existing reachable forecourt sidewalks.
+
+Official map/address/architecture sources support orientation and character;
+game anchors and body sizes are explicitly compressed fictional design. Keep
+every native palette/priority and collision byte, other-city pixels and all
+historical feedback hashes exact. A separate authenticated campus overlay proof
+admits only its explicit cells and reconstructs the old PNG. It introduces 15
+canonical background patterns and no actors, gameplay RAM or saved state.
+Plugin source analysis and R8 compiled allocation checks pass; native walking
+shows the clock/dome and library. R7 produced no ROM after its recorded bank
+failure. R8's fresh evidence is separate from R6's frozen story/combat acceptance,
+and physical/human visual checks remain pending.
+
+
+## Scooter deliveries and street activity — accepted 2026-10-05
+
+The user requests parked scooters that the courier can enter and drive, scooter
+delivery work, car impacts and NPC riders on sidewalks and streets. Retain the
+original fictional seated delivery scooter rather than treating its sprite as
+a real-world access rule. The existing 104 contracts remain unchanged: Parkdale
+Art (74, after six completions), West Closing Round (80, after eighteen) and
+Cross City Bundles (88, after eighteen) require vehicle 3. Campus Envelopes (21,
+after twelve) separately serves the University area and permits any vehicle.
+
+A or B enters a nearby vacant scooter on foot through the existing vehicle
+interaction/entry flow. Seed one scooter in an existing validated mainland curb
+bay, with Union's southeast sidewalk `(584,744)` tried first and the same
+terrain, streetcar and furniture guards determining any fallback. Preserve
+owned and protected abandoned vehicles. Taking a found scooter uses the
+existing vehicle-theft attention rule; returning to the courier's own vehicle
+is a separate interaction path.
+
+Two independent rider identities use separate authored road/sidewalk circuits
+in the loaded mainland district; Islands have none. Full-pose admission occurs
+outside the camera guard, movement is continuous and signal/body/pedestrian/
+terrain/tram/furniture guards remain active. Use eight active-VBlank quanta
+with bounded catch-up and freeze riders during menus/dialogue/interiors/queued
+scene mismatch. Do not replace the eight road slots or eight pedestrians.
+
+Relative speed and vehicle mass transfer momentum before an occupied scooter
+impact's existing attention, fine and carried-condition consequences, once
+per fresh collision. Original human airborne/prone poses accompany the empty
+bike; avoid a duplicate pedestrian slowdown. Vacant scooters can be shoved
+without a human-impact fine. Rider wrecks retire offscreen; parked damaged bikes
+follow their eligible later scene seeding. Checked whole-body sweeps retain
+wall, road-object, person, fleet and streetcar admission.
+
+Two original one-OBJ empty poses append at 49/50, preserving all 49 preceding
+pose metadata and pixels. Two rider structs and their counters use exactly
+16 transient native bytes without changing save v11/58. Separate the new rider
+admission helper/read-only tables into a bank while retaining original traffic
+code byte-for-byte. The R7 [bank-placement failure](docs/CAMPUS_SCOOTERS_R7_FINDING.json)
+produced no ROM; R8 supplies distinct compiled/native evidence.
+
+
+## Select matched campus and scooter R8 — 2026-10-05
+
+Select `toronto-dispatch-campus-scooters-r8.gbc`, 1,048,576 bytes, SHA-256
+`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [Build evidence](docs/CAMPUS_SCOOTERS_BUILD.json)
+binds 246 unchanged native inputs, official success in 164,830 ms, matching debug
+artifacts, full `make check` and four compiled guards. Static reserve is 532
+bytes, HOME 207 free, Core backgrounds 46/47 and compiled OBJ peak 126/128. These
+are allocation checks, not deepest stack or physical flicker acceptance.
+
+[Fresh native play](docs/NATIVE_CAMPUS_SCOOTERS.json) uses ordinary buttons to
+frame 17,224 without imported progress or memory writes. A/B scooter entry,
+one Market Start delivery at condition 70/cash $75/done 1, earned first-pay
+flags 3, campus clock/dome and Robarts views, exact 58-byte map freeze and
+committed campus save/reset pass in scope. The final idle sample shows the
+Core hospital `(504,344)`, cash $35 after the $40 fee, HP 100/ammo 12/heat 0
+and preserved parked vehicle. The zero-health/downed moment was not directly
+WRAM-sampled; retained R6 separately establishes that earlier sequence.
+
+R8's source-pinned ZIP awaits source commit/audit. Supported discovery finds
+zero connected consoles and dispatches no write. Preserve R6's audited bundle,
+R2 and physical 9c155 independently. All 104 jobs, three scooter-exclusive
+contracts, later chapters, remote recovery, native older-save imports, deepest
+stack, universal smoothness, human two-hour play, audio/browser and physical
+cartridge checks remain pending.

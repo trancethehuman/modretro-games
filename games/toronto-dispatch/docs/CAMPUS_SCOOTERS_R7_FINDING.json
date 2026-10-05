@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-05",
+  "result": "failed-native-compilation",
+  "eligibleForLoading": false,
+  "attemptedOutput": "toronto-dispatch-campus-scooters-r7.gbc",
+  "romProduced": false,
+  "builder": "gb-studio-cli",
+  "exitCode": 1,
+  "durationMs": 125006,
+  "prebuildNativeInputs": 245,
+  "prebuildPinsSha256": "48441b562cfee1bfb2c08ad566e043316b4f0eed2bd18ed83b80cb0d6075961d",
+  "failure": {
+    "object": "td_traffic.o",
+    "codeBytes": 17774,
+    "bankCapacityBytes": 16384,
+    "message": "BankPack rejected the code area before ROM output"
+  },
+  "followUp": "Move only the new rider admission and exact read-only helpers to a separate banked unit; preserve existing fleet behavior, artwork and save layout. Any successor needs distinct build and native evidence."
+}

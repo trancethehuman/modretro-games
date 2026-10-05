@@ -16,6 +16,9 @@ void td_fleet_present(actor_t *actor,UBYTE kind,UBYTE orientation) BANKED;
 void td_civilian_present(actor_t *actor,UBYTE variant,UBYTE pose) BANKED;
 /* Canonical owned car/truck/motorcycle/scooter sheet, sixteen-heading frame. */
 void td_vehicle_present(actor_t *actor,UBYTE vehicle,UBYTE heading) BANKED;
+/* Original empty scooter: appended one-OBJ frames49 horizontal/50 vertical.
+ * Mounted original vehicle3 frames24..31 remain unchanged. */
+void td_scooter_parked_present(actor_t *actor,UBYTE heading) BANKED;
 /* Restore the cached original courier/vehicle sheet after transient injury. */
 void td_player_sprite_restore(void) BANKED;
 #endif

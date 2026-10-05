@@ -1451,6 +1451,42 @@
                   "priority": false
                 }
               ]
+            },
+            {
+              "id": "b6265b2a-c944-59d6-852f-65b343211714",
+              "tiles": [
+                {
+                  "id": "3de89bfb-f872-5ee3-96a4-9a34c601bf92",
+                  "x": 4,
+                  "y": 0,
+                  "sliceX": 20,
+                  "sliceY": 48,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "f956a80d-efb5-5be9-84c5-6a34fa0a66ad",
+              "tiles": [
+                {
+                  "id": "390222f2-ff60-5c1f-9bb6-a2ced767178f",
+                  "x": 4,
+                  "y": 0,
+                  "sliceX": 36,
+                  "sliceY": 48,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
             }
           ]
         },
@@ -1533,5 +1569,5 @@
   "animSpeed": 255,
   "numTiles": 0,
   "filename": "dispatch_topdown.png",
-  "checksum": "3afaaea3a6ddf68a6f52b1842fbc82e84648e2f9"
+  "checksum": "d7f2e33bc97edf576279f96a5bd5eba22e130448"
 }

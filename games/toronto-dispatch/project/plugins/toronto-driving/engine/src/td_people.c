@@ -1,6 +1,7 @@
 #pragma bank 255
 #include <string.h>
 #include "td_people.h"
+#include "td_scooter.h"
 #include "td_police.h"
 #include "td_combat.h"
 #include "td_game.h"
@@ -73,7 +74,7 @@ static UBYTE td_person_road_clear(UWORD u,UWORD v){
     }
     if(td.onfoot&&td.park_district==td_streetcar_view_district&&td_people_distance(pu,td.park_u)<144&&
         td_people_distance(pv,td.park_v)<144)return FALSE;
-    return td_streetcar_runtime_pedestrian_clear(td_streetcar_view_district,pu,pv);
+    return td_scooter_foot_clear(pu,pv)&&td_streetcar_runtime_pedestrian_clear(td_streetcar_view_district,pu,pv);
 }
 
 /* Only a proposed walking step yields to the physically occupied local car.

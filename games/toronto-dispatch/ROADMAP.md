@@ -1,5 +1,14 @@
 # Roadmap
 
+## Selected campus and scooter R8 — 2026-10-05
+
+Current local ROM: `toronto-dispatch-campus-scooters-r8.gbc`, SHA-256
+`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [Official build](docs/CAMPUS_SCOOTERS_BUILD.json),
+full `make check`, compiled guards and [fresh native play](docs/NATIVE_CAMPUS_SCOOTERS.json)
+pass in their recorded scope. [Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
+found no connected console and dispatched no write. The R8 source-pinned ZIP
+awaits the source commit/audit; retained R6/R2 and physical 9c155 stay separate.
+
 ## Second physical feedback batch — accepted, implementation in progress
 
 The user approved the current character designs, supplied 23 points and confirmed
@@ -380,10 +389,10 @@ The 9c155 write has vendor-reported success and user-confirmed cold boot/buttons
 - [ ] Curate the R5 needs-review record with its scoped 148/840 idle and 159/840 active update samples; preserve phase differences and do not claim a causal FPS gain.
 - [x] Build and select distinct R6 `71a7e493…` with 243 unchanged inputs, matching debug artifacts, full `make check` and four compiled guards: 548 static reserve, HOME 207 and peak 124/128 OBJ tiles. [Fresh native play](docs/NATIVE_STORY_COMBAT.json) covers one full-condition job, intro/first-pay chapters, sampled road arrow, sound/map, firing, hospital/arrest and genuine resets. [Timing](docs/STORY_COMBAT_OPTIMIZATION.json) records 149/840 idle and 160/840 active updates, without a whole-city smoothness claim.
 - [ ] Play later story chapters, portal/remote guidance and broader districts/combat scenes natively; measure deepest stack and human readability/pacing separately.
-- [ ] Commit matching source and audit a new source-pinned loading ZIP. R6 currently selects the local raw ROM.
+- [x] Commit matching R6 source and audit its 293,707-byte local loading ZIP; [package evidence](docs/STORY_COMBAT_PACKAGE.json) pins source `fb589599f6411d517fe8e2af9d8c43dbf6d89144`. Its ROM and guide stay frozen separately from R8.
 - [ ] Physical cartridge flash and cold-boot/audio acceptance when the identified console is available.
 
-Keep the retained sandbox-stable R2 package and all older build/hardware evidence immutable. R6's scoped acceptance selects a new raw ROM without transferring the older package or cartridge checks.
+Keep the retained sandbox-stable R2 package and all older build/hardware evidence immutable. R6's scoped acceptance and audited package remain historical; selecting R8 does not transfer older package or cartridge checks.
 
 ## Hospital and arrest revision — accepted and scoped checked
 
@@ -393,3 +402,25 @@ Keep the retained sandbox-stable R2 package and all older build/hardware evidenc
 - [x] Host-check menu timer freezing and badge/background ownership with no marker/OAM state. R6 shows the badge and genuine explicit/automatic-save resets; actual linked reserve is 548 bytes, separately from deepest stack use.
 - [x] Capture matching [R6 build](docs/STORY_COMBAT_BUILD.json) and [native hospital/arrest/arrow acceptance](docs/NATIVE_STORY_COMBAT.json); select that raw ROM.
 - [ ] Verify remote-district recovery and fatal active-job overlap natively, then physical cold boot, power-off saves, audio and flicker.
+
+## University of Toronto campus — accepted 2026-10-05
+
+- [x] Research official St. George map/grid, landmark addresses and architecture; record the historical reference and compressed fictional placement separately.
+- [x] Author original UC tower/clock/arcade/UT sign, Con Hall dome/columns, angular Robarts roof and two paved forecourts on existing Core bodies/sidewalks.
+- [x] Source-check explicit cells, unchanged collision/priority/attribute bytes, ROM/other-city pixels, deterministic regeneration and bounded 15-pattern addition. Preserve authenticated pre-campus source and immutable historical feedback proof.
+- [x] Verify distinct R8 compiled limits (Core background 46/47, scene OBJ peak 126/128, static reserve 532/HOME 207) and native campus clock/dome/library viewing and walking; retain R6 acceptance separately.
+- [ ] Verify physical cartridge presentation and human visual quality after an approved installation.
+
+
+## Scooter deliveries and street activity — accepted and scoped checked
+
+- [x] Make vehicle-3 scooters enterable through A/B on foot; use a guarded Union-sidewalk seed and existing mainland curb bays while retaining protected owned/abandoned vehicles.
+- [x] Preserve all 104 contracts and their gates/routes/pay; document three existing scooter-only jobs and separate any-vehicle Campus Envelopes.
+- [x] Add two independent mainland road/sidewalk riders with continuous offscreen admission, signal/body/terrain/tram/object guards and eight-active-VBlank movement/crash timing; preserve all eight road cars/eight pedestrians.
+- [x] Add guarded speed/mass scooter pushing and occupied non-graphic rider consequences once, without a second slowdown or vacant human fine; actual-C scooter suite passes 633,765 assertions and sandbox 554,672.
+- [x] Append two original empty one-OBJ poses while pinning all previous 49 poses; extension proof passes 118 checks. Keep save v11/58 bytes and add exactly 16 transient native bytes.
+- [x] Preserve R7's failed bank placement/no-ROM outcome; build distinct R8 with only the new rider helper in a separate bank and original traffic byte-identical R6. All 246 native inputs remain unchanged.
+- [x] Native-test A/B Union scooter entry, one Market Start delivery on vehicle 3, campus views, exact 58-byte map freezing and genuine committed-campus save/reset. Retain the final hospital-outcome observation separately from the unsampled downed/zero-HP moment.
+- [ ] Play the three scooter-exclusive contracts and native occupied/vacant scooter ramming, other districts/queues and sustained crowded camera cases; review human handling and visual quality.
+- [ ] Commit matching R8 source and audit its new source-pinned loading ZIP.
+- [ ] Install on the identified development cartridge when connected; verify cold boot, physical controls, power-off saves, audio and flicker independently.

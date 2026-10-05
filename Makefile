@@ -1,6 +1,7 @@
 .PHONY: check
 
 check:
+	python3 scripts/test_campus.py
 	python3 scripts/check_actor_header.py
 	python3 games/toronto-dispatch/scripts/create_atlas.py --check
 	python3 scripts/test_atlas.py
@@ -17,6 +18,8 @@ check:
 	python3 scripts/test_scenery.py
 	python3 scripts/test_shops.py
 	python3 scripts/test_sandbox.py
+	python3 scripts/test_scooters.py
+	python3 scripts/test_scooter_protection.py
 	python3 scripts/check_stop_names.py
 	python3 scripts/test_atlas_banks.py
 	python3 scripts/check_repository.py

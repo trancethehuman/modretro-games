@@ -1,0 +1,643 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "result": "passed-scoped-native-play",
+  "romSha256": "bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d",
+  "debugNoiSha256": "03925b506c35770ec1ac42f2a7cc74249b74f198d240ef2dcc7bfc0db67c8a1c",
+  "sourceFingerprint": "2452dff3881bc7d507a81adc2f2392a8d4036d11f918788faa3cb6d20a1a3143",
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "sessionId": "1e5feed700a24d0aa27fb9f2b6e0efde",
+  "branch": "branch-0001",
+  "frames": 17224,
+  "outcome": "passed",
+  "eventCount": 1052,
+  "eventDigest": "d24773e3a6c70b0d5c0f54a40fbd1dd0585fdb260430ce2880efcd4327361cd2",
+  "archive": {
+    "id": "a56afea0-127a-4594-bc20-c2711d041897",
+    "manifestSha256": "27f1d69a54f2a18746a858a15b8785def12c90268c4a09f10e875e49dc5c5292",
+    "inventory": {
+      "digest": "7fd1cb0a6696beb1bfa4fbc067f799ff8bd5e0ae36344508750181e17cd23078",
+      "bytes": 1323285,
+      "entries": 355
+    },
+    "sessionClosedBeforeArchive": true,
+    "retrievedAndVerifiedAfterArchive": true
+  },
+  "method": "Fresh native boot, ordinary held-button sets and read-only bounded WRAM/OAM. No RAM writes, imported saves, synthetic frames or checkpoints.",
+  "checks": [
+    {
+      "name": "A/B parked Union scooter entry",
+      "first": {
+        "frame": 984,
+        "hex": "8024802e8024802e1e000900000000000003000003ff00640029000000000000000000000000000100000000000000008024802e011e640c0000",
+        "u": 584,
+        "v": 744,
+        "park": [
+          584,
+          744
+        ],
+        "cash": 30,
+        "seconds": 9,
+        "left": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 0,
+        "cargo": 100,
+        "done": 0,
+        "story": 1,
+        "heat": 1,
+        "HP": 100,
+        "ammo": 12,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "reentry": {
+        "frame": 2050,
+        "hex": "8024802e8024802e1e0017006a0000000003000003000164001b000000000000000000000000000100000000000000008024802e011e640c0000",
+        "u": 584,
+        "v": 744,
+        "park": [
+          584,
+          744
+        ],
+        "cash": 30,
+        "seconds": 23,
+        "left": 106,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 0,
+        "stage": 1,
+        "cargo": 100,
+        "done": 0,
+        "story": 1,
+        "heat": 1,
+        "HP": 100,
+        "ammo": 12,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "name": "first delivery using scooter",
+      "result": {
+        "frame": 3826,
+        "hex": "70305a2d8024802e4b0034004d0000000003000703ff0246012c0100000000000000000000000001000000000000010070305a2d031e640c0000",
+        "u": 775,
+        "v": 725.625,
+        "park": [
+          584,
+          744
+        ],
+        "cash": 75,
+        "seconds": 52,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 0,
+        "mode": 7,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 1,
+        "heat": 3,
+        "HP": 100,
+        "ammo": 12,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "contract": 0,
+      "creditedPay": 75,
+      "cargoCondition": 70
+    },
+    {
+      "name": "native campus artwork",
+      "frames": [
+        14509,
+        16264
+      ],
+      "positionClockDome": {
+        "frame": 14509,
+        "hex": "4019fa0c70305a2d4b00e1004d0000000003010003ff024601210100000000000000000000000003000000000000000070305a2d021e640b0000",
+        "u": 404,
+        "v": 207.625,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 75,
+        "seconds": 225,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 2,
+        "HP": 100,
+        "ammo": 11,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "positionLibrary": {
+        "frame": 16264,
+        "hex": "401b020970305a2d4b00f3004d0000000003010000ff0246010401000000000000000000000000030000000000000000201a0209021e640b0000",
+        "u": 436,
+        "v": 144.125,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 75,
+        "seconds": 243,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 2,
+        "HP": 100,
+        "ammo": 11,
+        "district": 0,
+        "parkDistrict": 0
+      }
+    },
+    {
+      "name": "city map freezes all58 game bytes",
+      "frames": [
+        15087,
+        15327
+      ],
+      "equal": true
+    },
+    {
+      "name": "explicit save and actual4button reset",
+      "saved": {
+        "frame": 15639,
+        "hex": "201a020970305a2d4b00ec004d0000000003010006ff0246010a01000000000000000000000000030000000000000c0070305a2d021e640b0000",
+        "u": 418,
+        "v": 144.125,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 75,
+        "seconds": 236,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 0,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 2,
+        "HP": 100,
+        "ammo": 11,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "boot": {
+        "frame": 15843,
+        "hex": "201a020970305a2d4b00ec004d0000000003010800ff0246010a01000000000000000000000000030000000000000000201a0209021e640b0000",
+        "u": 418,
+        "v": 144.125,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 75,
+        "seconds": 236,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 2,
+        "HP": 100,
+        "ammo": 11,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "resumed": {
+        "frame": 15987,
+        "hex": "201a020970305a2d4b00ee004d0000000003010000ff0246011801000000000000000000000000030000000000000000201a0209021e640b0000",
+        "u": 418,
+        "v": 144.125,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 75,
+        "seconds": 238,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 2,
+        "HP": 100,
+        "ammo": 11,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "persistentFields": [
+        "u",
+        "v",
+        "park",
+        "cash",
+        "vehicle",
+        "foot",
+        "done",
+        "story",
+        "heat",
+        "HP",
+        "ammo",
+        "district",
+        "parkDistrict"
+      ]
+    },
+    {
+      "name": "armed pursuit hospital endpoint",
+      "before": {
+        "frame": 16264,
+        "hex": "401b020970305a2d4b00f3004d0000000003010000ff0246010401000000000000000000000000030000000000000000201a0209021e640b0000",
+        "u": 436,
+        "v": 144.125,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 75,
+        "seconds": 243,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 2,
+        "HP": 100,
+        "ammo": 11,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "after": {
+        "frame": 17224,
+        "hex": "801f801570305a2d230003014d0000000003010000ff0246010401000000000000000000000000030000000000001900801f80150000640c0000",
+        "u": 504,
+        "v": 344,
+        "park": [
+          775,
+          725.625
+        ],
+        "cash": 35,
+        "seconds": 259,
+        "left": 77,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 3,
+        "foot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "cargo": 70,
+        "done": 1,
+        "story": 3,
+        "heat": 0,
+        "HP": 100,
+        "ammo": 12,
+        "district": 0,
+        "parkDistrict": 0
+      },
+      "hospitalMessageVisible": true,
+      "chargedCash": 40,
+      "parkedVehiclePreserved": true,
+      "zeroHpMomentDirectlySampled": false,
+      "interpretation": "Ordinary idle frames ended at marked Core hospital, restored HP/ammo, cleared heat and $40 fee. No direct intermediate zero-HP WRAM sample."
+    }
+  ],
+  "oamSamples": [
+    {
+      "view": "oam",
+      "frame": 13763,
+      "totalObjects": 40,
+      "visibleObjects": 9,
+      "matchedObjects": 9,
+      "returnedObjects": 9,
+      "truncated": false,
+      "objects": [
+        {
+          "index": 0,
+          "x": 101,
+          "y": 11,
+          "tile": 86,
+          "attributes": 96,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 1,
+          "x": 93,
+          "y": 11,
+          "tile": 84,
+          "attributes": 96,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 2,
+          "x": 101,
+          "y": -5,
+          "tile": 82,
+          "attributes": 96,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 3,
+          "x": 93,
+          "y": -5,
+          "tile": 80,
+          "attributes": 96,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 4,
+          "x": 76,
+          "y": 24,
+          "tile": 26,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 5,
+          "x": 143,
+          "y": 136,
+          "tile": 116,
+          "attributes": 42,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 6,
+          "x": -5,
+          "y": 80,
+          "tile": 116,
+          "attributes": 42,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 7,
+          "x": 109,
+          "y": 27,
+          "tile": 72,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 8,
+          "x": 101,
+          "y": 27,
+          "tile": 72,
+          "attributes": 104,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        }
+      ],
+      "scanlineSummary": {
+        "peakObjects": 3,
+        "hardwareLimit": 10,
+        "overLimitScanlines": 0,
+        "peakScanlines": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ]
+      }
+    },
+    {
+      "view": "oam",
+      "frame": 17224,
+      "totalObjects": 40,
+      "visibleObjects": 2,
+      "matchedObjects": 2,
+      "returnedObjects": 2,
+      "truncated": false,
+      "objects": [
+        {
+          "index": 0,
+          "x": 76,
+          "y": 40,
+          "tile": 24,
+          "attributes": 8,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        },
+        {
+          "index": 1,
+          "x": 131,
+          "y": 124,
+          "tile": 108,
+          "attributes": 1,
+          "width": 8,
+          "height": 16,
+          "visible": true
+        }
+      ],
+      "scanlineSummary": {
+        "peakObjects": 1,
+        "hardwareLimit": 10,
+        "overLimitScanlines": 0,
+        "peakScanlines": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          124,
+          125,
+          126,
+          127,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "playtest-campus-scooters-r8/scooter-entry.png",
+      "frame": 984,
+      "pngSha256": "acb8810f355ae5a440ee36d4bc984f49652d317a86052d1ec54cddeb11f4ab6e",
+      "rgbaSha256": "38c28c560d34b52d49ace6a333f54a8cf0f79abd94e4439f5619563fe68957f6",
+      "originalFilename": "acb8810f355ae5a440ee36d4bc984f49652d317a86052d1ec54cddeb11f4ab6e.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "file": "playtest-campus-scooters-r8/scooter-delivery.png",
+      "frame": 3850,
+      "pngSha256": "412210df9dc89839f18f09d244a5e3af4545e780b583edf9e817d7c802ca8a66",
+      "rgbaSha256": "c7f631c827ede59960bf5d47812ecc289e9e986cc69354b5c971dc1cb25fc95a",
+      "originalFilename": "412210df9dc89839f18f09d244a5e3af4545e780b583edf9e817d7c802ca8a66.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "file": "playtest-campus-scooters-r8/campus-clock-dome.png",
+      "frame": 14509,
+      "pngSha256": "9cfce42a87ab33e8b97917382ed7f64ef249c4e06353503490ac7c11eb7e502a",
+      "rgbaSha256": "18c008fd0e8f414599937be03745789372a31660261108d40d58b828310aca48",
+      "originalFilename": "9cfce42a87ab33e8b97917382ed7f64ef249c4e06353503490ac7c11eb7e502a.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "file": "playtest-campus-scooters-r8/campus-library.png",
+      "frame": 16264,
+      "pngSha256": "652250c9e6089ef8d5c8f49f966726188535af8c22e0e3737158e17ce6c09f32",
+      "rgbaSha256": "78fb26e94cb4311ac4f62e26ee6a5199491dff6d3e647647a226231e0928a2ae",
+      "originalFilename": "652250c9e6089ef8d5c8f49f966726188535af8c22e0e3737158e17ce6c09f32.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "file": "playtest-campus-scooters-r8/save-recovered.png",
+      "frame": 15987,
+      "pngSha256": "bf51564660d3097969b3d50565d957293f41c94380bec299832b7fa047f2aa07",
+      "rgbaSha256": "1e035c6f63e8034919010909801adb9867fbd9e0c97d1354497f32794900e3a9",
+      "originalFilename": "bf51564660d3097969b3d50565d957293f41c94380bec299832b7fa047f2aa07.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "file": "playtest-campus-scooters-r8/hospital.png",
+      "frame": 17224,
+      "pngSha256": "145001bcf781df51480d94e01bf620326c569d179593a19d26279b9b8eca9450",
+      "rgbaSha256": "c54198c8df020c5c51195fded6eb1c0764e8a67938126c222223cee6b9f27cb2",
+      "originalFilename": "145001bcf781df51480d94e01bf620326c569d179593a19d26279b9b8eca9450.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "file": "playtest-campus-scooters-r8/city-map.png",
+      "frame": 15327,
+      "pngSha256": "b070954201bd43736810a799491344eb9e96f665c494751820b23b5968b2a4a2",
+      "rgbaSha256": "7e5eb4320c4d57305f8d7d9789302e11cc3fa35f416b1a5d7e80c32cc85a9882",
+      "originalFilename": "b070954201bd43736810a799491344eb9e96f665c494751820b23b5968b2a4a2.png",
+      "width": 160,
+      "height": 144
+    }
+  ],
+  "limitations": [
+    "Three late scooter-exclusive contracts and all104 jobs not completed natively",
+    "Two human gameplay hours not measured",
+    "Rider admission/red/yield/ram exhaustively host-checked; no universal native behavior claim",
+    "New native hospital endpoint observed only in Core; earlier all-transition R6/host evidence retains separate scope",
+    "No human audio listening, deepest stack or universal smoothness guarantee",
+    "No R8 physical cartridge write, cold boot, power-off saves, flicker or browser acceptance"
+  ]
+}
