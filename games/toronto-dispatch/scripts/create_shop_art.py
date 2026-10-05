@@ -103,12 +103,24 @@ def render(kind):
         'new_oam_objects':0,'native_registration_verified':False,'native_gameplay_verified':False}
 
 
+def same_png_artwork(expected,actual):
+    """Platform zlib encodings may differ; native artwork must remain exact."""
+    with Image.open(io.BytesIO(expected)) as a,Image.open(io.BytesIO(actual)) as b:
+        return (a.format==b.format=='PNG' and a.mode==b.mode and a.size==b.size and
+                a.getpalette()==b.getpalette() and a.info==b.info and a.tobytes()==b.tobytes())
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
     rooms=[]
     for kind in ('grocery','corner_store','repair_shop'):
         png,room=render(kind);rooms.append(room);path=ART/room['filename']
-        if args.check:assert path.read_bytes()==png,('Stale original shop pixels',kind)
+        if args.check:
+            actual=path.read_bytes()
+            assert same_png_artwork(png,actual),('Stale original shop pixels/mode/dimensions',kind)
+            # Preserve the committed asset's binary identity after checking its
+            # artwork; the manifest and registered copy still pin those bytes.
+            room['background_sha256']=hashlib.sha256(actual).hexdigest()
         else:path.write_bytes(png)
         print(f"{kind}:160x144,{room['raw_unique_tiles']} raw tiles, original full-screen room with reachable exit")
     metadata={'schema_version':1,'license':'MIT','source':'scripts/create_shop_art.py',
