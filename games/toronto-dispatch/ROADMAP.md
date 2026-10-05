@@ -5,8 +5,12 @@
 Current local ROM: `toronto-dispatch-campus-scooters-r8.gbc`, SHA-256
 `bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [Official build](docs/CAMPUS_SCOOTERS_BUILD.json),
 full `make check`, compiled guards and [fresh native play](docs/NATIVE_CAMPUS_SCOOTERS.json)
-pass in their recorded scope. [Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
-found no connected console and dispatched no write. The [R8 source-pinned ZIP audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes at source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`; retained R6/R2 and physical 9c155 stay separate.
+pass in their recorded scope. The earlier [zero-device discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
+is historical. The [R8 source-pinned ZIP audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes at source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`; retained R6/R2 and prior physical 9c155 stay separate.
+
+- [x] Complete the [supported R8 cartridge write](docs/CARTRIDGE_CAMPUS_SCOOTERS_INSTALL_2026_10_05.json) after updater success, the user's battery/USB reset and fresh intended-device selection. Vendor CLI 1.2.1 reported success after 60,380 ms and exited/closed with code 0; one write request, no automatic retry and no separate complete read-back digest.
+- [x] Receive the user's confirmation that R8 boots after power-off, USB disconnection and power-on with the cartridge inserted, and responds to physical buttons.
+- [ ] Verify extended R8 physical gameplay, handling/performance, power-off save persistence, audio and flicker.
 
 ## Second physical feedback batch — accepted, implementation in progress
 

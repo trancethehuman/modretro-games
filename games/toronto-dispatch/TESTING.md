@@ -35,13 +35,37 @@ compiled ground assets total 110 poses. Dedicated actual-C scooter checks pass
 the sprite-extension proof 118. Allocation checks do not measure deepest stack.
 
 The [R8 package audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes all 246 committed/working native inputs, six allowlisted ZIP members, exact ROM/checksums/licences, 36 immutable guide links and retained installed baselines. `toronto-dispatch-campus-scooters-r8-reviewed.zip` is 299,675 bytes, SHA-256 `5ec9679d58957968afb9e542d7165126bbefd3f41bdd4b06bb7f79d2b8af663b`, pinned to source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`. Its guide is frozen before these later metadata; packaging does not rebuild or certify hardware.
-[Supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
-found zero connected consoles, so no R8 write was dispatched. Cartridge boot,
+[Earlier supported discovery](docs/CARTRIDGE_CAMPUS_SCOOTERS_DISCOVERY_2026_10_05.json)
+found zero connected consoles and dispatched no write at that time; the later
+R8 installation below supersedes its connection status. Extended physical gameplay,
 power-off save persistence, physical audio/flicker, browser recovery, native
 old-save imports, all 104 jobs, the three scooter-exclusive contracts, later
 chapters, remote hospital transitions, deepest stack and two measured enjoyable
 human hours remain pending. Earlier R6, R2 and physical 9c155 evidence retains
 its own identity; emulator SRAM reset does not establish physical persistence.
+
+### R8 cartridge installation and manual cold boot — 2026-10-05
+
+The [installation record](docs/CARTRIDGE_CAMPUS_SCOOTERS_INSTALL_2026_10_05.json)
+binds the exact 1,048,576-byte `bdcebd6f…` raw R8 ROM to supported operation
+`e82d9d24a8dc7f69505c032b0f4a45341a9a98f72711c065f84dff281c25b4f8`.
+Official Updater 1.7.4+2f7c620 reported success; the user confirmed its battery/USB
+reset and the same writable DevDay cartridge before fresh sole-device enumeration.
+Enumeration reported zero conflicts, unmatched functions or diagnostics. Cartridge
+capacity was previously detected at 4 MiB and was not freshly redetected.
+
+Vendor CLI 1.2.1 reported success after **60,380 ms** and exited/closed with code 0.
+The writer closed at **15:50:54.889 UTC** and the operation completed at
+**15:50:54.892 UTC**. Exactly one plugin write request was dispatched, with no
+automatic retry. The returned digest identifies the input ROM; no separate complete
+cartridge read-back digest was supplied.
+
+After power-off, USB disconnection and power-on with the cartridge inserted, the
+user confirmed: “Yes — it boots and responds”. This records user-confirmed R8
+cartridge cold boot and physical button response. Extended gameplay, performance,
+power-off save persistence, audio and flicker remain pending. The prior 9c155
+boot evidence, immutable build/package/native records and frozen ZIP retain their
+own identities and acceptance scopes.
 
 ## Retained story/combat R6 — 2026-10-05
 

@@ -24,6 +24,29 @@ An optional `play` demo emulates the ROM on the computer and streams to the cons
 
 For a failed or missing reply, query the original operation's status. Do not automatically retry an uncertain write, delete its journal, reset firmware or substitute another cartridge profile. Follow reported recovery: Developer Mode errors go to ModRetro Updater; connection or contact errors get their indicated checks. A generic programming error does not prove which of those caused it. Keep codes, saves, ordinary backups, device identifiers and private preview URLs out of Git; the original-ROM archive above is the explicit exception.
 
+## Campus and scooter R8 installation — 2026-10-05
+
+The official Chromatic Firmware Updater 1.7.4+2f7c620 reported success. The user
+confirmed completion of its battery/USB reset and the same writable DevDay cartridge
+before fresh USB enumeration selected the sole intended Chromatic, with zero
+conflicts, unmatched functions or diagnostics. No fresh cartridge-capacity detection
+was performed; the earlier supported detection established 4 MiB.
+
+The [supported installation record](../games/toronto-dispatch/docs/CARTRIDGE_CAMPUS_SCOOTERS_INSTALL_2026_10_05.json)
+binds `toronto-dispatch-campus-scooters-r8.gbc`, 1,048,576 bytes, SHA-256
+`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`.
+Vendor CLI 1.2.1 reported success after 60,380 ms and exited/closed with code 0;
+the writer closed at 15:50:54.889 UTC and the operation completed at
+15:50:54.892 UTC. Exactly one plugin write request was made, with no automatic
+retry. No separate complete cartridge read-back digest was supplied.
+
+The user confirmed R8 boots after power-off, USB disconnection and power-on with
+the cartridge inserted, and responds to physical buttons. Extended physical
+gameplay/performance, power-off save persistence, audio and flicker remain pending.
+The prior 9c155 baseline, earlier zero-device discoveries and frozen build/package/
+native evidence remain historical with their own identities. Raw device details,
+activation state, saves and operation journals remain local and excluded from Git.
+
 ## Cartridge preservation evidence as of 2026-10-04
 
 The connected Chromatic was discovered without diagnostics. Supported cartridge detection succeeded: 4 MiB ISSI flash, current title `OPENAI`, declared 128 KiB ROM and 32 KiB save RAM. Detection did not write a game. Toronto Dispatch's inspected 1 MiB ROM fits; this does not establish Developer Mode activation or cartridge boot.
