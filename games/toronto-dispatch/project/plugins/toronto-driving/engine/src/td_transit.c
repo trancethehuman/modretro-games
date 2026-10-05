@@ -1,14 +1,22 @@
 #pragma bank 255
 #include <string.h>
 #include "td_transit.h"
+#include "td_game.h"
+#include "td_district.h"
 
 typedef char td_transit_queen_ids_fit_origin[
     (TD_TRANSIT_QUEEN_FIRST + TD_TRANSIT_QUEEN_COUNT <= 64) ? 1 : -1];
 typedef char td_transit_queen_timetable_matches_eight_stops[
-    (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 64 &&
-     TD_TRANSIT_QUEEN_HOP_SECONDS == 4) ? 1 : -1];
+    (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 256 &&
+     TD_TRANSIT_QUEEN_HOP_SECONDS == 16) ? 1 : -1];
 
-static const UBYTE td_transit_train_stops[] = {0, 12, 13, 14, 15, 16, 17};
+/* Preserve all seven historical positions/phases; append the northbound
+ * Summerhill and St Clair endpoints to the fictional18-second service. */
+static const UBYTE td_transit_train_stops[] = {0, 12, 13, 14, 15, 16, 17, 59, 60};
+#define TD_TRANSIT_TRAIN_COUNT 9
+typedef char td_transit_train_phase_fits_period[
+    (sizeof(td_transit_train_stops)==TD_TRANSIT_TRAIN_COUNT &&
+     (TD_TRANSIT_TRAIN_COUNT-1)*2<18)?1:-1];
 static const UBYTE td_transit_bus_stops[] = {18, 16, 19};
 static const UBYTE td_transit_ferry_stops[] = {10, 20, 21, 22};
 static const char td_transit_labels[4][19] = {
@@ -21,7 +29,7 @@ static UBYTE td_transit_service_local(UBYTE origin) {
     UBYTE i;
     if (origin & 128) return TD_TRANSIT_INVALID;
     if (origin & 64) return origin == 80 ? TD_TRANSIT_BUS : TD_TRANSIT_INVALID;
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < TD_TRANSIT_TRAIN_COUNT; i++) {
         if (td_transit_train_stops[i] == origin) return TD_TRANSIT_TRAIN;
     }
     if (origin == 18 || origin == 19) return TD_TRANSIT_BUS;
@@ -41,7 +49,7 @@ static UBYTE td_transit_index_local(UBYTE service, UBYTE stop) {
     }
     if (service == TD_TRANSIT_TRAIN) {
         route = td_transit_train_stops;
-        count = 7;
+        count = TD_TRANSIT_TRAIN_COUNT;
     } else if (service == TD_TRANSIT_BUS) {
         route = td_transit_bus_stops;
         count = 3;
@@ -79,7 +87,7 @@ UBYTE td_transit_valid(UBYTE origin, UBYTE target) BANKED {
 
 UBYTE td_transit_count(UBYTE origin) BANKED {
     UBYTE service = td_transit_service_local(origin);
-    if (service == TD_TRANSIT_TRAIN) return 7;
+    if (service == TD_TRANSIT_TRAIN) return TD_TRANSIT_TRAIN_COUNT;
     if (service == TD_TRANSIT_BUS) return 3;
     if (service == TD_TRANSIT_FERRY) return (origin & 63) == 10 ? 3 : 1;
     if (service == TD_TRANSIT_STREETCAR) return TD_TRANSIT_QUEEN_COUNT;
@@ -88,7 +96,7 @@ UBYTE td_transit_count(UBYTE origin) BANKED {
 
 UBYTE td_transit_stop(UBYTE origin, UBYTE selection) BANKED {
     UBYTE service = td_transit_service_local(origin);
-    if (service == TD_TRANSIT_TRAIN && selection < 7) return td_transit_train_stops[selection];
+    if (service == TD_TRANSIT_TRAIN && selection < TD_TRANSIT_TRAIN_COUNT) return td_transit_train_stops[selection];
     if (service == TD_TRANSIT_BUS && selection < 3) return td_transit_bus_stops[selection];
     if (service == TD_TRANSIT_FERRY) {
         if ((origin & 63) == 10 && selection < 3) return td_transit_ferry_stops[selection + 1];
@@ -101,7 +109,8 @@ UBYTE td_transit_stop(UBYTE origin, UBYTE selection) BANKED {
 }
 
 UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED {
-    UBYTE service = td_transit_service_local(origin), period, phase, source_index, target_index, elapsed;
+    UBYTE service = td_transit_service_local(origin), source_index, target_index;
+    UWORD period,phase,elapsed;
     /* A self target asks only for this origin's timetable. It never permits
      * boarding, including at a ferry island with mainland-only service. */
     if (!(service && target == (origin & 63)) &&
@@ -119,19 +128,30 @@ UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED {
     } else {
         period = TD_TRANSIT_QUEEN_PERIOD;
         target_index = td_transit_index_local(service, target);
-        phase = target_index >= source_index ? source_index * 4 : 32 + (7 - source_index) * 4;
+        phase = target_index >= source_index ? source_index * 16 : 128 + (7 - source_index) * 16;
     }
-    /* Reduce the UWORD first: all subsequent arithmetic stays below128. */
+    /* Queen period256 requires WORD temporaries; valid closed countdowns
+     * are at most252, distinct from the255 invalid sentinel. */
     elapsed = (seconds % period + period - phase) % period;
-    return elapsed < 2 ? 0 : period - elapsed;
+    return elapsed < (service==TD_TRANSIT_STREETCAR?4:2) ? 0 : period - elapsed;
 }
 
-UBYTE td_transit_fare(UBYTE origin) BANKED {
+static UBYTE td_transit_fare_local(UBYTE origin) {
     UBYTE service = td_transit_service_local(origin);
     if (service == TD_TRANSIT_TRAIN || service == TD_TRANSIT_STREETCAR) return 3;
     if (service == TD_TRANSIT_BUS) return 2;
     if (service == TD_TRANSIT_FERRY) return 4;
     return 0;
+}
+
+UBYTE td_transit_fare(UBYTE origin) BANKED {
+    return td_transit_fare_local(origin);
+}
+
+UBYTE td_transit_booking_fare(UBYTE origin,UBYTE target,UBYTE job,UWORD cash,UBYTE district) BANKED {
+    if(district==TD_DISTRICT_ISLANDS&&origin>=20&&origin<=22&&
+       target==10&&job==TD_NONE&&cash<4)return 0;
+    return td_transit_fare_local(origin);
 }
 
 UBYTE td_transit_duration(UBYTE origin, UBYTE target) BANKED {

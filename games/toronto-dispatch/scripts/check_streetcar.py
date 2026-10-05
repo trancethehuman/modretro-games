@@ -6,7 +6,7 @@ streetcar artwork, human route enjoyment, runtime scene loading or hardware.
 import json
 from pathlib import Path
 
-from check_campaign import decode
+from check_campaign import TOTAL_STOPS, decode
 from create_district_jobs import RouteModel, point
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,13 +18,13 @@ def check():
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
     stops = authored['stops']
     assert [stop['id'] for stop in stops] == list(range(43, 51))
-    assert stops == campaign['stops'][43:51] and len(campaign['stops']) == 51
+    assert stops == campaign['stops'][43:51] and len(campaign['stops']) == TOTAL_STOPS
     service = authored['service']
     assert service['stops'] == list(range(43, 51))
-    assert service['fare'] == 3 and service['period_seconds'] == 64
-    assert service['boarding_window_seconds'] == 2 and service['segment_seconds'] == 4
-    assert service['eastbound_phases'] == list(range(0, 32, 4))
-    assert service['westbound_phases'] == list(range(60, 28, -4))
+    assert service['fare'] == 3 and service['period_seconds'] == 256
+    assert service['boarding_window_seconds'] == 4 and service['segment_seconds'] == 16
+    assert service['eastbound_phases'] == list(range(0, 128, 16))
+    assert service['westbound_phases'] == list(range(240, 112, -16))
     assert campaign['transit']['streetcar501'] == service
     assert [stop['district'] for stop in stops] == [1, 0, 0, 0, 0, 3, 3, 3]
     grids = {}

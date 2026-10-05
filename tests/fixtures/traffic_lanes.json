@@ -1,0 +1,4400 @@
+{
+  "schema_version": 1,
+  "purpose": "Independent named-road/right-hand lane and exact endcap oracle. Source validation only; not native timing or queue proof.",
+  "baseline_commit": "b7666c784cac0651a3c9f5e22bc28c707eeec667",
+  "roles": [
+    "car",
+    "truck",
+    "police",
+    "fire",
+    "ambulance",
+    "bus"
+  ],
+  "actual_square_half_pixels": [
+    5,
+    6,
+    5,
+    7,
+    6,
+    7
+  ],
+  "conservative_half_pixels": 8,
+  "right_hand_offset_pixels": 8,
+  "junction_extension_pixels": 8,
+  "districts": [
+    {
+      "id": 0,
+      "scene": "toronto_city",
+      "art_source": "content/city_art.json",
+      "roads": [
+        {
+          "name": "BLOOR STREET",
+          "points": [
+            [
+              0,
+              64
+            ],
+            [
+              1024,
+              64
+            ]
+          ]
+        },
+        {
+          "name": "WELLESLEY / HARBORD",
+          "points": [
+            [
+              24,
+              176
+            ],
+            [
+              992,
+              176
+            ]
+          ]
+        },
+        {
+          "name": "COLLEGE / CARLTON",
+          "points": [
+            [
+              0,
+              288
+            ],
+            [
+              992,
+              288
+            ]
+          ]
+        },
+        {
+          "name": "DUNDAS STREET",
+          "points": [
+            [
+              0,
+              400
+            ],
+            [
+              1024,
+              400
+            ]
+          ]
+        },
+        {
+          "name": "KING STREET",
+          "points": [
+            [
+              24,
+              640
+            ],
+            [
+              848,
+              640
+            ]
+          ]
+        },
+        {
+          "name": "BATHURST STREET",
+          "points": [
+            [
+              208,
+              24
+            ],
+            [
+              208,
+              816
+            ]
+          ]
+        },
+        {
+          "name": "PARLIAMENT STREET",
+          "points": [
+            [
+              816,
+              24
+            ],
+            [
+              816,
+              816
+            ]
+          ]
+        }
+      ],
+      "roles": [
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "COLLEGE / CARLTON",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                48,
+                280
+              ],
+              [
+                48,
+                296
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "COLLEGE / CARLTON",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                840,
+                296
+              ],
+              [
+                840,
+                280
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "DUNDAS STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                48,
+                392
+              ],
+              [
+                48,
+                408
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "DUNDAS STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                840,
+                408
+              ],
+              [
+                840,
+                392
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "WELLESLEY / HARBORD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                48,
+                168
+              ],
+              [
+                48,
+                184
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "WELLESLEY / HARBORD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                840,
+                184
+              ],
+              [
+                840,
+                168
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "KING STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                48,
+                632
+              ],
+              [
+                48,
+                648
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "KING STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                832,
+                648
+              ],
+              [
+                832,
+                632
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "PARLIAMENT STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                824,
+                48
+              ],
+              [
+                808,
+                48
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "PARLIAMENT STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                808,
+                792
+              ],
+              [
+                824,
+                792
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "BLOOR STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "PARLIAMENT STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "WELLESLEY / HARBORD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "WELLESLEY / HARBORD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "BATHURST STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "BLOOR STREET",
+                "segment": 0
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": 1,
+      "scene": "toronto_west",
+      "art_source": "content/districts/west_art.json",
+      "roads": [
+        {
+          "name": "Bloor Street West",
+          "points": [
+            [
+              1000,
+              64
+            ],
+            [
+              816,
+              64
+            ],
+            [
+              816,
+              112
+            ],
+            [
+              512,
+              112
+            ],
+            [
+              512,
+              160
+            ],
+            [
+              384,
+              160
+            ],
+            [
+              384,
+              240
+            ],
+            [
+              24,
+              240
+            ]
+          ]
+        },
+        {
+          "name": "Dundas Street West",
+          "points": [
+            [
+              1000,
+              400
+            ],
+            [
+              800,
+              400
+            ],
+            [
+              800,
+              352
+            ],
+            [
+              640,
+              352
+            ],
+            [
+              640,
+              320
+            ],
+            [
+              480,
+              320
+            ],
+            [
+              480,
+              240
+            ],
+            [
+              416,
+              240
+            ],
+            [
+              416,
+              160
+            ],
+            [
+              384,
+              160
+            ],
+            [
+              384,
+              96
+            ],
+            [
+              24,
+              96
+            ]
+          ]
+        },
+        {
+          "name": "College Street",
+          "points": [
+            [
+              1000,
+              288
+            ],
+            [
+              800,
+              288
+            ],
+            [
+              800,
+              320
+            ],
+            [
+              640,
+              320
+            ]
+          ],
+          "note": "Ends at Dundas; no extension through High Park."
+        },
+        {
+          "name": "Roncesvalles Avenue",
+          "points": [
+            [
+              416,
+              240
+            ],
+            [
+              416,
+              464
+            ],
+            [
+              512,
+              464
+            ],
+            [
+              512,
+              608
+            ],
+            [
+              640,
+              608
+            ]
+          ]
+        },
+        {
+          "name": "Howard Park Avenue",
+          "points": [
+            [
+              480,
+              320
+            ],
+            [
+              416,
+              320
+            ],
+            [
+              416,
+              352
+            ],
+            [
+              24,
+              352
+            ]
+          ]
+        },
+        {
+          "name": "Queen Street West",
+          "points": [
+            [
+              1000,
+              528
+            ],
+            [
+              800,
+              528
+            ],
+            [
+              800,
+              576
+            ],
+            [
+              640,
+              576
+            ],
+            [
+              640,
+              608
+            ]
+          ]
+        },
+        {
+          "name": "King Street West",
+          "points": [
+            [
+              1000,
+              640
+            ],
+            [
+              880,
+              640
+            ],
+            [
+              880,
+              688
+            ],
+            [
+              704,
+              688
+            ],
+            [
+              704,
+              608
+            ],
+            [
+              640,
+              608
+            ]
+          ]
+        },
+        {
+          "name": "The Queensway",
+          "points": [
+            [
+              640,
+              608
+            ],
+            [
+              512,
+              608
+            ],
+            [
+              512,
+              640
+            ],
+            [
+              24,
+              640
+            ]
+          ]
+        },
+        {
+          "name": "Lansdowne Avenue",
+          "points": [
+            [
+              800,
+              64
+            ],
+            [
+              800,
+              528
+            ]
+          ],
+          "note": "Ends at Queen; underpass south of Dundas."
+        },
+        {
+          "name": "Brock Avenue",
+          "points": [
+            [
+              912,
+              64
+            ],
+            [
+              912,
+              528
+            ]
+          ]
+        },
+        {
+          "name": "Sorauren Avenue",
+          "points": [
+            [
+              544,
+              320
+            ],
+            [
+              544,
+              464
+            ],
+            [
+              704,
+              464
+            ],
+            [
+              704,
+              576
+            ]
+          ]
+        },
+        {
+          "name": "Lake Shore Boulevard West",
+          "points": [
+            [
+              24,
+              832
+            ],
+            [
+              1000,
+              832
+            ]
+          ],
+          "note": "East end closed until a researched waterfront link is registered."
+        }
+      ],
+      "roles": [
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Bloor Street West",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Brock Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "College Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Lansdowne Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "College Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Brock Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Lansdowne Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Brock Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                904,
+                488
+              ],
+              [
+                920,
+                488
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Brock Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                920,
+                400
+              ],
+              [
+                904,
+                400
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 4
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 3
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Lansdowne Avenue",
+                "segment": 0
+              },
+              {
+                "road": "Queen Street West",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Queen Street West",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Sorauren Avenue",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Sorauren Avenue",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Sorauren Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 6
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 5
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Howard Park Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Roncesvalles Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "The Queensway",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Roncesvalles Avenue",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Roncesvalles Avenue",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Roncesvalles Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Howard Park Avenue",
+                "segment": 0
+              },
+              {
+                "road": "Dundas Street West",
+                "segment": 4
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Sorauren Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Sorauren Avenue",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Sorauren Avenue",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Queen Street West",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Queen Street West",
+                "segment": 3
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": 2,
+      "scene": "toronto_high_park",
+      "art_source": "content/districts/high_park_art.json",
+      "roads": [
+        {
+          "name": "Bloor Street West",
+          "points": [
+            [
+              1000,
+              240
+            ],
+            [
+              944,
+              240
+            ],
+            [
+              944,
+              272
+            ],
+            [
+              656,
+              272
+            ],
+            [
+              656,
+              304
+            ],
+            [
+              432,
+              304
+            ],
+            [
+              432,
+              352
+            ],
+            [
+              96,
+              352
+            ]
+          ]
+        },
+        {
+          "name": "Dundas Street West",
+          "points": [
+            [
+              1000,
+              96
+            ],
+            [
+              848,
+              96
+            ],
+            [
+              848,
+              112
+            ],
+            [
+              432,
+              112
+            ]
+          ],
+          "note": "Western endpoint is Runnymede, before outside-boundary Dundas/Jane."
+        },
+        {
+          "name": "Keele Street",
+          "points": [
+            [
+              944,
+              240
+            ],
+            [
+              944,
+              176
+            ],
+            [
+              848,
+              176
+            ],
+            [
+              848,
+              96
+            ]
+          ]
+        },
+        {
+          "name": "Parkside Drive",
+          "points": [
+            [
+              944,
+              240
+            ],
+            [
+              944,
+              640
+            ]
+          ]
+        },
+        {
+          "name": "Howard Park Avenue",
+          "points": [
+            [
+              1000,
+              352
+            ],
+            [
+              976,
+              352
+            ],
+            [
+              976,
+              384
+            ],
+            [
+              944,
+              384
+            ]
+          ],
+          "note": "Ordinary road terminates at Parkside. TTC loop inside park is not a through car road."
+        },
+        {
+          "name": "Annette Street",
+          "points": [
+            [
+              960,
+              96
+            ],
+            [
+              960,
+              192
+            ],
+            [
+              432,
+              192
+            ],
+            [
+              432,
+              224
+            ],
+            [
+              176,
+              224
+            ],
+            [
+              176,
+              256
+            ]
+          ]
+        },
+        {
+          "name": "Runnymede Road",
+          "points": [
+            [
+              432,
+              112
+            ],
+            [
+              432,
+              496
+            ]
+          ],
+          "note": "Southern road endpoint at Morningside; not a straight link to Queensway."
+        },
+        {
+          "name": "Jane Street",
+          "points": [
+            [
+              176,
+              256
+            ],
+            [
+              176,
+              352
+            ]
+          ]
+        },
+        {
+          "name": "Morningside Avenue",
+          "points": [
+            [
+              432,
+              496
+            ],
+            [
+              576,
+              496
+            ]
+          ]
+        },
+        {
+          "name": "Ellis Avenue",
+          "points": [
+            [
+              576,
+              496
+            ],
+            [
+              576,
+              688
+            ]
+          ]
+        },
+        {
+          "name": "The Queensway",
+          "points": [
+            [
+              1000,
+              640
+            ],
+            [
+              576,
+              640
+            ],
+            [
+              576,
+              688
+            ],
+            [
+              384,
+              688
+            ],
+            [
+              384,
+              736
+            ],
+            [
+              160,
+              736
+            ],
+            [
+              160,
+              784
+            ],
+            [
+              64,
+              784
+            ]
+          ]
+        },
+        {
+          "name": "South Kingsway",
+          "points": [
+            [
+              144,
+              352
+            ],
+            [
+              256,
+              352
+            ],
+            [
+              256,
+              512
+            ],
+            [
+              384,
+              512
+            ],
+            [
+              384,
+              736
+            ]
+          ]
+        },
+        {
+          "name": "Colborne Lodge Drive south approach",
+          "points": [
+            [
+              736,
+              640
+            ],
+            [
+              736,
+              832
+            ]
+          ],
+          "note": "Represents the lower collector connection; northern park access is foot-only in this game."
+        },
+        {
+          "name": "Lake Shore Boulevard West",
+          "points": [
+            [
+              1000,
+              832
+            ],
+            [
+              384,
+              832
+            ],
+            [
+              384,
+              848
+            ],
+            [
+              64,
+              848
+            ]
+          ]
+        }
+      ],
+      "roles": [
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Keele Street",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Keele Street",
+                "segment": 2
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Keele Street",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Runnymede Road",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 3
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 4
+              },
+              {
+                "road": "Jane Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Bloor Street West",
+                "segment": 6
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Runnymede Road",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                440,
+                304
+              ],
+              [
+                424,
+                304
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Runnymede Road",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Morningside Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Ellis Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "The Queensway",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "The Queensway",
+                "segment": 3
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                376,
+                736
+              ],
+              [
+                392,
+                736
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "South Kingsway",
+                "segment": 3
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "South Kingsway",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "South Kingsway",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Bloor Street West",
+                "segment": 6
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Runnymede Road",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Dundas Street West",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Keele Street",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Keele Street",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Keele Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Bloor Street West",
+                "segment": 6
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Jane Street",
+                "segment": 0
+              },
+              {
+                "road": "Annette Street",
+                "segment": 4
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Annette Street",
+                "segment": 3
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Runnymede Road",
+                "segment": 0
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": 3,
+      "scene": "toronto_east",
+      "art_source": "content/districts/east_art.json",
+      "roads": [
+        {
+          "name": "Danforth Avenue",
+          "points": [
+            [
+              24,
+              64
+            ],
+            [
+              976,
+              64
+            ]
+          ]
+        },
+        {
+          "name": "Gerrard Street East",
+          "points": [
+            [
+              24,
+              288
+            ],
+            [
+              672,
+              288
+            ],
+            [
+              672,
+              256
+            ],
+            [
+              976,
+              256
+            ]
+          ],
+          "note": "Left connection conditional on core east-bank Gerrard correction; named road still exists in this viewport."
+        },
+        {
+          "name": "Dundas Street East",
+          "points": [
+            [
+              24,
+              400
+            ],
+            [
+              672,
+              400
+            ],
+            [
+              672,
+              368
+            ],
+            [
+              976,
+              368
+            ]
+          ]
+        },
+        {
+          "name": "Queen Street East",
+          "points": [
+            [
+              24,
+              528
+            ],
+            [
+              672,
+              528
+            ],
+            [
+              672,
+              496
+            ],
+            [
+              976,
+              496
+            ]
+          ]
+        },
+        {
+          "name": "Bain Avenue",
+          "points": [
+            [
+              224,
+              208
+            ],
+            [
+              544,
+              208
+            ]
+          ],
+          "note": "Only the researched Logan\u2192Carlaw\u2192Pape portion is represented; other residential streets omitted."
+        },
+        {
+          "name": "Logan Avenue",
+          "points": [
+            [
+              224,
+              64
+            ],
+            [
+              224,
+              720
+            ]
+          ]
+        },
+        {
+          "name": "Carlaw Avenue",
+          "points": [
+            [
+              384,
+              64
+            ],
+            [
+              384,
+              720
+            ]
+          ]
+        },
+        {
+          "name": "Pape Avenue north fragment",
+          "points": [
+            [
+              544,
+              64
+            ],
+            [
+              544,
+              208
+            ]
+          ],
+          "note": "Road terminates north of the rail corridor; compressed street endpoint is not an exact geographic projection."
+        },
+        {
+          "name": "Pape Avenue south fragment",
+          "points": [
+            [
+              544,
+              288
+            ],
+            [
+              544,
+              688
+            ]
+          ],
+          "note": "No car link across railway to north fragment."
+        },
+        {
+          "name": "Jones Avenue",
+          "points": [
+            [
+              704,
+              64
+            ],
+            [
+              704,
+              496
+            ]
+          ],
+          "note": "Ends at Queen; no invented extension to Eastern."
+        },
+        {
+          "name": "Leslie Street",
+          "points": [
+            [
+              816,
+              256
+            ],
+            [
+              816,
+              952
+            ]
+          ],
+          "note": "Continues south through the existing Eastern junction to the Port Lands cutline. No invented Leslie\u2192Danforth road through the railway. Junction facts and separate source provenance in docs/PORT_LANDS_PLAN.md."
+        },
+        {
+          "name": "Greenwood Avenue",
+          "points": [
+            [
+              944,
+              64
+            ],
+            [
+              944,
+              496
+            ]
+          ],
+          "note": "Southern road endpoint at Queen."
+        },
+        {
+          "name": "Eastern Avenue",
+          "points": [
+            [
+              80,
+              720
+            ],
+            [
+              384,
+              720
+            ],
+            [
+              384,
+              688
+            ],
+            [
+              704,
+              688
+            ],
+            [
+              704,
+              656
+            ],
+            [
+              976,
+              656
+            ]
+          ],
+          "note": "Viewport endpoints, not real street termini. No west portal or Don-mouth bridge authored."
+        }
+      ],
+      "roles": [
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Danforth Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Carlaw Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Bain Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Logan Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Danforth Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Pape Avenue north fragment",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Bain Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Carlaw Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Gerrard Street East",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Carlaw Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Dundas Street East",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Logan Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Gerrard Street East",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Pape Avenue south fragment",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Dundas Street East",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Carlaw Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Jones Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                696,
+                464
+              ],
+              [
+                712,
+                464
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Jones Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                712,
+                368
+              ],
+              [
+                696,
+                368
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Carlaw Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                376,
+                688
+              ],
+              [
+                392,
+                688
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Carlaw Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                392,
+                560
+              ],
+              [
+                376,
+                560
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ]
+      ]
+    },
+    {
+      "id": 4,
+      "scene": "toronto_port_lands",
+      "art_source": "content/districts/port_lands_art.json",
+      "roads": [
+        {
+          "name": "Lake Shore Boulevard East",
+          "points": [
+            [
+              24,
+              128
+            ],
+            [
+              672,
+              128
+            ],
+            [
+              672,
+              64
+            ],
+            [
+              976,
+              64
+            ]
+          ]
+        },
+        {
+          "name": "Cherry Street",
+          "points": [
+            [
+              192,
+              24
+            ],
+            [
+              192,
+              832
+            ]
+          ]
+        },
+        {
+          "name": "Commissioners Street",
+          "points": [
+            [
+              192,
+              352
+            ],
+            [
+              336,
+              352
+            ],
+            [
+              336,
+              288
+            ],
+            [
+              592,
+              288
+            ],
+            [
+              592,
+              224
+            ],
+            [
+              912,
+              224
+            ]
+          ]
+        },
+        {
+          "name": "Ookwemin Street",
+          "points": [
+            [
+              272,
+              256
+            ],
+            [
+              272,
+              352
+            ]
+          ],
+          "note": "Older island Cherry alignment; no new northern channel bridge."
+        },
+        {
+          "name": "Villiers west bank fragment",
+          "points": [
+            [
+              272,
+              256
+            ],
+            [
+              400,
+              256
+            ]
+          ]
+        },
+        {
+          "name": "Villiers east bank fragment",
+          "points": [
+            [
+              512,
+              192
+            ],
+            [
+              544,
+              192
+            ]
+          ],
+          "note": "No bridge joins the fragments."
+        },
+        {
+          "name": "Don Roadway",
+          "points": [
+            [
+              544,
+              128
+            ],
+            [
+              544,
+              288
+            ]
+          ],
+          "note": "No invented southern extension over Ship Channel."
+        },
+        {
+          "name": "Carlaw Avenue southern approach",
+          "points": [
+            [
+              736,
+              24
+            ],
+            [
+              736,
+              224
+            ]
+          ]
+        },
+        {
+          "name": "Leslie Street",
+          "points": [
+            [
+              912,
+              24
+            ],
+            [
+              912,
+              768
+            ]
+          ]
+        },
+        {
+          "name": "Polson Street",
+          "points": [
+            [
+              128,
+              576
+            ],
+            [
+              192,
+              576
+            ]
+          ]
+        },
+        {
+          "name": "Unwin Avenue",
+          "points": [
+            [
+              192,
+              824
+            ],
+            [
+              864,
+              824
+            ],
+            [
+              864,
+              768
+            ],
+            [
+              912,
+              768
+            ]
+          ],
+          "note": "Two cardinal bends east of the circulation channel; widened original game lane, no completion claim for proposed replacement bridge."
+        },
+        {
+          "name": "Regatta Road",
+          "points": [
+            [
+              352,
+              824
+            ],
+            [
+              352,
+              864
+            ]
+          ],
+          "note": "Stops before the beach promenade."
+        },
+        {
+          "name": "Fictional Turning Basin service drive",
+          "points": [
+            [
+              672,
+              224
+            ],
+            [
+              672,
+              576
+            ],
+            [
+              704,
+              576
+            ]
+          ],
+          "note": "Original private courier-yard access, not a surveyed or named public street; stops north of Ship Channel."
+        }
+      ],
+      "roles": [
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Cherry Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                184,
+                320
+              ],
+              [
+                200,
+                320
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Cherry Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                200,
+                248
+              ],
+              [
+                184,
+                248
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                376,
+                280
+              ],
+              [
+                376,
+                296
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Commissioners Street",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                408,
+                296
+              ],
+              [
+                408,
+                280
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Commissioners Street",
+                "segment": 2
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Don Roadway",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                536,
+                248
+              ],
+              [
+                552,
+                248
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Don Roadway",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                552,
+                160
+              ],
+              [
+                536,
+                160
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "Leslie Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "E",
+            "endpoints": [
+              [
+                904,
+                408
+              ],
+              [
+                920,
+                408
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "Leslie Street",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "W",
+            "endpoints": [
+              [
+                920,
+                272
+              ],
+              [
+                904,
+                272
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          }
+        ],
+        [
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                280,
+                816
+              ],
+              [
+                280,
+                832
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Unwin Avenue",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                440,
+                832
+              ],
+              [
+                440,
+                816
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Unwin Avenue",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "turnaround",
+            "direction": "S",
+            "endpoints": [
+              [
+                752,
+                216
+              ],
+              [
+                752,
+                232
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "Commissioners Street",
+                "segment": 4
+              }
+            ]
+          },
+          {
+            "kind": "turnaround",
+            "direction": "N",
+            "endpoints": [
+              [
+                832,
+                232
+              ],
+              [
+                832,
+                216
+              ]
+            ],
+            "reason": "Exact16px transverse lane change at reviewed paved junction/endcap; no through-road exemption."
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "Commissioners Street",
+                "segment": 4
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": 5,
+      "scene": "toronto_islands",
+      "art_source": "content/districts/island_art.json",
+      "roads": [],
+      "roles": []
+    },
+    {
+      "id": 6,
+      "scene": "toronto_north",
+      "art_source": "content/districts/north_art.json",
+      "roads": [
+        {
+          "name": "BATHURST STREET",
+          "points": [
+            [
+              208,
+              912
+            ],
+            [
+              208,
+              160
+            ]
+          ]
+        },
+        {
+          "name": "SPADINA ROAD SOUTH",
+          "points": [
+            [
+              336,
+              976
+            ],
+            [
+              336,
+              576
+            ]
+          ],
+          "note": "Ends at Davenport below Baldwin Steps; never connects to upper road as car terrain."
+        },
+        {
+          "name": "SPADINA ROAD NORTH",
+          "points": [
+            [
+              336,
+              488
+            ],
+            [
+              336,
+              160
+            ]
+          ],
+          "note": "Upper road connects to St Clair and eastern Austin branch."
+        },
+        {
+          "name": "AVENUE ROAD",
+          "points": [
+            [
+              480,
+              912
+            ],
+            [
+              480,
+              160
+            ]
+          ]
+        },
+        {
+          "name": "YONGE STREET",
+          "points": [
+            [
+              640,
+              976
+            ],
+            [
+              640,
+              160
+            ]
+          ]
+        },
+        {
+          "name": "ST CLAIR AVENUE",
+          "points": [
+            [
+              24,
+              160
+            ],
+            [
+              784,
+              160
+            ]
+          ],
+          "note": "East end withheld before ravine crossing; western streetcar corridor only visual reference at this stage."
+        },
+        {
+          "name": "DUPONT STREET",
+          "points": [
+            [
+              24,
+              768
+            ],
+            [
+              408,
+              768
+            ],
+            [
+              408,
+              680
+            ],
+            [
+              480,
+              680
+            ]
+          ],
+          "note": "Cardinal compression; ends at Avenue and meets Davenport at408,680."
+        },
+        {
+          "name": "DAVENPORT ROAD",
+          "points": [
+            [
+              24,
+              576
+            ],
+            [
+              408,
+              576
+            ],
+            [
+              408,
+              784
+            ],
+            [
+              640,
+              784
+            ]
+          ],
+          "note": "North-west to south-east bend preserved; single CPR underpass on408 column."
+        },
+        {
+          "name": "WALMER ROAD SOUTH",
+          "points": [
+            [
+              280,
+              912
+            ],
+            [
+              280,
+              768
+            ]
+          ],
+          "note": "Annex section only; northern fragments and closed intersections not silently joined."
+        },
+        {
+          "name": "BERNARD AVENUE",
+          "points": [
+            [
+              280,
+              848
+            ],
+            [
+              480,
+              848
+            ]
+          ],
+          "note": "Verified Walmer/Spadina/Avenue connections; does not reach Bathurst. Existing Bloor stays solely in Core below the two seam throats."
+        },
+        {
+          "name": "AUSTIN TERRACE EAST",
+          "points": [
+            [
+              296,
+              488
+            ],
+            [
+              336,
+              488
+            ]
+          ],
+          "note": "Verified eastern branch only; NOT a through Bathurst-to-Spadina car shortcut."
+        },
+        {
+          "name": "AUSTIN TERRACE WEST",
+          "points": [
+            [
+              208,
+              488
+            ],
+            [
+              232,
+              488
+            ]
+          ],
+          "note": "Compressed western local fragment, closed at east end."
+        },
+        {
+          "name": "SUMMERHILL AVENUE",
+          "points": [
+            [
+              640,
+              336
+            ],
+            [
+              744,
+              336
+            ],
+            [
+              744,
+              432
+            ]
+          ],
+          "note": "Cardinalised curved eastern junction with Shaftesbury, not an extra rail crossing."
+        },
+        {
+          "name": "SHAFTESBURY AVENUE",
+          "points": [
+            [
+              640,
+              432
+            ],
+            [
+              744,
+              432
+            ]
+          ]
+        },
+        {
+          "name": "ROSEHILL AVENUE",
+          "points": [
+            [
+              640,
+              280
+            ],
+            [
+              744,
+              280
+            ]
+          ]
+        },
+        {
+          "name": "PRICE STREET",
+          "points": [
+            [
+              640,
+              552
+            ],
+            [
+              744,
+              552
+            ]
+          ],
+          "note": "Short researched street south of rail; original heritage-side curb handoff."
+        }
+      ],
+      "roles": [
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "BATHURST STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "DUPONT STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "SPADINA ROAD SOUTH",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "WALMER ROAD SOUTH",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "BERNARD AVENUE",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "SPADINA ROAD SOUTH",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "DUPONT STREET",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "SPADINA ROAD SOUTH",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "BERNARD AVENUE",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "AVENUE ROAD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "AVENUE ROAD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "YONGE STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "ST CLAIR AVENUE",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "BATHURST STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "DAVENPORT ROAD",
+                "segment": 2
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "AVENUE ROAD",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "ST CLAIR AVENUE",
+                "segment": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "kind": "lane",
+            "direction": "S",
+            "road_sections": [
+              {
+                "road": "YONGE STREET",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "E",
+            "road_sections": [
+              {
+                "road": "SHAFTESBURY AVENUE",
+                "segment": 0
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "N",
+            "road_sections": [
+              {
+                "road": "SUMMERHILL AVENUE",
+                "segment": 1
+              }
+            ]
+          },
+          {
+            "kind": "lane",
+            "direction": "W",
+            "road_sections": [
+              {
+                "road": "SUMMERHILL AVENUE",
+                "segment": 0
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  ],
+  "protected_files": {
+    "project/assets/avatars/README.md": "8d21f717f26c5c641533dd3d35463802874bc78fd5c0f708175ecc2fb00e5267",
+    "project/assets/backgrounds/README.md": "3ba8e88d6f8fde5dc5a21a6ba61e53549b929a5c7c5f48ffce5e4b3057055259",
+    "project/assets/backgrounds/toronto_city.png": "05a791496a6160d0418b1117b6ae0c736ca8574a16117ec398420175e30f61e2",
+    "project/assets/backgrounds/toronto_city.png.gbsres": "51efce533a6207ca7ef60a92283cac56bca872dd1c9c8493ed34f5e9f41ffa70",
+    "project/assets/backgrounds/toronto_east.png": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
+    "project/assets/backgrounds/toronto_east.png.gbsres": "aef080a93d249eed37683bf8d7025aa9ffc4a5cdb2b16952b760e944810180e9",
+    "project/assets/backgrounds/toronto_high_park.png": "4d8eb0d6552187b0c82db1226d72fefa0ebd3c1acb8b3b56000c0c3568be5141",
+    "project/assets/backgrounds/toronto_high_park.png.gbsres": "84364688036ba6c4c389ca61a791711466ccb737bddca03212aca25508472d90",
+    "project/assets/backgrounds/toronto_islands.png": "4955543e14ff485b99a62da45f4c075bed5f6fcce11b1901de1723002e73cbc9",
+    "project/assets/backgrounds/toronto_islands.png.gbsres": "1e8ea0f501082228af91464883e1be40291c80a1c7b664af8f1b8e5a250118fe",
+    "project/assets/backgrounds/toronto_north.png": "56910e88a2379181bf00c0b0e788323554bd794c3a899d6ce3fcac439b89dba4",
+    "project/assets/backgrounds/toronto_north.png.gbsres": "762acbf1fd3da9722f9d7b9f99d4e5a9d7c867bab76853f222312e5d15b81bf9",
+    "project/assets/backgrounds/toronto_port_lands.png": "a46cdd43ea23db5ea147948a6d7d9a1e2e59a8223d84d1cceb4dee41a46bbbf6",
+    "project/assets/backgrounds/toronto_port_lands.png.gbsres": "448c3683fb64ec3a9ae449a9ae95467dde724598f639036a2f99e8ed4d6aa92f",
+    "project/assets/backgrounds/toronto_west.png": "2c55ed72664a4608bb5da993583c4f9d9954205940fae7c9c18f9b51892161ac",
+    "project/assets/backgrounds/toronto_west.png.gbsres": "5249e001d54381265be9f8390e808cc7d466656d98611d2e0ed006453d6e8293",
+    "project/assets/backgrounds/workshop.png": "62b4c3e9d7a3aefad8c1eb8f91e0c24ab2e148e4526845dc2810ad00a805ef21",
+    "project/assets/backgrounds/workshop.png.gbsres": "5c65d888533bf3685c30d19b8c3b4fa2fe5ce3f6f0dd7202314bb0537155a14f",
+    "project/assets/emotes/README.md": "b8c5226927e87703fa139f487cc927a96a0ca2fb9b8f4073bde5556195490c9a",
+    "project/assets/fonts/README.md": "dc7b0a156b4a08cd811a0d01530c28bfc2dd55b08d43b8617c98131f20084f3f",
+    "project/assets/fonts/bench-mono.json": "fe07b62939eaf26f4b9cb299d1e774e7aa2d24a5404afdc2c74e5b2194ce0415",
+    "project/assets/fonts/bench-mono.png": "5ef84106e16f70e7843ccaea5ee6b1a6b96e6c833067fa11c8c596431e0c8c7d",
+    "project/assets/fonts/bench-mono.png.gbsres": "acb6a3b673ada695d54fc0f86e19c5eaccf8be87699e7a3cfdd327e7fa2f3921",
+    "project/assets/music/README.md": "4ea64405fb856e03947f1be834db73b1e3785427298e35ef3f56cc170a31b227",
+    "project/assets/sounds/README.md": "40589906fa6ff73337406a3c12c48271f88c1fb25eb0f6234d115c5c2c888e5a",
+    "project/assets/sprites/README.md": "6fffcb09ce378f3bd1572b15104fc9f283a2a8e66c4470ccfec143e433284d0d",
+    "project/assets/sprites/ambient_aircraft.png": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+    "project/assets/sprites/ambient_aircraft.png.gbsres": "a812e93c1838133a43f71e330080294a8f50c2cbc141228b526e04ac2853b1df",
+    "project/assets/sprites/ambient_boat.png": "2e689bb7315d3135505b96a1e60374ad1ce123ecddf695a3369e6a5332047b50",
+    "project/assets/sprites/ambient_boat.png.gbsres": "6ca8cf2891a62abfe6f2d7f50bd90fbb96f01f2aa39f96a9acc1dfc077d2aeeb",
+    "project/assets/sprites/city_civilians.png": "64fe215f55bb8ae3ff10fccdd0ade66efd96b97e251499162853b2efa72421dd",
+    "project/assets/sprites/city_civilians.png.gbsres": "5eb94e145bd7c3991a3a8a8f7be580f3a382c3537e89a8f02d8c31c229e8ac06",
+    "project/assets/sprites/city_fleet.png": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
+    "project/assets/sprites/city_fleet.png.gbsres": "653872c4ae428af085aa7a976110bf792bf150b8b3277df7f3bfd48e7679ed11",
+    "project/assets/sprites/dispatch_topdown.png": "102546a1540f16f4732ca1728b20ab98242bbf611390d03c496661180a2340fb",
+    "project/assets/sprites/dispatch_topdown.png.gbsres": "7bc4f5c91376914de7da50f83062af25a934b426a83ce9451eca28abf350a41f",
+    "project/assets/sprites/queen_streetcar.png": "66a1469bdeea84935e7ec4e000f18e0060846cd734bac7a8ef9ef80a9651c055",
+    "project/assets/sprites/queen_streetcar.png.gbsres": "1b453bbc74610339c6410210bd6f383c84d78523346a6faac84468f9bbf0c9c3",
+    "project/assets/sprites/workshop_player.png": "51c5a0374686531ae8e35ebeb4dc63f5c0b0f666e6d6abcdb5b8e52776e8766b",
+    "project/assets/sprites/workshop_player.png.gbsres": "786ab27cda45b6242070c23f116f359fcb5232931e6f50725768355a5ac418ca",
+    "project/assets/tilesets/README.md": "9d9596e07276574b38e6e80d7797a5403005ed2ec26e9e845682a8a701916576",
+    "project/assets/ui/README.md": "aaca4e0da660c9fc7e66ac55e3c0adf56343f8be74bbd3167f3902291a57c11c",
+    "project/assets/ui/cursor.png": "a1cd08f8a5dc8a0a19c74f9fc36ef3d1e77c25be0746c9de0dc4c7dc5d044b5f",
+    "project/assets/ui/frame.png": "cdebcc3e1a3a6827db29d6cd74a19d785980a5bef18a87589f8eb878457e311c",
+    "project/original-art/README.md": "564f40efcac52e7bf880909c22f089ab0cb9fa7f7c2f00202a1bc35ed4b04733",
+    "project/original-art/ambient_aircraft.metadata.json": "a624b9f49d9b5efa25e8928692edea79d0a7ffa173effbab21e46594c6de4822",
+    "project/original-art/ambient_aircraft.png": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+    "project/original-art/ambient_aircraft_art.json": "34820e0a60f7d6a2f8935f52a0f7bcceaf13c73dae1dad15903e2e82097bbd29",
+    "project/original-art/ambient_aircraft_preview.png": "c7a91eaa6b077564ddea0fade0bd3b76add21e3bf2fb41f1a3e7550c0f84102b",
+    "project/original-art/ambient_boat.metadata.json": "fca0f62947b8d37881c0de3e26271e27f1a33ebac9e7ec7237130c130726a0db",
+    "project/original-art/ambient_boat.png": "2e689bb7315d3135505b96a1e60374ad1ce123ecddf695a3369e6a5332047b50",
+    "project/original-art/ambient_boat_art.json": "8b00968df71254fc40a16cf8d83a5e9799e64a38f575d32e155cd7f1a6329a41",
+    "project/original-art/city_attributes.json": "127045a611745d44d520a9d5463056bc6cc00e8c66a238830c0869b90bdb5922",
+    "project/original-art/city_civilians.metadata.json": "214e467a44f389e6f147842dcf1cb864da236d2184c198b7955333714f172ec3",
+    "project/original-art/city_civilians.png": "64fe215f55bb8ae3ff10fccdd0ade66efd96b97e251499162853b2efa72421dd",
+    "project/original-art/city_civilians_art.json": "9f84b4801c637b8bd66ed43829b88c1d4da2744458c302f6bb3181204acb090f",
+    "project/original-art/city_civilians_preview.png": "d35b5da4c1cad52bbfb3c6ac69cd5534a43000e5917ec60452ef328b1c8e9929",
+    "project/original-art/city_fleet.metadata.json": "be558a6bf05767b0b173d90ff5f37f81bb257be0da5f6173a79173480e3c38e4",
+    "project/original-art/city_fleet.png": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
+    "project/original-art/city_fleet_art.json": "fc7a99396f7e9e11adbf1bc441fe12d30fed24a2c7f2d1424f0ecd2bab73a26a",
+    "project/original-art/city_fleet_preview.png": "5651e1f11be2f3ca57d54e198c5278b713107ba83eabda45151b027805ee33f6",
+    "project/original-art/dispatch_topdown.png": "102546a1540f16f4732ca1728b20ab98242bbf611390d03c496661180a2340fb",
+    "project/original-art/east_attributes.json": "8a0c67e9457b1510bbf3b4043f31729a5088c4753a8c37eea90b7a3bf4b918c4",
+    "project/original-art/high_park_attributes.json": "13945deb7dc0f91c87146ddc3fc0241e7bcf523d3cf0ef0a12469a2b590290c9",
+    "project/original-art/island_attributes.json": "eac8dccb92823dc75cad4bbe73646fd112704584f975e151cd847a7d6d9d8552",
+    "project/original-art/native-cells.json": "854e238f42839764f10bc6046af26336c66db0c241f4c869e15f209ca52abfa1",
+    "project/original-art/north_attributes.json": "f76fd6fe43c47570c72be574bcc2ffd38b0a7e7073db8c6f6f95a691787971e6",
+    "project/original-art/port_lands_attributes.json": "eb00e7e4c2b9c7790d8f872b1f50bc98486babdb88981deddc3afa0c8b46c90a",
+    "project/original-art/queen_streetcar.metadata.json": "18fca25ffe73ef90c6ae3b0f23e75ef195b09d8742c89f465c58bdcfa11492fb",
+    "project/original-art/queen_streetcar.png": "66a1469bdeea84935e7ec4e000f18e0060846cd734bac7a8ef9ef80a9651c055",
+    "project/original-art/queen_streetcar_art.json": "ade442a60a8df80fe2f45a471e9f92a9eff7ab506e0c2a76013c034b9ac2dd87",
+    "project/original-art/recipes.mjs": "94c792a276434db59f02e30c4d967e673600e2343fba75f3858f31fd18aa1ca3",
+    "project/original-art/toronto_east.png": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
+    "project/original-art/toronto_islands.png": "4955543e14ff485b99a62da45f4c075bed5f6fcce11b1901de1723002e73cbc9",
+    "project/original-art/toronto_north.png": "56910e88a2379181bf00c0b0e788323554bd794c3a899d6ce3fcac439b89dba4",
+    "project/original-art/toronto_port_lands.png": "a46cdd43ea23db5ea147948a6d7d9a1e2e59a8223d84d1cceb4dee41a46bbbf6",
+    "project/original-art/west_attributes.json": "7b293094cacd37d3008ae4e8d070eccfe48515c5daab15b558411ea819a5738c",
+    "project/project/scenes/start/scene.gbsres": "5c5745bf5c2ba784e480b95f5798028288a660f602d1466b3f7c0f7ea6572f0f",
+    "project/project/scenes/toronto_city/actors/ambient_aircraft_loader.gbsres": "87a6464bd1490963a35a9eaa0457847eccdf2a6e517254f6e7f828ca00052411",
+    "project/project/scenes/toronto_city/actors/ambient_boat_loader.gbsres": "45e467c0de5c6191b8e015f2979a4258847364989bce61e491cce7fcb01a08ac",
+    "project/project/scenes/toronto_city/actors/city_civilians_loader.gbsres": "ff02d916d419afa6f431a62c89e4ba3c4eefb3c14411d2e5270d6160aa5d9972",
+    "project/project/scenes/toronto_city/actors/city_fleet_loader.gbsres": "52ca139c40ce979dc07a0e09393fb54c6fa3383c1897d193cf57d8c2a487298a",
+    "project/project/scenes/toronto_city/actors/queen_streetcar_loader.gbsres": "2cfcc420feb277838a729cbc678dd83cd92eab6b27471c93fa7e73e928f657b2",
+    "project/project/scenes/toronto_city/scene.gbsres": "7a39e2f24318a2d3f87937336f798e2f85d59a3571b2545615bc44a4691f1224",
+    "project/project/scenes/toronto_east/actors/ambient_aircraft_loader.gbsres": "05bfac7e0db5abb9d5c46f062a8881aa44fab1efa422d0e0f2f58406aa8d6d65",
+    "project/project/scenes/toronto_east/actors/ambient_boat_loader.gbsres": "622a96a456fb2aa85c2c3ffba8a5c260a67f0ac7665f23d4799429f694f7f0c2",
+    "project/project/scenes/toronto_east/actors/city_civilians_loader.gbsres": "9c943cc32123c675104eab5d04f490a02d8a6db98d7c1a47e7ce162447b48460",
+    "project/project/scenes/toronto_east/actors/city_fleet_loader.gbsres": "e8a0d54afb15c4410a7ea1135767cfdccd44b8ba55c6b9a9174789c1ba26827a",
+    "project/project/scenes/toronto_east/actors/queen_streetcar_loader.gbsres": "1c10ce4b3cd5aec42ecea95d43d24f3303fdf1933aebd5356d7c039ea79becb7",
+    "project/project/scenes/toronto_east/scene.gbsres": "74d671f39a963d4a467394b792547e29a1b59c64705509cf9c0b3f23dec7e754",
+    "project/project/scenes/toronto_high_park/actors/ambient_aircraft_loader.gbsres": "f87fe0f5ffead202dc895f4d65647c49ecfbac040c7b0f70d8241b11e32b172e",
+    "project/project/scenes/toronto_high_park/actors/ambient_boat_loader.gbsres": "7efafc63b8bcc2d3136e51709f5af488bdcabe51b6c4b38c4f2cb9f66e1bf8fa",
+    "project/project/scenes/toronto_high_park/actors/city_civilians_loader.gbsres": "662011f786cf7bbe637c0b0e4c5effab000c5d28b709ddf7c7d70ff988cce9de",
+    "project/project/scenes/toronto_high_park/actors/city_fleet_loader.gbsres": "1229eb0f3e3206ac3da5f9f3ae2ceadaa9339002c6f63b12ec330b80f72b8960",
+    "project/project/scenes/toronto_high_park/scene.gbsres": "c4f9c1eda658c693088edc77b73c91782cce379b45276705d088b701da802e25",
+    "project/project/scenes/toronto_islands/actors/ambient_aircraft_loader.gbsres": "7ea5490c45398783d75cac37116be43f454bc0ba6c64fc66fd1c3f68013812b1",
+    "project/project/scenes/toronto_islands/actors/ambient_boat_loader.gbsres": "424864ae0c8290cc3816950eded2a3ad6259793e838cd91ef126890c7947c047",
+    "project/project/scenes/toronto_islands/actors/city_civilians_loader.gbsres": "3e6c9c4326016f2c939aaf93a3da66b78f6ccfd77d4ab5ae1a175754faf2a618",
+    "project/project/scenes/toronto_islands/actors/city_fleet_loader.gbsres": "be1e8684960e2d26ebf770162886b7bbe34471ab844bd033d17ada9601a36882",
+    "project/project/scenes/toronto_islands/scene.gbsres": "12173dd34e73eb18e224a81ec8e0ac59914e09e13adf1ead4c207891eddcfba9",
+    "project/project/scenes/toronto_north/actors/ambient_aircraft_loader.gbsres": "5a5069a98744dc13efb3f5385acc5d2e844b039379502d0baac9dfc5ee3402ea",
+    "project/project/scenes/toronto_north/actors/city_civilians_loader.gbsres": "47139dc6bb3fbaf41b4ea857da36c9d9ceddfb701d0d000b40ae454550fd7459",
+    "project/project/scenes/toronto_north/actors/city_fleet_loader.gbsres": "bca8cd801d16d96bdfd55b8d576439e709d0b3d8f23da74e76c94f9e50c7c978",
+    "project/project/scenes/toronto_north/scene.gbsres": "ec44e4435c07c210901689edd0fdd9dc9cde6ee8e72a8de69ea541b1e18c3c50",
+    "project/project/scenes/toronto_port_lands/actors/ambient_aircraft_loader.gbsres": "abb53b0385b724c3205474a7d4a36d6b9d4437a835537c8285b8203715ecba98",
+    "project/project/scenes/toronto_port_lands/actors/ambient_boat_loader.gbsres": "f29aa630c5d593734a4945e87ffc9a866963ce320349af877995cf3696d4547d",
+    "project/project/scenes/toronto_port_lands/actors/city_civilians_loader.gbsres": "4ef986aa2c96887c1c707d2444dfa5c8b12de03ce02dffc2281745bd87b512a4",
+    "project/project/scenes/toronto_port_lands/actors/city_fleet_loader.gbsres": "b714e683740d20f8e86b4f0663301e913bdda980297d0efbbd32e4fd2d879136",
+    "project/project/scenes/toronto_port_lands/scene.gbsres": "d86537d60253d415ff8066ec8d8d3df360c815caa3f0f8de698f70cf53d73cad",
+    "project/project/scenes/toronto_west/actors/ambient_aircraft_loader.gbsres": "b99ec284a0dddcd9492df2bbddd179d415046e0e3d5116877d598d0675621ce0",
+    "project/project/scenes/toronto_west/actors/ambient_boat_loader.gbsres": "bd8f213f89c5e10d0f0207761b2c6aad2348002f309414dcfa31dd2b1303cd87",
+    "project/project/scenes/toronto_west/actors/city_civilians_loader.gbsres": "f72aeedaf50344bf2b482c3d8b0b0962108ac02fb8ce0a455b9cc37961446d03",
+    "project/project/scenes/toronto_west/actors/city_fleet_loader.gbsres": "fb9adf92be7710865007e8753be6e8c0120ecf7366b74478e706dbd96e1af7c7",
+    "project/project/scenes/toronto_west/actors/queen_streetcar_loader.gbsres": "645d9ffd5e16f355297513d471d8c40c38f4ac994a4faaf6407ae350ee57e7de",
+    "project/project/scenes/toronto_west/scene.gbsres": "f1be3404affed305db1283eddf8d58258613afb7e602953d58554f9f862d2ef5",
+    "content/campaign.json": "0b66696468cb3b503170dee6805fc4a74f0ca17031fcaba30ad03a0832f41266",
+    "content/districts/world.json": "e74e67e52a7158ef4f554b39d14405fc1c9dfd9f41e5f96104789e5a06d1b713",
+    "project/plugins/toronto-driving/engine/src/td_content.c": "e08f04a5724bb67770c366ceefad3dcfbc5be81df95f550476eec8a2c351d325",
+    "project/plugins/toronto-driving/engine/src/td_save.c": "32a220dc92d2952bf20775343b8545dacec2904e7a8ae3701b2112afd8563118",
+    "project/plugins/toronto-driving/engine/include/td_game.h": "6e817f59a4a15287ec76bee5b6f26c919aba545713423b0f475f6670ffc89db6"
+  },
+  "protected_json": {
+    "content/city_art.json": {
+      "sha256": "6ae258cf6ca3489b99e147c80ae69c9e3fdc0a096c356ba28b860ccef4dd7471",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/west_art.json": {
+      "sha256": "f42a0fba717d956f92d75e60f95be8a11769c9faf930bda1551486f9d04fc715",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/high_park_art.json": {
+      "sha256": "2ac12b5520154d8417d8fe995e0ce82b9dd2995761586404306612f75fc33e28",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/east_art.json": {
+      "sha256": "87e73eac6623bbc9e1ae1f50daf5d9b8a4adfe285058f3dce7dad2949af29cf4",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/port_lands_art.json": {
+      "sha256": "e4303a2591bcca52be5eed19d1f7e9f02f602378c0baf6875eb004497a75aa30",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/island_art.json": {
+      "sha256": "b58ac8a5a7df7516a4e075c8afe1f78183a9cc6e7636200d2d66054e0553131d",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/north_art.json": {
+      "sha256": "eea44d995ea68f6e715ad54151b9c55dccac0adf0f75f51462f32ab895a06c2a",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule",
+        "source_layout_sha256"
+      ]
+    },
+    "content/districts/north_jobs.json": {
+      "sha256": "3e64b0b8d538ae68c8f257003199b7c2ca84a6b5969203a27efd203d9a7bec2d",
+      "omit_geography_keys": [
+        "source_layout_sha256",
+        "geometry_sha256"
+      ]
+    },
+    "content/districts/north_layout.json": {
+      "sha256": "7c75eb24bb7e600219515d6fca5092ea014b1f5cac929695ee86754123044ba4",
+      "omit_top_keys": [
+        "traffic_loops",
+        "traffic_lane_segments",
+        "traffic_rule"
+      ]
+    },
+    "content/districts/west_jobs.json": {
+      "sha256": "5642ad4e7935509ab87f085577c07357cf5de2d5dbdb9fc95e7c448745a1fc27",
+      "geography_sha256_sources": [
+        "content/districts/west_art.json",
+        "content/districts/high_park_art.json"
+      ],
+      "original_source_sha256": "57e9a45be00da05cedf1df78dc15ce24218957fa7a0476814f7224ccbfa1d46c"
+    },
+    "content/districts/east_jobs.json": {
+      "sha256": "050765373542e58bc6328d10775e86a4cefd99c3e6e486ca9aedcdd79295c990",
+      "geography_sha256_sources": [
+        "content/districts/east_art.json"
+      ],
+      "original_source_sha256": "602c83e1852a1adde536f681664ee314d76bbda2db71cf24dba2039bd975050a"
+    },
+    "content/districts/port_lands_jobs.json": {
+      "sha256": "d493176661d90a79af55bd85042a07c729ed62c67a1e0f4aed857433ab24fa18",
+      "geography_sha256_sources": [
+        "content/districts/port_lands_art.json"
+      ],
+      "original_source_sha256": "aee4e0c0bff036de9e6452f393d95f6a55b924d244604667babf05959ade43d0"
+    }
+  },
+  "baseline": {
+    "source_files": {
+      "content/city_art.json": "14ae524a5b3eaf1461bbce4864364730bfec3b471ad28f911bc1319284612e88",
+      "content/districts/world.json": "e74e67e52a7158ef4f554b39d14405fc1c9dfd9f41e5f96104789e5a06d1b713",
+      "project/plugins/toronto-driving/engine/src/states/TORONTO.c": "be3bd4bb91b5d3d6f608d333515ea9864cb5f68141ffe09c8f44059f228bf24a",
+      "project/plugins/toronto-driving/engine/include/td_district_world.h": "35b42f4b758fd2ddd57b66e488edb9aa98a3255582980b143bc72162acadd16f"
+    },
+    "loops": [
+      {
+        "district": 0,
+        "loops": [
+          [
+            [
+              840,
+              280
+            ],
+            [
+              840,
+              296
+            ],
+            [
+              48,
+              296
+            ],
+            [
+              48,
+              280
+            ]
+          ],
+          [
+            [
+              840,
+              392
+            ],
+            [
+              840,
+              408
+            ],
+            [
+              48,
+              408
+            ],
+            [
+              48,
+              392
+            ]
+          ],
+          [
+            [
+              840,
+              168
+            ],
+            [
+              840,
+              184
+            ],
+            [
+              48,
+              184
+            ],
+            [
+              48,
+              168
+            ]
+          ],
+          [
+            [
+              840,
+              632
+            ],
+            [
+              840,
+              648
+            ],
+            [
+              48,
+              648
+            ],
+            [
+              48,
+              632
+            ]
+          ],
+          [
+            [
+              824,
+              792
+            ],
+            [
+              808,
+              792
+            ],
+            [
+              808,
+              48
+            ],
+            [
+              824,
+              48
+            ]
+          ],
+          [
+            [
+              640,
+              72
+            ],
+            [
+              216,
+              72
+            ],
+            [
+              216,
+              168
+            ],
+            [
+              640,
+              168
+            ],
+            [
+              808,
+              168
+            ],
+            [
+              808,
+              72
+            ]
+          ]
+        ]
+      },
+      {
+        "district": 1,
+        "loops": [
+          [
+            [
+              800,
+              64
+            ],
+            [
+              912,
+              64
+            ],
+            [
+              912,
+              288
+            ],
+            [
+              800,
+              288
+            ]
+          ],
+          [
+            [
+              800,
+              288
+            ],
+            [
+              912,
+              288
+            ],
+            [
+              912,
+              400
+            ],
+            [
+              800,
+              400
+            ]
+          ],
+          [
+            [
+              904,
+              400
+            ],
+            [
+              920,
+              400
+            ],
+            [
+              920,
+              488
+            ],
+            [
+              904,
+              488
+            ]
+          ],
+          [
+            [
+              544,
+              320
+            ],
+            [
+              640,
+              320
+            ],
+            [
+              640,
+              352
+            ],
+            [
+              800,
+              352
+            ],
+            [
+              800,
+              576
+            ],
+            [
+              704,
+              576
+            ],
+            [
+              704,
+              464
+            ],
+            [
+              544,
+              464
+            ]
+          ],
+          [
+            [
+              416,
+              240
+            ],
+            [
+              480,
+              240
+            ],
+            [
+              480,
+              320
+            ],
+            [
+              416,
+              320
+            ]
+          ],
+          [
+            [
+              640,
+              608
+            ],
+            [
+              512,
+              608
+            ],
+            [
+              512,
+              464
+            ],
+            [
+              416,
+              464
+            ],
+            [
+              416,
+              320
+            ],
+            [
+              544,
+              320
+            ],
+            [
+              544,
+              464
+            ],
+            [
+              704,
+              464
+            ],
+            [
+              704,
+              576
+            ],
+            [
+              640,
+              576
+            ]
+          ]
+        ]
+      },
+      {
+        "district": 2,
+        "loops": [
+          [
+            [
+              848,
+              96
+            ],
+            [
+              960,
+              96
+            ],
+            [
+              960,
+              192
+            ],
+            [
+              944,
+              192
+            ],
+            [
+              944,
+              176
+            ],
+            [
+              848,
+              176
+            ]
+          ],
+          [
+            [
+              432,
+              112
+            ],
+            [
+              848,
+              112
+            ],
+            [
+              848,
+              176
+            ],
+            [
+              944,
+              176
+            ],
+            [
+              944,
+              192
+            ],
+            [
+              432,
+              192
+            ]
+          ],
+          [
+            [
+              432,
+              224
+            ],
+            [
+              176,
+              224
+            ],
+            [
+              176,
+              352
+            ],
+            [
+              432,
+              352
+            ]
+          ],
+          [
+            [
+              432,
+              304
+            ],
+            [
+              432,
+              496
+            ],
+            [
+              576,
+              496
+            ],
+            [
+              576,
+              688
+            ],
+            [
+              384,
+              688
+            ],
+            [
+              384,
+              736
+            ],
+            [
+              384,
+              512
+            ],
+            [
+              256,
+              512
+            ],
+            [
+              256,
+              352
+            ],
+            [
+              432,
+              352
+            ]
+          ],
+          [
+            [
+              960,
+              96
+            ],
+            [
+              848,
+              96
+            ],
+            [
+              848,
+              176
+            ],
+            [
+              944,
+              176
+            ],
+            [
+              944,
+              192
+            ],
+            [
+              960,
+              192
+            ]
+          ],
+          [
+            [
+              432,
+              352
+            ],
+            [
+              176,
+              352
+            ],
+            [
+              176,
+              224
+            ],
+            [
+              432,
+              224
+            ]
+          ]
+        ]
+      },
+      {
+        "district": 3,
+        "loops": [
+          [
+            [
+              224,
+              64
+            ],
+            [
+              384,
+              64
+            ],
+            [
+              384,
+              208
+            ],
+            [
+              224,
+              208
+            ]
+          ],
+          [
+            [
+              384,
+              64
+            ],
+            [
+              544,
+              64
+            ],
+            [
+              544,
+              208
+            ],
+            [
+              384,
+              208
+            ]
+          ],
+          [
+            [
+              224,
+              288
+            ],
+            [
+              384,
+              288
+            ],
+            [
+              384,
+              400
+            ],
+            [
+              224,
+              400
+            ]
+          ],
+          [
+            [
+              384,
+              288
+            ],
+            [
+              544,
+              288
+            ],
+            [
+              544,
+              400
+            ],
+            [
+              384,
+              400
+            ]
+          ],
+          [
+            [
+              696,
+              368
+            ],
+            [
+              712,
+              368
+            ],
+            [
+              712,
+              464
+            ],
+            [
+              696,
+              464
+            ]
+          ],
+          [
+            [
+              376,
+              560
+            ],
+            [
+              392,
+              560
+            ],
+            [
+              392,
+              688
+            ],
+            [
+              376,
+              688
+            ]
+          ]
+        ]
+      },
+      {
+        "district": 4,
+        "loops": [
+          [
+            [
+              184,
+              248
+            ],
+            [
+              200,
+              248
+            ],
+            [
+              200,
+              320
+            ],
+            [
+              184,
+              320
+            ]
+          ],
+          [
+            [
+              376,
+              280
+            ],
+            [
+              408,
+              280
+            ],
+            [
+              408,
+              296
+            ],
+            [
+              376,
+              296
+            ]
+          ],
+          [
+            [
+              536,
+              160
+            ],
+            [
+              552,
+              160
+            ],
+            [
+              552,
+              248
+            ],
+            [
+              536,
+              248
+            ]
+          ],
+          [
+            [
+              904,
+              272
+            ],
+            [
+              920,
+              272
+            ],
+            [
+              920,
+              408
+            ],
+            [
+              904,
+              408
+            ]
+          ],
+          [
+            [
+              280,
+              816
+            ],
+            [
+              440,
+              816
+            ],
+            [
+              440,
+              832
+            ],
+            [
+              280,
+              832
+            ]
+          ],
+          [
+            [
+              752,
+              216
+            ],
+            [
+              832,
+              216
+            ],
+            [
+              832,
+              232
+            ],
+            [
+              752,
+              232
+            ]
+          ]
+        ]
+      },
+      {
+        "district": 5,
+        "loops": []
+      },
+      {
+        "district": 6,
+        "loops": [
+          [
+            [
+              200,
+              568
+            ],
+            [
+              344,
+              568
+            ],
+            [
+              344,
+              776
+            ],
+            [
+              200,
+              776
+            ]
+          ],
+          [
+            [
+              272,
+              760
+            ],
+            [
+              344,
+              760
+            ],
+            [
+              344,
+              856
+            ],
+            [
+              272,
+              856
+            ]
+          ],
+          [
+            [
+              328,
+              568
+            ],
+            [
+              416,
+              568
+            ],
+            [
+              416,
+              776
+            ],
+            [
+              488,
+              776
+            ],
+            [
+              488,
+              856
+            ],
+            [
+              328,
+              856
+            ]
+          ],
+          [
+            [
+              472,
+              152
+            ],
+            [
+              648,
+              152
+            ],
+            [
+              648,
+              792
+            ],
+            [
+              472,
+              792
+            ]
+          ],
+          [
+            [
+              200,
+              152
+            ],
+            [
+              488,
+              152
+            ],
+            [
+              488,
+              792
+            ],
+            [
+              400,
+              792
+            ],
+            [
+              400,
+              584
+            ],
+            [
+              200,
+              584
+            ]
+          ],
+          [
+            [
+              632,
+              328
+            ],
+            [
+              752,
+              328
+            ],
+            [
+              752,
+              440
+            ],
+            [
+              632,
+              440
+            ]
+          ]
+        ]
+      }
+    ]
+  }
+}

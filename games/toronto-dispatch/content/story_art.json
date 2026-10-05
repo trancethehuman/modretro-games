@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "source": "create_story.py",
+  "original": true,
+  "composition": "Original near courier back/shoulder, distant human speaker; dialogue only.",
+  "dimensions": [
+    160,
+    80
+  ],
+  "palette": "default-ui",
+  "palette_slot": 7,
+  "tile_bank": 1,
+  "first_tile": 16,
+  "tile_count": 130,
+  "last_tile": 145,
+  "font_first": 192,
+  "new_oam_objects": 0,
+  "story_scenes": 8,
+  "story_pages": 41,
+  "persistent_state_bytes": 0,
+  "save_bits": [
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111
+  ],
+  "portraits": [
+    {
+      "name": "june",
+      "filename": "june.png",
+      "decoded_pixels_sha256": "acc4203ea5d39e45363b0a90abe347161ebb997bcb718b920efee41dc69ca0bb"
+    },
+    {
+      "name": "moss",
+      "filename": "moss.png",
+      "decoded_pixels_sha256": "cffd7ae620da60b4ccc083899746260a3f4e76d26d8805012e7dd34cf8476703"
+    },
+    {
+      "name": "vale",
+      "filename": "vale.png",
+      "decoded_pixels_sha256": "5645f3ac86640b551165a81b81b279fe280ec0858bc561a8d72fbddf828403df"
+    }
+  ]
+}

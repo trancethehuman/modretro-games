@@ -22,12 +22,12 @@
     "time_limit_seconds",
     "reward"
   ],
-  "world_sha256": "626de8b9a745e87bbedfd6722488f51d82c62777ef8ff44de130fec1ea93866a",
+  "world_sha256": "e74e67e52a7158ef4f554b39d14405fc1c9dfd9f41e5f96104789e5a06d1b713",
   "collision_resources": [
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92"
+      "collision_sha256": "205f344c966e09bce0d8cd0f52dea33f6bc0b49c942b2cc257c3cf5104311645"
     },
     {
       "district": 1,
@@ -42,18 +42,33 @@
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "collision_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71"
+      "collision_sha256": "c70340500318d89e5301a3cc94d51e96f534b0fcd6f33ab1ffb73c012e7e1764"
+    },
+    {
+      "district": 4,
+      "scene": "project/project/scenes/toronto_port_lands/scene.gbsres",
+      "collision_sha256": "5d20e96673670728837a481462b0f7e30d76e354579b1ea0427bc73545f73d1d"
+    },
+    {
+      "district": 5,
+      "scene": "project/project/scenes/toronto_islands/scene.gbsres",
+      "collision_sha256": "c2ba2ec0d1a6b0c0c8c8b8fe4015cb04917881b32f7ad4144f84cc4df66711cc"
+    },
+    {
+      "district": 6,
+      "scene": "project/project/scenes/toronto_north/scene.gbsres",
+      "collision_sha256": "5d8ea6a7309cdf6587a74961efd79988ef56f818f0d6e50ca561a90994308a51"
     }
   ],
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "fd0e39a958d7b2af256bd0f147cd6e77eeeac40f2aa0e3f8a359e0d4fb8c7445",
+      "sha256": "3b1dc91bd10120c0b217f789014ebc3b02687315e9ccc76b06fc7c6da95c2196",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {
       "path": "content/districts/high_park_art.json",
-      "sha256": "beada3b753445d12ea45d6e73c59f5f66cf6f5ca6f3d3cf017472cb8ef0e993f",
+      "sha256": "e03652979943b4d6e7a6cd23e83339f0c4bd2e393da4c0476fd5ab5d36f8b895",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     }
   ],
@@ -635,7 +650,7 @@
         {
           "stop_id": 18,
           "district": 0,
-          "objective": "Ossington relay handoff"
+          "objective": "Bloorcourt relay handoff"
         },
         {
           "stop_id": 28,

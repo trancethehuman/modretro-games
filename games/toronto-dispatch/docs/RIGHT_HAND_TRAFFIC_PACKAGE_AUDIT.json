@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "outcome": "passed-independent-right-hand-traffic-package-audit",
+  "checks": 1518,
+  "checksByGroup": {
+    "source": 209,
+    "package": 43,
+    "buildIdentity": 4,
+    "documents": 12,
+    "nativeIdentity": 11,
+    "header": 3,
+    "compiled": 99,
+    "licenses": 15,
+    "links": 43,
+    "toolchain": 8,
+    "limits": 7,
+    "privacy": 6,
+    "preservation": 1
+  },
+  "readOnlyGitAndGuideChecks": {
+    "Git": 521,
+    "source": 412,
+    "links": 62,
+    "documents": 62
+  },
+  "findings": [],
+  "sourceCommit": "9b1017d762ac4289b2b66c730ad4c69e07c6b444",
+  "projectTree": "602de456a48430248c2fbb268760cb172fb3c2b5",
+  "committedProjectInputCount": 206,
+  "committedInputsEqualFrozenBuild": true,
+  "package": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.zip",
+    "bytes": 146040,
+    "sha256": "615a336eda750d7894bc8c68af5b864c68b18abc2a5c45c3e68f1bb67c9146bc",
+    "members": [
+      "BUILDINFO.json",
+      "LICENSE",
+      "LOADING.md",
+      "ROM_NOTICES.txt",
+      "SHA256SUMS",
+      "toronto-dispatch-right-hand-traffic-filter.gbc"
+    ],
+    "memberSizes": {
+      "BUILDINFO.json": 1402,
+      "LICENSE": 1084,
+      "LOADING.md": 21112,
+      "ROM_NOTICES.txt": 6889,
+      "SHA256SUMS": 113,
+      "toronto-dispatch-right-hand-traffic-filter.gbc": 1048576
+    },
+    "crcVerified": true
+  },
+  "rom": {
+    "filename": "toronto-dispatch-right-hand-traffic-filter.gbc",
+    "bytes": 1048576,
+    "sha256": "e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6"
+  },
+  "noiSha256": "449e832e380619a252ca72891278a19aa8506a970ae81d769b9f43e4f5d5ce8d",
+  "sourceFingerprint": "c4fa1cedbe63204b43b8c467fb777468476568f5f61c8f7b6c921e76068d90c0",
+  "sourcePinsSha256": "d402b6c603eeabd1116f5892875856e9ff61558821613fcfa237f386dde34d5b",
+  "officialBuildReceiptSha256": "d5d168c73b3ea04067191d8ee05cb4546225da95de4b1cade94106ef819d9bf4",
+  "publicBuildAudit": {
+    "path": "games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json",
+    "bytes": 35917,
+    "sha256": "ba1d2ab81a7a394a365bfe29ac8fee00b969c4a8eddf5446c3fdf91b53ee6763"
+  },
+  "nativePublicManifest": {
+    "path": "games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json",
+    "bytes": 6500329,
+    "sha256": "f86432db7fb9f1b4cabdf3cda16eba3b25e6557ad5948365a098837bd61e82a8"
+  },
+  "nativeScope": {
+    "recordingOutcome": "passed",
+    "frames": 16172,
+    "events": 1218,
+    "uniqueJobs": [
+      0,
+      1,
+      2
+    ],
+    "finalDone": 3,
+    "finalCash": 101,
+    "capture": "underfunded H3, 95 to 0; accepted job 2 stage 0 retained",
+    "paidServices": "Core/St Clair train, fare 3 each direction",
+    "imageDelivery": "15 available and 392 omitted step receipts, plus one available North observation; 28 unique delivered blocks",
+    "initialReviewOutcome": "needs-review"
+  },
+  "header": {
+    "CGBOnly": true,
+    "mapper": "MBC5+RUMBLE+RAM+BATTERY",
+    "ROMBytes": 1048576,
+    "SRAMBytes": 32768,
+    "headerChecksum": 232,
+    "globalChecksum": 59840
+  },
+  "resourceLimits": {
+    "mainBank": 25,
+    "mainFreeBytes": 10,
+    "policeHelperBank": 1,
+    "helperFreeBytes": 1,
+    "staticReserveBytes": 1096,
+    "saveVersion": 10,
+    "savePayloadBytes": 58,
+    "persistentBytesAdded": 0,
+    "deepestStackMeasured": false
+  },
+  "compiledPoliceTableCount": 6,
+  "compiledManualByteSpanCount": 27,
+  "loadingGuide": {
+    "committedBytes": 18590,
+    "committedSha256": "3d532f305b85d0517c79eac83e7274976b447daaab90264f01a14ed1462f8626",
+    "bundledBytes": 21112,
+    "bundledSha256": "7f11b6c396870f8cfb430aa3494430b5aa053f5962bf1d65549faccc744b8592",
+    "relativeLinksConverted": [
+      "games/toronto-dispatch/docs/BUILD.md",
+      "games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json",
+      "games/toronto-dispatch/TESTING.md",
+      "docs/HARDWARE.md",
+      "games/toronto-dispatch/docs/MENU_INPUT_PACKAGE_AUDIT.json",
+      "games/toronto-dispatch/TESTING.md",
+      "games/toronto-dispatch/docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_RIGHT_HAND_TRAFFIC.json",
+      "games/toronto-dispatch/docs/NATIVE_TRAFFIC_INITIAL_REVIEW.json",
+      "games/toronto-dispatch/docs/MENU_INPUT_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json",
+      "games/toronto-dispatch/docs/NORTH_PACKAGE_AUDIT.json",
+      "games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json",
+      "games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json",
+      "games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json",
+      "games/toronto-dispatch/docs/NATIVE_NORTH_SUPPLEMENT.json",
+      "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+      "games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+      "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json",
+      "games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json",
+      "games/toronto-dispatch/TESTING.md"
+    ]
+  },
+  "notices": [
+    "Original MIT authorship",
+    "Complete GB Studio, GBVM and starter MIT texts",
+    "City Toronto OGL attribution and official link",
+    "hUGEDriver public-domain credit",
+    "GBDK GPLv2 linking exception and external toolchain boundaries"
+  ],
+  "limits": [
+    "Read-only ZIP/filesystem/immutable Git object checks only; no packaging, build, emulator, browser, device or Git mutation.",
+    "All 206 committed native inputs match the official filtered build snapshot. Packaging itself does not rebuild the ROM or add gameplay evidence.",
+    "Retained native passed outcome applies only to its recorded exact-ROM cases; initial fc2ef remains needs-review and earlier ROMs remain separate.",
+    "No funded H3 capture, every transport mode, all 104 contracts, whole-city FPS, deepest stack, matched native speedup or two enjoyable human hours acceptance.",
+    "No cartridge write, cartridge boot, physical cold SRAM, physical save persistence or browser acceptance.",
+    "Exactly six root members; no SRAM, saves, ROM/debug sidecars, raw recording, private host path or activation/device state is distributed."
+  ],
+  "ignoredAuditProvenance": {
+    "path": "games/toronto-dispatch/project/build/RIGHT_HAND_TRAFFIC_PACKAGE_AUDIT.json",
+    "bytes": 6118,
+    "sha256": "4827a4f933a58fed2690b65c578524b83c90f28ddc93bfb55a348ec3759184d3",
+    "published": false
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-stable-native-acceptance",
+  "date": "2026-10-05",
+  "result": "passed-with-stated-scope",
+  "rom": {
+    "filename": "toronto-dispatch-sandbox-stable.gbc",
+    "sha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+    "sizeBytes": 1048576
+  },
+  "sourceDebug": {
+    "noiSha256": "aa8c5d17b23cfb69f1dd567f8df2f2a817133a285220825ff3aacdb39464e676",
+    "sourceFingerprint": "a9fa9f957ef8dda5c24f9c76508289af8725cdc73645e8485010c5b1423b1324",
+    "projectRevision": "6be9dfc8923fd83d3e0a05ab9bb0e0282a7763061343426019c4791f43b8499e",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627"
+  },
+  "nativeInputSnapshot": {
+    "files": 200,
+    "pinsSha256": "c3e17d9c699fc44e27a4e6eebea255315ed68ea498d254194665583cb67740e5",
+    "unchangedAfterBuildAndNativePlay": true
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "sessionId": "89b5368257224377a05001017130188e",
+    "endFrame": 30153,
+    "eventCount": 1325,
+    "eventDigest": "731daec5566f963dfca22ac0424da131d5b49a1700622dbe0c41d2667cf91526",
+    "outcome": "passed",
+    "archiveManifestSha256": "247c9704cd7fc88ced01fce627beddc9bc9582c3ac0d7f30c852b0d96fc5c3be",
+    "archivedFiles": 392,
+    "archivedBytes": 1386322
+  },
+  "history": {
+    "freshBoot": true,
+    "initialFrames": 180,
+    "ramWrites": false,
+    "checkpointsImported": false,
+    "sramImported": false,
+    "genuineInWorkerResets": 2
+  },
+  "observations": {
+    "idle": {
+      "lastFrame": 20284,
+      "worldSeconds": 335,
+      "completeTramScheduleCycleIncluded": true,
+      "shopActive": "FF",
+      "initialProbeHex": "8833020004000100e47f00000000255701270302000000ff",
+      "initializedProbeAddress": "DCA1",
+      "idleProbes": [
+        {
+          "frame": 2284,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 3484,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 4684,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 5884,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 7084,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 8284,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 9484,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 10684,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 11884,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 13084,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 14284,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 15484,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 16684,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 17884,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 19084,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        },
+        {
+          "frame": 20284,
+          "hex": "ff8833020004000100e47f00000000255701270302000000ff"
+        }
+      ],
+      "note": "The adjacent district scene script legitimately changes on scene transitions. The first13 probe bytes remain unchanged; these observations do not measure the minimum stack pointer."
+    },
+    "settings": {
+      "worldFrozenFor240Frames": true,
+      "soundLabels": [
+        "MUSIC + EFFECTS",
+        "EFFECTS ONLY",
+        "ALL SOUND OFF"
+      ],
+      "guideAndBackObserved": true,
+      "audiblePlaybackVerified": false
+    },
+    "delivery": {
+      "job": 0,
+      "frame": 21700,
+      "health": 80,
+      "baseReward": 86,
+      "conditionPay": 68,
+      "timeBonus": 21,
+      "credited": 89,
+      "cash": 89,
+      "done": 1,
+      "wanted": 2
+    },
+    "save": {
+      "missedInitialShortInputAttemptRetained": true,
+      "verifiedSaveFrame": 22842,
+      "entryTimer": 9,
+      "onfootAtSave": true,
+      "savedNotice": 12,
+      "resetFrame": 23142,
+      "restoredOnfoot": false,
+      "restoredEntryTimer": 0,
+      "restoredCash": 89,
+      "restoredDone": 1,
+      "restoredHealth": 80,
+      "restoredWanted": 2,
+      "note": "One-frame steps held each input until the native loop actually observed it. Save projects the completed car-entry position; this is emulator SRAM evidence."
+    },
+    "boat": {
+      "boardFrame": 24616,
+      "occupied": true,
+      "drivingAndBrakingObserved": true,
+      "firstExitAttemptOutsideDockRadiusRetained": true,
+      "verifiedDockFrame": 24828,
+      "occupiedAfterDock": false,
+      "mooredAfterDock": true
+    },
+    "shop": {
+      "entryFrame": 28087,
+      "scene": "scene_toronto_shop_grocery",
+      "keeperGreeting": "FRESH FOOD DAILY",
+      "returnFrame": 28367,
+      "returnedScene": "scene_toronto_city",
+      "shopActiveAfterReturn": "FF",
+      "immutableProbePrefixHex": "8833020004000100e47f000000"
+    },
+    "theft": {
+      "beginFrame": 29057,
+      "entryTimerAtBegin": 12,
+      "wantedAtBegin": 1,
+      "completeFrame": 29217,
+      "onfootAfter": false,
+      "uPixels": 64,
+      "vPixels": 280,
+      "heading": 8,
+      "note": "Occupied street vehicle entry and resulting pursuit observed; no artificial placement."
+    },
+    "police": {
+      "twoStarHelicopterVisibleDuringWalk": true,
+      "ordinaryCaptureReducedCash89To0AndClearedWanted": true,
+      "allThreeStarLevelsVerified": false
+    },
+    "collision": {
+      "frame": 29417,
+      "crashNoticeObserved": true,
+      "recoilObserved": true,
+      "successfulNpcPushNotEstablished": true
+    },
+    "map": {
+      "frozenAcross460Frames": true,
+      "panningAndCloseToParentMenuObserved": true,
+      "resumeToWorldObserved": true
+    },
+    "finalMemory": {
+      "frame": 30153,
+      "shopActive": "FF",
+      "immutableProbePrefixHex": "8833020004000100e47f000000"
+    }
+  },
+  "limitations": [
+    "Scoped native acceptance does not prove universal smoothness, deepest stack use, every city/vehicle/pursuit/collision case, all104 contracts or two enjoyable human hours.",
+    "Sound toggles and source song/cues are checked; physical listening remains pending.",
+    "The physical cartridge write, cold boot, physical saves and extended play are separate evidence.",
+    "Machine paths, private artifacts, activation details and device selection tokens are omitted."
+  ]
+}

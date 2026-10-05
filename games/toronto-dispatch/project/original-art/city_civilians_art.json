@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "licence": "MIT",
+  "notice": "Original hand-placed pixels; no logo, photograph or copied game sprite",
+  "generator": "scripts/create_city_sprites.py",
+  "native_asset_id": "e89b6d16-588b-5bfb-ae62-3fe34d537c86",
+  "native_symbol": "sprite_city_civilians",
+  "source_png": "original-art/city_civilians.png",
+  "source_metadata": "original-art/city_civilians.metadata.json",
+  "destination": "assets/sprites/city_civilians.png",
+  "png_sha256": "64fe215f55bb8ae3ff10fccdd0ade66efd96b97e251499162853b2efa72421dd",
+  "metadata_sha256": "214e467a44f389e6f147842dcf1cb864da236d2184c198b7955333714f172ec3",
+  "decoded_rgb_sha256": "20490dd3a5ee281cb67d51643992c4f9f23a21755026f004c77eaad66698241c",
+  "visible_frames": 24,
+  "hidden_frame": 24,
+  "objects_per_visible_pose": 1,
+  "palette_slots": [
+    1,
+    2
+  ],
+  "source_unique_8x16_patterns": 10,
+  "allocation_target_max_8x8_per_obj_bank": 24,
+  "frame_layout": "commuter/worker/backpacker/senior each E0,E1,W0,W1,airborne,prone; palettes1/2 reused",
+  "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"
+}

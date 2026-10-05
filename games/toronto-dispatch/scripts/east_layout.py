@@ -104,7 +104,7 @@ EAST = {
         path("Pape Avenue north fragment", [[544,64],[544,208]], note="Road terminates north of the rail corridor; compressed street endpoint is not an exact geographic projection."),
         path("Pape Avenue south fragment", [[544,288],[544,688]], note="No car link across railway to north fragment."),
         path("Jones Avenue", [[704,64],[704,496]], note="Ends at Queen; no invented extension to Eastern."),
-        path("Leslie Street", [[816,256],[816,656]], note="No invented Leslie→Danforth road through the railway."),
+        path("Leslie Street", [[816,256],[816,952]], note="Continues south through the existing Eastern junction to the Port Lands cutline. No invented Leslie→Danforth road through the railway. Junction facts and separate source provenance in docs/PORT_LANDS_PLAN.md."),
         path("Greenwood Avenue", [[944,64],[944,496]], note="Southern road endpoint at Queen."),
         path("Eastern Avenue", [[80,720],[384,720],[384,688],[704,688],[704,656],[976,656]], note="Viewport endpoints, not real street termini. No west portal or Don-mouth bridge authored."),
     ],
@@ -117,12 +117,12 @@ EAST = {
     "ports": [
         {"edge":"west","name":name,"x":24,"y":y,"target":0,"target_x":1000,"target_y":y,"foot_only":False,"registration_status":"Proposed source seam; root must open matching core edge and register reciprocal transition."}
         for name,y in [("Danforth",64),("Dundas",400),("Queen",528)]
-    ],
+    ] + [{"edge":"south","name":"Leslie south","x":816,"y":952,"target":4,"target_x":912,"target_y":24,"foot_only":False,"registration_status":"Authored reciprocal approach for the new Port Lands scene; native build and travel remain separate gates."}],
     "conditional_ports": [{"edge":"west","name":"Gerrard","x":24,"y":288,"target":0,"target_x":1000,"target_y":288,"foot_only":False,"condition":"Correct core College/Carlton label/topology east of Parliament first; closed border and no registered transition in this asset."}],
     "parks": [{"name":"Withrow Park","rect":[256,104,96,72],"source_ids":["east_withrow","east_withrow_context"]},{"name":"Greenwood Park","rect":[848,288,64,48],"source_ids":["east_greenwood"]}],
     "water": [],
     "rails": [path("Lakeshore East railway barrier", [[80,800],[160,688],[176,528],[208,400],[352,304],[400,288],[544,232],[704,176],[1008,128]], note="Original compressed curve from City major-rail features, not a trace. Roads reopen only represented real crossing corridors; Pape remains foot-only.")],
-    "closed_frontiers": [{"rect":[16,816,992,144],"name":"Unexpanded southern viewport","source_fact":False,"note":"Game map cutline, not a municipal border or real-world closure."}],
+    "closed_frontiers": [{"rect":rect,"name":"Unexpanded southern viewport","source_fact":False,"note":"Game map cutline beside the authored Leslie approach, not a municipal border or real-world closure."} for rect in ([16,816,768,144],[848,816,160,144])],
     "landmarks": [
         {"name":"Danforth Music Hall","x":104,"y":112,"width":80,"depth":48,"style":1,"kind":"music_hall","source_ids":["east_music_hall"]},
         {"name":"Opera House","x":64,"y":448,"width":80,"depth":32,"style":1,"kind":"theatre","source_ids":["east_opera_house"]},
@@ -140,21 +140,64 @@ EAST = {
         {"key":"ashbridge_queen","name":"Ashbridge Queen","x":880,"y":496,"foot_only":False,"fictional_service_point":True},
     ],
     "traffic_loops": [
-        [[224,64],[384,64],[384,208],[224,208]],
-        [[384,64],[544,64],[544,208],[384,208]],
-        [[224,288],[384,288],[384,400],[224,400]],
-        [[384,288],[544,288],[544,400],[384,400]],
-        [[544,400],[672,400],[672,368],[704,368],[704,496],[672,496],[672,528],[544,528]],
-        [[384,528],[544,528],[544,688],[384,688]],
+        [[232,72],[376,72],[376,200],[232,200]],
+        [[392,72],[536,72],[536,200],[392,200]],
+        [[232,296],[376,296],[376,392],[232,392]],
+        [[392,296],[536,296],[536,392],[392,392]],
+        [[696,368],[696,464],[712,464],[712,368]],
+        [[376,560],[376,688],[392,688],[392,560]],
     ],
+    "traffic_lane_segments": [
+        [
+            {"kind":"lane","road_sections":[{"road":"Danforth Avenue","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Bain Avenue","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Logan Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Danforth Avenue","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Pape Avenue north fragment","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Bain Avenue","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Gerrard Street East","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Dundas Street East","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Logan Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Gerrard Street East","segment":0}],"direction":"E"},
+            {"kind":"lane","road_sections":[{"road":"Pape Avenue south fragment","segment":0}],"direction":"S"},
+            {"kind":"lane","road_sections":[{"road":"Dundas Street East","segment":0}],"direction":"W"},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0}],"direction":"N"},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Jones Avenue","segment":0}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Jones Avenue","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Jones Avenue","segment":0}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Jones Avenue","segment":0}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+        [
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"direction":"S"},
+            {"kind":"turnaround","direction":"E","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+            {"kind":"lane","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"direction":"N"},
+            {"kind":"turnaround","direction":"W","road_sections":[{"road":"Carlaw Avenue","segment":0},{"road":"Eastern Avenue","segment":1}],"reason":"Bounded16px lane turnaround inside existing paved junction/endcap; not through-road travel."},
+        ],
+    ],
+    "traffic_rule": "Right-hand8px lanes; annotations describe point i to point(i+1) modulo count. Named-road joins allow at most8px endpoint extension; turnarounds permit only explicit16px opposing-lane endcaps.",
     "traffic_identity": "Six original circulation loops, not literal TTC or live traffic routes.",
 }
 
 
 def extended_points(route):
-    """Only the three unconditioned source approaches continue to the border."""
+    """Only registered, reciprocal source approaches continue to the border."""
     points = [p[:] for p in route["points"]]
     for port in EAST["ports"]:
+        border={"west":[0,port["y"]],"east":[WIDTH,port["y"]],
+                "north":[port["x"],0],"south":[port["x"],HEIGHT]}[port["edge"]]
         if points[0] == [port["x"],port["y"]]:
-            points.insert(0,[0,port["y"]])
+            points.insert(0,border)
+        elif points[-1] == [port["x"],port["y"]]:
+            points.append(border)
     return points

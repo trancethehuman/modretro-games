@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "licence": "MIT",
+  "notice": "Original hand-placed pixels; no logo, photograph or copied game sprite",
+  "generator": "scripts/create_city_sprites.py",
+  "native_asset_id": "b6ae14b5-e2ae-55b7-b2e4-64cf56d4c012",
+  "native_symbol": "sprite_city_fleet",
+  "source_png": "original-art/city_fleet.png",
+  "source_metadata": "original-art/city_fleet.metadata.json",
+  "destination": "assets/sprites/city_fleet.png",
+  "png_sha256": "1a2983306cb1a633220351e0a0565a0ccba52d632efb654ee6169e736d1812fb",
+  "metadata_sha256": "85f55f574463979e90631cb7d6309dedda525ab62acd7e38d5d28e7282dcd4d8",
+  "decoded_rgb_sha256": "43b71cc876139fb1eaf7df57eb6c484dea9921db3f8e9a432cd33d5fda39fe00",
+  "visible_frames": 20,
+  "hidden_frame": 20,
+  "objects_per_visible_pose": 2,
+  "palette_slots": [
+    3,
+    4,
+    5,
+    6
+  ],
+  "source_unique_8x16_patterns": 20,
+  "allocation_target_max_8x8_per_obj_bank": 24,
+  "frame_layout": "police/fire/ambulance/bus/taxi each E,S,W,N; taxi shares gold bus palette6",
+  "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"
+}

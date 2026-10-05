@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Selected unedited original native PNGs; publicPath maps the independently audited source bytes to tracked files.",
+  "prefix": {
+    "path": "games/toronto-dispatch/project/build/ui-polish-03e0-art-closed-prefix.json",
+    "bytes": 612836,
+    "sha256": "af9dc1f0b94a31f5e336a0924b86f20a113a2e5f304af5ad729c93c61c5bebf0",
+    "published": false
+  },
+  "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+  "sourceFingerprint": "1140f844d78d0f841a94509ad99609e8aac8fc00687b7f9e233da6b983f81744",
+  "sessionId": "4b7406dc1aff4d9f8662f71a7db08209",
+  "archiveManifestSha256": "3e1999f22ce53e7e6946ba2de26e7fd26fc8b0e595343fcb79ac3bb0a44a3879",
+  "images": [
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 2546,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/b33e9598ce2ea2ad5a5f3236baf9ececfa5e57a90da358342d82895494c71d02.png",
+      "pngSha256": "b33e9598ce2ea2ad5a5f3236baf9ececfa5e57a90da358342d82895494c71d02",
+      "rgbaSha256": "7a13ac2a3a426b234bac5b6b411b3ae544c5b4b16dfe3e0ee5c481ab9b0b460d",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Genuine Union FirstArt pickup",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-2546.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3106,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/38f5089727688e69a6ecf266a35eb38f99f67f62a2f53a99c8e7af5326aab5cc.png",
+      "pngSha256": "38f5089727688e69a6ecf266a35eb38f99f67f62a2f53a99c8e7af5326aab5cc",
+      "rgbaSha256": "bc9624a2cc06fe1064041766047900e8ed85f5d05db7d5a9c0cb0cdced3356b5",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Observed damaged cargo88 after broad driving bracket",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3106.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3378,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/83fb23ecb74226b5f76f9755ff80c291769ec56e28e19b2f53d0c8f5c94b8f80.png",
+      "pngSha256": "83fb23ecb74226b5f76f9755ff80c291769ec56e28e19b2f53d0c8f5c94b8f80",
+      "rgbaSha256": "a0f5a28988481317bb46452060bc36c8a662cbf2f221a0749e0dc288e041731d",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Wrong parking-menu intent opened MAP",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3378.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3450,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/eeff27661f4d6ddbbe920066556d8791829552ccbe8ceff7825b6902344ba9be.png",
+      "pngSha256": "eeff27661f4d6ddbbe920066556d8791829552ccbe8ceff7825b6902344ba9be",
+      "rgbaSha256": "c7afc470a46e68df0e9794e757bd78f103d81b6ef4c890c88a01d9c0bda170a5",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Actual parked walker after ordinary menu correction",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3450.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3626,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/1fe80066dffa58cb2b136742f873a00e7579df3dce7b56d2eafc12ce39c39994.png",
+      "pngSha256": "1fe80066dffa58cb2b136742f873a00e7579df3dce7b56d2eafc12ce39c39994",
+      "rgbaSha256": "914f625e5f36ac4461b1f8b32cc44b629226c8c9607645b3813b25f8b91c1628",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Active foot board CURRENT STOP2/2 before120 paused frames",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3626.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3746,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/1fe80066dffa58cb2b136742f873a00e7579df3dce7b56d2eafc12ce39c39994.png",
+      "pngSha256": "1fe80066dffa58cb2b136742f873a00e7579df3dce7b56d2eafc12ce39c39994",
+      "rgbaSha256": "914f625e5f36ac4461b1f8b32cc44b629226c8c9607645b3813b25f8b91c1628",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Same active foot board after120-frame freeze",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3746.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3778,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/1b5c1aea5bb1f0c6091011ba0f998320f04d2fdd97e7e0ae5aba58ea136852d7.png",
+      "pngSha256": "1b5c1aea5bb1f0c6091011ba0f998320f04d2fdd97e7e0ae5aba58ea136852d7",
+      "rgbaSha256": "d7cedf5aa8a09b9e9179d18c96f6449274f730f26858dffa1d1b822fd0ff8a27",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Genuine on-foot88-percent FirstArt delivery credit123",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3778.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 3882,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/a8ee7b39fa88625f733fb85e4b640d9d57663120f592eef81f5ade282be37a2d.png",
+      "pngSha256": "a8ee7b39fa88625f733fb85e4b640d9d57663120f592eef81f5ade282be37a2d",
+      "rgbaSha256": "641248fa8b556aae9b7cf4a8fa2671834c2369449dc2b52acd3293a9cf8643b4",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Originalcar entry complete before worldsecond35",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-3882.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 4182,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png",
+      "pngSha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+      "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Same-worker SRAM reset HELP with durable done2/cash261",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-4182.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 4203,
+      "branchId": "branch-0002",
+      "archiveId": "b3652c8b-5083-4933-b726-cc218cca4395",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/b3652c8b-5083-4933-b726-cc218cca4395/recording/frames/84b503420201a47b88c2de9199d9f2002af6242eca65f77de26445e5a3bfaa03.png",
+      "pngSha256": "84b503420201a47b88c2de9199d9f2002af6242eca65f77de26445e5a3bfaa03",
+      "rgbaSha256": "a3ae2741a5915f9ba041d0a0ae0e0a5bbd8aa41c55e201a991a34b7572a812cd",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "Final neutral resumed car, originalpark/cash261/done2",
+      "publicPath": "games/toronto-dispatch/docs/screenshots/ui-polish-art-frame-4203.png"
+    }
+  ]
+}

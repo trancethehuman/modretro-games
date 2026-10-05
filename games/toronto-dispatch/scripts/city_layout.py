@@ -8,10 +8,13 @@ NEW_ROWS = ROWS + [816,880,896,912,920,928,952]
 BRIDGES = [64,288,400,528,784]
 RIVER = [872,912]
 MAINLAND = [24,24,992,816]
-ISLANDS = [[336,912,600,952],[640,896,784,952],[800,880,928,928]]
+# The former miniature Island strips are captured in island_legacy_v8.json.
+# Public Islands ground now belongs to its separate ferry-only scene.
+ISLANDS = []
 ROAD_HALF, WALK_HALF = 24, 32
 WEST_PORTS = [64,288,400,528,640]
 EAST_PORTS = [64,400,528]  # Bloor/Danforth, Dundas and Queen; no King/Front bridge.
+NORTH_PORTS = [336,640]  # Spadina and Yonge; two bounded northern throats only.
 
 def interpolate(value, old, new):
     for i in range(len(old)-1):
@@ -23,6 +26,7 @@ def location(u,v):
     return interpolate(u,OLD_COLS,COLS),interpolate(v,OLD_ROWS,NEW_ROWS)
 
 def road(u,v,half=ROAD_HALF):
+    if 0<=v<24 and any(abs(u-c)<half for c in NORTH_PORTS):return True
     if 0<=u<24 and any(abs(v-r)<half for r in WEST_PORTS):return True
     if 992<u<1024 and any(abs(v-r)<half for r in EAST_PORTS):return True
     if not(24<=u<=992 and 24<=v<=808):return False

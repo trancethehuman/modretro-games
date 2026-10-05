@@ -1,9 +1,12 @@
 """Original, tile-aligned top-down pixel art. Requires Pillow; no downloaded art."""
 from pathlib import Path
-import json, math, uuid, hashlib, sys
+import json, math, uuid, hashlib, sys, io
 from PIL import Image, ImageDraw
 from city_layout import *
 from streetcar_art import paint_streetcar_stops
+from street_scenery import decorate
+from campus_art import paint as paint_campus
+from crossing_art import native_bytes as crossing_native_bytes
 ROOT=Path(__file__).resolve().parents[1]; PROJECT=ROOT/'project'
 COLORS=['#071821','#306850','#86c06c','#e0f8cf']; TRANSPARENT='#65ff00'
 def ident(name):return str(uuid.uuid5(uuid.NAMESPACE_URL,'toronto-dispatch/topdown/'+name))
@@ -26,8 +29,9 @@ def main(background_only=False):
         d.line((start,v-ROAD_HALF-4,end-1,v-ROAD_HALF-4),fill=COLORS[0]);d.line((start,v+ROAD_HALF+4,end-1,v+ROAD_HALF+4),fill=COLORS[0])
         for u in range(32,end,32):box(u,v,8,1,3)
     for u in COLS:
-        box(u-WALK_HALF,24,WALK_HALF*2,792,3);box(u-ROAD_HALF,24,ROAD_HALF*2,792,1)
-        d.line((u-ROAD_HALF-4,24,u-ROAD_HALF-4,815),fill=COLORS[0]);d.line((u+ROAD_HALF+4,24,u+ROAD_HALF+4,815),fill=COLORS[0])
+        top=0 if u in NORTH_PORTS else 24
+        box(u-WALK_HALF,top,WALK_HALF*2,816-top,3);box(u-ROAD_HALF,top,ROAD_HALF*2,816-top,1)
+        d.line((u-ROAD_HALF-4,top,u-ROAD_HALF-4,815),fill=COLORS[0]);d.line((u+ROAD_HALF+4,top,u+ROAD_HALF+4,815),fill=COLORS[0])
         for v in range(32,816,32):box(u,v,1,8,3)
     box(872,24,40,792,2)
     for v in BRIDGES:
@@ -99,13 +103,10 @@ def main(background_only=False):
     building(400,96,48,40,4,True,'Royal Ontario Museum')
     building(368,432,48,56,3,True,'Art Gallery of Ontario')
     building(744,584,32,24,1,label='Gooderham Flatiron')
-    building(480,928,32,24,3,label='Hanlans service pavilion')
-    building(664,904,32,24,0,label='Centre Island pavilion')
-    building(872,888,24,24,2,label='Wards Island cottages')
     # CN needle and circular observation deck in an off-road plaza west of Union.
     d.ellipse((376,664,407,695),fill=COLORS[1],outline=COLORS[0]);box(390,650,4,36,0);box(388,688,8,8,3);attr(376,648,32,48,4,True)
     # Parks, trees, street furniture and harbour bollards reuse a handful of tiles.
-    for u,v in [(112,112),(152,448),(248,336),(360,568),(488,224),(584,336),(744,208),(832,448),(960,336),(352,936),(656,936),(816,904),(664,680),(664,568),(360,448),(504,336),(584,208)]:
+    for u,v in [(112,112),(152,448),(248,336),(360,568),(488,224),(584,336),(744,208),(832,448),(960,336),(664,680),(664,568),(360,448),(504,336),(584,208)]:
         u=u//8*8;v=v//8*8
         box(u+6,v+16,3,8,0);d.ellipse((u,v,u+15,v+15),fill=COLORS[1],outline=COLORS[0]);box(u+4,v+4,8,8,2);attr(u,v,16,16,6,True);canopies.append([u,v,16,16])
     for u in range(32,992,32):box(u,808,4,4,0)
@@ -114,39 +115,33 @@ def main(background_only=False):
     for old_u,old_v in stops:
         u,v=location(old_u,old_v);d.rectangle((u-4,v-4,u+3,v+3),fill=COLORS[3],outline=COLORS[0]);d.line((u-2,v,u+1,v),fill=COLORS[0])
     paint_streetcar_stops(d,0,COLORS)
-    img.save(PROJECT/'assets/backgrounds/toronto_city.png')
-    content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto and Island service areas; full Old Toronto boundaries remain a release check'}
+    # Decorative background detail preserves the same authoritative terrain.
+    grid=[]
+    for v in range(4,HEIGHT,8):
+        for u in range(4,WIDTH,8):
+            blocked=any(b['x']<=u<b['x']+b['width'] and b['y']<=v<b['y']+b['depth'] for b in blocks)
+            blocked=blocked or (32<=u<=560 and 752<=v<760) or (376<=u<408 and 664<=v<696)
+            grid.append(15 if blocked or not walkable(u,v) else 0 if road(u,v) else 16)
+    roads=[{'points':[[24,v],[848 if v in (640,720) else 992,v]]} for v in ROWS]
+    roads += [{'points':[[u,24],[u,816]]} for u in COLS]
+    campaign=json.loads((ROOT/'content/campaign.json').read_text())
+    service_points=[{'x':s['u'],'y':s['v'],'name':s['name']} for s in campaign['stops']
+                    if s['district']==0 and s['transit']]
+    scenery=decorate(img,grid,attrs,blocks,canopies,'city',{'roads':roads,'stop_candidates':service_points})
+    paint_campus(img,blocks)
+    content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto mainland and harbour; public Island paths are in their separate ferry-only scene. Full Old Toronto boundaries remain a release check'}
+    content['scenery']=scenery
+    # The crossing repaint is a final native-only layer. Retain historical
+    # scenery metadata and campus proof instead of recapturing either fixture.
+    buffer=io.BytesIO();img.save(buffer,format='PNG')
+    (PROJECT/'assets/backgrounds/toronto_city.png').write_bytes(crossing_native_bytes(buffer.getvalue(),content))
     (ROOT/'content/city_art.json').write_text(json.dumps(content,indent=2)+'\n')
     (PROJECT/'original-art/city_attributes.json').write_text(json.dumps(attrs)+'\n')
     if background_only:
         print(f'Authored {WIDTH}x{HEIGHT} north-up city, {len(blocks)} varied buildings; sprites unchanged.')
         return
-    # 32 vehicle headings, 8 walking frames, 4 beacon frames, open-door car frame.
-    sheet=Image.new('RGB',(256,48),TRANSPARENT);sd=ImageDraw.Draw(sheet)
-    for frame in range(45):
-        ox=(frame%16)*16;oy=(frame//16)*16
-        veh=frame//8;heading=frame%8
-        if frame<32 or frame==44:
-            if frame==44:veh=0;heading=0
-            a=heading*math.pi/4;dx,dy=math.cos(a),math.sin(a)
-            length=(6,7,5,4)[veh];width=(3,4,2,2)[veh]
-            pts=[(ox+8+dx*f-dy*s,oy+8+dy*f+dx*s) for f,s in ((length,width),(length,-width),(-length,-width),(-length,width))]
-            sd.polygon(pts,fill=COLORS[2],outline=COLORS[0]);sd.line((ox+8+dx*2-dy*width,oy+8+dy*2+dx*width,ox+8+dx*2+dy*width,oy+8+dy*2-dx*width),fill=COLORS[3],width=2)
-            if frame==44:sd.line((ox+8,oy+11,ox+11,oy+15),fill=COLORS[2],width=2)
-        elif frame<40:
-            direction=(frame-32)//2;step=frame&1
-            sd.ellipse((ox+6,oy+2,ox+10,oy+6),fill=COLORS[3],outline=COLORS[0]);sd.rectangle((ox+6,oy+7,ox+10,oy+11),fill=COLORS[2]);sd.line((ox+6,oy+12,ox+5+step*2,oy+15),fill=COLORS[0]);sd.line((ox+10,oy+12,ox+11-step*2,oy+15),fill=COLORS[0]);sd.point((ox+(6 if direction==1 else 10),oy+5),fill=COLORS[0])
-        else:
-            sd.polygon([(ox+8,oy+1),(ox+14,oy+7),(ox+8,oy+14),(ox+2,oy+7)],fill=COLORS[3],outline=COLORS[0]);sd.rectangle((ox+7,oy+4,ox+9,oy+9),fill=COLORS[2])
-    sheet.save(PROJECT/'original-art/dispatch_topdown.png')
-    frames=[]
-    for n in range(45):
-        frames.append({'id':ident(f'frame-{n}'),'tiles':[{'id':ident(f'tile-{n}-{x}'),'x':x,'y':0,'sliceX':(n%16)*16+x,'sliceY':(n//16)*16,'flipX':False,'flipY':False,'palette':0,'paletteIndex':0,'objPalette':'OBP0','priority':False} for x in (0,8)]})
-    states=[]
-    for name,subset in [('vehicles',frames[:32]),('courier',frames[32:])]:
-        animations=[{'id':ident(name+'-animation'),'frames':subset}]+[{'id':ident(f'{name}-empty-{n}'),'frames':[{'id':ident(f'{name}-emptyframe-{n}'),'tiles':[]}]} for n in range(7)]
-        states.append({'id':ident(name+'-state'),'name':'' if name=='vehicles' else 'Courier and beacon','animationType':'fixed','flipLeft':False,'animations':animations})
-    meta={'_resourceType':'sprite','id':ident('vehicles'),'name':'Top-down vehicles and courier','symbol':'sprite_dispatch_topdown','states':states,'width':256,'height':48,'canvasOriginX':8,'canvasOriginY':8,'canvasWidth':16,'canvasHeight':16,'boundsX':2,'boundsY':2,'boundsWidth':12,'boundsHeight':12,'animSpeed':255,'numTiles':0,'filename':'dispatch_topdown.png','checksum':hashlib.sha1((PROJECT/'original-art/dispatch_topdown.png').read_bytes()).hexdigest()}
-    (PROJECT/'dispatch_topdown.metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
+    # Keep source sprites separately reproducible from city/scenery artwork.
+    from create_player_sprites import write as write_player_sprites
+    write_player_sprites()
     print(f'Authored {WIDTH}x{HEIGHT} north-up city, {len(blocks)} varied buildings, 45 vehicle/courier frames.')
 if __name__=='__main__':main(background_only='--background-only' in sys.argv)

@@ -11,6 +11,7 @@ typedef int8_t BYTE;
 typedef uint16_t UWORD;
 typedef int16_t WORD;
 typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
+extern far_ptr_t current_scene;
 #define BANKED
 #define NONBANKED
 #define TRUE 1
@@ -22,18 +23,30 @@ struct actor {
     actor_t *prev,*next;
     UBYTE flags,collision_group,anim_tick,frame,frame_start,frame_end;
     struct { UBYTE bank; const void *ptr; } script,script_update;
+    UWORD hscript_update,hscript_hit;
+    UBYTE base_tile;
+    far_ptr_t sprite;
+    struct { WORD left,right,top,bottom; } bounds;
 };
-extern actor_t actors[21];
+#define MAX_ACTORS 22
+typedef struct { UBYTE width,height; far_ptr_t collisions; } scene_t;
+extern actor_t actors[22];
 extern actor_t *actors_inactive_head;
 extern UBYTE actors_len;
 #define PLAYER actors[0]
-#define ACTOR_FLAG_PERSISTENT 1
-#define ACTOR_FLAG_HIDDEN 4
+#define ACTOR_FLAG_PERSISTENT 16
+#define ACTOR_FLAG_HIDDEN 2
+#define ACTOR_FLAG_ACTIVE 32
+#define ACTOR_FLAG_DISABLED 64
 #define CAMERA_LOCK_FLAG 1
 extern UWORD camera_x,camera_y,image_width,image_height,sys_time;
+extern WORD draw_scroll_x,draw_scroll_y;
 extern UBYTE camera_settings;
 extern BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 extern UBYTE joy,joy_pressed;
+extern UBYTE VBK_REG;
+void set_win_tiles(UBYTE x,UBYTE y,UBYTE width,UBYTE height,const UBYTE *tiles);
+void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles);
 
 enum { J_RIGHT=1,J_LEFT=2,J_UP=4,J_DOWN=8,J_A=16,J_B=32,J_SELECT=64,J_START=128 };
 #define INPUT_RIGHT (joy & J_RIGHT)
@@ -60,5 +73,11 @@ void td_host_sram_store(volatile UBYTE *address,UBYTE value);
 UBYTE tile_at(UBYTE x,UBYTE y);
 void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end);
 void activate_actor(actor_t *actor);
+void deactivate_actor(actor_t *actor);
+void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank);
+UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank);
 
+extern UBYTE tile_hit_x,tile_hit_y;
+UBYTE tile_col_test_range_x(UBYTE mask,UBYTE row,UBYTE first,UBYTE last);
+UBYTE tile_col_test_range_y(UBYTE mask,UBYTE column,UBYTE first,UBYTE last);
 #endif

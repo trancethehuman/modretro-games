@@ -1,0 +1,171 @@
+{
+  "manifest": "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+  "manifestSha256": "1a624b230d9406eebec1439c62b67516585906935e1363f2a2381f518e015a40",
+  "images": [
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 308,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/aa056b3c121a4c4015673c9da50e6488fc32cac7d0d11f023770cc5b31189b4a.png",
+      "pngSha256": "aa056b3c121a4c4015673c9da50e6488fc32cac7d0d11f023770cc5b31189b4a",
+      "rgbaSha256": "df604e271007c7dfaf55499b90550db4b67ad4a54aebfa069c280c358ef7795b",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "active current job CURRENT STOP2/2 caption",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-308.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 512,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/cea02f76d8f181efc2f259066b7ebc4d1090afbaf654bd40f1264079871788ff.png",
+      "pngSha256": "cea02f76d8f181efc2f259066b7ebc4d1090afbaf654bd40f1264079871788ff",
+      "rgbaSha256": "6eb9ab58ad1641835fe67c188c995b0fdbfc6da2fbca59ef69054d4ec35f88d1",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "another eligible offer while carrying Market",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-512.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 584,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c.png",
+      "pngSha256": "8ad063edc3cd3c67a7146646ba56afb94e5b14771e7a783c587309a55f23733c",
+      "rgbaSha256": "edd0d607fd4fb2bf2887543dcb852c7d564fff70bef84698c42ddb259080a239",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "locked offer8 NEEDS6 COMPLETED/A RESUME after Select+A",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-584.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1196,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/c73d248e7f9a58ac3bf5262d76d37fb8ca3fdb21194de5f8f86bb39f64f243c7.png",
+      "pngSha256": "c73d248e7f9a58ac3bf5262d76d37fb8ca3fdb21194de5f8f86bb39f64f243c7",
+      "rgbaSha256": "451fa67e4e0005e37d2865dbe1a70b5009b13edfb20aa8bae7ee8e512f8a25c2",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "only genuine full-condition Market result",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1196.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1292,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/dfa9cead1da6c28e2fa6893a746a62de6e86ac80c2b8a4a226cbca4a00090ec4.png",
+      "pngSha256": "dfa9cead1da6c28e2fa6893a746a62de6e86ac80c2b8a4a226cbca4a00090ec4",
+      "rgbaSha256": "23ca5f195e8d2ef8549bdda8861fc75f730fdf33d1fb9cc121153f21f6fe0019",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "free car entry timer0 before next world second with corrected CAR controls",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1292.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1396,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/db5e25fa57bc5f5d01b56ef11828f86b2520fa01948303255b1358ef3a3c8cf8.png",
+      "pngSha256": "db5e25fa57bc5f5d01b56ef11828f86b2520fa01948303255b1358ef3a3c8cf8",
+      "rgbaSha256": "272e3427f1e061ad9bc8761daeef312fed5fad0024d954323f1e7f5e622b0f1b",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "completed other-offer preview while carrying FirstArt",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1396.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1536,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/4f60ea6c885ab9556f36ae7b064444c42c3b2ecb183c23230efe152fc3e45b33.png",
+      "pngSha256": "4f60ea6c885ab9556f36ae7b064444c42c3b2ecb183c23230efe152fc3e45b33",
+      "rgbaSha256": "bf1caaa5554a9d492efc57a6981569a8a2e6efeadd403407f8c909836403c3b2",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "active map before pan",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1536.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1656,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/9ce1fcf51b2bc39e2c3f8d8830f20148062e5f1156c40c55e259f79be2f7ab86.png",
+      "pngSha256": "9ce1fcf51b2bc39e2c3f8d8830f20148062e5f1156c40c55e259f79be2f7ab86",
+      "rgbaSha256": "2c3105a9654d28ff4d775e8e9a4856104e179d7de0715bf04b8084f94cc75ae7",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "active map after120 pan",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1656.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1760,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/20e47e2a63fa6935e5ddddd825673f16d392cd6ba08d777697771a1b7a1c0061.png",
+      "pngSha256": "20e47e2a63fa6935e5ddddd825673f16d392cd6ba08d777697771a1b7a1c0061",
+      "rgbaSha256": "32cdd6ea745561116a121187939270a29e693a61132393d0e9466c970d802134",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "entry animation paused with timer6",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1760.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 1908,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/1c363911571bb1b7d0066682a72c2bf39761dcf002f161ceb5974ee9afdb4566.png",
+      "pngSha256": "1c363911571bb1b7d0066682a72c2bf39761dcf002f161ceb5974ee9afdb4566",
+      "rgbaSha256": "5b1b1ee7d890cd4de405a8728e89d87b55e561de1930a8975a53be6355745cbf",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "entry completes after ordinary pause resume",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-1908.png"
+    },
+    {
+      "romSha256": "03e09fa85351c91f56d7370a3f0e0f856cd147a3c8d5ebfd328a2786a38f25d6",
+      "frame": 2209,
+      "archiveId": "864cb591-7cfb-49be-8bb2-ed68ae5c375e",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/864cb591-7cfb-49be-8bb2-ed68ae5c375e/recording/frames/0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474.png",
+      "pngSha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+      "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "same-worker SRAM reset HELP",
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-gameplay-2209.png"
+    }
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Three unmodified native contract result frames plus actual Cherry North deck world frame, with exact byte/pixel/input provenance.",
+  "rom": {
+    "path": "project/build/toronto-dispatch-courier-clearance.gbc",
+    "sha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+    "sizeBytes": 524288
+  },
+  "source": {
+    "commit": "25b659785d94ff8eaa8eeeb402243005acfe146a",
+    "debugIdentity": {
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "aa8417d346d660ea1efb2a98cac2f706bc15037438a73e7dbfd1400f1e2129b7",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "noiSha256": "7ca4749489938523e81a847527841b2b3fcf9dd08bee8844713044c859ed0b92",
+    "unchangedFromEarlierClearanceCampaignRecords": true,
+    "portArtGeometry": {
+      "path": "content/districts/port_lands_art.json",
+      "sha256": "1cb51b841782ba474d00c523aa4840118e7c7df3ce8ec21bbea5eefe014a547e",
+      "coordinateAuthorityForAuthoredDeckNames": true
+    }
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "sessionId": "f5252cea79e0415c8746cc07e8c8a910",
+    "status": "stopped",
+    "branchId": "branch-0002",
+    "frame": 143128,
+    "totalFrames": 33226,
+    "eventCount": 8476,
+    "eventDigest": "afee6c45a2c1e37e1c4aef0673ce02abaee63c49bc41f4c390c2d0dae9dd256d",
+    "outcome": "passed",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 180
+      },
+      {
+        "branchId": "branch-0002",
+        "frame": 143128,
+        "parentBranchId": "branch-0002",
+        "sourceSessionId": "c099889306ea4ff0af265e9a9397e5ed",
+        "checkpointId": "checkpoint-001ae49f811c414d9d4ed42d3f432213"
+      }
+    ],
+    "originalPath": "project/artifacts/playtests/session-83878ea2-51e1-40f7-9114-fbc888bdb5a5",
+    "closed": true,
+    "archiveId": "f07eeba0-ef58-401e-a66d-c5a829080838",
+    "archivePath": "project/artifacts/recording-archives/f07eeba0-ef58-401e-a66d-c5a829080838/recording",
+    "manifestSha256": "c91126a99c41a7d07d3322ecd79fda5a9bb88f97373d028144c3fdbebd7bd681",
+    "inventory": {
+      "digest": "9595e83c03d4405b19b24605dc3f022616a82d0e292cb11b8cff31de88798d7f",
+      "bytes": 26386532,
+      "entries": 10780
+    },
+    "retrievedManifestMatches": true,
+    "endCheckpointSavedOnly": true,
+    "endCheckpoint": {
+      "checkpointId": "checkpoint-09dda9b7f08048728b46a914b4d143e7",
+      "frame": 143128,
+      "branchId": "branch-0002",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "stateSha256": "fb69940e1521c44f1a30d1123a530af5e2e1ecccc4a9da9155958939fd977574",
+      "automaticAdvance": 0
+    },
+    "freshBootFrames": 180,
+    "ordinaryPostImportFrames": 33046
+  },
+  "fullIgnoredPrefix": {
+    "path": "project/build/campaign-e797-twenty-two-closed-prefix.json",
+    "bytes": 27712526,
+    "sha256": "0742c0d9a340f2bc711861b2b956e2696055aabe8c57a56f37c906fdb3b5bf0b"
+  },
+  "images": [
+    {
+      "path": "docs/screenshots/campaign-twenty-two-fire-hall-result.png",
+      "frame": 118154,
+      "branchId": "branch-0002",
+      "rawStepIndex": 838,
+      "stepLabel": "fire_hall_delivered_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 118154,
+        "width": 160,
+        "height": 144,
+        "sha256": "16ae976e0d661cc297f123534819ad1dcb3aeb497593991387858c6cc10d47e7",
+        "rgbaSha256": "8d5bc53a71bccbf97ad19eb62ce7b0f3354e44960bc2f0987d6e898a77231b28",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/f07eeba0-ef58-401e-a66d-c5a829080838/recording/frames/16ae976e0d661cc297f123534819ad1dcb3aeb497593991387858c6cc10d47e7.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-83878ea2-51e1-40f7-9114-fbc888bdb5a5",
+        "sessionId": "f5252cea79e0415c8746cc07e8c8a910",
+        "branchId": "branch-0002",
+        "fromActionIndex": 13170,
+        "toActionIndex": 13172,
+        "fromFrame": 118122,
+        "toFrame": 118154,
+        "fromPrefixPin": {
+          "eventCount": 2191,
+          "eventDigest": "6e2d2a43a367865d7c692e398d30d50b084b79e279f0854d9eb8f1cd203f2035",
+          "byteLength": 4552652,
+          "sha256": "a4c130e944d11dc3dd3e0867b99a9c7c7c7d0d81b834b7073f98b19d7e631dcd"
+        },
+        "prefixPin": {
+          "eventCount": 2195,
+          "eventDigest": "fa8b8be3cf9a15334b11eb663f621dee9f7606fd422a1dcc46a15f44fc3ec2bc",
+          "byteLength": 4554157,
+          "sha256": "ca0889b38557a8623034bd27e623e151dae34deaef04a9f9d508f1029c302c2e"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 4,
+      "decodedVehicleField": 0,
+      "decodedOnFootField": 1,
+      "sceneBytes": "12ab7f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-twenty-two-lodge-result.png",
+      "frame": 136197,
+      "branchId": "branch-0002",
+      "rawStepIndex": 2506,
+      "stepLabel": "lodge_last_mile_delivered_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 136197,
+        "width": 160,
+        "height": 144,
+        "sha256": "85eb639bdc8c661ed17576654e60dbce7d4ca2d1b8f99f6be3ba73e26da83b97",
+        "rgbaSha256": "395ff9444f85bbbbdcc4affa4d4d8bda4cfea58fffc1df2754cadae5f7d40695",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/f07eeba0-ef58-401e-a66d-c5a829080838/recording/frames/85eb639bdc8c661ed17576654e60dbce7d4ca2d1b8f99f6be3ba73e26da83b97.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-83878ea2-51e1-40f7-9114-fbc888bdb5a5",
+        "sessionId": "f5252cea79e0415c8746cc07e8c8a910",
+        "branchId": "branch-0002",
+        "fromActionIndex": 15269,
+        "toActionIndex": 15271,
+        "fromFrame": 136165,
+        "toFrame": 136197,
+        "fromPrefixPin": {
+          "eventCount": 6389,
+          "eventDigest": "a7736714a817483159ae77865c8b965f8bd65f611118bd3cf11c955a7b4bbc1d",
+          "byteLength": 6281642,
+          "sha256": "53d747b172f94bf2a0f6149d9af8f131a3401453bc00eda77c10fdcdf1fe622b"
+        },
+        "prefixPin": {
+          "eventCount": 6393,
+          "eventDigest": "53a84d5d43f0feeac71784574f4f428cb2b16457375337c0be46e76c89809cf5",
+          "byteLength": 6283147,
+          "sha256": "9ea6f6e5099da895ae0948754fe1f918004c7712287d29f5f2e676676dae8b02"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 0,
+      "decodedVehicleField": 0,
+      "decodedOnFootField": 0,
+      "sceneBytes": "16a67f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-twenty-two-crane-result.png",
+      "frame": 142388,
+      "branchId": "branch-0002",
+      "rawStepIndex": 3261,
+      "stepLabel": "crane_walk_delivered_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 142388,
+        "width": 160,
+        "height": 144,
+        "sha256": "6606e89e584b498591219de61e07bbc7c42c6bd8919553b3d2ef1e31cc8d0edb",
+        "rgbaSha256": "38b7e748c7215be515d1f0e0e66587c70ef3aaa43179f0ebaf6a07d67c91eea0",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/f07eeba0-ef58-401e-a66d-c5a829080838/recording/frames/6606e89e584b498591219de61e07bbc7c42c6bd8919553b3d2ef1e31cc8d0edb.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-83878ea2-51e1-40f7-9114-fbc888bdb5a5",
+        "sessionId": "f5252cea79e0415c8746cc07e8c8a910",
+        "branchId": "branch-0002",
+        "fromActionIndex": 16283,
+        "toActionIndex": 16285,
+        "fromFrame": 142356,
+        "toFrame": 142388,
+        "fromPrefixPin": {
+          "eventCount": 8417,
+          "eventDigest": "7ff36c994edff534e2005a3f84a0323ffaaac1345c570c1ec3e658ff440c6b44",
+          "byteLength": 7104103,
+          "sha256": "e543a47ff67d56333b73e02282a168aaa8362359949a136abb32c23183c62f1b"
+        },
+        "prefixPin": {
+          "eventCount": 8421,
+          "eventDigest": "4689055fc988a02cf4c754953f482d4d1d61c5d7770097eff2e1d25733c0c084",
+          "byteLength": 7105608,
+          "sha256": "72251bb95a77f386bce348ce054c473157209f018e6fafd9395afa132e312f8f"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 4,
+      "decodedVehicleField": 0,
+      "decodedOnFootField": 1,
+      "sceneBytes": "12ab7f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-twenty-two-cherry-north-bridge.png",
+      "frame": 141595,
+      "branchId": "branch-0002",
+      "rawStepIndex": 3178,
+      "stepLabel": "crane_port_cherry_crane_parking_native5_y_drive_21",
+      "request": {
+        "buttons": [],
+        "frames": 4,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 141595,
+        "width": 160,
+        "height": 144,
+        "sha256": "d4ce81d1c7142444afa9512213736987caa9bf88578cadb61f810ec1725b0627",
+        "rgbaSha256": "15cfc4af8baf8e4672556bc5328ac4acc9d7641e117b34703ed53aebd831bea6",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/f07eeba0-ef58-401e-a66d-c5a829080838/recording/frames/d4ce81d1c7142444afa9512213736987caa9bf88578cadb61f810ec1725b0627.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-83878ea2-51e1-40f7-9114-fbc888bdb5a5",
+        "sessionId": "f5252cea79e0415c8746cc07e8c8a910",
+        "branchId": "branch-0002",
+        "fromActionIndex": 16164,
+        "toActionIndex": 16165,
+        "fromFrame": 141591,
+        "toFrame": 141595,
+        "fromPrefixPin": {
+          "eventCount": 8179,
+          "eventDigest": "12761a1587f289a0e08d26cc9b3c7fa9b94f4c678b71d6044b4b186d8f93f2b9",
+          "byteLength": 7008687,
+          "sha256": "c5fd586bd7825d977f83f39b5b3c265226564ff53ecb6e4c80bda0161cad4442"
+        },
+        "prefixPin": {
+          "eventCount": 8181,
+          "eventDigest": "3a497cbb1f905b2547b21fb5cc0888df5f7b23d45c44ac5d7934ee1808f589a0",
+          "byteLength": 7009554,
+          "sha256": "6136a70e65217e1b630a2976ca479763bd78ff84b65f0dcf288de942145b3e3e"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 4,
+      "decodedVehicleField": 0,
+      "decodedOnFootField": 0,
+      "sceneBytes": "12ab7f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    }
+  ],
+  "hardwareCapture": false,
+  "importedCompletions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    15,
+    23,
+    72,
+    74,
+    80,
+    88
+  ],
+  "newCompletions": [
+    89,
+    77,
+    90
+  ],
+  "bridgeCoordinateCorrection": {
+    "nonBridgeLeg": {
+      "originalControllerLabel": "crane_port_lakeshore_don_bridge_native5_x",
+      "start": [
+        910.3125,
+        63.5
+      ],
+      "nativeEndFrame": 140393,
+      "end": [
+        674.875,
+        63.5
+      ],
+      "authoredDeckCrossed": false
+    },
+    "horizontalLegAtY129375IsLakeShoreDonNotCherryNorth": true,
+    "subsequentVerticalLegAtX19375CrossesCherryNorth": true,
+    "sourceCoordinateClassificationIsNotSurveyGeometry": true,
+    "otherPortBridgesNotAcceptedHere": true
+  },
+  "fullCampaignOrHumanDurationClaim": false
+}

@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "purpose": "Four unmodified archived native frames: failed West result, successful mixed-mode West retry result, motorcycle High Park play and Port truck result.",
+  "rom": {
+    "path": "project/build/toronto-dispatch-courier-clearance.gbc",
+    "sha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+    "sizeBytes": 524288
+  },
+  "source": {
+    "commit": "25b659785d94ff8eaa8eeeb402243005acfe146a",
+    "debugIdentity": {
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "projectRevision": "09ba8075cd2c34147626fdcaaf3f399b0d3912a89f931a03bf1d9d7185e02e3c",
+      "sourceFingerprint": "aa8417d346d660ea1efb2a98cac2f706bc15037438a73e7dbfd1400f1e2129b7",
+      "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+      "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+    },
+    "noiSha256": "7ca4749489938523e81a847527841b2b3fcf9dd08bee8844713044c859ed0b92",
+    "unchangedFromEarlierClearanceCampaignRecords": true
+  },
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recording": {
+    "sessionId": "c099889306ea4ff0af265e9a9397e5ed",
+    "status": "stopped",
+    "branchId": "branch-0002",
+    "frame": 110082,
+    "totalFrames": 44525,
+    "eventCount": 12540,
+    "eventDigest": "7382d01b99f424cfbaeb0a119baa4619237a61415b9739a6f3d202ada8bbf601",
+    "outcome": "passed",
+    "branches": [
+      {
+        "branchId": "branch-0001",
+        "frame": 180
+      },
+      {
+        "branchId": "branch-0002",
+        "frame": 110082,
+        "parentBranchId": "branch-0002",
+        "sourceSessionId": "90129596530f46a58accd17bda901289",
+        "checkpointId": "checkpoint-dd8301d4f3ca4becb95cf50150125a0a"
+      }
+    ],
+    "originalPath": "project/artifacts/playtests/session-cab969ef-e3be-4db9-b28d-715a4e82a723",
+    "closed": true,
+    "archiveId": "16165f2f-fb70-4ac1-b9c7-82358745b70e",
+    "archivePath": "project/artifacts/recording-archives/16165f2f-fb70-4ac1-b9c7-82358745b70e/recording",
+    "manifestSha256": "cae130f4834e04ef67f80b38945a32e143ce674639d449f9e514a7ba68dd5b86",
+    "inventory": {
+      "digest": "9496070fed4912a3e9561eb3bd89351f61a8a85c2446936fae71bb7e5784fc45",
+      "bytes": 21219450,
+      "entries": 7795
+    },
+    "retrievedManifestMatches": true,
+    "endCheckpointSavedOnly": true,
+    "endCheckpoint": {
+      "checkpointId": "checkpoint-001ae49f811c414d9d4ed42d3f432213",
+      "frame": 110082,
+      "branchId": "branch-0002",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "stateSha256": "15cc8ef98c5829b6a01b71c438a87648368c82f4fb0d2dd775fd8d7af594d32e",
+      "automaticAdvance": 0
+    },
+    "freshBootFrames": 180,
+    "ordinaryPostImportFrames": 44345
+  },
+  "fullIgnoredPrefix": {
+    "path": "project/build/campaign-e797-nineteen-closed-prefix.json",
+    "bytes": 24484823,
+    "sha256": "d4b92d56123226e46c365e86f5bac99318b3e4dd05af6c73454eb8994b56c48f"
+  },
+  "images": [
+    {
+      "path": "docs/screenshots/campaign-nineteen-west-failed-result.png",
+      "frame": 80264,
+      "branchId": "branch-0002",
+      "rawStepIndex": 1594,
+      "stepLabel": "campaign_west_window_failure_neutral",
+      "request": {
+        "buttons": [],
+        "frames": 8,
+        "includeImages": true,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 80264,
+        "width": 160,
+        "height": 144,
+        "sha256": "4bfbb7f405194226c91b12935ccb3f8bc73c79f770947e643578896d6362f7e7",
+        "rgbaSha256": "0005d419f63acf0a2fdd83135451d3c456fcd9014b47d1a21befc91a90e10e27",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/16165f2f-fb70-4ac1-b9c7-82358745b70e/recording/frames/4bfbb7f405194226c91b12935ccb3f8bc73c79f770947e643578896d6362f7e7.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-cab969ef-e3be-4db9-b28d-715a4e82a723",
+        "sessionId": "c099889306ea4ff0af265e9a9397e5ed",
+        "branchId": "branch-0002",
+        "fromActionIndex": 8323,
+        "toActionIndex": 8325,
+        "fromFrame": 80256,
+        "toFrame": 80264,
+        "fromPrefixPin": {
+          "eventCount": 5029,
+          "eventDigest": "abe92fd6f1d105113d67a7b8d0a750604469cb1f4e2a420c70d85c036e141bc4",
+          "byteLength": 3745576,
+          "sha256": "358f33d71941bfa26a58fb8a87c153399d62a30cf97191b5e9aadb0d47fb7c55"
+        },
+        "prefixPin": {
+          "eventCount": 5033,
+          "eventDigest": "01525aab9a05c8da2d1bed73993595cd88878103ec058192274b72d03fd8f34b",
+          "byteLength": 3747066,
+          "sha256": "e3a766aeb2021b99c3c631333db502e8d5fd663a53a522e37ffa05009220274a"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 1,
+      "decodedVehicleField": 0,
+      "sceneBytes": "1ad17e",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-nineteen-west-retry-result.png",
+      "frame": 91048,
+      "branchId": "branch-0002",
+      "rawStepIndex": 2464,
+      "stepLabel": "campaign_west_retry_Union_completed_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 91048,
+        "width": 160,
+        "height": 144,
+        "sha256": "e7d15b829e1900c5eee8c2d42825541589789c6ed2bf894fc66030a48910773a",
+        "rgbaSha256": "d53db331025365605476d9319a7707dcbf7f0d75c243239fb7d1f9bf1049a56f",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/16165f2f-fb70-4ac1-b9c7-82358745b70e/recording/frames/e7d15b829e1900c5eee8c2d42825541589789c6ed2bf894fc66030a48910773a.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-cab969ef-e3be-4db9-b28d-715a4e82a723",
+        "sessionId": "c099889306ea4ff0af265e9a9397e5ed",
+        "branchId": "branch-0002",
+        "fromActionIndex": 9579,
+        "toActionIndex": 9581,
+        "fromFrame": 91016,
+        "toFrame": 91048,
+        "fromPrefixPin": {
+          "eventCount": 7541,
+          "eventDigest": "1c952a8f2ffabe2b0913dbfe6ec1ecc281922318b14db2506753dc6c660004f3",
+          "byteLength": 4744988,
+          "sha256": "3c19faa9aa3ea23f6eae8932340954f0eba795efc255b764858e1af70f50bb33"
+        },
+        "prefixPin": {
+          "eventCount": 7545,
+          "eventDigest": "d2aa37642b46004daba8a3260f510c8e5411e93e89d1d5698868f50f0692a127",
+          "byteLength": 4746484,
+          "sha256": "beb7e9721b67da53cbce97852802c2276b4cf03b57d9d126b07f99302678024f"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 0,
+      "decodedVehicleField": 0,
+      "sceneBytes": "16a67f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-nineteen-high-park-motorcycle.png",
+      "frame": 96598,
+      "branchId": "branch-0002",
+      "rawStepIndex": 3102,
+      "stepLabel": "campaign_west_rush_Bloor_Park_handoff_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 96598,
+        "width": 160,
+        "height": 144,
+        "sha256": "a7a3db7f8a608736c8b944607d3ec21ee268b6ef6f0ab08a5a745d8d505fcf07",
+        "rgbaSha256": "a84c1303cd9f53242c92d3df96871aef2e1e0e7cb6c41e443ea2336f0fce8350",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/16165f2f-fb70-4ac1-b9c7-82358745b70e/recording/frames/a7a3db7f8a608736c8b944607d3ec21ee268b6ef6f0ab08a5a745d8d505fcf07.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-cab969ef-e3be-4db9-b28d-715a4e82a723",
+        "sessionId": "c099889306ea4ff0af265e9a9397e5ed",
+        "branchId": "branch-0002",
+        "fromActionIndex": 10405,
+        "toActionIndex": 10407,
+        "fromFrame": 96566,
+        "toFrame": 96598,
+        "fromPrefixPin": {
+          "eventCount": 9193,
+          "eventDigest": "24f943841c9b76cd4283b7f860651dd130bbff19a8a831a21b045fcbb91735df",
+          "byteLength": 5417401,
+          "sha256": "93d238a7c88a0c66bd2f3e3635cd5919aef7246d9cc418b1b0b63272abd77242"
+        },
+        "prefixPin": {
+          "eventCount": 9197,
+          "eventDigest": "7ffcba7355e5d5cc27e6d77af560b8570c1058c8406a2381d0fa5a76419968c5",
+          "byteLength": 5418900,
+          "sha256": "695228d86a63cd9448258fe32467a62cee27d84fe4846d9ac33505d6ed260519"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 2,
+      "decodedVehicleField": 2,
+      "sceneBytes": "1a4b7e",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    },
+    {
+      "path": "docs/screenshots/campaign-nineteen-port-truck-result.png",
+      "frame": 110074,
+      "branchId": "branch-0002",
+      "rawStepIndex": 4432,
+      "stepLabel": "campaign_port_channel_stock_delivered_release",
+      "request": {
+        "buttons": [],
+        "frames": 32,
+        "includeImages": false,
+        "sampleCount": 1
+      },
+      "sample": {
+        "frame": 110074,
+        "width": 160,
+        "height": 144,
+        "sha256": "6b8a328e869faf0c3956f1bcac20e0add42aa42db46efebfb01b8aa2508928b3",
+        "rgbaSha256": "cfcd4073bb9f5fd3df9f1958bb30e21247091101cd2fc70d607c00d88d523389",
+        "sampledButtons": [],
+        "path": "project/artifacts/recording-archives/16165f2f-fb70-4ac1-b9c7-82358745b70e/recording/frames/6b8a328e869faf0c3956f1bcac20e0add42aa42db46efebfb01b8aa2508928b3.png"
+      },
+      "recordingSpan": {
+        "recordingPath": "project/artifacts/playtests/session-cab969ef-e3be-4db9-b28d-715a4e82a723",
+        "sessionId": "c099889306ea4ff0af265e9a9397e5ed",
+        "branchId": "branch-0002",
+        "fromActionIndex": 12074,
+        "toActionIndex": 12076,
+        "fromFrame": 110042,
+        "toFrame": 110074,
+        "fromPrefixPin": {
+          "eventCount": 12531,
+          "eventDigest": "518a293f17c213236fd94c6a8fc041e9bffcafd0a9892180aee8915e1ae5a124",
+          "byteLength": 6794206,
+          "sha256": "4ff67918290e885725e570d1565423b452007c0236b552237e4b55a05651a594"
+        },
+        "prefixPin": {
+          "eventCount": 12535,
+          "eventDigest": "0b848df2dfbc3d4db68c88e9292670c3783ce9982b8fc3b0363a18c4f393c58a",
+          "byteLength": 6795715,
+          "sha256": "ab04d44855f89a5f92340b1df4675138d88572d1314958c747a08c9a0a978c8f"
+        },
+        "emptyInterval": false
+      },
+      "decodedDistrictField": 4,
+      "decodedVehicleField": 1,
+      "sceneBytes": "12ab7f",
+      "width": 160,
+      "height": 144,
+      "unmodifiedArchiveBytes": true,
+      "hardwareCapture": false
+    }
+  ],
+  "hardwareCapture": false,
+  "importedCompletions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    15,
+    23
+  ],
+  "newCompletions": [
+    72,
+    74,
+    80,
+    88
+  ],
+  "failedJob72Preserved": true,
+  "fullCampaignOrHumanDurationClaim": false
+}

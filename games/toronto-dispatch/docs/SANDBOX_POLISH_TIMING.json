@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-polish-scoped-native-timing",
+  "date": "2026-10-04",
+  "result": "requires-fix-native-state-corruption",
+  "timingResult": "scoped-passed",
+  "nativeReviewDate": "2026-10-05",
+  "releaseEligibility": {
+    "selectedForCartridge": false,
+    "eligibleForPackagingOrLoading": false,
+    "reason": "Later ordinary-play and clean-idle diagnostics found reproducible state corruption on this exact ROM.",
+    "evidence": "NATIVE_SANDBOX_STACK_DIAGNOSTIC.json"
+  },
+  "scope": "One fresh source-authenticated Core Union stationary workload on the exact uninstrumented sandbox-polish ROM; scoped timing only.",
+  "identity": {
+    "romSha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
+    "romBytes": 1048576,
+    "noiSha256": "80c124290f9ad5b86af5889c4d00bcf31c2ff97fb7a4e949ded98944e23f1a81",
+    "sourceFingerprint": "0db5ffdb8e09e10645d601b81c37b325c6569cf7927c1818b5a8a8091ebc609b",
+    "debugMode": "source",
+    "sessionId": "01a6c99caadc49b3ab925e563682c80d"
+  },
+  "recording": {
+    "status": "stopped-closed-archived",
+    "stopOutcome": "passed",
+    "eventDigest": "1f3c169436b4c6076117d1b2d5c0f177a088240c9ce30b42489592eb8d890207",
+    "manifestSha256": "a8a3e5f5b57ee96bfd7c0e71354acf9e03d7d8eb5d3f3ea763b6398b79b6ed09",
+    "archiveFiles": 21,
+    "archiveBytes": 50972
+  },
+  "method": {
+    "freshBootFrames": 180,
+    "postBootInputs": [
+      {"buttons": ["a"], "frames": 32},
+      {"buttons": [], "frames": 32}
+    ],
+    "view": "Core Union, courier and car stationary at 560,720",
+    "counterSymbol": "_game_time",
+    "counterAddress": "0xC0BC",
+    "counterType": "unsigned byte",
+    "inspection": "Read-only, paused counter samples from the matching source-authenticated ROM/NOI",
+    "calculation": "Adjacent game_time deltas modulo 256 count completed updates. Nominal rate uses 60 VBlanks per second."
+  },
+  "samples": [
+    {"frame": 244, "gameTimeHex": "59"},
+    {"frame": 364, "gameTimeHex": "6e"},
+    {"frame": 484, "gameTimeHex": "86"},
+    {"frame": 604, "gameTimeHex": "99"},
+    {"frame": 724, "gameTimeHex": "b0"},
+    {"frame": 844, "gameTimeHex": "c5"},
+    {"frame": 964, "gameTimeHex": "d9"},
+    {"frame": 1084, "gameTimeHex": "ee"}
+  ],
+  "measurement": {
+    "elapsedVBlanks": 840,
+    "completedUpdatesByInterval": [21, 24, 19, 23, 21, 20, 21],
+    "completedUpdates": 149,
+    "nominal60VBlankUpdatesPerSecond": 10.642857142857142
+  },
+  "comparison": {
+    "v12": {
+      "romSha256": "18e61b7a7e9a939c544a0babf72df10fc36ab5d8daf171b7fa4dac7af04a0105",
+      "evidence": "SANDBOX_PERFORMANCE_DIAGNOSTICS.json",
+      "elapsedVBlanks": 840,
+      "completedUpdates": 135,
+      "nominal60VBlankUpdatesPerSecond": 9.642857142857142
+    },
+    "relativeCompletedUpdateGainPercent": 10.37037037037037,
+    "installedBaseline": {
+      "romSha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+      "nominal60VBlankUpdatesPerSecond": 17,
+      "featureContentMatched": false
+    },
+    "limitations": "These are distinct source revisions. The scoped gain does not isolate individual optimizations. The installed baseline has simpler feature content and is not a matching-fidelity comparison."
+  },
+  "limitations": [
+    "The closed timing recording passed only its scoped measurement. Later reproducible native state corruption makes this exact ROM ineligible for release, packaging or loading; the timing values remain historical observations.",
+    "One stationary Core workload does not establish repeated trials, whole-city/crowded/scrolling performance, physical smoothness or human feel.",
+    "Completed updates and nominal VBlank rate are not display FPS or exact host wall-clock throughput.",
+    "No hardware operation or cartridge loading is established by this record; installed 9c155 history remains separate.",
+    "Raw local artifacts, private paths, activation details and request tokens are omitted."
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "outcome": "passed-scoped-initial-North-package-source",
+  "checks": 1235,
+  "checksByGroup": {
+    "package": 24,
+    "Git": 451,
+    "source": 611,
+    "buildIdentity": 10,
+    "links": 55,
+    "documents": 54,
+    "prefix": 3,
+    "limits": 6,
+    "header": 3,
+    "license": 4,
+    "toolchain": 8,
+    "privacy": 6
+  },
+  "sourceCommit": "8290eefba2c909ef004970669b05588c471b2d10",
+  "projectTree": "c582cea86a376cf8b91dc87157c5474f23c054bb",
+  "committedProjectInputCount": 203,
+  "committedInputsEqualFrozenBuild": true,
+  "archive": "games/toronto-dispatch/project/build/toronto-dispatch-north-initial.zip",
+  "archiveSha256": "c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac",
+  "archiveSizeBytes": 138530,
+  "members": [
+    "BUILDINFO.json",
+    "LICENSE",
+    "LOADING.md",
+    "ROM_NOTICES.txt",
+    "SHA256SUMS",
+    "toronto-dispatch-north-initial.gbc"
+  ],
+  "memberSizes": {
+    "BUILDINFO.json": 1390,
+    "LICENSE": 1084,
+    "LOADING.md": 15962,
+    "ROM_NOTICES.txt": 6889,
+    "SHA256SUMS": 101,
+    "toronto-dispatch-north-initial.gbc": 1048576
+  },
+  "crcVerified": true,
+  "rom": {
+    "filename": "toronto-dispatch-north-initial.gbc",
+    "sha256": "22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95",
+    "sizeBytes": 1048576
+  },
+  "header": {
+    "CGBOnly": true,
+    "mapper": "MBC5+RUMBLE+RAM+BATTERY",
+    "ROMBytes": 1048576,
+    "SRAMBytes": 32768,
+    "headerChecksum": 232,
+    "globalChecksum": 830
+  },
+  "sourceFingerprint": "f007836c9aa73957ecaa922157e42a29b068b04f1b6652eb28f7578903fa44f0",
+  "noiSha256": "9315d5dfbf855b2a50e15bbf687e262bd04edabce81dac3f2cce51e82d58f0a7",
+  "retainedCompiledChecks": 47502,
+  "sourcePinsSha256": "49b1cc06045bffa79a64ed1bcb4b0af9a24112884c7766d6c232acc72adae393",
+  "originalBuildReceiptSha256": "8c26fb87822b814af0ed1a8c10bc5cf5003fb716659921a990e07f08d4dcb862",
+  "originalCompiledAuditSha256": "18a90b9eb3321464b1c720353b875f44d689b2d031f4d8a0cb3baefb411826de",
+  "publicCompiledAuditSha256": "f6e0a7ead6a399745304082b1960e3093e1667cb22c724a14a1690ce6c94a31b",
+  "loadingRelativeLinksConverted": [
+    "games/toronto-dispatch/docs/BUILD.md",
+    "games/toronto-dispatch/TESTING.md",
+    "docs/HARDWARE.md",
+    "games/toronto-dispatch/TESTING.md",
+    "games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json",
+    "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+    "games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+    "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json",
+    "games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json",
+    "games/toronto-dispatch/TESTING.md"
+  ],
+  "oldPrefix": {
+    "stops": 59,
+    "jobs": 96,
+    "nativeFieldsAndBriefsExact": true
+  },
+  "save": {
+    "version": 10,
+    "bytes": 58
+  },
+  "resourceLimits": {
+    "packedBytes": {
+      "33": 6441,
+      "26": 16064,
+      "28": 16223,
+      "30": 16353,
+      "27": 16363,
+      "32": 16366,
+      "29": 16369,
+      "25": 16374,
+      "12": 16375,
+      "23": 16375,
+      "18": 16376,
+      "24": 16376,
+      "16": 16378,
+      "19": 16379,
+      "20": 16379,
+      "7": 16380,
+      "1": 16381,
+      "21": 16381,
+      "31": 16381,
+      "10": 16382,
+      "17": 16382,
+      "3": 16383,
+      "11": 16384,
+      "13": 16384,
+      "14": 16384,
+      "15": 16384,
+      "2": 16384,
+      "22": 16384,
+      "4": 16384,
+      "5": 16384,
+      "6": 16384,
+      "8": 16384,
+      "9": 16384
+    },
+    "mainBank2Free": 0,
+    "UIBank1Free": 3,
+    "saveBank29Free": 15,
+    "inlineChapter": 13,
+    "ROMBytes": 1048576
+  },
+  "limits": [
+    "Package/committed-source/identity evidence only; retained compiled checks are not rerun by this script.",
+    "No packaging/build/native/browser/device action or Git mutation.",
+    "Host v9 migration does not prove native older-SRAM import or cross-ROM checkpoint transfer.",
+    "No all104 native campaign, human two-hour enjoyment, deepest-stack or cartridge/hardware acceptance."
+  ]
+}

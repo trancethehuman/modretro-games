@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "kind": "curated-sandbox-ui-save-native-diagnostic",
+  "date": "2026-10-04",
+  "result": "needs-review",
+  "scope": "Ordinary-button Settings, one Market delivery and partial-entry save/reset observations on the exact v12 diagnostic ROM. This is not final ROM acceptance or cartridge evidence.",
+  "identity": {
+    "romSha256": "18e61b7a7e9a939c544a0babf72df10fc36ab5d8daf171b7fa4dac7af04a0105",
+    "role": "v12-diagnostic-not-for-loading",
+    "sessionId": "c138fa752906404fba0794f155bb0722"
+  },
+  "recording": {
+    "status": "stopped-closed-archived",
+    "stopOutcome": "needs-review",
+    "frames": 2608,
+    "eventDigest": "53829b385b204a49340aa1be721fff6e269bc0934ca5f31c13a96d9702e62385",
+    "manifestSha256": "c9c1e18daa4d93f0fe11e092d1a563bc2e1788ff24cf62ec4cda702cf3ba608b",
+    "archiveFiles": 66,
+    "archiveBytes": 270697
+  },
+  "provenance": {
+    "ordinaryButtonsOnly": true,
+    "observationKind": "Curated semantic observations from the closed diagnostic session, not a complete input trace.",
+    "rawArtifacts": "Retained locally outside version control; private paths and request tokens omitted.",
+    "physicalOperation": false,
+    "currentSourceAcceptance": false
+  },
+  "observations": [
+    {
+      "check": "settings-navigation",
+      "observed": [
+        "Start opened the main pause menu and Settings.",
+        "Sound displayed Music + Effects, Effects Only and All Sound Off through the existing three modes.",
+        "Control Guide opened; return, Back and resume navigation were exercised."
+      ],
+      "limitation": "Menu labels and controller behavior were observed. No listening or captured-PCM proof is claimed."
+    },
+    {
+      "check": "market-delivery",
+      "observed": {
+        "job": "Market Start",
+        "completedJobs": 1,
+        "credit": 98,
+        "cash": 103,
+        "health": 90,
+        "pedestrianImpactObserved": true,
+        "redLightFineObserved": 5
+      },
+      "limitation": "This is one genuine delivery with observed pedestrian/red-light effects, not full campaign or balance acceptance."
+    },
+    {
+      "check": "save-during-partial-car-entry",
+      "beforeSave": {
+        "onfoot": 1,
+        "entryTimer": 9,
+        "mode": "pause"
+      },
+      "input": {
+        "action": "Save Game",
+        "buttons": ["a"],
+        "frames": 4
+      },
+      "afterCommand": {
+        "mode": "roam",
+        "message": 12,
+        "entryTimer": 9
+      },
+      "interpretation": "The save command did not complete the live entry animation. The subsequent reset observation checks its committed safe recovery."
+    },
+    {
+      "check": "same-worker-button-reset",
+      "input": [
+        {
+          "buttons": ["a", "b", "select", "start"],
+          "frames": 120
+        },
+        {
+          "buttons": [],
+          "frames": 180
+        }
+      ],
+      "restoredState": {
+        "u": 763.25,
+        "v": 720,
+        "onfoot": 0,
+        "entryTimer": 0,
+        "completedJobs": 1,
+        "cash": 103,
+        "health": 90,
+        "wanted": 1
+      },
+      "limitation": "This genuine reset checks committed in-worker progress and completed driver-entry recovery. It does not establish physical cartridge battery persistence."
+    },
+    {
+      "check": "exit-and-reenter-after-reset",
+      "guideInput": {
+        "buttons": ["a"],
+        "frames": 32
+      },
+      "exitAction": "Get out of car through the native pause menu",
+      "afterExit": {
+        "u": 763.25,
+        "v": 738,
+        "onfoot": 1,
+        "entryTimer": 0
+      },
+      "entryAction": "Fresh A begins the 12-tick car-entry animation; neutral input lets it finish.",
+      "afterEntry": {
+        "u": 763.25,
+        "v": 720,
+        "onfoot": 0,
+        "entryTimer": 0,
+        "completedJobs": 1,
+        "cash": 103
+      }
+    }
+  ],
+  "limitations": [
+    "The v12 ROM is a diagnostic. Its separately measured performance remained below the installed baseline, and source continued changing afterward.",
+    "These observations do not accept the final replacement ROM, select a cartridge candidate or change the last confirmed installed 9c155 ROM.",
+    "No boat, shop, vehicle-theft, helicopter-pursuit or jet native check is claimed in this session.",
+    "No audio playback/listening, captured PCM, physical boot/buttons, save battery, flicker or hardware performance proof is claimed.",
+    "One delivery and one partial-entry recovery do not prove every menu, entry path, save state, contract or enjoyable two-hour campaign."
+  ]
+}

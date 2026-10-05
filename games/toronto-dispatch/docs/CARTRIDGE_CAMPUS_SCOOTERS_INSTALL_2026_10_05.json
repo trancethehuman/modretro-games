@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "status": "vendor-reported-success",
+  "rom": {
+    "path": "project/build/toronto-dispatch-campus-scooters-r8.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d",
+    "title": "TORONTODISPATCH",
+    "colorMode": "gbc-only",
+    "mapper": "MBC5"
+  },
+  "firmwareUpdatePrerequisite": {
+    "officialUpdater": "Chromatic Firmware Updater",
+    "version": "1.7.4+2f7c620",
+    "successScreenObserved": true,
+    "resetInstructions": "Disconnect USB, remove batteries, wait a few seconds; reinsert batteries, reconnect USB and power on",
+    "userConfirmedResetCompleteBeforeUSBDiscovery": true,
+    "consoleFirmwareVersion": "not-independently-recorded",
+    "firmwareModifiedByThisWrite": false
+  },
+  "device": {
+    "product": "ModRetro Chromatic",
+    "cartridge": "User-confirmed same writable ModRetro DevDay cartridge",
+    "selection": "Matched intended Player 1 against fresh post-reset USB enumeration",
+    "previouslyDetectedCapacityBytes": 4194304,
+    "capacityFreshlyRedetected": false
+  },
+  "authorization": {
+    "userExplicitlyRequestedWriteAfterSystemUpdate": true,
+    "priorCartridgeEraseAndPossibleSaveLossConsentReused": true,
+    "originalROMBackupRequirementWaived": true,
+    "originalROMExported": false
+  },
+  "write": {
+    "operationId": "e82d9d24a8dc7f69505c032b0f4a45341a9a98f72711c065f84dff281c25b4f8",
+    "vendorCLI": "1.2.1",
+    "state": "succeeded",
+    "stage": "finished",
+    "success": true,
+    "cartridgeWrite": "vendor-reported-success",
+    "elapsedMs": 60380,
+    "pluginWriteRequestsInThisAttempt": 1,
+    "automaticPluginRetry": false,
+    "exitCode": 0,
+    "exitedAtUTC": "2026-10-05T15:50:54.883Z",
+    "processCloseCode": 0,
+    "processClosed": true,
+    "closedAtUTC": "2026-10-05T15:50:54.889Z",
+    "completedAtUTC": "2026-10-05T15:50:54.892Z"
+  },
+  "enumeration": {
+    "operationId": "b15fcf53c4edf0ac33e08cec87513e97ba4518dc27a9ab4a0db1d53825cc9ba0",
+    "devices": 1,
+    "conflicts": 0,
+    "unmatched": 0,
+    "diagnostics": 0,
+    "success": true
+  },
+  "verification": {
+    "cartridgeWrite": "vendor-reported-success",
+    "readBack": "not-reported-by-vendor",
+    "physicalColdBoot": "user-confirmed",
+    "physicalButtons": "user-confirmed",
+    "physicalGameplay": "pending",
+    "physicalSavePersistence": "pending",
+    "physicalAudio": "pending",
+    "physicalFlicker": "pending",
+    "vendorManualBootAndPlayVerified": false,
+    "userReport": {
+      "procedure": "Power off, disconnect USB, power on with the same cartridge inserted",
+      "response": "Yes \u2014 it boots and responds",
+      "scope": "R8 cartridge cold boot and physical button response; extended gameplay not reviewed"
+    }
+  },
+  "notes": [
+    "The official updater had reported success. The user completed its battery/USB reset before fresh device discovery and this write.",
+    "Exactly one supported write request installed the independently inspected/native-tested R8 ROM; the original operation reached terminal success and writer exit/close0.",
+    "The returned ROM digest identifies the input file; no separate complete cartridge read-back digest was supplied.",
+    "The user confirmed R8 cold-boots with USB disconnected and responds to physical buttons. Earlier 9c155 observations and all frozen builds/packages remain historical; extended R8 acceptance stays separate.",
+    "Raw device identities, selection tokens, activation state, saves and journals remain local and excluded from Git."
+  ]
+}

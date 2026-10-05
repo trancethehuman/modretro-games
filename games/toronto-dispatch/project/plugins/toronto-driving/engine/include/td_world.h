@@ -22,10 +22,13 @@ UBYTE td_world_route(UBYTE from,UBYTE to,UBYTE onfoot,UWORD u,UWORD v,
  * Caller validates destination collision before committing/queueing a load. */
 UBYTE td_world_crossing(UBYTE district,UBYTE onfoot,UWORD old_u,UWORD old_v,
                        UWORD u,UWORD v,td_crossing_t *crossing) BANKED;
-/* Western metadata only: district0 retains its native signal-specific loops.
+/* Authored right-hand routes for every enabled district, including Core.
  * One banked call fills all six slots. Cache samples until a leg changes. */
 UBYTE td_world_traffic_init(UBYTE district,UWORD *u,UWORD *v,UBYTE *legs,
                            td_traffic_sample_t *samples) BANKED;
 UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,
                               td_traffic_sample_t *samples) BANKED;
+/* One authored route leg, for bounded phase-offset extra civilian cars. */
+UBYTE td_world_traffic_one(UBYTE district,UBYTE route,UBYTE leg,
+                         td_traffic_sample_t *sample) BANKED;
 #endif

@@ -1,0 +1,646 @@
+{
+  "outcome": "passed-focused-source-and-compiled-ferry-clarity-audit",
+  "checks": 1116,
+  "checksByGroup": {
+    "identity": 14,
+    "header": 4,
+    "source": 420,
+    "memory": 11,
+    "capacity": 36,
+    "preservation": 69,
+    "tables": 198,
+    "bounds": 134,
+    "hints": 105,
+    "UI-ABI": 18,
+    "relocation": 85,
+    "scenes": 21,
+    "privacy": 1
+  },
+  "findings": [],
+  "rom": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "a9353a76c1e792ee09f9bbd35efe9d8957b54edfbcf7658fa76bd93240ae803b"
+  },
+  "noi": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc.debug/symbols.noi",
+    "sizeBytes": 57883,
+    "sha256": "7257787183e0d53689b53a10f043d8694703f95ce278fbc1ef9eb0b0abed4c94"
+  },
+  "globals": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-ferry-clarity.gbc.debug/globals.i",
+    "sizeBytes": 1477,
+    "sha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a"
+  },
+  "buildReceipt": {
+    "path": "games/toronto-dispatch/project/build/ferry-clarity-build.json",
+    "sizeBytes": 14019,
+    "sha256": "4f2cfa403a23ba1e9d79444c70a9380f69a7913bcc63e39861ab66e22e320210"
+  },
+  "sourcePins": {
+    "path": "games/toronto-dispatch/project/build/ferry-clarity-source-pins.json",
+    "sizeBytes": 41617,
+    "sha256": "e0df2193f223a195463012323b5836206d04945ed38284a9a1c429938ad4a86d"
+  },
+  "sourceFingerprint": "cc8e09b92f8debf7ec8769142dea7de18f30be73be1aebd8192eb8078cae5515",
+  "projectRevision": "c612cd5f51e737d7d4b998422167daee41ce38c3700004d9444d3ad0c88598e7",
+  "compilerSHA256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+  "engineABI": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f",
+  "officialBuild": {
+    "builder": "gb-studio-cli",
+    "durationMs": 56197,
+    "exitCode": 0,
+    "diagnosticCount": 0,
+    "warnings": [
+      {
+        "code": "DEP0190",
+        "category": "node-deprecation",
+        "source": "gb-studio-cli-process",
+        "message": "Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated."
+      }
+    ]
+  },
+  "predecessor": {
+    "rom": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc",
+      "sizeBytes": 1048576,
+      "sha256": "e4a9fb301fd4ba6a00c58e2f8e756924d8398d6f373f7c6864cc1cdff28ac2d6"
+    },
+    "noi": {
+      "path": "games/toronto-dispatch/project/build/toronto-dispatch-right-hand-traffic-filter.gbc.debug/symbols.noi",
+      "sizeBytes": 57883,
+      "sha256": "449e832e380619a252ca72891278a19aa8506a970ae81d769b9f43e4f5d5ce8d"
+    },
+    "sourcePins": {
+      "path": "games/toronto-dispatch/project/build/right-hand-traffic-filter-source-pins.json",
+      "sizeBytes": 41285,
+      "sha256": "d402b6c603eeabd1116f5892875856e9ff61558821613fcfa237f386dde34d5b"
+    },
+    "nativeSourceCommit": "9b1017d762ac4289b2b66c730ad4c69e07c6b444",
+    "preBuildPublicationCommit": "cbc36c18221311e252670b5e819fbbbf13b5bd10",
+    "UI": {
+      "path": "games/toronto-dispatch/project/build/ferry-clarity-predecessor-ui.c",
+      "sizeBytes": 18262,
+      "sha256": "dd6551d66d5550e0ebcc5ffc3dd58b41ff6ed393834ab8e590140c7e9e877039"
+    }
+  },
+  "sourcePreservation": {
+    "nativeInputs": 206,
+    "unchangedNativeInputs": 205,
+    "changedNativeInputs": [
+      "games/toronto-dispatch/project/plugins/toronto-driving/engine/src/td_ui.c"
+    ],
+    "UIHash": "9c54b4ad39245c09a649db27ce6a5c9e1d1d3d016f92bd25fb736027b89fee52",
+    "approvedTwoHunkDiffSHA256": "9f5cac18a2e4805d875e073c21dc43484921acbcfb76002c12565802ed95c335",
+    "newPersistentDeclarations": 0,
+    "newVarargsCalls": 0,
+    "gameplayFareSchedulePenaltyChanges": false
+  },
+  "memory": {
+    "heapEnd": "0xdab8",
+    "stackBase": "0xdf00",
+    "staticReserveBytes": 1096,
+    "requiredStaticReserveBytes": 1024,
+    "savedStateBytes": 58,
+    "saveVersion": 10,
+    "exportedWRAMNamesCompared": 226,
+    "allExportedWRAMNamesAndAddressesUnchanged": true,
+    "allocatedDATABytes": 6621,
+    "allocatedINITIALIZEDBytes": 59,
+    "UIAutomaticFrameBytes": 52,
+    "newAllocatedPersistentBytes": 0,
+    "maximumRuntimeStackMeasured": false
+  },
+  "capacity": {
+    "packedBanks": {
+      "33": 15532,
+      "32": 15897,
+      "31": 16059,
+      "29": 16109,
+      "30": 16177,
+      "27": 16238,
+      "26": 16262,
+      "28": 16351,
+      "17": 16374,
+      "24": 16374,
+      "25": 16374,
+      "15": 16378,
+      "20": 16378,
+      "6": 16380,
+      "18": 16381,
+      "16": 16382,
+      "22": 16382,
+      "1": 16383,
+      "19": 16383,
+      "2": 16383,
+      "10": 16384,
+      "11": 16384,
+      "12": 16384,
+      "13": 16384,
+      "14": 16384,
+      "21": 16384,
+      "23": 16384,
+      "3": 16384,
+      "4": 16384,
+      "5": 16384,
+      "7": 16384,
+      "8": 16384,
+      "9": 16384
+    },
+    "UIBank": 26,
+    "UIBytes": 16262,
+    "UIFreeBytes": 122,
+    "UIBytesAdded": 270,
+    "mainBank": 25,
+    "mainFreeBytes": 10,
+    "policeHelperBank": 1,
+    "policeHelperFreeBytes": 1
+  },
+  "nativeAddresses": {
+    "_td": "0xc1f6",
+    "_td_job": "0xc230",
+    "_td_offer": "0xc257",
+    "_actors": "0xc5ec",
+    "_frame_joy": "0xd9ed",
+    "_last_joy": "0xd9ee",
+    "_recent_joy": "0xd9ef",
+    "_joy_pressed": "0xd9f0",
+    "_game_time": "0xc0b9",
+    "_current_scene": "0xd5aa",
+    "_td_ui_draw": "0x1a5018",
+    "_td_ui_init": "0x1a4faa",
+    "_toronto_update": "0x197705",
+    "_td_save": "0x1e5ebc",
+    "_td_restore": "0x1e6228",
+    "_td_transit_booking_fare": "0x216a7e"
+  },
+  "compiledTableLocations": {
+    "all64Stops": {
+      "bank": 24,
+      "address": "0x4066",
+      "sizeBytes": 1664,
+      "sha256": "27bbc58cff8e814f9021fd58ff808d5ac7e40bc064836b2ad6b5f3fe5c407f63"
+    },
+    "all104Jobs": {
+      "bank": 24,
+      "address": "0x46e6",
+      "sizeBytes": 4056,
+      "sha256": "ff9773dabe9c6f5f698d70b3a012b2f9022f3721aa4b04d05e8ace447e060bc8"
+    },
+    "Line1Stops": {
+      "bank": 33,
+      "address": "0x67b1",
+      "sizeBytes": 9,
+      "sha256": "a2aab2e7f6c2607b2234f15696edbe76475235874b841b20df63116937620235"
+    },
+    "BusStops": {
+      "bank": 33,
+      "address": "0x67ba",
+      "sizeBytes": 3,
+      "sha256": "baa968f5be2e1e5ef4ad9b6863e29d1675ab9c9c244985cbdc5d81c530329468"
+    },
+    "FerryStops": {
+      "bank": 33,
+      "address": "0x67bd",
+      "sizeBytes": 4,
+      "sha256": "b9e2868d1e1bdaf5f2f6f6ed1285134b23b216b1c3dfb40c06b3b6594a7437a6"
+    },
+    "TransitLabels": {
+      "bank": 33,
+      "address": "0x67c1",
+      "sizeBytes": 76,
+      "sha256": "8b4bb628fd82cb6858e995d704585bf3fba899bd3d490d6bc796bae158d2233b"
+    }
+  },
+  "routeBudgetOracle": [
+    {
+      "job": 7,
+      "missionFerryLegs": 2,
+      "normalReturnLegs": 0,
+      "budget": 8
+    },
+    {
+      "job": 15,
+      "missionFerryLegs": 2,
+      "normalReturnLegs": 0,
+      "budget": 8
+    },
+    {
+      "job": 23,
+      "missionFerryLegs": 2,
+      "normalReturnLegs": 0,
+      "budget": 8
+    },
+    {
+      "job": 31,
+      "missionFerryLegs": 4,
+      "normalReturnLegs": 0,
+      "budget": 16
+    },
+    {
+      "job": 39,
+      "missionFerryLegs": 4,
+      "normalReturnLegs": 0,
+      "budget": 16
+    },
+    {
+      "job": 47,
+      "missionFerryLegs": 4,
+      "normalReturnLegs": 0,
+      "budget": 16
+    },
+    {
+      "job": 55,
+      "missionFerryLegs": 5,
+      "normalReturnLegs": 1,
+      "budget": 24
+    },
+    {
+      "job": 63,
+      "missionFerryLegs": 5,
+      "normalReturnLegs": 1,
+      "budget": 24
+    },
+    {
+      "job": 71,
+      "missionFerryLegs": 5,
+      "normalReturnLegs": 1,
+      "budget": 24
+    }
+  ],
+  "newNativeLiterals": [
+    {
+      "text": "FERRY BUDGET $8",
+      "columns": 15,
+      "bank": 26,
+      "address": "0x6439",
+      "sizeBytes": 16,
+      "sha256": "805c9daab1345a4a5fbfda75a0a5dca1d9d27f20765d84b410959f68837d4aad"
+    },
+    {
+      "text": "FERRY BUDGET $16",
+      "columns": 16,
+      "bank": 26,
+      "address": "0x6449",
+      "sizeBytes": 17,
+      "sha256": "4fa490dd26886b55850f02eab429000fa4f0ffde7019366d2b56a28f88902781"
+    },
+    {
+      "text": "FERRY BUDGET $24",
+      "columns": 16,
+      "bank": 26,
+      "address": "0x645a",
+      "sizeBytes": 17,
+      "sha256": "6c145e4178664ff574adba7e77b4cc9cc2fc319fd93ca5b83a846f68eb2d7ac2"
+    },
+    {
+      "text": "NO FARE: START MENU",
+      "columns": 19,
+      "bank": 26,
+      "address": "0x5fa3",
+      "sizeBytes": 20,
+      "sha256": "2c0d6becc3c7047c70a75b4145c57e11c6606a61a75a37073c5dcee8f7da7f55"
+    },
+    {
+      "text": "CANCEL JOB TO RETURN",
+      "columns": 20,
+      "bank": 26,
+      "address": "0x5ffe",
+      "sizeBytes": 21,
+      "sha256": "75409e9541fa9a151b26bd95e384c3369b4d91dfa4b7fdf755c78f00235d7afe"
+    }
+  ],
+  "manualNativeByteProofs": {
+    "unchanged_draw_automatic_frame": {
+      "bank": 26,
+      "address": "0x5018",
+      "bytes": "e8cc",
+      "meaning": "ADD SP,-52; predecessor frame is also52 bytes; no local frame growth."
+    },
+    "no_fare_four_way_gate": {
+      "bank": 26,
+      "address": "0x51df",
+      "bytes": "2124c24e79d6042019fa2ec2d6052012fa0bc23c280c21fec12a6ed6047dde003803af18023e01f82d77",
+      "meaning": "msg4(C224),district5(C22E),job!=FF(C20B),full16bitcash<4(C1FE) produce existinglocal fare atSP+45; WAIT/RIDE return earlier."
+    },
+    "no_fare_row0_pointer": {
+      "bank": 26,
+      "address": "0x528d",
+      "bytes": "f82d7eb7280501a35f1828",
+      "meaning": "Readlocal fare; iftrue loadBC=5FA3 direct literal, bypass old message selection."
+    },
+    "row0_common_text_call": {
+      "bank": 26,
+      "address": "0x52c0",
+      "bytes": "5950afcd0945",
+      "meaning": "BCtext movedtoDE; A=0 thennear CALL4509; no formatting or varargs introduced."
+    },
+    "condition_row_then_assistance_row2": {
+      "bank": 26,
+      "address": "0x5392",
+      "bytes": "f82d7eb7280b11fe5f3e02cd0945c3f05d",
+      "meaning": "Originalcondition row1 already rendered; iffare true DE=5FFE,A=2,CALL4509; return."
+    },
+    "board_exact_nine_offer_gates": {
+      "bank": 26,
+      "address": "0x5994",
+      "bytes": "210ac24e79fe483026e607d6072020fa6ac2d6072019",
+      "meaning": "MenuC20A<72,menu&7==7,offerkindC26A==7; otherwise originaldefault row17."
+    },
+    "board_budget_choice_and_row17": {
+      "bank": 26,
+      "address": "0x59aa",
+      "bytes": "79d6183005113964181279d63030051149641808115a641803116b643e11cd0945c3f05d",
+      "meaning": "Menu<24/$8 or<48/$16 else$24; fallback646B; DEliteral,A17,CALL4509 thenreturn."
+    },
+    "unchanged_nested_bank_restoration": {
+      "bank": 0,
+      "address": "0x3e7d",
+      "bytes": "f090f57be090ea0020e7e16f7ce090ea00207dc9",
+      "meaning": "Stock far-call wrapper saves/restores priorHRAM/mapper bank; byte-identical predecessor."
+    }
+  },
+  "ROMDelta": {
+    "changedBanks": [
+      {
+        "bank": 0,
+        "differentByteOffsets": 34
+      },
+      {
+        "bank": 21,
+        "differentByteOffsets": 2
+      },
+      {
+        "bank": 22,
+        "differentByteOffsets": 14
+      },
+      {
+        "bank": 23,
+        "differentByteOffsets": 16
+      },
+      {
+        "bank": 26,
+        "differentByteOffsets": 8492
+      },
+      {
+        "bank": 33,
+        "differentByteOffsets": 6
+      }
+    ],
+    "relocations": [
+      {
+        "bank": 0,
+        "pointerAddress": "0x208",
+        "oldTarget": "0x7e48",
+        "newTarget": "0x7f56",
+        "meaning": "stock workshop state _logo_init"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x211",
+        "oldTarget": "0x7e54",
+        "newTarget": "0x7f62",
+        "meaning": "stock workshop state _logo_update"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f51",
+        "oldTarget": "0x657e",
+        "newTarget": "0x668c",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f53",
+        "oldTarget": "0x6582",
+        "newTarget": "0x6690",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f55",
+        "oldTarget": "0x6588",
+        "newTarget": "0x6696",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f57",
+        "oldTarget": "0x6593",
+        "newTarget": "0x66a1",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f59",
+        "oldTarget": "0x659b",
+        "newTarget": "0x66a9",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f5b",
+        "oldTarget": "0x65a8",
+        "newTarget": "0x66b6",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f5d",
+        "oldTarget": "0x65ba",
+        "newTarget": "0x66c8",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f5f",
+        "oldTarget": "0x65cb",
+        "newTarget": "0x66d9",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f61",
+        "oldTarget": "0x65d9",
+        "newTarget": "0x66e7",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f63",
+        "oldTarget": "0x65ea",
+        "newTarget": "0x66f8",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f65",
+        "oldTarget": "0x65fc",
+        "newTarget": "0x670a",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 0,
+        "pointerAddress": "0x3f67",
+        "oldTarget": "0x660d",
+        "newTarget": "0x671b",
+        "meaning": "UI banked dispatch case target"
+      },
+      {
+        "bank": 21,
+        "pointerAddress": "0x7fd0",
+        "oldTarget": "0x7d57",
+        "newTarget": "0x7e65",
+        "meaning": "_sprite_workshop_courier_bank2_tileset"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7ec1",
+        "oldTarget": "0x7e2c",
+        "newTarget": "0x7f3a",
+        "meaning": "_bg_central_toronto_and_islands"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7ecd",
+        "oldTarget": "0x7dd7",
+        "newTarget": "0x7ee5",
+        "meaning": "_scene_toronto_city_init"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7f04",
+        "oldTarget": "0x7df4",
+        "newTarget": "0x7f02",
+        "meaning": "_bg_toronto_high_park"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7f10",
+        "oldTarget": "0x7daa",
+        "newTarget": "0x7eb8",
+        "meaning": "_scene_toronto_high_park_init"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7f16",
+        "oldTarget": "0x7e61",
+        "newTarget": "0x7f6f",
+        "meaning": "_scene_toronto_high_park_sprites"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7f47",
+        "oldTarget": "0x7e1e",
+        "newTarget": "0x7f2c",
+        "meaning": "_bg_toronto_uptown_hills"
+      },
+      {
+        "bank": 22,
+        "pointerAddress": "0x7f8a",
+        "oldTarget": "0x7e3a",
+        "newTarget": "0x7f48",
+        "meaning": "_bg_quiet_workshop"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7d0c",
+        "oldTarget": "0x7e02",
+        "newTarget": "0x7f10",
+        "meaning": "_bg_toronto_islands"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7d18",
+        "oldTarget": "0x7d9b",
+        "newTarget": "0x7ea9",
+        "meaning": "_scene_toronto_islands_init"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7d1e",
+        "oldTarget": "0x7e55",
+        "newTarget": "0x7f63",
+        "meaning": "_scene_toronto_islands_sprites"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7dc4",
+        "oldTarget": "0x7d79",
+        "newTarget": "0x7e87",
+        "meaning": "_sprite_ambient_boat_tileset"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7dd5",
+        "oldTarget": "0x7de6",
+        "newTarget": "0x7ef4",
+        "meaning": "_bg_toronto_west"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7e24",
+        "oldTarget": "0x7dc8",
+        "newTarget": "0x7ed6",
+        "meaning": "_scene_toronto_east_init"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7e2a",
+        "oldTarget": "0x7db9",
+        "newTarget": "0x7ec7",
+        "meaning": "_scene_toronto_east_sprites"
+      },
+      {
+        "bank": 23,
+        "pointerAddress": "0x7e9e",
+        "oldTarget": "0x7e10",
+        "newTarget": "0x7f1e",
+        "meaning": "_bg_toronto_port_lands"
+      },
+      {
+        "bank": 33,
+        "pointerAddress": "0x63fb",
+        "oldTarget": "0x7e6d",
+        "newTarget": "0x7f7b",
+        "meaning": "_bootstrap_script"
+      },
+      {
+        "bank": 33,
+        "pointerAddress": "0x6748",
+        "oldTarget": "0x7e6d",
+        "newTarget": "0x7f7b",
+        "meaning": "_bootstrap_script"
+      },
+      {
+        "bank": 33,
+        "pointerAddress": "0x74fb",
+        "oldTarget": "0x661f",
+        "newTarget": "0x672d",
+        "meaning": "_td_atlas_row_unit_0"
+      }
+    ],
+    "otherDifferences": "Two header global-checksum bytes and four stock autogenerated save_signature bytes; all other nonUI changes are authenticated +270 relocation pointers.",
+    "wholeMainPoliceContentSaveBanksByteIdentical": true
+  },
+  "limits": [
+    "This is filesystem source/linker/compiled-byte inspection only; no ROM execution, plugin build, browser or device action was performed by this audit.",
+    "No new source commit is assigned before publication. The official receipt and206 frozen current inputs bind this artifact; predecessor native acceptance remains separate.",
+    "The renderer-owned43,223,754 host UI checks and root-owned full make check are separate evidence and are not rerun or included in this audit count.",
+    "Bank fit and1096 static reserve do not prove peak runtime stack, frame timing, whole-city performance, hardware boot or save persistence.",
+    "Captions advertise fictional ordinary ferry budgets, not acceptance affordability enforcement; active-job assistance still requires existing cancel/menu rules.",
+    "Native hint rendering/playability, all104 completions, two human hours, browser and physical cartridge acceptance require separate evidence."
+  ],
+  "formatVersion": 1,
+  "underlyingIgnoredAudit": {
+    "path": "games/toronto-dispatch/project/build/FERRY_CLARITY_COMPILED_AUDIT.json",
+    "sizeBytes": 20953,
+    "sha256": "85ebd6166d4b447e3d6b8abb8bb0c52725fdb39f5e7f0773fb3c1887c4d12227"
+  },
+  "provenanceNote": "Exact original compiled audit is retained ignored; public fields contain repository-relative file references only.",
+  "scenePreservation": {
+    "registeredScenesCompared": 7,
+    "collisionBytesPerScene": 15616,
+    "allCompiledCollisionBuffersAndBackgroundDescriptorsUnchanged": true
+  }
+}

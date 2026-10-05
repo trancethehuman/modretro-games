@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "purpose": "Compiled memory and exact host-equivalence evidence for the sandbox stack fix; no absolute peak-SP or smoothness claim.",
+  "artifact": {
+    "romSha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+    "symbolsSha256": "aa8c5d17b23cfb69f1dd567f8df2f2a817133a285220825ff3aacdb39464e676",
+    "nativeSourceFiles": 200,
+    "previousRomSha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
+    "nativeSourcePinsSha256": "c3e17d9c699fc44e27a4e6eebea255315ed68ea498d254194665583cb67740e5",
+    "sourceFingerprint": "a9fa9f957ef8dda5c24f9c76508289af8725cdc73645e8485010c5b1423b1324"
+  },
+  "compiledFrames": {
+    "method": "Read unchanged ROM machine prologues and corresponding call-site argument/register pushes.",
+    "automaticBytes": [
+      {
+        "function": "td_streetcar_runtime_traffic_sweep_clear",
+        "before": 39,
+        "after": 20,
+        "afterBank": 32,
+        "afterAddress": "4A9F"
+      },
+      {
+        "function": "td_streetcar_sweep",
+        "before": 21,
+        "after": 2,
+        "afterBank": 1,
+        "afterAddress": "7F0B"
+      },
+      {
+        "function": "td_streetcar_range_hit",
+        "before": 30,
+        "after": 11,
+        "afterBank": 1,
+        "afterAddress": "7B90"
+      }
+    ],
+    "normalTravelPathReductionBytes": 57,
+    "deepOrdinaryTrafficTravelBoundsChainBytes": {
+      "before": 470,
+      "after": 413
+    },
+    "chainScope": "Static feasible chain relative to toronto_update entry; includes that chain's native locals, arguments, return addresses and bank-call pushes. Engine callers and interrupts are additional. This is not an observed minimum SP or a whole-game stack maximum.",
+    "branchIsolation": "Instant, dwell and held-arrival pose/body scratch is allocated only inside its private branch helper; normal range traversal no longer retains those three19-byte pairs.",
+    "heldAndRetreat": "Held automatic scratch totals are unchanged with a small extra private call frame; held queries do not descend into normal travel. Retreat extent retains its58-byte frame and its nested future sweep receives the same57-byte reduction.",
+    "persistentBytesAdded": 0
+  },
+  "losslessUiPacking": {
+    "sharedTextAtlasCacheBytes": {
+      "before": 360,
+      "after": 270,
+      "saved": 90
+    },
+    "textEncoding": "18 rows of20 six-bit glyphs:15 bytes per row; empty glyph63.",
+    "atlasEncoding": "172 ten-bit dictionary IDs:215 bytes; empty1023; shared union remains270 bytes.",
+    "hiddenActorMaskBytes": {
+      "before": 22,
+      "after": 3,
+      "saved": 19
+    },
+    "totalPersistentBytesSaved": 109,
+    "logicalStatePreserved": "Glyphs, cache misses/repaints, atlas dictionary IDs and upload-slot order, all22 actor hidden flags and menu/map state."
+  },
+  "compiledStaticMemory": {
+    "stackOrigin": "DF00",
+    "heapEndBefore": "DD2A",
+    "heapEndAfter": "DCBD",
+    "reserveBytesBefore": 470,
+    "reserveBytesAfter": 579,
+    "qualification": "Static separation from heap end to stack origin; not a measured maximum stack requirement."
+  },
+  "hostValidation": {
+    "streetcarActualC": {
+      "checks": 13541674,
+      "failures": 0,
+      "exactProgressResourceBytes": 8684,
+      "progressTablesUnchanged": true
+    },
+    "atlasUiActualC": {
+      "checks": 46502905,
+      "failures": 0
+    },
+    "fullEnginePerVariant": {
+      "checks": 3275676,
+      "failures": 0
+    },
+    "oldTramDifferential": {
+      "scenarios": 93,
+      "snapshots": 6526,
+      "comparedFieldPayloads": 3941704,
+      "byteExact": true,
+      "traceSha256": "d3024e7e306ee114fd1d693573659427918a4fc9d292ef256529a6b30750ae0d",
+      "scope": "Archived pre-refactor tram plus independent uncached motion reference versus shallow tram plus current exact motion cache. Both variants preserve the same gameplay. Source-change guard covered the two tram files while disjoint UI code, excluded from the composed engine, was packed concurrently."
+    },
+    "repositoryChecks": {
+      "command": "make check",
+      "exitCode": 0,
+      "passingLogSha256": "25cbbd777be072dc49b156695ba553e13dd27a586c462b94e3728382697403ca"
+    },
+    "qualification": "Host sanitizers and adapters prove scoped logic and state equality; native CPU timing, interrupt high-water and cartridge execution require separate evidence."
+  },
+  "nativeInitializedProbeQualification": "Only the first 13 initialized printer bytes, hex 8833020004000100e47f000000, are invariant. The remaining 11 script bytes may legitimately change after scene return; the entire 24-byte packet is not immutable. See NATIVE_SANDBOX_STABLE.json for the separate replacement ROM's observations.",
+  "gameplayScope": "No reduction in pedestrian or vehicle counts, update cadence, art, OAM limits, physics, timetable, query validation or save format."
+}

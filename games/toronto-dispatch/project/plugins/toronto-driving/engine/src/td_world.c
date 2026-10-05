@@ -117,16 +117,17 @@ UBYTE td_world_crossing(UBYTE district,UBYTE onfoot,UWORD old_u,UWORD old_v,
 
 static UBYTE td_world_valid_traffic(UBYTE district,const UBYTE *legs){
     UBYTE i,count;
-    if(!district||district>=TD_DISTRICT_COUNT)return FALSE;
+    if(district>=TD_DISTRICT_COUNT||!td_traffic_enabled[district])return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++){
-        count=td_west_traffic_counts[district-1][i];
+        count=td_traffic_counts[district][i];
         if(count<2||count>TD_TRAFFIC_POINTS||(legs&&legs[i]>=count))return FALSE;
+        if(!district&&!legs&&td_core_traffic_spawn_leg[i]>=count)return FALSE;
     }
     return TRUE;
 }
 static void td_world_sample(UBYTE district,UBYTE i,UBYTE leg,td_traffic_sample_t *sample){
-    const UWORD (*path)[2]=td_west_traffic[district-1][i];
-    UBYTE count=td_west_traffic_counts[district-1][i],previous=leg?leg-1:count-1;
+    const UWORD (*path)[2]=td_traffic_paths[district][i];
+    UBYTE count=td_traffic_counts[district][i],previous=leg?leg-1:count-1;
     sample->u=path[leg][0]*16;sample->v=path[leg][1]*16;sample->count=count;
     sample->frame=path[leg][0]>path[previous][0]?0:path[leg][0]<path[previous][0]?4:path[leg][1]>path[previous][1]?2:6;
     sample->frame+=(i==5?1:i%4)*8;
@@ -135,8 +136,10 @@ UBYTE td_world_traffic_init(UBYTE district,UWORD *u,UWORD *v,UBYTE *legs,td_traf
     UBYTE i;
     if(!u||!v||!legs||!samples||!td_world_valid_traffic(district,NULL))return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++){
-        u[i]=td_west_traffic[district-1][i][0][0]*16;v[i]=td_west_traffic[district-1][i][0][1]*16;
-        legs[i]=1;td_world_sample(district,i,1,&samples[i]);
+        u[i]=(district?td_traffic_paths[district][i][0][0]:td_core_traffic_spawn_u[i])*16;
+        v[i]=(district?td_traffic_paths[district][i][0][1]:td_core_traffic_spawn_v[i])*16;
+        legs[i]=district?1:td_core_traffic_spawn_leg[i];
+        td_world_sample(district,i,legs[i],&samples[i]);
     }
     return TRUE;
 }
@@ -145,4 +148,9 @@ UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,td_traffic_sampl
     if(!legs||!samples||!td_world_valid_traffic(district,legs))return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++)td_world_sample(district,i,legs[i],&samples[i]);
     return TRUE;
+}
+UBYTE td_world_traffic_one(UBYTE district,UBYTE route,UBYTE leg,td_traffic_sample_t *sample) BANKED {
+    if(!sample||!td_world_valid_traffic(district,NULL)||route>=TD_TRAFFIC_COUNT||
+       leg>=td_traffic_counts[district][route])return FALSE;
+    td_world_sample(district,route,leg,sample);return TRUE;
 }

@@ -1,6 +1,6 @@
 {
   "status": "engine-integrated",
-  "scope": "Four linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.",
+  "scope": "Seven original compressed scenes with a bounded northern hills/station slice. Existing59 stops and96 native contracts retain exact current geometry/fields/briefs/IDs; five North endpoints and eight contracts append. Islands remain ferry/foot-only. Native campaign tuning, full Old Toronto and measured duration require separate evidence.",
   "duration_target_minutes": 120,
   "duration_verified": false,
   "duration_notice": "Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.",
@@ -23,7 +23,11 @@
     "Arts and audiences",
     "Evening dispatch",
     "Across the network",
-    "Master courier"
+    "Master courier",
+    "Western package routes",
+    "Eastern package connections",
+    "Port Lands loading and park rounds",
+    "Northern hills and station rounds"
   ],
   "stops": [
     {
@@ -192,10 +196,13 @@
       "id": 18,
       "u": 144,
       "v": 64,
-      "name": "OSSINGTON BUS",
+      "name": "BLOORCOURT BUS",
       "transit": 2,
       "district": 0,
-      "reserved": 0
+      "reserved": 0,
+      "location_notice": "Fictional compressed Bloorcourt bus handoff, not a surveyed TTC stop; regional label corrected from Ossington without moving stop18 or its saved identity",
+      "geography_source": "https://www.toronto.ca/business-economy/business-operation-growth/business-improvement-areas/bia-list/bia-list-a-e/",
+      "geography_reviewed": "2026-10-04"
     },
     {
       "id": 19,
@@ -208,30 +215,33 @@
     },
     {
       "id": 20,
-      "u": 444,
-      "v": 928,
+      "u": 320,
+      "v": 280,
       "name": "HANLANS POINT",
       "transit": 3,
-      "district": 0,
-      "reserved": 0
+      "district": 5,
+      "reserved": 0,
+      "location_notice": "Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door"
     },
     {
       "id": 21,
-      "u": 720,
-      "v": 920,
+      "u": 512,
+      "v": 448,
       "name": "CENTRE ISLAND",
       "transit": 3,
-      "district": 0,
-      "reserved": 0
+      "district": 5,
+      "reserved": 0,
+      "location_notice": "Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door"
     },
     {
       "id": 22,
-      "u": 848,
-      "v": 896,
+      "u": 920,
+      "v": 280,
       "name": "WARDS ISLAND",
       "transit": 3,
-      "district": 0,
-      "reserved": 0
+      "district": 5,
+      "reserved": 0,
+      "location_notice": "Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door"
     },
     {
       "id": 23,
@@ -244,33 +254,33 @@
     },
     {
       "id": 24,
-      "u": 560,
-      "v": 928,
+      "u": 160,
+      "v": 600,
       "name": "HANLAN SERVICE",
       "transit": 0,
-      "location_notice": "Original fictional delivery entrance on compressed Island terrain",
-      "district": 0,
-      "reserved": 0
+      "district": 5,
+      "reserved": 0,
+      "location_notice": "Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door"
     },
     {
       "id": 25,
-      "u": 760,
-      "v": 944,
+      "u": 512,
+      "v": 744,
       "name": "CENTRE PARK POST",
       "transit": 0,
-      "location_notice": "Original fictional delivery entrance on compressed Island terrain",
-      "district": 0,
-      "reserved": 0
+      "district": 5,
+      "reserved": 0,
+      "location_notice": "Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door"
     },
     {
       "id": 26,
-      "u": 912,
-      "v": 912,
+      "u": 904,
+      "v": 440,
       "name": "WARD COTTAGE POST",
       "transit": 0,
-      "location_notice": "Original fictional delivery entrance on compressed Island terrain",
-      "district": 0,
-      "reserved": 0
+      "district": 5,
+      "reserved": 0,
+      "location_notice": "Original compressed public Island dock or fictional service entrance; ferry/foot access, not a surveyed loading door"
     },
     {
       "id": 27,
@@ -768,6 +778,193 @@
         "estimated_pixels": 24,
         "planning_only": true
       }
+    },
+    {
+      "id": 51,
+      "u": 672,
+      "v": 272,
+      "name": "CHANNEL STAGE",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Channel Stage",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 52,
+      "u": 312,
+      "v": 432,
+      "name": "FIRE HALL BOOKS",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Fire Hall Books",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 304,
+        "v": 352
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 53,
+      "u": 144,
+      "v": 432,
+      "name": "CRANE WALK",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Crane Walk",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 192,
+        "v": 352
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 54,
+      "u": 704,
+      "v": 576,
+      "name": "TURNING BASIN",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Turning Basin Cases",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 55,
+      "u": 616,
+      "v": 808,
+      "name": "UNWIN WORKS",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Unwin Works",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 56,
+      "u": 432,
+      "v": 888,
+      "name": "BEACH MAIL",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Beach Mail",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 352,
+        "v": 856
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 57,
+      "u": 128,
+      "v": 576,
+      "name": "POLSON PACKET",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Polson Packet",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 58,
+      "u": 352,
+      "v": 592,
+      "name": "RIVERBANK PARCEL",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Riverbank Parcel",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 192,
+        "v": 552
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 59,
+      "u": 696,
+      "v": 416,
+      "name": "SUMMERHILL",
+      "transit": 1,
+      "district": 6,
+      "reserved": 0,
+      "foot_only": false,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking"
+    },
+    {
+      "id": 60,
+      "u": 688,
+      "v": 176,
+      "name": "ST CLAIR",
+      "transit": 1,
+      "district": 6,
+      "reserved": 0,
+      "foot_only": false,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking"
+    },
+    {
+      "id": 61,
+      "u": 296,
+      "v": 464,
+      "name": "CASA LOMA PARCEL",
+      "transit": 0,
+      "district": 6,
+      "reserved": 1,
+      "foot_only": true,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking",
+      "parking_anchor": {
+        "u": 336,
+        "v": 576
+      }
+    },
+    {
+      "id": 62,
+      "u": 704,
+      "v": 552,
+      "name": "SUMMERHILL STOCK",
+      "transit": 0,
+      "district": 6,
+      "reserved": 0,
+      "foot_only": false,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking"
+    },
+    {
+      "id": 63,
+      "u": 752,
+      "v": 256,
+      "name": "ROSEHILL POST",
+      "transit": 0,
+      "district": 6,
+      "reserved": 1,
+      "foot_only": true,
+      "location_notice": "Original compressed public courier point; not a surveyed door or station parking",
+      "parking_anchor": {
+        "u": 640,
+        "v": 280
+      }
     }
   ],
   "quests": [
@@ -1006,12 +1203,59 @@
       "reward": 118,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 128,
+        "island_walking_pixels": 592,
         "required_ferry_legs": 2,
         "fictional_ferry_fares": 8,
-        "modeled_road_and_foot_seconds": 4.3,
+        "modeled_road_and_foot_seconds": 19.7,
         "modeled_control_allowance_seconds": 20,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 21,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 21,
+            "to_stop": 25,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 25,
+            "to_stop": 21,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 21,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 72,
+        "modeled_movement_wait_and_handling_seconds": 111.7,
+        "preserved_deadline_seconds": 195,
+        "modeled_slack_seconds": 83.3,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -1272,12 +1516,59 @@
       "reward": 130,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 272,
+        "island_walking_pixels": 960,
         "required_ferry_legs": 2,
         "fictional_ferry_fares": 8,
-        "modeled_road_and_foot_seconds": 9.1,
+        "modeled_road_and_foot_seconds": 32.0,
         "modeled_control_allowance_seconds": 20,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 20,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 20,
+            "to_stop": 24,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 24,
+            "to_stop": 20,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 20,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 72,
+        "modeled_movement_wait_and_handling_seconds": 124.0,
+        "preserved_deadline_seconds": 205,
+        "modeled_slack_seconds": 81.0,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -1546,12 +1837,59 @@
       "reward": 142,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 160,
+        "island_walking_pixels": 352,
         "required_ferry_legs": 2,
         "fictional_ferry_fares": 8,
-        "modeled_road_and_foot_seconds": 5.3,
+        "modeled_road_and_foot_seconds": 11.7,
         "modeled_control_allowance_seconds": 20,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 22,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 22,
+            "to_stop": 26,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 26,
+            "to_stop": 22,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 22,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 72,
+        "modeled_movement_wait_and_handling_seconds": 103.7,
+        "preserved_deadline_seconds": 200,
+        "modeled_slack_seconds": 96.3,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -1834,12 +2172,95 @@
       "reward": 202,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 400,
+        "island_walking_pixels": 1552,
         "required_ferry_legs": 4,
         "fictional_ferry_fares": 16,
-        "modeled_road_and_foot_seconds": 13.3,
+        "modeled_road_and_foot_seconds": 51.7,
         "modeled_control_allowance_seconds": 40,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 20,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 20,
+            "to_stop": 24,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 24,
+            "to_stop": 20,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 20,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 21,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 21,
+            "to_stop": 25,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 25,
+            "to_stop": 21,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 21,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 144,
+        "modeled_movement_wait_and_handling_seconds": 235.7,
+        "preserved_deadline_seconds": 310,
+        "modeled_slack_seconds": 74.3,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -2121,12 +2542,95 @@
       "reward": 214,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 288,
+        "island_walking_pixels": 944,
         "required_ferry_legs": 4,
         "fictional_ferry_fares": 16,
-        "modeled_road_and_foot_seconds": 9.6,
+        "modeled_road_and_foot_seconds": 31.5,
         "modeled_control_allowance_seconds": 40,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 21,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 21,
+            "to_stop": 25,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 25,
+            "to_stop": 21,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 21,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 22,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 22,
+            "to_stop": 26,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 26,
+            "to_stop": 22,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 22,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 144,
+        "modeled_movement_wait_and_handling_seconds": 215.5,
+        "preserved_deadline_seconds": 305,
+        "modeled_slack_seconds": 89.5,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -2414,12 +2918,95 @@
       "reward": 226,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 432,
+        "island_walking_pixels": 1312,
         "required_ferry_legs": 4,
         "fictional_ferry_fares": 16,
-        "modeled_road_and_foot_seconds": 14.4,
+        "modeled_road_and_foot_seconds": 43.7,
         "modeled_control_allowance_seconds": 40,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 22,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 22,
+            "to_stop": 26,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 26,
+            "to_stop": 22,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 22,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 20,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 20,
+            "to_stop": 24,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 24,
+            "to_stop": 20,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 20,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 144,
+        "modeled_movement_wait_and_handling_seconds": 227.7,
+        "preserved_deadline_seconds": 310,
+        "modeled_slack_seconds": 82.3,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -2713,12 +3300,113 @@
       "reward": 262,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 480,
+        "island_walking_pixels": 1728,
         "required_ferry_legs": 5,
         "fictional_ferry_fares": 20,
-        "modeled_road_and_foot_seconds": 16.0,
+        "modeled_road_and_foot_seconds": 57.6,
         "modeled_control_allowance_seconds": 50,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 20,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 20,
+            "to_stop": 24,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 24,
+            "to_stop": 20,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 20,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 21,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 21,
+            "to_stop": 25,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 25,
+            "to_stop": 21,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 21,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 22,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 22,
+            "to_stop": 26,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 180,
+        "modeled_movement_wait_and_handling_seconds": 287.6,
+        "preserved_deadline_seconds": 360,
+        "modeled_slack_seconds": 72.4,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -3016,12 +3704,113 @@
       "reward": 274,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 424,
+        "island_walking_pixels": 1424,
         "required_ferry_legs": 5,
         "fictional_ferry_fares": 20,
-        "modeled_road_and_foot_seconds": 14.1,
+        "modeled_road_and_foot_seconds": 47.5,
         "modeled_control_allowance_seconds": 50,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 21,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 21,
+            "to_stop": 25,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 25,
+            "to_stop": 21,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 21,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 22,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 22,
+            "to_stop": 26,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 26,
+            "to_stop": 22,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 22,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 20,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 20,
+            "to_stop": 24,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 180,
+        "modeled_movement_wait_and_handling_seconds": 277.5,
+        "preserved_deadline_seconds": 360,
+        "modeled_slack_seconds": 82.5,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -3319,12 +4108,113 @@
       "reward": 286,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 496,
+        "island_walking_pixels": 1608,
         "required_ferry_legs": 5,
         "fictional_ferry_fares": 20,
-        "modeled_road_and_foot_seconds": 16.5,
+        "modeled_road_and_foot_seconds": 53.6,
         "modeled_control_allowance_seconds": 50,
-        "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
+        "basis": "Registered full-body Island foot paths, explicit mainland ferry spokes, nominal walking speed and worst fictional waits; capped update cadence/traffic/handling and human play remain unmeasured",
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "full_foot_half_pixels": 5,
+        "full_foot_grid_step_pixels": 4,
+        "legs": [
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 22,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 22,
+            "to_stop": 26,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 26,
+            "to_stop": 22,
+            "walking_pixels": 176,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 22,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 20,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 20,
+            "to_stop": 24,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "foot",
+            "from_stop": 24,
+            "to_stop": 20,
+            "walking_pixels": 480,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 20,
+            "to_stop": 10,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "ferry",
+            "from_stop": 10,
+            "to_stop": 21,
+            "walking_pixels": 0,
+            "worst_wait_seconds": 28,
+            "ride_seconds": 8,
+            "fare": 4
+          },
+          {
+            "mode": "foot",
+            "from_stop": 21,
+            "to_stop": 25,
+            "walking_pixels": 296,
+            "worst_wait_seconds": 0,
+            "ride_seconds": 0,
+            "fare": 0
+          }
+        ],
+        "worst_fictional_wait_and_ride_seconds": 180,
+        "modeled_movement_wait_and_handling_seconds": 283.6,
+        "preserved_deadline_seconds": 360,
+        "modeled_slack_seconds": 76.4,
+        "deadline_status": "Preserved native limit; nominal model fits, ordinary-input timing/tuning pending"
       }
     },
     {
@@ -3779,7 +4669,7 @@
         {
           "stop_id": 18,
           "district": 0,
-          "objective": "Ossington relay handoff"
+          "objective": "Bloorcourt relay handoff"
         },
         {
           "stop_id": 28,
@@ -5159,6 +6049,1151 @@
         ],
         "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
       }
+    },
+    {
+      "id": "contract-89",
+      "title": "CHANNEL STOCK RUN",
+      "brief": [
+        "BULKY STAGE STOCK",
+        "TRUCK BRAKE EARLY"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        0,
+        51
+      ],
+      "time_limit_seconds": 170,
+      "reward": 184,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect stage stock at Union"
+        },
+        {
+          "stop_id": 51,
+          "district": 4,
+          "objective": "Unload at the Channel Stage apron"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 2448,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 34.4,
+        "normalized_moving_seconds_slow": 34.4,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 51,
+            "from_district": 0,
+            "to_district": 4,
+            "vehicle_pixels": 2448,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing",
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-90",
+      "title": "FIRE HALL BOOKS",
+      "brief": [
+        "COMMUNITY BOOK BOX",
+        "PARK THEN WALK"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        37,
+        52
+      ],
+      "time_limit_seconds": 175,
+      "reward": 150,
+      "stages": [
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Collect community books at Riverside"
+        },
+        {
+          "stop_id": 52,
+          "district": 4,
+          "objective": "Walk to the Fire Hall Books entrance"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 2112,
+        "required_walking_pixels": 104,
+        "normalized_moving_seconds_fast": 24.3,
+        "normalized_moving_seconds_slow": 36.6,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 37,
+            "to_stop": 52,
+            "from_district": 3,
+            "to_district": 4,
+            "vehicle_pixels": 2112,
+            "required_walking_pixels": 104,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-91",
+      "title": "CRANE WALK PACKET",
+      "brief": [
+        "POCKET RELAY KIT",
+        "PARK OR USE QUEEN"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        53
+      ],
+      "time_limit_seconds": 205,
+      "reward": 173,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect a pocket relay packet at Union"
+        },
+        {
+          "stop_id": 53,
+          "district": 4,
+          "objective": "Walk to the Crane Walk handoff"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 3008,
+        "required_walking_pixels": 128,
+        "normalized_moving_seconds_fast": 34.0,
+        "normalized_moving_seconds_slow": 51.5,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 53,
+            "from_district": 0,
+            "to_district": 4,
+            "vehicle_pixels": 3008,
+            "required_walking_pixels": 128,
+            "shortest_modeled_seams": [
+              "Queen east crossing",
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-92",
+      "title": "TURNING BASIN LOAD",
+      "brief": [
+        "STAGE EQUIPMENT",
+        "UNWIN THEN YARD"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        51,
+        55,
+        54
+      ],
+      "time_limit_seconds": 185,
+      "reward": 198,
+      "stages": [
+        {
+          "stop_id": 51,
+          "district": 4,
+          "objective": "Load stage equipment at Channel Stage"
+        },
+        {
+          "stop_id": 55,
+          "district": 4,
+          "objective": "Handoff equipment at Unwin Works"
+        },
+        {
+          "stop_id": 54,
+          "district": 4,
+          "objective": "Deliver the reusable cases to Turning Basin"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 2560,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 35.9,
+        "normalized_moving_seconds_slow": 35.9,
+        "assumed_interaction_allowance_seconds": 15,
+        "legs": [
+          {
+            "from_stop": 51,
+            "to_stop": 55,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 1120,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 55,
+            "to_stop": 54,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 1440,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-93",
+      "title": "UNWIN GLASS",
+      "brief": [
+        "FRAGILE GLASS KIT",
+        "BRAKE BEFORE TURNS"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        39,
+        55
+      ],
+      "time_limit_seconds": 150,
+      "reward": 170,
+      "stages": [
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Collect the fragile kit at Carlaw Works"
+        },
+        {
+          "stop_id": 55,
+          "district": 4,
+          "objective": "Deliver intact glass at Unwin Works"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 1920,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 22.3,
+        "normalized_moving_seconds_slow": 22.3,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 39,
+            "to_stop": 55,
+            "from_district": 3,
+            "to_district": 4,
+            "vehicle_pixels": 1920,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-94",
+      "title": "BEACH MAIL",
+      "brief": [
+        "RIVER AND BEACH",
+        "TWO FOOT HANDOFFS"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        52,
+        58,
+        56
+      ],
+      "time_limit_seconds": 180,
+      "reward": 129,
+      "stages": [
+        {
+          "stop_id": 52,
+          "district": 4,
+          "objective": "Collect the mail pouch at Fire Hall Books"
+        },
+        {
+          "stop_id": 58,
+          "district": 4,
+          "objective": "Walk to the Riverbank Parcel handoff"
+        },
+        {
+          "stop_id": 56,
+          "district": 4,
+          "objective": "Deliver the final mail at the Beach entrance"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 776,
+        "required_walking_pixels": 616,
+        "normalized_moving_seconds_fast": 28.2,
+        "normalized_moving_seconds_slow": 32.7,
+        "assumed_interaction_allowance_seconds": 15,
+        "legs": [
+          {
+            "from_stop": 52,
+            "to_stop": 58,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 312,
+            "required_walking_pixels": 304,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 58,
+            "to_stop": 56,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 464,
+            "required_walking_pixels": 312,
+            "shortest_modeled_seams": []
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-95",
+      "title": "HARBOUR PAPER RUN",
+      "brief": [
+        "URGENT PORT FILE",
+        "MOTORCYCLE ROUTE"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        57,
+        1
+      ],
+      "time_limit_seconds": 120,
+      "reward": 175,
+      "stages": [
+        {
+          "stop_id": 57,
+          "district": 4,
+          "objective": "Collect harbour files at Polson Packet"
+        },
+        {
+          "stop_id": 1,
+          "district": 0,
+          "objective": "Reach St Lawrence before the cutoff"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 3088,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 30.5,
+        "normalized_moving_seconds_slow": 30.5,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 57,
+            "to_stop": 1,
+            "from_district": 4,
+            "to_district": 0,
+            "vehicle_pixels": 3088,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands",
+              "Queen east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-96",
+      "title": "STAGE RETURN KIT",
+      "brief": [
+        "YARD RETURN PAPERS",
+        "ORIGINAL BACK YARD"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        54,
+        51,
+        39,
+        54
+      ],
+      "time_limit_seconds": 200,
+      "reward": 204,
+      "stages": [
+        {
+          "stop_id": 54,
+          "district": 4,
+          "objective": "Collect return papers at Turning Basin"
+        },
+        {
+          "stop_id": 51,
+          "district": 4,
+          "objective": "Handoff the stage copy at Channel Stage"
+        },
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Collect the dispatch copy at Carlaw Works"
+        },
+        {
+          "stop_id": 54,
+          "district": 4,
+          "objective": "Return the original kit to Turning Basin"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 3312,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 38.4,
+        "normalized_moving_seconds_slow": 38.4,
+        "assumed_interaction_allowance_seconds": 20,
+        "legs": [
+          {
+            "from_stop": 54,
+            "to_stop": 51,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 336,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 51,
+            "to_stop": 39,
+            "from_district": 4,
+            "to_district": 3,
+            "vehicle_pixels": 1328,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          },
+          {
+            "from_stop": 39,
+            "to_stop": 54,
+            "from_district": 3,
+            "to_district": 4,
+            "vehicle_pixels": 1648,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-97",
+      "title": "BALDWIN BOOK BOX",
+      "brief": [
+        "UNION BOOK PARCEL",
+        "STAIRS OR UPPER RD"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        0,
+        61
+      ],
+      "time_limit_seconds": 220,
+      "reward": 180,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect the book box at Union"
+        },
+        {
+          "stop_id": 61,
+          "district": 6,
+          "objective": "Walk to the public Casa Loma Parcel handoff"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1344,
+        "required_full_foot5_parking_walk_pixels": 152,
+        "normalized_moving_seconds_fast": 18.3,
+        "normalized_moving_seconds_slow": 26.1,
+        "assumed_control_and_handoff_seconds": 5,
+        "modeled_nominal_slack_seconds": 188.9,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 61,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1344,
+            "full_foot5_parking_walk_pixels": 152,
+            "modeled_seams": [
+              "Spadina north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-98",
+      "title": "SUMMERHILL GLASS",
+      "brief": [
+        "FRAGILE GLASS KIT",
+        "BRAKE UNDER RAIL"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        5,
+        62
+      ],
+      "time_limit_seconds": 205,
+      "reward": 172,
+      "stages": [
+        {
+          "stop_id": 5,
+          "district": 0,
+          "objective": "Collect the glass kit at AGO / Grange"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Deliver intact at Summerhill Stock"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1192,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 13.8,
+        "normalized_moving_seconds_slow": 13.8,
+        "assumed_control_and_handoff_seconds": 5,
+        "modeled_nominal_slack_seconds": 186.2,
+        "legs": [
+          {
+            "from_stop": 5,
+            "to_stop": 62,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1192,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Spadina north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-99",
+      "title": "HILLTOP FILES",
+      "brief": [
+        "URGENT NORTH FILE",
+        "BIKE TO CITY HALL"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        62,
+        3
+      ],
+      "time_limit_seconds": 170,
+      "reward": 156,
+      "stages": [
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Collect the sealed files at Summerhill Stock"
+        },
+        {
+          "stop_id": 3,
+          "district": 0,
+          "objective": "Reach City Hall before the cutoff"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1096,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 10.8,
+        "normalized_moving_seconds_slow": 10.8,
+        "assumed_control_and_handoff_seconds": 5,
+        "modeled_nominal_slack_seconds": 154.2,
+        "legs": [
+          {
+            "from_stop": 62,
+            "to_stop": 3,
+            "from_district": 6,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 1096,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-100",
+      "title": "ST CLAIR STOCK",
+      "brief": [
+        "UNION STOCK LOAD",
+        "TRUCK TO ST CLAIR"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        0,
+        62,
+        60
+      ],
+      "time_limit_seconds": 220,
+      "reward": 202,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Load the stock at Union"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Handoff the first stock at Summerhill Stock"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Deliver the remaining stock at St Clair"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1744,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 24.5,
+        "normalized_moving_seconds_slow": 24.5,
+        "assumed_control_and_handoff_seconds": 10,
+        "modeled_nominal_slack_seconds": 185.5,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 62,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1288,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 456,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-101",
+      "title": "NORTH CONNECTION",
+      "brief": [
+        "TRAIN OR YONGE RD",
+        "PARK EDGE WALK"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        0,
+        59,
+        62,
+        60,
+        63,
+        60,
+        0
+      ],
+      "time_limit_seconds": 330,
+      "reward": 252,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect the pocket relay at Union"
+        },
+        {
+          "stop_id": 59,
+          "district": 6,
+          "objective": "Handoff at Summerhill"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Collect the heritage-side packet"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Handoff at St Clair"
+        },
+        {
+          "stop_id": 63,
+          "district": 6,
+          "objective": "Walk to Rosehill Post"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Return to St Clair"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Deliver the relay at Union"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 4048,
+        "required_full_foot5_parking_walk_pixels": 272,
+        "normalized_moving_seconds_fast": 49.0,
+        "normalized_moving_seconds_slow": 72.6,
+        "assumed_control_and_handoff_seconds": 30,
+        "modeled_nominal_slack_seconds": 227.4,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 59,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1416,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 59,
+            "to_stop": 62,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 224,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 456,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 60,
+            "to_stop": 63,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 152,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 63,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 152,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 60,
+            "to_stop": 0,
+            "from_district": 6,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 1648,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-102",
+      "title": "NORTH PICKUPS",
+      "brief": [
+        "NORTH PASSENGERS",
+        "KEEP CAR READY"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "PASSENGER RUN",
+      "kind_id": 5,
+      "required_vehicle": 0,
+      "min_completed": 8,
+      "route": [
+        0,
+        62,
+        60,
+        17,
+        0
+      ],
+      "time_limit_seconds": 255,
+      "reward": 230,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Start the car run at Union"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Handoff at Summerhill Stock"
+        },
+        {
+          "stop_id": 60,
+          "district": 6,
+          "objective": "Stop at St Clair"
+        },
+        {
+          "stop_id": 17,
+          "district": 0,
+          "objective": "Stop at Bloor-Yonge"
+        },
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Finish at Union"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 3392,
+        "required_full_foot5_parking_walk_pixels": 0,
+        "normalized_moving_seconds_fast": 39.3,
+        "normalized_moving_seconds_slow": 39.3,
+        "assumed_control_and_handoff_seconds": 20,
+        "modeled_nominal_slack_seconds": 195.7,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 62,
+            "from_district": 0,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 1288,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 60,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 456,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 60,
+            "to_stop": 17,
+            "from_district": 6,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 912,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": [
+              "Yonge north"
+            ]
+          },
+          {
+            "from_stop": 17,
+            "to_stop": 0,
+            "from_district": 0,
+            "to_district": 0,
+            "full_half5_vehicle_pixels": 736,
+            "full_foot5_parking_walk_pixels": 0,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-103",
+      "title": "ROSEHILL SIGNED",
+      "brief": [
+        "SIGNED PARK PAPERS",
+        "RETURN TO DESK"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        62,
+        61,
+        63,
+        62
+      ],
+      "time_limit_seconds": 310,
+      "reward": 212,
+      "stages": [
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Collect the papers at Summerhill Stock"
+        },
+        {
+          "stop_id": 61,
+          "district": 6,
+          "objective": "Walk to the Casa Loma Parcel handoff"
+        },
+        {
+          "stop_id": 63,
+          "district": 6,
+          "objective": "Walk to Rosehill Post"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Return the original papers to Summerhill Stock"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 2096,
+        "required_full_foot5_parking_walk_pixels": 576,
+        "normalized_moving_seconds_fast": 39.9,
+        "normalized_moving_seconds_slow": 52.1,
+        "assumed_control_and_handoff_seconds": 15,
+        "modeled_nominal_slack_seconds": 242.9,
+        "legs": [
+          {
+            "from_stop": 62,
+            "to_stop": 61,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 776,
+            "full_foot5_parking_walk_pixels": 152,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 61,
+            "to_stop": 63,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 984,
+            "full_foot5_parking_walk_pixels": 288,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 63,
+            "to_stop": 62,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 336,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
+    },
+    {
+      "id": "contract-104",
+      "title": "RIDGE PARCEL ROUND",
+      "brief": [
+        "SMALL PARCEL ROUND",
+        "TWO FOOT HANDOFFS"
+      ],
+      "chapter": "Northern hills and station rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        61,
+        62,
+        63
+      ],
+      "time_limit_seconds": 260,
+      "reward": 195,
+      "stages": [
+        {
+          "stop_id": 61,
+          "district": 6,
+          "objective": "Collect the parcel at the public Casa Loma edge"
+        },
+        {
+          "stop_id": 62,
+          "district": 6,
+          "objective": "Handoff at Summerhill Stock"
+        },
+        {
+          "stop_id": 63,
+          "district": 6,
+          "objective": "Walk to Rosehill Post"
+        }
+      ],
+      "objective_notice": "Existing ordered handoffs, condition, vehicle and return rules; no new loading/signature/passenger UI or forced train requirement",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Provisional authored limit; ordinary-input tuning pending",
+        "full_half5_vehicle_route_pixels": 1112,
+        "required_full_foot5_parking_walk_pixels": 288,
+        "normalized_moving_seconds_fast": 20.6,
+        "normalized_moving_seconds_slow": 27.0,
+        "assumed_control_and_handoff_seconds": 10,
+        "modeled_nominal_slack_seconds": 223.0,
+        "legs": [
+          {
+            "from_stop": 61,
+            "to_stop": 62,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 776,
+            "full_foot5_parking_walk_pixels": 152,
+            "modeled_seams": []
+          },
+          {
+            "from_stop": 62,
+            "to_stop": 63,
+            "from_district": 6,
+            "to_district": 6,
+            "full_half5_vehicle_pixels": 336,
+            "full_foot5_parking_walk_pixels": 136,
+            "modeled_seams": []
+          }
+        ],
+        "basis": "Registered collision grids after integration; proposed fixture beforehand. Exact vehicle/foot half5 bodies on four-pixel Core+North graph; endpoints cover each cardinal edge sweep. Legacy3x3 models unchanged. Excludes optional outside-district detours, dynamic occupancy, acceleration, turns, prepositioning, scene/load/entry waits and observed CPU pacing. Parking-per-leg can overcount native continuous walking. Not measured time."
+      }
     }
   ],
   "transit": {
@@ -5170,7 +7205,9 @@
         14,
         15,
         16,
-        17
+        17,
+        59,
+        60
       ],
       "period_seconds": 18,
       "fare": 3,
@@ -5210,29 +7247,29 @@
         49,
         50
       ],
-      "period_seconds": 64,
-      "boarding_window_seconds": 2,
-      "segment_seconds": 4,
+      "period_seconds": 256,
+      "boarding_window_seconds": 4,
+      "segment_seconds": 16,
       "fare": 3,
       "eastbound_phases": [
         0,
-        4,
-        8,
-        12,
         16,
-        20,
-        24,
-        28
+        32,
+        48,
+        64,
+        80,
+        96,
+        112
       ],
       "westbound_phases": [
-        60,
-        56,
-        52,
-        48,
-        44,
-        40,
-        36,
-        32
+        240,
+        224,
+        208,
+        192,
+        176,
+        160,
+        144,
+        128
       ],
       "notice": "Normal-corridor fictional game operation; shared directional platforms, original fare and schedule; current construction detours omitted, era unadopted.",
       "source_refs": [

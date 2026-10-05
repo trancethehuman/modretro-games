@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "source": "scripts/crossing_art.py",
+  "direction": "Original north-up continental-style crossing marks, compressed for the existing game junctions; not surveyed City engineering drawings.",
+  "paint": "Repeated 2px-wide,6px-long pale stripes surrounded by asphalt margins; vertical on north/south arms, horizontal on east/west arms.",
+  "stop_bars": "Original painted stopbars and runtime stop positions retained.",
+  "source_layers": "Existing original district PNG generators and historical metadata are retained; this final pixel-only layer paints the registered native background.",
+  "districts": [
+    {
+      "district": "city",
+      "native": "project/assets/backgrounds/toronto_city.png",
+      "historical_metadata": "content/city_art.json",
+      "retained_art": "project/original-art/crossings/toronto_city_before_crossings.png",
+      "paint_cells": 1113,
+      "before_canonical_patterns": 174,
+      "after_canonical_patterns": 174
+    },
+    {
+      "district": "west",
+      "native": "project/assets/backgrounds/toronto_west.png",
+      "historical_metadata": "content/districts/west_art.json",
+      "retained_art": "project/original-art/crossings/toronto_west_before_crossings.png",
+      "paint_cells": 354,
+      "before_canonical_patterns": 172,
+      "after_canonical_patterns": 172
+    },
+    {
+      "district": "high_park",
+      "native": "project/assets/backgrounds/toronto_high_park.png",
+      "historical_metadata": "content/districts/high_park_art.json",
+      "retained_art": "project/original-art/crossings/toronto_high_park_before_crossings.png",
+      "paint_cells": 320,
+      "before_canonical_patterns": 97,
+      "after_canonical_patterns": 97
+    },
+    {
+      "district": "east",
+      "native": "project/assets/backgrounds/toronto_east.png",
+      "historical_metadata": "content/districts/east_art.json",
+      "retained_art": "project/original-art/crossings/toronto_east_before_crossings.png",
+      "paint_cells": 484,
+      "before_canonical_patterns": 98,
+      "after_canonical_patterns": 98
+    },
+    {
+      "district": "port_lands",
+      "native": "project/assets/backgrounds/toronto_port_lands.png",
+      "historical_metadata": "content/districts/port_lands_art.json",
+      "retained_art": "project/original-art/crossings/toronto_port_lands_before_crossings.png",
+      "paint_cells": 225,
+      "before_canonical_patterns": 120,
+      "after_canonical_patterns": 120
+    },
+    {
+      "district": "north",
+      "native": "project/assets/backgrounds/toronto_north.png",
+      "historical_metadata": "content/districts/north_art.json",
+      "retained_art": "project/original-art/crossings/toronto_north_before_crossings.png",
+      "paint_cells": 337,
+      "before_canonical_patterns": 110,
+      "after_canonical_patterns": 110
+    }
+  ],
+  "source_colors": [
+    "#071821",
+    "#306850",
+    "#86c06c",
+    "#e0f8cf"
+  ],
+  "collision_bytes_changed": 0,
+  "palette_priority_bytes_changed": 0,
+  "building_footprints_changed": 0,
+  "road_geometry_changed": 0,
+  "npc_changes": 0,
+  "new_oam_objects": 0,
+  "new_runtime_state_bytes": 0,
+  "net_canonical_pattern_change_per_district": 0,
+  "compiled_resource_fit_verified": false,
+  "native_visual_verified": false,
+  "physical_visual_verified": false
+}

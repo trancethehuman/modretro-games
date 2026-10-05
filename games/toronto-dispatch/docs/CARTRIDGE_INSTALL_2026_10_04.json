@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "status": "vendor-reported-success",
+  "rom": {
+    "path": "project/build/toronto-dispatch-driving-only.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "8be1eff05236edfd05e475fe143f5b48e20db8d4a09c30f46e038e7d9643bdfb",
+    "title": "TORONTODISPATCH",
+    "colorMode": "gbc-only",
+    "mapper": "MBC5"
+  },
+  "device": {
+    "product": "ModRetro Chromatic",
+    "cartridge": "User-selected writable ModRetro DevDay cartridge",
+    "detectedCapacityBytes": 4194304
+  },
+  "authorization": {
+    "cartridgeEraseAndPossibleSaveLossAccepted": true,
+    "originalROMBackupRequirementWaived": true,
+    "originalROMExported": false
+  },
+  "saveDataBackup": {
+    "status": "exported-locally",
+    "includedInGit": false,
+    "sizeBytes": 32768,
+    "sha256": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+    "allBytesZero": true,
+    "restoreTested": false
+  },
+  "write": {
+    "vendorCLI": "1.2.1",
+    "elapsedMs": 49679,
+    "exitCode": 0,
+    "processClosed": true,
+    "automaticRetry": false,
+    "completedAtUTC": "2026-10-04T20:27:55.962Z"
+  },
+  "verification": {
+    "readBack": "not-reported-by-vendor",
+    "physicalColdBoot": "confirmed-by-user",
+    "physicalButtons": "confirmed-by-user",
+    "physicalGameplay": "pending",
+    "physicalSavePersistence": "pending",
+    "physicalAudio": "pending"
+  },
+  "notes": [
+    "The vendor reported success for the exact inspected, native-tested ROM. Its reported ROM digest identifies the input file; no separate complete cartridge read-back digest was supplied.",
+    "Original ROM was not exported. The user explicitly waived preservation before installation.",
+    "User confirmed cartridge cold boot with USB disconnected and physical button response. Gameplay, battery persistence and audio remain unverified; the original vendor output did not assert manual boot."
+  ],
+  "manualObservation": {
+    "date": "2026-10-04",
+    "source": "user",
+    "question": "After powering off, disconnecting USB, and powering on with the cartridge inserted, does Toronto Dispatch appear and respond to the physical buttons?",
+    "answer": "Yes, it boots and responds"
+  }
+}

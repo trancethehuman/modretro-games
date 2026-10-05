@@ -1,0 +1,3249 @@
+{
+  "schemaVersion": 1,
+  "kind": "curated-hardware-feedback-native-record",
+  "result": "scoped-passed",
+  "date": "2026-10-04",
+  "identity": {
+    "romPath": "project/build/toronto-dispatch-hardware-feedback.gbc",
+    "romSha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+    "romBytes": 1048576,
+    "runtime": "PyBoy 2.7.0 protocol 1",
+    "runtimeSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925",
+    "debugMode": "source",
+    "freshBootFrames": 180,
+    "sessionId": "9f28baa0a62c4d3e90025aeaad01d8da",
+    "branchId": "branch-0001"
+  },
+  "recording": {
+    "status": "stopped-closed-archived-retrieved",
+    "frames": 11786,
+    "eventCount": 6650,
+    "eventDigest": "64cd51eab7ee44ebd8e8a13ffe3f8b161ca5bafd4b8fb6e80a306f03e658ffcb",
+    "manifestSha256": "979b5d6d6aa72bd57746dec9a1980df88b831f98dd24ae05607f6cedb2341087",
+    "inventory": {
+      "digest": "4ba54b08f65aef501a3adae6925afd18da6974952fff1cff5b5a704bbce58b30",
+      "bytes": 5975724,
+      "entries": 1768
+    }
+  },
+  "provenance": {
+    "ordinaryButtonsOnly": true,
+    "readOnlyWRAMOffset": 502,
+    "readBytes": 58,
+    "gameMemoryWrites": false,
+    "checkpointOrSRAMImports": false,
+    "checkpointRestores": false,
+    "physicalOperation": false,
+    "observationScope": "35 selected semantic states from 128 completed input steps; full original events and samples retained locally and ignored. No action replay or position edits."
+  },
+  "observations": [
+    {
+      "input": {
+        "buttons": [],
+        "frames": 16
+      },
+      "frame": 204,
+      "state": {
+        "u": 560,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 30,
+        "seconds": 0,
+        "left": 0,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 0,
+        "health": 100,
+        "done": 0,
+        "subsecond": 23,
+        "complete": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "0023002d0023002d1e000000000000000000000000ff00640017000000000000000000000000000000000000000000000023002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 252,
+      "state": {
+        "u": 560,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 30,
+        "seconds": 0,
+        "left": 120,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 57,
+        "complete": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "0023002d0023002d1e0000007800000000000000000001640039000000000000000000000000000000000000000000000023002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 20
+      },
+      "frame": 750,
+      "state": {
+        "u": 765,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 30,
+        "seconds": 9,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 0,
+        "job": 0,
+        "stage": 1,
+        "health": 100,
+        "done": 0,
+        "subsecond": 15,
+        "complete": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f002d0023002d1e0009006f0000000000000000000164000f00000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 758,
+      "state": {
+        "u": 765,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 9,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 7,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 19,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f002d0023002d8a0009006f0000000000000700ff0264011301000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 890,
+      "state": {
+        "u": 765,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 9,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 3,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f002d0023002d8a0009006f0000000000000300ff0264012f01000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 60
+      },
+      "frame": 1050,
+      "state": {
+        "u": 765,
+        "v": 720,
+        "park_u": 560,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 9,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 3,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 47,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f002d0023002d8a0009006f0000000000000300ff0264012f01000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 1106,
+      "state": {
+        "u": 765,
+        "v": 738,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 9,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 52,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f202ed02f002d8a0009006f0000000000010003ff0264013401000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 1154,
+      "state": {
+        "u": 763.3125,
+        "v": 727.5625,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 10,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 38,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "b52f792dd02f002d8a000a006f0000000000010003ff0264012601000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 1178,
+      "state": {
+        "u": 765,
+        "v": 720,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 11,
+        "left": 111,
+        "speed": 0,
+        "heading": 0,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 6,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f002dd02f002d8a000b006f0000000000000003ff0264010601000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1266,
+      "state": {
+        "u": 765,
+        "v": 720,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 138,
+        "seconds": 12,
+        "left": 111,
+        "speed": 0,
+        "heading": 9,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 34,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 6,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d02f002dd02f002d8a000c006f0000000900000003ff0264012201000000000000000000000000000000000000000600d02f002d000000000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 260
+      },
+      "frame": 1526,
+      "state": {
+        "u": 703.125,
+        "v": 668.4375,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 16,
+        "left": 111,
+        "speed": 14,
+        "heading": 9,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 53,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 9,
+        "msg": 19,
+        "wanted": 2,
+        "wanted_left": 30,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f22bc729d02f002d4e0010006f000e000900000003ff0264013501000000000000000000000000000000000000091300f22bc72902001e000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 1742,
+      "state": {
+        "u": 707.3125,
+        "v": 664.125,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 20,
+        "left": 111,
+        "speed": -4,
+        "heading": 8,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 30,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 5,
+        "wanted": 2,
+        "wanted_left": 26,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "352c8229d02f002d4e0014006f00fcff0800000003ff0264011e01000000000000000000000000000000000000000500352c822902001a000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1846,
+      "state": {
+        "u": 712.0625,
+        "v": 664.125,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 22,
+        "left": 111,
+        "speed": 0,
+        "heading": 4,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 12,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 5,
+        "wanted": 2,
+        "wanted_left": 24,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "812c8229d02f002d4e0016006f0000000400000003ff0264010c01000000000000000000000000000000000000000500812c8229020018000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 100
+      },
+      "frame": 1946,
+      "state": {
+        "u": 712.0625,
+        "v": 718.3125,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 23,
+        "left": 111,
+        "speed": 14,
+        "heading": 4,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 52,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 23,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "812ce52cd02f002d4e0017006f000e000400000003ff0264013401000000000000000000000000000000000000000000812ce52c020017000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2052,
+      "state": {
+        "u": 712.0625,
+        "v": 730.5625,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 25,
+        "left": 111,
+        "speed": 0,
+        "heading": 8,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 37,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 21,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "812ca92dd02f002d4e0019006f0000000800000003ff0264012501000000000000000000000000000000000000000000812ca92d020015000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 120
+      },
+      "frame": 2172,
+      "state": {
+        "u": 650,
+        "v": 730.5625,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 27,
+        "left": 111,
+        "speed": 14,
+        "heading": 8,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 38,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 19,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "a028a92dd02f002d4e001b006f000e000800000003ff0264012601000000000000000000000000000000000000000000a028a92d020013000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2274,
+      "state": {
+        "u": 637.5,
+        "v": 730.5625,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 29,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 22,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 17,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d827a92dd02f002d4e001d006f0000000c00000003ff0264011601000000000000000000000000000000000000000000d827a92d020011000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 240
+      },
+      "frame": 2514,
+      "state": {
+        "u": 637.5,
+        "v": 580.125,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 33,
+        "left": 111,
+        "speed": 14,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 0,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 21,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 13,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d8274224d02f002d4e0021006f000e000c00000003ff0264011501000000000000000000000000000000000000000000d827422402000d000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 40
+      },
+      "frame": 2618,
+      "state": {
+        "u": 637.5,
+        "v": 568.125,
+        "park_u": 765,
+        "park_v": 720,
+        "cash": 78,
+        "seconds": 34,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 0,
+        "mode": 1,
+        "menu": 3,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 6,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 0,
+        "target": 0,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 12,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "d8278223d02f002d4e0022006f0000000c00000103ff0264010601000000000000000000000000000000000000000000d827822302000c000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 2828,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 78,
+        "seconds": 37,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 5,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 16,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 9,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234e0025006f0000000c00010504ff02640110010000000000000000000000000000002e2f00000000d8278223020009000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 480
+      },
+      "frame": 3308,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 78,
+        "seconds": 45,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 5,
+        "menu": 4,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 17,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 1,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234e002d006f0000000c00010504ff02640111010000000000000000000000000000002e2f00000000d8278223020001000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8
+      },
+      "frame": 3340,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 78,
+        "seconds": 45,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 1,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 40,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 1,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234e002d006f0000000c00010100ff02640128010000000000000000000000000000002e2f00000000d8278223020001000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 3356,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 78,
+        "seconds": 45,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 3,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 40,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 1,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234e002d006f0000000c00010300ff02640128010000000000000000000000000000002e2f00000000d8278223020001000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 120
+      },
+      "frame": 3476,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 78,
+        "seconds": 45,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 3,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 40,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 1,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234e002d006f0000000c00010300ff02640128010000000000000000000000000000002e2f00000000d8278223020001000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 3492,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 78,
+        "seconds": 45,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 1,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 40,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 2,
+        "wanted_left": 1,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234e002d006f0000000c00010101ff02640128010000000000000000000000000000002e2f00000000d8278223020001000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 240
+      },
+      "frame": 3748,
+      "state": {
+        "u": 671.5,
+        "v": 560.125,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 49,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 6,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 51,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 15,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 1,
+        "wanted_left": 27,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f8290223d82782234b0031006f0000000c00010601ff02640133010000000000000000000000000000002e2f0f000000d827822301001b000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 4732,
+      "state": {
+        "u": 980,
+        "v": 556,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 66,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 19,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 1,
+        "wanted_left": 10,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "403dc022d82782234b0042006f0000000c00010001ff02640113010000000000000000000000000000002e2f00000000403dc02201000a000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 360
+      },
+      "frame": 11242,
+      "state": {
+        "u": 970,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 174,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 45,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "a03ca020d82782234b00ae006f0000000c00010001ff0264012d010000000000000000000000000000002e2f00000000403dc022000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 48
+      },
+      "frame": 11290,
+      "state": {
+        "u": 959,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 175,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 36,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 106,
+        "msg": 18,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "f03ba020d82782234b00af006f0000000c00010001ff02640124010000000000000000000000000000002e2f006a1200f03ba020000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 48
+      },
+      "frame": 11338,
+      "state": {
+        "u": 942,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 176,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 25,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 63,
+        "msg": 18,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "e03aa020d82782234b00b0006f0000000c00010001ff02640119010000000000000000000000000000002e2f003f1200e03aa020000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 120
+      },
+      "frame": 11458,
+      "state": {
+        "u": 942,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 178,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 1,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 24,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 18,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "e03aa020d82782234b00b2006f0000000c00010001ff02640118010000000000000000000000000000002e2f00001200e03aa020000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 4
+      },
+      "frame": 11558,
+      "state": {
+        "u": 936,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 178,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 1,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 42,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 18,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "803aa020d82782234b00b2006f0000000c00010106ff0264012a010000000000000000000000000000002e2f00001200e03aa020000000000000"
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 11566,
+      "state": {
+        "u": 936,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 178,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 6,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 49,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 12,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "803aa020d82782234b00b2006f0000000c00010006ff02640131010000000000000000000000000000002e2f00000c00e03aa020000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 180
+      },
+      "frame": 11766,
+      "state": {
+        "u": 936,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 178,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 8,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 42,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "803aa020d82782234b00b2006f0000000c00010800ff0264012a010000000000000000000000000000002e2f00000000803aa020000000000000"
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 12
+      },
+      "frame": 11786,
+      "state": {
+        "u": 936,
+        "v": 522,
+        "park_u": 637.5,
+        "park_v": 568.125,
+        "cash": 75,
+        "seconds": 178,
+        "left": 111,
+        "speed": 0,
+        "heading": 12,
+        "vehicle": 0,
+        "onfoot": 1,
+        "mode": 0,
+        "menu": 0,
+        "job": 255,
+        "stage": 2,
+        "health": 100,
+        "done": 1,
+        "subsecond": 59,
+        "complete": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "origin": 46,
+        "target": 47,
+        "ride_left": 0,
+        "cooldown": 0,
+        "msg": 0,
+        "wanted": 0,
+        "wanted_left": 0,
+        "district": 0,
+        "park_district": 0
+      },
+      "hex": "803aa020d82782234b00b2006f0000000c00010000ff0264013b010000000000000000000000000000002e2f00000000803aa020000000000000"
+    }
+  ],
+  "completedInputSequence": [
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 188
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 16
+      },
+      "frame": 204
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 212
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 220
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 228
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 236
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 244
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 252
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 120
+      },
+      "frame": 372
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 60
+      },
+      "frame": 432
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 460
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 16
+      },
+      "frame": 476
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 484
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 492
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 60
+      },
+      "frame": 552
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 24
+      },
+      "frame": 576
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 30
+      },
+      "frame": 606
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 614
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 622
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 80
+      },
+      "frame": 702
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 730
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 20
+      },
+      "frame": 750
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 758
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 766
+    },
+    {
+      "input": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8
+      },
+      "frame": 774
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 782
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 790
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 60
+      },
+      "frame": 850
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8
+      },
+      "frame": 858
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 866
+    },
+    {
+      "input": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8
+      },
+      "frame": 874
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 882
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 890
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 60
+      },
+      "frame": 950
+    },
+    {
+      "input": {
+        "buttons": [
+          "right"
+        ],
+        "frames": 40
+      },
+      "frame": 990
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 60
+      },
+      "frame": 1050
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8
+      },
+      "frame": 1058
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1066
+    },
+    {
+      "input": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 8
+      },
+      "frame": 1074
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1082
+    },
+    {
+      "input": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 8
+      },
+      "frame": 1090
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1098
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 1106
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 1130
+    },
+    {
+      "input": {
+        "buttons": [
+          "left"
+        ],
+        "frames": 8
+      },
+      "frame": 1138
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1146
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 1154
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 1178
+    },
+    {
+      "input": {
+        "buttons": [
+          "left"
+        ],
+        "frames": 80
+      },
+      "frame": 1258
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1266
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 260
+      },
+      "frame": 1526
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 1554
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 20
+      },
+      "frame": 1574
+    },
+    {
+      "input": {
+        "buttons": [
+          "left"
+        ],
+        "frames": 12
+      },
+      "frame": 1586
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1594
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 120
+      },
+      "frame": 1714
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 1742
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 20
+      },
+      "frame": 1762
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 30
+      },
+      "frame": 1792
+    },
+    {
+      "input": {
+        "buttons": [
+          "left"
+        ],
+        "frames": 46
+      },
+      "frame": 1838
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 1846
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 100
+      },
+      "frame": 1946
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 1974
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 1998
+    },
+    {
+      "input": {
+        "buttons": [
+          "right"
+        ],
+        "frames": 46
+      },
+      "frame": 2044
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2052
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 120
+      },
+      "frame": 2172
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 2200
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 20
+      },
+      "frame": 2220
+    },
+    {
+      "input": {
+        "buttons": [
+          "right"
+        ],
+        "frames": 46
+      },
+      "frame": 2266
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2274
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 240
+      },
+      "frame": 2514
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 28
+      },
+      "frame": 2542
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 20
+      },
+      "frame": 2562
+    },
+    {
+      "input": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8
+      },
+      "frame": 2570
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2578
+    },
+    {
+      "input": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 40
+      },
+      "frame": 2618
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2626
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 2634
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 2658
+    },
+    {
+      "input": {
+        "buttons": [
+          "right"
+        ],
+        "frames": 78
+      },
+      "frame": 2736
+    },
+    {
+      "input": {
+        "buttons": [
+          "up"
+        ],
+        "frames": 60
+      },
+      "frame": 2796
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2804
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8
+      },
+      "frame": 2812
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 2820
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 2828
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 480
+      },
+      "frame": 3308
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 3332
+    },
+    {
+      "input": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8
+      },
+      "frame": 3340
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 3348
+    },
+    {
+      "input": {
+        "buttons": [
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 3356
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 120
+      },
+      "frame": 3476
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8
+      },
+      "frame": 3484
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 3492
+    },
+    {
+      "input": {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8
+      },
+      "frame": 3500
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 8
+      },
+      "frame": 3508
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 240
+      },
+      "frame": 3748
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 4708
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 24
+      },
+      "frame": 4732
+    },
+    {
+      "input": {
+        "buttons": [
+          "up"
+        ],
+        "frames": 56
+      },
+      "frame": 4788
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 40
+      },
+      "frame": 4828
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 60
+      },
+      "frame": 4888
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 160
+      },
+      "frame": 5048
+    },
+    {
+      "input": {
+        "buttons": [
+          "up"
+        ],
+        "frames": 50
+      },
+      "frame": 5098
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 4
+      },
+      "frame": 5102
+    },
+    {
+      "input": {
+        "buttons": [
+          "left"
+        ],
+        "frames": 20
+      },
+      "frame": 5122
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 6082
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 7042
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 8002
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 8962
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 9922
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 960
+      },
+      "frame": 10882
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 360
+      },
+      "frame": 11242
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 48
+      },
+      "frame": 11290
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 48
+      },
+      "frame": 11338
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 120
+      },
+      "frame": 11458
+    },
+    {
+      "input": {
+        "buttons": [
+          "left"
+        ],
+        "frames": 16
+      },
+      "frame": 11474
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 4
+      },
+      "frame": 11478
+    },
+    {
+      "input": {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8
+      },
+      "frame": 11486
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 4
+      },
+      "frame": 11490
+    },
+    {
+      "input": {
+        "buttons": [
+          "down"
+        ],
+        "frames": 64
+      },
+      "frame": 11554
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 4
+      },
+      "frame": 11558
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 11566
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 12
+      },
+      "frame": 11578
+    },
+    {
+      "input": {
+        "buttons": [
+          "a",
+          "b",
+          "start",
+          "select"
+        ],
+        "frames": 8
+      },
+      "frame": 11586
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 180
+      },
+      "frame": 11766
+    },
+    {
+      "input": {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8
+      },
+      "frame": 11774
+    },
+    {
+      "input": {
+        "buttons": [],
+        "frames": 12
+      },
+      "frame": 11786
+    }
+  ],
+  "images": [
+    {
+      "frame": 758,
+      "path": "docs/playtest-hardware-feedback/delivery-758.png",
+      "sha256": "5972b4b85770cb86c4e27f3c96874054eecfae9df24fbacc13aa73ec7a57ab67",
+      "rgbaSha256": "27c1520eeda1a2cfba39edcb4840721815c84cc8eefbe9d679f75f436987f701",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 1106,
+      "path": "docs/playtest-hardware-feedback/walking-1106.png",
+      "sha256": "6acf502723da699cd4e013b78434f018780c5ebc52280af004d5216ac93ce18c",
+      "rgbaSha256": "0033c536e51664b887a7a91686c32919008242c571fe9b776a67e2fcf2a6a0e9",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 1178,
+      "path": "docs/playtest-hardware-feedback/car-entry-complete-1178.png",
+      "sha256": "5a6347f5334f41ef510e6e35ea762a3423ba2f290110444f69f282a494b121a6",
+      "rgbaSha256": "7f956fe8b1a6f49a5b453227bf14f5a43643eea36ec98d2a2d986212905182f8",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 1388,
+      "path": "docs/playtest-hardware-feedback/pedestrian-airborne-1388.png",
+      "sha256": "afa636d9755b18e5cc3eb848b6051a6b4c449eb469f70cbd34fd35998e047258",
+      "rgbaSha256": "9e8e8523725476b1c99c54b185e5dd52e7b3a41a5e8dc21147adfd27d345296b",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 1526,
+      "path": "docs/playtest-hardware-feedback/pedestrian-prone-1526.png",
+      "sha256": "d76be56fb7172d9f58ca099f2b9fe9cc3810ee6be8966c68e87a9b35c40e2e62",
+      "rgbaSha256": "c7af3e51e042401086e02b620dc5ea42966a2fb6281c2d4607da49fd7fe2dce5",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 3308,
+      "path": "docs/playtest-hardware-feedback/city-wait-3308.png",
+      "sha256": "6291065e0003952b1baab23803a0535195d3e5bde00cc5869b510f331178f10a",
+      "rgbaSha256": "8f3ac3ad80a6ad5d354d64f1e5b775f0d5aa5a04f3ab50a94e46619599c20ac1",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 3748,
+      "path": "docs/playtest-hardware-feedback/queen-ride-3748.png",
+      "sha256": "293a16c4e5fb633e0bf409ec6a3c3e48055df8a0cdf6ea36b31123dab86f756f",
+      "rgbaSha256": "f5f88a76610657859a12a7d93ff7199c6523696ed17024c484e7f77c476d7210",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 11338,
+      "path": "docs/playtest-hardware-feedback/courier-tram-hit-11338.png",
+      "sha256": "7d876948d4e84470e463f422b3ab5050a74f2181f33f7750088389a78b9cfeb0",
+      "rgbaSha256": "763c585b2d62f8782ef68b5f9593110e767483f2a658d805efb97f471f328a64",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 11458,
+      "path": "docs/playtest-hardware-feedback/courier-recovered-11458.png",
+      "sha256": "980d8786851dff90731ac917d9cdd0d5bb21199df855147d9e2ebea10b189d57",
+      "rgbaSha256": "1c6fa92dd4442eaf1f137313ca1bbe911c56cf8ea6952764c8e0a95960968bee",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 11558,
+      "path": "docs/playtest-hardware-feedback/pause-menu-11558.png",
+      "sha256": "800e9cfd044aafd3c66203cd4b40fcc81427791b65ad17e0c106c6e4ab3e281a",
+      "rgbaSha256": "1e8a3f35e64faf21a2ba1a205cb78ab556ec802a8dc6f5ede1d4a1c869460ad1",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "frame": 11766,
+      "path": "docs/playtest-hardware-feedback/saved-reset-11766.png",
+      "sha256": "0e86c800af0bfc4062a06558369332eb16ba0dcd020e5769dfc30dc42c09d474",
+      "rgbaSha256": "7176c4c96af74cb83d0ef9eeb5f309ddff0ec824d6396584796e89f840828b58",
+      "width": 160,
+      "height": 144
+    }
+  ],
+  "checks": {
+    "MarketStart": {
+      "job": 0,
+      "resultFrame": 758,
+      "condition": 100,
+      "secondsLeft": 111,
+      "credit": 108,
+      "cash": 138,
+      "done": 1
+    },
+    "cardinalAlignment": {
+      "eastFrames": [
+        252,
+        750
+      ],
+      "southFrames": [
+        1846,
+        1946
+      ],
+      "westFrames": [
+        2052,
+        2172
+      ],
+      "northFrames": [
+        2274,
+        2514
+      ],
+      "settledOrthogonalCoordinatesEqual": true,
+      "nativeCarMaximumSpeedQ4": 14
+    },
+    "visibleEntry": {
+      "exitFrame": 1106,
+      "intermediateFrame": 1154,
+      "occupiedFrame": 1178
+    },
+    "mapFreezeFrames": [
+      [
+        890,
+        1050
+      ],
+      [
+        3356,
+        3476
+      ]
+    ],
+    "pedestrianImpactRendering": {
+      "airborneFrames": [
+        1388,
+        1500
+      ],
+      "proneFrames": [
+        1516,
+        1526
+      ],
+      "capturedFineCash": [
+        118,
+        78
+      ],
+      "worldThrowDistanceMeasured": false
+    },
+    "menuRepeat": {
+      "down40FramesResult": 3,
+      "down64FramesResult": 6,
+      "pauseSelectShortcut": true
+    },
+    "QueenTrip": {
+      "origin": 46,
+      "target": 47,
+      "waitFrame": 2828,
+      "cashBefore": 78,
+      "paidFrame": 3748,
+      "cashPaid": 75,
+      "arrivalFrame": 4732,
+      "cashAtArrival": 75,
+      "onfootAtArrival": true,
+      "parkedCarUnchanged": true,
+      "scheduledDepartureSecond": 48,
+      "scheduledArrivalSecond": 64
+    },
+    "tramFootImpact": {
+      "beforeFrame": 11242,
+      "flightFrame": 11290,
+      "proneFrame": 11338,
+      "recoveredFrame": 11458,
+      "uBefore": 970,
+      "uAfter": 942,
+      "v": 522,
+      "condition": 100,
+      "message": 18,
+      "cashUnchanged": true,
+      "walkingAfterRecoveryFrame": 11474
+    },
+    "saveReset": {
+      "explicitSaveFrame": 11566,
+      "fourButtonResetFrame": 11586,
+      "restoredHelpFrame": 11766,
+      "finalNeutralFrame": 11786,
+      "cash": 75,
+      "done": 1,
+      "poseAndParkedCarPreserved": true,
+      "subsecondRestored": 42,
+      "physicalPersistenceVerified": false
+    },
+    "sampledOAM": [
+      {
+        "frame": 3308,
+        "visibleObjects": 17,
+        "peakPerScanline": 7,
+        "overLimitScanlines": 0
+      },
+      {
+        "frame": 3748,
+        "visibleObjects": 11,
+        "peakPerScanline": 5,
+        "overLimitScanlines": 0
+      },
+      {
+        "frame": 11786,
+        "visibleObjects": 7,
+        "peakPerScanline": 5,
+        "overLimitScanlines": 0
+      }
+    ]
+  },
+  "retainedControllerCorrections": [
+    "Two premature Market Select attempts outside the actual client radius refuse before the genuine handoff.",
+    "An 80-frame stationary turn yields heading 9 rather than the planned 8; the following northwest drive hits civilians and terrain. Ordinary reverse and yaw corrections recover the car.",
+    "Walking toward the tram during its door dwell stops at its collision boundary; the later westbound tram naturally contacts the standing courier."
+  ],
+  "curationCorrections": [
+    "The initial map-freeze comparator used Pause at3340 and return-Pause at3492, which differ in menu selection. The corrected in-map3356→3476 comparison preserves all58 bytes; clock/cash/booking also remain fixed through the full paused interval."
+  ],
+  "limitations": [
+    "Physical cartridge contains the prior 8be1 ROM; this update has not been installed.",
+    "No complete 104-contract play, two measured enjoyable human hours, motorcycle74 replay at the slower speed, or broad human balance test.",
+    "No deepest-stack or whole-city frame-pacing measurement, universal flicker proof, or physical save/audio test.",
+    "The partial-entry save overlap remains pending; ordinary near-car A recovers.",
+    "NPC avoidance beside the wider parked car may allow about 1px visual overlap.",
+    "Civilian deaths last only in the loaded district; at most six prone/active civilian visual slots are retained.",
+    "Road-NPC-to-foot damage is actual-C host evidence; this native impact sample uses the tram.",
+    "Existing 344 building footprints and 104 deadlines remain unchanged."
+  ]
+}

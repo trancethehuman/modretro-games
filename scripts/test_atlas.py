@@ -1,7 +1,7 @@
 """Exercise the unchanged native atlas API against independent source oracles.
 
 This reads registered scene collisions and authored geographic water metadata,
-then compiles the actual td_atlas.c with host integer/bank adapters only. Native
+then compiles the actual td_atlas.c and available data units with host adapters. Native
 2bpp bytes are decoded independently; no generator rendering functions, plugin
 calls, ROM builds, Game Boy timing or hardware claims are involved.
 """
@@ -75,7 +75,7 @@ def authored_water(scene, point, metadata):
             bool(metadata.get("pond") and inside_polygon(point, metadata["pond"])))
 
 
-def fixture_header():
+def fixture_header(registered_islands=True):
     world = json.loads((GAME / "content/districts/world.json").read_text())
     districts = world["districts"]
     count = re.findall(r"^#define TD_DISTRICT_COUNT (\d+)$",
@@ -83,24 +83,37 @@ def fixture_header():
     require(len(count) == 1 and len(districts) == int(count[0]) and
             [district["id"] for district in districts] == list(range(len(districts))),
             "Atlas oracle requires the actual registered district order/count.")
-    require(len(districts) == 4, "Review the independent four-scene water oracle before changing world coverage.")
-    expected_sources = {"toronto_city": "content/city_art.json",
-                        "toronto_west": "content/districts/west_art.json",
-                        "toronto_high_park": "content/districts/high_park_art.json",
-                        "toronto_east": "content/districts/east_art.json"}
+    # The accepted northern append translates only atlas display coordinates.
+    # Synthetic appended-source fixtures may retain either historical layout;
+    # all four original identities and their relative placement remain fixed.
+    display_y = 976 if districts and districts[0]['atlas_y'] == 976 else 0
+    require(4 <= len(districts) <= 32 and
+            [district['scene'] for district in districts[:4]] ==
+            ['toronto_city', 'toronto_west', 'toronto_high_park', 'toronto_east'] and
+            [(district['atlas_x'], district['atlas_y']) for district in districts[:4]] ==
+            [(2048, display_y), (1024, display_y), (0, display_y), (3072, display_y)],
+            "Existing atlas district identities and placement must remain append-only.")
+    if registered_islands:
+        require(len(districts) >= 7 and
+                [d['scene'] for d in districts[4:7]] ==
+                ['toronto_port_lands', 'toronto_islands', 'toronto_north'] and
+                [(d['atlas_x'], d['atlas_y']) for d in districts[:7]] ==
+                [(2048, 976), (1024, 976), (0, 976), (3072, 976),
+                 (3072, 1952), (2048, 1952), (2048, 0)],
+                'North must append at district 6 with only the accepted 976-pixel display translation.')
     actual_width = max(district["atlas_x"] + district["width_pixels"] for district in districts) // 8
     actual_height = max(district["atlas_y"] + district["height_pixels"] for district in districts) // 8
-    require((actual_width, actual_height) == (512, 122), "Review native row addressing when atlas dimensions change.")
-    require([district["id"] for district in sorted(districts, key=lambda d: d["atlas_x"])] == [2, 1, 0, 3],
-            "The tested west-to-east district placement must match the registered world.")
+    require(20 <= (actual_width + 7) // 8 <= 255 and 12 <= (actual_height + 7) // 8 <= 255,
+            "Oracle dimensions exceed the public native UBYTE atlas interface.")
+    padded_width = (actual_width + 7) // 8 * 8
     padded_height = (actual_height + 7) // 8 * 8
-    pixels = [0] * (actual_width * padded_height)
+    pixels = [0] * (padded_width * padded_height)
     occupied = set()
     metas = []
     classes = [0] * 4
     for district in districts:
         scene_name = district["scene"]
-        require(scene_name in expected_sources, "An unreviewed scene has no independent water oracle.")
+        require(re.fullmatch(r'toronto_[a-z0-9_]+', scene_name), "Invalid registered scene identity.")
         scene = json.loads((GAME / "project/project/scenes" / scene_name / "scene.gbsres").read_text())
         require((scene["width"], scene["height"]) == (128, 122) and scene["symbol"] == district["symbol"],
                 "Atlas oracle scene dimensions/identity disagree with registered native resources.")
@@ -109,7 +122,32 @@ def fixture_header():
                     for field in ("atlas_x", "atlas_y")), "Atlas placement must be nonnegative and tile aligned.")
         collisions = collision_bytes(scene["collisions"], 128 * 122)
         require(set(collisions) <= {0, 15, 16}, "Review newly introduced collision classes before assigning atlas colours.")
-        metadata = json.loads((GAME / expected_sources[scene_name]).read_text())
+        # Independently read the declared source path rather than importing
+        # the production generator's metadata resolver.
+        metadata_path = district.get('art_source', 'content/city_art.json' if district['id'] == 0 else (
+            'content/districts/' + scene_name.removeprefix('toronto_') + '_art.json'))
+        require(isinstance(metadata_path, str) and metadata_path.startswith('content/') and
+                not Path(metadata_path).is_absolute() and '..' not in Path(metadata_path).parts and
+                (GAME / metadata_path).resolve().is_relative_to((GAME / 'content').resolve()),
+                'Atlas water source must be a confined public content path.')
+        metadata = json.loads((GAME / metadata_path).read_text())
+        require(metadata['dimensions'] == [1024, 976], "Atlas oracle water metadata dimensions disagree.")
+        if scene_name == 'toronto_north':
+            # These fixed source probes independently distinguish public roads,
+            # foot-only steps/curbs, closed grounds and the small Yellow Creek.
+            # They do not import the art generator or infer driving from water.
+            for x, y, flag, wet in (
+                    (640, 200, 0, False), (336, 952, 0, False),
+                    (336, 532, 16, False), (264, 488, 16, False),
+                    (296, 464, 16, False), (752, 256, 16, False),
+                    (568, 704, 16, False), (828, 204, 15, True),
+                    (812, 204, 16, False), (844, 204, 16, False),
+                    (828, 188, 16, False), (828, 468, 15, False),
+                    (900, 700, 15, False), (244, 356, 15, False),
+                    (372, 356, 15, False), (600, 464, 15, False)):
+                require(collisions[(y // 8) * 128 + x // 8] == flag and
+                        authored_water(scene_name, (x, y), metadata) == wet,
+                        f'North atlas source probe changed at ({x},{y}).')
         offset_x, offset_y = district["atlas_x"] // 8, district["atlas_y"] // 8
         name = district["name"]
         require(name.isascii() and len(name) <= 18, "District name must fit the native 19-byte output.")
@@ -124,27 +162,37 @@ def fixture_header():
             # a bridge remains visible land even when its centre is wet.
             colour = 1 if collision == 0 else 2 if collision == 16 else (
                 3 if authored_water(scene_name, (tile_x * 8 + 4, tile_y * 8 + 4), metadata) else 0)
-            pixels[atlas_y * actual_width + atlas_x] = colour
+            pixels[atlas_y * padded_width + atlas_x] = colour
             classes[colour] += 1
-    require(len(occupied) == actual_width * actual_height and all(classes),
-            "The oracle must cover the actual world and exercise all four pixel classes.")
+    require(len(occupied) == len(districts) * 128 * 122 and all(classes),
+            "The oracle must cover each registered district and all four pixel classes.")
     # Check the independent water oracle at real geographic boundary examples.
     core = json.loads((GAME / "content/city_art.json").read_text())
     require(authored_water("toronto_city", (892, 100), core) and
-            not authored_water("toronto_city", (400, 924), core) and
+            authored_water("toronto_city", (400, 924), core) and
             authored_water("toronto_city", (620, 924), core),
-            "Core water oracle lost the Don River, Island land or intervening lake.")
+            "Core water oracle lost the Don River or kept removed duplicate Island ground.")
+    if registered_islands:
+        island = next((d for d in districts if d['id'] == 5), None)
+        require(island is not None and island['scene'] == 'toronto_islands' and
+                (island['atlas_x'], island['atlas_y']) == (2048, 1952),
+                'Fuller Islands must occupy its registered north-up cell without a road seam.')
+        island_art = json.loads((GAME / island['art_source']).read_text())
+        require(authored_water('toronto_islands', (20, 20), island_art) and
+                not authored_water('toronto_islands', (512, 448), island_art),
+                'Independent Island water oracle must distinguish lake from the Centre dock.')
     hp = json.loads((GAME / "content/districts/high_park_art.json").read_text())
     require(inside_polygon((650, 550), hp["pond"]) and not inside_polygon((750, 550), hp["pond"]),
             "Independent pond oracle does not distinguish land and water.")
     rows = ["typedef struct { UBYTE id; UWORD x,y,width,height; const char *name; } oracle_district_t;",
             f"#define ORACLE_DISTRICT_COUNT {len(districts)}",
             f"#define ORACLE_WIDTH {actual_width}", f"#define ORACLE_HEIGHT {actual_height}",
+            f"#define ORACLE_PADDED_WIDTH {padded_width}",
             f"#define ORACLE_PADDED_HEIGHT {padded_height}",
             "static const oracle_district_t oracle_districts[]={" + ",".join(metas) + "};",
-            "static const UBYTE oracle_pixels[ORACLE_WIDTH*ORACLE_PADDED_HEIGHT]={"]
-    rows += [",".join(map(str, pixels[offset:offset + actual_width])) + ","
-             for offset in range(0, len(pixels), actual_width)]
+            "static const UBYTE oracle_pixels[ORACLE_PADDED_WIDTH*ORACLE_PADDED_HEIGHT]={"]
+    rows += [",".join(map(str, pixels[offset:offset + padded_width])) + ","
+             for offset in range(0, len(pixels), padded_width)]
     rows += ["};", ""]
     return "\n".join(rows)
 
@@ -184,7 +232,10 @@ typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
         subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
                         "-Wno-unknown-pragmas", "-fsanitize=address,undefined",
                         "-I", str(work), "-I", str(ENGINE / "include"),
-                        str(HARNESS), "-o", str(binary)], check=True)
+                        str(HARNESS),
+                        *map(str, sorted(ENGINE.glob('src/td_atlas_patterns_*.c'))),
+                        *map(str, sorted(ENGINE.glob('src/td_atlas_rows_*.c'))),
+                        "-o", str(binary)], check=True)
         raise SystemExit(subprocess.run([str(binary)], check=False).returncode)
 
 

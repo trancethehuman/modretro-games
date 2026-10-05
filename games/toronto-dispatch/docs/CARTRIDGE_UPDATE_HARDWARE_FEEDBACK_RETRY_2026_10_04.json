@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "status": "vendor-reported-success",
+  "previousAttempt": "CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json",
+  "rom": {
+    "path": "project/build/toronto-dispatch-hardware-feedback.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+    "title": "TORONTODISPATCH",
+    "colorMode": "gbc-only",
+    "mapper": "MBC5"
+  },
+  "device": {
+    "product": "ModRetro Chromatic",
+    "cartridge": "User-selected writable ModRetro DevDay cartridge",
+    "selection": "Matched the intended reconnected device against fresh USB enumeration",
+    "previouslyDetectedCapacityBytes": 4194304,
+    "capacityFreshlyRedetected": false
+  },
+  "authorization": {
+    "userReconnectedDeviceAndExplicitlyRequestedRetry": true,
+    "priorCartridgeEraseAndPossibleSaveLossConsentReused": true,
+    "originalROMBackupRequirementWaived": true,
+    "originalROMExported": false
+  },
+  "write": {
+    "operationId": "eb66092f7ebec12ce71c0291e1556d8b08dee87b28e2ded638f0bea603e1c8b4",
+    "vendorCLI": "1.2.1",
+    "state": "succeeded",
+    "stage": "finished",
+    "success": true,
+    "cartridgeWrite": "vendor-reported-success",
+    "elapsedMs": 52404,
+    "pluginWriteRequestsInThisAttempt": 1,
+    "separatelyAuthorizedPluginWriteRequestsAcrossBothAttempts": 2,
+    "automaticPluginRetry": false,
+    "exitCode": 0,
+    "exitedAtUTC": "2026-10-04T23:02:07.269Z",
+    "processCloseCode": 0,
+    "processClosed": true,
+    "closedAtUTC": "2026-10-04T23:02:07.275Z",
+    "completedAtUTC": "2026-10-04T23:02:07.282Z"
+  },
+  "enumeration": {
+    "exitCode": 0,
+    "processCloseCode": 0
+  },
+  "verification": {
+    "cartridgeWrite": "vendor-reported-success",
+    "readBack": "not-reported-by-vendor",
+    "physicalColdBoot": "user-confirmed",
+    "physicalButtons": "user-confirmed",
+    "physicalGameplay": "pending",
+    "physicalSavePersistence": "pending",
+    "physicalAudio": "pending",
+    "physicalFlicker": "pending",
+    "vendorManualBootAndPlayVerified": false,
+    "userReport": {
+      "procedure": "Power off, disconnect USB, power on with the same cartridge inserted",
+      "response": "Yes, it boots and responds",
+      "scope": "New hardware-feedback ROM cold boot and physical button response; extended gameplay not yet reviewed"
+    }
+  },
+  "notes": [
+    "The first failed write remains recorded separately. This retry followed the user's reconnection and explicit request; it was not an automatic retry of an uncertain operation.",
+    "The vendor reported success for the same inspected, native-tested ROM and the writer closed. Its returned ROM digest identifies the input file; no separate complete cartridge read-back digest was supplied.",
+    "The user confirmed this new ROM cold-boots with USB disconnected and responds to physical buttons. Extended gameplay, save persistence, audio and flicker checks remain pending; older 8be1 observations retain their separate scope.",
+    "Source, ROM files, frozen reviewed ZIPs and prior records remain unchanged. Raw device identities, selection tokens, activation state, saves and operation journals remain local and ignored."
+  ]
+}

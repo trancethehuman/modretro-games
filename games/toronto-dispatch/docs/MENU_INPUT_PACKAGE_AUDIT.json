@@ -1,0 +1,146 @@
+{
+  "outcome": "passed-independent-menu-input-package-audit",
+  "checks": 1337,
+  "checksByGroup": {
+    "source": 207,
+    "buildIdentity": 6,
+    "documents": 30,
+    "nativeIdentity": 9,
+    "prefix": 3,
+    "package": 21,
+    "header": 3,
+    "resources": 21,
+    "licenses": 9,
+    "links": 20,
+    "toolchain": 8,
+    "limits": 5,
+    "privacy": 6
+  },
+  "readOnlyGitAndGuideChecks": {
+    "Git": 479,
+    "source": 406,
+    "links": 60,
+    "documents": 44
+  },
+  "findings": [],
+  "sourceCommit": "b7666c784cac0651a3c9f5e22bc28c707eeec667",
+  "projectTree": "5f23a975046f90ba36e342ad0ca036d9b237836b",
+  "committedProjectInputCount": 203,
+  "committedInputsEqualFrozenBuild": true,
+  "package": {
+    "path": "games/toronto-dispatch/project/build/toronto-dispatch-menu-input-release.zip",
+    "bytes": 139546,
+    "sha256": "65760b05a2b7e3065954e9d5cd776cd53534c24aaf411041d0f957d91808b71f",
+    "members": [
+      "BUILDINFO.json",
+      "LICENSE",
+      "LOADING.md",
+      "ROM_NOTICES.txt",
+      "SHA256SUMS",
+      "toronto-dispatch-menu-input-release.gbc"
+    ],
+    "memberSizes": {
+      "BUILDINFO.json": 1395,
+      "LICENSE": 1084,
+      "LOADING.md": 18980,
+      "ROM_NOTICES.txt": 6889,
+      "SHA256SUMS": 106,
+      "toronto-dispatch-menu-input-release.gbc": 1048576
+    },
+    "crcVerified": true
+  },
+  "rom": {
+    "filename": "toronto-dispatch-menu-input-release.gbc",
+    "bytes": 1048576,
+    "sha256": "7ccfa3b0532b2fa2f65f5198644c8f5ee3dc59df2b2e40034a3f1af954bdbeb9"
+  },
+  "noiSha256": "d576cdeb32107978e2e33e68730557a56bbdbe36a5c37bca3e10c8602c7ba79e",
+  "sourceFingerprint": "7b9f49745388edc9df59b159cca8d9314b2da82169b37ef40c50bfbf666cfd7d",
+  "sourcePinsSha256": "1207fb11cbd443fcb02a77fa705f8a875c4cbce734b45839a5b849c2710f96fc",
+  "officialBuildReceiptSha256": "384a06537efbebef2afb4e06f733a10d1cbbf8f167e1e2b96822179b93ce8c1d",
+  "retainedResourceSourceChecks": 219647,
+  "retainedOriginalNativeAndProseChecks": 34355,
+  "retainedNarrowProseRefreshChecks": 403,
+  "retainedCurationChecks": 13669,
+  "nativePublicManifest": {
+    "path": "games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json",
+    "bytes": 3426957,
+    "sha256": "9ec20c81de387889edea1a5590605c314e8b2449795f9f17f23b720b4d7cc6f5"
+  },
+  "compiledResourceLocations": {
+    "all64_native_stops": {
+      "bank": 25,
+      "address": "0x4066",
+      "bytes": 1664,
+      "sha256": "27bbc58cff8e814f9021fd58ff808d5ac7e40bc064836b2ad6b5f3fe5c407f63",
+      "exactNorthBaseline": true
+    },
+    "all104_native_jobs": {
+      "bank": 25,
+      "address": "0x46e6",
+      "bytes": 4056,
+      "sha256": "ff9773dabe9c6f5f698d70b3a012b2f9022f3721aa4b04d05e8ace447e060bc8",
+      "exactNorthBaseline": true
+    }
+  },
+  "compiledSceneCount": 7,
+  "retainedSpriteAssetCount": 6,
+  "header": {
+    "CGBOnly": true,
+    "mapper": "MBC5+RUMBLE+RAM+BATTERY",
+    "ROMBytes": 1048576,
+    "SRAMBytes": 32768,
+    "headerChecksum": 232,
+    "globalChecksum": 62264
+  },
+  "resourceLimits": {
+    "mainBank2FreeBytes": 1,
+    "UIBank1FreeBytes": 3,
+    "saveBank29FreeBytes": 15,
+    "staticReserveBytes": 1096,
+    "saveVersion": 10,
+    "savePayloadBytes": 58,
+    "deepestStackMeasured": false
+  },
+  "loadingRelativeLinksConverted": [
+    "games/toronto-dispatch/docs/BUILD.md",
+    "games/toronto-dispatch/TESTING.md",
+    "docs/HARDWARE.md",
+    "games/toronto-dispatch/TESTING.md",
+    "games/toronto-dispatch/docs/MENU_INPUT_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_MENU_INPUT_RELEASE.json",
+    "games/toronto-dispatch/docs/NORTH_PACKAGE_AUDIT.json",
+    "games/toronto-dispatch/docs/NORTH_BUILD_AUDIT.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_FRESH.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_CONTINUED.json",
+    "games/toronto-dispatch/docs/NATIVE_NORTH_SUPPLEMENT.json",
+    "games/toronto-dispatch/docs/NATIVE_UI_POLISH_SAMPLES.json",
+    "games/toronto-dispatch/docs/NATIVE_CAMPAIGN_TWENTY_TWO_SAMPLES.json",
+    "games/toronto-dispatch/docs/NATIVE_TERRAIN_CACHE_COMPARISON.json",
+    "games/toronto-dispatch/docs/NATIVE_COURIER_CHAIN_SAMPLES.json",
+    "games/toronto-dispatch/TESTING.md"
+  ],
+  "oldPrefix": {
+    "stops": 59,
+    "jobs": 96,
+    "exactNativeFields": true
+  },
+  "notices": [
+    "MIT project authorship",
+    "Open Government Licence Toronto City attribution",
+    "GB Studio/engine/audio third-party terms retained"
+  ],
+  "limits": [
+    "Read-only ZIP/filesystem/immutable Git objects; no packaging/build/native/plugin/browser/device/source or Git mutation.",
+    "All203 committed inputs equal actual frozen build; retained compiled/native checks are separately identified, not inherited oldNorth PC proofs or rerun native coverage.",
+    "NewROM native record completes only job0 withcredit104/cash134/done1; older eight-job North progress remains separate.",
+    "No all104/human two-hour enjoyment/everypaidmode/native-oldSRAM/crossROMcheckpoint/wholecityFPS/deepeststack/cartridgewrite/coldboot/physicalsave acceptance.",
+    "Package contains exactly six root files; no NOI, raw recordings, opaque saves/checkpoints, activation/device state or privatehost paths."
+  ],
+  "ignoredAuditProvenance": {
+    "path": "games/toronto-dispatch/project/build/MENU_INPUT_PACKAGE_AUDIT.json",
+    "bytes": 5148,
+    "sha256": "9ae3a4edb81ce3f27532740be743f7f6976269076b17daebbaec3c6610105857",
+    "published": false
+  }
+}

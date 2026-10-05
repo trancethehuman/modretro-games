@@ -11,6 +11,8 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import atlas_banks
+from district_sources import district_art_path, read_district_art
 
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT / "project/plugins/toronto-driving/engine"
@@ -95,7 +97,7 @@ def water_model(district, metadata):
         left, right = [integer(v, 0, width, "river coordinate") for v in river]
         require(left < right, "Invalid core river width")
         mainland = rectangle(metadata.get("mainland"), width, height, endpoints=True)
-        require(isinstance(metadata.get("islands"), list) and metadata["islands"], "Missing core Island ground")
+        require(isinstance(metadata.get("islands"), list), "Missing core Island ground declaration")
         islands = [rectangle(r, width, height, endpoints=True) for r in metadata["islands"]]
         shapes = {"river": [left, mainland[1], right, mainland[3]],
                   "harbour_from_y": mainland[3], "island_land_exclusions": [list(r) for r in islands]}
@@ -153,15 +155,18 @@ def model():
                           ("TD_DISTRICT_TILE_WIDTH", 128), ("TD_DISTRICT_TILE_HEIGHT", 122)):
         matches = re.findall(r"^#define\s+" + key + r"\s+(\d+)\s*$", canonical_text, re.M)
         require(len(matches) == 1 and int(matches[0]) == expected, "Atlas/canonical native dimensions disagree")
-    require(isinstance(districts, list) and len(districts) == int(counts[0]) == 4,
-            "Atlas requires the four actually registered native districts")
-    require([d.get("id") for d in districts] == list(range(4)) and all(type(d.get("id")) is int for d in districts),
+    require(isinstance(districts, list) and len(districts) == int(counts[0]) and 4 <= len(districts) <= 32,
+            "Atlas requires the actually registered native districts")
+    require([d.get("id") for d in districts] == list(range(len(districts))) and all(type(d.get("id")) is int for d in districts),
             "Native district IDs must be unique, contiguous and ordered")
     bounds = []
     for district in districts:
         i = district["id"]
-        require(district.get("scene") == EXPECTED_SCENES[i], "Unregistered or reassigned atlas district")
-        require(district.get("symbol") == "scene_" + EXPECTED_SCENES[i], "Invalid native scene symbol")
+        scene_name = district.get("scene")
+        require(isinstance(scene_name, str) and re.fullmatch(r"toronto_[a-z0-9_]+", scene_name), "Invalid native atlas scene")
+        if i < len(EXPECTED_SCENES):
+            require(scene_name == EXPECTED_SCENES[i], "Reassigned existing atlas district")
+        require(district.get("symbol") == "scene_" + scene_name, "Invalid native scene symbol")
         require((district.get("width_pixels"), district.get("height_pixels")) == (1024, 976),
                 "Atlas/native district dimensions disagree")
         x = integer(district.get("atlas_x"), 0, 65535 - 1024, "atlas x")
@@ -175,12 +180,20 @@ def model():
         for b in bounds[i + 1:]:
             require(not (a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]),
                     "Registered atlas districts overlap")
-    require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts) == EXPECTED_OFFSETS,
-            "Current atlas layout changed; review geography and generated budgets")
+    north = len(districts) == 7 and districts[6]["scene"] == "toronto_north"
+    expected_offsets = tuple((x, y + (976 if north else 0)) for x, y in EXPECTED_OFFSETS)
+    require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts[:4]) == expected_offsets,
+            "Existing atlas layout changed outside the reviewed northern display translation")
+    if north:
+        require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts[4:]) ==
+                ((3072, 1952), (2048, 1952), (2048, 0)),
+                "Northern atlas must preserve Port/Island relative placement and append North above Core")
+    require(len({d['scene'] for d in districts}) == len(districts), "Atlas scenes must be unique")
     width = max(r[2] for r in bounds) // SCALE
     height = max(r[3] for r in bounds) // SCALE
     tile_width, tile_height = (width + 7) // 8, (height + 7) // 8
-    require((width, height, tile_width, tile_height) == (512, 122, 64, 16), "Unexpected native atlas dimensions")
+    require(VIEW_WIDTH <= tile_width <= 255 and VIEW_HEIGHT <= tile_height <= 255,
+            "Atlas tile dimensions exceed the UBYTE viewport API")
     raster = [[SOLID] * (tile_width * 8) for _ in range(tile_height * 8)]
     resources, compiled_districts = [], []
     for district in districts:
@@ -192,9 +205,8 @@ def model():
                 and (scene.get("width"), scene.get("height")) == (128, 122),
                 "Unavailable or malformed registered scene")
         grid = decode_grid(scene.get("collisions"), 128 * 122)
-        metadata_path = ROOT / ("content/city_art.json" if i == 0 else
-                                "content/districts/" + district["scene"].removeprefix("toronto_") + "_art.json")
-        metadata = read(metadata_path)
+        metadata_path = district_art_path(district, ROOT)
+        metadata = read_district_art(district, ROOT)
         require(metadata.get("dimensions") == [1024, 976], "Art/water metadata dimensions disagree")
         if i:
             require(metadata.get("collisions") == grid, "Authored and registered district collisions disagree")
@@ -216,7 +228,7 @@ def model():
                           "scene_sha256": sha(scene_path.read_bytes()),
                           "collision_encoding_sha256": sha(scene["collisions"].encode()),
                           "collision_bytes_sha256": sha(bytes(grid)),
-                          "art_metadata": str(metadata_path.relative_to(ROOT)),
+                          "art_metadata": str(metadata_path.relative_to(ROOT.resolve())),
                           "art_metadata_sha256": sha(metadata_path.read_bytes())})
 
     patterns, indices, lookup = [], [], {}
@@ -231,7 +243,7 @@ def model():
             indices.append(lookup[packed])
     require(0 < len(patterns) <= 65535 and all(0 <= i < len(patterns) for i in indices),
             "Atlas dictionary indices cannot be represented natively")
-    # Prove all225 allowed20x12 viewports, rather than checking district centres.
+    # Prove every allowed20x12 viewport, including holes and bank boundaries.
     visible = []
     for y in range(tile_height - VIEW_HEIGHT + 1):
         visible.append([len({indices[yy * tile_width + xx]
@@ -240,9 +252,12 @@ def model():
     worst = max(v for row in visible for v in row)
     require(worst <= VISIBLE_LIMIT, "Atlas exceeds the reserved visible ground tile cache")
     pattern_bytes, index_bytes, metadata_bytes = len(patterns) * 16, len(indices) * 2, len(districts) * (4 + 19)
-    require(all(n < 16384 for n in (pattern_bytes, index_bytes, metadata_bytes))
-            and pattern_bytes + index_bytes + metadata_bytes <= DATA_LIMIT,
-            "Atlas data needs another ROM bank; keep4KiB for BANKED code")
+    if len(districts) == 4:
+        require(all(n < 16384 for n in (pattern_bytes, index_bytes, metadata_bytes))
+                and pattern_bytes + index_bytes + metadata_bytes <= DATA_LIMIT,
+                "Atlas data needs another ROM bank; keep4KiB for BANKED code")
+    else:
+        require(metadata_bytes <= DATA_LIMIT, "Atlas metadata exhausts its banked API unit")
     # Reconstruct the complete raster independently from the dictionary layout.
     reconstructed = [[SOLID] * (tile_width * 8) for _ in range(tile_height * 8)]
     for i, pattern in enumerate(indices):
@@ -252,14 +267,16 @@ def model():
             reconstructed[y + dy][x:x + 8] = pixels[dy * 8:dy * 8 + 8]
     require(reconstructed == raster, "Dictionary schematic differs from source raster")
     require(all(v == SOLID for row in raster[height:] for v in row), "Atlas padding must be solid")
+    require(all(v == SOLID for row in raster for v in row[width:]), "Atlas right padding must be solid")
     flat = bytes(v for row in raster[:height] for v in row[:width])
-    return {"format": "toronto-native-atlas-1", "status": "Original generated schematic; ROM/UI not yet verified",
+    data = {"format": "toronto-native-atlas-1", "status": "Original generated schematic; ROM/UI not yet verified",
             "projection": "North-up ground permissions at one map pixel per native8x8 tile; original compression",
-            "scope": "Only four registered scenes, not complete former Toronto coverage or new transit service",
+            "scope": ("Only four registered scenes, not complete former Toronto coverage or new transit service" if len(districts) == 4 else
+                      f"Only {len(districts)} registered scenes, not complete former Toronto coverage or new transit service"),
             "scale": SCALE, "width_pixels": width, "height_pixels": height,
             "padded_height_pixels": tile_height * 8, "tile_width": tile_width, "tile_height": tile_height,
             "ground_values": {"solid": SOLID, "road": ROAD, "walk": WALK, "water": WATER},
-            "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour excludes Island land. East has no water.",
+            "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour uses its declared mainland/land exclusions; Islands use their separate water mask. East has no water.",
             "world_sha256": sha(world_path.read_bytes()), "canonical_district_header_sha256": sha(canonical_text.encode()),
             "sources": resources, "districts": compiled_districts,
             "visual_west_to_east": [d["id"] for d in sorted(compiled_districts, key=lambda d: (d["y"], d["x"]))],
@@ -273,6 +290,16 @@ def model():
                         "visible_pattern_limit": VISIBLE_LIMIT, "worst_visible_patterns": worst,
                         "viewport_pattern_counts": visible, "persistent_wram_bytes": 0,
                         "native_build_verified": False, "ui_render_verified": False}}
+    if len(districts) > 4:
+        pattern_units, row_units = atlas_banks.units(data)
+        data['budgets'].update({"data_limit_bytes": atlas_banks.UNIT_DATA_LIMIT,
+                                "data_layout": "Independent BANKED units with WRAM output buffers",
+                                "patterns_per_unit": atlas_banks.PATTERNS_PER_UNIT,
+                                "indices_per_unit": atlas_banks.INDICES_PER_UNIT,
+                                "pattern_units": pattern_units, "index_units": row_units,
+                                "max_unit_data_bytes": max(min(pattern_bytes, atlas_banks.UNIT_DATA_LIMIT),
+                                                           min(index_bytes, atlas_banks.UNIT_DATA_LIMIT))})
+    return data
 
 
 def header(data):
@@ -303,6 +330,8 @@ def header(data):
 
 
 def source(data):
+    if len(data['districts']) > 4:
+        return atlas_banks.source(data)
     districts = data["districts"]
     lines = ["/* Generated by scripts/create_atlas.py; source hashes and budgets in content/atlas.json. */",
              "#pragma bank 255", "#include <string.h>", '#include "td_atlas.h"', '#include "td_district.h"',
@@ -345,21 +374,40 @@ def source(data):
     return "\n".join(lines)
 
 
+def files(data):
+    return atlas_banks.files(data) if len(data['districts']) > 4 else {}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Validate all sources/budgets and deterministic generated output without writes")
     args = parser.parse_args()
     data = model()
     generated = [(OUTPUT, json.dumps(data, indent=2) + "\n"), (HEADER, header(data)), (SOURCE, source(data))]
+    chunks = files(data)
+    generated += [(ENGINE / name, text) for name, text in sorted(chunks.items())]
+    actual_chunks = set(ENGINE.glob('src/td_atlas_patterns_*.c')) | set(ENGINE.glob('src/td_atlas_rows_*.c'))
+    private_header = ENGINE / 'include/td_atlas_data.h'
+    if private_header.exists():
+        actual_chunks.add(private_header)
+    stale_chunks = actual_chunks - {ENGINE / name for name in chunks}
+    if args.check:
+        require(not stale_chunks, "Stale generated atlas bank units are still registered")
+    else:
+        for path in stale_chunks:
+            path.unlink()
     for path, expected in generated:
         if args.check:
             require(path.is_file() and path.read_text() == expected, f"Stale generated atlas: {path.relative_to(ROOT)}")
         else:
             path.write_text(expected)
     budget = data["budgets"]
-    print(f"Native atlas {'matches' if args.check else 'generated'}:512x122,64x16 tiles,{budget['dictionary_patterns']} patterns; "
+    print(f"Native atlas {'matches' if args.check else 'generated'}:{data['width_pixels']}x{data['height_pixels']},"
+          f"{data['tile_width']}x{data['tile_height']} tiles,{budget['dictionary_patterns']} patterns; "
           f"every20x12 viewport<={budget['worst_visible_patterns']}/{VISIBLE_LIMIT}; "
-          f"{budget['native_data_bytes']}/{DATA_LIMIT} ROM data bytes,no persistent WRAM. ROM/UI proof pending.")
+          f"{budget['native_data_bytes']} ROM data bytes,"
+          f"{'separate bounded bank units' if chunks else str(DATA_LIMIT) + '-byte unit budget'},"
+          "no persistent WRAM. ROM/UI proof pending.")
 
 
 if __name__ == "__main__":

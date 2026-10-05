@@ -10,12 +10,18 @@
 #include "data/scene_toronto_west.h"
 #include "data/scene_toronto_high_park.h"
 #include "data/scene_toronto_east.h"
+#include "data/scene_toronto_port_lands.h"
+#include "data/scene_toronto_islands.h"
+#include "data/scene_toronto_north.h"
 
 static const far_ptr_t td_district_scenes[TD_DISTRICT_COUNT]={
     TO_FAR_PTR_T(scene_toronto_city),
     TO_FAR_PTR_T(scene_toronto_west),
     TO_FAR_PTR_T(scene_toronto_high_park),
-    TO_FAR_PTR_T(scene_toronto_east)
+    TO_FAR_PTR_T(scene_toronto_east),
+    TO_FAR_PTR_T(scene_toronto_port_lands),
+    TO_FAR_PTR_T(scene_toronto_islands),
+    TO_FAR_PTR_T(scene_toronto_north)
 };
 
 /* This persistent WRAM buffer remains valid until core consumes the exception.
@@ -85,6 +91,6 @@ UBYTE td_district_drivable(UBYTE district,UWORD u,UWORD v) BANKED {
     scene_t scene;UBYTE x,y,left,right,top,bottom;
     if(u<8||v<8||u>TD_DISTRICT_PIXEL_WIDTH-8||v>TD_DISTRICT_PIXEL_HEIGHT-8||!td_district_metadata(district,&scene))return FALSE;
     left=(u-5)>>3;right=(u+5)>>3;top=(v-5)>>3;bottom=(v+5)>>3;
-    for(y=top;y<=bottom;y++)for(x=left;x<=right;x++)if(td_district_read_tile(&scene,x,y))return FALSE;
+    for(y=top;y<=bottom;y++)for(x=left;x<=right;x++)if(td_district_read_tile(&scene,x,y)&COLLISION_ALL)return FALSE;
     return TRUE;
 }

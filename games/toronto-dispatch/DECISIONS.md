@@ -1,5 +1,93 @@
 # Decisions
 
+## Accepted R8 crossing, performance and menu revision — 2026-10-05
+
+The user reports that crossing paint looks unrealistic, the physical game is
+very slow and fullscreen menus need designed frames/layouts. Redesign crossing
+paint and fullscreen menu presentation with original art. Preserve city
+geometry, every non-crossing pixel, the compact HUD and established controls.
+
+Optimize repeated calculations without reducing the eight fleet vehicles,
+eight pedestrians, two independent riders, street objects, collision rules,
+visual fidelity or simulation cadence. Caller-owned synchronous reuse must
+retain invalid-input/scene/owner guards and expire before its inputs change.
+Read-only ROM lookup tables may replace repeated searches exactly; no save
+version change or persistent gameplay cache is authorized by this feedback.
+
+Compare genuine native R8 and new-ROM completed-loop counts under matched
+ordinary input recipes. Host operation counts and cartridge boot alone are
+insufficient speed evidence. Inspect genuine menu/crossing frames and preserve
+the old ROM's evidence separately before selecting the replacement build.
+
+## Accepted presentation and sandbox extension — 2026-10-04
+
+The physical-feedback update also adopts a compact gameplay HUD with graphic
+navigation, improved pixel menus and bright parks/city palettes. Ramming vehicles
+should transfer momentum according to relative speed and vehicle weight: a faster
+car can shove a slower car while retaining more speed than in a head-on impact.
+Both vehicles must visibly move through collision-checked positions, with a
+bounded rebound and safe recovery rather than clipping through obstacles.
+Fences, poles and street objects should collide
+and break visibly; structural building destruction remains an open clarification.
+Police attention should use visible stars, a pursuing helicopter and actual
+loss-of-sight evasion. These extend the original 23-point batch; preserve original
+art, native hardware budgets and the existing courier/transit/save loop.
+
+## Second physical feedback batch — accepted 2026-10-04
+
+The user played installed9c155, approved the character designs and supplied
+23 requirements, then confirmed: “That's the full list — implement and reload”.
+Retain every item in [the feedback checklist](docs/SANDBOX_FEEDBACK_2026_10_04.md).
+Recording acceptance does not establish implementation or new-ROM verification.
+
+Accept quick A/B interactions with parked and occupied vehicles, visible occupant
+extraction before entry, larger boardable/drivable boats, marked full-screen
+playable shop interiors, natural off-screen arrivals with stable visible actor
+identity, social pedestrian pairs, more street activity, better car/building art,
+parking lots, crossings, water ripples, audible original chiptunes and normal-view
+objective arrows. Improve real traffic-light roles, NPC driving, impact speed
+loss and vehicle collisions. Preserve approved human artwork and geographic
+Old Toronto/waterfront/Islands scope; audit dated official City/TTC references.
+
+Player cars may travel on sidewalks, superseding the earlier shortcut exclusion.
+Steering must not rotate a stopped car. Vehicle theft and boat control supersede
+their earlier unadopted/cosmetic-only status. Exact interaction priority, bounded
+actor counts and native implementation details are routine engineering choices;
+keep input consumption, mission state, safe exits and hardware limits explicit.
+No aircraft control, weapons or unrelated combat scope is added.
+
+Boat controls retain A for boarding on foot and acceleration aboard. A fresh
+Down+A chord requests a stopped dock exit; gas alone must never disembark.
+The launch waits only inside the same inclusive 56px boarding range, so an
+approaching walker cannot freeze it outside reachable interaction distance.
+
+Implement/test distinct playable milestones before the replacement write. Keep
+9c155 and its reviewed bundle/physical record immutable. The user's existing
+same-cartridge erase consent applies to the requested later installation, with
+fresh supported device selection and separate terminal/manual evidence.
+
+## Pedestrian variety — accepted 2026-10-04
+
+The user requests varied kinds of pedestrians. Use several original small silhouettes with distinct clothes, hair and accessories, including commuters, workers, backpackers and older pedestrians. Each keeps the same collision size and non-graphic airborne/prone response. Variation must fit native sprite/palette limits; do not add new saved identity fields.
+
+## Hardware feedback update — accepted 2026-10-04
+
+The user played the installed 8be1 cartridge and reports that it works well, with driving-direction/speed problems, excessively fast trams and occasional flicker. Accept slower momentum-based driving with controlled steering and stable cardinal motion, and slower Queen streetcar movement with a matching paid timetable. Keep the north-up view and real street/stop geography.
+
+Accept a slightly larger, recognisable car and smaller human sprites. Courier–pedestrian impacts should show a brief non-graphic airborne knockback followed by a prone/dead pose, with no repeated charges from a grounded person. NPC deaths are transient within the loaded district; saved money, cargo and police consequences remain durable. The on-foot courier can be struck by moving vehicles, with a recoverable knockback rather than permanently ending the open-world session. Preserve visible walking and entering/leaving the original vehicle.
+
+Accept clearer context-sensitive pause labels, held directional menu navigation and a quick map shortcut, retaining separate one-press actions and release consumption for A/B. Add original building details, street signs, signal scenery, park details and benches using background tiles where possible. Preserve collision footprints, traversable sidewalks, mission entrances and existing Toronto geography. Sprite admission and clipping must respect hardware limits; a source fix alone does not establish that the reported physical flicker is gone.
+
+Build and test a distinct ROM before replacing the working cartridge. Original 8be1 binaries, source-pinned ZIP and installation evidence remain historical and unchanged. Record new-ROM build, gameplay and later physical verification separately.
+
+## Ferry budget and recovery cues — compiled and scoped native milestone, 2026-10-04
+
+Explain the existing ferry rules without changing them. The nine preserved Island rounds need two/four/five paid legs before completion; show budgets $8/$16/$24 on their offer screen, with the final amount including a normal $4 homeward trip after the on-Island payout. Optional positioning trips and penalties are outside the budget. Do not reserve cash, introduce an acceptance lock, change any brief/mission field, or make active-job fares free.
+
+After an active Island courier receives NO FARE with less than $4, show `NO FARE: START MENU` and `CANCEL JOB TO RETURN` while retaining objective progress/time/condition/attention. Start → Cancel Active Job abandons the contract without payout or completion; B at an Island dock then offers the existing no-job $0 scheduled assistance. WAIT cancellation alone does not cancel a contract. This fixes an unclear recovery path rather than a permanent softlock. The implementation is confined to the UI with no new persistent state; host, compiled and native acceptance are recorded separately.
+
+Distinct `a9353a76…` passes the official build, full `make check` and [focused compiled audit](docs/FERRY_CLARITY_BUILD_AUDIT.json). Only `td_ui.c` changes among 206 native inputs. The fresh [closed native record](docs/NATIVE_FERRY_CLARITY.json) checks all nine budget offers, spends eight $3 train fares and one $4 ferry fare, then rejects the active return at $2 with 96 seconds left. Cancelling leaves $2 and zero completions; free assistance waits for its normal departure and eight-second ride. After the settled mainland scene, ordinary walking/entry recovers the parked car. A new Market Start completes at condition 100 for credit 108 / cash 110 / done 1; a genuine button reset restores committed progress. Root's mistaken marker and deadline/mode expectations remain disclosed. Select this distinct local playtest ROM; prior e4a9 artifacts and police/three-job evidence remain unchanged and separate. Full campaign, human duration, browser and physical execution remain open.
+
 ## Accepted, 2026-10-01
 
 - Original game for the user's ModRetro device and writable cartridge.
@@ -28,13 +116,38 @@
 - Buildings must block movement, roof edges/canopies must occlude sprites, and people must visibly walk, approach a car, enter it and drive.
 - Add autonomous walking NPCs. Correct overly fast turns and abrupt speed loss during steering.
 
+## Accepted expanded street simulation, 2026-10-02
+
+- Expand toward a GTA-inspired living street simulation while retaining the Toronto courier loop, straight north-up view, original art/fictional branding and accepted Old Toronto/waterfront/Islands geography. The comparison describes gameplay, not a wider GTA geographic map.
+- Show recognisable ordinary civilian pedestrians separately from the player. Player vehicles can hit pedestrians with gameplay consequences. The user selected chaotic sandbox play with escalating police pursuits and tougher penalties; lethal injury rules were not adopted.
+- Add police, fire and ambulance vehicles, varied trucks and buses, boats on water, recognisable bridges and NPC road drivers. Interpret the user's “JPCs” as NPCs. Traffic lights must affect those drivers' behavior, rather than serving only as visual scenery.
+- Preserve accurate supported street/water crossings, vehicle/walking rules, mission progression and scheduled paid transit. New systems need original sprites and bounded loaded-scene actors, followed by compiled/native/hardware checks.
+
+The requested direction and the user's chaotic sandbox/pursuit choice are accepted. Current source implements bounded police chases on actual traversable roads, escalation and tougher penalties below. Current `d58…` records sample impacts/reset, funded H1/H2 Core on-foot and H3 moving-car captures, and a same-scene patrol rejoin; escape, other capture/return routes, broader pacing and hardware remain pending. Service incidents, equipment/medical/repair contracts, boat boarding/dock dwells and further or moving bridges remain proposals. Combat, stealing NPC vehicles, weapons, multiplayer, aircraft control and lethal rules have not been adopted.
+
+The 88-contract/51-stop campaign, measured two-hour target and full-city/hardware gaps keep their existing status until new content and evidence are recorded.
+
+## Implemented pursuit/street source choices, 2026-10-02
+
+- Import original civilian walk/stumble poses and fleet art separately from the unchanged courier sheet. Six bounded road slots present car, truck, police, fire, ambulance and bus; two human variants occupy the six nearby pedestrian slots. Compiled exact poses/limits and scoped native civilian/police/boat rendering pass on `a2438348…`; wider poses/crowds and physical readability remain pending.
+- Use swept movement against visible people. Each newly struck human holds a non-graphic stumble for six active world seconds, then resumes the same route phase. No repeat charge occurs during that person's stumble. A contact update halves courier velocity, adds hit count to attention capped at three and fines $20 × hit count × resulting attention with cash clamped at zero. Isolated impacts at H1/H2/H3 cost $20/$40/$60. Each person removes ten carried-condition points only after pickup. Recovery is transient across scene loads; saved consequences persist.
+- Show attention as HUD `H`, zero to three. Human impacts and roaming within a 96-pixel AABB of the police refresh the 30-second countdown; one level cools per 30 active seconds away. Capture within a 32-pixel AABB zeroes velocity, fines $25 × H² ($25/$100/$225), clears attention and saves. The range includes the 24-pixel junction stop line plus eight-pixel sweep. Pause/maps freeze time. These choices supersede the earlier flat human fine and $15×H/24-pixel lane stop; player red-signal fines remain separate.
+- Route the one loaded police vehicle through cardinal actual-road waypoints, keeping collision-backed barriers and normal light/junction/tram/person/vehicle admission. Desired speed is `(8+4H)` Q4 units/VBlank, capped at eight pixels/sweep. Cache a six-byte waypoint plus four-byte origin and one-byte stuck counter; replan on arrival or 64 blocked updates. When pursuit ends, drive back to the authored patrol instead of teleporting. All paid RIDE states now suppress pursuit and trigger return; capture requires ROAM. This local planner claims neither global shortest paths nor cross-scene chase continuity, backup units or combat.
+- Advance ordinary road motion every sixteen active VBlanks and chasing police every four. This replaces the earlier eight-VBlank ordinary cadence; eight-pixel sweeps provide nominal 30-pixel/second traffic, but delayed catch-up caps discard excess time, so speed is not guaranteed. Keep courier/contact/person/attention queries on every active city update and validated eight-Q4 separating escape on its per-render cadence. Cache light-pattern readiness in one byte, reset at scene initialization/map close and write only changed VRAM cells; human responsiveness/readability remains unverified.
+- Validate traffic once per batch in a caller-owned 87-byte native stack snapshot, adding no persistent RAM or save fields. Check all six vehicle coordinates/extents, visible people and active parked car on begin. Twelve bytes of 16-pixel centre buckets replace the 123-byte version's hull arrays; five-bucket separation excludes only bodies beyond the 58-pixel maximum sweep/priority reach, retaining exact nearby checks. Admission owns a pending candidate; only terrain/tram-cleared commit advances the snapshot/buckets and live cache, so later movers see accepted endpoints sequentially. Preserve guarded eight-Q4 separating retreat and fail closed on malformed input. Rebuild each batch; deepest native stack use remains unverified. Fuse hot-path admission, unchanged full terrain/future-tram guards and commit in one BANKED operation. Remove only old-body revalidation proven by private begin/commits; public old-position equality and all candidate bounds/cardinality/limits remain. Preserve the separating-retreat guard exception. Move the unchanged standalone signal-stop API to its own translation unit with ROM-only duplicated constants to fit the traffic bank.
+- Use fictional shared 12-second signals: seven seconds east/west, five north/south. NPC red-line checks, swept-body clearance and occupied-junction admission also apply to emergency vehicles. Other drivers yield to police while attention is active and fire/ambulance during the first 30 seconds of each fictional 60-second cycle; this priority does not permit running red or entering blocked junctions. No actual emergency dispatch, real TTC timing or synchronized paid bus movement is claimed.
+- Write save v8 without enlarging the 58-byte payload: obsolete saved atlas-cursor words become attention/countdown, and valid v4–v7 imports clear them. Keep the paid-arrival hold flag, two-slot checksums and private atlas cursor. Pre-v8 binaries cannot read rewritten v8 records; physical persistence still needs hardware proof.
+- Capture one original boat loader before actor cloning. In Core/Port Lands, a cosmetic 8×16 craft follows validated authored water and clips pixels below the existing Lake Shore/Commissioners decks. Its independent scratch pair and single OAM object must pass compiled limits; 40-object/ten-per-scanline or UI pressure omits the boat rather than ground actors. Boat state has no SRAM fields, with a 13-byte target and ≤20-byte guard. There is no boat driving, passenger service or dock dwell.
+- Keep bridges limited to existing collision-backed water crossings and preserve original branding, Old Toronto geography and courier controls. Source/host checks, official linked resource/stack limits, exact-ROM contact/patrol/lights/water records, crowded performance/human feedback and physical cartridge acceptance remain distinct. Historical city/aircraft playtests are not reassigned to this source.
+- Retained fused-milestone `make check` passes with engine/planner/traffic/light 695,857 / 11,133 / 2,424,828 / 12,842 and atlas API/UI 1,475,876 / 24,151,787. Official fused `a2438348…` passes compiled poses/limits/1,098-byte static reserve, measures 108 loops/360 VBlanks and has separate fresh first-delivery and street-functionality recordings. Native H1 impact/stumble, map freeze, saved-attention reset, road police capture, parking/walking/blocked shore and visible boat pass in scope. Preserve earlier cadence `bd09f1c3…` 107, hull `555f3d31…` 91 and bucket `6665b6fa…` 92 as separate evidence; retained baseline remains 132. Diagnostic cuts and the wrong-address counter measurement are never performance/gameplay acceptance. Whole-city pace, sufficient-cash higher fines/escape/paid-ride native branches, remaining vehicle/bridge/occlusion/crowd cases, deepest stack, measured two-hour campaign and hardware remain pending. Later `a243…` Port samples add six car deck crossings and H2/H3 escalation with cash already zero; their scope is recorded below.
+
 ## Implemented handling and reliability tuning, 2026-10-02
 
 - Slower speed-dependent yaw, with reverse using the magnitude of speed; opposing steering inputs cancel.
 - Steering keeps acceleration and smoothed velocity. Glancing contact removes blocked-axis motion without draining scalar speed on every tick. Asphalt is now 48 pixels wide with 8-pixel sidewalks; all 80 building footprints remain unchanged, and building shadows/priority regions are clipped at the road edge.
 - Collision checks every tile overlapped by the car footprint, including narrow rails. A small corner correction searches 1–6 pixels of clear lateral space only with acceleration held, no brake and forward speed at least 3. It validates bounds, candidate footprint and swept lateral clearance, with at most one correction per rendered update. Broad head-on walls remain solid and stop the car.
 - Hidden pedestrians cannot slow the vehicle. Traffic stop lines use the authored junction coordinates. Autonomous traffic keeps moving while the courier waits/rides.
-- Traffic motion and screen presentation are separate. Road loops and a bus proxy run continuously; six nearby pedestrian actors follow 102 fixed, collision-validated world routes and retain their routes while visible. Full TTC route geometry and moving streetcars remain future work.
+- Traffic motion and screen presentation are separate. Road loops and a bus proxy run continuously; six nearby pedestrian actors follow 102 fixed, collision-validated world routes and retain their routes while visible. At that milestone, full TTC geometry and moving streetcars remained future work; later source work is recorded below.
 - Car entry/exit checks the whole door approach against the native collision grid. Pressed actions occur once across motion substeps.
 - Transit cannot interrupt an active car entry/exit. If successful A entry and B transit inputs coincide, entry takes priority and its animation finishes without opening transit.
 - Starting a fresh trip with no active job clears the previous job's failure condition. An actual job deadline expiring during a paid ride still causes failure, shown after arrival at the booked destination.
@@ -86,13 +199,13 @@ This adds navigation to the existing four areas. Full former Toronto, waterfront
 
 ## Queen 501 scheduled source milestone, 2026-10-02
 
-The user already accepted autonomous paid transit and strategic alighting. The current implementation adds eight researched representative Queen platforms across west/core/east while retaining the four existing areas, all 88 contracts,43 original client/station records and 58-byte version-6 save format. Supplemental platforms 43–50 use original curb signs and shared directional boarding points; this is compressed game design, not surveyed TTC infrastructure or an added map era.
+The user already accepted autonomous paid transit and strategic alighting. Published Prototype 6 adds eight researched representative Queen platforms across west/core/east while retaining the four existing areas, all 88 contracts,43 original client/station records and 58-byte version-6 save format. Supplemental platforms 43–50 use original curb signs and shared directional boarding points; this is compressed game design, not surveyed TTC infrastructure or an added map era.
 
 A banked transit module owns the service queries used by menus, runtime and saved-trip validation. Queen service4 costs three game dollars, repeats each direction every 64 world-clock seconds and has two-second boarding windows. Eastbound index`i` departs at `4*i`; westbound at `32+4*(7-i)`. Destination selection determines the direction, and a ride takes `4*abs(destination_index-origin_index)` seconds. Confirming in either open-window second boards immediately. Current construction diversions, full 501/504 coverage, TTC branding and real fares/timetables are outside this milestone. Research and source/compression distinctions are in [STREETCAR.md](docs/STREETCAR.md).
 
 Remote paid arrivals commit an alighted state before queuing a scene; a failed queue retains the paid ride for retry. An earlier native Queen candidate completed three cross-district rides with pause/reset/map and parked-car recovery, but separate legacy-transit play exposed Union arrival onto the player's parked car. A bounded source correction retains the exact stop centre when clear, otherwise tries connected cardinal 12/18-pixel foot points clear of that car and loaded traffic; fully blocked arrivals retry without another fare. Host regressions pass. Exact final ROM `23b2a7a2…` repeats three Queen journeys with map/reset/car recovery and separately verifies subway, 94 bus, Island ferry and safe Union alighting with subsequent walking/car entry. This is the Prototype 6 milestone; these samples do not cover every platform or blocked-arrival condition. Historical results remain tied to their own ROM in [TESTING.md](TESTING.md).
 
-Moving streetcar artwork, human feedback on strategic transit, remaining platforms/arrival conditions, full former-Toronto coverage, measured two-hour varied gameplay and physical cartridge acceptance remain open. This implementation does not adopt the proposed 2026 era.
+Published Prototype 6 has no moving streetcar actor. The later source milestone below adds art/motion but still needs corrected native acceptance. Human feedback on strategic transit, remaining platforms/arrival conditions, full former-Toronto coverage, measured two-hour varied gameplay and physical cartridge acceptance remain open. This implementation does not adopt the proposed 2026 era.
 
 ## Implemented pickup condition lifecycle, 2026-10-02
 
@@ -100,6 +213,52 @@ Moving streetcar artwork, human feedback on strategic transit, remaining platfor
 - Collision text describes braking while empty and cargo damage while carrying. Rider warnings require an occupied passenger job.
 - Cold startup normalizes valid older active-stage-0 saves to 100 after CRC/semantic validation. It preserves carried damage, retired failure state, earnings, deadlines and district-qualified positions; invalid active condition remains rejected. This changes no save bytes or version.
 - The native candidate and retained predecessor failure are scoped in [TESTING.md](TESTING.md). The published Prototype 6 bundle does not contain this later correction. Further quest/transit route-choice and hardware acceptance remain open.
+
+## Moving Queen streetcar source milestone, 2026-10-02
+
+- Original rail art and one cyclic unit follow the existing eight-platform fictional 64-second timetable, with two-second door dwells and the retained four-second intervals. Lower eastbound / upper westbound lanes use the existing Queen seams and original East bend; no extra bridge, real TTC timetable or full-route coverage is implied.
+- The original sheet supplies four closed cardinal poses and four door poses, at four 8×16 OAM objects each. Motion geometry checks a 28×12 horizontal or 12×28 vertical body and its full sweep against registered collision resources. Source/palette/OAM counts alone do not establish compiler output or native rendering.
+- Banked presentation derives a paid ride's visible district, camera and tram position while preserving its logical origin, job, cash and parked-car fields until safe alighting. Pending queues and warm scene loads freeze clock catch-up; pause/map freeze the existing world. Rail-parking guards, older parked-car recovery, traffic yielding and carrying-only impact damage have host fixtures.
+- Version 7 reuses the 58-byte state and two CRC16 SRAM-bank-3 records. A single reserved bit represents a genuinely blocked paid Queen arrival with one second left and pins destination doors across schedule cycles/reset. Valid version-6 zero-reserved and version-5/4 migrations remain supported; older version-6 ROMs cannot read version-7 records after both slots are rewritten. Physical persistence remains pending.
+- WAIT must remain near its real origin before a fare is charged. Contact recovery outside that region cancels waiting; the courier can reselect at a reachable platform. Boarding interpolation is bounded to signed 16-bit arithmetic. A fully crowded contact search can return `BLOCKED` without moving the saved position; its player-facing policy remains unresolved.
+- Full `make check` passed at the pre-presentation-correction checkpoint with 3,450 engine and 3,771,783 motion checks plus the unchanged atlas/transit/bridge/navigation suites. Native `deb78bbd…` failed with missing tram OAM; compiled horizontal frames were empty after the optimizer discarded negative editor-Y positions. Earlier PLAYER/actor-size hypotheses are withdrawn. Corrected source preserves PNG/native IDs with canvas-safe metadata and uses Q5 actor bounds; full checks at `b1cf9a37…` pass with 3,454 engine checks before later performance edits.
+- Current candidate `a0e23f03…` restores one-pass scalar traffic while keeping direct phase/additive range math. Full `make check` passes 110,986 engine and 3,771,783 motion checks with the unchanged suites. Same-ROM native recordings sample three paid Queen trips, exact 58-byte map freezing, paid third-trip reset and Union car recovery; both are closed/archived with scoped `PASSED`. The Core comparison reaches 57 updates / 120 VBlanks (~28.5/s), against 45 on b1cf and 35 on failed 84e5.
+- Fresh same-ROM driving completes contract 01 for cash 139/done 1/condition 100. Held A reads speed 10→22→16; frame 864 has `PED BRAKE`, so the historical speed 24 is not claimed on this ROM. Blocked-terrain reverse/steering resumes 18. Static66 OBJ tiles per bank and 1,432-byte reserve pass their budgets, with sampled four-object/no-overlimit tram OAM. These results remain scoped; fully crowded `BLOCKED` recovery release policy and broader/human/hardware/two-hour acceptance are open. [TESTING.md](TESTING.md) retains each exact identity, with published loading unchanged.
+
+These are source implementation decisions within the accepted autonomous-transit design. Scoped native results do not complete whole-city/final acceptance, crowded-contact recovery, human boarding/readability feedback, full city, two-hour campaign or physical cartridge acceptance.
+
+## Ambient aircraft source milestone, 2026-10-02
+
+- Accepted user request: random planes and helicopters fly over the city. Use original pixel art without airline, emergency-service or commercial branding. These are fictional ambient flights, with no real aviation route or schedule claim.
+- The original 416×32 sheet contains four cardinal plane frames, eight helicopter frames covering four directions and two rotor phases, and a two-object stippled shadow. Native metadata adds an empty loader frame. Each aircraft frame uses four 8×16 OAM objects; the source art reuses the native four-colour palette workflow.
+- Signed Q4 cosmetic state is separate from the 58-byte version-7 save. The first flight waits 360–487 active-world VBlanks, then flights wait 1,200–2,223 VBlanks after completion. Plane speed is 24 Q4 units per VBlank and helicopter speed is 12, about 90 and 45 pixels per second at the nominal 60-frame game clock. Type, cardinal direction and lateral offset vary. A flight follows its spawned world path and resets on district load rather than simulating unloaded districts.
+- Freeze both flight motion and countdown during pause, map/menu browsing and pending scene loads. Preserve driving, walking, collision, mission, transit and fare rules. Cosmetic flight state adds no SRAM field or migration.
+- Render aircraft before ground objects in OAM and preserve roof priority with temporary background colour-zero holes only beneath opaque aircraft pixels. Restore the original tile and attributes conditionally before the next render, allowing fresh scroll data to win. Reserve bank-1 background tiles 32–46 while gameplay is active; restore before map/UI ownership. Bound OAM use and suppress cosmetic objects when frame or scanline capacity cannot preserve ground sprites.
+- Decode actual compiled ROM poses/tilesets while a flight is offscreen, then cache two 80-byte aircraft templates, an 8-byte shadow and two tags: 170 persistent cache bytes, separate from patch records and cosmetic simulation state. Reset/bind invalidates this cache; changes of kind/direction refresh it. A bounded interval-event sweep enforces 40 total OAM objects and 10 per scanline, including X-hidden ground objects; offscreen aircraft do not enlarge its row range. Protect current/destination/hardware UI-window rectangles from flybys.
+- The initial four gameplay scenes carry an empty aircraft resource loader. Core, west and east use stock actor slot 2; High Park uses slot 1 because it has no Queen loader. Cache and remove the loader before ordinary actor clones; retain the 16-slot Toronto actor pool. The later Port Lands source appends its own loader; its compiled/native checks remain separate.
+- A project-local override of pinned GBVM `src/core/actor.c` adds restore-entry/render-exit hooks. Preserve its upstream MIT notice and source provenance alongside the original renderer. Check combined aircraft/shadow capacity first, falling back to aircraft alone when the shadow cannot fit; compute roof-mask screen anchors once per priority tile. Compiled budgets, scoped native flyby/roof/map, delivery, transit, scene and reset evidence belong in [TESTING.md](TESTING.md) and [BUILD.md](docs/BUILD.md). Crowded performance, human readability and physical cartridge acceptance remain pending.
+
+## Contact and booked-arrival correction policy, 2026-10-02
+
+This is an engineering correction within the accepted traffic/transit design. The source passes host checks and the official native build. Ordinary-control recordings on `14005662…` verify a reachable save-load walker recovery, three paid Queen journeys with paid reset/map freezing, flybys and a delivery/driving sample. Native forced-HOLD/blocked-alighting and crowded performance remain separate pending gates.
+
+- Derive the booked Queen destination body directly for every alighting candidate, including the first failed arrival before its HOLD flag exists. Check the courier's full foot body and retain connected ground, parked-car and loaded-traffic checks. If no landing is safe, retain the paid ride without another fare or an unchecked teleport.
+- A paid HOLD must use the same booked tram body for traffic occupancy as its visible destination doors. Ordinary autonomous traffic retains its future-sweep guard.
+- Handle both successful and blocked contact recovery with a visible warning and one impact episode until the contact clears. Preserve occupied cargo penalties, checkpoint/fare semantics and WAIT proximity checks; a displaced wait cancels before charging.
+- Permit only small, validated retreat steps for traffic already overlapping the courier's conservative walking exclusion. Keep actor positions, cached positions and authored route segments coherent. Require increasing separation and road, parked-car, other-actor and tram clearance; any exception for an existing tram overlap must itself prove monotonic escape. Incoming traffic still yields. Invalid/off-route geometry fails closed.
+- Source fixtures must use actual registered routes and coherent actor/cache/leg state. An arbitrary obstruction proves a fail-closed branch, not ordinary native reachability. Native replays use ordinary controls on the exact corrected ROM.
+
+## Port Lands source integration, 2026-10-02
+
+This implements part of the accepted Old Toronto/waterfront scope. It registers a genuine editable GB Studio scene and engine world resources. Exact five-scene candidate `a212dd9e…` passes the official build/full host/header/resource/memory checks and scoped ordinary-control foot travel, map, reset, aircraft and first-delivery/driving recordings. Broader vehicle/bridge/crowded/campaign/hardware acceptance remains pending; earlier recordings retain their original ROM identities. [BUILD.md](docs/BUILD.md) and [TESTING.md](TESTING.md) record the exact build and scope.
+
+- Append district 4, Port Lands/Donmouth, with scene UUID `f9f8ee05-b372-5338-91a7-f1f7a0cda44e`. All five scenes retain 1,024 × 976 local pixels. Its logical atlas origin is `(3072,976)`, below East; existing four local systems and IDs remain unchanged.
+- Register only reciprocal East Leslie `(816,952)` ↔ Port Lands `(912,24)`, giving 15 seam pairs. Extend the actual East Leslie road and split its closed southern frontier. Core Cherry and Carlaw gateways remain withheld pending researched, authored approaches and full-footprint checks; no portal crosses an invented Don bridge or Island strip.
+- Use original industry/park/beach artwork and collision with six supported bridge decks, blocked water outside decks, foot-only park/beach paths and clear parking/loading approaches. Official City/Waterfront Toronto/TTC facts and licences are dated in the source registry and [PORT_LANDS_PLAN.md](docs/PORT_LANDS_PLAN.md). Representative contemporary normal corridors are an engineering working default; the user has not adopted a 2026 era. No source map/image/logo or raw GIS geometry is imported.
+- Source totals are 235 building footprints (`80+37+49+43+26`), 565 fixed pedestrian routes and 24 closed traffic loops across the four non-core scenes. Opening Leslie removes two eastern footprints; Port Lands supplies 26 buildings, 79 routes and six loops. These are bounded loaded-district resources, not simultaneous whole-city simulation. The 117 raw / 98 flip-canonical Port Lands patterns pass the source budget; compiled aircraft allocations and bank-1 background ≤32, protecting scratch IDs 32–46, pass across all five scenes. Static stack reserve is 1,176 bytes; deepest runtime stack remains unmeasured.
+- Generate the actual five-scene 512 × 244 collision-ground atlas, with 589 patterns and 13,507 bytes split across bounded banked data units. Host atlas checks find a worst visible set of 164 under the existing 172-slot limit, with no added persistent WRAM. Adapted full runtime/source suites pass; atlas API/UI tests cover 1,475,876 / 24,151,786 checks. Native second-row pans preserve all 58 game and 13 flight bytes. Remaining viewport/marker/cancellation/VRAM combinations retain their own pending coverage.
+- Sample paid Queen 46→49 (`30→27` once), ordinary Leslie foot entry into actual district 4, Cherry Beach and Unwin crossing, a blocked shore, real game-button reset restoring the saved Beach checkpoint and Core parked car, and ordinary return to actual East. Four-object planes and both helicopter rotor poses/shadows appear at sampled peak ten objects per scanline with no over-limit lines. A separate fresh contract-01 driving recording verifies completion, held acceleration, reverse/recovery and coasting. Car travel through the new district, remaining bridges, roof/crane occlusion and human route-choice value remain open.
+- The initial fifth-scene milestone preserved 88 contracts/51 records without Port jobs. Later source appends the eight jobs/clients below; a researched future bus remains a proposal. Quest count, source registration and atlas checks do not verify measured two-hour gameplay, full 17-district coverage, fuller Islands or hardware.
 
 ## Working defaults and pending proposals
 
@@ -110,7 +269,7 @@ Moving streetcar artwork, human feedback on strategic transit, remaining platfor
 - Straight north-up pixel artwork and matching native collision grid, with CGB background priority for roofs and canopies.
 - Implemented controls: left/right steer the vehicle; A accelerates; B brakes and reverses near rest; Select interacts at pickup/drop-off; Start pauses. On foot, the D-pad walks, A enters the nearby parked car and B opens transit. Handheld comfort still needs human playtesting.
 - A documented baseline transit map rather than changing live detours. The map era is not yet selected.
-- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. That full layout remains a proposal; the historical three-scene prototype and four-scene milestone use their own compressed layouts. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
+- The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. That full layout remains a proposal; the historical three-/four-/five-scene milestones and current six-scene source use their own compressed layouts. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
 
 ## Unresolved implementation questions
 
@@ -121,3 +280,512 @@ Moving streetcar artwork, human feedback on strategic transit, remaining platfor
 - Island delivery transport: ferry/on-foot or specifically authorised service-vehicle jobs, consistent with researched access rules.
 
 Material changes to accepted presentation, driving feel, or hardware target require a design discussion. Routine tuning and reversible implementation choices can proceed autonomously.
+
+## Port Lands courier expansion and clock fast path, 2026-10-02
+
+Implement the next package-first milestone with eight original contracts and clients, for 96/59 and seven auxiliary parking rows. Preserve all previous 51 native stop records and 88 jobs/briefs exactly; append client IDs 51–58 after Queen platforms 43–50 and job indices 88–95. The 16-byte completion bitmap, 58-byte v8 state and 16 actors remain unchanged. Preserved old saves remain readable by the expanded ROM; older 88-job ROMs reject new saved jobs/bits.
+
+- Reuse stopped handoffs, fixed-vehicle freight/fragile/express, light-cargo walking/transit and ordered returns. Studio→Unwin→yard makes the truck run substantive; Fire Hall→Riverbank→Beach uses all three foot clients; yard→studio→Carlaw→yard closes the return. No signatures, loading delay, NPC/service actors or 114 boarding are added.
+- Source routes use only the existing Leslie seam. Full half-two foot and half-eight car footprint checks validate every entrance/parking anchor; modeled final walks are 104/128/112/200 pixels. Initial deadlines 170/175/205/185/150/180/120/200 seconds are tuning inputs, not duration evidence.
+- Retained `a243…` ordinary controls cross all six Port decks by car, walk Commissioners/Beach, reset/recover a Port car and return through Leslie. Its [portable record](docs/NATIVE_PORT_DRIVING_SAMPLE.json) is distinct from the expanded source. H2/H3 escalation with cash already zero does not verify high-heat fine amounts. Truck/motorcycle/scooter, boat clipping and wider cases remain pending.
+- A shorter clock conversion skips division below 60 elapsed VBlanks, retains subsecond carry and the same timer/transit rules, and adds no persistent RAM. Source prefix/body/progression checks and the real-engine host gate pass 699,955 checks, including old saves and new ordered handoffs. Official `c625…` build/header/compiled/memory/full-suite checks pass. A tiny scoped110/360 timing sample is distinct from retained 108 and does not establish whole-city pace. Ordinary controls complete three original jobs and Fire Hall Books via sole Leslie/Port parking/legal foot approach, condition 36 / cash 71 / done 4, genuine reset/restored bit 89 and car recovery. This is one of eight new jobs; the other seven and deadline/condition/handling tuning remain pending. [Portable evidence](docs/NATIVE_PORT_CAMPAIGN_SAMPLES.json) retains its closed scoped-pass identity.
+- Measure purposeful normal-speed campaign play and human route-choice/handling feedback before claiming two hours or fun. Full Old Toronto/fuller Islands and physical cartridge acceptance remain unfinished.
+
+
+## Dispatch itinerary, payout feedback and separate tram optimization, 2026-10-03
+
+Improve existing courier decisions without adding contracts or idle time. Source integrates Up/Down browsing of the full ordered offer route while preserving Left/Right contract selection, A acceptance and B/Start back. Show stop role, name, district and foot-only access; reset to pickup on board entry/contract change. Browsing is paused and does not advance the job or relocate its objective. Existing locked/completed/vehicle restrictions remain.
+
+Result feedback uses the same split integer calculation as payment: condition pay is `base/100*condition + (base%100)*condition/100`, and the time bonus is `remaining_seconds/5`. Show base, condition, adjusted pay, bonus and actual credit. Reuse the board-only offer reward field to retain pre-payment cash until leaving the result, including partial/zero cap credit and an existing above-cap legacy balance correction. Failure/expired paid rides display zero without consulting stale offer data; cancellation returns to roam, replay pays without new unique credit, and result saves still normalize to ROAM before cold HELP restoration. Exactly one transient itinerary byte is added; no state/record, actor, tile or palette growth. Combined `4343f2b8…` passes its official build/compiled limits and 1,097-byte static reserve, all 796 host itinerary pages (24,185,014 UI checks), and scoped native itinerary/result/Line 1 paid-reset checks. Full `make check` passes, including 704,884 engine regressions. Deepest stack, native cap/damaged-payout cases and human/handheld readability remain pending.
+
+The preceding **tram-only `a638c374…` ROM lacks this UI**. Generated same-bank ROM progress tables preserve exact floor interpolation/endpoints and existing paths, schedules and swept guards, without persistent RAM. Official build takes 61,893 ms and retains 1,098 static bytes. Paired stationary 18-second samples total 381/1,080 versus `c625…` 348/1,080, about 9.5% more completed loops in that recipe; the three blocks are 115/123/143 versus 110/112/126. Its closed scoped native pass covers first delivery (condition 100/cash 139/done 1), held-turn speeds 16→23→16, paid Queen 46→49 fare 119→116, all 58 paid-map bytes frozen, genuine paid reset and East Leslie arrival. It does not establish whole-city pace, broader contracts, two hours, human enjoyment or physical execution. [PERFORMANCE.md](docs/PERFORMANCE.md) records its identity separately from the new combined source.
+
+
+Combined output `project/build/toronto-dispatch-route-feedback.gbc` has SHA-256 `4343f2b858e62f9e8daa2a3576a1d06bb7ee7208d2cd4a55434c36e168fb3100`; build takes 150,248 ms. Heap `DAB7`→stack `DF00` leaves 1,097 static bytes; the unchanged progress tables stay in bank 14. Its own stationary sample repeats 381/1,080 (115/123/143). Ordinary controls verify itinerary wrap, ordered-return previews, Beach Mail WALK/district cues and locked denial, acceptance from a delivery preview still targeting Union pickup, and condition 100/base 86/time 116 seconds +23/credit 109/cash 139/done 1. Replay timeout shows zero payment without extra completion or cash; rebuilt offers/reset return the preview cursor to pickup. A separate fresh combined-ROM Line 1 Union→King trip pays 30→27, freezes all 58 paid-map bytes, genuinely resets/resumes and reaches King `(640,640)` with the Union car `(560,720)` and fare retained. No Queen replay is claimed on this ROM. Full local `make check` passes; broader all-96/two-hour/full-city/human/hardware gates remain open.
+
+### Fuller Islands staging — 2026-10-03
+
+Implementation choices within the accepted Old Toronto/Islands scope:
+
+- Research established public paths, bridge decks and relative landings using actual official City map visuals and current access guidance. Use them as factual references for original art; do not import their artwork, silently adopt the proposed 2026 era or treat master-plan bridges as built. Keep Ward/Hanlan landings north of Centre, airport northwest, Gibraltar southwest and Algonquin west of Ward.
+- Stage a separate north-up 1,024 × 976 public walking background at proposed district5/atlas `(2048,976)`. Reserve the constant while retaining registered count5, existing stop geometry, 96/59 campaign and version8. Source art and metadata are not playable scene evidence.
+- Preserve exact old Island terrain and six records20/21/22/24/25/26 in `content/districts/island_legacy_v8.json`, captured from source commit `d6ee452…`. The immutable 60-byte mask covers475 tiles,354 walkable and no public car terrain; it contains no captured hardware save. The source gate checks every represented tile and all old southern walking ground, six ordinals and nine quest fields. Registration must introduce a tested58-byte version9 migration before removing the old Core strips or changing native stop coordinates.
+- Prepare gates that suppress all cached road-fleet occupancy, motion, presentation, contacts and police capture in the future foot-only district. Preserve pedestrians, courier visibility, aircraft and the mainland parked car. Existing five districts retain traffic behavior.
+- Prepare one shared UI/boarding fare query. Assistance is zero fare only from a plain Island dock20–22 to mainland10 in future district5, no active job and cash below4. Keep the fictional schedule and eight-second trip. It uses no save field, car teleport or mission completion; normal fares remain unchanged in current registered scenes. This recovery rule must receive UI/deduction/reset native acceptance when the district becomes real.
+
+The [geography](docs/ISLAND_DISTRICT_PLAN.md) and [runtime](docs/ISLAND_RUNTIME_PLAN.md) records own the proposed source layout, migration ordering and remaining gates. This staging milestone does not relocate a stop, expand the playable scene count, measure two hours or establish hardware execution.
+
+### Fuller Islands registration — 2026-10-03
+
+The next source milestone registers native district5 `toronto_islands` at atlas `(2048,976)`, with no ordinary mainland seam or public car terrain. It removes the three duplicated Core land strips/buildings while preserving all mainland pixels, collision and attributes above the harbour edge. Six scenes contain 241 building footprints, 595 fixed civilian routes and the existing 15 mainland seam pairs / 24 expansion traffic loops. Only six nearby people are active; Islands have no road fleet or signals. Original Manitou, Algonquin and Snake bridge decks connect public foot ground, with an inland/coastal eastward choice. Restricted ground stays blocked.
+
+The six dock/client IDs retain names, flags and ordinals; only their declared local coordinates and district change. An immutable 59-stop/96-job checkpoint fixture and narrow normalization retain the prior native-prefix hashes. All96 routes, briefs, rewards, deadlines, eligibility and completion bits stay unchanged. Full-body walking/ferry estimates show nominal slack72.4–96.3 seconds for the nine old Island jobs; that is planning evidence, not measured handling or duration. Ordinary foot/car graphs remain disconnected from Islands; typed ferry edges and bounded local terminal/dock guidance provide actual access without a false road.
+
+Save9 retains the58-byte payload and two-slot CRC/sequence protocol. Source migration validates non-geographic fields, parked-car ground and genuine legacy foot masks before relocation, preserves cash/clock/deadline/condition/job/completions/attention/car, and moves an admitted legacy Island walker near an old client to its corresponding new client; other admitted walkers use their corresponding dock. Valid near-origin WAIT/paid RIDE resumes; an away unpaid WAIT cancels without charge, and inconsistent paid geometry is rejected. Keep literal `version<8` attention clearing and explicitly read v8. The first normal save writes9 to the other slot; restore does not rewrite v5–8 by itself. Historical v4 retirement/upgrade remains separate. The exact legacy source capture is never regenerated from the new Core water.
+
+Shared scheduled return assistance and traffic suppression now target this real district. Assistance still requires plain dock20–22→terminal10, no active job and cash below4, without car relocation or mission advancement. Source/host validation, native build/resource checks, ordinary-input travel/reset/migration and hardware remain distinct evidence in [TESTING.md](TESTING.md). Registration alone does not complete full Old Toronto or the two-hour target.
+
+
+### Islands build-bank and native pause-text corrections — 2026-10-03
+
+The first six-scene native build exceeds the main gameplay bank by240 bytes. Move unchanged ferry approach guidance into the existing BANKED route unit, with only stack-local temporary state. Host objective/save regressions remain passing, the native build links and static reserve remains1,097 bytes.
+
+Native replay then reveals a GBDK-specific pause AUDIO varargs mismatch: a16-bit ternary marker is passed to one-byte `%c`, shifting the next string pointer and overflowing the40-byte text buffer into the cached streetcar/map focus. Keep that failed replay as separate evidence. Replace the mixed-width formatter with bounded prefix/label concatenation (maximum18 characters plus terminator), preserving menu choices and all gameplay/save state. Verify all three audio modes and map YOU/CAR/DEPOT focus on a new exact ROM. Source/host passes cannot replace this native regression.
+
+### Native campaign validation — 2026-10-03
+
+Retain the existing contracts, eligibility, rewards, deadlines and save format after the first timed Island check. A separate ordinary-input replay on unchanged `7b2…` completes 13 unique jobs across the eight kind IDs; Centre Letters unlocks after 12 and finishes its 195-second limit at condition 100 with 136 seconds left / credit 145. Active-job map, client/paid-return reset and unpaid WAIT cancellation pass with the mainland car retained.
+
+An intentional missed-client replay confirms expiry during a paid return: the genuine reset retains the fare and remaining trip, then RESULT pays zero without another completion or fare. These are scoped validation results, not a balance or duration decision. The remaining eight Island jobs, native historical-v8 imports, all 96 contracts, two measured enjoyable hours, human feedback and physical cartridge checks remain open. See the [separate campaign record](docs/NATIVE_ISLAND_CAMPAIGN_SAMPLES.json).
+
+### Native parked-actor flags destination — 2026-10-03
+
+Compute parked-car visibility before one explicit volatile actor-flags write. The prior SDCC-generated branch changed `HL` from the actor to the streetcar view during its comparison, then wrote flag bits into the view byte. Preserve unrelated actor bits, reject invalid district selection before table access and remove temporary diagnostics. Remote parked-car and pedestrian presentation/occupancy use the actually loaded district during paid Queen travel; the logical origin district must not introduce a foreign local-coordinate obstacle.
+
+Clean `5ae4…` passes the official build/compiled store/resource guards and full checks, including 797,467 engine and 2,400,936 pedestrian regressions. Its separate native first-delivery/Queen/pedestrian/paid-reset/car-recovery/audio/map pass selected it for local loading at that checkpoint. Reset preserves committed whole-second state; exact all-58 equality applies to its paused map pairs. Retain `e196…` and both diagnostic attempts as non-acceptance evidence, and the `7b2…` Island/13-job campaign under its original hash. This correction does not adopt new gameplay rules or prove full campaign duration, historical-v8 imports or physical cartridge behavior. See [TESTING.md](TESTING.md) and the [new portable record](docs/NATIVE_QUEEN_STREET_LIFE_SAMPLES.json).
+
+
+### Precise pedestrian bodies and Core bus lanes — 2026-10-03
+
+Pedestrian guards compare exact Q4 fleet centres with radii 144/160 Q4 (nine/ten pixels), retaining smaller-vehicle clearance while covering bus/fire bodies. Fleet Q4 caches map directly to native Q5 actor positions without whole-pixel truncation. Source commit `3c0e092318b383a0becaa1a0a26381576d453994` establishes that body correction; its `cf2f…` ordinary-input replay then exposes a bus/police standstill rather than accepting the lane geometry. Keep that [failure record](docs/NATIVE_CORE_BUS_LANE_FAILURE.json).
+
+Source commit `ef066ab6a3336c347297cd0d096324bc7ea4b61b` places the six Core bus vertices at `(640,72)`, `(216,72)`, `(216,168)`, `(640,168)`, `(808,168)`, `(808,72)`, with directions west/west/south/east/east/north and cold position `(216,72)` targeting leg 2. Target, recovery and visual direction tables agree. These are fictional compressed road lanes, not a newly adopted real TTC route or synchronization with paid boarding. No contract, fare, save field or persistent RAM changes.
+
+Clean `d58…` passes official/compiled/full checks (800,394 engine / 2,421,337 pedestrian), keeps 1,097 static bytes, and becomes the local loading candidate after a closed 10,064-frame native pass. First delivery, paid Line 1/map/reset/arrival, two bus/police passes, all six inspected legs and sampled northbound human clearance pass. The seeded nine-pixel human wait/resume case remains host-only. Queen `5ae4…` and Island/13-job `7b2…` records remain historical evidence; whole-city coverage/pacing, all contracts, two measured enjoyable hours, native older-save imports, browser recovery and hardware remain open. See [TESTING.md](TESTING.md) and the [current native record](docs/NATIVE_CORE_BUS_LANES_SAMPLES.json).
+
+
+### Supplemental courier payouts and funded H3 capture — 2026-10-03
+
+The source/ROM remain `ef066…` / `d58…`; this is additional validation, not a gameplay-rule change. A separate closed 9,418-frame [ordinary-input replay](docs/NATIVE_COURIER_HEAT_SAMPLES.json) completes jobs 0/2/1 uniquely: full-condition Market Start, condition-92 Distillery Files with floor-scaled base 93 + time 22 = credit 115, and First Art entirely on foot at condition 100 with 119 + 19 = 138. Normal parking/re-entry preserves the car; done 3 / bitmap `07…` reaches cash 392.
+
+Visible human impacts show H1/H2/H3 and the existing $20/$40/$60 charges. The H3 map freezes all 58 game, 61 person and 24 fleet bytes; genuine reset restores the committed H3/cash/completion/driven-car checkpoint, not the later live save-inspection pose. A road police approach then isolates the funded H3 fine of $225 (cash 272→47), speed zero and cleared attention; post-capture reset retains cash 47 / heat 0 / done 3. That replay does not verify lower-heat capture or patrol return. Escape, all paid-mode suppression branches and broader campaign/two-hour/human/hardware acceptance remain pending. The 103-step bus-loop pass and historical Queen/Island records keep their separate scopes.
+
+### Funded lower-heat captures and sampled Core patrol rejoin — 2026-10-03
+
+The unchanged `ef066…` / `d58…` receives a [third separate ordinary-input record](docs/NATIVE_LOWER_HEAT_PATROL_SAMPLES.json), not a gameplay change or rebuild. Two genuine full-condition jobs earn cash 263. Isolated impacts and Core on-foot police stops verify the funded $25 H1 fine (243→218) and $100 H2 fine (158→58), with attention clearing. After the foot courier clears King’s lane, sampled cop endpoints return toward the authored patrol and actual target leg 2 changes to 0 without reset or district change. Preserve those observations without claiming the unsampled exact `(48,184)` corner. Original-car re-entry and a zero-advance save-only emulator checkpoint pass in that record; the opaque checkpoint is not published or restored during that run.
+
+Earlier bus, three-job/H3, Queen and Island records retain their own scopes; the next continuation discloses its checkpoint import and narrower additional coverage.
+
+### Legitimate campaign continuation and narrow heat coverage — 2026-10-03
+
+Keep source `ef066…`, ROM `d58…`, existing IDs/rewards/deadlines and save fields unchanged. A [new closed ordinary-input branch](docs/NATIVE_SIX_JOB_CONTINUATION_SAMPLES.json) officially restores the compatible emulator checkpoint from the genuinely played lower-heat record (done 2 / IDs 0,2 / cash 58). It adds only four new unique IDs 1/6/3/4: fragile art, ordered signatures/return, required-truck freight and First Connection. Final done 6 / bitmap `5F…` / cash 626 is one growing campaign, not six fresh jobs or a sum of independent records. Credits 138/132/140/257 and two separate carried impacts verify meaningful existing rule differences; relay travel pays $14 for two trains/four buses and walks the short Bloor→Wellesley transfer.
+
+After braking, a stationary distant-police H1 countdown clears without another charge. Funded H1 car capture occurs within held acceleration: cash 156→131 / heat 0 / message 20, with speed 6 before and 2 after; do not infer the unsampled exact zero-speed frame. Positive-H1 paid Line 1 samples show police turning west toward patrol. These observations do not adopt balance changes or accept H2 car capture, moving/higher-heat escape, every paid-mode branch or every return route. The final released-input six-job checkpoint is saved with zero advance and not restored; opaque state stays private. New-job SRAM resets, all 96 jobs, remaining Island work, two measured enjoyable human hours, browser recovery and hardware remain pending.
+
+## Retained RESULT B release handling — a0bd, 2026-10-03
+
+Closing RESULT with B consumes that held B until release. The courier remains stopped while the active clock, pedestrians and traffic continue; a fresh B press then brakes/reverses normally. Existing A/Start result actions and other gameplay rules remain unchanged. One transient byte adds no saved field; save v9 remains 58 bytes. Current `a0bd…` / source `371641…` passes official/compiled/full checks (800,554 engine, 514 compiled checks), with 1,096 static reserve bytes.
+
+Its [fresh native record](docs/NATIVE_RESULT_CONTROLS_SAMPLES.json) verifies first delivery, held-B 120-VBlank stop with live world, pause/truck selection, fresh reverse and genuine button reset of the later automatic save. SAVE A resumes world/slight acceleration; reset is not latest-live full-58 identity. Early reset images remain blank until the visible HELP follow-up. The final emulator checkpoint is save-only. Earlier four `d58…` native scopes retain their hashes and are not inherited by this ROM. Wider play, all 96 jobs, two measured enjoyable human hours, browser recovery and hardware remain open.
+
+### Retained a0bd route-choice evidence — 2026-10-03
+
+Keep `371641…` / `a0bd…` and all contract rules unchanged. A [closed continuation](docs/NATIVE_MATCHED_TRANSIT_SAMPLES.json) discloses the genuine done-1 import, adds only jobs 1/2, then compares First Connection twice from the same done-3 checkpoint. Each independent branch finishes done 4. Transit/walking leaves nine more whole seconds; conservative cardinal driving leaves $3 more cash. The sampled Castle wait makes walking useful here; do not infer optimal human driving, universal transit advantage or adopt balance changes from this single phase. Current-ROM damaged-art cash-zero completion, ordinary parked-car recovery and funded H1 foot/H2 stationary-car fines are scoped observations. All 96 jobs, remaining Islands, two enjoyable human hours, browser and hardware remain unaccepted.
+
+### Defer unsafe first pedestrian appearance — source correction, 2026-10-03
+
+The host Core route-19/bus fixture reproduces a newly appearing human overlapping the occupied moving courier and immediately counting as an impact. Defer new/hidden identities until clear of the current occupied body and bounded prior sweep; only same-route, previously visible people count as continuous impact candidates. Admission uses strict 160-Q4 clearance, while genuine continuous impacts retain 128 Q4 and existing penalties/recovery. Apply occupied-car admission only when driving, outside remote ride view, with logical and loaded districts equal. An explicit volatile actor-flags store preserves other bits; the matching `964f…` compiled audit verifies its destination and both radius calls.
+
+Frozen `td_people.c` SHA-256 `6ba73602a0f8198b246572002e3f4bb19e64be6ff1bc0cb080c13e510a7da4f1` passes 2,423,750 pedestrian ASan/UBSan checks (+2,413) and 800,555 engine checks (+1). The narrow engine fixture now establishes a visible pedestrian before asserting retained impacts. No persistent/history/save field, route, art or cadence is added. This reproduction is not a native bugcase or a diagnosis of prior Bay impacts. Current `964f…` passes official/header guards and 580 compiled checks; its [fresh native record](docs/NATIVE_PEDESTRIAN_ADMISSION_SAMPLES.json) confirms first delivery/held-B live world, a continuously visible route-83 impact, exact map freezing/pan and genuine reset of later saved progress. Save v9/58 bytes and linked reserve 1,096 remain unchanged; the local frame 27→28 is not a deepest-stack/performance result. Earlier `371641…` / `a0bd…` records retain their own scope; route-19 native reproduction, broader campaign/two-hour/browser/hardware acceptance remain pending.
+
+### Visible walker clearance and dispatch chapters — 2026-10-03
+
+Accept a shortcut through the twelve existing eight-offer groups: dispatch Select advances to the next group’s first offer, including West/East/Port Lands, with wraparound and a readable chapter caption. Preserve per-offer completion/vehicle gates, individual Left/Right selection, ordered Up/Down stops, pause behavior and save layout. Select consumes simultaneous accept/navigation; B/Start exits first.
+
+The first combined `c4fa…` candidate passes those native controls, first delivery and RESULT held-B handling, but fails the [ordinary Bay Street driveaway check](docs/NATIVE_IDLE_DRIVEAWAY_FAILURE.json). A continuously visible route-83 walker waits at `(556,692)` beside the stopped courier `(566,695.1875)`. On the initial reverse it advances into the occupied body at `(559,692)`, stumbles and charges $20/H1. The old ten-pixel waiting pose was outside the eight-pixel impact envelope; the speed-limited yield ended too early. Keep this failed ROM/replay distinct from the corrected `e797…` build and its own evidence.
+
+Corrected source makes only proposed, non-stunned walking steps yield to the physically occupied local driving courier at all speeds. Retain the road-only old-position fallback and visible identity so genuine driver sweeps still contact that person; an independently road-blocked fallback can still hide under the existing policy. Keep remote paid-view/on-foot/district guards, admission and impact radii, recovery, penalties, routes, cadence and save v9/58 bytes. Distinct `e797…` passes full source checks, official build and 1,242 static checks. Its [two closed scoped native records](docs/NATIVE_COURIER_CLEARANCE_SAMPLES.json) verify chapter controls, one delivery, visible wait/reverse/clearance/resumed walking, a separate genuine forward impact, exact map freeze and committed SRAM recovery after a disclosed same-ROM checkpoint import. The current native trajectory was adapted through ordinary controls rather than reproducing c4fa's exact pose/phase. Broader vehicle/crowd/district behavior, all 96 contracts, two enjoyable human hours, browser and hardware remain open.
+
+### Exact update-local terrain reuse — accepted source optimization, 2026-10-03
+
+Reuse only the occupied driver's full half-five terrain result at an identical whole-pixel centre within the current update. Initialize the caller-owned six-byte automatic cache before the motion loop; keep false and invalid-coordinate results equivalent to the public road query. A successful scene/portal transition ends that lifetime. Preserve incoming collision-hit markers and all dynamic tram, actor, pedestrian, corner, input and clock checks. Do not add persistent/cache/save fields or weaken clearance/cadence.
+
+The first automatic placement fails the official compiler: `TORONTO.o` is 16,501 bytes against 16,384, 117 over, and produces no ROM. Retain that failure. Move only the new lookup helper to `td_terrain.c/.h`; unrelated existing gameplay code stays in place. Experimental `825444a0…` builds and passes 611 independent compiled checks, including the caller's WRAM pointer, nested banked road call and hit/miss storage. The automatic cache is six bytes, the update frame grows 10→16, and the helper has eight local bytes. Persistent reserve remains 1,096 bytes; save v9 stays 58 bytes. This is not a deepest-stack proof.
+
+Actual-C comparison matches 6,463 update/query snapshots and 3,425,390 field payloads. Fresh native idle pairs repeat 361→385 completed loops / 1,080 VBlanks (+6.648%); the fixed A60/A60/B60/neutral60 moving tail measures 77→80 / 240 (+3.896%). Accept the narrow implementation and modest scoped benefit, without treating loop counts as universal FPS or gameplay-duration evidence. [Comparison](docs/NATIVE_TERRAIN_CACHE_COMPARISON.json) and [fresh gameplay](docs/NATIVE_TERRAIN_CACHE_GAMEPLAY.json) preserve separate closed recordings.
+
+Retain `825…` and its e797 comparison as historical experiment evidence. The following direct UI milestone integrates its cache and addresses the observed HUD/dispatch feedback issues; its new build/replay remains distinct. Remaining contracts/full Toronto, two measured enjoyable human hours, wider performance, deepest stack, browser and physical hardware remain pending.
+
+### Active-job preview and entry completion — implemented direct polish, 2026-10-03
+
+Retain the accepted full itinerary and pickup-first reset. On the active offer show CURRENT STOP x/n from its actual next stage; on other completed/eligible offers show COMPLETE / PREVIEW or READY AFTER THIS JOB, with individual locks intact. A RESUME returns to the carried ROAM job without replacement, target/stage/deadline changes, a new WRONG VEHICLE message or SRAM write. B/Start and chapter Select priority are preserved. WAIT/RIDE cannot enter dispatch through the guarded pause route; explicit cancel and failure/retry/no-job acceptance rules are unchanged.
+
+Add one HUD repaint at the existing entry-animation completion event, after the parked-pose/onfoot transition, target rebuild and existing save. Preserve its timing and controls; there is no new production state. Old source fails seven engine/eight UI regressions; corrected full checks pass 804,864 / 25,110,098 respectively. The cache differential includes the host-only last-draw byte and matches 6,463 snapshots / 3,431,853 fields.
+
+Direct `03e09…` compiles without fallback at 16,380 bytes in bank 2, leaving four bytes; save v9 / 58 bytes and 1,096-byte reserve remain. Its fresh closed native replay verifies current/other/locked/completed previews, A/B/Start/Select rules, paused board/map/entry, immediate driving HUD, one condition-100 delivery and in-worker saved progress. First Art's remote Union pickup remains correctly rejected, not completed. Independent compiled/native reviews pass 597 / 5,253 checks; published evidence passes 481 checks. Packaging is verified separately. At that milestone, select this exact local testing candidate separately from the historical e797 22-job campaign and 825 performance measurements; no broader duration, human, browser or physical acceptance is implied.
+
+A separately audited [same-ROM continuation](docs/NATIVE_UI_POLISH_ART.json) imports that one-job checkpoint and adds only First Art: condition 88%, scaled credit 123, cash 261 and done 2. Active-foot board freeze/resume, original-car recovery and durable SRAM reset pass. Preserve the broad damage bracket and changing reset subsecond; do not infer an exact actor or full-state reset equality. No source, build or gameplay decision changes; this is additional scoped validation.
+
+### Northern geography, prefix and compatibility — 2026-10-03
+
+Implement district 6 / UPTOWN HILLS only through the two existing Core Spadina/Yonge columns. Keep Bloor in Core, Bernard east of Bathurst, the five researched rail underpasses, foot-only Baldwin Steps/Austin gap and closed estates/ravine. [NORTH_DISTRICT.md](docs/NORTH_DISTRICT.md) retains the dated City/TTC facts separately from original compressed service entrances. The source adds 103 footprints / 62 public pedestrian routes and eight contracts with varied vehicle/foot/return choices; it preserves every old 59-stop/96-job native field and brief. Deadlines remain provisional, not measured balance or a two-hour claim.
+
+Save v10 keeps the same 58 bytes and explicitly reads v9. Pre-v10 rejects new scene/park 6, job/completion 96+ and paid IDs 59+ before lookups/transforms; the immutable 48-tile Core-solid overlay preserves old point-foot/car acceptance. Summerhill/St Clair append Line1 at phases 14/16, leaving old timings and the 18-second/$3 service unchanged. Plain IDs 61–63 are non-transit clients. Atlas origins move only for display; existing local/save coordinates remain unchanged.
+
+Distinct `22157d72…` fits at 1 MiB with thirteen inline captions; the prepared banked-caption fallback remains unapplied. Independent compiled review passes 47,502 checks and full `make check` passes, including 880,572 engine / 43,172,497 UI checks. The original fresh run completes jobs 0/2/1 and stops `needs-review` at North arrival. Its separate same-ROM checkpoint continuation is closed scoped-passed: Baldwin Book Box adds only one new completion, earning 173 at condition 76 / 189 seconds left, then public foot access/car recovery, two northern train trips, exact paused-map state, northern and paid-ride resets, and both-direction car/foot Spadina/Yonge seams are observed. Four growing jobs end cash 523 after the $20/$25 consequences and two $3 fares. Continuation curation passes 26,017 checks; independent evidence comparison passes 55,785, with 359 prose/link/privacy checks. At this milestone, select this exact North ROM for local playtesting. Its retained prepared local ZIP passes 1,235 independent checks against source `8290eefba2c909ef004970669b05588c471b2d10`. Keep the prepared `03e09…` bundle and its historical scopes/pins distinct. Native older-save imports, remaining North contracts and tuning, all 104 jobs/full Old Toronto, enjoyable measured two-hour play, browser and physical checks remain separate.
+
+### Pause-close B leakage — retained old-ROM finding, 2026-10-04
+
+Retain the [fourth `22157…` record](docs/NATIVE_NORTH_GLASS_BIKE_FAILURE.json) as needs-review. It genuinely imports six completions and adds glass 97 at condition 58 / credit 130 and motorcycle 98 at condition 100 / credit 184, reaching eight / cash 564; those successes do not erase the control failure. Pause-close B at frames 21,700→21,716 reverses a stopped south-facing car from Y637.5 to 636.3125 / speed −2. Menu dismissal should consume B until release, consistently with the existing RESULT rule. The distinct correction and its fresh evidence are recorded separately below; this old record remains needs-review. Curation passes 26,394 and independent comparison 51,129 checks, without relabelling the original outcome. Existing source `8290eefb…`, ROM and prepared ZIP retain their identities; sampled Spadina/Davenport car travel and North H2 exact-zero/H1 held-B speed −2 captures do not certify all underpasses, full campaign, human two-hour duration or hardware.
+
+### Consume menu-used A/B until release — implemented distinct correction, 2026-10-04
+
+Extend the existing held-menu byte instead of adding a saved/persistent field. A/B used while in menus cannot become driving acceleration/braking/reverse or their driving audio until each button is released; a fresh press restores the normal action. Capture the whole physical joy byte for compact compiled storage, but apply consumption only to A/B. Steering after exit and on-foot movement remain unchanged. Preserve menu priority, independent-button releases, active world timing, physics, routes and save v10 / 58 bytes.
+
+Distinct `7ccfa3b0…` passes official build, full source checks (881,419 engine cases), 231 changed-code and 219,647 independent source/resource checks, fitting with one gameplay-bank byte free and 1,096 static reserve. A fresh closed ordinary-input replay completes only Market Start for credit 104 / cash 134 / done 1, checks held/chord/release controls and a stopped active-job Pause-close case, then truck coast, Core→North arrival/map/car recovery and real reset of the later periodic save. This does not relabel the old job-97 failure or import its eight completions. The [public native record](docs/NATIVE_MENU_INPUT_RELEASE.json) passes 13,669 curation checks; independent native/prose review passes 34,355 checks with zero findings. The prepared local ZIP passes [1,337 independent package checks](docs/MENU_INPUT_PACKAGE_AUDIT.json) against matching source `b7666c784cac0651a3c9f5e22bc28c707eeec667`. Its bundled guide remains frozen at that commit, before the later package-audit metadata; packaging changes neither the ROM nor native scope. Whole-city campaign, human duration, browser and physical gates remain open.
+
+### Road traffic handedness — retained predecessor finding, 2026-10-04
+
+A read-only audit of 36 active role loops identifies 21 with wrong-side principal legs and 15 circulating on painted centrelines; possible opposing queue exposures need review. Existing terrain/body tests do not prove correct lane handedness. A correction must preserve researched streets, explicit lane offsets, cold spawn/target/heading tables, police chase/return and light/body guards, then receive its own source/build/native checks. At that source checkpoint no correction was implemented; the audit establishes no permanent native deadlock. The distinct correction is recorded below.
+
+### Right-hand traffic correction — compiled and scoped native milestone, 2026-10-04
+
+Correct all 36 civilian/service patrols within the accepted realistic traffic rules. On north-up roads, east uses the lane eight pixels south of the centre, west eight north, south eight west and north eight east. Explicit short connectors may turn or reverse only inside authored junction/endcap pavement. Keep the roads, original pixels/collisions, paid TTC schedules, quests, portals, penalties and save v10 unchanged. These are fictional NPC circuits; Core row 176 is Wellesley/Harbord, while College/Carlton is row 288.
+
+Reverse the 21 offset circuits and author lane joins for the 15 centreline circuits, including bounded High Park junction bypasses and a Core fire-truck turnaround inset from x840 to x832. Move Core routes, spawns, targets and headings into the existing banked world cache so the nearly full main bank loses duplicated formulas. Police must emit actual cardinal lane/turn segments, obey the existing admission checks, and return continuously to an authored patrol target. A changed patrol table alone does not verify pursuit. North job provenance hashes may follow changed traffic metadata; every actual stop/mission value must remain identical.
+
+Independent semantic lane/mutation checks reject all 36 old circuits and pass the corrected circuits. The actual-C police graph covers 1,148 vertices and all exact return goals; return edges strictly reduce a weighted potential. Chase is bounded to four connectors and is not globally shortest or guaranteed acyclic. A safe full-coordinate predicate skips nodes sharing neither coordinate before exit extraction. Against the frozen initial helper, 3,306,549 actual-C queries preserve exact outputs/failures/terrain reads and reduce only synthetic membership-exit work by 94.8%; node scans remain. No native timing gain is claimed.
+
+Distinct `e4a9fb30…` official build and full `make check` pass. The [206-input build audit](docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json) preserves compiled byte/ABI proofs, the district-query relocation, one byte free in helper bank 1, ten in gameplay bank 25, unchanged 1,096 static reserve and save v10/58. The initial `fc2ef…` [record remains needs-review](docs/NATIVE_TRAFFIC_INITIAL_REVIEW.json); none of its acceptance is transferred.
+
+A [fresh closed e4a9 replay](docs/NATIVE_RIGHT_HAND_TRAFFIC.json) completes three unique jobs with credits 109/76/107, including carried H3 delivery. Isolated human impacts charge $20/$40/$60; underfunded H3 capture clamps $95 to zero and retains accepted job 2/stage 0. The full-condition delivery then restores $107. A stopped player car blocks the cop's westbound return until moved; it then follows the legal route to target `(840,184)` and resumes leg 1 toward `(48,168)`. RESULT-neutral time freezes the simulation. Paid Union–St Clair round-trip fares total $6, leaving $101; WAIT/map consumption, parked-car retention, visible walking/entry and genuine reset of committed progress pass in scope. Root's wrong-road building impact and short-input controller stalls remain disclosed. Funded H3, wider pursuits/transports/regions, peak stack, full campaign, two measured enjoyable human hours, browser and physical checks remain open. Select this exact local traffic candidate for playtesting; immutable older ROMs/ZIPs retain their own identities.
+
+### Vehicle-specific dispatch feedback — implemented distinct correction, 2026-10-04
+
+Retain the fresh a935 four-job record as needs-review: unlocked incomplete truck 3 in car 0 says READY TO ACCEPT while A correctly rejects with message 2. Show the shared WRONG VEHICLE literal only in the valid-index idle eligible incomplete fallback. Preserve current/other active work, completed and lock priority, acceptance logic, itineraries, fares, geometry, timing and save v10 / 58 bytes.
+
+Distinct `7ab28…` officially builds with matching artifacts and passes full source checks and 602 independent compiled assertions. UI/main/helper leave 150/10/1 bytes, preserving the 52-byte UI frame and 1,096 static reserve. Its fresh comparable ordinary-input replay completes four jobs, verifies the corrected warning before/after rejection and required-truck readiness/acceptance, then samples a funded H3 fine and actual saved-progress button reset. Old controller mistakes remain disclosed; no old checkpoint/SRAM or native acceptance is imported. [Old finding](docs/NATIVE_FERRY_CAMPAIGN_FEEDBACK_FINDING.json), [new replay](docs/NATIVE_DISPATCH_VEHICLE_FEEDBACK.json) and [compiled review](docs/DISPATCH_VEHICLE_BUILD_AUDIT.json) stay separate. Full campaign/human two-hour/browser/hardware gates remain open.
+
+
+## Implemented driving-only transit wording — 2026-10-04
+
+Replace shared message 8 HEAVY CARGO: DRIVE with DRIVE FOR THIS JOB, preserving its 18-character size and the existing kind 3/kind 5 guard before station lookup. This is an implementation clarity fix, not a new gameplay decision. No routes, deadlines, fares, actor behaviour or saved fields change. Distinct8be1 keeps all 206 input pins except that literal; compiled comparison accounts for generated stock-save signature/checksum separately. Fresh ordinary-input freight before/after pickup displays the caption, four genuine jobs and committed reset pass in scope. Earlier7ab sixteen-job continuation results remain historical and are not imported across this rebuild. Native passenger refusal, old-save imports, full 104/human duration/hardware remain pending.
+
+## 2026-10-04 — Correct a compressed Bloorcourt handoff label
+
+Accepted: stop18 now displays `BLOORCOURT BUS`, replacing `OSSINGTON BUS`. Actual Core source/native columns are Dufferin80, Bathurst208 and Spadina336; stop18 at144/64 belongs to a compressed Bloorcourt region, while stop8 remains correctly Dufferin at80/528. The City BIA description places Bloorcourt on Bloor West between Dufferin and Montrose (reviewed2026-10-04; source in `docs/CITY_ART_AND_SHOPS_2026_10_04.md`). This is a fictional regional bus handoff, not a surveyed TTC stop. Its ordinal, coordinates, service, flags,64-stop/104-job tables and savev10 layout stay unchanged. One strict name-only historical adapter preserves immutable old campaign hashes and rejects unrelated geometry/service/flag/name changes; current source/native checks require the corrected label.
+
+## Dialogue camera composition — accepted future direction, 2026-10-04
+
+The user accepted a Pokémon battle-camera composition reference for dialogue
+cutscenes: an original over-the-shoulder courier portrait occupies the
+foreground and faces the speaker farther into the scene. Use bright pixel art
+and a readable text box. The reference is camera composition; all portraits,
+dialogue, scene art and music remain original, with no Nintendo sprites or
+music. The city's straight, north-up driving/walking camera and approved
+overworld human sprites stay unchanged.
+
+At this dated checkpoint, the presentation direction was accepted but the
+dialogue system was not implemented. The keeper only showed a timed greeting.
+A future minimal prototype may attach one original conversation page to that
+interaction, using static background/window portraits, A advance and B return.
+Preserve held-button consumption, exact room/courier/mission/vehicle state and
+existing elapsed world-clock/audio semantics. Prove tile/palette ownership and
+restoration; avoid adding actors or saved fields, and measure any transient
+control bytes. Native source/assets remain frozen for the current performance
+candidate. Dialogue implementation and its own native/hardware evidence are
+future work at that checkpoint. The Oct5 story implementation below supersedes
+that implementation status; no release acceptance follows from this decision.
+
+
+## Accepted final UI and performance pass — 2026-10-04
+
+The user requested optimization that preserves gameplay and graphical fidelity.
+Use exact broad-phase rejections, avoid repeated work and retain all nearby
+collision, timing, signal, identity and save checks. Do not reduce population,
+art detail, effect size, palette quality or simulation rules to obtain a faster
+benchmark. Native measurements must identify their ROM and test view; “always
+smooth” remains a hardware acceptance target, not a claim from compilation.
+
+The current source implements beginner-friendly Start, Save Game and Settings
+controls. Start opens the main menu; Save Game commits progress and returns to
+the street. Settings has Sound, Control Guide and Back, with up/down navigation
+and A selection. Back, B or Start in Settings returns to the main menu; A/B in
+the guide returns to Settings. The same menu works while waiting for or riding
+transit, preserving the resume mode and frozen world/deadlines. During those
+trips, Save After Trip and TTC: Map/Settings explain the existing restricted
+actions and automatic transit saving; no controller rule changes. Menu-used
+A/B stay consumed until release. The welcome guide's start-game path is retained.
+
+Sound reuses the existing original 8-bit City Shift song, engine/brake sounds
+and interaction cues. Its three labels are Music + Effects, Effects Only and
+All Sound Off. The Sound Resets at Boot footer makes their session scope clear;
+no new saved field or persistent menu state is added. Physical listening and the final
+replacement ROM's controls need their own verification.
+
+The accepted performance implementation uses a 12-byte automatic driving
+cache: the original whole-pixel terrain result plus exact-Q4 stationary
+vehicle/tram clearance results. Reuse ends with the immutable movement batch;
+movement, entry, on-foot/injury state and active ramming invalidate it. Dynamic
+checks outside that batch remain live. Signal stop-line rejection, same-bank
+epoch road sweeps, one-selection actor metadata lookup and clean-scenery early
+return add no persistent state and retain the original geometry, bank
+restoration, hit globals and admission rules. Keep the historical six-byte
+cache's ROM measurements separate from this source implementation. Final linked
+memory and measured native/hardware pace remain acceptance gates.
+
+Further exact optimizations read fleet coordinate bytes before constructing
+full centres, bound pedestrian route search through its existing sorted Y
+coordinates, and use private same-bank render/helicopter observation calls
+behind the unchanged public BANKED interfaces. Keep every nearby exact body
+test, original route identity/tie order, bank restoration, OAM order and police
+observation rule. These introduce no new persistent RAM and do not change
+gameplay behavior, artwork or population density.
+
+Taxis join the existing sedan, service, truck and bus traffic using original art
+and sedan mechanics. Current source gives occasional jets larger original
+wing/fuselage ground shadows while retaining the old aircraft/helicopter art and
+behavior. Ordinary drivers yield to the on-foot courier as well as NPC pedestrians,
+with safe separation for existing overlaps; chaotic pursuing police and other
+moving hazards retain their contact consequences. These additive features are
+separate from behavior-preserving optimization and need native evidence.
+
+
+## Runtime memory and menu cache — accepted optimization, 2026-10-05
+
+The native sandbox-polish candidate reproduced initialized-state corruption
+with a stationary courier. Preserve that failed ROM and its evidence, and do
+not select or load it. A linked reserve alone does not prove runtime safety.
+
+Keep temporary tram pose/body buffers inside the instant, dwell or held-arrival
+branches that need them. Normal travel sweeps retain the same timetable,
+geometry, validation and collision results while carrying fewer live buffers.
+Pack the existing text cache into exact six-bit glyphs and atlas cache into
+exact ten-bit pattern IDs; keep the atlas hash/probe order and uploaded pixels
+unchanged. Pack the map's saved hidden flags into one bit per actor. These
+are lossless representations, with no new save fields or population changes.
+
+Pedestrian fleet checks advance the existing actor pointer through slots
+2–7 and 17–18, preserving every continue path and nearby exact query. Avoid
+repeated actor-stride arithmetic without adding a persistent fleet cache.
+
+Require new exact-ROM idle/long-play memory checks, menu/map/save controls and
+compiled resource checks before cartridge selection. Host equivalence, native
+observations and physical cartridge acceptance remain separate evidence.
+
+
+## Accepted quest, story and armed sandbox direction — 2026-10-05
+
+Keep exactly one accepted contract at a time. The existing dispatch/resume rules
+remain; add a visible ground arrow for the next stage, following collision-backed
+routes instead of directing a driver through buildings. Preserve the destination
+beacon and scrollable map. Route policy tables live in ROM; do not add a large
+per-frame search or reduce city art/population to accommodate guidance.
+
+The courier is a man who recently moved to Toronto. His ethnicity remains
+unspecified. Original full-screen over-the-shoulder dialogue scenes tell a
+rags-to-riches story with drama, beginning with a borrowed vehicle and ending
+with a community courier business. Welcome and completed-job milestones trigger
+one eligible unseen chapter at a time. A advances; B/Start skips the current
+chapter. Dialogue freezes the world, consumes its closing buttons until release,
+then restores the city/window/actor presentation. The original bright portrait
+art is distinct from the unchanged north-up city camera.
+
+Player and police weapons are accepted. On foot, A retains interactions; B
+retains nearby vehicle/TTC interactions and otherwise fires the sidearm in the
+walking direction. Firing uses ammunition, increases wanted attention, and
+checks cover/nearer road bodies. Armed police respond at higher attention.
+Player vitality is separate from package/passenger condition. Non-graphic
+hit/down poses, temporary immunity, recovery and a bounded medical fee prevent
+a permanently trapped player. The normal courier missions remain playable.
+
+Save v11 retains the 58-byte payload. Bounded attention/countdown counters use
+one byte each; the two released bytes store vitality and ammo. Story-seen flags
+use completion byte 13, outside the 104 quest bits, and never count as deliveries.
+Read genuine old v4–v10 layouts, validate old word high bytes before conversion,
+then initialize health/ammo while preserving old progress. Keep atomic journal
+writes and distinguish native/host/physical save evidence.
+
+These accepted requirements now have the implementation below. The matched R6
+build/native record selects a replacement ROM in the later entry; physical
+cartridge checks remain separate.
+
+## Quest/story/combat source and final UI pass — 2026-10-05
+
+Retain one active contract and all existing routes, deadlines, physics and city
+art. Local ground guidance uses generated collision-backed walking/driving
+fields alongside the original beacon and atlas. Eight original story chapters
+contain 41 pages at completion thresholds 0/1/8/16/32/56/80/104. Welcome/result
+triggers offer one unseen chapter; A advances and B/Start skips it. World clocks
+freeze in dialogue and closing action buttons stay consumed until release.
+The newcomer, June, Moss and Vale use original over-the-shoulder portraits.
+
+On-foot B keeps nearby vehicle/TTC interactions ahead of sidearm fire. Ammunition,
+attention, wall/body cover, armed patrol response, separate health, non-graphic
+downing and recovery are integrated. The original nearby-position recovery is
+superseded by the accepted hospital flow below. Recovery restores 100 health
+and 12 rounds, clears attention, charges at most $40 and fails active work. A shop
+keeper sells $10 supplies only when needed: up to 25 health and an ammo floor of 12,
+preserving higher carried ammunition. Existing 45 courier poses are preserved;
+four original gun poses are appended without replacing city art or the camera.
+
+Pause now explains why the selected car/recovery/TTC action is unavailable,
+including actual door/rail rejection notices. Its hint helper copies bounded
+text into caller-owned WRAM and adds no persistent state or terrain sweeps.
+Transit captions fit 20 columns. Shop Start displays B EXIT TO START MENU;
+indoor time/walking and A/B controls keep their existing rules. Music + Effects,
+Effects Only and All Sound Off retain the original song/cues and reset at boot.
+
+Save v11 keeps 58 payload bytes and atomic journal writes. Health/ammo occupy
+the two bytes released by bounded heat counters; eight chapter flags use
+completion byte 13 outside 104 quest bits. Genuine v4–v10 migrations initialize
+health/ammo without discarding career progress or accepting invalid old word
+high bytes. Host compatibility/input/rendering checks do not establish physical
+save persistence.
+
+Preliminary R4 native controls complete only the first delivery and sample the
+intro/first-chapter pause/skip paths, sound cycling and fresh/held firing.
+R5 remains needs-review for sampled road-arrow flicker. R6 has its own matched
+build/debug/native record below. Keep the retained `096862…` stable ROM/package
+and physically confirmed `9c155…` ROM immutable and separate; selecting R6 does
+not establish installation or physical execution.
+
+## Exact navigation work — 2026-10-05
+
+Generated ROM prefix counts preserve every mask ordinal while reducing counted
+ordinal byte operations by 79.72% in the scoped host comparison. This is an
+operation-count result, not a measured FPS improvement. The exact 14-byte query
+cache retains identical results until its goal/district/mode/player-cell key
+changes. The latest overlay correction keeps an unchanged patch across frames;
+guidance retains its existing 19 bytes, including that cache and five-byte patch.
+Forced modal and normal helper restoration runs in reverse composition order:
+aircraft, combat, guidance, then scenery. New owners and tilemap pages must be
+preserved. R5's arrow appeared in 24/30 sampled views and remains needs-review;
+R6's exact corrected build shows the arrow in 30/30 sampled views. Do not reduce
+artwork, population or gameplay rules to meet performance targets. The scoped
+149/840 idle and 160/840 active update counts are separate workloads, not a
+causal FPS comparison or a universal smoothness claim.
+
+## Accepted hospital and one-star arrest — 2026-10-05
+
+Replace nearby downed recovery with automatic hospital recovery after 120 active
+VBlanks at zero health. Use the fictional Toronto General forecourt in Core,
+exit `(504,344)` east of University/south of College, with one original mint
+plus badge at `(512,344)` in bank-1 background tile 254. The marker changes no base
+city asset or collision and adds no actor or mutable marker state. Validate
+the whole foot body and owned-car exclusion; retry a blocked exit.
+
+Restore 100 health and 12 rounds, clear attention, charge at most $40 and fail active work
+once. Preserve owned-car coordinates and district. Commit hospital progress
+before a safe genuine Core VM transition, freeze the old scene during allocation
+retries, and preserve the committed hospital position on reset. Menus freeze
+the 120-VBlank down timer. All seven district transitions, fatal-job overlap,
+blocked exits, failed VM queues and interrupted SRAM writes have actual-C host
+checks; the matched R6 native scope below covers Core recovery and reset.
+
+One-star arrest retains the $25 fine with a zero cash floor, clears attention
+and adds a 60-active-VBlank normal-pose hold. Existing two/three-star close
+captures retain $100/$225 fines; those levels fire 12/18 health damage on a 60-VBlank
+cooldown and keep their faster pursuit. Suppress arrests at zero health and
+during down/recovery/other combat locks. The arrest timer adds one transient
+byte; the official R6 build leaves 548 linked static bytes below the stack
+origin. This is allocation evidence, not a deepest-stack measurement.
+
+## Retained matched story/combat R6 — 2026-10-05
+
+Retain `toronto-dispatch-story-combat-r6.gbc`, 1,048,576 bytes, SHA-256
+`71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`.
+[Build evidence](docs/STORY_COMBAT_BUILD.json) binds 243 unchanged native inputs,
+matching debug artifacts, full `make check` and four compiled guards. HOME has
+207 bytes free and scene OBJ allocation peaks at 124/128. Save v11 retains the
+58-byte journal payload through validated v4–v10 migration.
+
+The [fresh native record](docs/NATIVE_STORY_COMBAT.json) passes at frame 12,974
+without imported progress or memory writes. It verifies the first full-condition
+delivery, introduction/first-pay chapter freezing and skipping, 30/30 sampled
+arrow visibility, three sound choices, map freeze and fresh/held shot gating.
+H3 injury reaches zero, then hospital recovery restores 100 health/12 rounds,
+charges $40 and preserves the parked car. Two $25 H1 arrests clear heat; fresh B
+during arrest is blocked. Explicit and automatic-save resets restore the
+observed committed career, story flags, health/ammo and hospital/car positions.
+Host coverage of later chapters, other hospital districts and fatal-job overlap
+does not become native acceptance. R6 has no new cartridge, browser, listening,
+all-104-contract or measured two-hour human acceptance. The retained R6 [package audit](docs/STORY_COMBAT_PACKAGE.json) verifies the local 293,707-byte `toronto-dispatch-story-combat-r6-reviewed.zip`, SHA-256 `6b718a78115a583fa840ff8bc04eab8dfdfd2b040e03ab5111e91f997bbc7b13`, pinned to source `fb589599f6411d517fe8e2af9d8c43dbf6d89144`. Its guide and ROM remain frozen; this package is separate from R8.
+
+## University of Toronto campus — accepted source extension, 2026-10-05
+
+The user accepts a nicely designed University of Toronto area alongside new
+scooter delivery and street activity. Use the recognisable St. George campus
+west of University/Queen's Park, south of Bloor and north of College, while
+preserving the current roads, collision-backed routes, ROM and city footprint.
+Original UC clock/arcade/UT lettering, Convocation dome/columns and Robarts
+angular concrete motifs now occupy three existing generic building bodies.
+Original stone paving follows existing reachable forecourt sidewalks.
+
+Official map/address/architecture sources support orientation and character;
+game anchors and body sizes are explicitly compressed fictional design. Keep
+every native palette/priority and collision byte, other-city pixels and all
+historical feedback hashes exact. A separate authenticated campus overlay proof
+admits only its explicit cells and reconstructs the old PNG. It introduces 15
+canonical background patterns and no actors, gameplay RAM or saved state.
+Plugin source analysis and R8 compiled allocation checks pass; native walking
+shows the clock/dome and library. R7 produced no ROM after its recorded bank
+failure. R8's fresh evidence is separate from R6's frozen story/combat acceptance,
+and physical/human visual checks remain pending.
+
+
+## Scooter deliveries and street activity — accepted 2026-10-05
+
+The user requests parked scooters that the courier can enter and drive, scooter
+delivery work, car impacts and NPC riders on sidewalks and streets. Retain the
+original fictional seated delivery scooter rather than treating its sprite as
+a real-world access rule. The existing 104 contracts remain unchanged: Parkdale
+Art (74, after six completions), West Closing Round (80, after eighteen) and
+Cross City Bundles (88, after eighteen) require vehicle 3. Campus Envelopes (21,
+after twelve) separately serves the University area and permits any vehicle.
+
+A or B enters a nearby vacant scooter on foot through the existing vehicle
+interaction/entry flow. Seed one scooter in an existing validated mainland curb
+bay, with Union's southeast sidewalk `(584,744)` tried first and the same
+terrain, streetcar and furniture guards determining any fallback. Preserve
+owned and protected abandoned vehicles. Taking a found scooter uses the
+existing vehicle-theft attention rule; returning to the courier's own vehicle
+is a separate interaction path.
+
+Two independent rider identities use separate authored road/sidewalk circuits
+in the loaded mainland district; Islands have none. Full-pose admission occurs
+outside the camera guard, movement is continuous and signal/body/pedestrian/
+terrain/tram/furniture guards remain active. Use eight active-VBlank quanta
+with bounded catch-up and freeze riders during menus/dialogue/interiors/queued
+scene mismatch. Do not replace the eight road slots or eight pedestrians.
+
+Relative speed and vehicle mass transfer momentum before an occupied scooter
+impact's existing attention, fine and carried-condition consequences, once
+per fresh collision. Original human airborne/prone poses accompany the empty
+bike; avoid a duplicate pedestrian slowdown. Vacant scooters can be shoved
+without a human-impact fine. Rider wrecks retire offscreen; parked damaged bikes
+follow their eligible later scene seeding. Checked whole-body sweeps retain
+wall, road-object, person, fleet and streetcar admission.
+
+Two original one-OBJ empty poses append at 49/50, preserving all 49 preceding
+pose metadata and pixels. Two rider structs and their counters use exactly
+16 transient native bytes without changing save v11/58. Separate the new rider
+admission helper/read-only tables into a bank while retaining original traffic
+code byte-for-byte. The R7 [bank-placement failure](docs/CAMPUS_SCOOTERS_R7_FINDING.json)
+produced no ROM; R8 supplies distinct compiled/native evidence.
+
+
+## Select matched campus and scooter R8 — 2026-10-05
+
+Select `toronto-dispatch-campus-scooters-r8.gbc`, 1,048,576 bytes, SHA-256
+`bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [Build evidence](docs/CAMPUS_SCOOTERS_BUILD.json)
+binds 246 unchanged native inputs, official success in 164,830 ms, matching debug
+artifacts, full `make check` and four compiled guards. Static reserve is 532
+bytes, HOME 207 free, Core backgrounds 46/47 and compiled OBJ peak 126/128. These
+are allocation checks, not deepest stack or physical flicker acceptance.
+
+[Fresh native play](docs/NATIVE_CAMPUS_SCOOTERS.json) uses ordinary buttons to
+frame 17,224 without imported progress or memory writes. A/B scooter entry,
+one Market Start delivery at condition 70/cash $75/done 1, earned first-pay
+flags 3, campus clock/dome and Robarts views, exact 58-byte map freeze and
+committed campus save/reset pass in scope. The final idle sample shows the
+Core hospital `(504,344)`, cash $35 after the $40 fee, HP 100/ammo 12/heat 0
+and preserved parked vehicle. The zero-health/downed moment was not directly
+WRAM-sampled; retained R6 separately establishes that earlier sequence.
+
+R8's [source-pinned ZIP audit](docs/CAMPUS_SCOOTERS_PACKAGE.json) passes at committed source `aa3fe96a2554c1ca34f4eb13d85aa7a039538a04`: 299,675 bytes, SHA-256 `5ec9679d58957968afb9e542d7165126bbefd3f41bdd4b06bb7f79d2b8af663b`, all 246 native inputs and six allowed members. Its guide remains frozen before later package metadata. Supported discovery finds
+zero connected consoles and dispatches no write. Preserve R6's audited bundle,
+R2 and physical 9c155 independently. All 104 jobs, three scooter-exclusive
+contracts, later chapters, remote recovery, native older-save imports, deepest
+stack, universal smoothness, human two-hour play, audio/browser and physical
+cartridge checks remain pending.

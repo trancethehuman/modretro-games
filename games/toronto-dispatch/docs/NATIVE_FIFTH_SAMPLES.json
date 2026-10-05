@@ -1,0 +1,1013 @@
+{
+  "format": "toronto-native-five-district-observations-1",
+  "scope": "Exploratory fifth-scene ROM before corrected street labels. Scoped measurement/delivery passed; exploratory travel retained needs-review. No hardware or whole-campaign claim.",
+  "build": {
+    "rom": {
+      "path": "project/build/toronto-port-lands.gbc",
+      "sizeBytes": 524288,
+      "sha256": "6a8a9f9664364cc09d84bf0b3c7ddc8f9b4c9db3b1f090bda96b28798e78bc94",
+      "title": "TORONTODISPATCH",
+      "colorMode": "gbc-only",
+      "colorFlag": 192,
+      "cartridgeType": 30,
+      "cartridgeTypeName": "MBC5+RUMBLE+RAM+BATTERY",
+      "mapper": "MBC5",
+      "romSizeCode": 4,
+      "declaredRomSizeBytes": 524288,
+      "ramSizeCode": 3,
+      "declaredRamSizeBytes": 32768,
+      "nintendoLogoValid": true,
+      "headerChecksum": 233,
+      "computedHeaderChecksum": 233,
+      "headerChecksumValid": true,
+      "valid": true
+    },
+    "debug": {
+      "directory": "project/build/toronto-port-lands.gbc.debug",
+      "noiPath": "project/build/toronto-port-lands.gbc.debug/symbols.noi",
+      "globalsPath": "project/build/toronto-port-lands.gbc.debug/globals.i",
+      "romSha256": "6a8a9f9664364cc09d84bf0b3c7ddc8f9b4c9db3b1f090bda96b28798e78bc94",
+      "noiSha256": "f36dc1b792234ffa17ba27f1db8d5641aa8f295d2c6d4a61baec703e060d3a65",
+      "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+      "internalRomFilename": "toronto-dispatch.gbc",
+      "sourceDebugAbi": {
+        "layout": "gbvm-farptr3-uword16-v1",
+        "sha256": "4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+      },
+      "sourceProvenance": {
+        "formatVersion": 1,
+        "projectPath": "project/project.gbsproj",
+        "projectRevision": "151a988b2b77e3312da36ee82d0f376b8fc15369fe21bbee0780b7d47b8682cc",
+        "revisionAlgorithm": "sha256-merkle-v2",
+        "sourceFingerprint": "54d7fb3a534eb48cd47df591776940961295840103a0dbb488b11c4c860b8c7a",
+        "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627"
+      }
+    }
+  },
+  "performance": {
+    "counter_address": "C0B9",
+    "windows": [
+      {
+        "start_frame": 482,
+        "end_frame": 542,
+        "counter_before": "d1",
+        "counter_after": "ee",
+        "completed_loops": 29,
+        "state_before_hex": "0023002d0023002d1e000400000000000000000000ff0064003b000000000000000000000000000000000000000000000023002d000000000000",
+        "state_after_hex": "0023002d0023002d1e000600000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "flight_before_hex": "000000006a000000ada9000000",
+        "flight_after_hex": "000000002f000000ada9000000",
+        "visible_objects_end": 14,
+        "scanline_summary_end": {
+          "peakObjects": 4,
+          "hardwareLimit": 10,
+          "overLimitScanlines": 0,
+          "peakScanlines": [
+            40,
+            41,
+            42,
+            43,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135
+          ]
+        }
+      },
+      {
+        "start_frame": 542,
+        "end_frame": 602,
+        "counter_before": "ee",
+        "counter_after": "02",
+        "completed_loops": 20,
+        "state_before_hex": "0023002d0023002d1e000600000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "state_after_hex": "0023002d0023002d1e000700000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "flight_before_hex": "000000002f000000ada9000000",
+        "flight_after_hex": "1022202603000c00126d010001",
+        "visible_objects_end": 14,
+        "scanline_summary_end": {
+          "peakObjects": 4,
+          "hardwareLimit": 10,
+          "overLimitScanlines": 0,
+          "peakScanlines": [
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            40,
+            41,
+            42,
+            43,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135
+          ]
+        }
+      },
+      {
+        "start_frame": 602,
+        "end_frame": 662,
+        "counter_before": "02",
+        "counter_after": "11",
+        "completed_loops": 15,
+        "state_before_hex": "0023002d0023002d1e000700000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "state_after_hex": "0023002d0023002d1e000800000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "flight_before_hex": "1022202603000c00126d010001",
+        "flight_after_hex": "1022a82b03004700126d010001",
+        "visible_objects_end": 20,
+        "scanline_summary_end": {
+          "peakObjects": 6,
+          "hardwareLimit": 10,
+          "overLimitScanlines": 0,
+          "peakScanlines": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            40,
+            41,
+            42,
+            43
+          ]
+        }
+      },
+      {
+        "start_frame": 662,
+        "end_frame": 722,
+        "counter_before": "11",
+        "counter_after": "24",
+        "completed_loops": 19,
+        "state_before_hex": "0023002d0023002d1e000800000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "state_after_hex": "0023002d0023002d1e000800000000000000000000ff0064003b000000000000000000000000000000000000000000000023002d000000000000",
+        "flight_before_hex": "1022a82b03004700126d010001",
+        "flight_after_hex": "1022903103008600126d010001",
+        "visible_objects_end": 10,
+        "scanline_summary_end": {
+          "peakObjects": 4,
+          "hardwareLimit": 10,
+          "overLimitScanlines": 0,
+          "peakScanlines": [
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            40,
+            41,
+            42,
+            43
+          ]
+        }
+      },
+      {
+        "start_frame": 722,
+        "end_frame": 782,
+        "counter_before": "24",
+        "counter_after": "41",
+        "completed_loops": 29,
+        "state_before_hex": "0023002d0023002d1e000800000000000000000000ff0064003b000000000000000000000000000000000000000000000023002d000000000000",
+        "state_after_hex": "0023002d0023002d1e000a00000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "flight_before_hex": "1022903103008600126d010001",
+        "flight_after_hex": "102218370300c100126d010001",
+        "visible_objects_end": 14,
+        "scanline_summary_end": {
+          "peakObjects": 4,
+          "hardwareLimit": 10,
+          "overLimitScanlines": 0,
+          "peakScanlines": [
+            40,
+            41,
+            42,
+            43,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135
+          ]
+        }
+      },
+      {
+        "start_frame": 782,
+        "end_frame": 842,
+        "counter_before": "41",
+        "counter_after": "55",
+        "completed_loops": 20,
+        "state_before_hex": "0023002d0023002d1e000a00000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "state_after_hex": "0023002d0023002d1e000b00000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "flight_before_hex": "102218370300c100126d010001",
+        "flight_after_hex": "1022003af504e0006084000001",
+        "visible_objects_end": 14,
+        "scanline_summary_end": {
+          "peakObjects": 4,
+          "hardwareLimit": 10,
+          "overLimitScanlines": 0,
+          "peakScanlines": [
+            40,
+            41,
+            42,
+            43,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135
+          ]
+        }
+      }
+    ],
+    "stop": {
+      "recordingPath": "project/artifacts/playtests/session-1d09f94f-328e-47e4-a89d-b3866268e53a",
+      "sessionId": "b59722948d4d420d8244f5c4d2828ba1",
+      "status": "stopped",
+      "branchId": "branch-0001",
+      "frame": 842,
+      "totalFrames": 842,
+      "bytesUsed": 85018,
+      "limits": {
+        "sampleEveryFrames": 30,
+        "recentFrameCount": 64,
+        "maxBytes": 33554432,
+        "maxFrames": 30000,
+        "maxWallTimeMs": 1800000
+      },
+      "eventCount": 75,
+      "eventDigest": "adc5c7b5da8faaad908e96ec32b91b9ffdacf2be38715723b703dd22f00e204d",
+      "branches": [
+        {
+          "branchId": "branch-0001",
+          "frame": 842
+        }
+      ],
+      "outcome": "passed",
+      "reason": "Scoped fresh Front Street paired performance replay only: six neutral60-VBlank windows, authentic counter read-only from matchingNOI C0B9; stationary state/OAM snapshots retained. Whole-game and physical performance separate."
+    },
+    "archive": {
+      "schemaVersion": 1,
+      "originalPath": "project/artifacts/playtests/session-1d09f94f-328e-47e4-a89d-b3866268e53a",
+      "archivePath": "project/artifacts/recording-archives/76b5db30-ec50-41c0-9a59-840b03169859/recording",
+      "sessionId": "b59722948d4d420d8244f5c4d2828ba1",
+      "manifestSha256": "0ea9ff47de291ed3a70b91664d4f6eae56bba52f4907fb698865d5dc2c8d2a6d",
+      "inventory": {
+        "digest": "35a4755d0ff53581dce8358f1cf168e9dba0939b0526b2a7f1ee525886703380",
+        "bytes": 85018,
+        "entries": 39
+      },
+      "status": "archived",
+      "reservationReleasedFrom": "project/artifacts/playtests",
+      "bytesReclaimed": 0
+    }
+  },
+  "delivery": {
+    "observations": [
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 2,
+        "frame": 182,
+        "state": "0023002d0023002d1e000000000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "4140ffd898e2c87055a8accd306b87814382d2bfaeb022942387e41b9ff727a8"
+      },
+      {
+        "buttons": [],
+        "frames": 300,
+        "frame": 482,
+        "state": "0023002d0023002d1e000400000000000000000000ff0064003b000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "cb1f943e2c49333342a515e27d8eb0bc8bea1db173c018ba8c9840029d676ddc"
+      },
+      {
+        "buttons": [
+          "select"
+        ],
+        "frames": 4,
+        "frame": 486,
+        "state": "0023002d0023002d1e000500000000000000000000ff00640004000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "3d7c8dbd6b8c6ed174724918bc78cb1c2663b7b2c08099ffc78408c3c38da06c"
+      },
+      {
+        "buttons": [],
+        "frames": 4,
+        "frame": 490,
+        "state": "0023002d0023002d1e000500000000000000000200ff00640004000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "2624448b0b9ba675e62765db89a1afdc9c80820b3a5ff0abecaf1a29b15a5617"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 4,
+        "frame": 494,
+        "state": "0023002d0023002d1e0005007800010000000000000000640006000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "30deeabe9cfadc0ff3ed8f8268abf1ba706c900c8da0b1de988e41aa82fb738c"
+      },
+      {
+        "buttons": [],
+        "frames": 4,
+        "frame": 498,
+        "state": "0023002d0023002d1e000500780001000000000000000064000a000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "f659dfeb651e12f2045a9647f27ea14c38f35ce86a6baa15a663cae0ebf6b1cc"
+      },
+      {
+        "buttons": [
+          "select"
+        ],
+        "frames": 4,
+        "frame": 502,
+        "state": "0023002d0023002d1e000500780001000000000000000164000c000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "d638bdb348c3e9a9dcb57d518ddb63147735db6607e1e2e3199aa941f2c22139"
+      },
+      {
+        "buttons": [],
+        "frames": 4,
+        "frame": 506,
+        "state": "0023002d0023002d1e0005007800000000000000000001640012000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "d21d0d4dcab6db000fd79fd5db86f6acb52f0a199ea0f21542a7b276a0d042e6"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 170,
+        "frame": 676,
+        "state": "102d002d0023002d1e000800750018000000000000000164000800000000000000000000000000000000000000000000102d002d000000000000",
+        "png": "f6533aa0abbb67498e6fe477f823004e0a27f766f32e68667d74363f77134851"
+      },
+      {
+        "buttons": [
+          "b"
+        ],
+        "frames": 48,
+        "frame": 724,
+        "state": "a82f002d0023002d1e000800750000000000000000000164003800000000000000000000000000000000000000000000a82f002d000000000000",
+        "png": "0d00fcfaa0e4b6af9510559703deaceddc8017f6a561072fbb04121c3946af08"
+      },
+      {
+        "buttons": [],
+        "frames": 12,
+        "frame": 736,
+        "state": "a82f002d0023002d1e000900740000000000000000000164000800000000000000000000000000000000000000000000a82f002d000000000000",
+        "png": "8933f59dcfe73aab63f8788e41abf6b5c9fc67058ee814cee252322835075fa9"
+      },
+      {
+        "buttons": [
+          "select"
+        ],
+        "frames": 4,
+        "frame": 740,
+        "state": "a82f002d0023002d8b000900740000000000000700ff0264010b01000000000000000000000000000000000000000000a82f002d000000000000",
+        "png": "8933f59dcfe73aab63f8788e41abf6b5c9fc67058ee814cee252322835075fa9"
+      },
+      {
+        "buttons": [],
+        "frames": 4,
+        "frame": 744,
+        "state": "a82f002d0023002d8b000900740000000000000700ff0264010b01000000000000000000000000000000000000000000a82f002d000000000000",
+        "png": "014ee4dac123715182528a28376e470f92d7a02999b29f9721809c0822223f77"
+      },
+      {
+        "buttons": [
+          "b"
+        ],
+        "frames": 4,
+        "frame": 748,
+        "state": "a82f002d0023002d8b0009007400ffff0000000000ff0264010c01000000000000000000000000000000000000000000a82f002d000000000000",
+        "png": "d6d64d2e73269fbb2b9d401edfdae225ac9db40bf7c3101680abdcd415141791"
+      },
+      {
+        "buttons": [],
+        "frames": 4,
+        "frame": 752,
+        "state": "a62f002d0023002d8b0009007400feff0000000000ff0264011001000000000000000000000000000000000000000000a62f002d000000000000",
+        "png": "3a5ae71ca2e579c20f671247380ecf2893021543424f5835b2322175576c8b37"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 40,
+        "frame": 792,
+        "state": "0330002d0023002d8b000900740008000000000000ff02640138010000000000000000000000000000000000000000000330002d000000000000",
+        "png": "49225ba802e28204b4d98a7cd487f894089c6011406456f4b122d37fce14c249"
+      },
+      {
+        "buttons": [
+          "a",
+          "right"
+        ],
+        "frames": 48,
+        "frame": 840,
+        "state": "84312f2e0023002d8b000a00740014000400000000ff0264012d010000000000000000000000000000000000001b050084312f2e000000000000",
+        "png": "0ebf47fd274f47c8265c0fdc59933a0163959aac56998f85a6862d7496a8a4e4"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 24,
+        "frame": 864,
+        "state": "d431f52f0023002d8b000b00740018000400000000ff0264010701000000000000000000000000000000000000040500d431f52f000000000000",
+        "png": "8aa7030ba2cac21719324796895481448c50f2587001aa138031e60e25055861"
+      },
+      {
+        "buttons": [
+          "b"
+        ],
+        "frames": 64,
+        "frame": 928,
+        "state": "d431b4310023002d8b000c007400faff0400000000ff0264010c010000000000000000000000000000000000000d0500d431b431000000000000",
+        "png": "bae3366907b279960c004e748841e0637774147865c65cf0cf817a084359cbc1"
+      },
+      {
+        "buttons": [
+          "a",
+          "right"
+        ],
+        "frames": 48,
+        "frame": 976,
+        "state": "ae3165310023002d8b000d00740006000a00000000ff0264010001000000000000000000000000000000000000000500ae316531000000000000",
+        "png": "c75211e5af38c476487df3b9a2ddd27605282ce99775cca72a4dc4661d609e44"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 48,
+        "frame": 1024,
+        "state": "523010300023002d8b000d00740012000a00000000ff026401300100000000000000000000000000000000000000050052301030000000000000",
+        "png": "449f750fe685357ae0767f80729a58320232f74d3f36d9d1ce43ee278fd32414"
+      },
+      {
+        "buttons": [],
+        "frames": 180,
+        "frame": 1204,
+        "state": "412df72e0023002d8b001000740000000a00000000ff0264013001000000000000000000000000000000000000090d00412df72e000000000000",
+        "png": "7cfc2d3e4b82f72350eeb3c1858fdf1790581d5304c3087511040943a0becdd5"
+      }
+    ],
+    "stop": {
+      "recordingPath": "project/artifacts/playtests/session-0fe169e9-9f4e-4fdb-9d84-b9e5f92f9d14",
+      "sessionId": "d74e337cd0794fd68ee1065b5cffdaf4",
+      "status": "stopped",
+      "branchId": "branch-0001",
+      "frame": 1204,
+      "totalFrames": 1204,
+      "bytesUsed": 155083,
+      "limits": {
+        "sampleEveryFrames": 30,
+        "recentFrameCount": 64,
+        "maxBytes": 33554432,
+        "maxFrames": 30000,
+        "maxWallTimeMs": 1800000
+      },
+      "eventCount": 165,
+      "eventDigest": "24d6d3e5c2d70c6b49b2b6b78ee68a674ac15b6d897d7ffb9cbd27c2833a2755",
+      "branches": [
+        {
+          "branchId": "branch-0001",
+          "frame": 1204
+        }
+      ],
+      "outcome": "passed",
+      "reason": "Scoped exact-five-district ROM: genuine first package pickup/delivery (cash30\u2192139,done1,condition100), held throttle turning speed20\u219224, brake/reverse \u22126, recovery and coast-to-stop. No fullcampaign,hardware ortwo-hour claim."
+    },
+    "archive": {
+      "schemaVersion": 1,
+      "originalPath": "project/artifacts/playtests/session-0fe169e9-9f4e-4fdb-9d84-b9e5f92f9d14",
+      "archivePath": "project/artifacts/recording-archives/d06edd7f-8962-4def-b71a-49a74e23bbb5/recording",
+      "sessionId": "d74e337cd0794fd68ee1065b5cffdaf4",
+      "manifestSha256": "4cc97b878d5d30bb69fe5e157297da875ae14ce5b192058b9d0a93d421aef9cc",
+      "inventory": {
+        "digest": "7adc7702517b671321a24a86aba99aafa83e4be3ccb7062069ae3badc7892385",
+        "bytes": 155083,
+        "entries": 63
+      },
+      "status": "archived",
+      "reservationReleasedFrom": "project/artifacts/playtests",
+      "bytesReclaimed": 0
+    }
+  },
+  "travel": {
+    "observations": [
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 2,
+        "frame": 182,
+        "state": "0023002d0023002d1e000000000000000000000000ff00640000000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "4140ffd898e2c87055a8accd306b87814382d2bfaeb022942387e41b9ff727a8"
+      },
+      {
+        "buttons": [],
+        "frames": 300,
+        "frame": 482,
+        "state": "0023002d0023002d1e000400000000000000000000ff0064003b000000000000000000000000000000000000000000000023002d000000000000",
+        "png": "cb1f943e2c49333342a515e27d8eb0bc8bea1db173c018ba8c9840029d676ddc"
+      },
+      {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8,
+        "frame": 490,
+        "state": "fd22002d0023002d1e0005000000fdff0000000000ff0064000800000000000000000000000000000000000000000000fd22002d000000000000",
+        "png": "8e0d6158f038c79424354fc29ba518054851c5f1ea666b05e74c57db2831464d"
+      },
+      {
+        "buttons": [],
+        "frames": 30,
+        "frame": 520,
+        "state": "dd22002d0023002d1e000500000000000000000000ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "debf8a5276acfe352fea1e0610640a1feed48b17bf661f71c305d6d6da3433ea"
+      },
+      {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8,
+        "frame": 528,
+        "state": "dd22002d0023002d1e000500000000000000000100ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "cc36456ea816da37712d4e08ef0e34465ff30869c4d90586a345339338fca7db"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 536,
+        "state": "dd22002d0023002d1e000500000000000000000100ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "cc36456ea816da37712d4e08ef0e34465ff30869c4d90586a345339338fca7db"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 8,
+        "frame": 544,
+        "state": "dd22002d0023002d1e000500000000000000000101ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "f5eadac37b42bee8f699eefdafc0e76c706bbaf039e278b3b980dabe2a67c6ad"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 552,
+        "state": "dd22002d0023002d1e000500000000000000000101ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "f5eadac37b42bee8f699eefdafc0e76c706bbaf039e278b3b980dabe2a67c6ad"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 8,
+        "frame": 560,
+        "state": "dd22002d0023002d1e000500000000000000000102ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "ec786c9fd9f1783edfc55b7fc8ec8eb83afd82976d5d95c91876d347a6acbda2"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 568,
+        "state": "dd22002d0023002d1e000500000000000000000102ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "ec786c9fd9f1783edfc55b7fc8ec8eb83afd82976d5d95c91876d347a6acbda2"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 8,
+        "frame": 576,
+        "state": "dd22002d0023002d1e000500000000000000000103ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "8fb1fc8c1da26872a3df8207806f6c56ff4c509b43fb0424104ed850d83e5962"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 584,
+        "state": "dd22002d0023002d1e000500000000000000000103ff0064002600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "8fb1fc8c1da26872a3df8207806f6c56ff4c509b43fb0424104ed850d83e5962"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8,
+        "frame": 592,
+        "state": "dd22202edd22002d1e000500000000000000010003ff0064002900000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "fff69d8490d49a643f22695280dcf85ffe4673af1e5e92d0d27fb74ec69565ce"
+      },
+      {
+        "buttons": [],
+        "frames": 40,
+        "frame": 632,
+        "state": "dd22202edd22002d1e000600000000000000010003ff0064001800000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "6cb78bbf03c5fef0f9f013281e3f35f27d9c4b9864053132f9734d0a88a004c7"
+      },
+      {
+        "buttons": [
+          "right"
+        ],
+        "frames": 230,
+        "frame": 862,
+        "state": "f529202edd22002d1e000a00000000000000010003ff0064000c00000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "ed293c6b55c7803085d45c08efcad9a9c5e3f569d0d2199cb305e009e954a0c7"
+      },
+      {
+        "buttons": [
+          "up"
+        ],
+        "frames": 328,
+        "frame": 1190,
+        "state": "0d2a002bdd22002d1e000f00000000000000010003ff0064002900000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "63ff06082859f831329672da582d382ae4a75b7db91c4ab2ebc517cc7501fdc9"
+      },
+      {
+        "buttons": [
+          "left"
+        ],
+        "frames": 64,
+        "frame": 1254,
+        "state": "0d28002bdd22002d1e001000000000000000010003ff0064002d00000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "5af27103abd1f1e5391d83258d60ad739fe83d95879d82e0ac5b0eb7abe132ab"
+      },
+      {
+        "buttons": [
+          "up"
+        ],
+        "frames": 264,
+        "frame": 1518,
+        "state": "fd272023dd22002d1e001500000000000000010003ff0064000900000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "7391b31f5560abe242ca02979589dc151a1c641f28be87b42049838820654ffb"
+      },
+      {
+        "buttons": [
+          "right"
+        ],
+        "frames": 66,
+        "frame": 1584,
+        "state": "fd291023dd22002d1e001600000000000000010003ff0064001000000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "5affecca03c11bd697a436edbf5f8f417d73adcf239aac10af866ff9db60dd2e"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 1592,
+        "state": "fd291023dd22002d1e001600000000000000010003ff0064001600000000000000000000000000000000000000000000dd22002d000000000000",
+        "png": "3952fa36912446e365e978bb0e821bf3fbeb40378b4540488272c80cf33a2881"
+      },
+      {
+        "buttons": [
+          "b"
+        ],
+        "frames": 8,
+        "frame": 1600,
+        "state": "fd291023dd22002d1e001600000000000000010404ff0064001c000000000000000000000000000000002e2f00000000dd22002d000000000000",
+        "png": "0eb1975a500b655a6b1988d98c9564c0a1164ed0e713919c0d4dae1ba51c033d"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 1608,
+        "state": "fd291023dd22002d1e001600000000000000010404ff0064001c000000000000000000000000000000002e2f00000000dd22002d000000000000",
+        "png": "0980e6d246b34c8bb854389418dcc1fcb3c09e174efe964e132a0bef8947e04d"
+      },
+      {
+        "buttons": [
+          "right"
+        ],
+        "frames": 8,
+        "frame": 1616,
+        "state": "fd291023dd22002d1e001600000000000000010405ff0064001c000000000000000000000000000000002e3000000000dd22002d000000000000",
+        "png": "f26ea53336a364b2302ee0f07e236bbf4224457d81caf28b23252caaa5e1841a"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 1624,
+        "state": "fd291023dd22002d1e001600000000000000010405ff0064001c000000000000000000000000000000002e3000000000dd22002d000000000000",
+        "png": "f26ea53336a364b2302ee0f07e236bbf4224457d81caf28b23252caaa5e1841a"
+      },
+      {
+        "buttons": [
+          "right"
+        ],
+        "frames": 8,
+        "frame": 1632,
+        "state": "fd291023dd22002d1e001600000000000000010406ff0064001c000000000000000000000000000000002e3100000000dd22002d000000000000",
+        "png": "9971f157e6c63f116286d4fdfeb4b8566240a3139b7b1e363dae19bc5f609ca0"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 1640,
+        "state": "fd291023dd22002d1e001600000000000000010406ff0064001c000000000000000000000000000000002e3100000000dd22002d000000000000",
+        "png": "9971f157e6c63f116286d4fdfeb4b8566240a3139b7b1e363dae19bc5f609ca0"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8,
+        "frame": 1648,
+        "state": "fd291023dd22002d1e001600000000000000010506ff00640022000000000000000000000000000000002e3100000000dd22002d000000000000",
+        "png": "d7bf090ffb2d735a496c6a6c47a0f4ca70b4a1aeeb7b936c3eb44e471b12bcde"
+      },
+      {
+        "buttons": [],
+        "frames": 2400,
+        "frame": 4048,
+        "state": "fd291023dd22002d1e003e00000000000000010506ff00640022000000000000000000000000000000002e3100000000dd22002d000000000000",
+        "png": "b5777ae7a90ed2836470742da17d23f60381e0376387047ef686069d3859b54e"
+      },
+      {
+        "buttons": [],
+        "frames": 3000,
+        "frame": 7048,
+        "state": "c030c020dd22002d1b007000000000000000010006ff00640012000000000000000000000000000000002e3100000000c030c020000000000300",
+        "png": "45290aa08dcd70cebf17101000da0870415e17399721e0c6495dfc0fc8ee461f"
+      },
+      {
+        "buttons": [
+          "right"
+        ],
+        "frames": 72,
+        "frame": 7120,
+        "state": "0033c020dd22002d1b007100000000000000010006ff0064001f000000000000000000000000000000002e3100000000c030c020000000000300",
+        "png": "925670f2156c8a235353b0dd01442be920d27daccc0d3a18f1a29ed2a2fd6ba5"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 856,
+        "frame": 7976,
+        "state": "0833d03add22002d1b007f00000000000000010006ff0064002f000000000000000000000000000000002e3100000000c030c020000000000300",
+        "png": "447ea12685594baca07e3756e59e66918223c85748b6c5403fd0d819b7009d89"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 64,
+        "frame": 8040,
+        "state": "0839a001dd22002d1b008000000000000000010006ff00640022000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "6c0bda2ff80084d2fd366cd3a832a3f8416c59e332faf4273b2bf5a2270cb8be"
+      },
+      {
+        "buttons": [],
+        "frames": 180,
+        "frame": 8220,
+        "state": "0839a001dd22002d1b008300000000000000010006ff00640023000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "5ffc1321eb0d19897a805c8ea224621039a72b3db2eecfac6f7df6a9817decd7"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 200,
+        "frame": 8420,
+        "state": "0839d807dd22002d1b008600000000000000010006ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "2c0df1ae114b7c6389665be46e704f107ae0066ceed2f3632cf97eea8c04839e"
+      },
+      {
+        "buttons": [
+          "start"
+        ],
+        "frames": 8,
+        "frame": 8428,
+        "state": "0839e007dd22002d1b008600000000000000010100ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "a3987e9128b8ba06d7d58e0981e746df16c3d196e1829da75e3c9c6627a4c72e"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 8436,
+        "state": "0839e007dd22002d1b008600000000000000010100ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "a3987e9128b8ba06d7d58e0981e746df16c3d196e1829da75e3c9c6627a4c72e"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 8,
+        "frame": 8444,
+        "state": "0839e007dd22002d1b008600000000000000010101ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "218578341bf6f752ee0e9b935ffbcb60e18b180af3400fb7b561aa008dbf1eb3"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 8452,
+        "state": "0839e007dd22002d1b008600000000000000010101ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "218578341bf6f752ee0e9b935ffbcb60e18b180af3400fb7b561aa008dbf1eb3"
+      },
+      {
+        "buttons": [
+          "a"
+        ],
+        "frames": 8,
+        "frame": 8460,
+        "state": "0839e007dd22002d1b008600000000000000010301ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "7176e5f55fb43aea5a7e00602663ab62b13708224603ea7447971a3194cf106c"
+      },
+      {
+        "buttons": [],
+        "frames": 8,
+        "frame": 8468,
+        "state": "0839e007dd22002d1b008600000000000000010301ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "2f1e4926f2fd56a4c463dfe09f18cc0dcc594bf76541362c79888079560b1935"
+      },
+      {
+        "buttons": [
+          "down"
+        ],
+        "frames": 480,
+        "frame": 8948,
+        "state": "0839e007dd22002d1b008600000000000000010301ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "c987ba7f0b766621eaaa51d05ce4b49a16fe8ec181af2206faf45bf55dd4e44e"
+      },
+      {
+        "buttons": [
+          "left"
+        ],
+        "frames": 720,
+        "frame": 9668,
+        "state": "0839e007dd22002d1b008600000000000000010301ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "f41224dccadbf2cc897e4d19f2b34390737fd016ed110214fb4303ba8dbaf940"
+      },
+      {
+        "buttons": [
+          "right"
+        ],
+        "frames": 720,
+        "frame": 10388,
+        "state": "0839e007dd22002d1b008600000000000000010301ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "c987ba7f0b766621eaaa51d05ce4b49a16fe8ec181af2206faf45bf55dd4e44e"
+      },
+      {
+        "buttons": [],
+        "frames": 120,
+        "frame": 10508,
+        "state": "0839e007dd22002d1b008600000000000000010301ff00640037000000000000000000000000000000002e310000000008398001000000000400",
+        "png": "c987ba7f0b766621eaaa51d05ce4b49a16fe8ec181af2206faf45bf55dd4e44e"
+      }
+    ],
+    "scene": {
+      "id": "f9f8ee05-b372-5338-91a7-f1f7a0cda44e",
+      "sceneId": "f9f8ee05-b372-5338-91a7-f1f7a0cda44e",
+      "name": "Toronto Port Lands",
+      "symbol": "scene_toronto_port_lands",
+      "resourcePath": "project/scenes/toronto_port_lands/scene.gbsres",
+      "type": "TORONTO",
+      "width": 128,
+      "height": 122
+    },
+    "stop": {
+      "recordingPath": "project/artifacts/playtests/session-80f131fe-2b38-439b-a678-00b80286c406",
+      "sessionId": "09b25664f81b4f69b93d214a9bbffa38",
+      "status": "stopped",
+      "branchId": "branch-0001",
+      "frame": 10508,
+      "totalFrames": 10508,
+      "bytesUsed": 870849,
+      "limits": {
+        "sampleEveryFrames": 30,
+        "recentFrameCount": 64,
+        "maxBytes": 33554432,
+        "maxFrames": 60000,
+        "maxWallTimeMs": 1800000
+      },
+      "eventCount": 865,
+      "eventDigest": "7d7af168c3240d08ad396859143f94bb56df4bbff46dc711ffa24da63e833175",
+      "branches": [
+        {
+          "branchId": "branch-0001",
+          "frame": 10508
+        }
+      ],
+      "outcome": "needs-review",
+      "reason": "Native five-scene traversal succeeded via paidQueen46\u219249 and reciprocalLeslie arrival intoPortLands; bankedtwo-axis atlas pans preserve58-byte state. Found Port Lands streetHUD wronglyfallsback toBloorStW becausegeneratedtd_content wasnot regenerated. Retain exploratoryscope; fixlabels andbuildfreshcandidate beforeacceptance."
+    },
+    "archive": {
+      "schemaVersion": 1,
+      "originalPath": "project/artifacts/playtests/session-80f131fe-2b38-439b-a678-00b80286c406",
+      "archivePath": "project/artifacts/recording-archives/a78affd0-e8fb-4034-ab2e-720415aa7283/recording",
+      "sessionId": "09b25664f81b4f69b93d214a9bbffa38",
+      "manifestSha256": "7fcd5733fb4bdae6432c9afac70b770c091729eda21d1e48ce69c2408c1ba289",
+      "inventory": {
+        "digest": "6975138055fb224129c546d49ab898c7ca1fc2189dad6cc6030bffd6d7636aa3",
+        "bytes": 870849,
+        "entries": 321
+      },
+      "status": "archived",
+      "reservationReleasedFrom": "project/artifacts/playtests",
+      "bytesReclaimed": 0
+    }
+  }
+}

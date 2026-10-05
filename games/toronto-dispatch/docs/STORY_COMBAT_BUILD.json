@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "result": "passed-scoped-native-candidate",
+  "rom": {
+    "filename": "toronto-dispatch-story-combat-r6.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8",
+    "colorMode": "gbc-only",
+    "mapper": "MBC5+RUMBLE+RAM+BATTERY",
+    "ramBytes": 32768
+  },
+  "debug": {
+    "noiSha256": "c30c8ed37eae03c42d920cc0383508b80148cc045d460b8dfe337f887e7ffbcd",
+    "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+    "projectRevision": "547f9dcdf219cda3bad1fdb80866319dd515c9f0a7ff5aa4756d9e60bdbef10c",
+    "sourceFingerprint": "6cb70b49233b540daf605afe7e77076cbbfd2ba2ca4f6bc39fa5c6d3f9ebd9b3",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "engineAbi": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+  },
+  "nativeInputs": {
+    "count": 243,
+    "pinsFile": "STORY_COMBAT_SOURCE_PINS.json",
+    "preBuildPinsSha256": "29dee66f6b42a96b3672d04e639376084ebe3664d9f22b415d81f57e38dd6a4a",
+    "allUnchangedAfterBuild": true
+  },
+  "build": {
+    "builder": "gb-studio-cli",
+    "exitCode": 0,
+    "durationMs": 125496
+  },
+  "checks": {
+    "repository": "make check passed",
+    "linkedHeap": "DCDC",
+    "stack": "DF00",
+    "staticStackReserveBytes": 548,
+    "requiredStaticStackReserveBytes": 512,
+    "deepestStackMeasured": false,
+    "fixedHomeHeadroomBytes": 207,
+    "maxSceneObjTiles": 124,
+    "maxSceneObjCapacity": 128,
+    "westBank1BkgTiles": 44,
+    "westBank1BkgCapacity": 47,
+    "preservedCourierPoses": 45,
+    "appendedOriginalArmedPoses": 4,
+    "compiledGroundPoseCount": 108,
+    "compiledQueenProgressBytes": 8684,
+    "compiledGuards": [
+      "memory reserve",
+      "aircraft/ground/banked actor/living-city/combat art and allocation",
+      "eight cardinal/door tram poses",
+      "six exact co-banked tram progress tables"
+    ]
+  },
+  "save": {
+    "version": 11,
+    "payloadBytes": 58,
+    "journalPreserved": true,
+    "legacyVersions": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "nativeLegacyImport": false
+  },
+  "verification": {
+    "nativeRecord": "NATIVE_STORY_COMBAT.json",
+    "physicalCartridgeWrite": false,
+    "physicalColdBoot": false,
+    "physicalSavePersistence": false,
+    "browserPreview": false,
+    "complete104Contracts": false,
+    "twoHourHumanGameplay": false
+  }
+}

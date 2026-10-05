@@ -282,5 +282,194 @@
     "reviewed": "2026-10-02",
     "scope": "TTC terms reserve website material and trademarks and restrict republication of substantial material. Research retains selected factual identities and citations only; no maps, logos, live data, timetable text or route geometry are imported.",
     "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "port-lands-city-context-20261002",
+    "url": "https://www.toronto.ca/city-government/planning-development/planning-studies-initiatives/port-lands/",
+    "reviewed": "2026-10-02",
+    "scope": "Port Lands boundaries, ongoing industry, McCleary/creative district relationships and future versus completed development. Supports proposed 1024×976 district, not native playable coverage.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-bridge-backgrounder-20261002",
+    "url": "https://www.waterfrontoronto.ca/sites/default/files/2024-01/Port%20Lands%20Road%20and%20Bridges%20Backgrounder%20AODA.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "2024 Cherry North/Commissioners opening, separate transit span, Cherry westward realignment and South bridge identity. Historical backgrounder distinguishes existing roads from future rights-of-way.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-completed-infrastructure-20261002",
+    "url": "https://secure.toronto.ca/council/agenda-item.do?item=2026.EX29.2",
+    "reviewed": "2026-10-02",
+    "scope": "City 2026 report records four completed flood-protection bridges and new Don river/park infrastructure. Review date does not adopt a 2026 gameplay era.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-ookwemin-island-20261002",
+    "url": "https://www.waterfrontoronto.ca/our-projects/ookwemin-minising",
+    "reviewed": "2026-10-02",
+    "scope": "New island bounded by Keating Channel, harbour and new Don river; future mixed-use development remains distinct from existing park and industry.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-biidaasige-project-20261002",
+    "url": "https://www.waterfrontoronto.ca/our-projects/biidaasige-park",
+    "reviewed": "2026-10-02",
+    "scope": "Opened park phases, multiple entrances, 39 Commissioners Old Fire Hall 30, Atlas Crane and river/wetland character; reference for original pixel art only.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-biidaasige-west-opening-20261002",
+    "url": "https://www.waterfrontoronto.ca/news/torontos-largest-park-in-a-generation-just-got-bigger",
+    "reviewed": "2026-10-02",
+    "scope": "July 24, 2026 western park opening, Canoe Cove, promenade and industrial heritage; future park/development phases not silently drawn as complete.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-fire-hall-30-20261002",
+    "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/biidaasige-park/book-an-amenity-at-biidaasige-park/",
+    "reviewed": "2026-10-02",
+    "scope": "Old Fire Hall 30 address 39 Commissioners and community/event use. Proposed courier entrance is fictional, not a surveyed loading door.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-unwin-bridge-study-20261002",
+    "url": "https://www.toronto.ca/legdocs/mmis/2025/ie/bgrd/backgroundfile-254868.pdf",
+    "reviewed": "2026-10-02",
+    "scope": "April 2025 report verifies Cherry–Leslie Unwin connection, bends, Hearn circulation-channel crossing, existing single-lane bridge and proposed replacement. Does not prove replacement completion.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-hearn-heritage-20261002",
+    "url": "https://secure.toronto.ca/nm/api/individual/notice/710.do",
+    "reviewed": "2026-10-02",
+    "scope": "Hearn at 440 Unwin, north side between Cherry and Leslie; broad brick hall and tall stack support original compressed silhouette. No interior access claim.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "port-lands-centreline-audit-20261002",
+    "url": "https://gis.toronto.ca/arcgis/rest/services/cot_geospatial/MapServer/2",
+    "reviewed": "2026-10-02",
+    "scope": "123 selected named features, 19 shared named junctions and current Ookwemin Street identity queried in memory; selected IDs/rounded coordinates only in PORT_LANDS_PLAN.md.",
+    "rights": "Selected factual City geographic observations only; Open Government Licence – Toronto v1.0 with attribution/link. No raw geometry, map imagery, logos or official marks imported."
+  },
+  {
+    "id": "port-lands-former-toronto-audit-20261002",
+    "url": "https://gis.toronto.ca/arcgis/rest/services/cot_geospatial27/MapServer/6",
+    "reviewed": "2026-10-02",
+    "scope": "AREA_NAME=TORONTO OBJECTID14035041 polygon; all 19 selected junctions inside by point-in-polygon. Whole compressed scene/shoreline clipping remains generation gate.",
+    "rights": "Selected factual City geographic observations only; Open Government Licence – Toronto v1.0 with attribution/link. No raw geometry, map imagery, logos or official marks imported."
+  },
+  {
+    "id": "ttc-port-lands-visitor-connections-20261002",
+    "url": "https://www.ttc.ca/riding-the-ttc/Explore-Toronto",
+    "reviewed": "2026-10-02",
+    "scope": "Official 114 Queens Quay East to Commissioners/Cherry or Munition and seasonal 202 Cherry Beach to Cherry/Unwin. Proposed game bus/curb signs/timings not registered; no live schedule imported.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "ttc-waterfront-east-future-20261002",
+    "url": "https://www.ttc.ca/about-the-ttc/projects-and-plans/Waterfront-Transit-Network-Expansion",
+    "reviewed": "2026-10-02",
+    "scope": "Waterfront East streetcar project remains design/enabling work; dedicated Cherry transit bridge alone does not establish operating Port Lands streetcar service.",
+    "rights": "Factual research reference only; no photographs, maps, artwork, logos, timetable text or geometry imported. The City dataset licence does not license this website material."
+  },
+  {
+    "id": "islands-wayfinding-202609-reviewed20261003",
+    "url": "https://www.toronto.ca/wp-content/uploads/2026/09/8ff1-Toronto-Island-Park-mapcompressed.pdf",
+    "reviewed": "2026-10-03",
+    "scope": "One-page September 2026 map opened and visually inspected after temporary PDF rendering outside the repository. North-arrow orientation, three landings, established public paths/bridge spurs, airport/plant/club restrictions checked; printed overview is south-up. Reference only, not an adopted map era.",
+    "rights": "City PDF expressly requires written permission for reproduction, distribution or alteration and includes additional map-data credits. No map or geometry bundled, traced or used as game artwork."
+  },
+  {
+    "id": "islands-existing-context-202211-reviewed20261003",
+    "url": "https://www.toronto.ca/wp-content/uploads/2022/11/91bd-toronto-island-park-master-plan-open-house-info-panel-nov-30-2022-03.pdf",
+    "reviewed": "2026-10-03",
+    "scope": "Panel 3 existing-context aerial visually inspected. Supports north-up relative Hanlan/Gibraltar/Centre/Ward/Algonquin, airport, harbour/lake, landing and landmark arrangement; historical context, not current operating guidance.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-existing-versus-proposed-bridges-20261003",
+    "url": "https://www.toronto.ca/legdocs/mmis/2024/ie/bgrd/backgroundfile-246911.pdf",
+    "reviewed": "2026-10-03",
+    "scope": "June 20 2024 full-report Part 1, printed pp47–51 / PDF pages68–72 opened, pp50–51 visually inspected. Existing Lakeshore–Cibola/Avenue/boardwalk and Fig3-4 black existing versus red proposed bridges; no proposed Lagoon Loop/Gibraltar bridges treated as built.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-public-access-20261003",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/getting-around/",
+    "reviewed": "2026-10-03",
+    "scope": "Official connected walking network and dock distances; public vehicles prohibited, emergency/commercial service exception. Island Bike Share availability does not permit its bikes on ferries. No real distances or walk times imposed as game waits.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-landmark-path-guide-20261003",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/things-to-do-on-toronto-island/",
+    "reviewed": "2026-10-03",
+    "scope": "Centre landing/Long Pond/Manitou/Avenue to south beach/pier; maze west of Avenue, Gibraltar lighthouse north of its beach, Ward waiting shed, southern boardwalk and public attractions. Original silhouettes/fictional clients only; no copied art or interior access claims.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-ferry-service-20261003",
+    "url": "https://www.toronto.ca/explore-enjoy/toronto-island-ferries/ferry-routes-schedules/",
+    "reviewed": "2026-10-03",
+    "scope": "Year-round Jack Layton origin, three warmer-season landing routes, winter Ward service, weather/mechanical variability. Current tables reviewed for identity only; no live timetable/fare imported or inter-island City route invented.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "islands-project-status-20261003",
+    "url": "https://www.toronto.ca/city-government/planning-development/construction-new-facilities/parks-facility-plans-strategies/toronto-island-park-projects/",
+    "reviewed": "2026-10-03",
+    "scope": "Distinguishes completed 2024–2025 Hanlan improvements from 2026 landing concept work, future landscape/movement recommendations and proposed Snake ceremonial space. Current high-water closures are not silently adopted as game era.",
+    "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "uhn-toronto-general-location-20261005",
+    "url": "https://www.uhn.ca/corporate/Directions/Pages/directions_TGH.aspx",
+    "reviewed": "2026-10-05",
+    "scope": "UHN directions explicitly identify Toronto General at 200 Elizabeth Street, east of University Avenue just south of College, with Elizabeth entrances between College and Gerrard. Supports relative compressed game hospital placement only; fictional University-side recovery forecourt is not a surveyed entrance, and current construction is not adopted.",
+    "rights": "Factual reference only. No maps, floor plans, photographs, logos, hospital marks, artwork or geometry imported. The new mint medical badge and building representation are original game art; the root MIT licence does not license UHN website material."
+  },
+  {
+    "id": "uoft-stgeorge-campus-map-2018-reviewed20261005",
+    "url": "https://my.alumni.utoronto.ca/s/731/images/editor_documents/reunion/alumnireunion2019/utsg_campus_map.pdf",
+    "reviewed": "2026-10-05",
+    "scope": "Official St. George 2018–19 campus map text/grid: Robarts B2, University College D3, Convocation Hall E3; Bloor, College, St. George, University/Queen's Park and King's College Circle named. Historical factual reference for relative orientation only; no map image/geometry imported. Current interactive map requires JavaScript and was not executed.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-campus-architecture-20261005",
+    "url": "https://www.fs.utoronto.ca/news/five-iconic-buildings-on-the-st-george-campus/",
+    "reviewed": "2026-10-05",
+    "scope": "Official facilities article identifies University College at 15 King's College Circle and its 19th-century Romanesque Revival exterior. Supports original arcade/tower architectural interpretation; game pixels/clock/sign are independently authored.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-robarts-library-20261005",
+    "url": "https://library.utoronto.ca/library/robarts",
+    "reviewed": "2026-10-05",
+    "scope": "Official library page identifies Robarts Library at 130 St George Street, St. George campus. Supports real landmark identity/address; game roof, vertical bays and placement are compressed original art.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-robarts-triangle-20261005",
+    "url": "https://library.utoronto.ca/space/robarts/robarts-library-stacks",
+    "reviewed": "2026-10-05",
+    "scope": "Official library-space page describes Robarts triangular shape and apex names St. George/Harbord/Sussex. Supports angular original roof motif only; no floor-plan access or exact outline is simulated.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "uoft-convocation-20261005",
+    "url": "https://www.utoronto.ca/news/convocation-hall-close-u-t-carpenters-share-iconic-building-s-quirks",
+    "reviewed": "2026-10-05",
+    "scope": "Official June12 2026 UofT article describes Convocation Hall columns/domed roof and oculus. Supports independently authored symmetric dome/columns; the game is not a building survey.",
+    "rights": "Factual reference only; no official map imagery, photographs, logos, crests, artwork or geometry imported or traced. Campus graphics and lettering are original MIT game art; UofT website/map material retains its own rights."
+  },
+  {
+    "id": "toronto-electric-scooter-rules-20261005",
+    "url": "https://www.toronto.ca/services-payments/streets-parking-transportation/transportation-projects/micromobility/electric-bicycles-e-bikes-e-scooters/",
+    "reviewed": "2026-10-05",
+    "scope": "City page, modified2026-08-11 and reviewed2026-10-05, states electric kick scooters cannot be operated on public streets, lanes, cycle tracks, trails, paths, sidewalks or parks, or left/stored/parked on public property. User-authorized road/sidewalk scooter activity is fictional sandbox design; existing vehicle3 is an original fictional seated delivery scooter and not a branded rental. This is a geographic/design distinction, not game navigation guidance.",
+    "rights": "Official City factual/legal reference only; no public-safety poster, logo, photography, map or artwork imported. Original scooter art and fictional traffic behavior do not claim real-world legality."
   }
 ]

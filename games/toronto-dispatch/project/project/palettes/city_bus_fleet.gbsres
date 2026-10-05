@@ -1,0 +1,18 @@
+{
+  "_resourceType": "palette",
+  "id": "04b8f44f-160e-57b8-a478-32eb6fe45fbf",
+  "name": "City bus fleet",
+  "colors": [
+    "F8F0E0",
+    "F8EBC1",
+    "E3AD35",
+    "203545"
+  ],
+  "defaultName": "City bus fleet",
+  "defaultColors": [
+    "F8F0E0",
+    "F8EBC1",
+    "E3AD35",
+    "203545"
+  ]
+}

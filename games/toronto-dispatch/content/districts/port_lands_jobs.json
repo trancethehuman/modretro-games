@@ -1,0 +1,758 @@
+{
+  "schema_version": 1,
+  "status": "authored; native compilation and ordinary-input Port Lands contract playtests pending",
+  "scope": "Eight purposeful Port Lands courier contracts and eight fictional clients appended after the preserved native 88/51 prefix; no new transit service or full Old Toronto coverage is implied",
+  "duration_target_minutes": 120,
+  "duration_verified": false,
+  "duration_notice": "Counts, route models, deadlines and assumed handling do not establish two hours or enjoyment. Measure purposeful ordinary gameplay.",
+  "base_stop_count": 51,
+  "base_quest_count": 88,
+  "result_stop_count": 59,
+  "result_quest_count": 96,
+  "preserved_base_stops_sha256": "68f6104038ab9724ca197de13ecef7528ab5e8a4713ee8d05cff8b8004a73325",
+  "preserved_base_quests_sha256": "ae5d1177fc297337b7efe449144d6ffbe188c333d3607d6710080c9d065e130a",
+  "preserved_base_stop_fields": [
+    "id",
+    "u",
+    "v",
+    "name",
+    "transit",
+    "district",
+    "reserved"
+  ],
+  "preserved_base_quest_fields": [
+    "id",
+    "title",
+    "brief",
+    "kind_id",
+    "required_vehicle",
+    "min_completed",
+    "route",
+    "time_limit_seconds",
+    "reward"
+  ],
+  "world_sha256": "e74e67e52a7158ef4f554b39d14405fc1c9dfd9f41e5f96104789e5a06d1b713",
+  "collision_resources": [
+    {
+      "district": 0,
+      "scene": "project/project/scenes/toronto_city/scene.gbsres",
+      "collision_sha256": "205f344c966e09bce0d8cd0f52dea33f6bc0b49c942b2cc257c3cf5104311645"
+    },
+    {
+      "district": 1,
+      "scene": "project/project/scenes/toronto_west/scene.gbsres",
+      "collision_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e"
+    },
+    {
+      "district": 2,
+      "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
+      "collision_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c"
+    },
+    {
+      "district": 3,
+      "scene": "project/project/scenes/toronto_east/scene.gbsres",
+      "collision_sha256": "c70340500318d89e5301a3cc94d51e96f534b0fcd6f33ab1ffb73c012e7e1764"
+    },
+    {
+      "district": 4,
+      "scene": "project/project/scenes/toronto_port_lands/scene.gbsres",
+      "collision_sha256": "5d20e96673670728837a481462b0f7e30d76e354579b1ea0427bc73545f73d1d"
+    },
+    {
+      "district": 5,
+      "scene": "project/project/scenes/toronto_islands/scene.gbsres",
+      "collision_sha256": "c2ba2ec0d1a6b0c0c8c8b8fe4015cb04917881b32f7ad4144f84cc4df66711cc"
+    },
+    {
+      "district": 6,
+      "scene": "project/project/scenes/toronto_north/scene.gbsres",
+      "collision_sha256": "5d8ea6a7309cdf6587a74961efd79988ef56f818f0d6e50ca561a90994308a51"
+    }
+  ],
+  "geography_metadata": [
+    {
+      "path": "content/districts/port_lands_art.json",
+      "sha256": "fc48ed77db0854628e9312b168a990201a70bd73fdb4e4d144f3c4e179e99577",
+      "notice": "Source-derived geography and original compressed artwork; retain source attribution and distribution notices"
+    }
+  ],
+  "normalized_cardinal_speeds_pixels_per_second": {
+    "car": 86.25,
+    "truck": 71.25,
+    "motorcycle": 101.25,
+    "scooter": 63.75,
+    "walking": 30.0
+  },
+  "transit_notice": "All eight clients have transit=0. Existing Queen platforms remain IDs 43..50 and can shorten light-cargo journeys before walking through Leslie; 114 boarding is not implemented by this content.",
+  "geography_notice": "All interdistrict Port Lands travel uses East Leslie (816,952) to Port Lands (912,24). Core Cherry/Carlaw gateways remain closed; use only the registered road/water/bridge graph.",
+  "save_notice": "Append-only native IDs fit the existing 16-byte completion bitmap and 58-byte v8 state. Older 88-contract ROMs reject saved new job IDs/completion bits; backward loading is not promised.",
+  "native_stop_flags": {
+    "reserved_bit_0": "Foot-only delivery; reject car-door proximity and require on-foot handoff"
+  },
+  "validation": {
+    "full_foot_component_tiles": 10678,
+    "full_foot_half_pixels": 2,
+    "full_vehicle_half_pixels": 8,
+    "foot_only_stop_ids": [
+      52,
+      53,
+      56,
+      58
+    ],
+    "parking_walks": [
+      {
+        "stop": 52,
+        "walking_pixels": 104
+      },
+      {
+        "stop": 53,
+        "walking_pixels": 128
+      },
+      {
+        "stop": 56,
+        "walking_pixels": 112
+      },
+      {
+        "stop": 58,
+        "walking_pixels": 200
+      }
+    ]
+  },
+  "stops": [
+    {
+      "id": 51,
+      "u": 672,
+      "v": 272,
+      "name": "CHANNEL STAGE",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Channel Stage",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 52,
+      "u": 312,
+      "v": 432,
+      "name": "FIRE HALL BOOKS",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Fire Hall Books",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 304,
+        "v": 352
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 53,
+      "u": 144,
+      "v": 432,
+      "name": "CRANE WALK",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Crane Walk",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 192,
+        "v": 352
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 54,
+      "u": 704,
+      "v": 576,
+      "name": "TURNING BASIN",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Turning Basin Cases",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 55,
+      "u": 616,
+      "v": 808,
+      "name": "UNWIN WORKS",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Unwin Works",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 56,
+      "u": 432,
+      "v": 888,
+      "name": "BEACH MAIL",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Beach Mail",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 352,
+        "v": 856
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    },
+    {
+      "id": 57,
+      "u": 128,
+      "v": 576,
+      "name": "POLSON PACKET",
+      "transit": 0,
+      "district": 4,
+      "reserved": 0,
+      "foot_only": false,
+      "reference_label": "Polson Packet",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"
+    },
+    {
+      "id": 58,
+      "u": 352,
+      "v": 592,
+      "name": "RIVERBANK PARCEL",
+      "transit": 0,
+      "district": 4,
+      "reserved": 1,
+      "foot_only": true,
+      "reference_label": "Riverbank Parcel",
+      "geography_reference": "docs/PORT_LANDS_PLAN.md",
+      "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
+      "parking_anchor": {
+        "u": 192,
+        "v": 552
+      },
+      "access_notice": "Native delivery requires an on-foot handoff; auxiliary parking guidance does not require returning to the vehicle between foot clients"
+    }
+  ],
+  "quests": [
+    {
+      "id": "contract-89",
+      "title": "CHANNEL STOCK RUN",
+      "brief": [
+        "BULKY STAGE STOCK",
+        "TRUCK BRAKE EARLY"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        0,
+        51
+      ],
+      "time_limit_seconds": 170,
+      "reward": 184,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect stage stock at Union"
+        },
+        {
+          "stop_id": 51,
+          "district": 4,
+          "objective": "Unload at the Channel Stage apron"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 2448,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 34.4,
+        "normalized_moving_seconds_slow": 34.4,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 51,
+            "from_district": 0,
+            "to_district": 4,
+            "vehicle_pixels": 2448,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Queen east crossing",
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-90",
+      "title": "FIRE HALL BOOKS",
+      "brief": [
+        "COMMUNITY BOOK BOX",
+        "PARK THEN WALK"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        37,
+        52
+      ],
+      "time_limit_seconds": 175,
+      "reward": 150,
+      "stages": [
+        {
+          "stop_id": 37,
+          "district": 3,
+          "objective": "Collect community books at Riverside"
+        },
+        {
+          "stop_id": 52,
+          "district": 4,
+          "objective": "Walk to the Fire Hall Books entrance"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 2112,
+        "required_walking_pixels": 104,
+        "normalized_moving_seconds_fast": 24.3,
+        "normalized_moving_seconds_slow": 36.6,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 37,
+            "to_stop": 52,
+            "from_district": 3,
+            "to_district": 4,
+            "vehicle_pixels": 2112,
+            "required_walking_pixels": 104,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-91",
+      "title": "CRANE WALK PACKET",
+      "brief": [
+        "POCKET RELAY KIT",
+        "PARK OR USE QUEEN"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "TRANSIT RELAY",
+      "kind_id": 4,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        0,
+        53
+      ],
+      "time_limit_seconds": 205,
+      "reward": 173,
+      "stages": [
+        {
+          "stop_id": 0,
+          "district": 0,
+          "objective": "Collect a pocket relay packet at Union"
+        },
+        {
+          "stop_id": 53,
+          "district": 4,
+          "objective": "Walk to the Crane Walk handoff"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 3008,
+        "required_walking_pixels": 128,
+        "normalized_moving_seconds_fast": 34.0,
+        "normalized_moving_seconds_slow": 51.5,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 0,
+            "to_stop": 53,
+            "from_district": 0,
+            "to_district": 4,
+            "vehicle_pixels": 3008,
+            "required_walking_pixels": 128,
+            "shortest_modeled_seams": [
+              "Queen east crossing",
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-92",
+      "title": "TURNING BASIN LOAD",
+      "brief": [
+        "STAGE EQUIPMENT",
+        "UNWIN THEN YARD"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "HEAVY FREIGHT",
+      "kind_id": 3,
+      "required_vehicle": 1,
+      "min_completed": 8,
+      "route": [
+        51,
+        55,
+        54
+      ],
+      "time_limit_seconds": 185,
+      "reward": 198,
+      "stages": [
+        {
+          "stop_id": 51,
+          "district": 4,
+          "objective": "Load stage equipment at Channel Stage"
+        },
+        {
+          "stop_id": 55,
+          "district": 4,
+          "objective": "Handoff equipment at Unwin Works"
+        },
+        {
+          "stop_id": 54,
+          "district": 4,
+          "objective": "Deliver the reusable cases to Turning Basin"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 2560,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 35.9,
+        "normalized_moving_seconds_slow": 35.9,
+        "assumed_interaction_allowance_seconds": 15,
+        "legs": [
+          {
+            "from_stop": 51,
+            "to_stop": 55,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 1120,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 55,
+            "to_stop": 54,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 1440,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-93",
+      "title": "UNWIN GLASS",
+      "brief": [
+        "FRAGILE GLASS KIT",
+        "BRAKE BEFORE TURNS"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 0,
+      "min_completed": 6,
+      "route": [
+        39,
+        55
+      ],
+      "time_limit_seconds": 150,
+      "reward": 170,
+      "stages": [
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Collect the fragile kit at Carlaw Works"
+        },
+        {
+          "stop_id": 55,
+          "district": 4,
+          "objective": "Deliver intact glass at Unwin Works"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 1920,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 22.3,
+        "normalized_moving_seconds_slow": 22.3,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 39,
+            "to_stop": 55,
+            "from_district": 3,
+            "to_district": 4,
+            "vehicle_pixels": 1920,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-94",
+      "title": "BEACH MAIL",
+      "brief": [
+        "RIVER AND BEACH",
+        "TWO FOOT HANDOFFS"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        52,
+        58,
+        56
+      ],
+      "time_limit_seconds": 180,
+      "reward": 129,
+      "stages": [
+        {
+          "stop_id": 52,
+          "district": 4,
+          "objective": "Collect the mail pouch at Fire Hall Books"
+        },
+        {
+          "stop_id": 58,
+          "district": 4,
+          "objective": "Walk to the Riverbank Parcel handoff"
+        },
+        {
+          "stop_id": 56,
+          "district": 4,
+          "objective": "Deliver the final mail at the Beach entrance"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 776,
+        "required_walking_pixels": 616,
+        "normalized_moving_seconds_fast": 28.2,
+        "normalized_moving_seconds_slow": 32.7,
+        "assumed_interaction_allowance_seconds": 15,
+        "legs": [
+          {
+            "from_stop": 52,
+            "to_stop": 58,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 312,
+            "required_walking_pixels": 304,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 58,
+            "to_stop": 56,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 464,
+            "required_walking_pixels": 312,
+            "shortest_modeled_seams": []
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-95",
+      "title": "HARBOUR PAPER RUN",
+      "brief": [
+        "URGENT PORT FILE",
+        "MOTORCYCLE ROUTE"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 2,
+      "min_completed": 6,
+      "route": [
+        57,
+        1
+      ],
+      "time_limit_seconds": 120,
+      "reward": 175,
+      "stages": [
+        {
+          "stop_id": 57,
+          "district": 4,
+          "objective": "Collect harbour files at Polson Packet"
+        },
+        {
+          "stop_id": 1,
+          "district": 0,
+          "objective": "Reach St Lawrence before the cutoff"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 3088,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 30.5,
+        "normalized_moving_seconds_slow": 30.5,
+        "assumed_interaction_allowance_seconds": 10,
+        "legs": [
+          {
+            "from_stop": 57,
+            "to_stop": 1,
+            "from_district": 4,
+            "to_district": 0,
+            "vehicle_pixels": 3088,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands",
+              "Queen east crossing"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    },
+    {
+      "id": "contract-96",
+      "title": "STAGE RETURN KIT",
+      "brief": [
+        "YARD RETURN PAPERS",
+        "ORIGINAL BACK YARD"
+      ],
+      "chapter": "Port Lands loading and park rounds",
+      "kind": "RETURN PAPERS",
+      "kind_id": 6,
+      "required_vehicle": 0,
+      "min_completed": 12,
+      "route": [
+        54,
+        51,
+        39,
+        54
+      ],
+      "time_limit_seconds": 200,
+      "reward": 204,
+      "stages": [
+        {
+          "stop_id": 54,
+          "district": 4,
+          "objective": "Collect return papers at Turning Basin"
+        },
+        {
+          "stop_id": 51,
+          "district": 4,
+          "objective": "Handoff the stage copy at Channel Stage"
+        },
+        {
+          "stop_id": 39,
+          "district": 3,
+          "objective": "Collect the dispatch copy at Carlaw Works"
+        },
+        {
+          "stop_id": 54,
+          "district": 4,
+          "objective": "Return the original kit to Turning Basin"
+        }
+      ],
+      "objective_notice": "Ordered native parcel handoffs, condition/timer/vehicle rules and returns; no signature UI, loading delay, new cargo system or new transit service is implied",
+      "timing_design": {
+        "planning_only": true,
+        "measured_duration_seconds": null,
+        "deadline_status": "Initial estimate; ordinary-input tuning pending",
+        "vehicle_route_pixels": 3312,
+        "required_walking_pixels": 0,
+        "normalized_moving_seconds_fast": 38.4,
+        "normalized_moving_seconds_slow": 38.4,
+        "assumed_interaction_allowance_seconds": 20,
+        "legs": [
+          {
+            "from_stop": 54,
+            "to_stop": 51,
+            "from_district": 4,
+            "to_district": 4,
+            "vehicle_pixels": 336,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": []
+          },
+          {
+            "from_stop": 51,
+            "to_stop": 39,
+            "from_district": 4,
+            "to_district": 3,
+            "vehicle_pixels": 1328,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          },
+          {
+            "from_stop": 39,
+            "to_stop": 54,
+            "from_district": 3,
+            "to_district": 4,
+            "vehicle_pixels": 1648,
+            "required_walking_pixels": 0,
+            "shortest_modeled_seams": [
+              "Leslie / Port Lands"
+            ]
+          }
+        ],
+        "basis": "Actual registered collision-grid tile-centre paths and the sole Leslie Port Lands seam. Driving uses integer-settled cardinal speed estimates; foot-client modeling returns to parking between legs, although the native game permits continuous walking. Excludes traffic, acceleration, transit, real handling and repositioning. Not observed duration."
+      }
+    }
+  ]
+}

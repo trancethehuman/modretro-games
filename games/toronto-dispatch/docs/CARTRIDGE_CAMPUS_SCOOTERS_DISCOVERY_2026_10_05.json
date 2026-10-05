@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-05",
+  "operation": "list-devices",
+  "vendorCliVersion": "1.2.1",
+  "result": "succeeded",
+  "devices": 0,
+  "unmatchedUsbFunctions": 0,
+  "conflicts": 0,
+  "diagnostics": 0,
+  "processExitCode": 0,
+  "writerClosed": true,
+  "cartridgeWrite": "not-dispatched",
+  "physicalBoot": "not-verified",
+  "reason": "No connected Chromatic was returned. The last physically confirmed 9c155 baseline retains its separate acceptance."
+}

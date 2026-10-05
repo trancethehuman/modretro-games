@@ -1,0 +1,489 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "result": "passed-scoped-native-play",
+  "romSha256": "71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8",
+  "debugNoiSha256": "c30c8ed37eae03c42d920cc0383508b80148cc045d460b8dfe337f887e7ffbcd",
+  "sourceFingerprint": "6cb70b49233b540daf605afe7e77076cbbfd2ba2ca4f6bc39fa5c6d3f9ebd9b3",
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "protocolVersion": 1,
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "sessionId": "87159ca1519b481e8d5c12546dab3a08",
+  "branch": "branch-0001",
+  "frames": 12974,
+  "outcome": "passed",
+  "eventCount": 1070,
+  "eventDigest": "08d1876420af09f3dfc8ce014b8b85d52f31923bfd34d30796fb4ed47b34329c",
+  "archive": {
+    "id": "69edb510-6c44-47c0-befb-3c1190506541",
+    "manifestSha256": "673c9cddb34f6a78bfd8c83fe44d6b09f7ebc1905d6a2581e489883e7f0488a8",
+    "inventory": {
+      "digest": "f0279e1c4f8e92510772ee452abdedcbeb451c0e79d973be645f80e96c080cc1",
+      "bytes": 1203243,
+      "entries": 340
+    },
+    "sessionClosedBeforeArchive": true
+  },
+  "method": "Fresh recorded native boot; ordinary physical-button sets and read-only bounded memory/VRAM inspection. No RAM writes, imported saves or debug checkpoints.",
+  "checks": [
+    {
+      "name": "intro held A",
+      "frames": [
+        204,
+        324
+      ],
+      "all58GameBytesEqual": true,
+      "framebufferRgbaSha256": "143eb38d949864aaae05b89a1e6006f2d2673b4dc96c89220aeb33e035b496ac"
+    },
+    {
+      "name": "first delivery",
+      "frame": 3302,
+      "completed": 1,
+      "cargoCondition": 100,
+      "cash": 129
+    },
+    {
+      "name": "earned first-pay chapter",
+      "frames": [
+        3350,
+        3470
+      ],
+      "all58GameBytesEqual": true,
+      "skipRecorded": true
+    },
+    {
+      "name": "road arrow continuity",
+      "sampleCount": 30,
+      "frames": [
+        2557,
+        2586
+      ],
+      "tileBank": 0,
+      "tileAddress": "9B4A",
+      "observedTile": "F2",
+      "present": 30
+    },
+    {
+      "name": "sound settings",
+      "choices": [
+        "music + effects",
+        "effects only",
+        "all sound off"
+      ],
+      "menuRoundTrip": true,
+      "humanListening": false
+    },
+    {
+      "name": "map world freeze",
+      "frames": [
+        3998,
+        4238
+      ],
+      "all58GameBytesEqual": true
+    },
+    {
+      "name": "fresh shots and held-input gate",
+      "first": {
+        "frame": 4814,
+        "position": {
+          "u": 761,
+          "v": 780,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 129,
+        "seconds": 51,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 1,
+        "wantedSeconds": 29,
+        "health": 100,
+        "ammo": 11
+      },
+      "held": {
+        "frame": 4934,
+        "position": {
+          "u": 761,
+          "v": 780,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 129,
+        "seconds": 53,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 1,
+        "wantedSeconds": 30,
+        "health": 100,
+        "ammo": 11
+      },
+      "third": {
+        "frame": 5030,
+        "position": {
+          "u": 761,
+          "v": 780,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 129,
+        "seconds": 54,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 3,
+        "wantedSeconds": 30,
+        "health": 100,
+        "ammo": 9
+      }
+    },
+    {
+      "name": "armed pursuit and hospital",
+      "initial": {
+        "frame": 6374,
+        "position": {
+          "u": 761,
+          "v": 748,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 129,
+        "seconds": 77,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 3,
+        "wantedSeconds": 30,
+        "health": 82,
+        "ammo": 9
+      },
+      "after": {
+        "frame": 7574,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 89,
+        "seconds": 97,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 0,
+        "wantedSeconds": 0,
+        "health": 100,
+        "ammo": 12
+      },
+      "proneFramebufferFrame": 6774,
+      "hospitalFramebufferFrame": 6974,
+      "fee": 40,
+      "parkedCarUnchanged": true,
+      "hospitalBadge": {
+        "frame": 10826,
+        "tileAddress": "9960",
+        "tile": "FE",
+        "attribute": "8F"
+      }
+    },
+    {
+      "name": "one-star arrest",
+      "before": {
+        "frame": 7598,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 89,
+        "seconds": 97,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 1,
+        "wantedSeconds": 30,
+        "health": 100,
+        "ammo": 11
+      },
+      "after": {
+        "frame": 8798,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 64,
+        "seconds": 117,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 0,
+        "wantedSeconds": 0,
+        "health": 100,
+        "ammo": 11
+      },
+      "fine": 25
+    },
+    {
+      "name": "arrest input guard",
+      "before": {
+        "frame": 10802,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 39,
+        "seconds": 143,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 0,
+        "wantedSeconds": 0,
+        "health": 100,
+        "ammo": 10
+      },
+      "afterFreshB": {
+        "frame": 10826,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 39,
+        "seconds": 144,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 0,
+        "wantedSeconds": 0,
+        "health": 100,
+        "ammo": 10
+      },
+      "ammoUnchanged": true,
+      "wantedStaysZero": true
+    },
+    {
+      "name": "explicit save and first game reset",
+      "before": {
+        "frame": 9182,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 64,
+        "seconds": 120,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 1,
+        "wantedSeconds": 27,
+        "health": 100,
+        "ammo": 10
+      },
+      "after": {
+        "frame": 9386,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 64,
+        "seconds": 120,
+        "mode": 8,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 1,
+        "wantedSeconds": 27,
+        "health": 100,
+        "ammo": 10
+      },
+      "careerHealthAmmoStoryPositionAndParkRestored": true
+    },
+    {
+      "name": "second auto-saved arrest and reset",
+      "after": {
+        "frame": 12974,
+        "position": {
+          "u": 504,
+          "v": 344,
+          "district": 0,
+          "onFoot": true
+        },
+        "parkedCar": {
+          "u": 761,
+          "v": 720,
+          "district": 0,
+          "vehicle": 0
+        },
+        "cash": 39,
+        "seconds": 175,
+        "mode": 0,
+        "job": 255,
+        "stage": 2,
+        "cargoCondition": 100,
+        "completed": 1,
+        "storyFlags": 3,
+        "wanted": 0,
+        "wantedSeconds": 0,
+        "health": 100,
+        "ammo": 10
+      }
+    }
+  ],
+  "samples": [
+    {
+      "role": "intro",
+      "frame": 204,
+      "sha256": "4bcd64f9aabf61305a85e1800f387b76338370f9a54144d20313355dd022b987",
+      "path": "playtest-story-combat-r6/intro-204.png"
+    },
+    {
+      "role": "road-navigation",
+      "frame": 3066,
+      "sha256": "c0224ea8cf0aa5b8d102b72a607eb3025118eed2d3d018d921e629610cef47e3",
+      "path": "playtest-story-combat-r6/road-navigation-3066.png"
+    },
+    {
+      "role": "first-pay",
+      "frame": 3350,
+      "sha256": "f8b11a2a1221552afe60ba991f6ed13a9d9465f515f393655929c03fd5d59d2a",
+      "path": "playtest-story-combat-r6/first-pay-3350.png"
+    },
+    {
+      "role": "downed",
+      "frame": 6774,
+      "sha256": "1ba11ac09274e0813224b5105d4a4c3add432e6695f7ce23b5045a58e14a6a8a",
+      "path": "playtest-story-combat-r6/downed-6774.png"
+    },
+    {
+      "role": "hospital",
+      "frame": 6974,
+      "sha256": "155c56bdad66ed7507a4933d0aa3c3087ccfee1993a93f12695348cf6f6da324",
+      "path": "playtest-story-combat-r6/hospital-6974.png"
+    },
+    {
+      "role": "arrest",
+      "frame": 10826,
+      "sha256": "89692eab9c02714f9de06c8eb487fcd006dd5aec263caa77c343190eb2ed8f80",
+      "path": "playtest-story-combat-r6/arrest-10826.png"
+    }
+  ],
+  "limitations": [
+    "Only first contract and first two story chapters played; later chapter thresholds and all107 route goals checked by host harnesses.",
+    "Fatal-job overlap, all7 hospital district transitions, blocked exits, failed scene queues and interrupted SRAM journal commits verified in actual-C host harnesses; native hospital sample starts and finishes in Core.",
+    "Native game reset restores committed SRAM in this emulator worker; physical power-off persistence is separate.",
+    "No current browser, cartridge, human audio listening, full104-job or two-hour enjoyment acceptance.",
+    "Resource reserve is linked static separation, not deepest-stack measurement or whole-city smoothness proof."
+  ]
+}

@@ -1,0 +1,736 @@
+{
+  "schema": 1,
+  "purpose": "Accepted original visual improvements, appended original taxi poses and four jet shadows, source-correct stop18 alias and native22-actor/save-notice capacity. Historical traffic fixture remains immutable; all terrain/client/job fields, previous fleet metadata and aircraft frames0..13/pixels/identity/defaults are reconstructed against its original pins. Four original armed courier poses45..48 append without changing prior45 pixels/IDs/defaults; savev11 retains58 bytes and legacy21/current27 notice bounds.",
+  "predecessor_commit": "8ea5ec413c3650cd3441ee588ba15f87a98889fa",
+  "historical_fixture_sha256": "182c15604186304bfaef91d2ad0d034f02965a9eec332b9c29085cbd30216bd8",
+  "raw_scopes": {
+    "project/assets/backgrounds/toronto_city.png": {
+      "before_sha256": "05a791496a6160d0418b1117b6ae0c736ca8574a16117ec398420175e30f61e2",
+      "after_sha256": "2e425c04a43227dea7b126b5dab9291617f24ac0509f1d2b5142eddb68076c7e"
+    },
+    "project/assets/backgrounds/toronto_east.png": {
+      "before_sha256": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
+      "after_sha256": "066fc89020671fc61f6fd822ee55981af83d5bd17757aea4634efa6f24a4a35e"
+    },
+    "project/assets/backgrounds/toronto_high_park.png": {
+      "before_sha256": "4d8eb0d6552187b0c82db1226d72fefa0ebd3c1acb8b3b56000c0c3568be5141",
+      "after_sha256": "1e4eeb5f545e647f04010cf19e224ba1a81ce7be747306e4e686a11fbfbdc5d1"
+    },
+    "project/assets/backgrounds/toronto_islands.png": {
+      "before_sha256": "4955543e14ff485b99a62da45f4c075bed5f6fcce11b1901de1723002e73cbc9",
+      "after_sha256": "e86f784e66bbc066d76f54e65ce435a11e7e0cdd87a94de10f9a652b9793230e"
+    },
+    "project/assets/backgrounds/toronto_north.png": {
+      "before_sha256": "56910e88a2379181bf00c0b0e788323554bd794c3a899d6ce3fcac439b89dba4",
+      "after_sha256": "9318fd9059bf7c921c08cdb72bdeeda27948ee49fcf6fd0db64d0b1fc46ca2c9"
+    },
+    "project/assets/backgrounds/toronto_port_lands.png": {
+      "before_sha256": "a46cdd43ea23db5ea147948a6d7d9a1e2e59a8223d84d1cceb4dee41a46bbbf6",
+      "after_sha256": "3fea592190f7928b329cfdf6ebeb72fba84eb69c2cf42e96d3da43ed962725ae"
+    },
+    "project/assets/backgrounds/toronto_west.png": {
+      "before_sha256": "2c55ed72664a4608bb5da993583c4f9d9954205940fae7c9c18f9b51892161ac",
+      "after_sha256": "2eca37c9bb4c7365f68fe96982ac7efe2d410dda246e4c78915ff2a377e70058"
+    },
+    "project/assets/sprites/ambient_aircraft.png": {
+      "before_sha256": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+      "after_sha256": "1d538e0d60a6dd7d4feeb3f44248f12cfd537fb081ea74ec6b40e448736b8bc6"
+    },
+    "project/assets/sprites/ambient_aircraft.png.gbsres": {
+      "before_sha256": "a812e93c1838133a43f71e330080294a8f50c2cbc141228b526e04ac2853b1df",
+      "after_sha256": "79f61bc24b917914a7327867ebafbe1c5859ca13f8b975b6324e12e70e65d50f"
+    },
+    "project/assets/sprites/ambient_boat.png": {
+      "before_sha256": "2e689bb7315d3135505b96a1e60374ad1ce123ecddf695a3369e6a5332047b50",
+      "after_sha256": "42cf0bf5375bf21f5c46d6a5f36d83cf2ade95cb70433189b6907fd68db4bc4e"
+    },
+    "project/assets/sprites/ambient_boat.png.gbsres": {
+      "before_sha256": "6ca8cf2891a62abfe6f2d7f50bd90fbb96f01f2aa39f96a9acc1dfc077d2aeeb",
+      "after_sha256": "e84191981f8f8e103fc8925cb9828758f3a3007e39de561cb4108240eadef2cf"
+    },
+    "project/assets/sprites/city_fleet.png": {
+      "before_sha256": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
+      "after_sha256": "1a2983306cb1a633220351e0a0565a0ccba52d632efb654ee6169e736d1812fb"
+    },
+    "project/assets/sprites/city_fleet.png.gbsres": {
+      "before_sha256": "653872c4ae428af085aa7a976110bf792bf150b8b3277df7f3bfd48e7679ed11",
+      "after_sha256": "86baf497db06b42797e6accffb381ce36f5794c32cf368a84c34798b39472d23"
+    },
+    "project/assets/sprites/dispatch_topdown.png": {
+      "before_sha256": "102546a1540f16f4732ca1728b20ab98242bbf611390d03c496661180a2340fb",
+      "after_sha256": "dc871d244b60fc197d2488b10526215025cecabc25dd1d5b74b2577611fcf169"
+    },
+    "project/assets/sprites/dispatch_topdown.png.gbsres": {
+      "before_sha256": "7bc4f5c91376914de7da50f83062af25a934b426a83ce9451eca28abf350a41f",
+      "after_sha256": "832e1efa496841c2a78f7cb4add1dd128415a5c32bfbe2fbe2cb704a28c55f09"
+    },
+    "project/original-art/ambient_aircraft.metadata.json": {
+      "before_sha256": "a624b9f49d9b5efa25e8928692edea79d0a7ffa173effbab21e46594c6de4822",
+      "after_sha256": "ec4aa5c29fde16e574273a730bf124fccfb8333a70d67b3b0f4ac1dd8d5f6c2e"
+    },
+    "project/original-art/ambient_aircraft.png": {
+      "before_sha256": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
+      "after_sha256": "1d538e0d60a6dd7d4feeb3f44248f12cfd537fb081ea74ec6b40e448736b8bc6"
+    },
+    "project/original-art/ambient_aircraft_art.json": {
+      "before_sha256": "34820e0a60f7d6a2f8935f52a0f7bcceaf13c73dae1dad15903e2e82097bbd29",
+      "after_sha256": "d634cc089faa3e2a6912f094dbd28b18dc46005f1bb5ba7cf89da2892301d4fc"
+    },
+    "project/original-art/ambient_aircraft_preview.png": {
+      "before_sha256": "c7a91eaa6b077564ddea0fade0bd3b76add21e3bf2fb41f1a3e7550c0f84102b",
+      "after_sha256": "c2fb6bf868b7ebcf1d2fc1c4c8a5f45c3e76215be99315da4a1d7a18f31a23ad"
+    },
+    "project/original-art/ambient_boat.metadata.json": {
+      "before_sha256": "fca0f62947b8d37881c0de3e26271e27f1a33ebac9e7ec7237130c130726a0db",
+      "after_sha256": "8d2d27f49055d553328c18b276cff4b23477592b418969957b1311bf8593ac1e"
+    },
+    "project/original-art/ambient_boat.png": {
+      "before_sha256": "2e689bb7315d3135505b96a1e60374ad1ce123ecddf695a3369e6a5332047b50",
+      "after_sha256": "42cf0bf5375bf21f5c46d6a5f36d83cf2ade95cb70433189b6907fd68db4bc4e"
+    },
+    "project/original-art/ambient_boat_art.json": {
+      "before_sha256": "8b00968df71254fc40a16cf8d83a5e9799e64a38f575d32e155cd7f1a6329a41",
+      "after_sha256": "2f322de49d4d565030729d22019bad87fa2cc9076a4122a6695a6bf166f7bedf"
+    },
+    "project/original-art/city_fleet.metadata.json": {
+      "before_sha256": "be558a6bf05767b0b173d90ff5f37f81bb257be0da5f6173a79173480e3c38e4",
+      "after_sha256": "85f55f574463979e90631cb7d6309dedda525ab62acd7e38d5d28e7282dcd4d8"
+    },
+    "project/original-art/city_fleet.png": {
+      "before_sha256": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
+      "after_sha256": "1a2983306cb1a633220351e0a0565a0ccba52d632efb654ee6169e736d1812fb"
+    },
+    "project/original-art/city_fleet_art.json": {
+      "before_sha256": "fc7a99396f7e9e11adbf1bc441fe12d30fed24a2c7f2d1424f0ecd2bab73a26a",
+      "after_sha256": "738138421740330cbd00e5a4a797fe586b941a3af75e1e7abd0d452f14f2d770"
+    },
+    "project/original-art/city_fleet_preview.png": {
+      "before_sha256": "5651e1f11be2f3ca57d54e198c5278b713107ba83eabda45151b027805ee33f6",
+      "after_sha256": "7cf0d192d30c57e8a320f94fb0eb821db4316beb9e4401ebceb0fcbca79eac43"
+    },
+    "project/original-art/dispatch_topdown.png": {
+      "before_sha256": "102546a1540f16f4732ca1728b20ab98242bbf611390d03c496661180a2340fb",
+      "after_sha256": "dc871d244b60fc197d2488b10526215025cecabc25dd1d5b74b2577611fcf169"
+    },
+    "project/original-art/toronto_east.png": {
+      "before_sha256": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
+      "after_sha256": "066fc89020671fc61f6fd822ee55981af83d5bd17757aea4634efa6f24a4a35e"
+    },
+    "project/original-art/toronto_islands.png": {
+      "before_sha256": "4955543e14ff485b99a62da45f4c075bed5f6fcce11b1901de1723002e73cbc9",
+      "after_sha256": "e86f784e66bbc066d76f54e65ce435a11e7e0cdd87a94de10f9a652b9793230e"
+    },
+    "project/original-art/toronto_north.png": {
+      "before_sha256": "56910e88a2379181bf00c0b0e788323554bd794c3a899d6ce3fcac439b89dba4",
+      "after_sha256": "9318fd9059bf7c921c08cdb72bdeeda27948ee49fcf6fd0db64d0b1fc46ca2c9"
+    },
+    "project/original-art/toronto_port_lands.png": {
+      "before_sha256": "a46cdd43ea23db5ea147948a6d7d9a1e2e59a8223d84d1cceb4dee41a46bbbf6",
+      "after_sha256": "3fea592190f7928b329cfdf6ebeb72fba84eb69c2cf42e96d3da43ed962725ae"
+    },
+    "project/project/scenes/toronto_city/actors/ambient_boat_loader.gbsres": {
+      "before_sha256": "45e467c0de5c6191b8e015f2979a4258847364989bce61e491cce7fcb01a08ac",
+      "after_sha256": "8be549342008bd6914792296105ef2517d06a23a664e668e2dd94ab8ffc09ae0"
+    },
+    "project/project/scenes/toronto_city/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "52ca139c40ce979dc07a0e09393fb54c6fa3383c1897d193cf57d8c2a487298a",
+      "after_sha256": "6e89141ae22793ef49da40032d3458dc7a37ea59da8504067aafbbd7d77c957e"
+    },
+    "project/project/scenes/toronto_east/actors/ambient_boat_loader.gbsres": {
+      "before_sha256": "622a96a456fb2aa85c2c3ffba8a5c260a67f0ac7665f23d4799429f694f7f0c2",
+      "after_sha256": "a9a7c3c67cc5c8a520cc6422a35a36b4fa02fdb486bfbcc5e0521ad818c1703a"
+    },
+    "project/project/scenes/toronto_east/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "e8a0d54afb15c4410a7ea1135767cfdccd44b8ba55c6b9a9174789c1ba26827a",
+      "after_sha256": "5e03c748d02828a4100d99cd6e2f1efd6d1675e4b349aef1a0c20ee5826c622c"
+    },
+    "project/project/scenes/toronto_high_park/actors/ambient_boat_loader.gbsres": {
+      "before_sha256": "7efafc63b8bcc2d3136e51709f5af488bdcabe51b6c4b38c4f2cb9f66e1bf8fa",
+      "after_sha256": "02aab701c94363532c94c3ba6489e7020d11696a8217b829d4dbbb1f65be9597"
+    },
+    "project/project/scenes/toronto_high_park/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "1229eb0f3e3206ac3da5f9f3ae2ceadaa9339002c6f63b12ec330b80f72b8960",
+      "after_sha256": "0dd1993bb6ecacbb985aee28d74e710b58ee8341798a9fd6423a5ca392d86b48"
+    },
+    "project/project/scenes/toronto_islands/actors/ambient_boat_loader.gbsres": {
+      "before_sha256": "424864ae0c8290cc3816950eded2a3ad6259793e838cd91ef126890c7947c047",
+      "after_sha256": "031acd103dbd6d24eb27b7910706de0af6d848d5cd731817ed774b316b4505fd"
+    },
+    "project/project/scenes/toronto_islands/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "be1e8684960e2d26ebf770162886b7bbe34471ab844bd033d17ada9601a36882",
+      "after_sha256": "004f4681622fcf0e8af91ad987538f47b28f637d36495d305e9a3f7599237328"
+    },
+    "project/project/scenes/toronto_north/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "bca8cd801d16d96bdfd55b8d576439e709d0b3d8f23da74e76c94f9e50c7c978",
+      "after_sha256": "b75c69b6162f3cc19bf7b7ee5f3e73807573a3c765dfc8c5d6b3c7bb93b5c5ee"
+    },
+    "project/project/scenes/toronto_port_lands/actors/ambient_boat_loader.gbsres": {
+      "before_sha256": "f29aa630c5d593734a4945e87ffc9a866963ce320349af877995cf3696d4547d",
+      "after_sha256": "2edd689dc0fc56b4224022bab9a14f5d66c4dc42aaa189e9eb8a6409dd1df973"
+    },
+    "project/project/scenes/toronto_port_lands/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "b714e683740d20f8e86b4f0663301e913bdda980297d0efbbd32e4fd2d879136",
+      "after_sha256": "404affce24e0f565a69d567af3ba69f40d6e8b35931f93690806fb2b0643b531"
+    },
+    "project/project/scenes/toronto_west/actors/ambient_boat_loader.gbsres": {
+      "before_sha256": "bd8f213f89c5e10d0f0207761b2c6aad2348002f309414dcfa31dd2b1303cd87",
+      "after_sha256": "d3b399d0ee8ce4f4bd97cf1b9e83ef5efc756af51753651972750f1419c41f88"
+    },
+    "project/project/scenes/toronto_west/actors/city_fleet_loader.gbsres": {
+      "before_sha256": "fb9adf92be7710865007e8753be6e8c0120ecf7366b74478e706dbd96e1af7c7",
+      "after_sha256": "7a2f6ef149954417881f7f49a47ec4afae7a64765012eca1ac6f84f140ae2220"
+    },
+    "content/campaign.json": {
+      "before_sha256": "0b66696468cb3b503170dee6805fc4a74f0ca17031fcaba30ad03a0832f41266",
+      "after_sha256": "8d8406f770517cad1b851b796ebd6d482dc88272f2dafd35fae7d3eae101bfe5"
+    },
+    "project/plugins/toronto-driving/engine/src/td_content.c": {
+      "before_sha256": "e08f04a5724bb67770c366ceefad3dcfbc5be81df95f550476eec8a2c351d325",
+      "after_sha256": "bd55072d80c62f4a95ece20177133f3eece091cbbe619eacc84d51672bb3adca"
+    },
+    "project/plugins/toronto-driving/engine/src/td_save.c": {
+      "before_sha256": "32a220dc92d2952bf20775343b8545dacec2904e7a8ae3701b2112afd8563118",
+      "after_sha256": "5060dfe512eaeb007d2573ba945198354ee8b79f31dcf8e93bae443184b9239e"
+    },
+    "project/plugins/toronto-driving/engine/include/td_game.h": {
+      "before_sha256": "6e817f59a4a15287ec76bee5b6f26c919aba545713423b0f475f6670ffc89db6",
+      "after_sha256": "1a937307b0377a6fc8218820e69ea8d3eccbc1ab0caf642f83641acb42b45ec2"
+    }
+  },
+  "json_scopes": {
+    "content/city_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "8218d26ab24b33dba4f875478231f0d60b4830871de8cc3118671673be0c29a0",
+        "after_sha256": "978706df2b83c6aa32d9672a0ba4a5acb1a29859c3d54953c5206371fed1760a",
+        "before_json_zlib": "eNqNldFqwyAUht/F67C1aZqGvMoYYs1p5mY8QU3XUPruO+1iy8bY8Sqgn1/Ozy94FvvJ2M64Xh4Q4+iNi0HqN+V66ES7KoRGa00w6OR+jvB7byJctGfhEQ9ywG6yINpNfSlEBxq9iuYIslcDyNEqDQNc9Q6jDJM/wnz1RD9BIQ7oB2UlnfGmQx/k6DGCjg/CwadENUjcv9N6uA1wXfM0g6EfhKgifA9520NveuPIOZoT2JA0o7IQCaSoRMT5j1iPUUX7chYfxtH6j4iFOIl2XRI703dVXYp/sG2ZhS22cl3n2DhssW3KJsfGYYutqlY5Ng5Ltl2ZZWOwxbats5IyWFk1OWWVTVb1ycaUlWwcttiYspKNwxYbU1aycViy/V/W3cZgi40rq8mqfrOrc8pKGNNCtc7Cko1pIdkYLNmYpMnGYLs66/YmjEmaMCZCwpiLdMfohrwWIuDkNT0pImhvxhieQ/QA9HxocODnp3EWly+91R5j"
+      }
+    ],
+    "content/districts/west_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "44e95994a2f423b2961a183acf275b416c917dbbc86bd605495bfd33b1819b21",
+        "after_sha256": "6f09095dc170983fb306c754fa8320c20d89201d639350705dc11b2da75da3e0",
+        "before_json_zlib": "eNqNmN1y4jgQhd/F19Su/zByXmVrywVEyXiH2JQxM0Ol8u4rgo6gsbpbt9GX1lHrdLvRZ7Y794fXfnjv3sZxPk79MJ+6/Y/t8G5fs5d8le3Hw6E/9ePQ7S6zfV47Ozx7+cx2dtj/yF7KVbbrh+xl7RbfDuNvO7nVdbXKjtvpZ3fq391avVll0zi+dR/j6/lg3fp6lZ3mydrZE+vya5W92v04bef+l+3etx+2Ox62e/thr/KG0ZHn6Ze9XHXM09m63cbpY3vo3P9M/es4nbrjNM52P9+Jwf7uxu1HN+7+c38/fR/g+rfJnaF3G5zm7Wxvh/xeG6f+vR9czGP/xx5OCHPcHuzsQJcqR8yXSFruUrOXfz6zn/3g/k7OvMr+uETUjr244zZfK55aN99QcU0KTxV5nYSVeQpW5mlYkaStbJOwqihTsKa6YU6jiJk8BduUJgVrmyQsaKtNkjYF83lTMG8Ql2X5oCmUy30ShnTImBOehDV1CubP6aompRA0zBeCgqEQNKxI0oZCUDAUgoIhH8Yk5UPB/MUrWMiHgvmL17A26QhVnXQEn4911aTkQ8O8PxQM+dCwIkkb8qFg8IeGtUlYnZsUDNk1dUKXUSiYTcN8l1EwmE3DfJdRMJhNw5o8BTNpCWnLpGhtFbuE2+h1uyR/5ZUGrIvHb+x1ZPNeuBXaY9+5T26PN0yQx+GNNp1HCvPgjfBHIUTQgZuXhIRWJCopq1JRAl/ElYQWJSipSpOgBI7hlaBg5TibWsut65PfxCZ6x2vvNbK62MVZbEmRXRrf0+K7NHVEw1PeMAbJSja+2/FKkBE5Tl36CTmv2cRh1iZIOBOKWYiAOVFA4O2C9Nulcb0tKfaUwaCIQEFwG93q7gTfhp0ifgsYgUILuXADxahhvCUocneMd4OoBmZQ1MARYixT5ymxQo6lWCHTElTHfpEstcd+3lAH+e5KkXvz9K2VLj9pKaI/aJYuzHNNTRn9PXZvoE2tq0GXVdRUZZJolLEgGi2SEY0eqWxkajU7JnqdzzWG7Sq2x4WtqlJqTXR52dWxURNtcKh1uvxcgnUCFG6qbVK+iQqGw7uoWp4psoiEOhUiwT1OW3RE8s6hyyQC0igg4UTxTcJp+AjhJDyCPdqoZbBFK3yh0WkotBz3fMehWPSrx4hBnxHVoNMoatBxBDXoN4wauFdUA+8yMYKNpBjBTPEYwUhSDHx5lazg6ytkBV9gzjBFUvrDnFsK/QHZodCyk/v8KBhSQLHo8EGRxfAhikYCFDVhQOfVhByRp9/oUEsRtjUKkdBMlEhoKBS73370ESba1CiyaGrMMizhvlFsY8W7QZlL5UKXmXKhEFsuYizkRITCudalNITTZWYIFyH8wKGvA+x0pGC4zKe3hmc7uHQK+dk0EWi5lX+BoljUWgKCRDa1kcxBl9l7pxhz70qscPyaL5ncSKLDsePLWDX6ew1l2AcbikVfbCiyeLIRxeAzr6jBh15Qg488owYfeFENPvOKGjRrQQ1ebgQkGCsuuK0SBLeNGCO8uRRCl8BGFIrNjc6+wtxIV5m5kULs3Eix6NzIiIGhRDWwk6IGlhLUwFaMGhhKVAM7KWpgKUENGj6jBo1eVBPeCmU14dFwo/ZfRk14UJQ3Ch7mNwrPhow/iwSDhidDWQ06uKAGHZxRY+oEg5pNkkHbXDVoW4kGbRs1u16KiT/rorCN9K6LsjbygyxK2/AvuyhvRg0KW1SDslbUoLQFNShvRg0KW1SDsjZpj9WCGpQ3owaFLapBWStqUNqCGpS3uB2KW9kOBS5shyJnDo/yFtWguBU1KHBBDYqcUWM2CTZt8ySbtpVq0/ahrv5dZafxPO3tNdZ+6o/z6W/E3NvBTpe/jpfs63/WRifD"
+      },
+      {
+        "path": [
+          "background_sha256"
+        ],
+        "before_sha256": "fe670a6a9707713a7ff9c784085edc967eefeb8360ca858f682b8e9d8b1c837e",
+        "after_sha256": "b1573b6baea88d328318038e4847a8691b09dc1303acc1d315a9628a934b29f9",
+        "before_json_zlib": "eNoFwQEBACAIA7AuJhDkyOMgSv8IbkMLeHeru6X5jHNwk1yIVda8JEwnaLPz7WJJNA8kqOKSNT4+iBEm"
+      },
+      {
+        "path": [
+          "validation",
+          "raw_unique_tiles"
+        ],
+        "before_sha256": "8cd2510271575d8430c05368315a87b9c4784c7389a47496080c1e615a2a00b6",
+        "after_sha256": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf",
+        "before_json_zlib": "eNozNDcHAAE7AKA="
+      },
+      {
+        "path": [
+          "validation",
+          "flip_canonical_unique_tiles"
+        ],
+        "before_sha256": "1d0ebea552eb43d0b1e1561f6de8ae92e3de7f1abec52399244d1caed7dbdfa6",
+        "after_sha256": "68519a9eca55c68c72658a2a1716aac3788c289859d46d6f5c3f14760fa37c9e",
+        "before_json_zlib": "eNozNDUBAAE0AJs="
+      }
+    ],
+    "content/districts/high_park_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "68cc2fbc3a9a75d235404bd0f3887b5bf5c5c0dc8bd838693e6061d0d48c6cd6",
+        "after_sha256": "1bead1b2d9674de7a085a823371292960ab72e974196efb15633747d96091eb3",
+        "before_json_zlib": "eNqNmN1y2zgMhd9F155dSdYP7Vfp7Ghsh0m1dSSPJLf1ZPLuZWIexlAJgFfthJ/BA/iQIPyWHa/9+akfXrrncVwuUz8sc3f6fhhe7FO2zzfZaTyf+7kfh+54W+x67erwbP+WHe1w+p7tq90mO/aD+0+xyZ7P4y87ueXKoZfD9KOb+xe/No3jc/c6Pl3PNts35n2TPdnTOB2W/qftXg6vtrucDyf7aj/kDOPSzdfpp7197LtMV+uCj9Pr4dy5z0z90zjN3WUaF3tavojB/urGw2s3Hv93f58/BX/8bXKae7fBvBwWe0/qc22c+pd+cDEv/W97nhHmcjjbxYGuNI5YbpEyfEnN9t/esh/94P5OUtxkv7N93Wyy28c/7xseKvIqharLBKrM8xSqMinULkX9tkpR7wvhUpWotkyhUAkNa0wKhlpoWFOlYKiGhjV5Coaq1WWKfzSszFMwOEjDiiRt8JCCbYsyBfP1cBJT6qFgCFYZiaqMScFq7Klgfs9dk3AMFArG1TBvXAWDcTXMG1fBULXtTv4+t00S5g+8ht2DVVWSOzTMnxYFQ9kUDPVQsDpNGxI1JilRBfPFVTB0sm1aK1MwX1wFw54mpWkoVGifJqlpKFhooCapaShYVeVJWFo9PNVsk5qGhvmyKRiahob5smnYLikFJGryBHsoVMhTwbw9FCzkqWDeHhS7v6s/gaa8A1vSFh+A1ihAiEA8E4vAArgfikbeoiKtL7IFCzS4Hbk6GP/YqAsmTYPzWJEs3Fjil/1l/hj/azy5M94ohME880nscKEyKne+m9F1aNh568RXK1/EtuQV4vwThihEm2mZMtX+3qXr0IA2K2moTaVoaIpG1NBURtBgcqNqcM+A+2ORdI8VhC+LQg86wnjQGC6V8OYnyFoNnvJ8nCBYioPql1u2tCg+RR5r62u/AlBclJ4ur3S4y0jT0RalrKOtKklH2za6DjhB0IFjzerAmWZ0wCOijsKfameGWAz32cjyKkZ4gxOIem0X3eYrl21pJB3hYS7pgBEFHcGGnI5gwriOYEF+i1BRMkN8XYX3RFy+fCJwIIWoSb0HKfJoUu/CFbC+iUQdJiqWmrQtZR1wobgR9mmY3hMGribaXnDx02XmBqJQ9AZideDrZ3TgBmKWQym48G1sEAwfx5uWLjPnmULUoE1sen2QgeeuEAPnmY2B88zkgvMs5oLzzMSATPe4YPLwIikQ7V0CEt5FpXQFQksdPfRBSc2066Aj/nl4ly4zjxd2k5AJAej3ijyMkb3hjlz0WsG4Wub640WE0HnqutQeMDU3HoSfeOu4Cb1H2c/j2cp8PkystfSsNUbLA9eXGCeI5SaZEMVUemdho4TvRoqCujRFI13HdJk+5RGBG5pQ2xXQr6pKl9cHAjriMVBROp+u34tFbAynI0F0HCYDYK7FQLdmY6Bfr4D1CCjmYqI/FkQvO1YHpkBGxy76CwJtP36LttCHrCL+0Pf1bLl5GdVkAdxiDpRevXSZefVSKNolV9v83SUZHeiSog60DkFHGL85HWH2jusIg7ekI0zfvI4wgnM6wvwd1xF8IekIEzivIxhIihNMxMcJ4zyXD44lkw8OpKgDR1LQgUPJ6sCx5Pzuj4PLR2/IFIo2ZIpEGvIKWN/Iog6Y2Qg/FHk7G+5XGhjaMD8VeSsb8bcib2ZBB+zM6oChGR2wsqgDZhZ0oOsz28Dp4jbwurAN3M6mC78zOuB0UQe8LuiA2yWH3JW6Hd//22TzeJ1O1jHzaeovy/zvvEzWLt18soOdbv9cbtn7HxbO9Ho="
+      },
+      {
+        "path": [
+          "background_sha256"
+        ],
+        "before_sha256": "1fd1061c959cc6dfb8da179b8e502f8614498e499ba588c4a3001e7309abeade",
+        "after_sha256": "406272493fbd3f37b799b54264c3cdce8da5775e75855d5bdcd2bd0e02bd7aed",
+        "before_json_zlib": "eNoFwQEBACAIA7AuJjggSB0P2D+C29qdQ3S4q+QhKrUpqtFH37yLYVvJLSaNHgAKZR7JcdmyPmGUEgE="
+      },
+      {
+        "path": [
+          "validation",
+          "raw_unique_tiles"
+        ],
+        "before_sha256": "8c1f1046219ddd216a023f792356ddf127fce372a72ec9b4cdac989ee5b0b455",
+        "after_sha256": "28dae7c8bde2f3ca608f86d0e16a214dee74c74bee011cdfdd46bc04b655bc14",
+        "before_json_zlib": "eNqztAQAAK0Acw=="
+      },
+      {
+        "path": [
+          "validation",
+          "flip_canonical_unique_tiles"
+        ],
+        "before_sha256": "b4944c6ff08dc6f43da2e9c824669b7d927dd1fa976fadc7b456881f51bf5ccc",
+        "after_sha256": "d6d824abba4afde81129c71dea75b8100e96338da5f416d2f69088f1960cb091",
+        "before_json_zlib": "eNqzMAUAAKcAbg=="
+      }
+    ],
+    "content/districts/east_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "b2cd46b390f66227498e523ff6f3bf10dd8f7f4daf2e147260e0999cd2fab335",
+        "after_sha256": "65f19e84c9d60e3e88e1faa421ee477ead4190141d79c5cc5b0b71c9b35a0013",
+        "before_json_zlib": "eNqNl9tyozAMht/F18wuB8c4eZWdHYYQN+tdgjOGtM10+u5rGotUgLFu4w/p/yX5kA92vOn2pLtz9WLMcLW6G/qq+VN3Z3VihzRhjWlb3WvTVcf7oOZrN4ezwwc7qq75ww6ZTNhRd+yQZwl7ac2bsm45d6g15qW6mNOtVezAy4T1g1VqqHp9HvH0M2En1RhbD/pVVef6oqprWzfqokZBnXHkzb6q+5h5sDflwht7qdvKfWP1ydi+ulozqGZ4Ep16q0x9qczxr/u9/5I8/madau0S9EM9qIetrzVj9Vl3LuZVv6u2hzDXulWDA11xHDHcVwrxlMoOvz7YP92535HnhL2zw04k7O6qNNoNU5ynFEykNCwjJS0FKZrMOQUDo7ucZHQbm3JKTsiZZ2LTZ06hsjwlYQUpp1dWcE7JGcGgaBEMpiOC5fKB8ZLUqRjmnUYw0BbBylx+YTshNzHOKZiUpGj7XU7BvFHnhDBsEQoaH8MKUk7oaASDHsQwwWlGJQWDHkQw6AHVaUGatggGHRWc0lFB2soRDMrhqkcpRwSDPepO8k2fKSdhQlIwV1QSthcr2OPR8Ojl6tU4PiUe3nylspSvfy/4KgDfS9+34Pd7X5UgMCkovh/18MTBGhDy/Z3zsOq3VIZOmElq7ks1W34qKfxewwBSMokNxdjJNQ0LqZOjbWwqXihd5ocpRxsaSQZFGFmkgsMeY1PxylJQosA4BKKAnw25kyN0qCwSTa4QNiWCtxleRokmw/vNoZqMI2ylBUW+PnV+KPHyIg0MViAKzEskCngKRAEvgWXoDl5e7U4hgg2EbYaRhVTYbBhbnEsbicAszzmlgRj7fgD5N9Mu0mAMIClgZhZj3j28HOxeIMpkJKwDrMhoAzES7M5GJEB2klMiiSxQXrA1A/T8e769f/xfGYw9xwkeIVxu30IYWL2FAimgskKmlEsKY4tLara8vKSCADxWspwyaxhbzBpeXpu1kvPtvs6AKYN/3pTBYYZnOUYWTqDuGHsW1D9SZ8vfHkhFVAn0LKIEehdQAp0LKilEGlNS7KNip7qH0khC6f1NIFNJOVoxhiJBshH5nbDe3GyjxliN1deh/wkxG9Upe/9xvbPP/5T6ru4="
+      },
+      {
+        "path": [
+          "background_sha256"
+        ],
+        "before_sha256": "b7c6296dd1562361288a683624992844ed122a0db12cb00bf4c70999f082e80e",
+        "after_sha256": "47a317ec511e2684f882d9b7ae796c16c91105bf44a4bbeb4a3b71fcb1a32526",
+        "before_json_zlib": "eNoFwQEBACAIA7AuJtAjIHEEef8IbiOulr3H1pn0LSG2rmfB+xA7OnjQ5swKGnVlUCBIfZUTPj5xZBJ2"
+      },
+      {
+        "path": [
+          "validation",
+          "raw_unique_tiles"
+        ],
+        "before_sha256": "482d9673cfee5de391f97fde4d1c84f9f8d6f2cf0784fcffb958b4032de7236c",
+        "after_sha256": "6affdae3b3c1aa6aa7689e9b6a7b3225a636aa1ac0025f490cca1285ceaf1487",
+        "before_json_zlib": "eNozNDADAAEsAJg="
+      },
+      {
+        "path": [
+          "validation",
+          "flip_canonical_unique_tiles"
+        ],
+        "before_sha256": "b4944c6ff08dc6f43da2e9c824669b7d927dd1fa976fadc7b456881f51bf5ccc",
+        "after_sha256": "29db0c6782dbd5000559ef4d9e953e300e2b479eed26d887ef3f92b921c06a67",
+        "before_json_zlib": "eNqzMAUAAKcAbg=="
+      }
+    ],
+    "content/districts/port_lands_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "e43165ce95894a64a0137d9688abfa31800561fe7a34a63888ff84c01a1d9e2c",
+        "after_sha256": "55ca2879d0c8401a782f41e874e6bf133ccbb09624d1fc28d23eff8d1056ba9f",
+        "before_json_zlib": "eNqNWNFyozoM/ReeM3fBGGPyKzs7DCFulrsJZID0bqbTf79OsZyKINlPbdCJdCQfSygfyeHWnY9df6rfhmG+jl0/T3X7u+lP5pjs013SDudzN3VDXx/us1nbbhae7D+Sg+nb38k+y3bJoeuTfV7Yf+w3m9Eic/v02ox/6qk7PWxql4zD8FZfhuPtbJK9sOC7Rdbt2Mz2c55/7pKjaQf7sXs39am5mPp6blpzMQ96/TDX0218N/cHj3m8mV3yNoyX5lzb74zdcRin+joOs2nnJ6I3/9VDc6mHw7/2+fSVwOPZaHPobIBptsGXJL9sw9idut76vHZ/zXkCN9fmbGYLtKWyiPm+UZYn1WT/8yP50/X2OUp5l/xN9sWjEHebrpSfOxqm0jQGVgq9wErFwSCoTHVM0AAMgoZglYiBeW6liOLGwzy3AAy48TDgZv/GcAvAShUHK6OCQgoBGKRgOcakEIAJuZTXlpmFKRkF02kMzN6BGJjVWRSsFDEwEJI9tG+wpeN9AbJ0YZULApDrBVBQHuw3F0AliBBOCVprwoPjQAIKJzkSoLTmAcJVtSLTdAIjAdKJgQQUTskrgBskSyV8A/uG+DY9Fqq5CINUtuHpMb2chpw2GA9ePyTZVL4inqMQJUR7gWw4L897tpWMqFQ4mxx0ThLJVRokkleCISJFuCCFSBkPRSHCqRRaBlKBw98OAo3Xnh8TRbsLgVEojHYywpBVwtrpiPFTKR1ByNNGg8Bn5eMg84qMj7TtAyqbKR1xtTAKH4CbHxiyIqPcWGD8+Jw5P/6ksB9fGJlGJOXLt+3EF451AiiRbnYdaAb2yjN33fUDDNrUC4asyfhoSm52DYijaH27wmLIuvquvEQYqCvrwydEc/HZVCpiNGDUyyliM9Gyc6HDjRCDXjohNlNyYSP59w+1qSlPRKUhuRAeoGZ5xakJRhBGPWm44UGYQQXYTKggQASmv+CaJfDhUUALo17kgs2EXGShQiMeQ6gJzTjyfFlHnnahwmNJah3SDYas/JSZW09Eyh08NhMHj0HUYdl3BO6wVmY0TdyCYcdcqMIYQlUYo4iLa8clNwywmRgGhA8Ys9j8Mq/dnF05QZXJRJgM1IbxA4Uh+HoPUofVgEGUGmxynBqwmXo5z0RIDxhC6WHlaH3UpQy+AmIINdLLUnGdHJupTr5yghpWtRVnPQJho9gm49cJloxfKGgyfqvgyNhex5GRWkeQ8bsJi4J3UpaPP086LzhMndIdGPb+lLsvm34IqWvJ9WEIJ9nXV81uZ5nLXDMrr/sRSpcR78GaWHqdinkyIGSGDCiHJQP6IciAcHgysNwyZGABY8nA/kWQgaHAk4GhwJCBocCSgZmq+V2bCQMLBBsG+jARBmZtxW3ikM8D9GuXTMNtbI2FTe3YXefpxzSPxsz11JrejPd/rvfk839ttVxm"
+      },
+      {
+        "path": [
+          "background_sha256"
+        ],
+        "before_sha256": "f683236e35ecf75cadb6172e7c035ce795b02bab794b7190c719ff53067ba29b",
+        "after_sha256": "8ffd57c7b1b463797a7c23bc0678c9ecf7bf29e85d34fc5acd9eb88b75697948",
+        "before_json_zlib": "eNoNy8ERACEIA8Be7ACNCuUAyfVfwvne2ZE4TWIp52JtpeEGPA8vI01TO9LnQwetWwVKsPeq6jvjB3cVExA="
+      },
+      {
+        "path": [
+          "validation",
+          "raw_unique_tiles"
+        ],
+        "before_sha256": "922c7954216ccfe7a61def609305ce1dc7c67e225f873f256d30d7a8ee4f404c",
+        "after_sha256": "be47addbcb8f60566a3d7fd5a36f8195798e2848b368195d9a5d20e007c59a0c",
+        "before_json_zlib": "eNozNDIHAAExAJs="
+      },
+      {
+        "path": [
+          "validation",
+          "flip_canonical_unique_tiles"
+        ],
+        "before_sha256": "9537f32ec7599e1ae953af6c9f929fe747ff9dadf79a9beff1f304c550173011",
+        "after_sha256": "2abaca4911e68fa9bfbf3482ee797fd5b9045b841fdff7253557c5fe15de6477",
+        "before_json_zlib": "eNozNLAAAAEuAJo="
+      }
+    ],
+    "content/districts/island_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "e561c1887daeeaf2b819f0120c0143c4b9800198955a87ab7b0e27f30c72aa6b",
+        "after_sha256": "5b37782b5c90e314a5dc3066ec27dc845b114bc63af0a9b38237980250bb7f79",
+        "before_json_zlib": "eNqNl+1yoyAUhu+F384uEkTirXR2HGNoytaIg6RtJtN7X1KF9Fg+9q8+Oe97vsDc0OEih6McT+2zUmbScjRz279040kcUYML1KthkLNUY3u4GrF9d7E4am7oIMb+BTWEF+hgf9BpC5C6QM+DehfaIqQs0NTp13aWpxE15b5AWqnn9qyOl0Ggpvos0FH0SndGvon21J1FOw1dL87i7mhUpp0v+k1c79JGX4SNrfS5G1r7Gy2PSs/tpJURvXkQo3hvVXdu1eGvfT5/eb4/09a2tAKz6YxY8vp6p7Q8ydHGnOSHGGYXZuoGYSxoq2MJcw1U4mEVNU839CpH+xxkWKAP1OyZLdAVNbuKfBZxjPMV2/8XRusk5kQzWM1wQHRp7BdQkgUgHIcBb7uMRLAvFqBmaQlo9RtA8SJRYZqWYDhikpRsARjNAHuW9mALlgFgJde9WETwWksg8liQBdqRAORWakEYDSBAqnQzR3gM4TiIPDLaYxoANna9UKwuLp8NAOqy5gORbV32LBenrkMIKB2nOBfFpx2P4pNO9NqlHVss7yS6eW6DCc1PC4SAE1qxEPIQqqpsDO+lig+lc1JFh9IKBJBNRhWnuTiM43wcb5nz9GBCAOTkSxeLQTnPxfD58OgmMpqNUpdZs26gEoirSUVwbm4TiEsaIjDpKhjl29kSdvJz+itwaUamH0LBszKBuGMjgZTrmWCbGS3cej5BBArRYJSfJ24ihrtDWMnSYw2ByGEKoeCs2OHMzQpEoF0nRCMb5AY7IePKBpFNRq6JUSGfD8e5+5nFvnV8NvEY7siAyMas26CokNufhJA7V5JCrAy5AR1yh09CyvcoJeWKV5cktyIQ2cTZER6AgOUdw/k4znQScjeSHbHcHQCRb71yNd4AoQMeItterbdaVMhXuGa5jYTItlPrkQih4NrWsW9236W4F9+llBf79ZOL45Ylhaw9sp+0+V24Q38KNKuL7u1/UDT3Wk5m/j0bLYT9w9mLUejrr+mKPv8BJbJvJw=="
+      },
+      {
+        "path": [
+          "background_sha256"
+        ],
+        "before_sha256": "751bb23a1f4148d92ace60e1afcea3b45008c83fefe2993171d501245c42f8c6",
+        "after_sha256": "d8e64b48af0be3391d5dd22f253cdffe05556233aff8c8fd42d2958076d3724b",
+        "before_json_zlib": "eNoFwQkBwDAIBDAvVcB3Zcgpn38JS44FANNh27UPGfGu9DOsFTlyGnu3apiTg7iHXZRIxrWy4vxKThHH"
+      },
+      {
+        "path": [
+          "validation",
+          "raw_unique_tiles"
+        ],
+        "before_sha256": "0f8ef3377b30fc47f96b48247f463a726a802f62f3faa03d56403751d2f66c67",
+        "after_sha256": "38d66d9692ac590000a91b03a88da1c88d51fab2b78f63171f553ecc551a0c6f",
+        "before_json_zlib": "eNozNDIFAAEvAJk="
+      },
+      {
+        "path": [
+          "validation",
+          "flip_canonical_unique_tiles"
+        ],
+        "before_sha256": "bbb965ab0c80d6538cf2184babad2a564a010376712012bd07b0af92dcd3097d",
+        "after_sha256": "8b940be7fb78aaa6b6567dd7a3987996947460df1c668e698eb92ca77e425349",
+        "before_json_zlib": "eNqzMAYAAKUAbA=="
+      },
+      {
+        "path": [
+          "palette_proposal",
+          "slot6_colors_light_to_dark"
+        ],
+        "before_sha256": "e04b39d6bea9706512fa384239329aa5171cf1045d23da61dc6343d13b66c88d",
+        "after_sha256": "0d5e2a3bebed64ff66f9aedf218d4ee1e075c4ef9145a7bc12e22b5fb45f6d94",
+        "before_json_zlib": "eNqLVnI1d3F1dlbSUbIwc7IwcwUyjE3NnE1NgQxDcyMnYwulWACX3wfN"
+      },
+      {
+        "path": [
+          "palette_proposal",
+          "native_palette_registered"
+        ],
+        "before_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "after_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "before_json_zlib": "eNpLS8wpTgUABhYCDA=="
+      }
+    ],
+    "content/districts/north_art.json": [
+      {
+        "path": [
+          "scenery"
+        ],
+        "before_sha256": "0d7e1ad0154aab16ee7cba10dbfc5d0e5d6b07d150539aef257d021c96ac71b4",
+        "after_sha256": "1a07158468b10a644ff204b6e9eb74cb2870684a8dbc006e1d09fe44a5e5a6e2",
+        "before_json_zlib": "eNqVmd1yozgQhd9F19QuCEkIv8rUFoWx4mHHBhfgmXGl8u6LY7W8Soj6zK31pfv0L4i8iv21Px364di8jONymfphmZvuezsc3UHs8kx04+nUz/04NPvb4j6eXVdc7F7F3g3dd7GTmdj3g9gVVSZeTuMvN62nhcnEpZ1+NHN/vJ+pTEzj+NKcx8P15NYfyjoT8zI5twTkLRMH141Tu/Q/XXNsz665nNrOnd1d3zCu5HX66W53Ict0dau7cTq3p2b9m6k/jNPcXKZxcd3yJAb3qxnbczPu/11/n98juP82rUH0q4N5aRf3iPL9bJz6Yz+sNi/9b3eaycylPbllBddcrcRy28jLU6rYfXsVP/ph/T0KOhO/xU7ZTNzWpBXmLfuaMgqhikJCmIR8ygqypvIcwu4dwGMa06YVlBBdyz+KVNlkCF6azZFSpalQKgaTkM8QAINZyFqoKINRRdOYxkIIFWWcPoyVhQRqwFBUAw6TkE+qAYNRcjmshKxpTBsll8P8uJRKITWokkNlc4SqDUKFSjEYhVlBO4bDQGsGCjTkNo353KrcIoEyGPlkMF8ppXKgUgwVlCloKXCYgaTpCtJGua2Q3cFQlLMK2jAcJiFlIbcVtDo4zC8inSvEGoNRpTishqxVVv2R09Ig7cFhZM1AQ8VgIYQ0Zvwj2eTJ1q1kDmFaQpjXxmB+XkyJzAtD0SRwmIR80rOWwULWGMxCIVA6jELSkab8+mCokDQGk5AyWh9cABayVuWQtVACBtNQpJXBtFlIW+ii2iAJqaRFEsJhPlIOM5DToM1A64PDSgNhFIKBtgyDhRBqaEgZzA+plciQMhSNH4cpyBq98nAYaK2GtFHhOcwXnsMspI1qoJH7AUOF5GrolZ7DDOQ0JFdDi4HBaDFwmIacUnKthVrXQvcIBqNXRQ4rIaehVhZ6z2KwUIQ0FgbBQm9tDOZ7t5bQNx4Go+xyWAlZoxbnsBqyRtllMOpdDvPZjbHHZ+PoTT1+E9sCokc2fWX26Xwniujq8Pz07Lthg/n/1+dH/fzgxtj92/bj2C/N+DjSUvineFKMzHNEjSxlSo00ilMja8OrKaVF1JQmT6kpa8mpUVLxapQ2iBplbUqNljmnRmvJq9FWIWpMYVJqjLKcGmORJi6gLq5Usouriu1im0MtYWnyomt2cBSOowvxc5r8qMjoTvo5Gi83xp5O8i0rmzMpox3zIbcBMsmQqSFiLHIXBKctBYf1ZvKCo+j4Y0OQq20b5KKMrhRfZjjGPvVLaXIu5LKWvFglkyOrogfxx+3gP9jIdMvIDeqZFb/k4+O4Y/yij5EvOiZhh1Z00g4t6S/k0t5NuKHUJd0ESMtkgxNm2WecKUyqkPHx5u5NIXT7i/6B8clJpaAhq0vDZ+YO/ZOJebxOnbtb66b+ssx/k9XODW66/XW5ibf/ALD4VmQ="
+      },
+      {
+        "path": [
+          "background_sha256"
+        ],
+        "before_sha256": "5c074dd7733d57ea0e81507c60654d8cf789ea295b11386816126c5fc5c76e3f",
+        "after_sha256": "f4b66aa18523803537c1223bfe22e90cbe8cf2cf3746ee37fcb265bd1f3b8ead",
+        "before_json_zlib": "eNoFwQkBACAIA8AuJkAB3eLwaP8I3g3fnHKBWHo4MfOJlKTcA+hSd8s+tNIA2buuvooyZYKdYeMDLCkReQ=="
+      },
+      {
+        "path": [
+          "background_pixel_sha256"
+        ],
+        "before_sha256": "7596e69da289aff2b96a61974300d6de9b5fc644609df103dd2b472933db3c4e",
+        "after_sha256": "eef0dae1d10a89d58d412a47523eb2eb32cb62e91887d574dc730282dc3a9cc0",
+        "before_json_zlib": "eNoFwQkBACEIBMAuJnDlgCWOPPaPcDPL0PAMorUDFOoMSg82TjNwiIy8qBklxWzLk3sH/gr++foBMxARDA=="
+      },
+      {
+        "path": [
+          "validation",
+          "raw_unique_tiles"
+        ],
+        "before_sha256": "9f1f9dce319c4700ef28ec8c53bd3cc8e6abe64c68385479ab89215806a5bdd6",
+        "after_sha256": "d2f483672c0239f6d7dd3c9ecee6deacbcd59185855625902a8b1c1a3bd67440",
+        "before_json_zlib": "eNozNDQBAAEsAJc="
+      },
+      {
+        "path": [
+          "validation",
+          "flip_canonical_unique_tiles"
+        ],
+        "before_sha256": "e3d6c4d4599e00882384ca981ee287ed961fa5f3828e2adb5e9ea890ab0d0525",
+        "after_sha256": "9bdb2af6799204a299c603994b8e400e4b1fd625efdb74066cc869fee42c9df3",
+        "before_json_zlib": "eNqzNAEAAKgAbg=="
+      }
+    ],
+    "content/districts/west_jobs.json": [
+      {
+        "path": [
+          "quests",
+          4,
+          "stages",
+          2,
+          "objective"
+        ],
+        "before_sha256": "04cb274a46b376f983e37d43dba1cd3ef74e5d0a5e5ae7e532b5efb8459de307",
+        "after_sha256": "bf5f0713e05b759334b5fccdc85a653b154a67b175d7ebfebefcfe2600171b0a",
+        "before_json_zlib": "eNpT8i8uzsxLL8nPUyhKzUmsVMhIzEvJT0tTAgB46Ak8"
+      }
+    ]
+  },
+  "stop18_location_notice": "Fictional compressed Bloorcourt bus handoff, not a surveyed TTC stop; regional label corrected from Ossington without moving stop18 or its saved identity",
+  "checksum_only_sprites": {
+    "project/assets/sprites/city_fleet.png.gbsres": "f5a327cdec7c2a57c8b76740e8e5a00b42952d2e",
+    "project/assets/sprites/dispatch_topdown.png.gbsres": "29b7ebb912d9ef4425b79352899a4b0403ba3f91"
+  },
+  "sprite_identity_scopes": {
+    "project/assets/sprites/ambient_boat.png.gbsres": {
+      "id": "22789632-122e-5a80-a195-5c8c6e7caeba",
+      "name": "ambient_boat",
+      "symbol": "sprite_ambient_boat",
+      "filename": "ambient_boat.png",
+      "animSpeed": 255
+    }
+  },
+  "boat_loaders": [
+    "project/project/scenes/toronto_city/actors/ambient_boat_loader.gbsres",
+    "project/project/scenes/toronto_east/actors/ambient_boat_loader.gbsres",
+    "project/project/scenes/toronto_high_park/actors/ambient_boat_loader.gbsres",
+    "project/project/scenes/toronto_islands/actors/ambient_boat_loader.gbsres",
+    "project/project/scenes/toronto_port_lands/actors/ambient_boat_loader.gbsres",
+    "project/project/scenes/toronto_west/actors/ambient_boat_loader.gbsres"
+  ],
+  "fleet_loaders": [
+    "project/project/scenes/toronto_city/actors/city_fleet_loader.gbsres",
+    "project/project/scenes/toronto_east/actors/city_fleet_loader.gbsres",
+    "project/project/scenes/toronto_high_park/actors/city_fleet_loader.gbsres",
+    "project/project/scenes/toronto_islands/actors/city_fleet_loader.gbsres",
+    "project/project/scenes/toronto_north/actors/city_fleet_loader.gbsres",
+    "project/project/scenes/toronto_port_lands/actors/city_fleet_loader.gbsres",
+    "project/project/scenes/toronto_west/actors/city_fleet_loader.gbsres"
+  ],
+  "world_palettes": {
+    "toronto_architecture_5.gbsres": {
+      "id": "cb66440b-a024-5c73-89c9-3eb74648aab2",
+      "colors": [
+        "FFF3D8",
+        "7BE2E3",
+        "74879A",
+        "273A49"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "9FC9D0",
+        "526879",
+        "172B38"
+      ]
+    },
+    "toronto_architecture_3.gbsres": {
+      "id": "6973f5bd-54db-5433-8457-5ffa542510b9",
+      "colors": [
+        "FFF3D8",
+        "EE796F",
+        "74879A",
+        "273A49"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "C5A9A1",
+        "526879",
+        "172B38"
+      ]
+    },
+    "toronto_architecture_1.gbsres": {
+      "id": "895b5791-cab0-5e02-bbab-4486f6a2c7ca",
+      "colors": [
+        "FFF3D8",
+        "FFBA66",
+        "74879A",
+        "273A49"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "D69E72",
+        "526879",
+        "172B38"
+      ]
+    },
+    "toronto_architecture_4.gbsres": {
+      "id": "31152bcc-b039-5ab5-a6a3-6e3666f9390d",
+      "colors": [
+        "FFF3D8",
+        "F1D674",
+        "74879A",
+        "273A49"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "D2C895",
+        "526879",
+        "172B38"
+      ]
+    },
+    "toronto_islands_park.gbsres": {
+      "id": "91d1d792-9124-5fd4-b0b0-9c37443d8579",
+      "colors": [
+        "FFF7CC",
+        "80D856",
+        "4A9356",
+        "284E38"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "86B86E",
+        "356C55",
+        "172B38"
+      ]
+    },
+    "toronto_architecture_6.gbsres": {
+      "id": "f0854ef8-e994-56e6-9bf7-5b63d34d3a1b",
+      "colors": [
+        "FFF3D8",
+        "C5AF8B",
+        "74879A",
+        "273A49"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "B8A785",
+        "526879",
+        "172B38"
+      ]
+    },
+    "toronto_stone_and_water.gbsres": {
+      "id": "10c26dfc-656e-513f-8e7b-0b23cfe0fa5e",
+      "colors": [
+        "F5F4DF",
+        "55C8E7",
+        "7D93A5",
+        "26334A"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "79AFAC",
+        "526879",
+        "172B38"
+      ]
+    },
+    "toronto_architecture_2.gbsres": {
+      "id": "a836a2bb-8434-583e-a9d0-7b7d68e058e5",
+      "colors": [
+        "FFF3D8",
+        "8DCEF2",
+        "74879A",
+        "273A49"
+      ],
+      "defaultColors": [
+        "E7DECC",
+        "8BBAD4",
+        "526879",
+        "172B38"
+      ]
+    }
+  },
+  "aircraft_extension": {
+    "original_frame_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "jet_frame_indices": [
+      14,
+      15,
+      16,
+      17
+    ],
+    "original_rgb_sha256": "bc20efa4a2602f32d958b2b2294f12924fee27fee31aab1a6221da23ace3c589",
+    "jet_rgb_sha256": "b8ed472302aff6ebabf0100bc0861d2e7208b9633e399ebf6391bf39383cceef",
+    "metadata": {
+      "project/assets/sprites/ambient_aircraft.png.gbsres": {
+        "original_checksum": "89cbaa45753a2a6b78a069acc5df69bfe43562ad",
+        "original_frames_sha256": "2e3dff5ba1b63b2acfdac5ff27b167bcbab07188ead86dc1797c65c2ee39426e",
+        "jet_frames_sha256": "b52b031a2b10fdb844742c3c5cbd0262f887d8ee479fe118cafaa2dde98fc166"
+      },
+      "project/original-art/ambient_aircraft.metadata.json": {
+        "original_checksum": "89cbaa45753a2a6b78a069acc5df69bfe43562ad",
+        "original_frames_sha256": "4fa6128e762202c9c5d50f62b707b177ab8eeb876833513af0c7062e2ddb334f",
+        "jet_frames_sha256": "b52b031a2b10fdb844742c3c5cbd0262f887d8ee479fe118cafaa2dde98fc166"
+      }
+    },
+    "original_art_json_zlib": "eNrdWMmO2zgQvecrCJ8SxO6IFCVTk1OAXOYQ5DK3QSCUyKLNRBI1JN0Lgvz7UIvd7vTqtNsB4oNBllSvio+PJam+vyJk5uUaGyjP0Xlj29lfhM4Hc4Cw8XE6++zMyrRQE283TiIBF96TFoI5j2MpsQvQRrPHDhwEnA3utZEYrb3/p7//GW2tDWY07SDX0KpFV4NERTpzibWP0JZ0axvsnNR2ZYl1xHfOBCTSdgbViLXCFmM063o4L53pgn8nHcYESjBOOtChHP3Ouqsp/pBzCd5jKI3qPblQHFItFpBXcpHlsliIIssXOQq+1EmVJprecPZXTWXrIegAXkJTGWzDLuh490hV2bWr/lY7LXcRqXv3s8NZf9O+U4MBFAR43HN759lXH3duwFDog+lzHbZyNqzVvxtz9Q/EjoPSr4Flee9WiUpqnmaC00xnqqiAp5Tn2ZIueQICWKqKLFNZmiMVSuSapYJLKnnFs0ToSQPb9PaAIWe8KjQvImaGOppRFEzkBUOFsCxUAkutgS5T1LqCilGMYQsuc4VcMLZdpLQKVelW1X7SkiURkgPLE6ZTFlMUFasYK7imrGBcI7Jl/EspQEVjKoyquJQovlRmopiIgBpD3Fdf2xBRk/2dkbaOg/5Q/But0Z5nWifJ4BhnmGgh9XYmcpnkcjtLllQwOouTLwPipjX/baJAIMZyrS/FpYiwRX7PRdqvMBuT6azH6xy+D//RrB00uM14sHwz7SDyeL5anO3MyjiUW4Eg+HB9ycVj58puDb5Hajd1vbs0UdC77mL3v124G8OU7Y+n4ZcdmO2gX2BlN63yN+D2/MQexB4047fhoClt9TWm1oPxnb2BS9NsdtfKDl3pJbS1afv1jUA/5nfzSA/iMdIT1s8icp+yYzC5Rx/bZ2+f1WMxyR5kkh3E5AU+U5E5/1MlmR5EZGvdMyU5lqM/UZL8FpNrjK8stosF9xcqZfIolZSJ43KZ3q1KenpVZodz+WC1fAKZefJiwkzvESY9jTDzw8l8qGA+gcviyM8deqcwWXF6YS4P5/LBmvk4mYzxFxMmvVuYrDiNMMVxKyZ9nMssP0nF/A3P8eLIFfMJZApx8op5okc5TY5bMukT3tRP8tHzO0ompUeumU9gMzv5h8+paia9/eXj16Dsxd1M3ngn/5UvSPGCT5/7qHzslLMDqdx1SEamyptcztZGKWyvrenYEjHnQ7dm9mFqbJHo7XDbsZTYhjh7TfM5zd/MSQNdh4oES0BGlsmFdbUinfVm2IkB0m3aYIYYs4/DHhFpfYPBSPL5wydiz9HVcPWexJMRffru6JAvsVp7DOT1WzF/y/gbcmHCmqxcTy7pnLHOhOiFTReuiA/gwqaLqyDfEDtPwhqJwynr2oJCR0x7bryp6qmpFuMabeSuw/dx7IVN3dM5mfpX8yFL2acJKyQQo/eZNsajW3jQSLbdOWLb+mroupqmi0d5TqqNqdWcTAz0DdhIprroCZU1mGb26ser/wGmk4f4"
+  },
+  "courier_extension": {
+    "original_frame_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44
+    ],
+    "armed_frame_indices": [
+      45,
+      46,
+      47,
+      48
+    ],
+    "previous_png_sha256": "5b563d78676e165c4487e4332a59de0eff2a828ca1f2f572f4c49ff3613ef972",
+    "previous_png_zlib": "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",
+    "original_rgb_sha256": "2d21d95ded6713698785b0e0ba8f7ece1268dda32e05f3983b2e4031c4b1b1aa",
+    "armed_rgb_sha256": "28f6c9ef0bef2c8b889c3fcf763bee53a9677154ba81075a6b26ffde2fa89131",
+    "metadata": {
+      "project/assets/sprites/dispatch_topdown.png.gbsres": {
+        "original_checksum": "29b7ebb912d9ef4425b79352899a4b0403ba3f91",
+        "original_frames_sha256": "447809e9dae652940d4d86c8feaa421127487e55af8b17431d34663ad2621125",
+        "armed_frames_sha256": "8fd32ac3699373ad9eb5a03383b26020ff36a07884856ddfd172fed55483054a"
+      },
+      "project/dispatch_topdown.metadata.json": {
+        "original_checksum": "75031e2a4c024db06b2d3f3ab027de97c3d29484",
+        "original_frames_sha256": "35e379e0f440cab8ae273559475539f0b9dab7eb5167246784721fbbebb23661",
+        "armed_frames_sha256": "8fd32ac3699373ad9eb5a03383b26020ff36a07884856ddfd172fed55483054a",
+        "previous_sha256": "d15d6d8bbca4658a95d597820be8bfb0c693558ca5b6bba3b333c55774773c89"
+      }
+    }
+  },
+  "save_extension": {
+    "project/plugins/toronto-driving/engine/include/td_game.h": "bce5ac7ad9c88b0d2ceb071ad89f7d7daa67563bb7a70bdc354f2adf53e2aa7c",
+    "project/plugins/toronto-driving/engine/src/td_save.c": "2cece846d0e4eaf8ce5f593ce30ccbf2eec0b74bc8b20b046715c2b5a4da3bf4"
+  }
+}

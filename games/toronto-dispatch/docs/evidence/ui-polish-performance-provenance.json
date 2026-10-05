@@ -1,0 +1,51 @@
+{
+  "manifest": "games/toronto-dispatch/docs/NATIVE_UI_POLISH_PERFORMANCE.json",
+  "manifestSha256": "31534b4f75a5dee498c19ddd47a5752ff558db18fb05fc3cfa36110071dbad79",
+  "images": [
+    {
+      "frame": 240,
+      "branchId": "branch-0001",
+      "archiveId": "2c1984fa-262e-4f40-a3cb-e2a827810a84",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/2c1984fa-262e-4f40-a3cb-e2a827810a84/recording/frames/8f4f4e11ddf987820e44c098c9a7ee1b20c74a1315a655cb2eda4fe38b04aeb8.png",
+      "pngSha256": "8f4f4e11ddf987820e44c098c9a7ee1b20c74a1315a655cb2eda4fe38b04aeb8",
+      "rgbaSha256": "f2258172f0f6957049ae9192665dc90d2ad3fa3ebaf0f6fdb715b93239756b2e",
+      "sampledButtons": [],
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-performance-240.png"
+    },
+    {
+      "frame": 1320,
+      "branchId": "branch-0001",
+      "archiveId": "2c1984fa-262e-4f40-a3cb-e2a827810a84",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/2c1984fa-262e-4f40-a3cb-e2a827810a84/recording/frames/ef723237a599d7968570361c2081073c086ec7e60d8622fabb7ee129cd970f42.png",
+      "pngSha256": "ef723237a599d7968570361c2081073c086ec7e60d8622fabb7ee129cd970f42",
+      "rgbaSha256": "bd3bf60da47202acfb9aeb5424dba0645e0d8bde96d4c4b17985e33c44c070a1",
+      "sampledButtons": [],
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-performance-1320.png"
+    },
+    {
+      "frame": 1560,
+      "branchId": "branch-0001",
+      "archiveId": "2c1984fa-262e-4f40-a3cb-e2a827810a84",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/2c1984fa-262e-4f40-a3cb-e2a827810a84/recording/frames/d265d1cacb75f6b8a468ff9a12d35d7deba602aea1d8f0586919a25e75424ab8.png",
+      "pngSha256": "d265d1cacb75f6b8a468ff9a12d35d7deba602aea1d8f0586919a25e75424ab8",
+      "rgbaSha256": "14534d1cb9e7427571aca21cd2449c23159503ae670301314b2c9f149431a541",
+      "sampledButtons": [],
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "publicPath": "games/toronto-dispatch/docs/evidence/ui-polish-performance-1560.png"
+    }
+  ]
+}

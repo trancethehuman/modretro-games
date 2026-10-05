@@ -13,6 +13,7 @@ import json
 import math
 from pathlib import Path
 import sys
+from island_campaign import historical_stop, ISLAND_DISTRICT, relocate_island_stops
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "content/districts/west_jobs.json"
@@ -52,7 +53,7 @@ CONTRACTS = [
       "Parkside roadside drop", "Parkdale stock drop", "Return empty crates"]),
     ("WEST TRANSFER KIT", ("SMALL PACKAGE KIT", "TRAIN BUS OR ROAD"), 4, 255, 8,
      [0, 17, 18, 28, 30, 0],
-     ["Collect small repair kit", "Bloor Yonge handoff", "Ossington relay handoff",
+     ["Collect small repair kit", "Bloor Yonge handoff", "Bloorcourt relay handoff",
       "Lansdowne handoff", "Howard Park handoff", "Return reusable pouch"]),
     ("LODGE LAST MILE", ("PARK THEN WALK", "LODGE LAST MILE"), 0, 255, 12,
      [0, 29, 34, 33, 0],
@@ -102,7 +103,7 @@ def point(district, u, v):
 
 
 class RouteModel:
-    """Tile-centre shortest paths, with authored seam distances and no transit.
+    """Ordinary tile-centre foot/road paths; ferries are separately typed legs.
 
     Vehicle paths conservatively require a clear 3x3 tile footprint. This is
     stricter than some native sub-tile positions, so it is not a lower bound.
@@ -114,6 +115,15 @@ class RouteModel:
         self.nodes = set()
         self.graphs = {}
         self.results = {}
+        self.full_foot_results = {}
+        self.full_foot_available = {}
+        self.stops = {stop["id"]: stop for stop in stops}
+        # Service graph is deliberately separate from both navigation graphs.
+        self.ferry_edges = {(origin, target): {"mode": "ferry", "from_stop": origin,
+                             "to_stop": target, "walking_pixels": 0,
+                             "worst_wait_seconds": 28, "ride_seconds": 8, "fare": 4}
+                            for dock in (20, 21, 22)
+                            for origin, target in ((10, dock), (dock, 10))}
         for district in world["districts"]:
             path = ROOT / "project/project/scenes" / district["scene"] / "scene.gbsres"
             scene = read_json(path)
@@ -222,6 +232,7 @@ class RouteModel:
         return result
 
     def stop_leg(self, first, last):
+        assert first["district"] != ISLAND_DISTRICT and last["district"] != ISLAND_DISTRICT, "Island work requires explicit foot/ferry legs, never vehicle access"
         walking = 0
         start = point(first["district"], first["u"], first["v"])
         finish = point(last["district"], last["u"], last["v"])
@@ -240,6 +251,70 @@ class RouteModel:
         road, seams = self.shortest(start, finish, True)
         return road, walking, seams
 
+    def full_foot_shortest(self, first, last, half=5):
+        """Four-pixel cardinal graph checking every tile under the whole body.
+
+        Five-pixel half-width is deliberately conservative versus the courier;
+        exact source anchors stay on this grid. No ferry or scene seam is added.
+        """
+        assert first["district"] == last["district"]
+        district = first["district"]
+        assert 1 <= half <= 8
+        width, height, grid = self.grids[district]
+        columns, rows = width * 2, height * 2
+        key = district, half
+        if key not in self.full_foot_available:
+            def clear(x, y):
+                u, v = x * 4, y * 4
+                return (half <= u < width * 8 - half and half <= v < height * 8 - half and
+                        all(not grid[ty * width + tx] & 15
+                            for ty in range((v - half) // 8, (v + half) // 8 + 1)
+                            for tx in range((u - half) // 8, (u + half) // 8 + 1)))
+            self.full_foot_available[key] = bytearray(clear(x, y) for y in range(rows) for x in range(columns))
+        available = self.full_foot_available[key]
+        assert all(stop["u"] % 4 == stop["v"] % 4 == 0 for stop in (first, last)), "Full-body route anchors must align to the four-pixel graph"
+        start = first["v"] // 4 * columns + first["u"] // 4
+        finish = last["v"] // 4 * columns + last["u"] // 4
+        assert all(0 <= stop['u'] < width * 8 and 0 <= stop['v'] < height * 8 for stop in (first, last)), 'Full-foot endpoint outside scene bounds'
+        assert available[start] and available[finish], "Blocked full-foot route endpoint"
+        result_key = district, half, start
+        if result_key not in self.full_foot_results:
+            queue, distances = deque([start]), {start: 0}
+            while queue:
+                index = queue.popleft()
+                x, y = index % columns, index // columns
+                for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    neighbor = ny * columns + nx
+                    if (0 <= nx < columns and 0 <= ny < rows and available[neighbor] and neighbor not in distances):
+                        distances[neighbor] = distances[index] + 4
+                        queue.append(neighbor)
+            self.full_foot_results[result_key] = distances
+        assert finish in self.full_foot_results[result_key], "Disconnected full-foot route"
+        return self.full_foot_results[result_key][finish]
+
+    def service_leg(self, first, last):
+        """Explicit Island-post graph: one ferry spoke or an ordinary foot leg.
+
+        Timings/fares are fictional native rules, not current City schedules.
+        Ferry edges never appear in shortest(..., vehicle/foot) or stop_leg.
+        """
+        origin, target = first["id"], last["id"]
+        if (origin, target) in self.ferry_edges:
+            terminal = first if origin == 10 else last
+            island = last if origin == 10 else first
+            assert terminal["district"] == 0 and island["district"] == ISLAND_DISTRICT
+            assert terminal["transit"] == island["transit"] == 3
+            return dict(self.ferry_edges[origin, target])
+        assert first["district"] == last["district"], "Island client access must explicitly visit a ferry dock"
+        if first["district"] == ISLAND_DISTRICT:
+            distance = self.full_foot_shortest(first, last)
+        else:
+            distance, _ = self.shortest(point(first["district"], first["u"], first["v"]),
+                                        point(last["district"], last["u"], last["v"]), False)
+        return {"mode": "foot", "from_stop": origin, "to_stop": target,
+                "walking_pixels": distance, "worst_wait_seconds": 0,
+                "ride_seconds": 0, "fare": 0}
+
 
 def author():
     campaign = read_json(ROOT / "content/campaign.json")
@@ -251,12 +326,12 @@ def author():
     assert [stop["id"] for stop in base_stops] == list(range(27))
     assert [job["id"] for job in base_jobs] == [f"contract-{index:02d}" for index in range(1, 73)]
     assert all(all(index < 27 for index in job["route"]) for job in base_jobs)
-    normalized_base_stops = [{field: stop[field] for field in ("id", "u", "v", "name", "transit")}
+    normalized_base_stops = [{field: historical_stop(stop)[field] for field in ("id", "u", "v", "name", "transit")}
                              for stop in base_stops]
     normalized_base_jobs = [{field: job[field] for field in BASE_QUEST_FIELDS} for job in base_jobs]
     assert sha(canonical(normalized_base_stops)) == BASE_STOPS_SHA256, "Existing core stops changed"
     assert sha(canonical(normalized_base_jobs)) == BASE_QUESTS_SHA256, "Existing 72 contracts changed"
-    stops = [{**stop, "district": 0} for stop in base_stops]
+    stops = relocate_island_stops(base_stops, world)
     authored_stops, metadata_sources = [], []
     for district, filename, expected in ((1, "west_art.json", 5), (2, "high_park_art.json", 3)):
         metadata = read_json(ROOT / "content/districts" / filename)

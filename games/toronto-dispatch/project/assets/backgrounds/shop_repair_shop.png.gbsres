@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "da51e011-a553-5a7f-9188-61aa1677e2c0",
+  "name": "Original repair shop interior",
+  "symbol": "bg_original_repair_shop_interior",
+  "tileColors": "012a+023+01!023+01!023+01!023+0118+0012+012+00!055+006+055+00!012+00!055+006+055+00!012+0012+012+0012+012+0012+012+00!054+008+054+00!012+00!054+008+054+00!012+00!054+008+054+00!012+00!054+008+054+00!012+0012+012+0012+012+0012+0115+",
+  "filename": "shop_repair_shop.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144,
+  "autoColor": false
+}

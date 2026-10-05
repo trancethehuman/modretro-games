@@ -13,6 +13,7 @@ dist/
 backups/
 *.gb
 *.gbc
+!history/openai-devday-cartridge/original-openai.gbc
 *.sav
 *.srm
 *.log

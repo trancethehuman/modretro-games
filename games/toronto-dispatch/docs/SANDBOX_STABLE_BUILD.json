@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-stable-native-build",
+  "date": "2026-10-05",
+  "result": "passed-with-stated-scope",
+  "rom": {
+    "filename": "toronto-dispatch-sandbox-stable.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+    "selectedForCartridge": true,
+    "title": "TORONTODISPATCH",
+    "colorMode": "gbc-only",
+    "cgbFlag": 192,
+    "cartridgeType": 30,
+    "cartridgeTypeName": "MBC5+RUMBLE+RAM+BATTERY",
+    "romSizeCode": 5,
+    "ramSizeCode": 3,
+    "ramSizeBytes": 32768,
+    "headerChecksum": 232,
+    "headerChecksumValid": true,
+    "nintendoLogoValid": true
+  },
+  "build": {
+    "builder": "official ModRetro Chromatic build",
+    "success": true,
+    "durationMs": 90460,
+    "instrumented": false,
+    "tdProfileMarkersRemaining": false
+  },
+  "sourceDebug": {
+    "romSha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+    "noiSha256": "aa8c5d17b23cfb69f1dd567f8df2f2a817133a285220825ff3aacdb39464e676",
+    "globalsSha256": "930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a",
+    "sourceFingerprint": "a9fa9f957ef8dda5c24f9c76508289af8725cdc73645e8485010c5b1423b1324",
+    "projectRevision": "6be9dfc8923fd83d3e0a05ab9bb0e0282a7763061343426019c4791f43b8499e",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627",
+    "engineAbiVersion": "gbvm-farptr3-uword16-v1:4d051f961ba47e2e300690e3114203f64285abd72a1433702ea422cd64e5e19f"
+  },
+  "nativeInputSnapshot": {
+    "files": 200,
+    "pinsSha256": "c3e17d9c699fc44e27a4e6eebea255315ed68ea498d254194665583cb67740e5",
+    "unchangedAfterBuildAndNativePlay": true
+  },
+  "memory": {
+    "heapEnd": "0xDCBD",
+    "stackOrigin": "0xDF00",
+    "staticReserveBytes": 579,
+    "fixedHomeHeadroomBytes": 221,
+    "fixedHomePoseHelperBytes": 87,
+    "maximumStackMeasured": false,
+    "saveVersion": 10,
+    "savedBytes": 58,
+    "actorPool": 22
+  },
+  "graphics": {
+    "aircraftRawTilesPerBank": [32, 30],
+    "maxSceneObjTilesPerBank": {
+      "core": 120,
+      "west": 120,
+      "highPark": 110,
+      "east": 120,
+      "portLands": 110,
+      "islands": 110,
+      "north": 102
+    },
+    "sceneObjLimitPerBank": 128,
+    "groundFramesChecked": 104,
+    "groundFrameBoundsPixels": {"left": -8, "right": 16, "top": 0, "bottom": 16},
+    "signalSceneBackgroundBank1Tiles": {"core": 31, "west": 44, "otherSignalScenes": 0},
+    "signalSceneBackgroundBank1Limit": 47,
+    "islandsBackgroundBank1Tiles": 0,
+    "islandsBackgroundBank1Limit": 64,
+    "queenStreetcar": {"poses": 8, "objectsPerPose": 4, "emptyPoseVerified": true},
+    "streetcarProgressResourceBytes": 8684,
+    "streetcarProgressResourceBytesExact": true
+  },
+  "checks": {
+    "compiledGuards": {
+      "check_rom_memory.py": "passed",
+      "check_aircraft_rom.py": "passed",
+      "check_streetcar_rom.py": "passed",
+      "check_streetcar_progress_rom.py": "passed"
+    },
+    "fullMakeCheck": {
+      "command": "make check",
+      "exitCode": 0,
+      "passingLogSha256": "25cbbd777be072dc49b156695ba553e13dd27a586c462b94e3728382697403ca"
+    },
+    "nativeGameplay": "scoped-passed; see NATIVE_SANDBOX_STABLE.json",
+    "nativeTiming": "scoped; see SANDBOX_STABLE_TIMING.json",
+    "physicalCartridge": "not-yet-written",
+    "package": "selected reviewed-r2; see SANDBOX_STABLE_PACKAGE_R2.json; first package retained in SANDBOX_STABLE_PACKAGE.json"
+  },
+  "retainedEvidence": {
+    "failedCandidateSha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
+    "failedCandidateRecord": "NATIVE_SANDBOX_STACK_DIAGNOSTIC.json",
+    "lastPhysicallyConfirmedRomSha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+    "lastPhysicallyConfirmedRecord": "CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json"
+  },
+  "limitations": [
+    "Static reserve and reviewed feasible stack chains do not measure the whole-game stack maximum or minimum observed SP.",
+    "Native observations cover selected idle, delivery, menu/map, save/reset, boat, shop, theft and pursuit paths, not every interaction or104 contracts.",
+    "One stationary timing sample does not establish universal smoothness, whole-city performance or physical responsiveness.",
+    "Cartridge writing, cold boot, physical save persistence, listening and flicker require their own evidence.",
+    "Generated binaries, raw journals, saves, machine paths, activation details and device/request tokens remain outside this public record."
+  ]
+}

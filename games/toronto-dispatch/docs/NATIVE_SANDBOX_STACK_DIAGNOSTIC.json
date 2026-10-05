@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "kind": "curated-native-state-corruption-and-stack-diagnostic",
+  "curatedOn": "2026-10-05",
+  "result": "requires-fix",
+  "scope": "Ordinary long-walk observations followed by two independent clean-idle reproductions on the exact sandbox-polish ROM. State corruption is observed; a stack/music-interrupt cause remains a hypothesis.",
+  "identity": {
+    "romSha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
+    "romBytes": 1048576,
+    "noiSha256": "80c124290f9ad5b86af5889c4d00bcf31c2ff97fb7a4e949ded98944e23f1a81",
+    "sourceFingerprint": "0db5ffdb8e09e10645d601b81c37b325c6569cf7927c1818b5a8a8091ebc609b",
+    "staticReserveBytes": 470,
+    "instrumented": false,
+    "selectedForCartridge": false
+  },
+  "provenance": {
+    "ordinaryButtonInputs": true,
+    "memoryInspection": "Read-only selected diagnostic bytes; no state injection is claimed.",
+    "closedRecordings": true,
+    "rawArtifacts": "Original events, semantic observations and archive bytes remain locally ignored. Private paths and request tokens are omitted.",
+    "hardwareOperation": false
+  },
+  "watchedMemory": {
+    "flagAddress": "0xDD0D",
+    "packetAddress": "0xDD0E",
+    "packetBytes": 24,
+    "originalPacketHex": "8833020004000100e47f00000000255701270302000000ff",
+    "widerReadAddress": "0xDD0D",
+    "widerReadBytes": 29,
+    "scope": "Addresses and original bytes belong to this exact ROM/NOI. Only the first 13 initialized packet bytes are invariant; the remaining 11 script bytes can legitimately change after a scene return. The complete original 24-byte packet is retained as an observation. These read-only samples are not a save export or evidence of a measured stack pointer.",
+    "immutablePrefixBytes": 13,
+    "immutablePrefixHex": "8833020004000100e47f000000",
+    "mutableScriptTailBytes": 11
+  },
+  "runs": [
+    {
+      "name": "ordinary-long-walk",
+      "recording": {
+        "sessionId": "e030172c48914d638a28bd01d5212870",
+        "rawStatus": "stopped",
+        "stopOutcome": "needs-review",
+        "workerClosed": true,
+        "frames": 7999,
+        "eventCount": 747,
+        "eventDigest": "73f03c8f3e3d8550b4d70c1c22603032ef771e1d6d67d00ea48efe3727ab3d0f",
+        "manifestSha256": "76c1c86492abab7bfc151e8f538c7df855ed87879e2f50daaea7e48dfba93a1a",
+        "archiveFiles": 184,
+        "archiveBytes": 685152
+      },
+      "observations": [
+        {
+          "frame": 7403,
+          "flagHex": "8b",
+          "finding": "Unexpected flag value observed during ordinary play."
+        },
+        {
+          "frame": 7703,
+          "flagHex": "ff",
+          "finding": "A genuine game-button soft reset restored the watched flag."
+        },
+        {
+          "frame": 7887,
+          "finding": "The grocery room opened successfully after that reset."
+        }
+      ],
+      "resetInput": [
+        {
+          "buttons": [
+            "a",
+            "b",
+            "select",
+            "start"
+          ],
+          "frames": 120
+        },
+        {
+          "buttons": [],
+          "frames": 180
+        }
+      ],
+      "limitation": "The successful post-reset room entry does not repair the preceding corruption or establish final gameplay acceptance."
+    },
+    {
+      "name": "clean-idle-reproduction",
+      "recording": {
+        "sessionId": "28679d9809d1487fa1b04d926d65a64e",
+        "rawStatus": "failed",
+        "stopOutcome": "failed",
+        "workerClosed": true,
+        "frames": 2372,
+        "eventCount": 85,
+        "eventDigest": "b40575272d07d2665adda79cf5117168dc907d4be087a65d2fc9266f78f8cca7",
+        "manifestSha256": "502ee6a768c478508d5d84bf7ccbce0e9f9b9dd5767ee2b7543d2d91c6cdcb96",
+        "archiveFiles": 44,
+        "archiveBytes": 120175
+      },
+      "method": {
+        "freshBootFrames": 180,
+        "leaveWelcome": {
+          "buttons": [
+            "a"
+          ],
+          "frames": 32
+        },
+        "subsequentInputs": "Neutral input in 120-frame sampling steps, without walking or opening a shop."
+      },
+      "observations": [
+        {
+          "frame": 2252,
+          "packetMatchesOriginal": true,
+          "widerReadHex": "ff8833020004000100e47f00000000255701270302000000ff0f96df00",
+          "immutablePrefixMatchesOriginal": true
+        },
+        {
+          "frame": 2372,
+          "packetMatchesOriginal": false,
+          "widerReadHex": "ff88330200042aed0c40444e44e02135dde000600033dde0214bddc017",
+          "immutablePrefixMatchesOriginal": false
+        }
+      ],
+      "finding": "The invariant initialized prefix changed under clean stationary idle, independently of the long walk and shop entry. This is not merely a legal change to the script tail."
+    },
+    {
+      "name": "refined-clean-idle-window",
+      "recording": {
+        "sessionId": "fde9f3c66d1540149c56e7a63c53d91c",
+        "rawStatus": "failed",
+        "stopOutcome": "failed",
+        "workerClosed": true,
+        "frames": 2332,
+        "eventCount": 71,
+        "eventDigest": "34b24bd03b7420a58c2759be5ffca0003a888d411efb650ba7abdcada1896f57",
+        "manifestSha256": "cca8c89a893307c7cd5fd2a9d98255abdfc37b52284d2219500d712de9bcb8df",
+        "archiveFiles": 30,
+        "archiveBytes": 82127
+      },
+      "method": {
+        "freshBootFrames": 180,
+        "leaveWelcome": {
+          "buttons": [
+            "a"
+          ],
+          "frames": 32
+        },
+        "initialNeutralFrames": 2040,
+        "refinedNeutralStepFrames": 8
+      },
+      "observations": [
+        {
+          "frame": 2324,
+          "packetMatchesOriginal": true,
+          "immutablePrefixMatchesOriginal": true
+        },
+        {
+          "frame": 2332,
+          "packetMatchesOriginal": false,
+          "widerReadHex": "ff88330200042a163bdd44dd44e02135dde000600033dde0214bdd6016",
+          "immutablePrefixMatchesOriginal": false
+        }
+      ],
+      "firstObservedOverwriteInterval": {
+        "afterFrame": 2324,
+        "byFrame": 2332
+      },
+      "finding": "A separate clean boot narrows the first observed overwrite of the invariant initialized prefix to an eight-frame interval."
+    }
+  ],
+  "interpretation": {
+    "confirmed": "Reproducible native state corruption makes this exact ROM ineligible for selection, packaging or loading.",
+    "stackReserveFinding": "A 470-byte linked static reserve did not establish runtime memory safety for this workload.",
+    "causeHypothesis": "Deep native call-stack use combined with music interrupts may overwrite nearby state.",
+    "exactStackPointerMeasured": false,
+    "causeProven": false,
+    "repairStatus": "This failed historical ROM retains its requires-fix result. A separate replacement ROM has compiled and passed scoped ordinary native validation; its evidence is recorded independently in NATIVE_SANDBOX_STABLE.json."
+  },
+  "limitations": [
+    "Read-only packet samples bracket the overwrite but do not identify the writing instruction, exact stack low-water mark or interrupt path.",
+    "Successful compilation, static graphics/memory checks and earlier scoped timing do not override this native failure.",
+    "Reset recovery and one grocery entry do not accept boats, shops in general, theft, pursuits, jet rendering, the campaign or physical cartridge behavior.",
+    "No physical write or hardware operation occurred in these diagnostics. The separately confirmed installed 9c155 baseline remains unchanged.",
+    "A repaired ROM needs new ordinary native reproduction, gameplay and hardware evidence; these records cannot be reassigned to it."
+  ],
+  "replacementEvidence": {
+    "romSha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+    "nativeValidation": "NATIVE_SANDBOX_STABLE.json",
+    "compiledFramesAndHostEquivalence": "SANDBOX_STABLE_OPTIMIZATION.json",
+    "scopedTiming": "SANDBOX_STABLE_TIMING.json",
+    "scope": "Separate replacement observations do not change the original recordings, prove their precise corruption cause, or establish physical cartridge execution."
+  }
+}

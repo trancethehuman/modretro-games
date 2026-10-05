@@ -1,0 +1,386 @@
+{
+  "schema": 1,
+  "name": "University of Toronto — St. George campus",
+  "district": 0,
+  "scene": "toronto_city",
+  "reviewed": "2026-10-05",
+  "display_projection": "Original straight north-up pixel art",
+  "art_bounds": [
+    368,
+    96,
+    440,
+    264
+  ],
+  "geography_notice": "Compressed architectural interpretation within existing Core footprints, west of University/Queen's Park, south of Bloor and north of College. University College's tower anchor is north/east of the Convocation dome; Robarts is northwest. This is not a surveyed map, a depiction of present construction or a campus access guide. King's College Circle and the full campus are not newly simulated.",
+  "landmarks": [
+    {
+      "id": "robarts",
+      "name": "Robarts Library",
+      "footprint": [
+        368,
+        96,
+        32,
+        40
+      ],
+      "character": "Angular concrete roof and repeated vertical bays",
+      "real_address": "130 St. George Street"
+    },
+    {
+      "id": "university-college",
+      "name": "University College",
+      "footprint": [
+        408,
+        208,
+        32,
+        40
+      ],
+      "character": "Romanesque stone tower, clock, arched arcade and original UT letter sign",
+      "real_address": "15 King's College Circle"
+    },
+    {
+      "id": "convocation",
+      "name": "Convocation Hall",
+      "footprint": [
+        368,
+        208,
+        32,
+        40
+      ],
+      "character": "Symmetric domed rotunda, central oculus and columned frontage",
+      "real_address": "31 King's College Circle"
+    }
+  ],
+  "visual_anchors": {
+    "robarts": [
+      384,
+      108
+    ],
+    "university-college": [
+      424,
+      208
+    ],
+    "convocation": [
+      384,
+      224
+    ],
+    "original_UT_sign": [
+      416,
+      232
+    ]
+  },
+  "paths": [
+    {
+      "rect": [
+        368,
+        144,
+        72,
+        8
+      ],
+      "purpose": "Existing north forecourt sidewalk with original repeating stonework"
+    },
+    {
+      "rect": [
+        368,
+        256,
+        72,
+        8
+      ],
+      "purpose": "Existing College-side campus forecourt with original repeating stonework"
+    }
+  ],
+  "unchanged": [
+    "All existing scene collision bytes",
+    "All palette/priority attribute bytes and world palette resources",
+    "All roads, ROM footprint and other city pixels outside the explicit stamp cells",
+    "All 77 Core building footprints",
+    "Mission/transit/traffic routes and existing prop identities",
+    "All courier/fleet/aircraft assets"
+  ],
+  "art_source": "scripts/campus_art.py",
+  "before_source_png": "project/original-art/campus/core_before_campus.png",
+  "before_source_commit": "fb589599f6411d517fe8e2af9d8c43dbf6d89144",
+  "native_background": "project/assets/backgrounds/toronto_city.png",
+  "source_checks": {
+    "stamp_cells": [
+      [
+        368,
+        96
+      ],
+      [
+        376,
+        96
+      ],
+      [
+        384,
+        96
+      ],
+      [
+        392,
+        96
+      ],
+      [
+        368,
+        104
+      ],
+      [
+        376,
+        104
+      ],
+      [
+        384,
+        104
+      ],
+      [
+        392,
+        104
+      ],
+      [
+        368,
+        112
+      ],
+      [
+        376,
+        112
+      ],
+      [
+        384,
+        112
+      ],
+      [
+        392,
+        112
+      ],
+      [
+        368,
+        120
+      ],
+      [
+        376,
+        120
+      ],
+      [
+        384,
+        120
+      ],
+      [
+        392,
+        120
+      ],
+      [
+        368,
+        128
+      ],
+      [
+        376,
+        128
+      ],
+      [
+        384,
+        128
+      ],
+      [
+        392,
+        128
+      ],
+      [
+        368,
+        144
+      ],
+      [
+        376,
+        144
+      ],
+      [
+        384,
+        144
+      ],
+      [
+        392,
+        144
+      ],
+      [
+        400,
+        144
+      ],
+      [
+        408,
+        144
+      ],
+      [
+        416,
+        144
+      ],
+      [
+        424,
+        144
+      ],
+      [
+        432,
+        144
+      ],
+      [
+        416,
+        200
+      ],
+      [
+        424,
+        200
+      ],
+      [
+        368,
+        208
+      ],
+      [
+        376,
+        208
+      ],
+      [
+        384,
+        208
+      ],
+      [
+        392,
+        208
+      ],
+      [
+        416,
+        208
+      ],
+      [
+        424,
+        208
+      ],
+      [
+        368,
+        216
+      ],
+      [
+        376,
+        216
+      ],
+      [
+        384,
+        216
+      ],
+      [
+        392,
+        216
+      ],
+      [
+        368,
+        224
+      ],
+      [
+        376,
+        224
+      ],
+      [
+        384,
+        224
+      ],
+      [
+        392,
+        224
+      ],
+      [
+        368,
+        232
+      ],
+      [
+        376,
+        232
+      ],
+      [
+        384,
+        232
+      ],
+      [
+        392,
+        232
+      ],
+      [
+        416,
+        232
+      ],
+      [
+        368,
+        240
+      ],
+      [
+        376,
+        240
+      ],
+      [
+        384,
+        240
+      ],
+      [
+        392,
+        240
+      ],
+      [
+        408,
+        240
+      ],
+      [
+        416,
+        240
+      ],
+      [
+        424,
+        240
+      ],
+      [
+        432,
+        240
+      ],
+      [
+        368,
+        256
+      ],
+      [
+        376,
+        256
+      ],
+      [
+        384,
+        256
+      ],
+      [
+        392,
+        256
+      ],
+      [
+        400,
+        256
+      ],
+      [
+        408,
+        256
+      ],
+      [
+        416,
+        256
+      ],
+      [
+        424,
+        256
+      ],
+      [
+        432,
+        256
+      ]
+    ],
+    "introduced_canonical_patterns": 15,
+    "before_canonical_patterns": 159,
+    "after_canonical_patterns": 174
+  },
+  "evidence": "Native source and plugin graphics analysis only; compiled R7 allocations and actual native/hardware presentation are separate pending checks.",
+  "source_ids": [
+    "uoft-stgeorge-campus-map-2018-reviewed20261005",
+    "uoft-campus-architecture-20261005",
+    "uoft-robarts-library-20261005",
+    "uoft-convocation-20261005"
+  ],
+  "rights": "All authored campus pixels, patterns, sign lettering and design are original MIT game assets. Official maps/photos/logos/crests were not imported or traced; source sites remain independently copyrighted."
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "kind": "sanitized-supported-device-discovery",
+  "date": "2026-10-05",
+  "finishedAt": "2026-10-05T04:45:03.678Z",
+  "selectedRom": {
+    "filename": "toronto-dispatch-sandbox-stable.gbc",
+    "sizeBytes": 1048576,
+    "sha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+    "sourceCommit": "120df305b439f4799ba28be21a6c72c20d08c085"
+  },
+  "discovery": {
+    "supportedPlugin": true,
+    "vendorVersion": "1.2.1",
+    "state": "succeeded",
+    "devices": 0,
+    "conflicts": 0,
+    "unmatched": 0,
+    "diagnostics": 0,
+    "processExitCode": 0,
+    "processCloseCode": 0
+  },
+  "cartridgeWrite": "not-dispatched-no-connected-device",
+  "lastUserConfirmedCartridgeRomSha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+  "nextStep": "Connect and power on the same approved console/development cartridge, obtain fresh selection, then write the exact inspected replacement.",
+  "limits": [
+    "Successful empty USB discovery does not establish activation, cartridge contents or a new installation.",
+    "Existing same-device data-loss consent persists. No new flash or automatic retry was dispatched.",
+    "Device identities, selection tokens, raw journals, saves and private paths are omitted."
+  ],
+  "additionalSuccessfulDiscoveryChecks": [
+    {
+      "finishedAt": "2026-10-05T04:49:46.622Z",
+      "devices": 0,
+      "conflicts": 0,
+      "unmatched": 0,
+      "diagnostics": 0
+    },
+    {
+      "finishedAt": "2026-10-05T05:10:22.684Z",
+      "devices": 0,
+      "conflicts": 0,
+      "unmatched": 0,
+      "diagnostics": 0
+    }
+  ],
+  "selectedReviewedBundleSourceCommit": "f564538b0c0afd867e9d5a2596fa970961079d45"
+}

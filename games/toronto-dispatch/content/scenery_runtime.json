@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "source": "create_scenery_data.py",
+  "districts": [
+    {
+      "district": 0,
+      "source": "city_art.json",
+      "count": 180,
+      "registry_sha256": "140e7ef2fc43660b4a553b78007b352d7f229c05f823aa73956f7cf3f934dddb"
+    },
+    {
+      "district": 1,
+      "source": "districts/west_art.json",
+      "count": 253,
+      "registry_sha256": "5aba4e1a3fbc964fdcfa686adb62c977eab79e2bedef2ae11a2a921d4c720419"
+    },
+    {
+      "district": 2,
+      "source": "districts/high_park_art.json",
+      "count": 207,
+      "registry_sha256": "31cbdeb5e48203cce57912630abb83f323d263a3334b9acb5cfe362b6ddc050d"
+    },
+    {
+      "district": 3,
+      "source": "districts/east_art.json",
+      "count": 141,
+      "registry_sha256": "8d6ecd689b969b489a58e85714552235a6dafa13f73f119364868677c7c2a0a4"
+    },
+    {
+      "district": 4,
+      "source": "districts/port_lands_art.json",
+      "count": 163,
+      "registry_sha256": "e77808a1e364533757db534538b0c28ce8327dd775173cc7ebc5938a6c62d105"
+    },
+    {
+      "district": 5,
+      "source": "districts/island_art.json",
+      "count": 85,
+      "registry_sha256": "519397597ae4b09d305ad746b952be14ab0ae43caa29b673fdc05d4fbf3921f4"
+    },
+    {
+      "district": 6,
+      "source": "districts/north_art.json",
+      "count": 106,
+      "registry_sha256": "becf5ada7837b70c2d6ead5cba27d33f0c6531937420a12bcd1a2bcd34c46f18"
+    }
+  ],
+  "counts": [
+    180,
+    253,
+    207,
+    141,
+    163,
+    85,
+    106
+  ],
+  "total_props": 1135,
+  "underlay_patterns": 16,
+  "native_static_bytes": 233,
+  "row_lookup_rom_bytes": 1736,
+  "broken_bits_bytes": 142,
+  "active_animations": 4,
+  "bkg_bank": 1,
+  "scratch_range": [
+    80,
+    97
+  ],
+  "max_visible_patches": 18,
+  "new_oam_objects": 0,
+  "terrain_collision_bytes_changed": 0,
+  "structural_buildings_trees_water_destructible": false
+}

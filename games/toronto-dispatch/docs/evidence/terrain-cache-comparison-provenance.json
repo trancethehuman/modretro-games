@@ -1,0 +1,73 @@
+{
+  "scope": "Four provenance entries map to three byte-original native PNGs; shared stationary endpoint pixels are identical across builds.",
+  "images": [
+    {
+      "run": "B1",
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 1320,
+      "archiveId": "d69f2046-ed10-436b-aff2-33f2b63321d6",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d69f2046-ed10-436b-aff2-33f2b63321d6/recording/frames/ef723237a599d7968570361c2081073c086ec7e60d8622fabb7ee129cd970f42.png",
+      "pngSha256": "ef723237a599d7968570361c2081073c086ec7e60d8622fabb7ee129cd970f42",
+      "rgbaSha256": "bd3bf60da47202acfb9aeb5424dba0645e0d8bde96d4c4b17985e33c44c070a1",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "stationary world endpoint",
+      "qualification": "Original native image; does not prove all-scene rendering, cartridge execution, FPS or zero velocity after moving suffix.",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-core-stopped.png"
+    },
+    {
+      "run": "B1",
+      "romSha256": "825444a0d9d82a3b2bb9a58f184ff30f3c6aa16d61f893531ceaa3a4f68e4c48",
+      "frame": 1560,
+      "archiveId": "d69f2046-ed10-436b-aff2-33f2b63321d6",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/d69f2046-ed10-436b-aff2-33f2b63321d6/recording/frames/d265d1cacb75f6b8a468ff9a12d35d7deba602aea1d8f0586919a25e75424ab8.png",
+      "pngSha256": "d265d1cacb75f6b8a468ff9a12d35d7deba602aea1d8f0586919a25e75424ab8",
+      "rgbaSha256": "14534d1cb9e7427571aca21cd2449c23159503ae670301314b2c9f149431a541",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "fixed moving suffix final endpoint",
+      "qualification": "Original native image; does not prove all-scene rendering, cartridge execution, FPS or zero velocity after moving suffix.",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-moving-candidate.png"
+    },
+    {
+      "run": "A2",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "frame": 1320,
+      "archiveId": "41e2c288-90ba-4bbe-8e42-88a559bf75f3",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/41e2c288-90ba-4bbe-8e42-88a559bf75f3/recording/frames/ef723237a599d7968570361c2081073c086ec7e60d8622fabb7ee129cd970f42.png",
+      "pngSha256": "ef723237a599d7968570361c2081073c086ec7e60d8622fabb7ee129cd970f42",
+      "rgbaSha256": "bd3bf60da47202acfb9aeb5424dba0645e0d8bde96d4c4b17985e33c44c070a1",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "stationary world endpoint",
+      "qualification": "Original native image; does not prove all-scene rendering, cartridge execution, FPS or zero velocity after moving suffix.",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-core-stopped.png"
+    },
+    {
+      "run": "A2",
+      "romSha256": "e797f5725574248915f89945dcb1c1b59c7906c8ebe8dc1f155f97b56000374f",
+      "frame": 1560,
+      "archiveId": "41e2c288-90ba-4bbe-8e42-88a559bf75f3",
+      "sourceArchivePng": "games/toronto-dispatch/project/artifacts/recording-archives/41e2c288-90ba-4bbe-8e42-88a559bf75f3/recording/frames/6b7495d457ee953a3ffd7a8eb49ac7460e6a7dedb437ed4177527b839870ad6f.png",
+      "pngSha256": "6b7495d457ee953a3ffd7a8eb49ac7460e6a7dedb437ed4177527b839870ad6f",
+      "rgbaSha256": "a2b1abec564a5ae6c32ef3fde7cb04d7546f96317858d8aaf52c3e50157bfd38",
+      "pixels": [
+        160,
+        144
+      ],
+      "contentEdited": false,
+      "role": "fixed moving suffix final endpoint",
+      "qualification": "Original native image; does not prove all-scene rendering, cartridge execution, FPS or zero velocity after moving suffix.",
+      "publicPath": "games/toronto-dispatch/docs/evidence/terrain-cache-moving-baseline.png"
+    }
+  ]
+}

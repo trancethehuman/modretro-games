@@ -19,7 +19,7 @@ static void expect_value(unsigned actual, unsigned expected, const char *operati
 static unsigned oracle_service(unsigned origin) {
     if (origin == 80) return 2;
     if (origin >= 64) return 0;
-    if (origin == 0 || (origin >= 12 && origin <= 17)) return 1;
+    if (origin == 0 || (origin >= 12 && origin <= 17) || origin == 59 || origin == 60) return 1;
     if (origin == 18 || origin == 19) return 2;
     if (origin == 10 || (origin >= 20 && origin <= 22)) return 3;
     if (origin >= 43 && origin <= 50) return 4;
@@ -30,6 +30,8 @@ static int oracle_index(unsigned service, unsigned stop) {
     if (service == 1) {
         if (stop == 0) return 0;
         if (stop >= 12 && stop <= 17) return (int)stop - 11;
+        if (stop == 59) return 7;
+        if (stop == 60) return 8;
     } else if (service == 2) {
         if (stop == 18) return 0;
         if (stop == 16) return 1;
@@ -54,7 +56,7 @@ static unsigned oracle_valid(unsigned origin, unsigned target) {
 
 static unsigned oracle_count(unsigned origin) {
     switch (oracle_service(origin)) {
-        case 1: return 7;
+        case 1: return 9;
         case 2: return 3;
         case 3: return (origin & 63) == 10 ? 3 : 1;
         case 4: return 8;
@@ -63,7 +65,7 @@ static unsigned oracle_count(unsigned origin) {
 }
 
 static unsigned oracle_stop(unsigned origin, unsigned selection) {
-    static const unsigned train[] = {0, 12, 13, 14, 15, 16, 17};
+    static const unsigned train[] = {0, 12, 13, 14, 15, 16, 17, 59, 60};
     static const unsigned bus[] = {18, 16, 19};
     if (selection >= oracle_count(origin)) return 255;
     switch (oracle_service(origin)) {
@@ -84,7 +86,7 @@ static unsigned oracle_duration(unsigned origin, unsigned target) {
     if (distance < 0) distance = -distance;
     if (service == 1) return 1 + (unsigned)distance / 2;
     if (service == 2) return 2 + 2 * (unsigned)distance;
-    return 4 * (unsigned)distance;
+    return 16 * (unsigned)distance;
 }
 
 static unsigned oracle_departure(unsigned origin, unsigned target, unsigned clock) {
@@ -95,14 +97,14 @@ static unsigned oracle_departure(unsigned origin, unsigned target, unsigned cloc
     else if (service == 2) { period = 24; phase = index * 4; }
     else if (service == 3) { period = 30; phase = index * 7; }
     else {
-        period = 64;
-        phase = oracle_index(service, target) >= index ? index * 4 : 32 + 4 * (7 - index);
+        period = 256;
+        phase = oracle_index(service, target) >= index ? index * 16 : 128 + 16 * (7 - index);
     }
     /* Signed remainder is deliberately unlike the implementation's unsigned
      * period-offset expression, including clocks before a stop's phase. */
     elapsed = ((int)clock - phase) % period;
     if (elapsed < 0) elapsed += period;
-    return elapsed < 2 ? 0 : (unsigned)(period - elapsed);
+    return elapsed < (service==4?4:2) ? 0 : (unsigned)(period - elapsed);
 }
 
 static void test_encodings_and_routes(void) {
@@ -149,7 +151,7 @@ static void test_every_route_and_phase(void) {
         if (!oracle_service(origin)) continue;
         for (target = 0; target < 64; target++) {
             if (target != (origin & 63) && !oracle_target(origin, target)) continue;
-            for (clock = 0; clock < 128; clock++) {
+            for (clock = 0; clock < 512; clock++) {
                 expect_value(td_transit_departure((UBYTE)origin, (UBYTE)target, (UWORD)clock),
                              oracle_departure(origin, target, clock), "route-phase", origin, target, clock);
             }
@@ -162,7 +164,8 @@ static void test_every_route_and_phase(void) {
 }
 
 static void test_complete_uword_clock(void) {
-    static const unsigned pairs[][2] = {{0,17}, {80,19}, {22,10}, {43,50}, {50,43}};
+    static const unsigned pairs[][2] = {{0,17}, {80,19}, {22,10}, {43,50}, {50,43},
+                                      {59,0}, {60,59}, {0,60}};
     unsigned pair, clock;
     for (pair = 0; pair < sizeof(pairs) / sizeof(pairs[0]); pair++) {
         unsigned origin = pairs[pair][0], target = pairs[pair][1];
@@ -179,17 +182,44 @@ static void test_complete_uword_clock(void) {
     expect_value(td_transit_departure(20, 20, 7), 0, "ferry-self-timetable", 20, 20, 7);
     expect_value(td_transit_valid(20, 20), 0, "ferry-self-unboardable", 20, 20, 7);
     expect_value(td_transit_valid(20, 21), 0, "ferry-no-island-shortcut", 20, 21, 0);
-    expect_value(td_transit_departure(50, 43, 32), 0, "queen-west-window", 50, 43, 32);
+    expect_value(td_transit_departure(50, 43, 128), 0, "queen-west-window", 50, 43, 128);
     expect_value(td_transit_departure(43, 50, 0), 0, "queen-east-window", 43, 50, 0);
-    expect_value(td_transit_duration(43, 50), 28, "queen-end-to-end", 43, 50, 0);
+    expect_value(td_transit_duration(43, 50), 112, "queen-end-to-end", 43, 50, 0);
     expect_value(td_transit_departure(43, 50, (UWORD)(65535U + 1U)), 0,
                  "uword-modulo-reset", 43, 50, 0);
+}
+
+static void test_booking_fares(void) {
+    /* Islands retain their no-job, stranded-cash return assistance.
+       North never receives that ferry exemption. */
+    static const unsigned fares[]={0,3,2,4,3};
+    static const unsigned jobs[]={255,0,95,96,103,254};
+    static const unsigned districts[]={0,1,2,3,4,5,6,255};
+    static const unsigned targets[]={10,0,20,21,22,59,60,63,64,255};
+    for(unsigned origin=0;origin<256;origin++)for(unsigned cash=0;cash<=4;cash++)
+        for(unsigned job=0;job<sizeof(jobs)/sizeof(jobs[0]);job++)
+            for(unsigned district=0;district<sizeof(districts)/sizeof(districts[0]);district++)
+                for(unsigned target=0;target<sizeof(targets)/sizeof(targets[0]);target++){
+                    unsigned expected=fares[oracle_service(origin)];
+                    /* Derive eligibility from the independent public service
+                       oracle, which rejects all encoded/malformed docks. */
+                    if(oracle_service(origin)==3&&origin!=10&&targets[target]==10&&
+                       jobs[job]==255&&districts[district]==5&&cash<4)expected=0;
+                    expect_value(td_transit_booking_fare(origin,targets[target],jobs[job],cash,districts[district]),
+                                 expected,"booking-fare",origin,targets[target],cash);
+                }
+    for(unsigned origin=20;origin<=22;origin++){
+        expect_value(td_transit_booking_fare(origin,10,255,65535,5),4,
+                     "booking-large-cash",origin,10,65535);
+        expect_value(td_transit_fare(origin),4,"ordinary-ferry-unmodified",origin,10,0);
+    }
 }
 
 int main(void) {
     test_encodings_and_routes();
     test_every_route_and_phase();
     test_complete_uword_clock();
+    test_booking_fares();
     printf("Transit production-source regressions: %lu checks, %lu failures.\n", checks, failures);
     return failures ? 1 : 0;
 }

@@ -1,0 +1,484 @@
+{
+  "schema": 1,
+  "title": "One Bag and a Map",
+  "original": true,
+  "protagonist": {
+    "name": "Driver",
+    "background": "A newcomer to Toronto with one bag, a borrowed car and a basement room. Their ethnicity is deliberately unspecified.",
+    "arc": "Reliable small deliveries build friendships and a reputation. A rival tries to turn that trust into debt. Neighbourhood clients help expose the scheme, and the newcomer grows into the owner of an independent community dispatch business."
+  },
+  "characters": {
+    "june": "June, a patient dispatcher who offers the newcomer their first shift and defends the drivers when the ledger disappears.",
+    "moss": "Moss, a garage owner whose failed partnership with Vale makes it difficult to trust another ambitious courier.",
+    "vale": "Vale, a polished rival courier owner who hides debts with false invoices, loses the city trust and ultimately offers to make restitution."
+  },
+  "trigger_policy": "The welcome closes into the introduction. Later acts queue after genuine delivery results, in increasing completion order. Story scene bits are separate from the 104 quest-completion bits. Dialogue freezes world time and uses an original over-the-shoulder portrait composition.",
+  "scenes": [
+    {
+      "id": 0,
+      "title": "ONE BAG AND A MAP",
+      "minimum_completed": 0,
+      "pages": [
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "ONE BAG. A NEW CITY.",
+            "A BORROWED CAR.",
+            "THIRTY DOLLARS LEFT.",
+            "I NEED A FIRST SHIFT"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "WELCOME TO TORONTO.",
+            "I RUN THIS DISPATCH.",
+            "YOU CAN START SMALL.",
+            "DELIVER ONE PARCEL."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "MY ROOM RENT IS DUE.",
+            "I KNOW NO ONE HERE.",
+            "WHAT IF I GET LOST?",
+            "THIS CITY IS HUGE."
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "FOLLOW THE ROAD CUE.",
+            "ONE JOB AT A TIME.",
+            "SELECT COLLECTS LOAD",
+            "START OPENS THE MENU"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "BRAKE BEFORE TURNS.",
+            "THE CITY HAS PEOPLE.",
+            "BRING THEM HOME SAFE",
+            "WE BUILD TRUST HERE."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "JUST ONE GOOD SHIFT.",
+            "THEN ANOTHER.",
+            "MAYBE THIS PLACE",
+            "CAN BECOME MY HOME."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "FIRST PAY",
+      "minimum_completed": 1,
+      "pages": [
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "MY FIRST DELIVERY.",
+            "THEY KNEW MY NAME.",
+            "IT IS ONLY ONE JOB.",
+            "IT FEELS LIKE A DOOR"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "YOU EARNED THAT PAY.",
+            "KEEP YOUR RECEIPTS.",
+            "TAKE THE NEXT JOB",
+            "WHEN YOU ARE READY."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "I CAN LEARN THE CITY",
+            "A STREET AT A TIME.",
+            "A PERSON AT A TIME.",
+            "NO NEED TO RUSH IT."
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "THAT IS THE START.",
+            "MOSS RUNS A GARAGE.",
+            "HE KNOWS ENGINES.",
+            "HE NEEDS A FRIEND."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "THE OLD GARAGE",
+      "minimum_completed": 8,
+      "pages": [
+        {
+          "speaker": "MOSS",
+          "portrait": "moss",
+          "lines": [
+            "EIGHT JOBS. YOU STAY",
+            "MOST CHASE EASY CASH",
+            "YOU KEEP COMING BACK",
+            "THAT MEANS SOMETHING"
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "moss",
+          "lines": [
+            "I SLEEP ABOVE A PIPE",
+            "MY CAR IS BORROWED.",
+            "BUT PEOPLE TRUST ME.",
+            "I WANT MY OWN PLACE."
+          ]
+        },
+        {
+          "speaker": "MOSS",
+          "portrait": "moss",
+          "lines": [
+            "I HAD THAT DREAM TOO",
+            "VALE WAS MY PARTNER.",
+            "HE LEFT ME THE DEBTS",
+            "AND TOOK THE CLIENTS"
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "moss",
+          "lines": [
+            "LET ME HELP THE SHOP",
+            "WE CAN TRADE ROUTES.",
+            "YOU KEEP US MOVING.",
+            "I BRING PEOPLE BACK."
+          ]
+        },
+        {
+          "speaker": "MOSS",
+          "portrait": "moss",
+          "lines": [
+            "A PARTNERSHIP THEN.",
+            "NO TRICKS THIS TIME.",
+            "KEEP BUILDING TRUST.",
+            "THE CITY REMEMBERS."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "VALE OFFER",
+      "minimum_completed": 16,
+      "pages": [
+        {
+          "speaker": "VALE",
+          "portrait": "vale",
+          "lines": [
+            "THE NEW DRIVER.",
+            "PEOPLE TALK OF YOU.",
+            "I CAN OFFER MORE PAY",
+            "JOIN MY DISPATCH."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "vale",
+          "lines": [
+            "MOSS KNOWS YOUR NAME",
+            "SO DO HIS CREDITORS.",
+            "I NEED MORE THAN PAY",
+            "I NEED TO TRUST YOU."
+          ]
+        },
+        {
+          "speaker": "VALE",
+          "portrait": "vale",
+          "lines": [
+            "TRUST DOES NOT PAY",
+            "FOR A ROOF OR A CAR.",
+            "WANT TO STAY POOR?",
+            "THINK ABOUT MY OFFER"
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "FOR A MOMENT I DID.",
+            "RENT. REPAIRS. FOOD.",
+            "IT WOULD BE SO EASY.",
+            "BUT I KNOW THAT TRAP"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "YOU HAVE CLIENTS.",
+            "KEEP THE WORK HONEST",
+            "NEXT COMES HARD WORK",
+            "YOU ARE NOT ALONE."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "MISSING LEDGER",
+      "minimum_completed": 32,
+      "pages": [
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "OUR LEDGER IS GONE.",
+            "FALSE BILLS ARRIVED.",
+            "THEY THINK WE LIED.",
+            "WE MAY LOSE DISPATCH"
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "EVERY PAY HAS A DATE",
+            "YOU TOLD ME TO SAVE",
+            "EVERY SINGLE RECEIPT",
+            "WE CAN PROVE IT."
+          ]
+        },
+        {
+          "speaker": "MOSS",
+          "portrait": "moss",
+          "lines": [
+            "I KNOW THESE NUMBERS",
+            "VALE DID THIS TO ME.",
+            "I KEPT QUIET THEN.",
+            "I WILL SPEAK UP NOW."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "moss",
+          "lines": [
+            "WE DO THE NEXT JOB.",
+            "THEN WE CALL CLIENTS",
+            "ASK THEM WHAT THEY",
+            "PAID. WHAT ARRIVED."
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "I ALMOST GAVE UP.",
+            "YOU HAD JUST ONE BAG",
+            "NOW YOU HOLD US UP.",
+            "LET US FINISH THIS."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "CITY ON YOUR SIDE",
+      "minimum_completed": 56,
+      "pages": [
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "THE SHOPS SENT PROOF",
+            "THE ISLANDS DID TOO.",
+            "ALL YOUR OLD CLIENTS",
+            "STOOD BESIDE US."
+          ]
+        },
+        {
+          "speaker": "MOSS",
+          "portrait": "moss",
+          "lines": [
+            "THE BILLS WERE FALSE",
+            "VALE MUST ANSWER NOW",
+            "MY GARAGE IS SAFE.",
+            "I CAN BREATHE AGAIN."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "moss",
+          "lines": [
+            "I CROSSED THIS CITY",
+            "CHASING THE NEXT PAY",
+            "I DID NOT SEE THE",
+            "FRIENDS ALONG MY WAY"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "THAT IS YOUR NETWORK",
+            "NOT JUST FAST ROADS.",
+            "PEOPLE WHO KNOW YOU.",
+            "KEEP SHOWING UP."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "NO MORE BORROWED CAR",
+            "NO MORE PIPE ROOM.",
+            "I HAVE A REAL FUTURE",
+            "AND PEOPLE TO SHARE."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "A DEBT REPAID",
+      "minimum_completed": 80,
+      "pages": [
+        {
+          "speaker": "VALE",
+          "portrait": "vale",
+          "lines": [
+            "I LOST THE CONTRACTS",
+            "I TOLD MYSELF I HAD",
+            "TO WIN AT ANY COST.",
+            "I HURT ALL OF YOU."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "vale",
+          "lines": [
+            "I CANNOT ERASE THAT.",
+            "START WITH THE DEBTS",
+            "PAY WHAT YOU OWE.",
+            "HELP THE DRIVERS."
+          ]
+        },
+        {
+          "speaker": "VALE",
+          "portrait": "vale",
+          "lines": [
+            "THAT WILL TAKE YEARS",
+            "BUT I WILL START.",
+            "YOU BUILT WHAT I HAD",
+            "A PLACE IN THIS CITY"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "CLIENTS ASK FOR YOU.",
+            "WE NEED A NEW OWNER.",
+            "MOSS HAS THE GARAGE.",
+            "YOU KNOW THE ROUTES."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "LET US FINISH OUR",
+            "CITY ROUND FIRST.",
+            "THEN OPEN OUR OWN",
+            "COMMUNITY DISPATCH."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "YOUR OWN DISPATCH",
+      "minimum_completed": 104,
+      "pages": [
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "EVERY ROUTE FINISHED",
+            "THE NEW SIGN IS UP.",
+            "YOUR NAME IS ON IT.",
+            "YOUR OWN DISPATCH."
+          ]
+        },
+        {
+          "speaker": "MOSS",
+          "portrait": "moss",
+          "lines": [
+            "A FLEET. A WORKSHOP.",
+            "A HOME OF YOUR OWN.",
+            "NO ONE DID IT ALONE.",
+            "WE MADE IT TOGETHER."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "moss",
+          "lines": [
+            "I CAME WITH ONE BAG.",
+            "I WANTED ONE PAY.",
+            "TORONTO GAVE ME WORK",
+            "ITS PEOPLE GAVE HOME"
+          ]
+        },
+        {
+          "speaker": "JUNE",
+          "portrait": "june",
+          "lines": [
+            "A NEW DRIVER IS HERE",
+            "ONE BAG. A WORN MAP.",
+            "THEY NEED A FIRST",
+            "SHIFT IN A NEW CITY."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "WELCOME TO TORONTO.",
+            "YOU CAN START SMALL.",
+            "ONE JOB AT A TIME.",
+            "WE BUILD TRUST HERE."
+          ]
+        },
+        {
+          "speaker": "DRIVER",
+          "portrait": "june",
+          "lines": [
+            "OUR STORY CONTINUES.",
+            "THE CITY STAYS OPEN.",
+            "DRIVE. WALK. EXPLORE",
+            "YOU HAVE FOUND HOME."
+          ]
+        }
+      ]
+    }
+  ]
+}
