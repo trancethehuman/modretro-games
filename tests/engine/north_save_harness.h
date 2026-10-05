@@ -102,7 +102,7 @@ static void test_north_current_and_v9_upgrade(void){
     for(UBYTE version=6;version<=10;version++){
         td_state_t s=north_save_baseline();s.onfoot=1;s.u=640*16;s.v=176*16;s.mode=TD_RIDE;
         s.transit_origin=80;s.transit_target=18;s.ride_left=4;island_disk_record(0,version,&s,37);
-        td_state_t expected=s;if(version<8)expected.wanted=expected.wanted_left=0;memset(&td,0,sizeof(td));
+        td_state_t expected=s;if(version<8){ expected.wanted=expected.wanted_left=0; }memset(&td,0,sizeof(td));
         expect(td_restore()&&!memcmp(&td,&expected,58),"encoded80 Wellesley bus and obsolete/current attention rules retain exact old semantics");
     }
     for(UBYTE version=8;version<=9;version++){

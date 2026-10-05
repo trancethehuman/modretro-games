@@ -53,7 +53,7 @@ static void test_police_aircraft_attention(void){
     expect(!td_police_observed(),"native shop clock cannot retain an outdoor ground observer while courier is indoors");
     td_inside_shop=0;
     for(UBYTE mode=0;mode<=TD_HELP;mode++){
-        if(mode==TD_ROAM)continue;td.mode=mode;
+        if(mode==TD_ROAM){ continue; }td.mode=mode;
         expect(!td_police_observed(),"transit and modal views never expose a proxy camera position as the actual courier");
     }
     td.mode=TD_ROAM;td.wanted=0;expect(!td_police_observed(),"resolved attention cannot create a renewed observer or finance consequence");

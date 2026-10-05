@@ -549,7 +549,7 @@ static void jet_shadow_checks(void){
     require(allocated_hardware_sprites==40&&!memcmp((void*)shadow_OAM,ground,36*4),
             "Exact40-object boundary appends the complete jet behind all36 street objects");
     reset(0);selected_frame=14;td_aircraft.u=td_aircraft.v=264*16;
-    for(i=0;i<9;i++)shadow_OAM[i].y=80;allocated_hardware_sprites=9;
+    for(i=0;i<9;i++){ shadow_OAM[i].y=80; }allocated_hardware_sprites=9;
     td_aircraft_render();require(allocated_hardware_sprites==9,"Eleven objects on one line rejects all jet cells atomically");
     reset(0);selected_frame=14;td_aircraft.u=td_aircraft.v=264*16;
     __render_shadow_OAM=(UBYTE)((UWORD)(uintptr_t)shadow_OAM2>>8);td_aircraft_render();

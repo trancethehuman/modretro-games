@@ -31,10 +31,10 @@ UBYTE tile_at(UBYTE x,UBYTE y){return x<128&&y<122?grid[y*128+x]:15;}
 void deactivate_actor(actor_t *actor){
     deactivations++;actor->flags&=~ACTOR_FLAG_ACTIVE;
     actor->next=actors_inactive_head;actor->prev=NULL;
-    if(actors_inactive_head)actors_inactive_head->prev=actor;actors_inactive_head=actor;
+    if(actors_inactive_head){ actors_inactive_head->prev=actor; }actors_inactive_head=actor;
 }
 void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank){
-    require(bank>=7&&bank<=9,"Unexpected ROM bank");bank_reads++;if(length==32)pixel_compositions++;memcpy(dest,src,length);
+    require(bank>=7&&bank<=9,"Unexpected ROM bank");bank_reads++;if(length==32){ pixel_compositions++; }memcpy(dest,src,length);
 }
 UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank){
     require(bank==7,"Descriptor read must use captured metadata bank");bank_reads++;return *src;

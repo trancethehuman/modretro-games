@@ -8,16 +8,16 @@ static UBYTE district,map[2][1024],patterns[2][256][16];
 static unsigned checks,failures,uploads,writes,district_reads,map_lookups,reads;
 UBYTE td_district_current(void){district_reads++;return district;}
 UBYTE *GetBkgAddr(void){map_lookups++;return map[0];}
-static void expect(int ok,const char *message){checks++;if(!ok){if(failures<12)fprintf(stderr,"FAIL %s\n",message);failures++;}}
+static void expect(int ok,const char *message){checks++;if(!ok){if(failures<12){ fprintf(stderr,"FAIL %s\n",message); }failures++;}}
 UBYTE get_vram_byte(UBYTE *p){size_t off=p-map[0];reads++;expect(off<1024,"map read bounded");return off<1024?map[VBK_REG&1][off]:0;}
-void set_vram_byte(UBYTE *p,UBYTE value){size_t off=p-map[0];expect(off<1024,"map write bounded");if(off<1024)map[VBK_REG&1][off]=value;writes++;}
+void set_vram_byte(UBYTE *p,UBYTE value){size_t off=p-map[0];expect(off<1024,"map write bounded");if(off<1024){ map[VBK_REG&1][off]=value; }writes++;}
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *data){expect(first>=80&&first<=97&&count==1&&VBK_REG==1,"only18 reserved signed bank1 patterns");memcpy(patterns[VBK_REG&1][first],data,16);uploads++;}
 static unsigned random_state=7171;
 static unsigned rng(void){random_state^=random_state<<13;random_state^=random_state>>17;random_state^=random_state<<5;return random_state;}
 static int slab(double old,double delta,double low,double high,double *a,double *b){
  if(delta==0)return old>=low&&old<=high;
  double first=(low-old)/delta,last=(high-old)/delta,t;if(first>last){t=first;first=last;last=t;}
- if(first>*a)*a=first;if(last<*b)*b=last;return *a<=*b;
+ if(first>*a){ *a=first; }if(last<*b){ *b=last; }return *a<=*b;
 }
 static int oracle(unsigned ou,unsigned ov,unsigned u,unsigned v,unsigned half){
  double a,b;int pad=half*16;unsigned start=td_prop_offsets[district],end=td_prop_offsets[district+1];

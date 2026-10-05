@@ -14,9 +14,9 @@ unsigned host_signal_head_steps;
 static unsigned long legacy_head_steps,optimized_head_steps;
 UBYTE td_district_current(void){return district;}
 UBYTE *GetBkgAddr(void){return map[0];}
-static void expect(int ok,const char *msg){checks++;if(!ok){if(failures<12)fprintf(stderr,"FAIL %s\n",msg);failures++;}}
+static void expect(int ok,const char *msg){checks++;if(!ok){if(failures<12){ fprintf(stderr,"FAIL %s\n",msg); }failures++;}}
 UBYTE get_vram_byte(UBYTE *p){size_t off=p-map[0];expect(off<1024,"signal read bounded");reads++;return off<1024?map[VBK_REG&1][off]:0;}
-void set_vram_byte(UBYTE *p,UBYTE value){size_t off=p-map[0];expect(off<1024,"signal write bounded");if(off<1024)map[VBK_REG&1][off]=value;writes++;}
+void set_vram_byte(UBYTE *p,UBYTE value){size_t off=p-map[0];expect(off<1024,"signal write bounded");if(off<1024){ map[VBK_REG&1][off]=value; }writes++;}
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *data){expect(first==47&&count==2&&VBK_REG==1,"exact reserved two-pattern signal allocation");memcpy(patterns[1][47],data,32);uploads++;}
 static unsigned pixel(unsigned tile,unsigned x,unsigned y){return ((patterns[1][tile][y*2]>>(7-x))&1)|(((patterns[1][tile][y*2+1]>>(7-x))&1)<<1);}
 static unsigned expected(UBYTE out[2][1024],UBYTE cells[1024]){
@@ -62,10 +62,10 @@ static void lifecycle(void){
  memset(map[0],77,1024);memset(map[1],128,1024);memset(patterns,59,sizeof(patterns));memcpy(want,map,sizeof(map));unsigned count=expected(want,cells);
  td_traffic_lights_reset();uploads=writes=reads=0;td_traffic_lights_render();memcpy(good,patterns[1][47],32);memcpy(before,map,sizeof(map));
  expect(uploads==1&&writes==count*2&&count>0,"initial viewport has larger actual heads");uploads=writes=reads=0;
- for(unsigned n=0;n<8;n++)td_traffic_lights_render();expect(!uploads&&!writes&&reads==count*16,"unchanged frame performs no redundant uploads or writes");
+ for(unsigned n=0;n<8;n++){ td_traffic_lights_render(); }expect(!uploads&&!writes&&reads==count*16,"unchanged frame performs no redundant uploads or writes");
  td.seconds=7;memcpy(want,map,sizeof(map));expected(want,cells);uploads=writes=reads=0;td_traffic_lights_render();
  expect(!memcmp(want,map,sizeof(map))&&!uploads&&writes==count*2&&reads==count*2,"phase boundary changes both lamp position and red/green palette exactly");
- unsigned first=0;while(first<1024&&!cells[first])first++;expect(first<1024,"visible head retained");
+ unsigned first=0;while(first<1024&&!cells[first]){ first++; }expect(first<1024,"visible head retained");
  map[1][first]=140;uploads=writes=reads=0;td_traffic_lights_render();expect(writes==1&&map[1][first]==want[1][first],"attribute-only repaint repaired once");
  map[0][first]=91;uploads=writes=reads=0;td_traffic_lights_render();expect(writes==1&&map[0][first]==want[0][first],"tile-only repaint repaired once");
  memcpy(before,map,sizeof(map));td.mode=TD_MAP;memset(patterns[1][47],153,32);uploads=writes=reads=0;td_traffic_lights_reset();td_traffic_lights_render();
@@ -81,7 +81,7 @@ int main(void){
  for(district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned i=oracle_offsets[district];i<oracle_offsets[district+1];i++)for(unsigned h=0;h<2;h++)for(unsigned e=0;e<6;e++)for(unsigned phase=0;phase<12;phase++){
   draw_scroll_x=(h?oracle_extra[i][0]:oracle_lights[i][3])*8-edges[e][0];draw_scroll_y=(h?oracle_extra[i][1]:oracle_lights[i][4])*8-edges[e][1];td.seconds=phase;td.mode=TD_ROAM;VBK_REG=phase&1;view();
  }
- district=0;draw_scroll_x=draw_scroll_y=0;for(td.mode=0;td.mode<=TD_HELP;td.mode++)view();td.mode=TD_ROAM;district=TD_DISTRICT_COUNT;view();district=0;
+ district=0;draw_scroll_x=draw_scroll_y=0;for(td.mode=0;td.mode<=TD_HELP;td.mode++){ view(); }td.mode=TD_ROAM;district=TD_DISTRICT_COUNT;view();district=0;
  draw_scroll_x=1024;view();draw_scroll_x=0;draw_scroll_y=976;view();draw_scroll_y=-145;view();draw_scroll_y=0;draw_scroll_x=-161;view();lifecycle();
  district=0;td.mode=TD_ROAM;td.seconds=0;draw_scroll_x=480;draw_scroll_y=648;
  unsigned union_before=legacy_work();view();

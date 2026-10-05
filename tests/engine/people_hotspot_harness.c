@@ -824,7 +824,7 @@ static void reference_route_selector(UBYTE *ids,UWORD (*points)[2]){
     unsigned pu=(td_streetcar_ride_view?td_streetcar_focus_u:td.u)/16;
     unsigned pv=(td_streetcar_ride_view?td_streetcar_focus_v:td.v)/16;
     UBYTE district=td_streetcar_ride_view?td_streetcar_view_district:td.district;
-    if(district>=TD_DISTRICT_COUNT){for(unsigned i=0;i<TD_PEOPLE_COUNT;i++)ids[i]=TD_NONE;return;}
+    if(district>=TD_DISTRICT_COUNT){for(unsigned i=0;i<TD_PEOPLE_COUNT;i++){ ids[i]=TD_NONE; }return;}
     for(unsigned i=0;i<TD_PEOPLE_COUNT;i++){
         unsigned id=ids[i];
         if(id<td_route_counts[district]&&(td_people_route_visible(id)||

@@ -54,7 +54,7 @@ static UBYTE test_boat_interact_calls,test_boat_drive_calls,test_boat_drive_keys
 static UWORD test_boat_shore_u,test_boat_shore_v;
 static unsigned sandbox_render_calls;
 static unsigned sandbox_pose_calls;
-UBYTE td_boats_restore_shore(UWORD *u,UWORD *v){if(!test_boat_shore_active)return FALSE;*u=test_boat_shore_u;*v=test_boat_shore_v;return TRUE;}
+UBYTE td_boats_restore_shore(UWORD *u,UWORD *v){if(!test_boat_shore_active){ return FALSE; }*u=test_boat_shore_u;*v=test_boat_shore_v;return TRUE;}
 static unsigned test_boat_controlled_calls;
 UBYTE td_boats_controlled(void){test_boat_controlled_calls++;return test_boat_active;}
 UBYTE td_boats_interact(UWORD *u,UWORD *v){
@@ -2651,7 +2651,7 @@ static void test_queen_hold_v7_recovery_and_invalid_flags(void) {
     UBYTE left=td.ride_left;while(left--)td_second();
     expect(td.mode==TD_RIDE&&td.ride_left==1&&(td.reserved&TD_STREETCAR_HOLD)&&td.cash==27&&td.district==0,
            "an actual blocked booked landing produces a paid version7 hold at the saved origin");
-    for(unsigned second=0;second<128;second++)td_second();td_streetcar_runtime_prepare(0);
+    for(unsigned second=0;second<128;second++){ td_second(); }td_streetcar_runtime_prepare(0);
     expect(td_streetcar_ride_view&&td_streetcar_view_district==3&&td_streetcar_focus_u==128*16&&td_streetcar_focus_v==536*16,
            "two complete timetable cycles cannot send a paid held rider away from the booked Saulter doors");
     td_state_t held=td;expect(td_save_address(td_save_slot)[2]==TD_SAVE_VERSION,"real held alighting writes the current semantic discriminator");
@@ -2672,7 +2672,7 @@ static void test_queen_hold_v7_recovery_and_invalid_flags(void) {
         if(fault==1){bad.transit_origin=0;bad.transit_target=12;bad.u=bad.safe_u=560*16;bad.v=bad.safe_v=720*16;}
         if(fault==2)bad.ride_left=2;
         if(fault==3)bad.reserved=2;
-        memcpy((void*)(record+8),&bad,58);if(fault==4)record[2]=6;refresh_record_crc(record);
+        memcpy((void*)(record+8),&bad,58);if(fault==4){ record[2]=6; }refresh_record_crc(record);
         expect(td_restore()&&td.cash==111&&td.reserved==TD_STREETCAR_HOLD&&td.mode==TD_RIDE,
                "CRC-valid nonride/nonQueen/left2/unknown-bit/version6 hold faults fall back to the older valid paid record");
     }

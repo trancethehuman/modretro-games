@@ -213,7 +213,7 @@ static void test_sandbox_actual(void){
     actors[19].flags=0;td.onfoot=0;td.speed=10;td_sandbox_last_u=390*16;td_sandbox_last_v=450*16;td.u=410*16;td.v=450*16;
     expect(td_sandbox_human_hits()==1&&(td_sandbox_drivers[0].kind&128),"a driven car sweeps an extracted living driver into the same airborne/prone human state");
     expect(!td_sandbox_human_hits(),"one struck extracted identity cannot repeatedly charge or slow the vehicle");
-    for(unsigned i=0;i<24;i++)td_sandbox_tick();td_sandbox_present();
+    for(unsigned i=0;i<24;i++){ td_sandbox_tick(); }td_sandbox_present();
     expect(td_sandbox_drivers[0].recover==24&&td_sandbox_drivers[0].u==417*16&&actors[19].frame_start==32+TD_CIVILIAN_PRONE,
            "struck driver moves twelve checked ground pixels and remains prone after a bounded non-graphic arc");
     test_sandbox_entry_and_boat_save();

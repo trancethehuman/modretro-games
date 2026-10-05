@@ -81,21 +81,21 @@ int main(void){
         td_vy=71;for(unsigned i=0;i<30;i++)step(J_A);
         UWORD v=td.v;step(J_A);expect(td_vy==0&&td.v==v,"cardinal east traction settles all vertical drift exactly");
         td.heading=4;step(J_A);expect(td_vx>0&&td_vy>0&&td.speed==limits[vehicle],"turning retains forward momentum while throttle stays held");
-        for(unsigned i=0;i<30;i++)step(J_A);expect(td_vx==0&&td_vy>0,"cardinal south traction settles all old horizontal drift");
-        for(unsigned i=0;i<180;i++)step(J_B);expect(td.speed==-4,"braking leads to bounded slow reverse");
+        for(unsigned i=0;i<30;i++){ step(J_A); }expect(td_vx==0&&td_vy>0,"cardinal south traction settles all old horizontal drift");
+        for(unsigned i=0;i<180;i++){ step(J_B); }expect(td.speed==-4,"braking leads to bounded slow reverse");
     }
-    reset();td.speed=4;td_vx=64;for(unsigned i=0;i<12;i++)step(J_LEFT);expect(td.heading==15,"left steering while moving forward yaws left");
-    reset();td.speed=-4;td_vx=-64;for(unsigned i=0;i<12;i++)step(J_LEFT);expect(td.heading==1,"left steering while reversing yaws the car in the opposite direction");
+    reset();td.speed=4;td_vx=64;for(unsigned i=0;i<12;i++){ step(J_LEFT); }expect(td.heading==15,"left steering while moving forward yaws left");
+    reset();td.speed=-4;td_vx=-64;for(unsigned i=0;i<12;i++){ step(J_LEFT); }expect(td.heading==1,"left steering while reversing yaws the car in the opposite direction");
     reset();td.speed=14;td_vx=224;td_motion_impact();expect(td.speed==7&&td_vx==112,"a human impact immediately halves real momentum");
     for(unsigned i=0;i<17;i++){step(J_A);expect(td.speed<=7,"held throttle cannot immediately replace the impact momentum loss");}
-    for(unsigned i=0;i<100;i++)step(J_A);expect(td.speed==14,"throttle resumes after bounded impact recovery");
+    for(unsigned i=0;i<100;i++){ step(J_A); }expect(td.speed==14,"throttle resumes after bounded impact recovery");
     reset();td.speed=14;td_vx=224;td.job=0;td.stage=1;td.health=100;blocked=1;UWORD u=td.u;
     step(J_A);expect(td.u==u&&td_vx<0&&td.health==88&&impacts==1,"a denied physical sweep starts a visible rebound and charges one impact");
     for(unsigned i=0;i<6;i++){UWORD before=td.u;step(J_A|J_LEFT);expect(td.u<=before&&before-td.u<=16&&td.heading==0&&td.speed<=7,"held throttle and steering cannot cancel or rotate the six-tick rebound");}
     expect(td.u==u-6*14&&td.safe_u==td.u,"the unobstructed recoil follows six ticks of the incoming14-Q4 momentum and updates the valid recovery point");
     for(unsigned i=0;i<13;i++)step(J_A);
     expect(td.u<=u&&td.health==88&&impacts==1,"continued held throttle never tunnels into the contacted car or repeats its penalty");
-    blocked=0;for(unsigned i=0;i<100;i++)step(J_A);expect(td.u>u,"driving resumes after a vehicle body clears");
+    blocked=0;for(unsigned i=0;i<100;i++){ step(J_A); }expect(td.u>u,"driving resumes after a vehicle body clears");
     for(UBYTE heading=0;heading<16;heading++)for(UBYTE reverse=0;reverse<2;reverse++){
         static const signed char dx[]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
         static const signed char dy[]={0,6,11,15,16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6};
@@ -117,6 +117,6 @@ int main(void){
     expect(td.u==u&&td_vx==0,"tram clearance applies to every recoil substep");
     reset();td.speed=14;td_vx=224;td_motion_vehicle_impact();td.onfoot=1;td_vx=td_vy=0;u=td.u;step(0);td.onfoot=0;step(0);
     expect(td.u>=u,"leaving a car cancels its transient rebound before a later entry");
-    for(UBYTE keys=J_A;keys<=J_B;keys+=J_A){reset();td.onfoot=1;for(unsigned i=0;i<20;i++)step(keys);expect(interactions==1&&(td_result_b_release&keys),"a fresh A or B foot interaction runs once and consumes its held action");step(0);step(keys);expect(interactions==2,"release and repress deliberately starts a second interaction");}
+    for(UBYTE keys=J_A;keys<=J_B;keys+=J_A){reset();td.onfoot=1;for(unsigned i=0;i<20;i++){ step(keys); }expect(interactions==1&&(td_result_b_release&keys),"a fresh A or B foot interaction runs once and consumes its held action");step(0);step(keys);expect(interactions==2,"release and repress deliberately starts a second interaction");}
     printf("Actual driving feedback unit: %u checks, %u failures; native playback remains separate.\n",checks,failures);return !!failures;
 }

@@ -13,7 +13,7 @@ static UWORD us[TD_TRAFFIC_SLOTS],vs[TD_TRAFFIC_SLOTS];
 static actor_t people[TD_TRAFFIC_PEOPLE];
 static td_traffic_context_t ctx;
 static void expect(int ok,const char *message){
-    checks++;if(!ok){if(failures<15)fprintf(stderr,"FAIL: %s\n",message);failures++;}
+    checks++;if(!ok){if(failures<15){ fprintf(stderr,"FAIL: %s\n",message); }failures++;}
 }
 /* Hardware-facing query adapters model tile solids and a future tram body,
  * rather than returning a forced pass/fail flag. The separate road/runtime
