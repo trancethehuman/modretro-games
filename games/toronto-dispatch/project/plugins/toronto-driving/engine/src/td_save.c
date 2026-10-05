@@ -29,7 +29,7 @@ static UBYTE td_valid_fields(td_state_t *s,UBYTE version){
     if(version<10&&(s->mode==TD_WAIT||s->mode==TD_RIDE)&&
        ((s->transit_origin&63)>=59||s->transit_target>=59))return FALSE;
     if(s->wanted>3||s->wanted_left>30||(!s->wanted!=!s->wanted_left))return FALSE;
-    if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP||s->msg>21)return FALSE;
+    if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP||s->msg>(version<11?21:TD_NOTICE_MAX)||s->vitality>100||s->ammo>24)return FALSE;
     if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
     if(s->district>=TD_DISTRICT_COUNT||s->park_district>=TD_DISTRICT_COUNT||(s->reserved&~TD_STREETCAR_HOLD))return FALSE;
     if(version<9&&(s->district>=TD_DISTRICT_ISLANDS||s->park_district>=TD_DISTRICT_ISLANDS))return FALSE;
@@ -37,14 +37,21 @@ static UBYTE td_valid_fields(td_state_t *s,UBYTE version){
     for(i=0;i<TD_COMPLETE_BYTES;i++){
         value=s->complete[i];
         if(version<10&&i>=12&&value)return FALSE;
-        if(i>=(TD_QUESTS+7)/8&&value)return FALSE;
+        /* Only quest bits contribute to done. Byte13 stores eight story flags. */
+        if(i>=(TD_QUESTS+7)/8){if(value&&(version<11||i!=13))return FALSE;continue;}
 #if (TD_QUESTS & 7)
         if(i==TD_QUESTS/8&&value>>(TD_QUESTS&7))return FALSE;
 #endif
         while(value){bits+=value&1;value>>=1;}
     }
     if(bits!=s->done)return FALSE;
-    if(s->job!=TD_NONE){if(s->job>=TD_QUESTS)return FALSE;td_get_job(s->job,&job);if(s->stage>=job.count||!s->left||!s->health)return FALSE;}
+    if(s->job!=TD_NONE){
+        if(s->job>=TD_QUESTS)return FALSE;td_get_job(s->job,&job);
+        if(s->stage>=job.count)return FALSE;
+        /* Only a v11 dead courier waiting for hospital may retain failed work.
+           Its eventual hospital commit retires that job exactly once. */
+        if((!s->left||!s->health)&&!(version>=11&&s->onfoot&&!s->vitality&&s->mode==TD_ROAM))return FALSE;
+    }
     if(s->mode==TD_WAIT||s->mode==TD_RIDE){
         if(!s->onfoot||(s->transit_origin&128)||(s->transit_origin&63)>=TD_STOPS||s->transit_target>=TD_STOPS||s->transit_target==(s->transit_origin&63))return FALSE;
         td_get_stop(s->transit_origin&63,&stop);
@@ -164,7 +171,7 @@ static void td_migrate_old(td_state_t *dest){
 static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq,UBYTE *source_version){
     UBYTE i,version,length;UWORD crc=0xFFFF;UBYTE *dst=(UBYTE*)dest;volatile UBYTE *ram=td_save_address(slot);
     version=ram[2];length=ram[3];
-    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==TD_SAVE_VERSION||version==9||version==8||version==7||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
+    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==TD_SAVE_VERSION||version==10||version==9||version==8||version==7||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
     for(i=2;i<=4;i++)crc=td_crc_byte(crc,ram[i]);
     for(i=0;i<length;i++){dst[i]=ram[8+i];crc=td_crc_byte(crc,ram[8+i]);}
     if(crc!=(ram[5]|(UWORD)ram[6]<<8))return FALSE;
@@ -173,7 +180,14 @@ static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq,UBYTE *source_v
     if(version==6&&dest->reserved)return FALSE;
     if(version==5)td_migrate_old(dest);
     /* v4..7 cursor words never drove the atlas; do not turn them into heat. */
-    if(version<8)dest->wanted=dest->wanted_left=0;
+    if(version<11){
+        /* Old bounded counters were little-endian words at52/54. Validate
+           their high bytes before repacking; do not silently repair forged heat. */
+        if(version>=8&&(dst[53]||dst[55]))return FALSE;
+        dest->wanted=version<8?0:dst[52];
+        dest->wanted_left=version<8?0:dst[54];
+        dest->vitality=100;dest->ammo=12;
+    }
     *seq=ram[4];*source_version=version;return TRUE;
 }
 UBYTE td_restore(void) BANKED {
@@ -197,6 +211,6 @@ UBYTE td_restore(void) BANKED {
     valid=ram[0]==0x54&&ram[1]==0xD7&&ram[2]==4;
     if(valid){for(i=0;i<48;i++){raw[i]=ram[4+i];check^=raw[i];}valid=check==ram[3];if(valid)td_migrate_old(&candidate);}
     SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
-    if(valid){candidate.wanted=candidate.wanted_left=0;candidate.job=TD_NONE;candidate.stage=0;candidate.left=0;candidate.health=100;candidate.mode=TD_ROAM;candidate.speed=0;if(td_prepare_state(&candidate,4)){td=candidate;td_save_slot=0;td_save();return TRUE;}}
+    if(valid){candidate.wanted=candidate.wanted_left=0;candidate.vitality=100;candidate.ammo=12;candidate.job=TD_NONE;candidate.stage=0;candidate.left=0;candidate.health=100;candidate.mode=TD_ROAM;candidate.speed=0;if(td_prepare_state(&candidate,4)){td=candidate;td_save_slot=0;td_save();return TRUE;}}
     return FALSE;
 }

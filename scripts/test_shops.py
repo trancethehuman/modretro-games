@@ -4,6 +4,7 @@ Host execution verifies logic against authored collision data. ROM linkage,
 native rendering, allocation and cartridge play remain separate checks.
 """
 from pathlib import Path
+import hashlib
 import json
 import os
 import shutil
@@ -25,6 +26,13 @@ def resources():
     types=[x for x in engine['sceneTypes'] if x['key']=='TORONTO_SHOP']
     assert len(types)==1 and 'src/td_shops.c' in types[0]['files']
     grids=[]
+    # Original registered interiors are fixed independently of the generator:
+    # supplies must reuse these pixels rather than quietly redesign the rooms.
+    original_art_sha256={
+        'grocery':'ed3fc4dbcc6196b6f3cdc16958f0139502b7c75ea9ca320ef6e794454c2cdf99',
+        'corner_store':'e8ffbcc40637251c61f6c6283372b514a0012cf2630644f14af2fdb2e2af0cfa',
+        'repair_shop':'66f5b5219e3febf8f9167d005ce01fea2f834c077e42ebb8b9d6e44b2899548a',
+    }
     for room in manifest['rooms']:
         key=room['key'];name='shop_'+key
         scene=json.loads((GAME/f'project/project/scenes/toronto_{name}/scene.gbsres').read_text())
@@ -33,6 +41,7 @@ def resources():
         assert scene['type']=='TORONTO_SHOP' and (scene['width'],scene['height'])==(20,18)
         assert scene['symbol']=='scene_toronto_'+name and scene['backgroundId']==background['id']
         assert asset.read_bytes()==(GAME/f'project/original-art/{name}.png').read_bytes()
+        assert hashlib.sha256(asset.read_bytes()).hexdigest()==original_art_sha256[key], 'Supplies changed original interior pixels'
         assert decode(background['tileColors'])==room['attributes']
         assert decode_grid(scene['collisions'],360)==room['collisions']
         assert scene['playerSpriteSheetId']=='95080aab-0201-545e-be5a-f5e79b9a693e'

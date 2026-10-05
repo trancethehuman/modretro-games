@@ -1,6 +1,48 @@
 # Native performance record
 
-Updated 2026-10-03. Latest selected UI ROM `03e09fa8…` has one fresh exact-ROM Core workload trial: **385 completed loops / 1,080 VBlanks**, then **80 / 240** under fixed driving/braking inputs. These match the retained 825 vectors numerically, without inheriting their repeats or relative gains. Completed loops are not display FPS, human responsiveness, whole-city or physical acceptance.
+Updated 2026-10-05. Preserve gameplay and graphical fidelity while removing repeated work. Selected ROM `toronto-dispatch-story-combat-r6.gbc`, SHA-256 `71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`, has [matched build](STORY_COMBAT_BUILD.json), [native play](NATIVE_STORY_COMBAT.json) and [optimization evidence](STORY_COMBAT_OPTIMIZATION.json). Its 243 native inputs remain unchanged. The linked heap `DCDC` leaves **548 static bytes** below stack origin `DF00`; HOME has 207 bytes free and scenes peak at 124/128 OBJ tiles. Static separation is not a deepest-stack measurement.
+
+Current navigation's generated ROM prefix counts preserve exact mask ordinals
+and reduce counted ordinal byte operations by **79.72%** in the scoped host
+comparison. They add ROM data, not a runtime mask cache, and change no road,
+body clearance, route or artwork. This measures the work of ordinal decoding;
+it is not an emulator FPS result or a percentage gain for the whole game.
+
+The exact **14-byte** repeated navigation-query cache keys the same goal,
+district, travel mode and player cell. Its existing five-byte ground patch
+makes **19 guidance bytes** total. The lifetime correction retains an
+unchanged patch; it adds no guidance RAM. Forced modal and ordinary helper
+restoration runs aircraft/combat/guidance/scenery in reverse composition order
+and preserves newer owners and the original tilemap page in host checks. A
+separate one-byte prepare-cycle flag makes restoration explicit. R6 observes
+the retained road arrow in **30/30** consecutive sampled views.
+
+R6 authenticates `_game_time` at `C0BC` from its own NOI. Separate Union windows
+count **149 updates / 840 VBlanks idle** and **160 / 840 active**, roughly
+**10.64 / 11.43 completed loops per emulated second** under the 60-VBlank
+convention. These are scoped workloads, not display FPS, a matched causal gain
+or proof of whole-city, human or physical smoothness. No traffic population,
+collision guard, existing city artwork or palette is removed for speed.
+
+R5 remains **needs-review** because its road arrow appeared in only 24 of 30 sampled
+views. Its Union workload counts **148 updates / 840 VBlanks idle** and **159 / 840
+active**. The phases differ from R4, so these samples establish no causal cache
+gain. Preliminary R4 Union observations remain roughly ten completed engine
+loops per emulated second; neither record establishes whole-city, human or
+physical smoothness. Source equivalence cannot supply later ROM timing.
+
+The accepted hospital badge uses one original bank-1 background tile 254 and no
+new actor or mutable marker state. The one-star arrest hold adds one transient
+byte. The actual 548-byte R6 reserve passes the 512-byte static guard; native
+Core play observes hospital recovery, the badge, arrests and committed reset.
+Other district recovery/failed queues/fatal-job overlap/SRAM interruption have
+host checks. The hospital/arrest rules are explicit gameplay additions,
+separate from optimizations that preserve existing behavior. Cartridge cold
+boot, power-off saves, audio listening and physical flicker remain pending.
+
+Retained sandbox-stable `096862ab…` keeps its [149/840 stationary sample](SANDBOX_STABLE_TIMING.json) and [lossless memory pass](SANDBOX_STABLE_OPTIMIZATION.json): 109 persistent UI bytes saved, 57 fewer reviewed automatic tram/traffic bytes and 579 linked static bytes. Those observations and its R2 package remain tied to that prior ROM.
+
+Retained UI ROM `03e09fa8…` has one fresh exact-ROM Core workload trial: **385 completed loops / 1,080 VBlanks**, then **80 / 240** under fixed driving/braking inputs. These match the retained 825 vectors numerically, without inheriting their repeats or relative gains. Completed loops are not display FPS, human responsiveness, whole-city or physical acceptance.
 
 The earlier read-only state, flight, counter and OAM observations are retained in [PERFORMANCE_SAMPLES.json](PERFORMANCE_SAMPLES.json). [TESTING.md](../TESTING.md) and [BUILD.md](BUILD.md) retain each candidate's broader build and gameplay scope. The later aggregated roof-mask change is outside both measurements.
 

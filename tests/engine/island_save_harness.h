@@ -278,7 +278,7 @@ static void test_island_versions_and_upgrade(void){
 }
 
 static void test_island_save_migration(void){
-    expect(TD_SAVE_VERSION==10&&sizeof(td_state_t)==58&&TD_DISTRICT_COUNT==7,
+    expect(TD_SAVE_VERSION==11&&sizeof(td_state_t)==58&&TD_DISTRICT_COUNT==7,
            "the real seven-scene world keeps58 serialized bytes and the earlier Island migration");
     test_island_historical_geometry();test_island_point_migration();test_island_booking_migration();
     test_island_invalid_and_ordering();test_island_versions_and_upgrade();test_island_v4_import();

@@ -67,6 +67,12 @@ static void compare(const metasprite_t *pose,WORD x,WORD y,UBYTE base,UBYTE used
 
 void td_traffic_lights_render(void){}
 void td_aircraft_render_restore(void){}
+void td_combat_render_restore(void){}
+void td_combat_render(void){}
+void td_guidance_road_restore(void){}
+void td_guidance_road_prepare(void){}
+void td_hospital_render(void){}
+void td_guidance_road_render(void){}
 void td_scenery_restore(void){}
 void td_scenery_render(void){}
 UBYTE td_boats_controlled(void){return 0;}

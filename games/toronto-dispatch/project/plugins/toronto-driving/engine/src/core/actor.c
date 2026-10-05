@@ -207,7 +207,7 @@ void actors_update(void) BANKED {
 void actors_render(void) NONBANKED {
     UBYTE _save = CURRENT_BANK;
 
-    td_actor_render_before();
+    td_actor_render_prepare();
 
     if (emote_actor) {
         SWITCH_ROM(emote_actor->sprite.bank);

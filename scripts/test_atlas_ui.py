@@ -92,12 +92,16 @@ def content_oracle():
 
 
 def district_name_adapter():
-    """Use the unchanged real engine adapter; no scene/driver is linked here."""
+    """Use unchanged real name/proximity adapters; no scene/driver is linked."""
     source = (ENGINE / "src/states/TORONTO.c").read_text()
     match = re.search(r"^void td_get_district_name\([^\n]+\) BANKED \{\n[^{}]+\n\}", source, re.M)
-    if not match:
+    distance = re.search(r"^static UWORD td_distance\([^\n]+\}\s*$", source, re.M)
+    near = re.search(r"^static UBYTE td_near\([^\n]+\}\s*$", source, re.M)
+    if not match or not distance or not near:
         raise ValueError("Actual district-name adapter changed; review its renderer-test dependencies")
-    return '#include <string.h>\n#include "td_game.h"\n#include "td_world.h"\n' + match.group() + "\n"
+    return ('#include <string.h>\n#include "td_game.h"\n#include "td_world.h"\n' + match.group() + "\n" +
+            distance.group() + "\n" + near.group() + "\n" +
+            'UBYTE td_ui_actual_near_stop(UBYTE id){td_stop_t stop;td_get_stop(id,&stop);return td_near(&stop);}\n')
 
 
 def main():
@@ -134,7 +138,8 @@ void ui_set_pos(UBYTE x,UBYTE y);
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(FIXTURES / "atlas_ui_harness.c"), str(work / "transit_under_test.c"),
                         str(work / "content_under_test.c"), str(work / "world_under_test.c"),
-                        str(work / "district_name_adapter.c"),
+                        str(work / "district_name_adapter.c"), str(ENGINE / "src/td_story.c"),
+                        str(ENGINE / "src/td_menu_hint.c"),
                         *map(str, sorted(ENGINE.glob('src/td_atlas_patterns_*.c'))),
                         *map(str, sorted(ENGINE.glob('src/td_atlas_rows_*.c'))),
                         "-o", str(binary)], check=True)

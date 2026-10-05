@@ -1,6 +1,66 @@
 # Testing record
 
-## Selected sandbox-stable update — 2026-10-05
+## Selected story/combat R6 — 2026-10-05
+
+Exact ROM `project/build/toronto-dispatch-story-combat-r6.gbc` is **1,048,576 bytes**,
+SHA-256 **`71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`**.
+The [official build](docs/STORY_COMBAT_BUILD.json) exits 0 in 125,496 ms and binds
+243 unchanged [native input pins](docs/STORY_COMBAT_SOURCE_PINS.json), source
+fingerprint `6cb70b49233b540daf605afe7e77076cbbfd2ba2ca4f6bc39fa5c6d3f9ebd9b3`
+and NOI `c30c8ed37eae03c42d920cc0383508b80148cc045d460b8dfe337f887e7ffbcd`.
+Full `make check`, including 87 actor-bank cases, and four compiled guards pass.
+Save v11 retains 58 payload bytes through genuine v4–v10 migration checks;
+native legacy imports remain untested. Heap `DCDC` to stack `DF00` leaves
+548 static bytes, fixed HOME has 207 free and scenes peak at 124/128 OBJ tiles.
+These resource checks do not measure deepest stack use.
+
+The [fresh native record](docs/NATIVE_STORY_COMBAT.json) uses ordinary buttons
+and bounded read-only memory/VRAM inspection, without imported saves/checkpoints
+or game-memory writes. It stops scoped-passed at **frame 12,974 / 1,070 events**,
+then closes before archiving. Event digest is
+`08d1876420af09f3dfc8ce014b8b85d52f31923bfd34d30796fb4ed47b34329c`;
+archive `69edb510-6c44-47c0-befb-3c1190506541`, manifest
+`673c9cddb34f6a78bfd8c83fe44d6b09f7ebc1905d6a2581e489883e7f0488a8`.
+The record binds six original PNG frames and the runtime/debug identity.
+
+The introduction held-A sample and earned first-pay chapter each freeze all 58
+game bytes over 120 frames; skipping restores play. The first delivery finishes
+at condition 100 / cash $129 / done 1. The road arrow remains present in 30/30
+consecutive sampled views. Settings cycles Music + Effects, Effects Only and
+All Sound Off; a 240-frame map interval freezes all 58 game bytes. Human audio
+listening is not established by the setting labels.
+
+Three fresh shots use ammunition 12→11→10→9; holding B after the first keeps
+ammo 11. H3 police fire is observed at health 82, then zero with a prone pose.
+Core hospital recovery returns the walking courier to `(504,344)`, restores
+HP 100 / ammo 12, clears heat and charges $40: cash $129→$89. The owned car stays
+Core `(761,720)`. The badge is observed at bank-1 tile `FE`, attribute `8F`.
+An H1 arrest charges $25 to $64; explicit Save and a genuine four-button reset
+restore the recorded career, HP/ammo, story flags and courier/car positions.
+A later H1 arrest charges another $25 to $39. Fresh B during its hold leaves
+ammo 10 and heat zero. Final reset restores the auto-saved hospital position,
+cash $39 / HP 100 / ammo 10 / story flags 3 / done 1 and the unchanged parked car.
+The native scenario has no active job at death and stays in Core.
+
+Actual-C host checks cover all 107 route goals, later chapter thresholds, all
+seven hospital district transitions, blocked exits, fatal active-job overlap,
+failed scene queues, timer/menu locks and interrupted SRAM journal writes.
+Those source checks do not become additional native play. [Matched optimization](docs/STORY_COMBAT_OPTIMIZATION.json)
+counts 149 idle and 160 active updates in separate 840-VBlank Union samples,
+roughly 10.64/11.43 loops per emulated second under the 60-VBlank convention.
+They are scoped observations, not display FPS or a causal whole-game gain.
+R5's earlier 24/30 arrow finding remains needs-review for that separate ROM;
+R6's passing sample does not relabel its outcome.
+
+The local raw R6 ROM is selected; the new source-pinned ZIP awaits source commit
+and package audit. No new CI/package hash or supported USB discovery is implied.
+Cartridge write/cold boot, power-off save persistence, audio listening, physical
+flicker, browser recovery, later chapters, all 104 contracts, native legacy
+imports, deepest stack/whole-city pacing and two measured enjoyable human hours
+remain pending. Emulator reset restores committed SRAM in the same worker.
+The older stable package and physically confirmed 9c155 build remain separate.
+
+## Retained sandbox-stable update — 2026-10-05
 
 Exact ROM `project/build/toronto-dispatch-sandbox-stable.gbc` is 1,048,576 bytes / SHA-256 `096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`. Official source-debug compilation succeeds in 90,460 ms; all 200 native input pins remain unchanged after building and native play. Full `make check` and four compiled guards pass. [Build evidence](docs/SANDBOX_STABLE_BUILD.json) records exact ROM/toolchain/debug identities, save v10/58 bytes, 22 actors, scene OBJ peak 120/128, 221 fixed-HOME bytes free and 579 bytes of static reserve.
 
@@ -12,11 +72,11 @@ The same run boards a boat, drives/brakes and exits at a valid dock with Down+A,
 
 [Memory optimization](docs/SANDBOX_STABLE_OPTIMIZATION.json) preserves gameplay and exact host state while saving 109 persistent UI bytes and reducing the reviewed ordinary tram collision chain by 57 automatic bytes. The [starting-view timing](docs/SANDBOX_STABLE_TIMING.json) counts 149 updates over 840 VBlanks, nominally 10.64 updates/s, compared with 135 updates in the retained v12 sandbox trial. Different autonomous phases and one viewpoint limit that comparison; no whole-city, physical or always-smooth guarantee is claimed. The simpler installed 9c155 build is separate.
 
-The failed `668727…` [native corruption diagnostic](docs/NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains failed and ineligible for loading. The selected 096862 ROM has not yet been flashed; the last physically confirmed 9c155 build and its historical ZIP/write evidence below remain separate. Full 104-contract coverage, motorcycle 74's slower-speed deadline, two enjoyable measured human hours, broader collision/pursuit cases, older-save imports, deepest stack/whole-city performance and physical cold boot/save/audio/flicker remain pending.
+The failed `668727…` [native corruption diagnostic](docs/NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains failed and ineligible for loading. The retained 096862 ROM was not flashed in that record; the last physically confirmed 9c155 build and its historical ZIP/write evidence below remain separate. Full 104-contract coverage, motorcycle 74's slower-speed deadline, two enjoyable measured human hours, broader collision/pursuit cases, older-save imports, deepest stack/whole-city performance and physical cold boot/save/audio/flicker remain pending.
 
 Fresh [supported USB discovery](docs/CARTRIDGE_SANDBOX_STABLE_DISCOVERY_2026_10_05.json) on 2026-10-05 succeeds with zero connected consoles, conflicts, unmatched functions or diagnostics. No replacement write was dispatched; connection remains the prerequisite. The reviewed local [package](docs/SANDBOX_STABLE_PACKAGE.json) is ready and preserves its source-pinned guide.
 
-The complete [Linux Clang CI](docs/SANDBOX_STABLE_CI.json) passes at source `f564538…`, with strict host warnings, sanitizers and assertions retained. Test-fixture formatting and PNG-check portability repairs leave all 200 native inputs and the exact ROM unchanged. The selected [R2 loading package](docs/SANDBOX_STABLE_PACKAGE_R2.json) pins that source; the first reviewed ZIP remains unchanged. The last supported USB discovery at 05:10:22 UTC again finds zero consoles, so no replacement writer was dispatched.
+The complete [Linux Clang CI](docs/SANDBOX_STABLE_CI.json) passes at source `f564538…`, with strict host warnings, sanitizers and assertions retained. Test-fixture formatting and PNG-check portability repairs leave all 200 native inputs and the exact ROM unchanged. The retained [R2 loading package](docs/SANDBOX_STABLE_PACKAGE_R2.json) pins that source; the first reviewed ZIP remains unchanged. The last supported USB discovery at 05:10:22 UTC again finds zero consoles, so no replacement writer was dispatched.
 
 ## Retained hardware feedback update — 2026-10-04
 

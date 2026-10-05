@@ -11,7 +11,12 @@ density/social activity, parking/buildings/water, original music, objective
 arrows and an official-source geographic audit. Existing9c155 remains the tested
 physical baseline; no new implementation/build/write is established by capture.
 
-## Dialogue cutscenes — accepted future direction, 2026-10-04
+## Dialogue cutscenes — retained initial plan, 2026-10-04
+
+This original shopkeeper-prototype plan is retained as history. The Oct5
+story implementation and its remaining acceptance gates are tracked at the end
+of this roadmap; it uses milestone-triggered chapters rather than requiring a
+new portrait conversation in each shop.
 
 - [x] Record the accepted Pokémon battle-camera composition reference: original over-the-shoulder courier foreground facing the speaker, bright pixel art and a readable text box. Preserve north-up city gameplay and approved human sprites.
 - [ ] Prototype one original shopkeeper conversation with static background/window portraits, A advance and B return; the current timed greeting is not this cutscene.
@@ -359,3 +364,32 @@ The published Prototype 6 remains unchanged. [AIRCRAFT.md](docs/AIRCRAFT.md) rec
 - [ ] Verify a full physical delivery, transit, save recovery and audio, and test the new hardware-feedback build on the cartridge after installation.
 
 The 9c155 write has vendor-reported success and user-confirmed cold boot/buttons. Complete read-back and extended physical gameplay remain unverified. Prior 8be1 observations retain their own scope. Record device observations separately from emulator results without private activation or device details.
+
+
+## Quest/story/combat integration — 2026-10-05
+
+- [x] Keep one active contract and add generated collision-backed local ground guidance, preserving the beacon, atlas, city art and mission rules; host route/overlay checks cover the source.
+- [x] Author eight original newcomer chapters, 41 pages and over-the-shoulder portraits at 0/1/8/16/32/56/80/104 completions; implement Welcome/result triggers, paused dialogue, input consumption and chapter flags.
+- [x] Integrate separate health/ammo, on-foot sidearm, armed patrol, wall/body blockers, non-graphic down/recovery and $10 shop supplies, with focused host behavior checks. Preserve the 45-pose courier prefix and append four original sidearm poses.
+- [x] Retain the 58-byte v11 save payload and atomic journal, with genuine v4–v10 layout, field validation and chapter-bit compatibility tests.
+- [x] Add contextual Pause help, complete-width transit captions and an indoor Start exit hint without changing gameplay; retain the original song/cues and three session-only sound modes.
+- [x] Preserve exact navigation ordinals with ROM prefix counts; the scoped host operation count falls 79.72%, without an FPS claim.
+- [x] Integrate the exact 14-byte repeated-query cache with explicit goal/district/mode/player-cell invalidation; retain the existing five-byte patch, 19 guidance bytes total.
+- [x] Verify the unchanged-patch lifetime correction and forced aircraft/combat/guidance/scenery restoration in host checks without adding guidance RAM; R6 sees the arrow in 30/30 sampled views, separate from R5's 24/30 finding.
+- [ ] Bind preliminary R4 first-delivery, intro/first-chapter freeze/skip, sound and firing samples to their exact evidence identity; do not transfer acceptance to the next ROM.
+- [ ] Curate the R5 needs-review record with its scoped 148/840 idle and 159/840 active update samples; preserve phase differences and do not claim a causal FPS gain.
+- [x] Build and select distinct R6 `71a7e493…` with 243 unchanged inputs, matching debug artifacts, full `make check` and four compiled guards: 548 static reserve, HOME 207 and peak 124/128 OBJ tiles. [Fresh native play](docs/NATIVE_STORY_COMBAT.json) covers one full-condition job, intro/first-pay chapters, sampled road arrow, sound/map, firing, hospital/arrest and genuine resets. [Timing](docs/STORY_COMBAT_OPTIMIZATION.json) records 149/840 idle and 160/840 active updates, without a whole-city smoothness claim.
+- [ ] Play later story chapters, portal/remote guidance and broader districts/combat scenes natively; measure deepest stack and human readability/pacing separately.
+- [ ] Commit matching source and audit a new source-pinned loading ZIP. R6 currently selects the local raw ROM.
+- [ ] Physical cartridge flash and cold-boot/audio acceptance when the identified console is available.
+
+Keep the retained sandbox-stable R2 package and all older build/hardware evidence immutable. R6's scoped acceptance selects a new raw ROM without transferring the older package or cartridge checks.
+
+## Hospital and arrest revision — accepted and scoped checked
+
+- [x] Accept automatic hospital recovery after 120 active VBlanks at zero health: fictional Core Toronto General forecourt `(504,344)`, original mint plus badge `(512,344)`, no base city-art/collision edits.
+- [x] Host-check clear exit/retry, capped medical fee, health/ammo restore, one fatal-job failure, preserved owned car and safe Core transition from all seven districts, including failed queues and interrupted SRAM commits. R6's native Core recovery observes $129→$89, HP 100/ammo 12 and the unchanged parked car.
+- [x] Host-check one-star $25 arrest/60-active-VBlank hold, heat clearing and dead/down/locked suppression, with retained higher-star penalties/damage. R6 natively observes two $25 arrests and blocked fresh-B firing inside the hold, after H3 police injury and hospital recovery.
+- [x] Host-check menu timer freezing and badge/background ownership with no marker/OAM state. R6 shows the badge and genuine explicit/automatic-save resets; actual linked reserve is 548 bytes, separately from deepest stack use.
+- [x] Capture matching [R6 build](docs/STORY_COMBAT_BUILD.json) and [native hospital/arrest/arrow acceptance](docs/NATIVE_STORY_COMBAT.json); select that raw ROM.
+- [ ] Verify remote-district recovery and fatal active-job overlap natively, then physical cold boot, power-off saves, audio and flicker.

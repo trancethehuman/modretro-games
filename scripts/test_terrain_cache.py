@@ -281,7 +281,7 @@ def module(path):
 
 
 def host_source(toronto,candidate):
-    sources = ['td_menu.c','td_transit.c','td_world.c','td_streetcar.c','td_streetcar_runtime.c',
+    sources = ['td_combat.c','td_story.c','td_story_control.c','td_menu.c','td_menu_actions.c','td_transit.c','td_world.c','td_streetcar.c','td_streetcar_runtime.c',
                'td_aircraft.c','td_people.c','td_traffic.c','td_roads.c']
     sources.extend(['td_terrain.c','td_sandbox.c','td_scenery.c','td_ramming.c'])
     bodies=[]

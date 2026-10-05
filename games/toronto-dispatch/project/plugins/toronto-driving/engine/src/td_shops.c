@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "td_shops.h"
 #include "td_game.h"
+#include "td_audio.h"
 #include "td_district.h"
 #include "actor.h"
 #include "camera.h"
@@ -55,7 +56,7 @@ UBYTE td_shops_interact(void) BANKED {
 static UBYTE glyph(char c){
     if(c>='A'&&c<='Z')return 193+c-'A';
     if(c>='0'&&c<='9')return 219+c-'0';
-    return c=='/'?230:192;
+    return c=='/'?230:c=='$'?237:c=='+'?233:192;
 }
 static void row(UBYTE y,const char *s){
     UBYTE i;
@@ -92,7 +93,7 @@ void td_shop_init(void) BANKED {
     camera_settings=0;camera_x=camera_y=0;
     camera_offset_x=camera_offset_y=camera_deadzone_x=camera_deadzone_y=0;
     td_ui_init();
-    if(td_shop_active<3)show_text("WELCOME COURIER");else ui_set_pos(0,144);
+    if(td_shop_active<3)show_text(td.vitality<100||td.ammo<12?"SUPPLIES $10 A TALK":"WELCOME COURIER");else ui_set_pos(0,144);
 }
 
 void td_shop_update(void) BANKED {
@@ -106,12 +107,19 @@ void td_shop_update(void) BANKED {
         td_shop_text_time=elapsed>=td_shop_text_time?0:td_shop_text_time-elapsed;
         if(!td_shop_text_time)ui_set_pos(0,144);
     }else ui_set_pos(0,144);
+    /* Interiors retain their live clock and simple exit controls. Start only
+     * explains how to reach the outdoor menu; it never pauses or saves. */
+    if(pressed&J_START)show_text("B EXIT TO START MENU");
     /* Fresh B is a simple, discoverable exit from anywhere inside. A near
      * the marked bottom doorway also returns; held entry A cannot exit. */
     x=PLAYER.pos.x>>5;y=PLAYER.pos.y>>5;
     if((pressed&J_B)||((pressed&J_A)&&distance(x,80)<=16&&y>=124)){leave();return;}
-    if((pressed&J_A)&&actors_len>1&&distance(x,actors[1].pos.x>>5)<40&&distance(y,actors[1].pos.y>>5)<40)
-        show_text(td_shops[td_shop_active].greeting);
+    if((pressed&J_A)&&actors_len>1&&distance(x,actors[1].pos.x>>5)<40&&distance(y,actors[1].pos.y>>5)<40){
+        if(td.vitality<100||td.ammo<12){
+            if(td.cash<10)show_text("NEED $10 / SUPPLIES");
+            else{td.cash-=10;td.vitality=td.vitality>75?100:td.vitality+25;if(td.ammo<12)td.ammo=12;td_save();td_audio_play(TD_AUDIO_PICKUP);show_text("HEALTH +25 / AMMO 12");}
+        }else show_text(td_shops[td_shop_active].greeting);
+    }
     for(n=0;n<(elapsed>4?4:elapsed);n++){
         nx=x;ny=y;
         if(joy&J_LEFT){if(nx)nx--;td_shop_direction=1;moving=1;}

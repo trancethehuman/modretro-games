@@ -44,6 +44,9 @@ extern WORD draw_scroll_x,draw_scroll_y;
 extern UBYTE camera_settings;
 extern BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 extern UBYTE joy,joy_pressed;
+extern UBYTE VBK_REG;
+void set_win_tiles(UBYTE x,UBYTE y,UBYTE width,UBYTE height,const UBYTE *tiles);
+void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles);
 
 enum { J_RIGHT=1,J_LEFT=2,J_UP=4,J_DOWN=8,J_A=16,J_B=32,J_SELECT=64,J_START=128 };
 #define INPUT_RIGHT (joy & J_RIGHT)

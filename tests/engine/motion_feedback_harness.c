@@ -19,6 +19,7 @@ static unsigned vehicle_queries,tram_queries;
 static void expect(int condition,const char *name){checks++;if(!condition){failures++;if(failures<20)fprintf(stderr,"FAIL %s\n",name);}}
 void actor_set_frames(actor_t *a,UBYTE first,UBYTE end){a->frame=a->frame_start=first;a->frame_end=end;}
 void td_player_sprite_restore(void){}
+UBYTE td_combat_damage(UBYTE damage,BYTE dx,BYTE dy){(void)damage;(void)dx;(void)dy;return 0;}
 void td_civilian_present(actor_t *a,UBYTE variant,UBYTE pose){(void)variant;actor_set_frames(a,pose,pose+1);}
 UBYTE td_district_walkable(UBYTE district,UWORD u,UWORD v){(void)district;return u<1024&&v<976;}
 UBYTE td_motion_foot_clear(UWORD u,UWORD v){return u<1024*16&&v<976*16;}

@@ -2,6 +2,7 @@
 #include <string.h>
 #include "td_people.h"
 #include "td_police.h"
+#include "td_combat.h"
 #include "td_game.h"
 #include "td_city_sprites.h"
 #include "td_streetcar_runtime.h"
@@ -314,6 +315,22 @@ UBYTE td_people_present(UBYTE tick) BANKED {
     td_people_last_u=td.u;td_people_last_v=td.v;return hits;
 }
 
+/* Weapon hits use the same admitted original person and checked flight/prone
+ * animation as vehicle impacts. No synthetic spawn or second fine episode. */
+UBYTE td_people_shot(UBYTE slot,BYTE dx,BYTE dy) BANKED {
+    td_person_t *person;
+    if(slot>=TD_PEOPLE_COUNT||(!dx&&!dy)||td.mode!=TD_ROAM)return FALSE;
+    person=&td_people[slot];
+    if(person->route==TD_NONE||person->stun||
+       (actors[9+slot].flags&ACTOR_FLAG_HIDDEN)||
+       (td_people_dead[person->route>>3]&(1<<(person->route&7))))return FALSE;
+    person->stun=6;person->recover=person->lag=0;
+    person->state&=TD_PERSON_ADMITTED;
+    person->dx=dx>0?1:dx<0?-1:0;person->dy=dy>0?1:dy<0?-1:0;
+    td_people_dead[person->route>>3]|=1<<(person->route&7);
+    return TRUE;
+}
+
 UBYTE td_people_second(void) BANKED {
     /* Corpses remain down until district load; police time still advances. */
     if(td.wanted&&td_police_observed()){td.wanted_left=30;return FALSE;}
@@ -334,7 +351,7 @@ UBYTE td_people_police(UWORD u,UWORD v) BANKED {
     /* A32px stop range includes the24px traffic stop line plus the bounded
        eight-pixel advance. Capture must work when the courier itself keeps
        a law-abiding patrol outside an occupied junction. */
-    if(td_people_distance(td.u,u)>=32*16||td_people_distance(td.v,v)>=32*16)return FALSE;
+    if(td_people_distance(td.u,u)>=(td.onfoot&&td.wanted>=2?8:32)*16||td_people_distance(td.v,v)>=(td.onfoot&&td.wanted>=2?8:32)*16)return FALSE;
     fine=25*td.wanted*td.wanted;td.cash=td.cash>fine?td.cash-fine:0;
     td.wanted=td.wanted_left=0;return TRUE;
 }

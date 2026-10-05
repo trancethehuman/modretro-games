@@ -24,3 +24,27 @@ Keep verified geometry separate from gameplay edits. Record compressed distances
 ## Data and artwork terms
 
 Check the applicable licence and attribution before importing datasets. The City portal pages link Open Government Licence – Toronto. TTC maps are references, not bundled game artwork. Make original landmark and vehicle sprites; do not copy official logos or commercial art. Update root `THIRD_PARTY_NOTICES.md` when external material is included.
+
+## Hospital recovery landmark — 2026-10-05
+
+[UHN's Toronto General directions](https://www.uhn.ca/corporate/Directions/Pages/directions_TGH.aspx)
+identify its mailing address as 200 Elizabeth Street and place the hospital east
+of University Avenue just south of College Street, with Elizabeth entrances
+between College and Gerrard. This supports the relative hospital placement; no
+map, photo, floor plan, logo or building artwork is imported. Current construction
+and actual entrance restrictions do not define this fictional game access.
+
+The original existing Core building at `(512,320)` represents a compressed game
+hospital. Its new original mint-plus badge at `(512,344)` and recovery forecourt
+at `(504,344)` preserve the east-University/south-College relation. The forecourt
+is a fictional access point, not a surveyed Toronto General entrance. University
+is Core column 480, College is row 288 and Dundas is row 400; omitted blocks and
+the small facade are deliberate cartridge-scale compression.
+
+`content/hospital.json` retains all nine bounded recovery candidates and their
+complete half-three-pixel terrain checks. Six candidates are raw-clear; the
+three eastward candidates at column 520 overlap the building and must be skipped.
+Recovery must additionally check live vehicles and use a clear full-body position.
+The badge keeps existing roof priority. This addition does not change the base
+city pixels, collision grid, 64 quest stops or generated navigation goals.
+Source checks do not establish native recovery or physical visual acceptance.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Author the original native courier/vehicle sheet without repainting the city.
 
-Frame IDs 0..44 retain their gameplay meanings. Cars use two hardware objects;
+Frame IDs 0..44 retain their gameplay meanings. Original armed poses45..48 append. Cars use two hardware objects;
 walking courier poses use one centred 8x16 object, matching smaller civilians.
 """
 from pathlib import Path
@@ -73,8 +73,21 @@ def courier(direction,step):
     d.line((9,10,9-step,12),fill=COLOURS[0])
     return image
 
+def armed_courier(direction):
+    """Original two-pixel sidearm within the same one-OBJ walker footprint."""
+    image=courier(direction,0);d=ImageDraw.Draw(image)
+    if direction==0:
+        d.line((9,7,11,7),fill=COLOURS[0]);d.point((10,8),fill=COLOURS[3])
+    elif direction==1:
+        d.line((4,7,6,7),fill=COLOURS[0]);d.point((5,8),fill=COLOURS[3])
+    elif direction==2:
+        d.line((8,9,8,12),fill=COLOURS[0]);d.point((7,10),fill=COLOURS[3])
+    else:
+        d.line((8,1,8,4),fill=COLOURS[0]);d.point((7,3),fill=COLOURS[3])
+    return image
+
 def artwork():
-    sheet=Image.new('RGB',(256,48),TRANSPARENT);sd=ImageDraw.Draw(sheet)
+    sheet=Image.new('RGB',(256,64),TRANSPARENT);sd=ImageDraw.Draw(sheet)
     for frame in range(45):
         ox=(frame%16)*16;oy=(frame//16)*16;veh=frame//8;heading=frame%8
         if frame<8 or frame==44:
@@ -87,21 +100,24 @@ def artwork():
         elif frame<40:sheet.paste(courier((frame-32)//2,frame&1),(ox,oy))
         else:
             sd.polygon([(ox+8,oy+1),(ox+14,oy+7),(ox+8,oy+14),(ox+2,oy+7)],fill=COLOURS[3],outline=COLOURS[0]);sd.rectangle((ox+7,oy+4,ox+9,oy+9),fill=COLOURS[2])
+    for direction in range(4):
+        frame=45+direction
+        sheet.paste(armed_courier(direction),((frame%16)*16,(frame//16)*16))
     frames=[]
-    for n in range(45):
-        frames.append({'id':ident(f'frame-{n}'),'tiles':[{'id':ident(f'tile-{n}-{x}'),'x':x,'y':0,'sliceX':(n%16)*16+x,'sliceY':(n//16)*16,'flipX':False,'flipY':False,'palette':0,'paletteIndex':0,'objPalette':'OBP0','priority':False} for x in ((4,) if 32<=n<40 else (0,8))]})
+    for n in range(49):
+        frames.append({'id':ident(f'frame-{n}'),'tiles':[{'id':ident(f'tile-{n}-{x}'),'x':x,'y':0,'sliceX':(n%16)*16+x,'sliceY':(n//16)*16,'flipX':False,'flipY':False,'palette':0,'paletteIndex':0,'objPalette':'OBP0','priority':False} for x in ((4,) if 32<=n<40 or n>=45 else (0,8))]})
     states=[]
     for name,subset in [('vehicles',frames[:32]),('courier',frames[32:])]:
         animations=[{'id':ident(name+'-animation'),'frames':subset}]+[{'id':ident(f'{name}-empty-{n}'),'frames':[{'id':ident(f'{name}-emptyframe-{n}'),'tiles':[]}]} for n in range(7)]
         states.append({'id':ident(name+'-state'),'name':'' if name=='vehicles' else 'Courier and beacon','animationType':'fixed','flipLeft':False,'animations':animations})
-    meta={'_resourceType':'sprite','id':ident('vehicles'),'name':'Top-down vehicles and courier','symbol':'sprite_dispatch_topdown','states':states,'width':256,'height':48,'canvasOriginX':8,'canvasOriginY':8,'canvasWidth':16,'canvasHeight':16,'boundsX':2,'boundsY':2,'boundsWidth':12,'boundsHeight':12,'animSpeed':255,'numTiles':0,'filename':'dispatch_topdown.png'}
+    meta={'_resourceType':'sprite','id':ident('vehicles'),'name':'Top-down vehicles and courier','symbol':'sprite_dispatch_topdown','states':states,'width':256,'height':64,'canvasOriginX':8,'canvasOriginY':8,'canvasWidth':16,'canvasHeight':16,'boundsX':2,'boundsY':2,'boundsWidth':12,'boundsHeight':12,'animSpeed':255,'numTiles':0,'filename':'dispatch_topdown.png'}
     return sheet,meta
 
 def write():
     sheet,meta=artwork();png=PROJECT/'original-art/dispatch_topdown.png'
     sheet.save(png);meta['checksum']=hashlib.sha1(png.read_bytes()).hexdigest()
     (PROJECT/'dispatch_topdown.metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
-    sheet.resize((1024,192),Image.Resampling.NEAREST).save(PROJECT/'original-art/dispatch_topdown_preview.png')
+    sheet.resize((1024,256),Image.Resampling.NEAREST).save(PROJECT/'original-art/dispatch_topdown_preview.png')
 
 def normalized(value):
     if isinstance(value,dict):return {k:normalized(v) for k,v in value.items() if k not in ('id','name','symbol')}
@@ -118,17 +134,23 @@ def check():
     assert json.loads((PROJECT/'dispatch_topdown.metadata.json').read_text())==meta
     native=json.loads((PROJECT/'assets/sprites/dispatch_topdown.png.gbsres').read_text())
     assert normalized(native)==normalized(meta)
+    native_frames=[f for state in native['states'] for f in state['animations'][0]['frames']]
+    assert len(native_frames)==49
+    assert hashlib.sha256(json.dumps(native_frames[:45],sort_keys=True,separators=(',',':')).encode()).hexdigest()=='447809e9dae652940d4d86c8feaa421127487e55af8b17431d34663ad2621125','Approved native frame identities or meanings changed'
+    old_pixels=b''.join(sheet.crop(((n%16)*16,(n//16)*16,(n%16+1)*16,(n//16+1)*16)).tobytes() for n in range(45))
+    assert hashlib.sha256(old_pixels).hexdigest()=='2d21d95ded6713698785b0e0ba8f7ece1268dda32e05f3983b2e4031c4b1b1aa','Approved0..44 pixels changed'
     frames=meta['states'][1]['animations'][0]['frames']
     assert [len(f['tiles']) for f in frames[:8]]==[1]*8
+    assert [len(f['tiles']) for f in frames[13:]]==[1]*4
     for frame in range(32,40):
         crop=sheet.crop(((frame%16)*16,32,(frame%16+1)*16,48))
         occupied=[(x,y) for y in range(16) for x in range(16) if crop.getpixel((x,y))!=(101,255,0)]
         assert max(x for x,y in occupied)-min(x for x,y in occupied)+1==6
         assert max(y for x,y in occupied)-min(y for x,y in occupied)+1==10
-    assert {sheet.getpixel((x,y)) for x in range(256) for y in range(48)}<=set(((101,255,0),(7,24,33),(134,192,108),(224,248,207)))
+    assert {sheet.getpixel((x,y)) for x in range(256) for y in range(64)}<=set(((101,255,0),(7,24,33),(134,192,108),(224,248,207)))
     with Image.open(PROJECT/'original-art/dispatch_topdown_preview.png') as preview:
-        assert preview.convert('RGB').tobytes()==sheet.resize((1024,192),Image.Resampling.NEAREST).tobytes()
-    print('Courier/car source and native pose checks passed: 45 preserved frame meanings, 6x10 one-OBJ walker, original larger car pixels')
+        assert preview.convert('RGB').tobytes()==sheet.resize((1024,256),Image.Resampling.NEAREST).tobytes()
+    print('Courier/car source and native pose checks passed: 45 preserved frame meanings/pixels/native IDs, four appended one-OBJ armed poses, 6x10 walker')
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true')

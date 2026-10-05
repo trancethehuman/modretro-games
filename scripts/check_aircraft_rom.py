@@ -47,7 +47,7 @@ def city_loader_assets(name: str) -> list[str]:
 
 def inspect_actor_banks(rom: bytes, symbols: dict[str, int]) -> tuple[list[str], list[str]]:
     """Check linked locations and GBDK call-bank tag, not source pragmas alone."""
-    helpers = ("td_actor_render_before", "td_actor_render_ground", "td_actor_render_after")
+    helpers = ("td_actor_render_before", "td_actor_render_prepare", "td_actor_render_ground", "td_actor_render_after")
     entries = helpers + ("td_actor_render", "td_actor_render_actor")
     required = ("_actors_render", "_td_actor_render_pose", "___sdcc_bcall_ehl", "s__HOME", "l__HOME") + \
         tuple(symbol for name in entries for symbol in ("_" + name, "b_" + name))
@@ -85,11 +85,11 @@ def inspect_actor_banks(rom: bytes, symbols: dict[str, int]) -> tuple[list[str],
             errors.append(f"{name} GBDK call-bank tag differs from its linked code bank")
         locations.append(f"{name.removeprefix('td_actor_render_')} bank{bank}:{address:04X}")
     bank = symbols["_td_actor_render_ground"] >> 16
-    near = ("td_actor_render_local", "td_actor_render_actor_local")
+    near = ("td_actor_render_local", "td_actor_render_actor_local", "td_actor_render_prepare_local")
     for name in near:
         if "b_" + name in symbols:
             errors.append(f"Private near-call {name} must not carry a GBDK call-bank tag")
-    for name in ("td_actor_render", "td_actor_render_actor"):
+    for name in ("td_actor_render", "td_actor_render_actor", "td_actor_render_before", "td_actor_render_prepare"):
         if symbols["_" + name] >> 16 != bank:
             errors.append(f"{name} must share the ground renderer's switchable bank")
     if not errors:
@@ -97,7 +97,9 @@ def inspect_actor_banks(rom: bytes, symbols: dict[str, int]) -> tuple[list[str],
         # address from its one thin public wrapper, decoding only through the
         # wrapper's unconditional RET/tail JP. No private exports are added.
         near_addresses = {}
-        for caller,callee in zip(("td_actor_render", "td_actor_render_actor"), near):
+        wrappers = (("td_actor_render", near[0]), ("td_actor_render_actor", near[1]),
+                    ("td_actor_render_before", near[2]), ("td_actor_render_prepare", near[2]))
+        for caller,callee in wrappers:
             pointer = symbols["_" + caller]
             end = min([value for value in symbols.values() if value >> 16 == bank and
                        (pointer & 0xFFFF) < (value & 0xFFFF) < 0x8000] or [(bank << 16) | 0x8000])
@@ -108,7 +110,10 @@ def inspect_actor_banks(rom: bytes, symbols: dict[str, int]) -> tuple[list[str],
             if len(transfers) != 1 or not 0x4000 <= transfers[0] < (pointer & 0xFFFF):
                 errors.append(f"{caller} lacks its compiled direct near call/jump to a single preceding private body")
                 continue
-            near_addresses[callee] = (bank << 16) | transfers[0]
+            target = (bank << 16) | transfers[0]
+            if callee in near_addresses and near_addresses[callee] != target:
+                errors.append("Overlay prepare wrappers differ in their actual private target")
+            near_addresses[callee] = target
             if "_" + callee in symbols and symbols["_" + callee] != near_addresses[callee]:
                 errors.append(f"Optional private near-call {callee} symbol differs from its actual wrapper target")
         if not errors:
@@ -118,8 +123,13 @@ def inspect_actor_banks(rom: bytes, symbols: dict[str, int]) -> tuple[list[str],
                 if caller == "td_actor_render_actor_local":
                     end = symbols["_td_actor_render_actor"]
                 else:
-                    end = min([value for value in symbols.values() if value >> 16 == bank and
-                               (pointer & 0xFFFF) < (value & 0xFFFF) < 0x8000] or [(bank << 16) | 0x8000])
+                    # Static prepare code follows ground but has no stock NOI
+                    # label. Its independently decoded wrappers give the exact
+                    # ground boundary; its overlay bank calls are legitimate.
+                    end = near_addresses["td_actor_render_prepare_local"]
+                    if not pointer < end < symbols["_td_actor_render_before"]:
+                        errors.append("Private overlay prepare target does not bound the ground renderer")
+                        continue
                 code = read(rom, pointer, (end & 0xFFFF) - (pointer & 0xFFFF))
                 transfers = sm83_direct_transfers(code)
                 if (near_addresses[callee] & 0xFFFF) not in transfers:
@@ -302,6 +312,36 @@ def source_city_poses() -> dict[str, tuple[list[list[tuple]], int]]:
     return result
 
 
+def source_courier_poses() -> dict[str, tuple[list[list[tuple]], int]]:
+    """All45 retained native poses plus four one-OBJ original sidearm poses."""
+    from PIL import Image
+    meta = json.loads((GAME / "project/assets/sprites/dispatch_topdown.png.gbsres").read_text())
+    frames = [frame for state in meta["states"] for frame in state["animations"][0]["frames"]]
+    if len(frames) != 49 or hashlib.sha256(json.dumps(frames[:45], sort_keys=True,
+            separators=(",", ":")).encode()).hexdigest() != \
+            "447809e9dae652940d4d86c8feaa421127487e55af8b17431d34663ad2621125":
+        raise ValueError("Retained courier frame identities/meanings or appended armed pose count changed")
+    poses = []
+    with Image.open(GAME / "project/original-art/dispatch_topdown.png") as source:
+        image = source.convert("RGB")
+        if image.size != (256, 64):
+            raise ValueError("Appended courier canvas must be256x64")
+        old = b"".join(image.crop(((n % 16)*16, (n // 16)*16, (n % 16+1)*16,
+                                  (n // 16+1)*16)).tobytes() for n in range(45))
+        if hashlib.sha256(old).hexdigest() != "2d21d95ded6713698785b0e0ba8f7ece1268dda32e05f3983b2e4031c4b1b1aa":
+            raise ValueError("Approved courier/vehicle/beacon pixels0..44 changed")
+        for index, frame in enumerate(frames):
+            cells = []
+            if index >= 45 and (len(frame["tiles"]) != 1 or frame["tiles"][0]["x"] != 4):
+                raise ValueError("Armed courier requires the unchanged one-OBJ footprint")
+            for part in frame["tiles"]:
+                pixels = tuple(SOURCE_COLOURS.index(image.getpixel((part["sliceX"]+x, part["sliceY"]+y)))
+                               for y in range(16) for x in range(8))
+                cells.append((part["x"], -part["y"], part["paletteIndex"], pixels))
+            poses.append(cells)
+    return {COURIER: (poses, 48)}
+
+
 def aircraft_cells(frame: int) -> list[tuple[int, int]]:
     """Independent approved native OBJ origins, including staggered jets."""
     if frame == 13:
@@ -395,7 +435,7 @@ def inspect_city_poses(rom: bytes, symbols: dict[str, int], expected: dict,
                 (len(boat_scratch_pairs) != 4 or len(set(boat_scratch_pairs)) != 4 or
                  boat_hull_pairs.intersection(boat_scratch_pairs)):
             errors.append("boat must own four unique writable OBJ pairs disjoint from every hull pair")
-        details.append(f"{name.removeprefix('_sprite_')}: {len(poses)-1} exact original poses + empty; OBJ banks={counts}")
+        details.append(f"{name.removeprefix('_sprite_')}: {sum(bool(pose) for pose in poses)} exact original poses + {sum(not pose for pose in poses)} empty; OBJ banks={counts}")
 
 
 def inspect_city_loaders(rom: bytes, symbols: dict[str, int], name: str,
@@ -434,7 +474,7 @@ def inspect_city_loaders(rom: bytes, symbols: dict[str, int], name: str,
             errors.append(f"{name}: declared {asset} loader no longer selects the verified empty source frame")
 
 
-def inspect_details(rom: bytes, symbols: dict[str, int], require_streetlife: bool = False) -> tuple[list[str], list[str]]:
+def inspect_details(rom: bytes, symbols: dict[str, int], require_streetlife: bool = False, require_combat: bool = False) -> tuple[list[str], list[str]]:
     required = (AIRCRAFT, AIRCRAFT + "_metasprites", COURIER, QUEEN) + SCENES
     missing = [name for name in required if name not in symbols]
     if missing:
@@ -543,6 +583,8 @@ def inspect_details(rom: bytes, symbols: dict[str, int], require_streetlife: boo
         labels = ", ".join(named_pointers.get(pointer, f"{pointer:X}").removeprefix("_sprite_")
                            for pointer in scene_assets)
         details.append(f"{name.removeprefix('_scene_')}: OBJ allocation={total}/128; bank-1 BKG={bkg1}/{47 if name in SIGNAL_SCENES else 64}; {labels}")
+    if require_combat:
+        inspect_city_poses(rom, symbols, source_courier_poses(), errors, details)
     return errors, details
 
 
@@ -763,22 +805,26 @@ def actor_bank_self_test() -> None:
     rom = bytearray(8 * 0x4000)
     symbols = {"_actors_render": 0x1B20, "_td_actor_render_pose": 0x2200, "_td_actor_render_after": 0x34800,
                "b_td_actor_render_after": 3, "_td_actor_render_before": 0x34700,
-               "b_td_actor_render_before": 3, "_td_actor_render_ground": 0x34600,
+               "b_td_actor_render_before": 3, "_td_actor_render_prepare": 0x34880,
+               "b_td_actor_render_prepare": 3, "_td_actor_render_ground": 0x34600,
                "b_td_actor_render_ground": 3, "s__HOME": 0x1599, "l__HOME": 0x2900,
                "_td_actor_render_local": 0x34200, "_td_actor_render_actor_local": 0x34400,
                "_td_actor_render": 0x34300, "b_td_actor_render": 3,
                "_td_actor_render_actor": 0x34500, "b_td_actor_render_actor": 3,
+               "_td_actor_render_prepare_local": 0x34680,
                "_synthetic_actor_end": 0x34900, "___sdcc_bcall_ehl": 0x3D23}
     calls = (("td_actor_render", "td_actor_render_local"),
              ("td_actor_render_actor", "td_actor_render_actor_local"),
              ("td_actor_render_actor_local", "td_actor_render_local"),
-             ("td_actor_render_ground", "td_actor_render_actor_local"))
+             ("td_actor_render_ground", "td_actor_render_actor_local"),
+             ("td_actor_render_before", "td_actor_render_prepare_local"),
+             ("td_actor_render_prepare", "td_actor_render_prepare_local"))
     for caller,callee in calls:
         offset = rom_offset(symbols["_" + caller], len(rom))
         rom[offset:offset+4] = bytes([0xCD]) + (symbols["_" + callee] & 0xFFFF).to_bytes(2, "little") + bytes([0xC9])
     assert not inspect_actor_banks(rom, symbols)[0], "valid compiled actor dispatch rejected"
     checks = 1
-    stripped = {key:value for key,value in symbols.items() if key not in ("_td_actor_render_local", "_td_actor_render_actor_local")}
+    stripped = {key:value for key,value in symbols.items() if key not in ("_td_actor_render_local", "_td_actor_render_actor_local", "_td_actor_render_prepare_local")}
     assert not inspect_actor_banks(rom, stripped)[0], "stock NOI without static private labels rejected"
     checks += 1
     boundary = dict(symbols);boundary["l__HOME"] = 0x3F80 - boundary["s__HOME"]
@@ -799,13 +845,13 @@ def actor_bank_self_test() -> None:
                  ("_td_actor_render_pose", symbols["s__HOME"] + symbols["l__HOME"], "outside its native fixed-bank HOME"),
                  ("b_td_actor_render_pose", 0, "must not carry a GBDK call-bank tag"),
                  ("b_td_actor_render_pose", 3, "must not carry a GBDK call-bank tag")]
-    for helper in ("td_actor_render_before", "td_actor_render_ground", "td_actor_render_after", "td_actor_render", "td_actor_render_actor"):
+    for helper in ("td_actor_render_before", "td_actor_render_prepare", "td_actor_render_ground", "td_actor_render_after", "td_actor_render", "td_actor_render_actor"):
         negatives.extend((("_" + helper, None, "symbols missing"),
                           ("b_" + helper, None, "symbols missing"),
                           ("_" + helper, 0x1B20, "switchable ROM bank"),
                           ("b_" + helper, 4, "call-bank tag"),
                           ("_" + helper, 0x84000, "outside the supplied native ROM")))
-    for helper in ("td_actor_render_local", "td_actor_render_actor_local"):
+    for helper in ("td_actor_render_local", "td_actor_render_actor_local", "td_actor_render_prepare_local"):
         negatives.extend((("_" + helper, 0x44000, "differs from its actual wrapper target"),
                           ("b_" + helper, 0, "must not carry a GBDK call-bank tag"),
                           ("b_" + helper, 3, "must not carry a GBDK call-bank tag")))
@@ -833,6 +879,16 @@ def actor_bank_self_test() -> None:
             assert any(expected in error for error in inspect_actor_banks(changed, symbols)[0]), \
                 "missing/banked/unaligned/additional renderer transfer accepted"
             checks += 1
+    changed = rom.copy(); offset = rom_offset(symbols["_td_actor_render_prepare_local"], len(rom))
+    changed[offset:offset+4] = bytes([0xCD,0x23,0x3D,0xC9])
+    assert not inspect_actor_banks(changed, stripped)[0], "adjacent private overlay bank call included in ground"
+    checks += 1
+    # An actual ground transfer before the verified boundary still fails.
+    offset = rom_offset(symbols["_td_actor_render_ground"], len(rom)) + 8
+    changed[offset:offset+4] = bytes([0xCD,0x23,0x3D,0xC9])
+    assert any("bank-switching trampoline" in error for error in inspect_actor_banks(changed, stripped)[0]), \
+        "actual ground bank call escaped the exact boundary"
+    checks += 1
     print(f"PASS: {checks} synthetic compiled actor-dispatch bank cases")
 
 
@@ -1017,6 +1073,7 @@ def main() -> int:
     parser.add_argument("symbols", type=Path, nargs="?")
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--require-streetlife", action="store_true")
+    parser.add_argument("--require-combat", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         if args.rom or args.symbols:
@@ -1032,7 +1089,7 @@ def main() -> int:
                     raise ValueError("Native ground visibility constants differ from the independent compiled bound proof")
         rom = args.rom.read_bytes()
         symbols = read_symbols(args.symbols.read_text())
-        errors, details = inspect_details(rom, symbols, args.require_streetlife)
+        errors, details = inspect_details(rom, symbols, args.require_streetlife or args.require_combat, args.require_combat)
     except (OSError, ValueError) as error:
         print(f"FAIL: {error}", file=sys.stderr)
         return 1
@@ -1046,6 +1103,8 @@ def main() -> int:
         print("PASS: original twelve aircraft poses, ellipse/empty, four large ground jet shadows, compiled tile pairs and scene allocations")
         if args.require_streetlife:
             print("PASS: exact original fleet/civilian/boat OBJ poses, palettes, empty frames and independent boat reserve")
+    if not errors and args.require_combat:
+        print("PASS: all45 preserved courier poses and four exact one-OBJ armed poses within scene allocations<=128")
     return bool(errors)
 
 

@@ -13,10 +13,16 @@
 #include "td_boats.h"
 #include "td_sandbox.h"
 #include "td_aircraft_render.h"
+#include "td_combat_render.h"
+#include "td_guidance.h"
+#include "td_hospital.h"
 
 /* Stock actor.c keeps these byte coordinates private to its translation
  * unit. Match its width so window masking retains native wrap semantics. */
 extern UBYTE screen_x,screen_y;
+/* One render-cycle bit prevents repeated banked restoration after the state
+ * has already prepared VRAM for camera/scroll. No saved or gameplay state. */
+static UBYTE td_actor_render_restored;
 
 #define TD_GROUND_POSE_OBJECTS 8
 #define TD_GROUND_POSE_HEIGHT 64
@@ -144,19 +150,30 @@ void td_actor_render_ground(UBYTE window_hide_actors) BANKED {
 
 }
 
-/* Restore previous background overlays before any ground metadata/OAM work.
- * The caller captures CURRENT_BANK first; each BANKED return restores it. */
-void td_actor_render_before(void) BANKED {
-    td_aircraft_render_restore();
+/* TORONTO prepares once after ordinary simulation, before stock scrolling.
+ * The core call remains a fallback when a locked VM skips the state update.
+ * Repeated modal/transition/core calls do no additional restoration work. */
+static void td_actor_render_prepare_local(UBYTE force){
+    if(td_actor_render_restored){
+        if(force)td_guidance_road_restore();
+        return;
+    }
+    td_actor_render_restored=1;
+    /* Reverse the draw ownership: sky/shadow, muzzle, arrow, scenery. */
+    td_aircraft_render_restore();td_combat_render_restore();
+    if(force)td_guidance_road_restore();else td_guidance_road_prepare();
     td_scenery_restore();
 }
+void td_actor_render_before(void) BANKED {td_actor_render_prepare_local(1);}
+void td_actor_render_prepare(void) BANKED {td_actor_render_prepare_local(0);}
 
 /* Only these dispatches moved out of fixed bank0. Preserve original overlay
  * order and the ambient/controlled launch distinction after ground OAM. */
 void td_actor_render_after(void) BANKED {
     td_traffic_lights_render();
-    td_scenery_render();
+    td_scenery_render();td_hospital_render();
     if(!td_boats_controlled())td_boats_render();
-    td_sandbox_render();
+    td_sandbox_render();td_guidance_road_render();td_combat_render();
     td_aircraft_render();
+    td_actor_render_restored=0;
 }

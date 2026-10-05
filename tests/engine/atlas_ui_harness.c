@@ -7,6 +7,8 @@
 #include "ui_host.h"
 #include "td_game.h"
 #include "td_atlas.h"
+#include "td_combat.h"
+#include "td_menu_hint.h"
 #include "atlas_under_test.c"
 #include "guidance_under_test.c"
 #include "ui_under_test.c"
@@ -18,12 +20,17 @@ td_stop_t td_target,td_cursor;
 UBYTE td_route_district;
 UBYTE td_resume_mode;
 UBYTE td_board_route;
+UBYTE td_ui_actual_near_stop(UBYTE id);
 UWORD td_streetcar_focus_u,td_streetcar_focus_v;
 UBYTE td_streetcar_view_district,td_streetcar_ride_view;
 actor_t actors[22];
 UBYTE actors_len;
 static UBYTE boat_control_fixture;
 UBYTE td_boats_controlled(void){return boat_control_fixture;}
+static UBYTE combat_locked_fixture,near_car_fixture;
+UBYTE td_entry_timer;
+UBYTE td_combat_locked(void){return combat_locked_fixture;}
+UBYTE td_motion_near_car(void){return near_car_fixture;}
 UWORD camera_x,camera_y;
 UBYTE camera_settings,VBK_REG,text_drawn;
 
@@ -102,7 +109,7 @@ static void reset_case(void) {
     memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));memset(&td_offer,0,sizeof(td_offer));
     memset(&td_target,0,sizeof(td_target));memset(&td_cursor,0,sizeof(td_cursor));
     memset(actors,0,sizeof(actors));actors[1].flags=ACTOR_FLAG_HIDDEN;memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
-    td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;
+    td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;td.vitality=100;td.ammo=12;
     td.park_district=1;td.park_u=400*16;td.park_v=528*16;td.cash=123;td.seconds=4321;
     td.left=199;td.health=100;td.job=84;td.stage=3;td.wanted=2;td.wanted_left=21;td.mode=TD_PAUSE;
     td_target.district=3;td_target.u=320;td_target.v=144;td_target.reserved=TD_STOP_FOOT;strcpy(td_target.name,"WITHROW PARK");
@@ -111,7 +118,7 @@ static void reset_case(void) {
     for(unsigned i=0;i<22;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
     window_x=window_y=0;window_writes=tile_uploads=ground_uploads=0;
-    audio_fixture_mode=TD_AUDIO_FULL;
+    audio_fixture_mode=TD_AUDIO_FULL;combat_locked_fixture=0;near_car_fixture=1;td_entry_timer=0;
     td_streetcar_focus_u=td_streetcar_focus_v=0;td_streetcar_view_district=td_streetcar_ride_view=0;
     td_ui_init();memcpy(initial_font,vram[1]+192,sizeof(initial_font));
 }
@@ -272,12 +279,21 @@ static void expect_compact_status(unsigned row,int active){
     }
 }
 
+static void expect_foot_health(void){
+    char expected[21];
+    snprintf(expected,sizeof(expected),"HP%u  AMMO%u",td.vitality,td.ammo);
+    for(unsigned i=(unsigned)strlen(expected);i<17;i++)expected[i]=' ';
+    for(unsigned i=0;i<3;i++)expected[17+i]=i<td.wanted&&!(td.wanted_left<30&&(td.seconds&1))?9:10;
+    expected[20]=0;
+    expect_window_text(1,expected,"walking always displays actual health, ammunition and three evasion-aware stars");
+}
+
 static void expect_three_row_hud_safe(void){
     UBYTE safe=1;
     for(unsigned row=0;row<3;row++)for(unsigned column=0;column<20;column++)
         if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>252||
            window_tiles[1][row][column]!=15)safe=0;
-    expect(safe&&window_x==0&&window_y==(td.mode==TD_ROAM?(td.msg?128:136):120)&&VBK_REG==0,
+    expect(safe&&window_x==0&&window_y==(td.mode==TD_ROAM?(td.onfoot?(td.msg?120:128):(td.msg?128:136)):120)&&VBK_REG==0,
            "gameplay HUD occupies one row normally, two for notices and three for transit, within reserved native patterns");
     expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),
            "ferry cancellation HUD preserves the actual uploaded font patterns");
@@ -288,6 +304,104 @@ static void expect_board_preserves_game(const game_snapshot_t *before) {
            !memcmp(&td_offer,&before->offer,sizeof(td_offer))&&!memcmp(&td_target,&before->target,sizeof(td_target))&&
            td_route_district==before->route&&td_resume_mode==before->resume_mode&&actors_len==before->actor_count,
            "itinerary draw only refreshes its cursor; saved game, active contract, offer, target and booking stay fixed");
+}
+
+static void expect_pause_hint(const char *expected){
+    game_snapshot_t before=snapshot_game();actor_t before_actors[TD_ACTORS];
+    UBYTE old_lock=combat_locked_fixture,old_near=near_car_fixture,old_entry=td_entry_timer;
+    UWORD old_camera_x=camera_x,old_camera_y=camera_y;UBYTE old_camera_settings=camera_settings;
+    memcpy(before_actors,actors,sizeof(before_actors));
+    td_ui_draw();expect_window_text(17,expected,"highlighted Pause action explains its actual availability or rejection without truncation");
+    expect_text_screen_safe();expect_game_unchanged(&before);
+    expect(!memcmp(before_actors,actors,sizeof(before_actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
+           camera_settings==old_camera_settings&&combat_locked_fixture==old_lock&&near_car_fixture==old_near&&td_entry_timer==old_entry,
+           "contextual action hints preserve actor, camera, recovery, door and input-guard state");
+    char bounded[40];memset(bounded,0x5a,sizeof(bounded));td_menu_hint(bounded);
+    size_t length=strlen(expected);
+    expect(length<=20&&!strcmp(bounded,expected),"BANKED hint copies a complete bounded line into caller-owned WRAM");
+    for(size_t i=length+1;i<sizeof(bounded);i++)expect(bounded[i]==0x5a,"hint never writes beyond its own terminator or overwrites the caller buffer tail");
+    expect_game_unchanged(&before);
+    unsigned writes=window_writes,uploads=tile_uploads;td_ui_draw();
+    expect(window_writes==writes&&tile_uploads==uploads,"unchanged availability hint reuses the existing packed text cache");
+}
+
+static void test_pause_action_hints(void){
+    reset_case();td.mode=TD_PAUSE;td.job=TD_NONE;td.msg=0;td.onfoot=0;td.speed=0;
+    for(UBYTE menu=0;menu<9;menu++){
+        td.menu=menu;
+        expect_pause_hint(menu==5?"PARK THEN WALK":"SELECT CITY MAP");
+    }
+    /* A lethal hit or active recovery makes car/transit actions unavailable,
+       while planning, Save and Settings retain their ordinary availability. */
+    for(UBYTE dead=0;dead<2;dead++){
+        td.vitality=dead?0:37;combat_locked_fixture=dead?0:1;
+        for(UBYTE menu=0;menu<9;menu++){
+            td.menu=menu;expect_pause_hint(menu>=3&&menu<=5?"RESUME TO RECOVER":"SELECT CITY MAP");
+        }
+    }
+    td.vitality=100;combat_locked_fixture=0;td.menu=4;
+    td.onfoot=1;expect_pause_hint("ENTER YOUR CAR FIRST");
+    td.job=0;expect_pause_hint("FINISH OR CANCEL JOB");
+    td.onfoot=0;expect_pause_hint("FINISH OR CANCEL JOB");
+    td.job=TD_NONE;
+    const WORD speeds[]={-4,-3,-2,0,2,3,14};
+    for(unsigned i=0;i<sizeof(speeds)/sizeof(*speeds);i++){
+        td.speed=speeds[i];expect_pause_hint(speeds[i]<-2||speeds[i]>2?"STOP TO CHANGE CAR":"SELECT CITY MAP");
+    }
+    /* These notices come from the unchanged actual rejection path. Switching
+       selection clears the longer footer rather than leaking stale letters. */
+    td.speed=0;td.menu=3;td.onfoot=1;near_car_fixture=0;td.msg=9;expect_pause_hint("WALK TO YOUR CAR");
+    near_car_fixture=1;td.msg=15;expect_pause_hint("DOOR PATH BLOCKED");
+    td.onfoot=0;td.msg=17;expect_pause_hint("MOVE OFF TRAM RAILS");
+    td.msg=11;td.speed=-3;expect_pause_hint("STOP TO USE CAR DOOR");
+    td.menu=0;expect_pause_hint("SELECT CITY MAP");
+    td.menu=5;td.speed=0;td.msg=0;td_entry_timer=1;expect_pause_hint("FINISH CAR ENTRY");
+    td_entry_timer=0;expect_pause_hint("PARK THEN WALK");
+    td.onfoot=1;td.job=0;
+    for(UBYTE kind=0;kind<8;kind++){
+        td_job.kind=kind;td.u=560*16;td.v=720*16;td.district=TD_DISTRICT_CITY;
+        expect_pause_hint(kind==3||kind==5?"DRIVE FOR THIS JOB":"SELECT CITY MAP");
+    }
+    td.job=TD_NONE;
+    /* Every authored boarding point, its exact15px boundary and a remote
+       district use the same origin eligibility as actual TTC interaction. */
+    for(UBYTE stop=0;stop<TD_STOPS;stop++){
+        td.district=host_ui_stops[stop].district;td.u=host_ui_stops[stop].u*16;td.v=host_ui_stops[stop].v*16;
+        if(host_ui_stops[stop].transit&&td_transit_can_origin(stop))expect_pause_hint("SELECT CITY MAP");
+    }
+    td.district=TD_DISTRICT_CITY;td.u=0;td.v=0;td.msg=6;expect_pause_hint("WALK TO A TTC STOP");
+    td.u=host_ui_stops[0].u*16;td.v=host_ui_stops[0].v*16;
+    td.u+=14*16;expect_pause_hint("SELECT CITY MAP");
+    td.u+=16;expect_pause_hint("WALK TO A TTC STOP");
+    /* Preserve the actual interaction's whole-pixel floor policy, including
+       its directional asymmetry. A negative239 Q4 offset floors to15px away;
+       positive239 floors to14px. Do not silently alter boarding in a UI fix.
+       Literal eligibility and the unchanged main-engine proximity function
+       independently check both axes and opposing fractional combinations. */
+    static const struct {WORD offset;UBYTE allowed;} fractional_edges[]={
+        {-241,0},{-240,0},{-239,0},{-225,0},{-224,1},{-1,1},{0,1},
+        {1,1},{224,1},{225,1},{239,1},{240,0},{241,0}
+    };
+    for(unsigned x=0;x<sizeof(fractional_edges)/sizeof(*fractional_edges);x++)
+        for(unsigned y=0;y<sizeof(fractional_edges)/sizeof(*fractional_edges);y++){
+            UBYTE expected=fractional_edges[x].allowed&&fractional_edges[y].allowed;
+            td.u=host_ui_stops[0].u*16+fractional_edges[x].offset;
+            td.v=host_ui_stops[0].v*16+fractional_edges[y].offset;
+            expect(td_ui_actual_near_stop(0)==expected,
+                   "fractional boundary oracle matches the unchanged actual main-engine boarding proximity on both axes");
+            expect_pause_hint(expected?"SELECT CITY MAP":"WALK TO A TTC STOP");
+        }
+    td.district=TD_DISTRICT_ISLANDS;expect_pause_hint("WALK TO A TTC STOP");
+    for(UBYTE mode=TD_WAIT;mode<=TD_RIDE;mode++){
+        td_resume_mode=mode;td.msg=2;
+        for(UBYTE menu=0;menu<9;menu++){
+            td.menu=menu;expect_pause_hint(menu>=2&&menu<=7?(menu==6?"SAVE AFTER THIS TRIP":"WAIT UNTIL TRIP ENDS"):"TTC: MAP/SETTINGS");
+        }
+    }
+    /* The two previous overlong captions now occupy complete native rows. */
+    reset_case();td.mode=TD_TRANSIT;td.transit_origin=0;td.transit_target=1;td_ui_draw();
+    expect_window_text(16,"WELLESLEY TRANSFER","interchange caption fits all twenty hardware columns");
+    expect_window_text(17,"FICTIONAL SCHEDULES","timetable disclaimer keeps its complete final word");
 }
 
 static void test_pause_audio_labels_and_map_cache(void){
@@ -585,7 +699,7 @@ static void test_car_entry_hud_repaint(void) {
     for(UBYTE vehicle=0;vehicle<4;vehicle++){
         reset_case();td.mode=TD_ROAM;td.job=TD_NONE;td.msg=0;td.vehicle=vehicle;td.onfoot=1;
         game_snapshot_t before=snapshot_game();td_ui_draw();
-        expect_window_text(1,"$123 WALK H2","car-entry fixture begins with the actual walking vehicle-status row");
+        expect_foot_health();
         expect_window_text(2,"A/B CAR A DOOR/BOAT","car-entry fixture begins with the actual walking controls");
         expect_game_unchanged(&before);
         /* The engine harness proves completion calls the renderer after the
@@ -598,7 +712,7 @@ static void test_car_entry_hud_repaint(void) {
         unsigned writes=window_writes;td_ui_draw();
         expect(window_writes==writes,"unchanged occupied-car HUD uses its existing row cache after the completion repaint");
         td.onfoot=1;before=snapshot_game();td_ui_draw();
-        expect_window_text(1,"$123 WALK H2","a later ordinary exit still restores the walking status without vehicle-name remnants");
+        expect_foot_health();
         expect_window_text(2,"A/B CAR A DOOR/BOAT","a later ordinary exit restores the walking controls");
         expect_game_unchanged(&before);
     }
@@ -820,22 +934,16 @@ static void test_island_no_fare_guidance(void){
         td.district=island?TD_DISTRICT_ISLANDS:TD_DISTRICT_CITY;td.job=active?7:TD_NONE;
         td_get_job(7,&td_job);td.stage=2;td.left=103;td.health=67;td.wanted=3;td_route_district=TD_NONE;
         td_get_stop(local?(island?25:0):(island?10:25),&td_target);
-        game_snapshot_t before=snapshot_game();td_ui_draw();char status[40];
+        game_snapshot_t before=snapshot_game();td_ui_draw();
         int rescue_cue=island&&active&&cash<4;
         expect_window_text(0,rescue_cue?"NO FARE: START MENU":"NO FARE MONEY",
                            "only an active low-cash Island notice exposes the cancellation recovery action");
         if(active){
-            sprintf(status,"3/%u 103S C67 H3",td_job.count);
-            if(rescue_cue)expect_window_text(1,status,"the special cancellation notice retains the full recovery status");
-            else expect_compact_status(1,1);
-            expect_window_text(2,rescue_cue?"CANCEL JOB TO RETURN":local?td_target.name:
-                               island?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
-                               "no-fare cancellation replaces only the eligible objective row");
+            expect_foot_health();
+            if(rescue_cue)expect_window_text(2,"CANCEL JOB TO RETURN","the eligible low-cash Island notice keeps its exact cancellation action");
+            else expect_compact_status(2,1);
         }else{
-            sprintf(status,"$%u WALK H3",cash);
-            expect_compact_status(1,0);
-            expect_window_text(2,island?"A BOAT / B FERRY":"A/B CAR A DOOR/BOAT",
-                               "no-job and mainland notices retain their normal controls");
+            expect_foot_health();expect_compact_status(2,0);
         }
         expect_game_unchanged(&before);expect_three_row_hud_safe();
         td.msg=0;before=snapshot_game();td_ui_draw();
@@ -853,7 +961,7 @@ static void test_island_no_fare_guidance(void){
     for(unsigned i=0;i<sizeof(notices);i++){
         td.msg=notices[i];game_snapshot_t before=snapshot_game();td_ui_draw();
         expect_window_text(0,text[i],"active Island notices retain the appropriate safety/penalty text without fare advice");
-        expect_window_text(2,"CENTRE PARK POST","other notices retain the Island client objective");
+        expect_compact_status(2,1);expect_foot_health();
         expect_game_unchanged(&before);
     }
     td.msg=4;td.transit_origin=20;td.transit_target=10;td.seconds=9;td_get_stop(10,&td_cursor);
@@ -1208,19 +1316,19 @@ static void test_compact_navigation_and_stars(void){
         actors[1].pos.x=((td.u>>4)+offset[i][0])*32;
         actors[1].pos.y=((td.v>>4)+offset[i][1]-12)*32;
         game_snapshot_t before=snapshot_game();td_ui_draw();
-        expect(window_y==136&&window_x==0,"normal driving leaves136 of144 native screen rows for the city");
+        expect(window_y==(td.onfoot?128:136)&&window_x==0,"driving preserves136 native city rows; armed walking uses a16px health strip");
         expect(window_tiles[0][0][0]==241+i,"each of eight independent target quadrants has its visible graphic direction");
         for(unsigned c=0;c<9;c++)expect(window_tiles[0][0][2+c]==td_glyph("MARKET PICKUP"[c]),
             "the visible strip preserves a readable short objective beside its arrow");
         expect_compact_status(0,1);expect_game_unchanged(&before);
     }
-    td.msg=19;td_ui_draw();expect(window_y==128,"collision notices temporarily add exactly one extra row");
+    td.msg=19;td_ui_draw();expect(window_y==(td.onfoot?120:128),"collision notices add one row above the walking health strip or driving objective");
     expect_window_text(0,"HUMAN HIT: FINE + H","the transient notice stays complete above the compact objective");
-    expect_compact_status(1,1);
+    expect_compact_status(td.onfoot?2:1,1);expect_foot_health();
     td.msg=0;td.wanted_left=29;td.seconds=1;td_ui_draw();expect_compact_status(0,1);
     td.seconds=2;td_ui_draw();expect_compact_status(0,1);
     td.wanted=td.wanted_left=0;td.job=TD_NONE;td.cash=60000;td_ui_draw();expect_compact_status(0,0);
-    expect(window_y==136,"idle roaming also uses the compact eight-pixel strip");
+    expect(window_y==(td.onfoot?128:136),"idle driving keeps8px HUD while walking exposes separate health/ammo");
     static const UBYTE gold_star[16]={0,0x10,0,0x38,0,0xfe,0,0x7c,0,0x38,0,0x6c,0,0x44,0,0};
     static const UBYTE mint_outline[16]={0x10,0,0x28,0,0xc6,0,0x44,0,0x28,0,0x54,0,0x44,0,0,0};
     expect(!memcmp(vram[1][249],gold_star,16)&&!memcmp(vram[1][250],mint_outline,16),
@@ -1346,6 +1454,8 @@ static void test_packed_actor_visibility(void){
     }
 }
 
+void td_hospital_init(void){}
+
 int main(void) {
     test_packed_row_codec();test_packed_atlas_codec();test_packed_actor_visibility();
     reset_case();boat_control_fixture=1;td.job=TD_NONE;td.mode=TD_ROAM;
@@ -1357,7 +1467,7 @@ int main(void) {
     expect_window_text(16,"A OR B: START GAME","the welcome screen explains how either action starts play");
     expect_game_unchanged(&boat_controls_before);
     td.menu=TD_SETTINGS_CONTROLS;boat_controls_before=snapshot_game();td_ui_draw();
-    expect_window_text(13,"DOCK: DOWN+A EXIT","the Settings control guide teaches the actual deliberate boat exit chord");
+    expect_window_text(14,"DOCK: DOWN+A EXIT","the Settings control guide teaches the actual deliberate boat exit chord");
     expect_game_unchanged(&boat_controls_before);boat_control_fixture=0;
     test_compact_navigation_and_stars();
     td.onfoot=1;td_map_focus=0;boat_control_fixture=1;td_map_headers();
@@ -1382,6 +1492,7 @@ int main(void) {
     test_dispatch_vehicle_readiness();
     printf("Dispatch vehicle UI regressions: %u checks, %u failures.\n",checks-vehicle_checks,failures-vehicle_failures);
     test_pause_audio_labels_and_map_cache();
+    test_pause_action_hints();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

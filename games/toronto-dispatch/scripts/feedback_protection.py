@@ -4,7 +4,7 @@ Historical fixture hashes remain authoritative. Current visual values are
 separately pinned, then replaced with retained historical values for the old
 geometry/client/job digest. This is not a blanket omit for scenery or missions.
 """
-import base64,copy,hashlib,json,zlib
+import base64,copy,hashlib,io,json,re,zlib
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];REPO=ROOT.parents[1]
 PATH=REPO/'tests/fixtures/city_feedback_protected.json'
@@ -131,12 +131,169 @@ def aircraft_extension_negatives(traffic,proof):
    rejected(lambda:aircraft_pixels_check(changed,scope))
  assert checks==20,'Aircraft extension mutation coverage changed'
 
+def courier_frames(meta):
+ return [frame for state in meta['states'] for frame in state['animations'][0]['frames']]
+
+def courier_meta_history(relative,meta,scope,traffic):
+ """Remove only the four approved poses, reconstructing every prior field."""
+ meta=copy.deepcopy(meta);pin=scope['metadata'][relative];frames=courier_frames(meta)
+ assert (meta['width'],meta['height'],meta['numTiles'],len(frames))==(256,64,0,49),'Courier append dimensions/count changed'
+ assert digest(frames[:45])==pin['original_frames_sha256'],'Original courier frame0..44 IDs/cells changed'
+ assert digest(frames[45:])==pin['armed_frames_sha256'],'Approved armed frames45..48 changed'
+ assert len(meta['states'])==2 and len(meta['states'][0]['animations'][0]['frames'])==32,'Original vehicle state changed'
+ for n,frame in enumerate(frames[45:],45):
+  assert len(frame['tiles'])==1,'An armed courier requires the preserved one-OBJ footprint'
+  tile=frame['tiles'][0]
+  assert (tile['x'],tile['y'],tile['sliceX'],tile['sliceY'])==(4,0,(n%16)*16+4,(n//16)*16),'Armed source cell changed'
+  assert tile['paletteIndex']==0 and tile['palette']==0 and tile['objPalette']=='OBP0' and not tile['priority'] and not tile['flipX'] and not tile['flipY'],'Armed palette/priority/flips changed'
+ meta['height']=48;meta['checksum']=pin['original_checksum']
+ meta['states'][1]['animations'][0]['frames']=meta['states'][1]['animations'][0]['frames'][:13]
+ expected=traffic['protected_files'][relative] if relative in traffic['protected_files'] else pin['previous_sha256']
+ assert hashlib.sha256((json.dumps(meta,indent=2)+'\n').encode()).hexdigest()==expected,('Courier defaults/identity/state/old poses changed',relative)
+ return meta
+
+def courier_pixels_check(image,scope):
+ from PIL import Image
+ image=image.convert('RGB');assert image.size==(256,64),'Courier sheet must append only one row'
+ previous=zlib.decompress(base64.b64decode(scope['previous_png_zlib']))
+ assert scope['previous_png_sha256']=='5b563d78676e165c4487e4332a59de0eff2a828ca1f2f572f4c49ff3613ef972','Pre-extension accepted PNG pin changed'
+ assert hashlib.sha256(previous).hexdigest()==scope['previous_png_sha256'],'Corrupt retained pre-extension courier PNG'
+ with Image.open(io.BytesIO(previous)) as old:
+  old=old.convert('RGB');assert old.size==(256,48),'Corrupt retained courier canvas'
+  original=[];armed=[]
+  for n in range(64):
+   rect=((n%16)*16,(n//16)*16,(n%16+1)*16,(n//16+1)*16);crop=image.crop(rect)
+   if n<45:
+    assert crop.tobytes()==old.crop(rect).tobytes(),('Approved courier/vehicle/beacon pixels changed',n)
+    original.append(crop.tobytes())
+   elif n<49:armed.append(crop.tobytes())
+   else:assert crop.getcolors()==[(256,(101,255,0))],('New courier pixels outside four appended poses',n)
+  assert hashlib.sha256(b''.join(original)).hexdigest()==scope['original_rgb_sha256'],'Original courier pixel prefix changed'
+  assert hashlib.sha256(b''.join(armed)).hexdigest()==scope['armed_rgb_sha256'],'Approved four sidearm poses changed'
+
+def courier_extension_check(traffic,proof):
+ from PIL import Image
+ scope=proof['courier_extension']
+ assert scope['original_frame_indices']==list(range(45)) and scope['armed_frame_indices']==[45,46,47,48]
+ assert set(scope['metadata'])=={'project/assets/sprites/dispatch_topdown.png.gbsres','project/dispatch_topdown.metadata.json'}
+ png=(ROOT/'project/assets/sprites/dispatch_topdown.png').read_bytes()
+ assert png==(ROOT/'project/original-art/dispatch_topdown.png').read_bytes(),'Native/source courier PNG bytes differ'
+ for relative in scope['metadata']:
+  meta=json.loads((ROOT/relative).read_text())
+  assert meta['checksum']==hashlib.sha1(png).hexdigest(),'Courier metadata does not identify its actual PNG'
+  courier_meta_history(relative,meta,scope,traffic)
+ with Image.open(io.BytesIO(png)) as image:
+  assert image.format=='PNG' and image.mode=='RGB','Unexpected courier PNG format/mode'
+  courier_pixels_check(image,scope)
+
+def courier_extension_negatives(traffic,proof):
+ from PIL import Image
+ scope=proof['courier_extension'];checks=0
+ def rejected(callback):
+  nonlocal checks
+  try:callback()
+  except AssertionError:checks+=1
+  else:raise AssertionError('Courier extension accepted an old/new pixel, ID, default or one-OBJ mutation')
+ for relative in scope['metadata']:
+  base=json.loads((ROOT/relative).read_text())
+  for kind in ('identity','old_cell','old_id','old_empty','extra_frame','armed_id','armed_palette','armed_slice','armed_body','default'):
+   changed=copy.deepcopy(base);frames=courier_frames(changed)
+   if kind=='identity':changed['id']='changed'
+   elif kind=='old_cell':frames[0]['tiles'][0]['x']+=1
+   elif kind=='old_id':frames[44]['id']='changed'
+   elif kind=='old_empty':changed['states'][0]['animations'][1]['frames'][0]['tiles']=copy.deepcopy(frames[0]['tiles'])
+   elif kind=='extra_frame':changed['states'][1]['animations'][0]['frames'].append(copy.deepcopy(frames[48]))
+   elif kind=='armed_id':frames[45]['id']='changed'
+   elif kind=='armed_palette':frames[45]['tiles'][0]['paletteIndex']=1
+   elif kind=='armed_slice':frames[46]['tiles'][0]['sliceX']+=1
+   elif kind=='armed_body':frames[47]['tiles'].append(copy.deepcopy(frames[47]['tiles'][0]))
+   else:changed['boundsWidth']+=1
+   rejected(lambda:courier_meta_history(relative,changed,scope,traffic))
+ with Image.open(ROOT/'project/assets/sprites/dispatch_topdown.png') as image:
+  for coordinate in ((0,0),(6,35),(8,31),(207,47),(215,39),(8,49),(255,63)):
+   changed=image.convert('RGB');changed.putpixel(coordinate,(0,0,0))
+   rejected(lambda:courier_pixels_check(changed,scope))
+  rejected(lambda:courier_pixels_check(image.crop((0,0,256,48)),scope))
+ corrupted=copy.deepcopy(scope);corrupted['previous_png_sha256']='changed'
+ rejected(lambda:courier_pixels_check(image,corrupted))
+ assert checks==29,'Courier extension mutation coverage changed'
+
+def save_layout_check(game,save):
+ """Independently count native scalar bytes, preserving historical bounds."""
+ assert '#define TD_ACTORS 22' in game and '#define TD_SAVE_VERSION 11' in game
+ assert '#define TD_STOPS 64' in game and '#define TD_QUESTS 104' in game and '#define TD_NOTICE_MAX 27' in game
+ declarations=game[game.index('typedef struct {\n    UWORD u,v,park_u'):game.index('} td_state_t;')]
+ declarations=re.sub(r'/\*.*?\*/','',declarations,flags=re.S)
+ size=0;fields=[]
+ for kind,names in re.findall(r'\b(UWORD|WORD|UBYTE)\s+([^;]+);',declarations):
+  for name in names.split(','):
+   name=name.strip();count=16 if name=='complete[TD_COMPLETE_BYTES]' else 1
+   fields.append(name);size+=(1 if kind=='UBYTE' else 2)*count
+ assert size==58,'Cartridge record must retain58 native scalar bytes'
+ assert fields[-8:]==['safe_u','safe_v','wanted','wanted_left','vitality','ammo','district','park_district'],'Packed v11 tail/legacy offsets changed'
+ compact=re.sub(r'\s+','',save)
+ assert 's->msg>(version<11?21:TD_NOTICE_MAX)' in compact,'Legacy21/current27 notice bounds changed'
+ assert 'dest->vitality=100;dest->ammo=12;' in compact and 'if(version<11)' in compact,'Legacy health/ammo defaults missing'
+
+def save_extension_check(game,save,proof):
+ """Reverse only the accepted v11 fields/migration; pin all older source."""
+ pins=proof['save_extension']
+ game_file='project/plugins/toronto-driving/engine/include/td_game.h'
+ save_file='project/plugins/toronto-driving/engine/src/td_save.c'
+ assert pins=={game_file:'bce5ac7ad9c88b0d2ceb071ad89f7d7daa67563bb7a70bdc354f2adf53e2aa7c',
+  save_file:'2cece846d0e4eaf8ce5f593ce30ccbf2eec0b74bc8b20b046715c2b5a4da3bf4'},'Accepted v10 source pins changed'
+ changes=(
+  (game_file,game,(
+   ('#define TD_DIALOG 9\n#define TD_SAVE_VERSION 11\n#define TD_NOTICE_MAX 27\n','#define TD_SAVE_VERSION 10\n'),
+   ('    UWORD safe_u,safe_v;\n    /* v11 packs bounded heat counters to retain the 58-byte SRAM record. */\n    UBYTE wanted,wanted_left,vitality,ammo;\n','    UWORD safe_u,safe_v,wanted,wanted_left;\n'),
+  )),
+  (save_file,save,(
+   ('    if(s->job!=TD_NONE){\n        if(s->job>=TD_QUESTS)return FALSE;td_get_job(s->job,&job);\n        if(s->stage>=job.count)return FALSE;\n        /* Only a v11 dead courier waiting for hospital may retain failed work.\n           Its eventual hospital commit retires that job exactly once. */\n        if((!s->left||!s->health)&&!(version>=11&&s->onfoot&&!s->vitality&&s->mode==TD_ROAM))return FALSE;\n    }\n','    if(s->job!=TD_NONE){if(s->job>=TD_QUESTS)return FALSE;td_get_job(s->job,&job);if(s->stage>=job.count||!s->left||!s->health)return FALSE;}\n'),
+   ('s->msg>(version<11?21:TD_NOTICE_MAX)||s->vitality>100||s->ammo>24','s->msg>21'),
+   ('        /* Only quest bits contribute to done. Byte13 stores eight story flags. */\n        if(i>=(TD_QUESTS+7)/8){if(value&&(version<11||i!=13))return FALSE;continue;}\n','        if(i>=(TD_QUESTS+7)/8&&value)return FALSE;\n'),
+   ('version==TD_SAVE_VERSION||version==10||version==9','version==TD_SAVE_VERSION||version==9'),
+   ('    if(version<11){\n        /* Old bounded counters were little-endian words at52/54. Validate\n           their high bytes before repacking; do not silently repair forged heat. */\n        if(version>=8&&(dst[53]||dst[55]))return FALSE;\n        dest->wanted=version<8?0:dst[52];\n        dest->wanted_left=version<8?0:dst[54];\n        dest->vitality=100;dest->ammo=12;\n    }\n','    if(version<8)dest->wanted=dest->wanted_left=0;\n'),
+   ('candidate.wanted=candidate.wanted_left=0;candidate.vitality=100;candidate.ammo=12;candidate.job','candidate.wanted=candidate.wanted_left=0;candidate.job'),
+  )),
+ )
+ for relative,current,patches in changes:
+  for after,before in patches:
+   assert current.count(after)==1,('Unapproved v11 source alteration',relative,after)
+   current=current.replace(after,before)
+  assert hashlib.sha256(current.encode()).hexdigest()==pins[relative],('Older save/layout/validation source changed outside accepted v11 additions',relative)
+ save_layout_check(game,save)
+
+def save_extension_negatives(game,save,proof):
+ cases=(
+  (game.replace('#define TD_QUESTS 104','#define TD_QUESTS 103'),save),
+  (game.replace('#define TD_SAVE_VERSION 11','#define TD_SAVE_VERSION 12'),save),
+  (game.replace('#define TD_NOTICE_MAX 27','#define TD_NOTICE_MAX 28'),save),
+  (game.replace('UBYTE wanted,wanted_left,vitality,ammo;','UWORD wanted,wanted_left,vitality,ammo;'),save),
+  (game.replace('UBYTE district,park_district;','UBYTE park_district,district;'),save),
+  (game,save.replace('version<11?21:TD_NOTICE_MAX','version<11?27:TD_NOTICE_MAX')),
+  (game,save.replace('s->ammo>24','s->ammo>25')),
+  (game,save.replace('version>=8&&(dst[53]||dst[55])','version>=8&&dst[53]')),
+  (game,save.replace('value&&(version<11||i!=13)','value&&version<11')),
+  (game,save.replace('version<10&&(s->district>=6','version<10&&(s->district>=7')),
+  (game,save.replace('dest->vitality=100;dest->ammo=12;','dest->vitality=99;dest->ammo=12;')),
+  (game,save.replace('version>=11&&s->onfoot','version>=10&&s->onfoot')),
+  (game,save.replace('version>=11&&s->onfoot&&!s->vitality','version>=11&&!s->vitality')),
+  (game,save.replace('s->onfoot&&!s->vitality','s->onfoot&&s->vitality<=1')),
+  (game,save.replace('s->mode==TD_ROAM','s->mode<=TD_RIDE')),
+  (game,save.replace('if(s->stage>=job.count)return FALSE;','if(s->stage>job.count)return FALSE;')),
+ )
+ for changed_game,changed_save in cases:
+  try:save_extension_check(changed_game,changed_save,proof)
+  except AssertionError:pass
+  else:raise AssertionError('Save protection accepted changed native size, older bounds or v11 migration')
+
 def semantic_check(traffic,proof=None):
  from PIL import Image
  proof=fixture() if proof is None else proof
  assert proof['predecessor_commit']=='8ea5ec413c3650cd3441ee588ba15f87a98889fa'
  assert proof['historical_fixture_sha256']==hashlib.sha256((REPO/'tests/fixtures/traffic_lanes.json').read_bytes()).hexdigest()
  aircraft_extension_check(traffic,proof);aircraft_extension_negatives(traffic,proof)
+ courier_extension_check(traffic,proof);courier_extension_negatives(traffic,proof)
  # Reconstruct only the accepted label/provenance correction. Every cash,
  # reward, deadline, job ordinal, route, stop coordinate and save ID stays old.
  campaign=json.loads((ROOT/'content/campaign.json').read_text());stop=campaign['stops'][18]
@@ -155,6 +312,8 @@ def semantic_check(traffic,proof=None):
   meta=json.loads((ROOT/relative).read_text())
   for key,value in checks.items():assert meta[key]==value,('Sprite identity/layout changed',relative,key)
  for relative,old_checksum in proof['checksum_only_sprites'].items():
+  if relative.endswith('dispatch_topdown.png.gbsres'):
+   courier_meta_history(relative,json.loads((ROOT/relative).read_text()),proof['courier_extension'],traffic);continue
   meta=json.loads((ROOT/relative).read_text());meta['checksum']=old_checksum
   if relative.endswith('city_fleet.png.gbsres'):
    frames=meta['states'][0]['animations'][0]['frames']
@@ -178,6 +337,5 @@ def semantic_check(traffic,proof=None):
   meta=json.loads((ROOT/'project/project/palettes'/filename).read_text())
   assert meta['id']==pin['id'] and meta['colors']==pin['colors'] and meta['defaultColors']==pin['defaultColors']
  game=(ROOT/'project/plugins/toronto-driving/engine/include/td_game.h').read_text()
- assert '#define TD_ACTORS 22' in game and '#define TD_SAVE_VERSION 10' in game
- assert '#define TD_STOPS 64' in game and '#define TD_QUESTS 104' in game
- assert 'msg>21' in (ROOT/'project/plugins/toronto-driving/engine/src/td_save.c').read_text()
+ save=(ROOT/'project/plugins/toronto-driving/engine/src/td_save.c').read_text()
+ save_extension_check(game,save,proof);save_extension_negatives(game,save,proof)

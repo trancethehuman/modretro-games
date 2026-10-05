@@ -79,7 +79,7 @@ def check_actor_override():
     edits = [('#include "td_scenery.h"\n', ""),
  ("#include \"td_aircraft_render.h\"\n", ""),
              ('#include "data_manager.h"\n', ""),
-             ("    td_actor_render_before();\n\n", ""),
+             ("    td_actor_render_prepare();\n\n", ""),
 
              ('#include "td_boats.h"\n', ""),
              ('#include "td_sandbox.h"\n', ""),

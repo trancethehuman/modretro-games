@@ -422,5 +422,12 @@
     "reviewed": "2026-10-03",
     "scope": "Distinguishes completed 2024–2025 Hanlan improvements from 2026 landing concept work, future landscape/movement recommendations and proposed Snake ceremonial space. Current high-water closures are not silently adopted as game era.",
     "rights": "Factual reference only. No map imagery, photographs, traced shapes, raw geometry, logos, public art or commercial characters imported. Website/PDF copyright remains separate from the root MIT licence and City dataset licence."
+  },
+  {
+    "id": "uhn-toronto-general-location-20261005",
+    "url": "https://www.uhn.ca/corporate/Directions/Pages/directions_TGH.aspx",
+    "reviewed": "2026-10-05",
+    "scope": "UHN directions explicitly identify Toronto General at 200 Elizabeth Street, east of University Avenue just south of College, with Elizabeth entrances between College and Gerrard. Supports relative compressed game hospital placement only; fictional University-side recovery forecourt is not a surveyed entrance, and current construction is not adopted.",
+    "rights": "Factual reference only. No maps, floor plans, photographs, logos, hospital marks, artwork or geometry imported. The new mint medical badge and building representation are original game art; the root MIT licence does not license UHN website material."
   }
 ]

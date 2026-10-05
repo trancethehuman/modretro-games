@@ -20,6 +20,13 @@ def strip(value,pin):
 
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--capture-approved',action='store_true');args=parser.parse_args();assert args.capture_approved,'Explicit maintainer capture flag required'
+ # This older capture path cannot reconstruct the separately authenticated
+ # courier/save append proofs. Preserve them rather than replacing the file
+ # with a weaker aircraft-only proof; ordinary validation remains supported.
+ if PATH.exists():
+  retained=json.loads(PATH.read_text())
+  unsupported=set(retained)&{'courier_extension','save_extension'}
+  if unsupported:raise SystemExit('Capture refused: retain and validate '+', '.join(sorted(unsupported))+' before this generator can replace the checked proof. No files changed.')
  traffic=json.loads((REPO/'tests/fixtures/traffic_lanes.json').read_text());raw={};scopes={}
  for relative,expected in traffic['protected_files'].items():
   before=old_bytes(relative);assert hashlib.sha256(before).hexdigest()==expected,('Historical raw pin mismatch',relative)

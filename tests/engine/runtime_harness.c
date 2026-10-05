@@ -38,11 +38,18 @@ BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 UBYTE td_test_sram[8192];
 
 static unsigned failures,checks,stop_reads,ui_draws;
+static UBYTE test_overlay_lifecycle,test_overlay_visible;
+static unsigned test_overlay_prepares,test_overlay_simulation_samples;
+static void expect(int condition,const char *name);
 static UBYTE ui_last_draw_onfoot;
 static unsigned audio_updates,audio_inits,audio_impacts;
 /* Native compositing has its own actual-source VRAM/OAM harness. */
 static UBYTE test_aircraft_exposed,test_boat_cover;
-UBYTE td_aircraft_render_exposed(UWORD u,UWORD v){(void)u;(void)v;return test_aircraft_exposed;}
+UBYTE td_aircraft_render_exposed(UWORD u,UWORD v){
+    (void)u;(void)v;
+    if(test_overlay_lifecycle){test_overlay_simulation_samples++;expect(test_overlay_visible,"Last complete overlays remain visible through ordinary simulation");}
+    return test_aircraft_exposed;
+}
 UBYTE td_boats_under_cover(void){return test_boat_cover;}
 void td_aircraft_render_reset(void) {}
 void td_aircraft_render_bind(void) {}
@@ -184,8 +191,24 @@ UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank) {
 }
 /* The actual UI initializer's transient-page reset is independently exercised
  * by the production UI harness. Retain that contract in this hardware stub. */
+UBYTE VBK_REG;
+void set_win_tiles(UBYTE x,UBYTE y,UBYTE width,UBYTE height,const UBYTE *tiles){(void)x;(void)y;(void)width;(void)height;(void)tiles;}
+void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles){(void)first;(void)count;(void)tiles;}
+void td_ui_story_frame(void){if(test_overlay_lifecycle)expect(!test_overlay_visible,"Story scratch is reused only after overlay preparation");}
+void td_ui_story_text(UBYTE row,const char *text){(void)row;(void)text;}
+void td_ui_story_close(void){td_ui_init();}
+void td_guidance_road_reset(void){}
+void td_guidance_road_restore(void){}
+void td_combat_render_reset(void){}
+void td_combat_render_restore(void){}
+void td_actor_render_before(void){test_overlay_prepares++;test_overlay_visible=0;}
+void td_actor_render_prepare(void){td_actor_render_before();}
 void td_ui_init(void) { td_board_route=0;ui_draws++; }
-void td_ui_draw(void) { ui_draws++;ui_last_draw_onfoot=td.onfoot; }
+void td_ui_draw(void) {
+    if(test_overlay_lifecycle&&td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE)
+        expect(!test_overlay_visible,"Full-screen UI drawing follows overlay preparation");
+    ui_draws++;ui_last_draw_onfoot=td.onfoot;
+}
 void td_map_open(void) {
     test_map_opens++;test_map_active=1;
     test_map_camera_x=camera_x;test_map_camera_y=camera_y;test_map_camera_settings=camera_settings;
@@ -229,6 +252,7 @@ UBYTE td_district_scene(UBYTE district,far_ptr_t *out) {
 }
 void td_district_reset(void) {test_reset_calls++;test_queued_district=TD_DISTRICT_NONE;}
 UBYTE td_district_queue(UBYTE district) {
+    if(test_overlay_lifecycle)expect(!test_overlay_visible,"District scene scheduling follows overlay preparation");
     test_queue_calls++;
     if(test_queue_fail||district>=TD_DISTRICT_COUNT||district==test_current_district)return FALSE;
     test_queued_district=district;return TRUE;
@@ -250,16 +274,17 @@ static void reset_case(void) {
     memset(&td_cursor,0,sizeof(td_cursor));memset(&td_target,0,sizeof(td_target));
     memset(td_test_sram,0,sizeof(td_test_sram));
     td.u=400*16;td.v=450*16;td.park_u=100*16;td.park_v=100*16;
-    td.job=TD_NONE;td.mode=TD_ROAM;td.health=100;td.cash=30;
+    td.job=TD_NONE;td.mode=TD_ROAM;td.health=100;td.vitality=100;td.ammo=12;td.cash=30;
     td.safe_u=td.u;td.safe_v=td.v;
     td_tick=td_notice_timer=td_red_cooldown=td_turn_tick=td_entry_timer=td_result_b_release=0;
     td_entry_target=td_walk_dir=td_input_edge=0;
     td_session_live=td_transition_pending=test_current_district=test_queue_fail=0;test_queued_district=TD_DISTRICT_NONE;
-    td_motion_reset();td_menu_reset();td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;td_board_route=0;
+    td_motion_reset();td_combat_reset();td_menu_reset();td_vx=td_vy=0;td_last_frame=0;td_resume_mode=TD_ROAM;td_board_route=0;
     td_route_district=TD_DISTRICT_NONE;memset(td_traffic_samples,0,sizeof(td_traffic_samples));
     td_corner_used=td_contact_episode=td_traffic_retreat_mask=td_vehicle_contact_mask=0;td_traffic_advance=8;td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
+    test_overlay_lifecycle=test_overlay_visible=0;test_overlay_prepares=test_overlay_simulation_samples=0;
     draw_scroll_x=draw_scroll_y=0;sandbox_pose_calls=0;
     test_boat_interact_calls=test_boat_drive_calls=test_boat_drive_keys=test_boat_exit_allowed=0;test_boat_controlled_calls=0;
     ui_last_draw_onfoot=0;
@@ -726,7 +751,7 @@ static void settings_press(UBYTE buttons){world_tick(0,1);world_tick(buttons,1);
 static void test_settings_controller(void){
     const UBYTE resumes[]={TD_ROAM,TD_WAIT,TD_RIDE};
     for(unsigned index=0;index<sizeof(resumes)/sizeof(resumes[0]);index++){
-        native_case();td.mode=resumes[index];td.onfoot=index!=0;
+        native_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.mode=resumes[index];td.onfoot=index!=0;
         td.job=0;td_get_job(td.job,&td_job);td.stage=1;td.health=67;td.left=90;
         td.seconds=7;td.subsecond=13;td.transit_origin=0;td.transit_target=12;td.ride_left=9;
         td.wanted=2;td.wanted_left=17;td.cooldown=43;
@@ -794,7 +819,7 @@ static void test_settings_controller(void){
             expect(td.speed<0&&audio_braking,"physical release then a fresh B restores braking and reverse after Settings");
         }
     }
-    reset_case();td.mode=TD_HELP;td.menu=0;td_resume_mode=TD_ROAM;world_tick(J_A,1);
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.mode=TD_HELP;td.menu=0;td_resume_mode=TD_ROAM;world_tick(J_A,1);
     expect(td.mode==TD_ROAM&&td.menu==0,"cold Welcome HELP retains its existing A/B Start Game destination");
 }
 
@@ -1227,7 +1252,7 @@ static void test_finished_job_target(void) {
 /* Clear terrain and distant fleet bodies isolate the input transition. The
    actual finish, menu, clock, driving, audio handoff and save code still run. */
 static void result_input_case(UBYTE success,UBYTE onfoot) {
-    reset_case();td.onfoot=onfoot;stop0_here=onfoot;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.onfoot=onfoot;stop0_here=onfoot;
     td.job=0;td_get_job(0,&td_job);td.stage=1;td.left=99;
     td_finish(success);
     expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.speed==0,
@@ -1377,7 +1402,7 @@ static void test_menu_held_drive_buttons(void) {
     /* Actual menu/driver/clock/traffic/audio functions on clear ground with
        distant bodies isolate input leakage from collision consequences. */
     for(unsigned index=0;index<sizeof(cases)/sizeof(cases[0]);index++) {
-        reset_case();td.mode=cases[index].mode;td.menu=cases[index].menu;
+        reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.mode=cases[index].mode;td.menu=cases[index].menu;
         td_resume_mode=TD_ROAM;td_get_job(0,&td_job);td_offer=td_job;
         if(cases[index].active){td.job=0;td.stage=1;td.left=180;td.health=68;}
         td_traffic_u[0]=100*16;td_traffic_v[0]=280*16;
@@ -1413,7 +1438,7 @@ static void test_menu_held_drive_buttons(void) {
     /* Reproduce the native North rejection/close inputs and exact pose;
        registered job data is real, while clear terrain/distant fleet keeps
        this regression about the input contract rather than native rendering. */
-    native_case();geometry=CLEAR_GROUND;test_current_district=td.district=TD_DISTRICT_NORTH;
+    native_case();td.complete[TD_STORY_SAVE_BYTE]=255;geometry=CLEAR_GROUND;test_current_district=td.district=TD_DISTRICT_NORTH;
     td.u=td.safe_u=406*16+9;td.v=td.safe_v=637*16+8;td.heading=4;
     td.job=97;td_get_job(td.job,&td_job);td.stage=1;td.health=68;td.left=150;
     td.mode=TD_PAUSE;td.menu=4;td_resume_mode=TD_ROAM;
@@ -1425,24 +1450,24 @@ static void test_menu_held_drive_buttons(void) {
     expect(td.mode==TD_ROAM&&td.u==north_u&&td.v==north_v&&td.speed==0&&td.health==68,
            "North vehicle rejection followed by B8 and neutral8 never produces inherited reverse");
 
-    reset_case();td.mode=TD_HELP;td_resume_mode=TD_ROAM;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.mode=TD_HELP;td_resume_mode=TD_ROAM;
     world_tick(J_A|J_B,1);world_tick(J_B,4);
     for(unsigned update=0;update<8;update++)world_tick(J_A|J_B,4);
     expect(td.speed>0&&!audio_braking,
            "fresh A works while only the unreleased menu B remains consumed");
-    reset_case();td.mode=TD_HELP;td_resume_mode=TD_ROAM;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.mode=TD_HELP;td_resume_mode=TD_ROAM;
     world_tick(J_A|J_B,1);world_tick(J_A,4);
     for(unsigned update=0;update<8;update++)world_tick(J_A|J_B,4);
     expect(td.speed<0&&audio_braking,
            "fresh B works while only the unreleased menu A remains consumed");
 
-    reset_case();td.speed=24;td_vx=384;UWORD moving_u=td.u;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.speed=24;td_vx=384;UWORD moving_u=td.u;
     world_tick(J_START,1);world_tick(0,1);world_tick(J_A|J_RIGHT,1);
     for(unsigned update=0;update<8;update++)world_tick(J_A|J_RIGHT,4);
     expect(td.mode==TD_ROAM&&td.u>moving_u&&td.speed>0&&td.speed<24&&td.heading!=0&&td.subsecond==32,
            "consumed resume throttle preserves coasting, steering and the active world clock");
 
-    reset_case();td.onfoot=1;td.park_u=td.u;td.park_v=td.v;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;td.onfoot=1;td.park_u=td.u;td.park_v=td.v;
     world_tick(J_A,4);
     for(unsigned update=0;update<12;update++)world_tick(J_A,4);
     expect(!td.onfoot&&!td_entry_timer&&!td.speed&&(td_result_b_release&J_A),
@@ -1450,18 +1475,18 @@ static void test_menu_held_drive_buttons(void) {
     world_tick(0,1);for(unsigned update=0;update<8;update++)world_tick(J_A,4);
     expect(td.speed>0,"fresh A after vehicle-entry release accelerates normally");
 
-    reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
     td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
     world_tick(J_A,1);world_tick(J_A,1);
     expect(!td_corner_used&&td.u==406*16&&td.v==392*16&&td.speed==0&&joy==J_A,
            "consumed menu A cannot trigger throttle-only corner assistance while the car coasts into a wall");
-    reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
     td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
     world_tick(J_B,1);world_tick(J_A|J_B,1);
     expect(td_corner_used&&td.u==407*16&&td.v>392*16&&td.speed==16&&joy==(J_A|J_B),
            "fresh A retains corner assistance despite a consumed menu B and restores the sampled hardware input");
 
-    reset_case();stop0_here=1;td.onfoot=1;td.mode=TD_TRANSIT;
+    reset_case();td.complete[TD_STORY_SAVE_BYTE]=255;stop0_here=1;td.onfoot=1;td.mode=TD_TRANSIT;
     td.transit_origin=0;td.transit_target=12;
     world_tick(J_B,1);
     for(unsigned update=0;update<8;update++)world_tick(J_B,4);
@@ -3460,7 +3485,7 @@ static void dispatch_edge(UBYTE button) {
 static void dispatch_offer(UBYTE job) {
     native_case();td.mode=TD_BOARD;td.menu=job;td_get_job(job,&td_offer);
     /* A valid, fully unlocked campaign with precisely this job uncompleted. */
-    memset(td.complete,255,TD_QUESTS/8);td.complete[job>>3]&=~(1<<(job&7));td.done=TD_QUESTS-1;
+    memset(td.complete,255,TD_QUESTS/8);td.complete[TD_STORY_SAVE_BYTE]=255;td.complete[job>>3]&=~(1<<(job&7));td.done=TD_QUESTS-1;
 }
 
 static void test_dispatch_itinerary_inputs(void) {
@@ -3971,8 +3996,38 @@ static void test_hardware_motion_feedback(void){
 #include "police_aircraft_harness.h"
 #include "ramming_harness.h"
 #include "traffic_courier_harness.h"
+#include "story_combat_save_harness.h"
+
+static void test_overlay_update_lifetime(void){
+    reset_case();test_overlay_lifecycle=test_overlay_visible=1;
+    world_tick(J_A,2);
+    expect(test_overlay_simulation_samples&&test_overlay_prepares==1&&!test_overlay_visible,
+           "Ordinary update preserves overlays through simulation and prepares once at completion");
+    reset_case();test_overlay_lifecycle=test_overlay_visible=1;
+    world_tick(J_START,2);
+    expect(td.mode==TD_PAUSE&&!test_overlay_visible&&test_overlay_prepares,
+           "Start cleans shared overlays before its immediate full-screen menu");
+    reset_case();test_overlay_lifecycle=test_overlay_visible=1;td.job=0;
+    td_finish(FALSE);
+    expect(td.mode==TD_RESULT&&!test_overlay_visible&&test_overlay_prepares,
+           "A mid-update mission result cleans overlays before result UI");
+    reset_case();test_overlay_lifecycle=test_overlay_visible=1;test_shop_pending=1;
+    world_tick(0,1);
+    expect(!test_overlay_visible&&test_overlay_prepares,
+           "A queued shop exit prepares before returning to the scene-changing VM");
+    reset_case();test_overlay_lifecycle=test_overlay_visible=1;
+    expect(td_change_district(1,400*16,450*16)&&!test_overlay_visible&&test_overlay_prepares,
+           "A valid district handoff prepares before scene scheduling");
+    reset_case();td.mode=TD_HELP;test_overlay_lifecycle=test_overlay_visible=1;
+    world_tick(J_A,1);
+    expect(td.mode==TD_DIALOG&&!test_overlay_visible&&test_overlay_prepares,
+           "The help-to-story handoff prepares before portrait/window tile reuse");
+    reset_case();
+}
 
 int main(void) {
+    test_overlay_update_lifetime();
+    if(getenv("TD_STORY_COMBAT_SAVE_ONLY")){test_story_combat_save_integration();printf("Story/combat save integration actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
     if(getenv("TD_COURIER_YIELD_ONLY")){test_ordinary_courier_yielding();printf("Ordinary courier yielding actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
     if(getenv("TD_SETTINGS_ONLY")){test_settings_controller();test_audio_event_integration();printf("Settings controller actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
     if(getenv("TD_BOAT_TRAFFIC_ONLY")){test_boat_traffic_exclusions();printf("Boat passenger/road traffic actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
@@ -4022,7 +4077,7 @@ int main(void) {
     test_dispatch_itinerary_inputs();test_dispatch_chapter_inputs();test_dispatch_chapter_eligibility();test_dispatch_acceptance_and_reentry();
     test_dispatch_active_preview_resume();test_dispatch_credit_cache_and_order();test_dispatch_transient_save_contract();
     test_reserved_islands_traffic_gates();test_current_ferry_fare_boundary();
-    test_island_save_migration();test_north_save_migration();test_island_objective_guidance();
+    test_island_save_migration();test_north_save_migration();test_island_objective_guidance();test_story_combat_save_integration();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

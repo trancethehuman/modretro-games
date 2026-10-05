@@ -12,6 +12,14 @@ static void expect(int ok,const char *message){checks++;if(!ok){if(failures<12){
 UBYTE get_vram_byte(UBYTE *p){size_t off=p-map[0];reads++;expect(off<1024,"map read bounded");return off<1024?map[VBK_REG&1][off]:0;}
 void set_vram_byte(UBYTE *p,UBYTE value){size_t off=p-map[0];expect(off<1024,"map write bounded");if(off<1024){ map[VBK_REG&1][off]=value; }writes++;}
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *data){expect(first>=80&&first<=97&&count==1&&VBK_REG==1,"only18 reserved signed bank1 patterns");memcpy(patterns[VBK_REG&1][first],data,16);uploads++;}
+static unsigned arrow_restore_calls,arrow_offset;
+static UBYTE arrow_tile,arrow_attr;
+void td_guidance_road_restore(void){
+ arrow_restore_calls++;
+ if(map[0][arrow_offset]>=241&&map[0][arrow_offset]<=244&&map[1][arrow_offset]==15){
+  map[0][arrow_offset]=arrow_tile;map[1][arrow_offset]=arrow_attr;
+ }
+}
 static unsigned random_state=7171;
 static unsigned rng(void){random_state^=random_state<<13;random_state^=random_state>>17;random_state^=random_state<<5;return random_state;}
 static int slab(double old,double delta,double low,double high,double *a,double *b){
@@ -208,4 +216,20 @@ static void render(void){
  for(unsigned frame=0;frame<25;frame++){unsigned expected=frame<8?2:frame<16?1:0;expect(td_prop_phase(district,0)==expected,"impact flash falls into rubble in24 visible frames");td_scenery_render();td_scenery_restore();}
  unsigned prior=td_prop_flash_next;td_scenery_render_reset();expect(td_prop_dead(td_prop_offsets[district])&&prior==td_prop_flash_next,"scene reload preserves destruction and animation identities");
 }
-int main(void){packing();contact();fastpath();render();printf("Scenery actual C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+static void retained_arrow_underlay(void){
+ static int scene;district=0;td.mode=TD_ROAM;current_scene=(far_ptr_t){1,&scene};
+ for(unsigned direction=1;direction<=4;direction++){
+  td_scenery_reset();memset(map,0,sizeof(map));
+  unsigned index=td_prop_offsets[0];td_broken[index/8]=1u<<(index%8);td_prop_flash_next|=128;
+  draw_scroll_x=td_props[index].x*8-80;draw_scroll_y=td_props[index].y*8-72;
+  arrow_offset=(td_props[index].y%32)*32+td_props[index].x%32;
+  arrow_tile=17;arrow_attr=2;arrow_restore_calls=0;
+  map[0][arrow_offset]=240+direction;map[1][arrow_offset]=15;
+  td_scenery_render();
+  expect(arrow_restore_calls==1&&td_prop_patch_count==1,"new destruction removes the retained road patch before admitting its rubble");
+  expect(td_prop_patches[0].tile==17&&td_prop_patches[0].attr==2,"rubble saves the ground underlay, never a stale arrow glyph");
+  td_scenery_restore();
+  expect(map[0][arrow_offset]==17&&map[1][arrow_offset]==2,"restoring rubble cannot leave an orphaned road arrow");
+ }
+}
+int main(void){packing();contact();fastpath();render();retained_arrow_underlay();printf("Scenery actual C: %u checks, %u failures\n",checks,failures);return failures?1:0;}

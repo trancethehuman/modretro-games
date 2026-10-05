@@ -1,0 +1,54 @@
+{
+  "name": "Toronto General game hospital",
+  "source": "uhn-toronto-general-location-20261005",
+  "reviewed": "2026-10-05",
+  "source_fact": "Toronto General Hospital is at 200 Elizabeth Street, east of University Avenue just south of College Street. Its Elizabeth entrances are between College and Gerrard.",
+  "game_compression": "The original existing Core facade at 512,320 represents a compressed hospital building. The University-side game forecourt and exit are fictional, not surveyed entrance coordinates. Existing roads, artwork and collision bytes remain unchanged.",
+  "district": 0,
+  "scene": "toronto_city",
+  "exit": {"u": 504, "v": 344},
+  "recovery": {
+    "foot_half_width": 3,
+    "coordinates_are_whole_pixels": true,
+    "runtime_requires_full_body_and_live_vehicle_clearance": true,
+    "candidates": [
+      {"u": 504, "v": 344, "raw_body_clear": true},
+      {"u": 520, "v": 344, "raw_body_clear": false},
+      {"u": 488, "v": 344, "raw_body_clear": true},
+      {"u": 504, "v": 360, "raw_body_clear": true},
+      {"u": 504, "v": 328, "raw_body_clear": true},
+      {"u": 520, "v": 360, "raw_body_clear": false},
+      {"u": 488, "v": 360, "raw_body_clear": true},
+      {"u": 520, "v": 328, "raw_body_clear": false},
+      {"u": 488, "v": 328, "raw_body_clear": true}
+    ]
+  },
+  "marker": {
+    "u": 512,
+    "v": 344,
+    "width": 8,
+    "height": 8,
+    "tile_bank": 1,
+    "tile": 254,
+    "palette": 7,
+    "preserve_roof_priority": true,
+    "upload": "td_ui_init",
+    "original_cells": [
+      "03333330",
+      "30011003",
+      "30011003",
+      "31111113",
+      "31111113",
+      "30011003",
+      "30011003",
+      "03333330"
+    ],
+    "source_png": "project/original-art/hospital_marker.png",
+    "original_art": true,
+    "uses_official_logo": false,
+    "new_oam_objects": 0,
+    "new_mutable_state_bytes": 0
+  },
+  "campaign_changes": {"new_quest_stops": 0, "renumbered_quest_stops": 0, "new_navigation_goals": 0},
+  "evidence": "Raw full-foot collision candidates are source checks only. Actual recovery, signed-bank tile allocation, scrolling/overlay behavior and hardware visuals need the distinct integrated ROM's native checks."
+}

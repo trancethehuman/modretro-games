@@ -3,7 +3,7 @@
 static void test_sandbox_entry_and_boat_save(void){
     reset_case();geometry=NATIVE_GRID;authored_content=1;
     td.msg=21;expect(td_valid_fields(&td,TD_SAVE_VERSION),"the bounded street-capacity notice is a valid current save field");
-    for(unsigned notice=22;notice<256;notice++){
+    for(unsigned notice=TD_NOTICE_MAX+1;notice<256;notice++){
         td.msg=notice;
         expect(!td_valid_fields(&td,TD_SAVE_VERSION),"a CRC-valid forged notice cannot index beyond the actual UI table");
     }

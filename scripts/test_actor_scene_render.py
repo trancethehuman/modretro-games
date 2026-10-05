@@ -37,7 +37,7 @@ def main():
     signature = "const metasprite_t *td_actor_render_pose(const void *descriptor,UBYTE bank,UBYTE frame) NONBANKED"
     assert helper.count(signature + " {") == 1 and declaration.count(signature + ";") == 1, \
         "The compact metadata selector must remain in fixed HOME with its matching ABI"
-    for name,args in (("before","void"), ("ground","UBYTE window_hide_actors"), ("after","void")):
+    for name,args in (("before","void"), ("prepare","void"), ("ground","UBYTE window_hide_actors"), ("after","void")):
         assert helper.count(f"void td_actor_render_{name}({args}) BANKED {{") == 1, \
             "Ground dispatch must retain its banked native ABI"
         assert declaration.count(f"void td_actor_render_{name}({args}) BANKED;") == 1, \

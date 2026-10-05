@@ -8,6 +8,7 @@
 #include "td_traffic.h"
 #include "td_scenery.h"
 #include "td_sandbox.h"
+#include "td_combat.h"
 #include "actor.h"
 #include "input.h"
 #include "compat.h"
@@ -141,7 +142,7 @@ UBYTE td_motion_player_knockback(BYTE dx,BYTE dy) BANKED {
     td_player_hurt=72;td.cooldown=120;td_entry_timer=0;td.mode=TD_ROAM;
     td.speed=0;td_vx=td_vy=0;
     if(td.job!=TD_NONE&&td.stage)td.health=td.health>15?td.health-15:0;
-    td_motion_notice(5);
+    td_combat_damage(15,dx,dy);td_motion_notice(5);
     if(td.job!=TD_NONE&&!td.health)td_motion_finish(FALSE);else td_save();
     return TRUE;
 }

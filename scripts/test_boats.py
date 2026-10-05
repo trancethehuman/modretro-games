@@ -38,7 +38,7 @@ def grids():
 
 def check_render_integration(core,helpers):
     render=body(core,"actors_render")
-    before=body(helpers,"td_actor_render_before")
+    before=body(helpers,"td_actor_render_prepare_local")
     ground_helper=body(helpers,"td_actor_render_ground")
     after=body(helpers,"td_actor_render_after")
     compact=lambda source:re.sub(r"\s+","",source)
@@ -47,11 +47,16 @@ def check_render_integration(core,helpers):
     combined=compact(render+before+ground_helper+after)
     assert combined.count("td_boats_render();")==2 and \
         combined.count(controlled)==combined.count(ambient)==1,"Keep one controlled and one ambient boat path"
-    assert compact(before)=="td_aircraft_render_restore();td_scenery_restore();", \
-        "Banked entry restores both previous overlays in their original order"
-    assert compact(after)=="td_traffic_lights_render();td_scenery_render();"+ambient+ \
-        "td_sandbox_render();td_aircraft_render();","Banked post-ground overlay contents and order stay exact"
-    assert render.count("td_actor_render_before();")==render.count("td_actor_render_after();")==1
+    assert compact(body(helpers,"td_actor_render_before"))=="td_actor_render_prepare_local(1);"
+    assert compact(body(helpers,"td_actor_render_prepare"))=="td_actor_render_prepare_local(0);"
+    assert compact(before)=="if(td_actor_render_restored){if(force)td_guidance_road_restore();return;}td_actor_render_restored=1;"+ \
+        "td_aircraft_render_restore();td_combat_render_restore();"+ \
+        "if(force)td_guidance_road_restore();elsetd_guidance_road_prepare();td_scenery_restore();", \
+        "Normal preparation retains an unchanged arrow; forced reuse releases it in reverse overlay ownership order"
+    assert compact(after)=="td_traffic_lights_render();td_scenery_render();td_hospital_render();"+ambient+ \
+        "td_sandbox_render();td_guidance_road_render();td_combat_render();"+ \
+        "td_aircraft_render();td_actor_render_restored=0;","Banked post-ground overlay contents and order stay exact"
+    assert render.count("td_actor_render_prepare();")==render.count("td_actor_render_after();")==1
     assert compact(render).count(controlled)==1 and not compact(render).count(ambient)
     assert render.count("SWITCH_ROM(_save);")==1
     assert render.count("td_actor_render_ground(window_hide_actors);")==1
@@ -60,7 +65,7 @@ def check_render_integration(core,helpers):
     assert ground_helper.count("td_actor_render_actor_local(actor);")==1 and \
         "td_actor_render_actor(actor);" not in ground_helper, "Same-bank ground dispatch uses its unchanged private near-call actor body"
     ground=render.index("td_actor_render_ground(window_hide_actors);")
-    assert render.index("td_actor_render_before();")<render.index("td_actor_render_actor(&PLAYER);")
+    assert render.index("td_actor_render_prepare();")<render.index("td_actor_render_actor(&PLAYER);")
     # Use the uncompressed exact native conditional for actual function order;
     # its position must stay before the ground loop and both bank restorations.
     control=re.search(r"if\s*\(\s*td_boats_controlled\(\)\s*\)\s*td_boats_render\(\);",render)
@@ -81,9 +86,11 @@ def check_integration():
     for changed_core,changed_helpers in (
         (core.replace("if(td_boats_controlled())td_boats_render();","td_boats_render();"),helpers),
         (core,helpers.replace("if(!td_boats_controlled())td_boats_render();","if(td_boats_controlled())td_boats_render();")),
-        (core,helpers.replace("    td_sandbox_render();\n    td_aircraft_render();","    td_aircraft_render();\n    td_sandbox_render();")),
+        (core,helpers.replace("    td_sandbox_render();td_guidance_road_render();td_combat_render();\n    td_aircraft_render();","    td_aircraft_render();\n    td_sandbox_render();td_guidance_road_render();td_combat_render();")),
         (core.replace("    SWITCH_ROM(_save);\n    td_actor_render_after();","    td_actor_render_after();\n    SWITCH_ROM(_save);"),helpers),
         (core,helpers.replace("    td_scenery_restore();\n","")),
+        (core,helpers.replace("td_aircraft_render_restore();td_combat_render_restore();","td_combat_render_restore();td_aircraft_render_restore();")),
+        (core,helpers.replace("td_guidance_road_render();td_combat_render();","td_combat_render();td_guidance_road_render();")),
     ):
         try:check_render_integration(changed_core,changed_helpers)
         except AssertionError:pass

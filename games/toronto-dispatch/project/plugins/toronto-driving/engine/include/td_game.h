@@ -20,7 +20,9 @@
 #define TD_SETTINGS_SOUND 9
 #define TD_SETTINGS_CONTROLS 10
 #define TD_SETTINGS_BACK 11
-#define TD_SAVE_VERSION 10
+#define TD_DIALOG 9
+#define TD_SAVE_VERSION 11
+#define TD_NOTICE_MAX 27
 #define TD_STREETCAR_HOLD 1
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
@@ -32,7 +34,9 @@ typedef struct {
     UBYTE transit_origin,transit_target,ride_left,cooldown,msg;
     UBYTE reserved;
     /* v8 reuses obsolete serialized map cursor words; atlas cursor is private. */
-    UWORD safe_u,safe_v,wanted,wanted_left;
+    UWORD safe_u,safe_v;
+    /* v11 packs bounded heat counters to retain the 58-byte SRAM record. */
+    UBYTE wanted,wanted_left,vitality,ammo;
     UBYTE district,park_district;
 } td_state_t;
 extern td_state_t td;

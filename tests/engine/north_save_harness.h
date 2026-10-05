@@ -120,7 +120,7 @@ static void test_north_current_and_v9_upgrade(void){
     td_state_t old=north_save_baseline();island_disk_record(0,9,&old,37);memset(&td,0,sizeof(td));
     expect(td_restore()&&!memcmp(&td,&old,58),"explicit9 reader accepts a genuine snapshot unchanged before first normal upgrade");
     UBYTE image[sizeof(td_test_sram)];memcpy(image,td_test_sram,sizeof(image));sram_writes=0;td_save();
-    expect(sram_writes==67&&td_save_address(1)[2]==10&&td_save_address(1)[3]==58,"normal9-to10 upgrade retains67 actual atomic stores");
+    expect(sram_writes==67&&td_save_address(1)[2]==TD_SAVE_VERSION&&td_save_address(1)[3]==58,"normal9-to11 upgrade retains67 actual atomic stores");
     for(volatile unsigned cut=1;cut<=67;cut++){
         memcpy(td_test_sram,image,sizeof(image));memset(&td,0,sizeof(td));expect(td_restore(),"interrupted upgrade begins from genuine admitted9 slot");
         sram_writes=0;sram_interrupt_after=cut;sram_interrupt_enabled=1;
@@ -131,7 +131,7 @@ static void test_north_current_and_v9_upgrade(void){
     }
 }
 static void test_north_save_migration(void){
-    expect(TD_SAVE_VERSION==10&&TD_DISTRICT_COUNT==7&&TD_QUESTS==104&&TD_STOPS==64&&sizeof(td_state_t)==58,
-           "actual North world appends7/104/64 with unchanged58-byte v10 payload");
+    expect(TD_SAVE_VERSION==11&&TD_DISTRICT_COUNT==7&&TD_QUESTS==104&&TD_STOPS==64&&sizeof(td_state_t)==58,
+           "actual North world appends7/104/64 with unchanged58-byte size with v11 player fields");
     test_north_old_field_bounds();test_north_historical_core_overlay();test_north_current_and_v9_upgrade();
 }

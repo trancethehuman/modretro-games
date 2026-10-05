@@ -19,9 +19,14 @@ const metasprite_t *td_actor_render_pose(const void *descriptor,UBYTE bank,UBYTE
 void td_actor_render_actor(actor_t *actor) BANKED;
 /* Scene-bounded stable roles2..last then marker1. No manual ROM switching. */
 void td_actor_render_ground(UBYTE window_hide_actors) BANKED;
-/* Restore aircraft then scenery overlays before ground actors; no WRAM. */
+/* Idempotent preparation until the next post-ground dispatch. TORONTO calls
+ * after simulation/before scroll; core rendering provides a VM-lock fallback.
+ * One transient byte, no serialized state or additional actor/OBJ. */
 void td_actor_render_before(void) BANKED;
+/* Normal preparation retains an unchanged owned road arrow. A forced modal
+ * call above can still release it after this cycle was already prepared. */
+void td_actor_render_prepare(void) BANKED;
 /* Existing post-ground overlays stay ordered in a switched ROM bank.
- * Caller restores its saved ROM bank before this dispatch; no state/WRAM. */
+ * Caller restores its saved ROM bank before this dispatch. Ends preparation. */
 void td_actor_render_after(void) BANKED;
 #endif

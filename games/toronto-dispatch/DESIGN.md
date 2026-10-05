@@ -1,5 +1,9 @@
 # Toronto Dispatch — design
 
+The [Oct5 source summary](#current-quest-story-and-combat-source--2026-10-05)
+describes the latest gameplay additions. Earlier milestone descriptions retain
+their own ROM scope; later source changes do not upgrade their evidence.
+
 ## Player experience
 
 The second physical feedback batch on 2026-10-04 accepts quick theft of parked
@@ -19,7 +23,7 @@ You are a Toronto courier working a shift. Accept a job, collect the package, fi
 
 The city remains open between jobs. Landmarks help navigation; neighbourhoods change in building shapes, density, road width, trees, and industrial character. A compact readable city is the starting point for a larger world, not the full Toronto map on day one. The accepted direction includes a GTA-inspired street simulation around the courier: visible civilian pedestrians, collision consequences, service vehicles, drivers obeying lights and activity on the waterfront. The user selected chaotic sandbox play with escalating police pursuits and tougher penalties. Current source integrates bounded road pursuits and the first street systems below; scoped native street functionality passes, while broader pacing/gameplay and hardware remain pending. Geographic scope stays within Old Toronto.
 
-## Dialogue camera direction — accepted, not implemented
+## Dialogue camera direction — original decision, 2026-10-04
 
 On 2026-10-04 the user accepted dialogue cutscenes with a Pokémon battle-camera
 composition reference: an original over-the-shoulder courier portrait in the
@@ -29,15 +33,11 @@ dialogue, music and scene art remain original; Nintendo sprites and music are
 not game assets. This camera composition applies to dialogue only. City driving
 and walking retain the accepted straight, north-up view and approved human art.
 
-The existing shopkeeper interaction provides a short greeting in a timed text
-window. It does not implement this camera or a dialogue/story system. A future
-first prototype should use one keeper and one original conversation page, with
-A to advance and B to return, without leaking held interaction input into
-walking or another action. Static background/window portraits should avoid
-extra actors or per-frame pixel composition. Tile ownership/restoration, room
-and courier state, existing world-clock/audio behavior and native readability
-need their own checks before dialogue content expands. The current native
-performance build and cartridge acceptance remain separate work.
+At that checkpoint, shopkeepers only offered a short timed greeting and the
+dialogue camera remained future work. The Oct5 source now implements original
+full-screen story portraits and pages, described below. Shop greetings remain
+their own simple indoor interaction. Neither the original decision nor source
+implementation supplies cartridge acceptance.
 
 ## Vehicle eligibility feedback — 2026-10-04
 
@@ -69,7 +69,11 @@ Cargo condition is part of the native contract rules. Damage starts after the fi
 
 Occasional original planes and helicopters cross the loaded district to make the city feel active. The user requested random flybys on 2026-10-02. Flights vary in direction, type and path offset; helicopters animate their rotors, and a small shadow follows below. Aircraft remain above roofs while the courier, cars and walkers retain building occlusion. Flights follow world positions once spawned, so camera scrolling does not drag them with the player. They are scenery: they do not collide, change fares or affect jobs. Pause, maps and menus freeze their motion and next-flight countdown. See [the aircraft source and acceptance record](docs/AIRCRAFT.md); native rendering, performance and hardware acceptance are separate gates.
 
-## Expanded street simulation — scoped native prototype, broader acceptance pending
+## Expanded street simulation — retained initial prototype scope
+
+This section records the first street-simulation milestone. Later sandbox and
+Oct5 story/combat work supersede its feature exclusions and temporary effects;
+the recorded earlier ROMs retain their original behavior and acceptance scope.
 
 The user requests recognisable ordinary people on foot, player vehicle impacts with gameplay consequences, police/fire/ambulance vehicles, trucks, buses, water boats, bridges, road-driving NPCs and traffic lights those drivers follow. Keep original Toronto-inspired art and fictional service branding, north-up readability, wide roads, researched streets/water crossings, walking/car entry and the courier mission loop. Chaotic sandbox play, escalating police pursuits and tougher penalties are accepted. The first implementation uses a non-graphic stumble; that existing recovery does not adopt lethal injury, combat, weapons or stealing NPC vehicles.
 
@@ -238,3 +242,115 @@ At completion of the existing door animation, rebuild the target and save as bef
 A [same-ROM continuation](docs/NATIVE_UI_POLISH_ART.json) imports the genuine one-job endpoint and adds First Art, with condition-scaled credit 123 / cash 261 / done 2. It verifies active-foot preview/resume, on-foot delivery, original-car recovery and durable SRAM reset. The 8,129-check audit discloses imported history and the broad damage bracket; the earlier fresh record remains a one-job scope. No mechanics, build or hardware evidence changes.
 
 A separate exact 03e09 Core trial counts 385 completed loops / 1,080 VBlanks while stopped, then 80 / 240 under a fixed driving/braking tail. It matches the older 825 numbers but supplies only one new trial. Preserve that [scope](docs/NATIVE_UI_POLISH_PERFORMANCE.json) without transferring repeated-trial, whole-city or human responsiveness claims.
+
+
+## Accepted quest, story and armed sandbox direction — 2026-10-05
+
+Keep exactly one accepted contract at a time. The existing dispatch/resume rules
+remain; add a visible ground arrow for the next stage, following collision-backed
+routes instead of directing a driver through buildings. Preserve the destination
+beacon and scrollable map. Route policy tables live in ROM; do not add a large
+per-frame search or reduce city art/population to accommodate guidance.
+
+The courier is a man who recently moved to Toronto. His ethnicity remains
+unspecified. Original full-screen over-the-shoulder dialogue scenes tell a
+rags-to-riches story with drama, beginning with a borrowed vehicle and ending
+with a community courier business. Welcome and completed-job milestones trigger
+one eligible unseen chapter at a time. A advances; B/Start skips the current
+chapter. Dialogue freezes the world, consumes its closing buttons until release,
+then restores the city/window/actor presentation. The original bright portrait
+art is distinct from the unchanged north-up city camera.
+
+Player and police weapons are accepted. On foot, A retains interactions; B
+retains nearby vehicle/TTC interactions and otherwise fires the sidearm in the
+walking direction. Firing uses ammunition, increases wanted attention, and
+checks cover/nearer road bodies. Armed police respond at higher attention.
+Player vitality is separate from package/passenger condition. Non-graphic
+hit/down poses, temporary immunity, recovery and a bounded medical fee prevent
+a permanently trapped player. The normal courier missions remain playable.
+
+Save v11 retains the 58-byte payload. Bounded attention/countdown counters use
+one byte each; the two released bytes store vitality and ammo. Story-seen flags
+use completion byte 13, outside the 104 quest bits, and never count as deliveries.
+Read genuine old v4–v10 layouts, validate old word high bytes before conversion,
+then initialize health/ammo while preserving old progress. Keep atomic journal
+writes and distinguish native/host/physical save evidence.
+
+## Current quest, story and combat build — 2026-10-05
+
+Dispatch retains one active contract. Its existing beacon and map are joined
+by a small ground arrow toward the next collision-backed local waypoint or
+district approach. Walking and driving use their respective body clearances;
+guidance does not accept work, move the courier or complete a handoff. The
+existing city art, roads, populations and 45 courier poses remain intact, with
+four original sidearm poses appended.
+
+Eight original chapters contain 41 pages, becoming eligible at 0, 1, 8, 16, 32,
+56, 80 and 104 unique deliveries. Welcome opens the introduction; subsequent
+delivery results offer one eligible unseen chapter. A advances; B/Start skips
+that chapter. Dialogue freezes the world, keeps input consumed through release
+and restores the ordinary city display afterward. The ending tells the
+newcomer's growth into a community dispatch owner; ethnicity stays unspecified.
+
+On-foot B keeps nearby vehicle/TTC interactions first, then fires in the walking
+direction. Shots spend ammunition, increase attention and check walls and nearer
+vehicle bodies before hitting a visible person or patrol. At higher attention,
+armed police can fire at the exposed walking courier. Health is separate from
+cargo condition and stays visible with ammo and police stars. Hits/downing use
+non-graphic poses and temporary immunity. The latest accepted recovery replaces
+the earlier nearby-position rule with the hospital flow below. These remain
+bounded loaded-district systems.
+
+If health is below 100 or ammunition below 12, a shop advertises $10 supplies.
+A near the keeper buys up to 25 health and raises ammo to at least 12; more carried
+ammo is retained and insufficient cash buys nothing. Shops continue their live
+clock and walking. Fresh Start only displays how to leave with B for the outdoor
+menu. Pause explains unavailable car/recovery/TTC actions without altering their
+rules. Sound keeps the original City Shift song and cues, with Music + Effects,
+Effects Only and All Sound Off lasting until boot.
+
+Save v11 retains the 58-byte payload, atomic journal and genuine older v4–v10
+layout migrations. New health/ammo and story flags do not replace quest bits or
+count as deliveries. Readable UI and source tests, official builds, native
+story/navigation/combat samples and physical save/audio checks remain separate.
+Selected R6 `71a7e493…` passes its [official build](docs/STORY_COMBAT_BUILD.json)
+and [scoped native record](docs/NATIVE_STORY_COMBAT.json): one full-condition job,
+the introduction/first-pay chapters, map freezing, sound cycling and fresh/held
+shots. Its road arrow appears in 30/30 sampled views. Later chapters and all 107
+route goals are host checked. The older stable package and last confirmed
+hardware ROM keep their previous identities; R6's cartridge checks are pending.
+
+## Accepted hospital recovery and arrest — 2026-10-05
+
+Zero health starts 120 active VBlanks in the downed pose, then automatic recovery
+at a fictional Toronto General forecourt in Core. Its compressed exit is
+`(504,344)`, east of University and south of College; an original mint medical
+badge marks `(512,344)`. This is a game forecourt, not a surveyed hospital door.
+The badge supplements the existing city artwork without changing base pixels
+or collision. Blocked exits retry rather than placing the courier inside a
+solid object or owned car.
+
+Recovery restores 100 health and 12 rounds, clears attention and charges at most
+$40 without a negative wallet. Active work fails once. Owned-car coordinates
+and district remain unchanged. A remote recovery commits the hospital state
+before safely queuing the genuine Core scene; a delayed VM transition freezes
+the old world until it can proceed. Menus freeze the down timer, and reset
+restores the committed hospital state. Actual-C host checks cover all seven
+district transitions, fatal-job overlap, blocked exits, failed scene queues and
+interrupted SRAM commits. These are distinct from native and physical checks.
+
+At one star, police arrest charges the existing $25 fine, clamped to available
+cash, clears heat and holds the courier in a normal pose for 60 active VBlanks.
+Two/three-star patrols retain their faster pursuit and fire for 12/18 health
+damage with a 60-VBlank firing cooldown; close captures retain $100/$225 fines.
+Dead, downed or otherwise locked couriers cannot be arrested again. The arrest
+timer is transient, uses one byte and freezes in menus. No new saved field or
+overworld pose is introduced.
+
+R6's native Core sample observes H3 injury from health 82 through zero, the prone
+pose and recovery at `(504,344)` with 100 health and 12 rounds. Cash falls
+$129→$89; the parked car remains at `(761,720)`. Two subsequent $25 H1 arrests
+clear attention, and fresh B during the hold spends no ammunition. Genuine game
+resets preserve committed health/ammo, story/career and the hospital/car
+positions. No other district hospital transition or active-job death is claimed
+as native play; physical power-off persistence and listening remain pending.

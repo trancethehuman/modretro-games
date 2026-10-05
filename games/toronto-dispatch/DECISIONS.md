@@ -456,8 +456,8 @@ dialogue, scene art and music remain original, with no Nintendo sprites or
 music. The city's straight, north-up driving/walking camera and approved
 overworld human sprites stay unchanged.
 
-This is an accepted presentation direction, not an implemented dialogue system
-or completed content. The current keeper interaction only shows a timed greeting.
+At this dated checkpoint, the presentation direction was accepted but the
+dialogue system was not implemented. The keeper only showed a timed greeting.
 A future minimal prototype may attach one original conversation page to that
 interaction, using static background/window portraits, A advance and B return.
 Preserve held-button consumption, exact room/courier/mission/vehicle state and
@@ -465,7 +465,8 @@ existing elapsed world-clock/audio semantics. Prove tile/palette ownership and
 restoration; avoid adding actors or saved fields, and measure any transient
 control bytes. Native source/assets remain frozen for the current performance
 candidate. Dialogue implementation and its own native/hardware evidence are
-future work; no release acceptance follows from recording this decision.
+future work at that checkpoint. The Oct5 story implementation below supersedes
+that implementation status; no release acceptance follows from this decision.
 
 
 ## Accepted final UI and performance pass — 2026-10-04
@@ -542,3 +543,143 @@ repeated actor-stride arithmetic without adding a persistent fleet cache.
 Require new exact-ROM idle/long-play memory checks, menu/map/save controls and
 compiled resource checks before cartridge selection. Host equivalence, native
 observations and physical cartridge acceptance remain separate evidence.
+
+
+## Accepted quest, story and armed sandbox direction — 2026-10-05
+
+Keep exactly one accepted contract at a time. The existing dispatch/resume rules
+remain; add a visible ground arrow for the next stage, following collision-backed
+routes instead of directing a driver through buildings. Preserve the destination
+beacon and scrollable map. Route policy tables live in ROM; do not add a large
+per-frame search or reduce city art/population to accommodate guidance.
+
+The courier is a man who recently moved to Toronto. His ethnicity remains
+unspecified. Original full-screen over-the-shoulder dialogue scenes tell a
+rags-to-riches story with drama, beginning with a borrowed vehicle and ending
+with a community courier business. Welcome and completed-job milestones trigger
+one eligible unseen chapter at a time. A advances; B/Start skips the current
+chapter. Dialogue freezes the world, consumes its closing buttons until release,
+then restores the city/window/actor presentation. The original bright portrait
+art is distinct from the unchanged north-up city camera.
+
+Player and police weapons are accepted. On foot, A retains interactions; B
+retains nearby vehicle/TTC interactions and otherwise fires the sidearm in the
+walking direction. Firing uses ammunition, increases wanted attention, and
+checks cover/nearer road bodies. Armed police respond at higher attention.
+Player vitality is separate from package/passenger condition. Non-graphic
+hit/down poses, temporary immunity, recovery and a bounded medical fee prevent
+a permanently trapped player. The normal courier missions remain playable.
+
+Save v11 retains the 58-byte payload. Bounded attention/countdown counters use
+one byte each; the two released bytes store vitality and ammo. Story-seen flags
+use completion byte 13, outside the 104 quest bits, and never count as deliveries.
+Read genuine old v4–v10 layouts, validate old word high bytes before conversion,
+then initialize health/ammo while preserving old progress. Keep atomic journal
+writes and distinguish native/host/physical save evidence.
+
+These accepted requirements now have the implementation below. The matched R6
+build/native record selects a replacement ROM in the later entry; physical
+cartridge checks remain separate.
+
+## Quest/story/combat source and final UI pass — 2026-10-05
+
+Retain one active contract and all existing routes, deadlines, physics and city
+art. Local ground guidance uses generated collision-backed walking/driving
+fields alongside the original beacon and atlas. Eight original story chapters
+contain 41 pages at completion thresholds 0/1/8/16/32/56/80/104. Welcome/result
+triggers offer one unseen chapter; A advances and B/Start skips it. World clocks
+freeze in dialogue and closing action buttons stay consumed until release.
+The newcomer, June, Moss and Vale use original over-the-shoulder portraits.
+
+On-foot B keeps nearby vehicle/TTC interactions ahead of sidearm fire. Ammunition,
+attention, wall/body cover, armed patrol response, separate health, non-graphic
+downing and recovery are integrated. The original nearby-position recovery is
+superseded by the accepted hospital flow below. Recovery restores 100 health
+and 12 rounds, clears attention, charges at most $40 and fails active work. A shop
+keeper sells $10 supplies only when needed: up to 25 health and an ammo floor of 12,
+preserving higher carried ammunition. Existing 45 courier poses are preserved;
+four original gun poses are appended without replacing city art or the camera.
+
+Pause now explains why the selected car/recovery/TTC action is unavailable,
+including actual door/rail rejection notices. Its hint helper copies bounded
+text into caller-owned WRAM and adds no persistent state or terrain sweeps.
+Transit captions fit 20 columns. Shop Start displays B EXIT TO START MENU;
+indoor time/walking and A/B controls keep their existing rules. Music + Effects,
+Effects Only and All Sound Off retain the original song/cues and reset at boot.
+
+Save v11 keeps 58 payload bytes and atomic journal writes. Health/ammo occupy
+the two bytes released by bounded heat counters; eight chapter flags use
+completion byte 13 outside 104 quest bits. Genuine v4–v10 migrations initialize
+health/ammo without discarding career progress or accepting invalid old word
+high bytes. Host compatibility/input/rendering checks do not establish physical
+save persistence.
+
+Preliminary R4 native controls complete only the first delivery and sample the
+intro/first-chapter pause/skip paths, sound cycling and fresh/held firing.
+R5 remains needs-review for sampled road-arrow flicker. R6 has its own matched
+build/debug/native record below. Keep the retained `096862…` stable ROM/package
+and physically confirmed `9c155…` ROM immutable and separate; selecting R6 does
+not establish installation or physical execution.
+
+## Exact navigation work — 2026-10-05
+
+Generated ROM prefix counts preserve every mask ordinal while reducing counted
+ordinal byte operations by 79.72% in the scoped host comparison. This is an
+operation-count result, not a measured FPS improvement. The exact 14-byte query
+cache retains identical results until its goal/district/mode/player-cell key
+changes. The latest overlay correction keeps an unchanged patch across frames;
+guidance retains its existing 19 bytes, including that cache and five-byte patch.
+Forced modal and normal helper restoration runs in reverse composition order:
+aircraft, combat, guidance, then scenery. New owners and tilemap pages must be
+preserved. R5's arrow appeared in 24/30 sampled views and remains needs-review;
+R6's exact corrected build shows the arrow in 30/30 sampled views. Do not reduce
+artwork, population or gameplay rules to meet performance targets. The scoped
+149/840 idle and 160/840 active update counts are separate workloads, not a
+causal FPS comparison or a universal smoothness claim.
+
+## Accepted hospital and one-star arrest — 2026-10-05
+
+Replace nearby downed recovery with automatic hospital recovery after 120 active
+VBlanks at zero health. Use the fictional Toronto General forecourt in Core,
+exit `(504,344)` east of University/south of College, with one original mint
+plus badge at `(512,344)` in bank-1 background tile 254. The marker changes no base
+city asset or collision and adds no actor or mutable marker state. Validate
+the whole foot body and owned-car exclusion; retry a blocked exit.
+
+Restore 100 health and 12 rounds, clear attention, charge at most $40 and fail active work
+once. Preserve owned-car coordinates and district. Commit hospital progress
+before a safe genuine Core VM transition, freeze the old scene during allocation
+retries, and preserve the committed hospital position on reset. Menus freeze
+the 120-VBlank down timer. All seven district transitions, fatal-job overlap,
+blocked exits, failed VM queues and interrupted SRAM writes have actual-C host
+checks; the matched R6 native scope below covers Core recovery and reset.
+
+One-star arrest retains the $25 fine with a zero cash floor, clears attention
+and adds a 60-active-VBlank normal-pose hold. Existing two/three-star close
+captures retain $100/$225 fines; those levels fire 12/18 health damage on a 60-VBlank
+cooldown and keep their faster pursuit. Suppress arrests at zero health and
+during down/recovery/other combat locks. The arrest timer adds one transient
+byte; the official R6 build leaves 548 linked static bytes below the stack
+origin. This is allocation evidence, not a deepest-stack measurement.
+
+## Select matched story/combat R6 — 2026-10-05
+
+Select `toronto-dispatch-story-combat-r6.gbc`, 1,048,576 bytes, SHA-256
+`71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`.
+[Build evidence](docs/STORY_COMBAT_BUILD.json) binds 243 unchanged native inputs,
+matching debug artifacts, full `make check` and four compiled guards. HOME has
+207 bytes free and scene OBJ allocation peaks at 124/128. Save v11 retains the
+58-byte journal payload through validated v4–v10 migration.
+
+The [fresh native record](docs/NATIVE_STORY_COMBAT.json) passes at frame 12,974
+without imported progress or memory writes. It verifies the first full-condition
+delivery, introduction/first-pay chapter freezing and skipping, 30/30 sampled
+arrow visibility, three sound choices, map freeze and fresh/held shot gating.
+H3 injury reaches zero, then hospital recovery restores 100 health/12 rounds,
+charges $40 and preserves the parked car. Two $25 H1 arrests clear heat; fresh B
+during arrest is blocked. Explicit and automatic-save resets restore the
+observed committed career, story flags, health/ammo and hospital/car positions.
+Host coverage of later chapters, other hospital districts and fatal-job overlap
+does not become native acceptance. R6 has no new cartridge, browser, listening,
+all-104-contract or measured two-hour human acceptance. A new source-pinned ZIP
+awaits the source commit and its own package audit; prior packages stay frozen.

@@ -224,7 +224,11 @@ def main():
     # First include the real world module's private generated arrays in this
     # shared translation unit so direct portal fixtures inspect production data.
     original = ((ENGINE / "src/td_motion.c").read_text() + '\n' +
+                (ENGINE / "src/td_combat.c").read_text() + '\n' +
+                (ENGINE / "src/td_story.c").read_text() + '\n' +
+                (ENGINE / "src/td_story_control.c").read_text() + '\n' +
                 (ENGINE / "src/td_menu.c").read_text() + '\n' +
+                (ENGINE / "src/td_menu_actions.c").read_text() + '\n' +
                 (ENGINE / "src/td_transit.c").read_text() + '\n' +
                 (ENGINE / "src/td_world.c").read_text() + '\n' +
                 (ENGINE / "src/td_streetcar.c").read_text() + '\n' +

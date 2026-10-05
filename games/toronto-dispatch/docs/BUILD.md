@@ -1,8 +1,47 @@
 # Native build and preview
 
-## Selected sandbox-stable build — 2026-10-05
+## Selected story/combat R6 build — 2026-10-05
 
-Selected ROM **`toronto-dispatch-sandbox-stable.gbc`** is **1,048,576 bytes**, SHA-256 **`096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`**. The official source-debug build succeeds in **90,460 ms**; source fingerprint **`a9fa9f957ef8dda5c24f9c76508289af8725cdc73645e8485010c5b1423b1324`**, NOI **`aa8c5d17b23cfb69f1dd567f8df2f2a817133a285220825ff3aacdb39464e676`**. All 200 captured native inputs remain unchanged after building and native play. Full `make check` and four compiled guards pass; the [build record](SANDBOX_STABLE_BUILD.json) binds their identities.
+Select **`toronto-dispatch-story-combat-r6.gbc`**, **1,048,576 bytes**, SHA-256
+**`71a7e49363947d4f036300770e1b24da4a3df80e344bfe41675c74240bfbf2b8`**.
+Official source-debug compilation exits 0 in **125,496 ms**. The [build record](STORY_COMBAT_BUILD.json)
+binds source fingerprint `6cb70b49233b540daf605afe7e77076cbbfd2ba2ca4f6bc39fa5c6d3f9ebd9b3`,
+NOI `c30c8ed37eae03c42d920cc0383508b80148cc045d460b8dfe337f887e7ffbcd`,
+globals `930e459cba58eca33586d76ab1bd13f21fbe3decfcb004d9ecc121897b4d7c2a`
+and project revision `547f9dcdf219cda3bad1fdb80866319dd515c9f0a7ff5aa4756d9e60bdbef10c`.
+All **243 [native input pins](STORY_COMBAT_SOURCE_PINS.json)** remain unchanged
+after building and play. Full `make check`, including 87 actor-bank cases, and
+all four compiled guards pass with the pinned toolchain below.
+
+Save **v11 / 58 bytes** preserves the atomic journal and validates genuine
+v4–v10 migrations. Scenes peak at **124/128 OBJ tiles** per bank; West uses
+44 bank-1 background tiles before signal scratch at 47. Fixed HOME has
+**207 bytes free**; heap `DCDC` leaves **548 static bytes** below stack origin
+`DF00`, passing the 512-byte guard. The original 45 courier poses remain intact
+with four original armed poses appended. Allocation does not measure deepest
+stack use or establish universal pacing.
+
+The [fresh native run](NATIVE_STORY_COMBAT.json) ends scoped-passed at frame
+**12,974** without imported progress or memory writes. It checks one
+full-condition delivery, introduction/first-pay dialogue freeze/skip, 30/30
+sampled road-arrow visibility, three sound options, map freeze, fresh/held
+firing, H3 injury through zero health, Core hospital recovery and two $25 H1
+arrests. Explicit and automatic-save resets preserve the sampled committed
+career, health/ammo, chapter flags, hospital location and parked car.
+[Optimization evidence](STORY_COMBAT_OPTIMIZATION.json) records 149/840 idle
+and 160/840 active updates in separate scoped workloads. Later chapters,
+all seven recovery districts, fatal-job overlap and interrupted SRAM commits
+are host coverage, rather than additional native play.
+
+The local raw ROM is selected. A new source-pinned ZIP awaits the source commit
+and package audit; no ZIP hash or CI result is assigned yet. Cartridge write,
+cold boot, power-off saves, audio listening, browser acceptance, all 104
+contracts and two measured enjoyable human hours remain pending. Prior stable
+and hardware identities below stay separate and immutable.
+
+## Retained sandbox-stable build — 2026-10-05
+
+Retained ROM **`toronto-dispatch-sandbox-stable.gbc`** is **1,048,576 bytes**, SHA-256 **`096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`**. The official source-debug build succeeds in **90,460 ms**; source fingerprint **`a9fa9f957ef8dda5c24f9c76508289af8725cdc73645e8485010c5b1423b1324`**, NOI **`aa8c5d17b23cfb69f1dd567f8df2f2a817133a285220825ff3aacdb39464e676`**. All 200 captured native inputs remain unchanged after building and native play. Full `make check` and four compiled guards pass; the [build record](SANDBOX_STABLE_BUILD.json) binds their identities.
 
 | Component | Version / identity |
 | --- | --- |
@@ -20,13 +59,13 @@ Compiled checks cover city/boat/aircraft poses and tile ownership, actor-bank di
 
 The [fresh native run](NATIVE_SANDBOX_STABLE.json) includes a full tram-cycle idle check, Settings/map freeze, Market Start, interrupted-entry save/reset, boat driving/docking, grocery entry/return, occupied vehicle theft and sampled police pursuit. Its [starting-view timing](SANDBOX_STABLE_TIMING.json) is scoped to one workload and does not guarantee universal smoothness. The earlier `668727…` [corruption diagnostic](NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains failed and ineligible. Fresh [USB discovery](CARTRIDGE_SANDBOX_STABLE_DISCOVERY_2026_10_05.json) found no connected console, so the selected ROM has not yet been written to the cartridge; the physically confirmed 9c155 baseline below retains its own hardware evidence.
 
-Selected revised bundle **`project/build/toronto-dispatch-sandbox-stable-reviewed-r2.zip`** is **185,283 bytes**, SHA-256 **`aab360ff9a225e9db29fd4a49b78a3b5a928fe59a6da7e1e849d7122acea75f5`**, pinned to source **`f564538b0c0afd867e9d5a2596fa970961079d45`**, which passed both Linux CI checks with Clang 18.1.3. Its [package audit](SANDBOX_STABLE_PACKAGE_R2.json) verifies all 200 committed and working native inputs, six allowlisted members, checksums/licences and 32 immutable guide links. All native inputs, the ROM and the first reviewed bundle remain unchanged. The revised bundled guide stays frozen at that source commit, before these later ZIP metadata; packaging adds no cartridge or gameplay evidence.
+Retained revised bundle **`project/build/toronto-dispatch-sandbox-stable-reviewed-r2.zip`** is **185,283 bytes**, SHA-256 **`aab360ff9a225e9db29fd4a49b78a3b5a928fe59a6da7e1e849d7122acea75f5`**, pinned to source **`f564538b0c0afd867e9d5a2596fa970961079d45`**, which passed both Linux CI checks with Clang 18.1.3. Its [package audit](SANDBOX_STABLE_PACKAGE_R2.json) verifies all 200 committed and working native inputs, six allowlisted members, checksums/licences and 32 immutable guide links. All native inputs, the ROM and the first reviewed bundle remain unchanged. The revised bundled guide stays frozen at that source commit, before these later ZIP metadata; packaging adds no cartridge or gameplay evidence.
 
 Retained first local **`project/build/toronto-dispatch-sandbox-stable-reviewed.zip`** is **184,975 bytes**, SHA-256 **`79f6b39a10fdd2088f5d4a73c9bd71158a9a0719ac93f95f0d5ecfdf8c6b6bb9`**, pinned to source **`120df305b439f4799ba28be21a6c72c20d08c085`**. The [package audit](SANDBOX_STABLE_PACKAGE.json) checks all 200 committed and working native inputs, six allowlisted members, checksums/licences and 31 immutable loading links. The bundled guide stays frozen at that source commit, before these later ZIP metadata. The preserved 9c155 ROM/ZIP hashes remain unchanged; packaging adds no cartridge or gameplay evidence.
 
 ## Retained physically confirmed hardware feedback build
 
-Selected update **`toronto-dispatch-hardware-feedback.gbc`** is **1,048,576 bytes**, SHA-256 **`9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`**. Official source-debug build succeeds in **67,663 ms**; source fingerprint **`b45d7dbb0b2d9f384ff70e412b549e3cf9c636c8ad3ae8efa9f7d7fe35e0e5fb`**, NOI **`171956c8796e7b5664361d30e9aa036166455917fad5cb9e68adab693ca03818`**. Full `make check`, source graphics analysis, compiled city poses/progress tables and native memory guards pass. [Build record](HARDWARE_FEEDBACK_BUILD.json) retains exact identity and the failed/intermediate attempts. Static reserve is 1,046 bytes; save v10 remains 58 bytes. Scene allocation peaks at 120/128 OBJ tiles per bank; maximum runtime stack/performance remain unmeasured.
+Retained update **`toronto-dispatch-hardware-feedback.gbc`** is **1,048,576 bytes**, SHA-256 **`9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`**. Official source-debug build succeeds in **67,663 ms**; source fingerprint **`b45d7dbb0b2d9f384ff70e412b549e3cf9c636c8ad3ae8efa9f7d7fe35e0e5fb`**, NOI **`171956c8796e7b5664361d30e9aa036166455917fad5cb9e68adab693ca03818`**. Full `make check`, source graphics analysis, compiled city poses/progress tables and native memory guards pass. [Build record](HARDWARE_FEEDBACK_BUILD.json) retains exact identity and the failed/intermediate attempts. Static reserve is 1,046 bytes; save v10 remains 58 bytes. Scene allocation peaks at 120/128 OBJ tiles per bank; maximum runtime stack/performance remain unmeasured.
 
 The [fresh scoped native replay](NATIVE_HARDWARE_FEEDBACK.json) completes Market Start at full condition, samples stable cardinal driving and reverse, walking/entry, smaller varied civilians with visible flight/prone poses, menu repeat/map freeze, one paid Queen trip, natural tram injury/recovery and saved in-worker reset. [Update details](HARDWARE_FEEDBACK_2026_10_04.md) retain the limitations and controller corrections. The [user-requested cartridge retry](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed with vendor-reported success after the separately retained first failure. The user confirmed this new ROM cold-boots with USB disconnected and responds to physical buttons. Complete read-back and extended physical gameplay remain unverified. Preserve all earlier binaries and packages unchanged.
 

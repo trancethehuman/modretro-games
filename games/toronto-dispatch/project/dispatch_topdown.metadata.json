@@ -1379,6 +1379,78 @@
                   "priority": false
                 }
               ]
+            },
+            {
+              "id": "a8a23756-5f82-533c-a80e-924cd0a9d21d",
+              "tiles": [
+                {
+                  "id": "e506dca9-af68-54ca-9160-a53967dad902",
+                  "x": 4,
+                  "y": 0,
+                  "sliceX": 212,
+                  "sliceY": 32,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "ea51bb8a-a851-56d1-a445-ed4e9e91697f",
+              "tiles": [
+                {
+                  "id": "3a8a78d7-7f34-57d8-858f-54df36c295c2",
+                  "x": 4,
+                  "y": 0,
+                  "sliceX": 228,
+                  "sliceY": 32,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "76bfcb38-d745-5236-abda-e5273daa282f",
+              "tiles": [
+                {
+                  "id": "0a53165e-cbaf-5d09-bc7e-878ede76cad7",
+                  "x": 4,
+                  "y": 0,
+                  "sliceX": 244,
+                  "sliceY": 32,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "60e33f98-064c-598a-a60b-d3d212e4b7fb",
+              "tiles": [
+                {
+                  "id": "58eeb340-acb6-5e7b-8a7c-73393aa2becf",
+                  "x": 4,
+                  "y": 0,
+                  "sliceX": 4,
+                  "sliceY": 48,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 0,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
             }
           ]
         },
@@ -1449,7 +1521,7 @@
     }
   ],
   "width": 256,
-  "height": 48,
+  "height": 64,
   "canvasOriginX": 8,
   "canvasOriginY": 8,
   "canvasWidth": 16,
@@ -1461,5 +1533,5 @@
   "animSpeed": 255,
   "numTiles": 0,
   "filename": "dispatch_topdown.png",
-  "checksum": "75031e2a4c024db06b2d3f3ab027de97c3d29484"
+  "checksum": "3afaaea3a6ddf68a6f52b1842fbc82e84648e2f9"
 }

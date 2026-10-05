@@ -5,6 +5,13 @@ check:
 	python3 games/toronto-dispatch/scripts/create_atlas.py --check
 	python3 scripts/test_atlas.py
 	python3 scripts/test_atlas_ui.py
+	python3 games/toronto-dispatch/scripts/create_story.py --check
+	python3 scripts/test_story.py
+	python3 games/toronto-dispatch/scripts/create_navigation.py --check
+	python3 scripts/test_quest_navigation.py
+	python3 scripts/test_combat.py
+	python3 scripts/test_combat_render.py
+	python3 scripts/test_hospital.py
 	python3 scripts/test_menu_repeat.py
 	python3 scripts/test_motion_feedback.py
 	python3 scripts/test_scenery.py

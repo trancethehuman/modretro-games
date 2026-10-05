@@ -3,6 +3,7 @@
 #include "td_scenery.h"
 #include "td_game.h"
 #include "td_district.h"
+#include "td_guidance.h"
 #ifdef CGB
 #include "data_manager.h"
 #include "gbs_types.h"
@@ -168,6 +169,13 @@ void td_scenery_render(void) BANKED {
         if(td_prop_patch_count==TD_SCENERY_PATCHES)break;
         offset=((UWORD)(td_props[index].y&31)<<5)|(td_props[index].x&31);
         VBK_REG=1;attr=get_vram_byte(td_prop_map+offset);if(attr&128)continue;
+        /* A newly broken prop can replace a retained ground arrow. Remove
+         * that owned patch before saving the prop's permanent underlay. */
+        if(attr==15){
+            UBYTE tile;VBK_REG=0;tile=get_vram_byte(td_prop_map+offset);
+            if(tile>=241&&tile<=244)td_guidance_road_restore();
+            VBK_REG=1;attr=get_vram_byte(td_prop_map+offset);
+        }
         patch=&td_prop_patches[td_prop_patch_count];patch->offset=offset;patch->attr=attr;
         VBK_REG=0;patch->tile=get_vram_byte(td_prop_map+offset);
         td_prop_pixels(&td_props[index],td_prop_phase(district,id),pixels);

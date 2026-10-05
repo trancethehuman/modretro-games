@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "purpose": "Accepted original visual improvements, appended original taxi poses and four jet shadows, source-correct stop18 alias and native22-actor/save-notice capacity. Historical traffic fixture remains immutable; all terrain/client/job fields, previous fleet metadata and aircraft frames0..13/pixels/identity/defaults are reconstructed against its original pins.",
+  "purpose": "Accepted original visual improvements, appended original taxi poses and four jet shadows, source-correct stop18 alias and native22-actor/save-notice capacity. Historical traffic fixture remains immutable; all terrain/client/job fields, previous fleet metadata and aircraft frames0..13/pixels/identity/defaults are reconstructed against its original pins. Four original armed courier poses45..48 append without changing prior45 pixels/IDs/defaults; savev11 retains58 bytes and legacy21/current27 notice bounds.",
   "predecessor_commit": "8ea5ec413c3650cd3441ee588ba15f87a98889fa",
   "historical_fixture_sha256": "182c15604186304bfaef91d2ad0d034f02965a9eec332b9c29085cbd30216bd8",
   "raw_scopes": {
@@ -58,11 +58,11 @@
     },
     "project/assets/sprites/dispatch_topdown.png": {
       "before_sha256": "102546a1540f16f4732ca1728b20ab98242bbf611390d03c496661180a2340fb",
-      "after_sha256": "5b563d78676e165c4487e4332a59de0eff2a828ca1f2f572f4c49ff3613ef972"
+      "after_sha256": "dc871d244b60fc197d2488b10526215025cecabc25dd1d5b74b2577611fcf169"
     },
     "project/assets/sprites/dispatch_topdown.png.gbsres": {
       "before_sha256": "7bc4f5c91376914de7da50f83062af25a934b426a83ce9451eca28abf350a41f",
-      "after_sha256": "be844d29d2baf504c6bcc9fe904e0d454707f6926a3e58b82fc3b9df02e5fe8d"
+      "after_sha256": "832e1efa496841c2a78f7cb4add1dd128415a5c32bfbe2fbe2cb704a28c55f09"
     },
     "project/original-art/ambient_aircraft.metadata.json": {
       "before_sha256": "a624b9f49d9b5efa25e8928692edea79d0a7ffa173effbab21e46594c6de4822",
@@ -110,7 +110,7 @@
     },
     "project/original-art/dispatch_topdown.png": {
       "before_sha256": "102546a1540f16f4732ca1728b20ab98242bbf611390d03c496661180a2340fb",
-      "after_sha256": "5b563d78676e165c4487e4332a59de0eff2a828ca1f2f572f4c49ff3613ef972"
+      "after_sha256": "dc871d244b60fc197d2488b10526215025cecabc25dd1d5b74b2577611fcf169"
     },
     "project/original-art/toronto_east.png": {
       "before_sha256": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
@@ -190,11 +190,11 @@
     },
     "project/plugins/toronto-driving/engine/src/td_save.c": {
       "before_sha256": "32a220dc92d2952bf20775343b8545dacec2904e7a8ae3701b2112afd8563118",
-      "after_sha256": "2cece846d0e4eaf8ce5f593ce30ccbf2eec0b74bc8b20b046715c2b5a4da3bf4"
+      "after_sha256": "5060dfe512eaeb007d2573ba945198354ee8b79f31dcf8e93bae443184b9239e"
     },
     "project/plugins/toronto-driving/engine/include/td_game.h": {
       "before_sha256": "6e817f59a4a15287ec76bee5b6f26c919aba545713423b0f475f6670ffc89db6",
-      "after_sha256": "bce5ac7ad9c88b0d2ceb071ad89f7d7daa67563bb7a70bdc354f2adf53e2aa7c"
+      "after_sha256": "1a937307b0377a6fc8218820e69ea8d3eccbc1ab0caf642f83641acb42b45ec2"
     }
   },
   "json_scopes": {
@@ -656,5 +656,81 @@
       }
     },
     "original_art_json_zlib": "eNrdWMmO2zgQvecrCJ8SxO6IFCVTk1OAXOYQ5DK3QSCUyKLNRBI1JN0Lgvz7UIvd7vTqtNsB4oNBllSvio+PJam+vyJk5uUaGyjP0Xlj29lfhM4Hc4Cw8XE6++zMyrRQE283TiIBF96TFoI5j2MpsQvQRrPHDhwEnA3utZEYrb3/p7//GW2tDWY07SDX0KpFV4NERTpzibWP0JZ0axvsnNR2ZYl1xHfOBCTSdgbViLXCFmM063o4L53pgn8nHcYESjBOOtChHP3Ouqsp/pBzCd5jKI3qPblQHFItFpBXcpHlsliIIssXOQq+1EmVJprecPZXTWXrIegAXkJTGWzDLuh490hV2bWr/lY7LXcRqXv3s8NZf9O+U4MBFAR43HN759lXH3duwFDog+lzHbZyNqzVvxtz9Q/EjoPSr4Flee9WiUpqnmaC00xnqqiAp5Tn2ZIueQICWKqKLFNZmiMVSuSapYJLKnnFs0ToSQPb9PaAIWe8KjQvImaGOppRFEzkBUOFsCxUAkutgS5T1LqCilGMYQsuc4VcMLZdpLQKVelW1X7SkiURkgPLE6ZTFlMUFasYK7imrGBcI7Jl/EspQEVjKoyquJQovlRmopiIgBpD3Fdf2xBRk/2dkbaOg/5Q/But0Z5nWifJ4BhnmGgh9XYmcpnkcjtLllQwOouTLwPipjX/baJAIMZyrS/FpYiwRX7PRdqvMBuT6azH6xy+D//RrB00uM14sHwz7SDyeL5anO3MyjiUW4Eg+HB9ycVj58puDb5Hajd1vbs0UdC77mL3v124G8OU7Y+n4ZcdmO2gX2BlN63yN+D2/MQexB4047fhoClt9TWm1oPxnb2BS9NsdtfKDl3pJbS1afv1jUA/5nfzSA/iMdIT1s8icp+yYzC5Rx/bZ2+f1WMxyR5kkh3E5AU+U5E5/1MlmR5EZGvdMyU5lqM/UZL8FpNrjK8stosF9xcqZfIolZSJ43KZ3q1KenpVZodz+WC1fAKZefJiwkzvESY9jTDzw8l8qGA+gcviyM8deqcwWXF6YS4P5/LBmvk4mYzxFxMmvVuYrDiNMMVxKyZ9nMssP0nF/A3P8eLIFfMJZApx8op5okc5TY5bMukT3tRP8tHzO0ompUeumU9gMzv5h8+paia9/eXj16Dsxd1M3ngn/5UvSPGCT5/7qHzslLMDqdx1SEamyptcztZGKWyvrenYEjHnQ7dm9mFqbJHo7XDbsZTYhjh7TfM5zd/MSQNdh4oES0BGlsmFdbUinfVm2IkB0m3aYIYYs4/DHhFpfYPBSPL5wydiz9HVcPWexJMRffru6JAvsVp7DOT1WzF/y/gbcmHCmqxcTy7pnLHOhOiFTReuiA/gwqaLqyDfEDtPwhqJwynr2oJCR0x7bryp6qmpFuMabeSuw/dx7IVN3dM5mfpX8yFL2acJKyQQo/eZNsajW3jQSLbdOWLb+mroupqmi0d5TqqNqdWcTAz0DdhIprroCZU1mGb26ser/wGmk4f4"
+  },
+  "courier_extension": {
+    "original_frame_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44
+    ],
+    "armed_frame_indices": [
+      45,
+      46,
+      47,
+      48
+    ],
+    "previous_png_sha256": "5b563d78676e165c4487e4332a59de0eff2a828ca1f2f572f4c49ff3613ef972",
+    "previous_png_zlib": "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",
+    "original_rgb_sha256": "2d21d95ded6713698785b0e0ba8f7ece1268dda32e05f3983b2e4031c4b1b1aa",
+    "armed_rgb_sha256": "28f6c9ef0bef2c8b889c3fcf763bee53a9677154ba81075a6b26ffde2fa89131",
+    "metadata": {
+      "project/assets/sprites/dispatch_topdown.png.gbsres": {
+        "original_checksum": "29b7ebb912d9ef4425b79352899a4b0403ba3f91",
+        "original_frames_sha256": "447809e9dae652940d4d86c8feaa421127487e55af8b17431d34663ad2621125",
+        "armed_frames_sha256": "8fd32ac3699373ad9eb5a03383b26020ff36a07884856ddfd172fed55483054a"
+      },
+      "project/dispatch_topdown.metadata.json": {
+        "original_checksum": "75031e2a4c024db06b2d3f3ab027de97c3d29484",
+        "original_frames_sha256": "35e379e0f440cab8ae273559475539f0b9dab7eb5167246784721fbbebb23661",
+        "armed_frames_sha256": "8fd32ac3699373ad9eb5a03383b26020ff36a07884856ddfd172fed55483054a",
+        "previous_sha256": "d15d6d8bbca4658a95d597820be8bfb0c693558ca5b6bba3b333c55774773c89"
+      }
+    }
+  },
+  "save_extension": {
+    "project/plugins/toronto-driving/engine/include/td_game.h": "bce5ac7ad9c88b0d2ceb071ad89f7d7daa67563bb7a70bdc354f2adf53e2aa7c",
+    "project/plugins/toronto-driving/engine/src/td_save.c": "2cece846d0e4eaf8ce5f593ce30ccbf2eec0b74bc8b20b046715c2b5a4da3bf4"
   }
 }
