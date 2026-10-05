@@ -27,5 +27,22 @@
     "Successful empty USB discovery does not establish activation, cartridge contents or a new installation.",
     "Existing same-device data-loss consent persists. No new flash or automatic retry was dispatched.",
     "Device identities, selection tokens, raw journals, saves and private paths are omitted."
-  ]
+  ],
+  "additionalSuccessfulDiscoveryChecks": [
+    {
+      "finishedAt": "2026-10-05T04:49:46.622Z",
+      "devices": 0,
+      "conflicts": 0,
+      "unmatched": 0,
+      "diagnostics": 0
+    },
+    {
+      "finishedAt": "2026-10-05T05:10:22.684Z",
+      "devices": 0,
+      "conflicts": 0,
+      "unmatched": 0,
+      "diagnostics": 0
+    }
+  ],
+  "selectedReviewedBundleSourceCommit": "f564538b0c0afd867e9d5a2596fa970961079d45"
 }

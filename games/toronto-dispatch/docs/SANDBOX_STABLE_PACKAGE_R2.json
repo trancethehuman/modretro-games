@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-stable-reviewed-package-r2",
+  "date": "2026-10-05",
+  "archive": {
+    "filename": "toronto-dispatch-sandbox-stable-reviewed-r2.zip",
+    "sizeBytes": 185283,
+    "sha256": "aab360ff9a225e9db29fd4a49b78a3b5a928fe59a6da7e1e849d7122acea75f5"
+  },
+  "originalAuditSha256": "a8591ccfd52a164008ba2908d07cee681b7b47a843a4ad3c4703aede34e04eb6",
+  "header": {
+    "CGBOnly": true,
+    "ROMBytes": 1048576,
+    "SRAMBytes": 32768,
+    "globalChecksum": 11591,
+    "headerChecksum": 232
+  },
+  "immutableGuideLinksChecked": 32,
+  "limits": [
+    "Complete assets/plugins/project/project.gbsproj scope, not every repository file.",
+    "Frozen pins supplied by caller; separate official build/native evidence must authenticate their origin.",
+    "No rebuild/source-to-ROM proof, native behavior, performance, cartridge write or physical acceptance.",
+    "Privacy allowlist/pattern review does not certify absence of every possible secret."
+  ],
+  "members": [
+    "BUILDINFO.json",
+    "LICENSE",
+    "LOADING.md",
+    "ROM_NOTICES.txt",
+    "SHA256SUMS",
+    "toronto-dispatch-sandbox-stable.gbc"
+  ],
+  "nativeInputs": 200,
+  "nativeInputsByScope": {
+    "assets": 50,
+    "plugins": 79,
+    "project": 70,
+    "project.gbsproj": 1
+  },
+  "result": "passed-scoped-package-source-audit",
+  "retainedBaselines": [
+    {
+      "filename": "toronto-dispatch-hardware-feedback.gbc",
+      "sha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+      "sizeBytes": 1048576
+    },
+    {
+      "filename": "toronto-dispatch-hardware-feedback-reviewed.zip",
+      "sha256": "9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570",
+      "sizeBytes": 155795
+    }
+  ],
+  "romSha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+  "sourceCommit": "f564538b0c0afd867e9d5a2596fa970961079d45",
+  "sourcePinsSha256": "c3e17d9c699fc44e27a4e6eebea255315ed68ea498d254194665583cb67740e5",
+  "bundledGuide": {
+    "frozenAtSourceCommit": "f564538b0c0afd867e9d5a2596fa970961079d45",
+    "note": "The bundled guide is committed at this revision, before later ZIP metadata and hardware outcomes. It is preserved unchanged."
+  },
+  "retainedFirstBundle": {
+    "filename": "toronto-dispatch-sandbox-stable-reviewed.zip",
+    "sizeBytes": 184975,
+    "sha256": "79f6b39a10fdd2088f5d4a73c9bd71158a9a0719ac93f95f0d5ecfdf8c6b6bb9",
+    "sourceCommit": "120df305b439f4799ba28be21a6c72c20d08c085",
+    "record": "SANDBOX_STABLE_PACKAGE.json",
+    "unchanged": true
+  },
+  "evidenceScope": "Packaging validates the inspected ROM, committed native inputs, immutable guide links, checksums and notices. Separate build/native and CI records authenticate their own results; hardware results remain separately recorded."
+}

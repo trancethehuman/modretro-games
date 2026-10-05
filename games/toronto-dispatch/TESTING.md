@@ -16,6 +16,8 @@ The failed `668727…` [native corruption diagnostic](docs/NATIVE_SANDBOX_STACK_
 
 Fresh [supported USB discovery](docs/CARTRIDGE_SANDBOX_STABLE_DISCOVERY_2026_10_05.json) on 2026-10-05 succeeds with zero connected consoles, conflicts, unmatched functions or diagnostics. No replacement write was dispatched; connection remains the prerequisite. The reviewed local [package](docs/SANDBOX_STABLE_PACKAGE.json) is ready and preserves its source-pinned guide.
 
+The complete [Linux Clang CI](docs/SANDBOX_STABLE_CI.json) passes at source `f564538…`, with strict host warnings, sanitizers and assertions retained. Test-fixture formatting and PNG-check portability repairs leave all 200 native inputs and the exact ROM unchanged. The selected [R2 loading package](docs/SANDBOX_STABLE_PACKAGE_R2.json) pins that source; the first reviewed ZIP remains unchanged. The last supported USB discovery at 05:10:22 UTC again finds zero consoles, so no replacement writer was dispatched.
+
 ## Retained hardware feedback update — 2026-10-04
 
 Exact new ROM `project/build/toronto-dispatch-hardware-feedback.gbc` is 1,048,576 bytes / SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Official source-debug build and full `make check` pass. [Build evidence](docs/HARDWARE_FEEDBACK_BUILD.json) records compiled artwork/timetable guards, save v10/58 bytes, peak 120/128 OBJ tiles per bank and 1,046 static reserve. The initial fixed-bank failure and intermediate metadata-repair build remain separate.
