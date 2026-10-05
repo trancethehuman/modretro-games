@@ -1,5 +1,52 @@
 # Decisions
 
+## Accepted presentation and sandbox extension — 2026-10-04
+
+The physical-feedback update also adopts a compact gameplay HUD with graphic
+navigation, improved pixel menus and bright parks/city palettes. Ramming vehicles
+should transfer momentum according to relative speed and vehicle weight: a faster
+car can shove a slower car while retaining more speed than in a head-on impact.
+Both vehicles must visibly move through collision-checked positions, with a
+bounded rebound and safe recovery rather than clipping through obstacles.
+Fences, poles and street objects should collide
+and break visibly; structural building destruction remains an open clarification.
+Police attention should use visible stars, a pursuing helicopter and actual
+loss-of-sight evasion. These extend the original 23-point batch; preserve original
+art, native hardware budgets and the existing courier/transit/save loop.
+
+## Second physical feedback batch — accepted 2026-10-04
+
+The user played installed9c155, approved the character designs and supplied
+23 requirements, then confirmed: “That's the full list — implement and reload”.
+Retain every item in [the feedback checklist](docs/SANDBOX_FEEDBACK_2026_10_04.md).
+Recording acceptance does not establish implementation or new-ROM verification.
+
+Accept quick A/B interactions with parked and occupied vehicles, visible occupant
+extraction before entry, larger boardable/drivable boats, marked full-screen
+playable shop interiors, natural off-screen arrivals with stable visible actor
+identity, social pedestrian pairs, more street activity, better car/building art,
+parking lots, crossings, water ripples, audible original chiptunes and normal-view
+objective arrows. Improve real traffic-light roles, NPC driving, impact speed
+loss and vehicle collisions. Preserve approved human artwork and geographic
+Old Toronto/waterfront/Islands scope; audit dated official City/TTC references.
+
+Player cars may travel on sidewalks, superseding the earlier shortcut exclusion.
+Steering must not rotate a stopped car. Vehicle theft and boat control supersede
+their earlier unadopted/cosmetic-only status. Exact interaction priority, bounded
+actor counts and native implementation details are routine engineering choices;
+keep input consumption, mission state, safe exits and hardware limits explicit.
+No aircraft control, weapons or unrelated combat scope is added.
+
+Boat controls retain A for boarding on foot and acceleration aboard. A fresh
+Down+A chord requests a stopped dock exit; gas alone must never disembark.
+The launch waits only inside the same inclusive 56px boarding range, so an
+approaching walker cannot freeze it outside reachable interaction distance.
+
+Implement/test distinct playable milestones before the replacement write. Keep
+9c155 and its reviewed bundle/physical record immutable. The user's existing
+same-cartridge erase consent applies to the requested later installation, with
+fresh supported device selection and separate terminal/manual evidence.
+
 ## Pedestrian variety — accepted 2026-10-04
 
 The user requests varied kinds of pedestrians. Use several original small silhouettes with distinct clothes, hair and accessories, including commuters, workers, backpackers and older pedestrians. Each keeps the same collision size and non-graphic airborne/prone response. Variation must fit native sprite/palette limits; do not add new saved identity fields.
@@ -394,3 +441,104 @@ Distinct `7ab28…` officially builds with matching artifacts and passes full so
 ## Implemented driving-only transit wording — 2026-10-04
 
 Replace shared message 8 HEAVY CARGO: DRIVE with DRIVE FOR THIS JOB, preserving its 18-character size and the existing kind 3/kind 5 guard before station lookup. This is an implementation clarity fix, not a new gameplay decision. No routes, deadlines, fares, actor behaviour or saved fields change. Distinct8be1 keeps all 206 input pins except that literal; compiled comparison accounts for generated stock-save signature/checksum separately. Fresh ordinary-input freight before/after pickup displays the caption, four genuine jobs and committed reset pass in scope. Earlier7ab sixteen-job continuation results remain historical and are not imported across this rebuild. Native passenger refusal, old-save imports, full 104/human duration/hardware remain pending.
+
+## 2026-10-04 — Correct a compressed Bloorcourt handoff label
+
+Accepted: stop18 now displays `BLOORCOURT BUS`, replacing `OSSINGTON BUS`. Actual Core source/native columns are Dufferin80, Bathurst208 and Spadina336; stop18 at144/64 belongs to a compressed Bloorcourt region, while stop8 remains correctly Dufferin at80/528. The City BIA description places Bloorcourt on Bloor West between Dufferin and Montrose (reviewed2026-10-04; source in `docs/CITY_ART_AND_SHOPS_2026_10_04.md`). This is a fictional regional bus handoff, not a surveyed TTC stop. Its ordinal, coordinates, service, flags,64-stop/104-job tables and savev10 layout stay unchanged. One strict name-only historical adapter preserves immutable old campaign hashes and rejects unrelated geometry/service/flag/name changes; current source/native checks require the corrected label.
+
+## Dialogue camera composition — accepted future direction, 2026-10-04
+
+The user accepted a Pokémon battle-camera composition reference for dialogue
+cutscenes: an original over-the-shoulder courier portrait occupies the
+foreground and faces the speaker farther into the scene. Use bright pixel art
+and a readable text box. The reference is camera composition; all portraits,
+dialogue, scene art and music remain original, with no Nintendo sprites or
+music. The city's straight, north-up driving/walking camera and approved
+overworld human sprites stay unchanged.
+
+This is an accepted presentation direction, not an implemented dialogue system
+or completed content. The current keeper interaction only shows a timed greeting.
+A future minimal prototype may attach one original conversation page to that
+interaction, using static background/window portraits, A advance and B return.
+Preserve held-button consumption, exact room/courier/mission/vehicle state and
+existing elapsed world-clock/audio semantics. Prove tile/palette ownership and
+restoration; avoid adding actors or saved fields, and measure any transient
+control bytes. Native source/assets remain frozen for the current performance
+candidate. Dialogue implementation and its own native/hardware evidence are
+future work; no release acceptance follows from recording this decision.
+
+
+## Accepted final UI and performance pass — 2026-10-04
+
+The user requested optimization that preserves gameplay and graphical fidelity.
+Use exact broad-phase rejections, avoid repeated work and retain all nearby
+collision, timing, signal, identity and save checks. Do not reduce population,
+art detail, effect size, palette quality or simulation rules to obtain a faster
+benchmark. Native measurements must identify their ROM and test view; “always
+smooth” remains a hardware acceptance target, not a claim from compilation.
+
+The current source implements beginner-friendly Start, Save Game and Settings
+controls. Start opens the main menu; Save Game commits progress and returns to
+the street. Settings has Sound, Control Guide and Back, with up/down navigation
+and A selection. Back, B or Start in Settings returns to the main menu; A/B in
+the guide returns to Settings. The same menu works while waiting for or riding
+transit, preserving the resume mode and frozen world/deadlines. During those
+trips, Save After Trip and TTC: Map/Settings explain the existing restricted
+actions and automatic transit saving; no controller rule changes. Menu-used
+A/B stay consumed until release. The welcome guide's start-game path is retained.
+
+Sound reuses the existing original 8-bit City Shift song, engine/brake sounds
+and interaction cues. Its three labels are Music + Effects, Effects Only and
+All Sound Off. The Sound Resets at Boot footer makes their session scope clear;
+no new saved field or persistent menu state is added. Physical listening and the final
+replacement ROM's controls need their own verification.
+
+The accepted performance implementation uses a 12-byte automatic driving
+cache: the original whole-pixel terrain result plus exact-Q4 stationary
+vehicle/tram clearance results. Reuse ends with the immutable movement batch;
+movement, entry, on-foot/injury state and active ramming invalidate it. Dynamic
+checks outside that batch remain live. Signal stop-line rejection, same-bank
+epoch road sweeps, one-selection actor metadata lookup and clean-scenery early
+return add no persistent state and retain the original geometry, bank
+restoration, hit globals and admission rules. Keep the historical six-byte
+cache's ROM measurements separate from this source implementation. Final linked
+memory and measured native/hardware pace remain acceptance gates.
+
+Further exact optimizations read fleet coordinate bytes before constructing
+full centres, bound pedestrian route search through its existing sorted Y
+coordinates, and use private same-bank render/helicopter observation calls
+behind the unchanged public BANKED interfaces. Keep every nearby exact body
+test, original route identity/tie order, bank restoration, OAM order and police
+observation rule. These introduce no new persistent RAM and do not change
+gameplay behavior, artwork or population density.
+
+Taxis join the existing sedan, service, truck and bus traffic using original art
+and sedan mechanics. Current source gives occasional jets larger original
+wing/fuselage ground shadows while retaining the old aircraft/helicopter art and
+behavior. Ordinary drivers yield to the on-foot courier as well as NPC pedestrians,
+with safe separation for existing overlaps; chaotic pursuing police and other
+moving hazards retain their contact consequences. These additive features are
+separate from behavior-preserving optimization and need native evidence.
+
+
+## Runtime memory and menu cache — accepted optimization, 2026-10-05
+
+The native sandbox-polish candidate reproduced initialized-state corruption
+with a stationary courier. Preserve that failed ROM and its evidence, and do
+not select or load it. A linked reserve alone does not prove runtime safety.
+
+Keep temporary tram pose/body buffers inside the instant, dwell or held-arrival
+branches that need them. Normal travel sweeps retain the same timetable,
+geometry, validation and collision results while carrying fewer live buffers.
+Pack the existing text cache into exact six-bit glyphs and atlas cache into
+exact ten-bit pattern IDs; keep the atlas hash/probe order and uploaded pixels
+unchanged. Pack the map's saved hidden flags into one bit per actor. These
+are lossless representations, with no new save fields or population changes.
+
+Pedestrian fleet checks advance the existing actor pointer through slots
+2–7 and 17–18, preserving every continue path and nearby exact query. Avoid
+repeated actor-stride arithmetic without adding a persistent fleet cache.
+
+Require new exact-ROM idle/long-play memory checks, menu/map/save controls and
+compiled resource checks before cartridge selection. Host equivalence, native
+observations and physical cartridge acceptance remain separate evidence.

@@ -37,6 +37,7 @@ def main():
         work = Path(directory)
         shutil.copyfile(ROOT / "tests/engine/gbvm_stubs.h", work / "gbvm_stubs.h")
         (work / "input.h").write_text('#include "gbvm_stubs.h"\n')
+        (work / "data_manager.h").write_text('#include "gbvm_stubs.h"\n')
         (work / "collision.h").write_text('#include "gbvm_stubs.h"\n'
             'extern UBYTE tile_hit_x,tile_hit_y;\n'
             'UBYTE tile_col_test_range_x(UBYTE,UBYTE,UBYTE,UBYTE);\n'

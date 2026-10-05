@@ -4,7 +4,7 @@
 #include <string.h>
 #include "actor.h"
 #include "city_loader_fixture.h"
-actor_t actors[21],*actors_inactive_head;
+actor_t actors[22],*actors_inactive_head;
 UBYTE actors_len;
 static UBYTE district;
 static unsigned long checks;
@@ -59,7 +59,7 @@ static void presentation(void){
                      actors[first+2].prev==&actors[1],"Preceding Queen and following boat retained");
         /* Root clones only after binding: copied caches must survive reuse. */
         actors[first]=actors[first+1]=PLAYER;
-        for(kind=0;kind<6;kind++)for(orientation=0;orientation<4;orientation++){
+        for(kind=0;kind<7;kind++)for(orientation=0;orientation<4;orientation++){
             actor_t before;
             memset(actor,0,sizeof(*actor));actor->pos_x=1234;actor->pos_y=4567;
             actor->flags=37;actor->prev=&actors[1];actor->next=&actors[20];before=*actor;
@@ -78,7 +78,7 @@ static void presentation(void){
             require(actor->frame==variant*6+pose&&actor->frame_end==actor->frame+1,"Civilian palette/pose ID");
         }
         {actor_t before=*actor;
-         td_fleet_present(actor,6,0);td_fleet_present(actor,0,4);
+         td_fleet_present(actor,7,0);td_fleet_present(actor,0,4);
          td_civilian_present(actor,4,0);td_civilian_present(actor,0,6);
          require(!memcmp(actor,&before,sizeof(before)),"Invalid pose leaves actor unchanged");}
     }
@@ -97,6 +97,8 @@ static void reset_and_banks(void){
     td_fleet_present(&actors[18],5,3);td_civilian_present(&actors[19],1,4);
     require(actors[18].sprite.bank==4&&actors[18].frame==6,"Invalid binding discards previous fleet cache");
     require(actors[19].sprite.bank==4&&actors[19].frame==32,"Invalid binding discards previous civilian cache");
+    td_fleet_present(&actors[18],6,3);
+    require(actors[18].sprite.bank==4&&actors[18].frame==6,"Missing fleet binding makes taxi fall back safely to original sedan");
     require(actors_inactive_head==&actors[1]&&actors[1].next==&actors[2],"Invalid bind preserves native list");
     init(0,0);actors_len=4;td_city_sprites_bind();
     td_fleet_present(&actors[18],3,2);

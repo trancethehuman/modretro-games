@@ -63,12 +63,12 @@
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "82c6e474ace6e2c209108bde8d1fb1b797c097294941edbd184ef8404f363f50",
+      "sha256": "3b1dc91bd10120c0b217f789014ebc3b02687315e9ccc76b06fc7c6da95c2196",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {
       "path": "content/districts/high_park_art.json",
-      "sha256": "f2f8ddf70e5586f3867abcaf702c2a86c844c1efa514c326dcacfd081cb0de9b",
+      "sha256": "e03652979943b4d6e7a6cd23e83339f0c4bd2e393da4c0476fd5ab5d36f8b895",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     }
   ],
@@ -650,7 +650,7 @@
         {
           "stop_id": 18,
           "district": 0,
-          "objective": "Ossington relay handoff"
+          "objective": "Bloorcourt relay handoff"
         },
         {
           "stop_id": 28,

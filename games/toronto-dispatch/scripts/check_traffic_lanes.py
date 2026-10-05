@@ -20,6 +20,7 @@ REPO = ROOT.parents[1]
 FIXTURE = REPO / 'tests/fixtures/traffic_lanes.json'
 HEADER = ROOT / 'project/plugins/toronto-driving/engine/include/td_district_world.h'
 COUNTS = 7
+from feedback_protection import historical_json, raw_sha, semantic_check
 checks = 0
 body_samples = 0
 
@@ -269,7 +270,7 @@ def verify_native_arrays(text, models):
 
 
 def protected_json_check(relative, value, pin, verify_fresh=True):
-    value = copy.deepcopy(value)
+    value = historical_json(relative,value) if verify_fresh else copy.deepcopy(value)
     for key in pin.get('omit_top_keys', []):
         value.pop(key, None)
     for key in pin.get('omit_geography_keys', []):
@@ -294,9 +295,10 @@ def protected_json_check(relative, value, pin, verify_fresh=True):
 
 def protected_check(fixture):
     for relative, expected in fixture['protected_files'].items():
-        require(hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() == expected, 'Protected asset/campaign/world changed: ' + relative)
+        require(raw_sha(relative,(ROOT / relative).read_bytes(),expected), 'Protected asset/campaign/world changed: ' + relative)
     for relative, pin in fixture['protected_json'].items():
         protected_json_check(relative, read(ROOT / relative), pin)
+    semantic_check(fixture)
     north = read(ROOT / 'content/districts/north_art.json')
     jobs = read(ROOT / 'content/districts/north_jobs.json')
     geo = jobs['geography_metadata']
@@ -369,6 +371,22 @@ def self_test(fixture, models, native):
             require(bool(original[field]), 'Missing job content mutation target ' + relative)
             must_reject(lambda field=field, key=key: bad_content(lambda value: value[field][0].update({key: value[field][0][key] + 1})),
                         'Job semantic content altered ' + relative + '/' + field + '/' + key)
+    # The new companion cannot weaken geometry, scenery, civilians or money.
+    for relative,pin in fixture['protected_json'].items():
+        current=read(ROOT/relative)
+        if not relative.endswith('_art.json'):continue
+        def bad_art(path):
+            value=copy.deepcopy(current);parent=value
+            for key in path[:-1]:parent=parent[key]
+            key=path[-1];parent[key]+=1
+            protected_json_check(relative,value,pin)
+        must_reject(lambda:bad_art(['blocks',0,'width']),'Feedback proof cannot move original building footprint '+relative)
+        must_reject(lambda:bad_art(['scenery','placements',0,'x']),'Feedback proof cannot admit unreviewed scenery pixels '+relative)
+        if 'collisions' in current:
+            must_reject(lambda:bad_art(['collisions',0]),'Feedback proof cannot alter raw terrain '+relative)
+    for relative in ('content/campaign.json','project/assets/sprites/city_civilians.png','project/assets/backgrounds/toronto_city.png'):
+        payload=(ROOT/relative).read_bytes()
+        require(not raw_sha(relative,payload+b'corruption',fixture['protected_files'][relative]),'Feedback artifact rejects corrupt source '+relative)
     # Direct independent cardinal oracle: corrupt a principal coordinate in
     # every direction, without relying on a generator's expected route array.
     seen = set()

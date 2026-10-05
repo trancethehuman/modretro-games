@@ -1,6 +1,7 @@
 """Check authored/imported city sprites and sanitize actual native binding."""
 from pathlib import Path
 import json
+import hashlib
 import os
 import re
 import shutil
@@ -14,6 +15,17 @@ ENGINE = GAME / "project/plugins/toronto-driving/engine"
 
 def main():
     subprocess.run(["python3", str(GAME / "scripts/create_city_sprites.py"), "--check"], check=True)
+    from PIL import Image
+    # The taxi is appended. All previously approved service poses and exact
+    # native IDs remain protected independently from the current generator.
+    native=json.loads((GAME/'project/assets/sprites/city_fleet.png.gbsres').read_text())
+    frames=native['states'][0]['animations'][0]['frames']
+    assert len(frames)==21 and not frames[20]['tiles']
+    assert hashlib.sha256(json.dumps(frames[:16],sort_keys=True,separators=(',',':')).encode()).hexdigest()=='ba0d3f4f4882686f86afc30d71009a2789f6b946b9e0720051f52e989032343d'
+    with Image.open(GAME/'project/assets/sprites/city_fleet.png') as image:
+        assert image.size==(160,16)
+        assert hashlib.sha256(image.convert('RGB').crop((0,0,128,16)).tobytes()).hexdigest()=='1b7a7beadad9294ef1ff2013fa9512e4e71fba94e8bfbd3bc3bf2878a7d9ffdd'
+    assert all(len(frame['tiles'])==2 and all(t['paletteIndex']==6 for t in frame['tiles']) for frame in frames[16:20])
     count = int(re.search(r"^#define TD_DISTRICT_COUNT (\d+)$",
                          (ENGINE / "include/td_district.h").read_text(), re.M)[1])
     districts = json.loads((GAME / "content/districts/world.json").read_text())["districts"]
@@ -52,7 +64,7 @@ struct actor { actor_t *prev,*next; far_ptr_t sprite; unsigned pos_x,pos_y;
 #define PLAYER actors[0]
 #define ACTOR_FLAG_ACTIVE 32
 #define ACTOR_FLAG_HIDDEN 2
-extern actor_t actors[21],*actors_inactive_head;
+extern actor_t actors[22],*actors_inactive_head;
 extern UBYTE actors_len;
 void deactivate_actor(actor_t *actor);
 #endif
@@ -64,7 +76,7 @@ void deactivate_actor(actor_t *actor);
             ','.join(map(str, loader_first)) + '};\n')
         binary = work / "city-sprites-regressions"
         subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
-                        "-Wno-unknown-pragmas", "-fsanitize=address,undefined", "-I", str(work),
+                        "-Wno-unknown-pragmas", "-DACTOR_H", "-fsanitize=address,undefined", "-I", str(work),
                         "-I", str(ENGINE / "include"), str(ROOT / "tests/engine/city_sprites_harness.c"),
                         "-o", str(binary)], check=True)
         raise SystemExit(subprocess.run([str(binary)], check=False).returncode)

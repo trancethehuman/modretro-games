@@ -196,10 +196,13 @@
       "id": 18,
       "u": 144,
       "v": 64,
-      "name": "OSSINGTON BUS",
+      "name": "BLOORCOURT BUS",
       "transit": 2,
       "district": 0,
-      "reserved": 0
+      "reserved": 0,
+      "location_notice": "Fictional compressed Bloorcourt bus handoff, not a surveyed TTC stop; regional label corrected from Ossington without moving stop18 or its saved identity",
+      "geography_source": "https://www.toronto.ca/business-economy/business-operation-growth/business-improvement-areas/bia-list/bia-list-a-e/",
+      "geography_reviewed": "2026-10-04"
     },
     {
       "id": 19,
@@ -4666,7 +4669,7 @@
         {
           "stop_id": 18,
           "district": 0,
-          "objective": "Ossington relay handoff"
+          "objective": "Bloorcourt relay handoff"
         },
         {
           "stop_id": 28,

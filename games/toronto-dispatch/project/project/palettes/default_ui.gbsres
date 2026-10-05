@@ -1,12 +1,12 @@
 {
   "_resourceType": "palette",
   "id": "default-ui",
-  "name": "Default UI",
+  "name": "Dispatch Navy / Mint / Gold",
   "colors": [
-    "F8F8B8",
-    "48C058",
-    "D84848",
-    "082048"
+    "112439",
+    "45DEC2",
+    "FFD46A",
+    "EFFBE8"
   ],
   "defaultName": "Default UI",
   "defaultColors": [

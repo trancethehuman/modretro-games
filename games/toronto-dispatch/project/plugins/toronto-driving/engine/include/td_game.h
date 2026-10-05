@@ -4,7 +4,7 @@
 #define TD_QUESTS 104
 #define TD_STOPS 64
 #define TD_COMPLETE_BYTES 16
-#define TD_ACTORS 16
+#define TD_ACTORS 22
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0
@@ -16,6 +16,10 @@
 #define TD_RIDE 6
 #define TD_RESULT 7
 #define TD_HELP 8
+/* Paused Settings shares the existing menu byte, without changing saves. */
+#define TD_SETTINGS_SOUND 9
+#define TD_SETTINGS_CONTROLS 10
+#define TD_SETTINGS_BACK 11
 #define TD_SAVE_VERSION 10
 #define TD_STREETCAR_HOLD 1
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;

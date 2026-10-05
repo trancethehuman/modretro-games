@@ -9,9 +9,9 @@
   "source_png": "original-art/ambient_aircraft.png",
   "source_metadata": "original-art/ambient_aircraft.metadata.json",
   "destination": "assets/sprites/ambient_aircraft.png",
-  "png_sha256": "b8bcf4358415f5d9ba43146571740a8a23d955d536e18d86f2384c1c4b4508fe",
-  "metadata_sha256": "a624b9f49d9b5efa25e8928692edea79d0a7ffa173effbab21e46594c6de4822",
-  "decoded_rgb_sha256": "bc20efa4a2602f32d958b2b2294f12924fee27fee31aab1a6221da23ace3c589",
+  "png_sha256": "1d538e0d60a6dd7d4feeb3f44248f12cfd537fb081ea74ec6b40e448736b8bc6",
+  "metadata_sha256": "ec4aa5c29fde16e574273a730bf124fccfb8333a70d67b3b0f4ac1dd8d5f6c2e",
+  "decoded_rgb_sha256": "a4acfde35949a932d03d3898afdf50dbd84b73928aedef5c1bb5d1f6f2438e74",
   "palette_slot": 0,
   "source_colours": [
     "65ff00",
@@ -19,8 +19,8 @@
     "86c06c",
     "071821"
   ],
-  "unique_patterns_8x8": 96,
-  "unique_patterns_8x16": 50,
+  "unique_patterns_8x8": 113,
+  "unique_patterns_8x16": 62,
   "poses": [
     {
       "frame": 0,
@@ -281,11 +281,115 @@
       ],
       "oam_objects": 2,
       "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 13,
+      "kind": "hidden",
+      "direction": null,
+      "rotor_phase": null,
+      "source_rect": [
+        416,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [],
+      "oam_objects": 0,
+      "maximum_objects_per_scanline": 0
+    },
+    {
+      "frame": 14,
+      "kind": "jet_shadow",
+      "direction": "east",
+      "rotor_phase": null,
+      "source_rect": [
+        448,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 15,
+      "kind": "jet_shadow",
+      "direction": "south",
+      "rotor_phase": null,
+      "source_rect": [
+        480,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 16,
+      "kind": "jet_shadow",
+      "direction": "west",
+      "rotor_phase": null,
+      "source_rect": [
+        512,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
+    },
+    {
+      "frame": 17,
+      "kind": "jet_shadow",
+      "direction": "north",
+      "rotor_phase": null,
+      "source_rect": [
+        544,
+        0,
+        32,
+        32
+      ],
+      "opaque_bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "oam_objects": 4,
+      "maximum_objects_per_scanline": 2
     }
   ],
+  "unique_flipped_patterns_8x16": 31,
+  "jet_additional_flipped_patterns_8x16": 6,
   "shadow_frame": 12,
   "hidden_frame": 13,
+  "jet_shadow_frames": [
+    14,
+    15,
+    16,
+    17
+  ],
+  "original_decoded_rgb_sha256": "bc20efa4a2602f32d958b2b2294f12924fee27fee31aab1a6221da23ace3c589",
   "pivot": "Aircraft share source centre (16,16), mapped to actor world position",
-  "runtime": "Direct cosmetic OAM overlay; optional shadow offset (+8,+24) with ground priority; empty startup 13 keeps the resource loader invisible",
+  "runtime": "Original plane/heli overlay and optional ellipse remain exact; larger jet shadows append four ground objects without roof patches; empty startup 13 remains invisible",
   "verification": "Decoded pixels, palette, OAM coverage and optimiser-safe metadata only; no import, build, runtime or hardware claim"
 }

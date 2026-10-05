@@ -9,7 +9,7 @@
 #include "engine_under_test.c"
 
 /* Host-only isolated private-call compatibility; no production NULL path. */
-static void td_test_drive(void){td_terrain_cache_t cache;cache.valid=0;td_drive(&cache);}
+static void td_test_drive(void){td_terrain_cache_t cache={0};td_drive(&cache);}
 static UBYTE td_test_drivable(UWORD u,UWORD v){td_terrain_cache_t cache;cache.valid=0;return td_terrain_drivable(u,v,&cache);}
 #define td_drive() td_test_drive()
 #define td_drivable(u,v) td_test_drivable(u,v)
@@ -27,10 +27,12 @@ static UBYTE td_test_drivable(UWORD u,UWORD v){td_terrain_cache_t cache;cache.va
 #undef td_get_west_street
 #include "native_collision_fixture.h"
 
-actor_t actors[21];
+actor_t actors[22];
 actor_t *actors_inactive_head;
 UBYTE actors_len;
 UWORD camera_x,camera_y,image_width=1024,image_height=976,sys_time;
+WORD draw_scroll_x,draw_scroll_y;
+far_ptr_t current_scene;
 UBYTE camera_settings,joy,joy_pressed;
 BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 UBYTE td_test_sram[8192];
@@ -39,16 +41,40 @@ static unsigned failures,checks,stop_reads,ui_draws;
 static UBYTE ui_last_draw_onfoot;
 static unsigned audio_updates,audio_inits,audio_impacts;
 /* Native compositing has its own actual-source VRAM/OAM harness. */
+static UBYTE test_aircraft_exposed,test_boat_cover;
+UBYTE td_aircraft_render_exposed(UWORD u,UWORD v){(void)u;(void)v;return test_aircraft_exposed;}
+UBYTE td_boats_under_cover(void){return test_boat_cover;}
 void td_aircraft_render_reset(void) {}
 void td_aircraft_render_bind(void) {}
 void td_aircraft_render_restore(void) {}
 void td_city_sprites_bind(void) {}
 void td_player_sprite_restore(void) {}
+static UBYTE test_boat_shore_active,test_boat_active,test_shop_pending;
+static UBYTE test_boat_interact_calls,test_boat_drive_calls,test_boat_drive_keys,test_boat_exit_allowed;
+static UWORD test_boat_shore_u,test_boat_shore_v;
+static unsigned sandbox_render_calls;
+static unsigned sandbox_pose_calls;
+UBYTE td_boats_restore_shore(UWORD *u,UWORD *v){if(!test_boat_shore_active)return FALSE;*u=test_boat_shore_u;*v=test_boat_shore_v;return TRUE;}
+static unsigned test_boat_controlled_calls;
+UBYTE td_boats_controlled(void){test_boat_controlled_calls++;return test_boat_active;}
+UBYTE td_boats_interact(UWORD *u,UWORD *v){
+    test_boat_interact_calls++;
+    if(test_boat_active&&test_boat_exit_allowed){test_boat_active=0;*u=560*16;*v=800*16;return 2;}
+    return 0;
+}
+void td_boats_drive(UBYTE keys,UWORD elapsed,UWORD *u,UWORD *v){
+    test_boat_drive_calls++;test_boat_drive_keys=keys;(void)elapsed;(void)u;(void)v;
+}
+UBYTE td_shops_interact(void){return FALSE;}
+UBYTE td_shops_pending(void){return test_shop_pending;}
+void td_shops_reset(void){test_shop_pending=0;}
+void td_actor_render_actor(actor_t *a){(void)a;sandbox_render_calls++;}
+void td_vehicle_present(actor_t *a,UBYTE vehicle,UBYTE heading){UBYTE f=vehicle*8+((heading+1)&15)/2;sandbox_pose_calls++;actor_set_frames(a,f,f+1);}
 void td_boats_bind(void){}
 void td_boats_reset(void){}
 void td_boats_update(UWORD elapsed){(void)elapsed;}
 void td_traffic_lights_reset(void){}
-void td_fleet_present(actor_t *a,UBYTE kind,UBYTE direction){UBYTE frame=kind<2?kind*8+direction*2:(kind-2)*4+direction;actor_set_frames(a,frame,frame+1);}
+void td_fleet_present(actor_t *a,UBYTE kind,UBYTE direction){UBYTE frame=kind<2?kind*8+direction*2:(kind-2)*4+direction;sandbox_pose_calls++;actor_set_frames(a,frame,frame+1);}
 void td_civilian_present(actor_t *a,UBYTE variant,UBYTE pose){(void)variant;actor_set_frames(a,32+pose,33+pose);}
 static UBYTE audio_mode,audio_active,audio_cue,audio_braking;
 static UBYTE stop0_here;
@@ -62,7 +88,13 @@ static scene_t test_native_scenes[TD_DISTRICT_COUNT];
 static unsigned test_map_opens,test_map_updates,test_map_closes;
 static UBYTE test_map_active,test_map_buttons,test_map_pressed,test_map_camera_settings;
 static UWORD test_map_camera_x,test_map_camera_y;
-static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER,ISLAND_CHECKPOINT_EDGE } geometry;
+static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER,ISLAND_CHECKPOINT_EDGE,TRAM_CORNER } geometry;
+static UBYTE test_corner_tile_x,test_corner_tile_y;
+static unsigned long test_road_tile_reads;
+static void test_refresh_scene(void){
+    current_scene.bank=geometry+1;
+    current_scene.ptr=test_current_district<TD_DISTRICT_COUNT?&test_native_scenes[test_current_district]:NULL;
+}
 static jmp_buf interrupted_save;
 static unsigned sram_writes,sram_interrupt_after;
 static int sram_interrupt_enabled;
@@ -71,7 +103,7 @@ static UBYTE sram_values[256];
 
 static void expect(int condition,const char *name) {
     checks++;
-    if (!condition) { failures++; fprintf(stderr,"FAIL %s\n",name); }
+    if (!condition) { failures++; fprintf(stderr,"FAIL %s\n",name);if(getenv("TD_ENGINE_DIAGNOSTICS"))fprintf(stderr,"  state d%u mode%u foot%u pos%u/%u speed%d heading%u health%u cash%u cool%u msg%u heat%u tick%u entry%u release%u contact%u\n",td.district,td.mode,td.onfoot,td.u,td.v,td.speed,td.heading,td.health,td.cash,td.cooldown,td.msg,td.wanted,td_tick,td_entry_timer,td_result_b_release,td_contact_episode); }
 }
 
 void td_host_sram_store(volatile UBYTE *address,UBYTE value) {
@@ -89,13 +121,14 @@ static UBYTE district_tile(UBYTE district,UBYTE x,UBYTE y) {
     if (geometry==EAST_WALL && x>=50) return 15;
     if (geometry==SOUTH_CURB && y>=50) return 15;
     if (geometry==SOUTHWEST_CORNER && y>=50 && x<50) return 15;
+    if (geometry==TRAM_CORNER && y>=test_corner_tile_y && x<test_corner_tile_x) return 15;
     if (geometry==ALIGHT_BARRIER&&x==71&&y==90) return 15;
     if (geometry==ISLAND_CHECKPOINT_EDGE&&district==TD_DISTRICT_ISLANDS&&x==39&&y==35)return 15;
     if (geometry==NATIVE_GRID||geometry==ALIGHT_BARRIER||geometry==ISLAND_CHECKPOINT_EDGE) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
     if (geometry==HIDDEN_NPC_TILE && x==48 && y==53) return 15;
     return 0;
 }
-UBYTE tile_at(UBYTE x,UBYTE y) {return district_tile(test_current_district,x,y);}
+UBYTE tile_at(UBYTE x,UBYTE y) {test_road_tile_reads++;return district_tile(test_current_district,x,y);}
 UBYTE tile_hit_x,tile_hit_y;
 UBYTE tile_col_test_range_x(UBYTE mask,UBYTE row,UBYTE first,UBYTE last){
     tile_hit_y=row;
@@ -185,7 +218,7 @@ void td_get_job(UBYTE index,td_job_t *out) {
     (void)index;memset(out,0,sizeof(*out));out->count=2;
     out->vehicle=TD_NONE;out->seconds=120;out->reward=150;out->route[1]=1;
 }
-UBYTE td_district_current(void) {return test_current_district;}
+UBYTE td_district_current(void) {test_refresh_scene();return test_current_district;}
 UBYTE td_district_scene(UBYTE district,far_ptr_t *out) {
     if(!out||district>=TD_DISTRICT_COUNT)return FALSE;
     test_native_scenes[district].width=native_widths[district];
@@ -204,7 +237,7 @@ UBYTE td_district_drivable(UBYTE district,UWORD u,UWORD v) {
     if(district>=TD_DISTRICT_COUNT||u<8||v<8||u>1016||v>968)return FALSE;
     for(unsigned y=(v-5)>>3;y<=((v+5)>>3);y++)
         for(unsigned x=(u-5)>>3;x<=((u+5)>>3);x++)
-            if(district_tile(district,x,y))return FALSE;
+            if(district_tile(district,x,y)&15)return FALSE;
     return TRUE;
 }
 UBYTE td_district_walkable(UBYTE district,UWORD u,UWORD v) {
@@ -227,6 +260,8 @@ static void reset_case(void) {
     td_corner_used=td_contact_episode=td_traffic_retreat_mask=td_vehicle_contact_mask=0;td_traffic_advance=8;td_police_waypoint.valid=td_police_stuck=td_traffic_elapsed=td_police_elapsed=0;td_police_advance=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
+    draw_scroll_x=draw_scroll_y=0;sandbox_pose_calls=0;
+    test_boat_interact_calls=test_boat_drive_calls=test_boat_drive_keys=test_boat_exit_allowed=0;test_boat_controlled_calls=0;
     ui_last_draw_onfoot=0;
     stop0_here=authored_content=0;test_queue_calls=test_reset_calls=0;
     test_map_opens=test_map_updates=test_map_closes=0;
@@ -234,14 +269,15 @@ static void reset_case(void) {
     test_map_camera_x=test_map_camera_y=0;
     td_save_slot=TD_NONE;td_save_seq=0;actors_inactive_head=test_actors_active_head=NULL;actors_len=0;
     sram_writes=sram_interrupt_after=0;sram_interrupt_enabled=0;
-    geometry=CLEAR_GROUND;
+    geometry=CLEAR_GROUND;test_boat_shore_active=test_boat_active=test_shop_pending=test_boat_cover=0;test_aircraft_exposed=1;test_boat_shore_u=test_boat_shore_v=0;sandbox_render_calls=0;td_inside_shop=0;td_sandbox_reset();td_scenery_reset();td_ramming_reset();test_refresh_scene();test_road_tile_reads=0;
     td_audio_init();audio_updates=audio_inits=audio_impacts=0;
     td_world_traffic_init(0,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
-    for(unsigned i=0;i<6;i++) { td_traffic_u[i]=(800+i*32)*16;td_traffic_v[i]=928*16;td_ped_route[i]=TD_NONE; }
+    for(unsigned i=0;i<8;i++) { td_traffic_u[i]=(i<6?800+i*32:704+(i-6)*32)*16;td_traffic_v[i]=928*16;td_ped_route[i]=TD_NONE; }
+    td_sandbox_u=td_traffic_u;td_sandbox_v=td_traffic_v;td_sandbox_district=0;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_streetcar_runtime_reset();
     td_people_reset();
-    for(unsigned i=9;i<15;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
+    for(unsigned i=9;i<17;i++)actors[i].flags=ACTOR_FLAG_HIDDEN;
     td_aircraft_reset(0x9D27);
 }
 
@@ -249,7 +285,7 @@ static void driving_tick(UBYTE held) {
     joy_pressed=held & ~joy;joy=held;td_tick++;sys_time++;td_corner_used=0;td_drive();
 }
 static void world_tick(UBYTE held,UWORD elapsed) {
-    joy_pressed=held & ~joy;joy=held;sys_time+=elapsed;toronto_update();
+    test_refresh_scene();joy_pressed=held & ~joy;joy=held;sys_time+=elapsed;toronto_update();
 }
 static WORD prime_car(void) {
     for(unsigned i=0;i<180;i++) driving_tick(J_A);
@@ -394,7 +430,7 @@ static void test_pedestrian_phase_reuse(void) {
         expect(actors[9].pos.x==u*32&&actors[9].pos.y==v*32&&
                actors[9].frame_start==33+cases[point].direction&&td_ped_route[0]==route,
                "reused phase preserves recorded native pedestrian position, turnaround direction and animation");
-        expect(!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!(td_distance(td.u>>4,u)<112&&td_distance(td.v>>4,v)<96)&&
+        expect(!!(actors[9].flags&ACTOR_FLAG_HIDDEN)==!(td_distance(td.u>>4,u)<176&&td_distance(td.v>>4,v)<144)&&
                !memcmp(&td,&before,58),"pedestrian phase reuse preserves visibility and every saved field");
     }
 }
@@ -491,15 +527,15 @@ static void test_fractional_fleet_presentation(void) {
 
 static void test_route_selection_invalid_context(void) {
     for(unsigned ride=0;ride<2;ride++)for(unsigned invalid=TD_DISTRICT_COUNT;invalid<=255;invalid++){
-        struct {UBYTE before[3],ids[6],after[3];} slots={{0x41,0x82,0xC3},{0,1,70,255,127,128},{0xD4,0xA5,0x76}};
-        struct {UWORD before,points[6][2],after;} points={0xA15C,{{123,456},{789,12},{345,678},{901,234},{567,890},{1234,5678}},0xE29D};
-        UWORD cached[6][2];memcpy(cached,points.points,sizeof(cached));
+        struct {UBYTE before[3],ids[8],after[3];} slots={{0x41,0x82,0xC3},{0,1,70,255,127,128,4,5},{0xD4,0xA5,0x76}};
+        struct {UWORD before,points[8][2],after;} points={0xA15C,{{123,456},{789,12},{345,678},{901,234},{567,890},{1234,5678},{321,654},{987,210}},0xE29D};
+        UWORD cached[8][2];memcpy(cached,points.points,sizeof(cached));
         reset_case();td.district=ride?0:invalid;td.mode=ride?TD_RIDE:TD_ROAM;
         td_streetcar_view_district=ride?invalid:1;td_streetcar_ride_view=ride;
         td_streetcar_focus_u=910*16+15;td_streetcar_focus_v=520*16+7;
         td_state_t before=td;
         td_refresh_routes(slots.ids,points.points);
-        for(unsigned slot=0;slot<6;slot++)expect(slots.ids[slot]==TD_NONE,
+        for(unsigned slot=0;slot<8;slot++)expect(slots.ids[slot]==TD_NONE,
                 "invalid chosen district clears every pedestrian identity before ROM indexing");
         expect(!memcmp(points.points,cached,sizeof(cached))&&points.before==0xA15C&&points.after==0xE29D&&
                slots.before[0]==0x41&&slots.before[1]==0x82&&slots.before[2]==0xC3&&
@@ -513,23 +549,23 @@ static void test_route_selection_invalid_context(void) {
        suppress legitimate logical-scene pedestrians while walking. */
     reset_case();td.district=1;td.u=910*16;td.v=520*16;
     td_streetcar_view_district=1;td_streetcar_ride_view=0;
-    UBYTE expected[6];UWORD expected_points[6][2];memset(expected,TD_NONE,sizeof(expected));
+    UBYTE expected[8];UWORD expected_points[8][2];memset(expected,TD_NONE,sizeof(expected));
     memset(expected_points,0xA5,sizeof(expected_points));td_refresh_routes(expected,expected_points);
     expect(expected[0]!=TD_NONE,"registered West comparison selects actual nearby pedestrian routes");
     for(unsigned invalid=TD_DISTRICT_COUNT;invalid<=255;invalid++){
-        UBYTE selected[6];UWORD points[6][2];memset(selected,TD_NONE,sizeof(selected));memset(points,0xA5,sizeof(points));
+        UBYTE selected[8];UWORD points[8][2];memset(selected,TD_NONE,sizeof(selected));memset(points,0xA5,sizeof(points));
         td_streetcar_view_district=invalid;td_refresh_routes(selected,points);
         expect(!memcmp(selected,expected,sizeof(selected))&&!memcmp(points,expected_points,sizeof(points)),
                "unused invalid view cannot alter valid logical-district route selection");
     }
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned ride=0;ride<2;ride++){
-        UBYTE selected[6];UWORD points[6][2];memset(selected,TD_NONE,sizeof(selected));memset(points,0,sizeof(points));
+        UBYTE selected[8];UWORD points[8][2];memset(selected,TD_NONE,sizeof(selected));memset(points,0,sizeof(points));
         reset_case();td.district=ride?0:district;td_streetcar_view_district=district;td_streetcar_ride_view=ride;
         td.u=td_streetcar_focus_u=(td_district_routes[district][0][0]+32)*16;
         td.v=td_streetcar_focus_v=td_district_routes[district][0][1]*16;
         td_refresh_routes(selected,points);
         expect(selected[0]!=TD_NONE,"every registered chosen district retains positive route selection");
-        for(unsigned slot=0;slot<6;slot++)expect(selected[slot]==TD_NONE||
+        for(unsigned slot=0;slot<8;slot++)expect(selected[slot]==TD_NONE||
             (selected[slot]<td_route_counts[district]&&points[slot][0]==td_district_routes[district][selected[slot]][0]&&
              points[slot][1]==td_district_routes[district][selected[slot]][1]),
              "selected route identities and cached coordinates remain authored and in range");
@@ -603,8 +639,8 @@ static void test_city_routes_and_walking(void) {
     expect(!td_drivable(76,756),"car footprint rejects a narrow solid rail under its centre");
     reset_case();geometry=NATIVE_GRID;td.u=793*16+2;td.v=730*16+12;
     td.heading=4;td.speed=21;td_vx=0;td_vy=336;
-    for(unsigned i=0;i<16;i++)driving_tick(J_A);
-    expect(td.speed>=21&&td.v>738*16,"held throttle clears a small quantised corner overlap without losing forward speed");
+    for(unsigned i=0;i<4;i++)driving_tick(J_A);
+    expect(td.speed>=21&&td.v>734*16,"held throttle clears the small quantised terrain corner before reaching actual street furniture");
     expect(td_drivable(td.u>>4,td.v>>4),"corner slide retains a collision-valid car footprint");
 
     reset_case();geometry=EAST_WALL;td.u=394*16;td.v=450*16;td.heading=0;td.speed=24;td_vx=384;
@@ -672,6 +708,9 @@ static void test_audio_event_integration(void) {
     joy=joy_pressed=0;sys_time+=240;toronto_update();
     expect(!audio_active&&audio_updates==3,"paused frames continue to service audio without advancing the world");
     td.menu=8;td_resume_mode=TD_RIDE;
+    joy=joy_pressed=J_A;sys_time+=2;toronto_update();
+    expect(td.menu==TD_SETTINGS_SOUND&&audio_mode==0&&td.mode==TD_PAUSE,
+           "the paused transit Settings entry opens Sound without silently changing the audio preference");
     for(unsigned mode=1;mode<=3;mode++) {
         joy=joy_pressed=J_A;sys_time+=2;toronto_update();
         expect(audio_mode==mode%3&&td.mode==TD_PAUSE,"audio mode can be cycled while a transit trip is paused");
@@ -681,6 +720,82 @@ static void test_audio_event_integration(void) {
     td.left=100;td_target.u=td.u>>4;td_target.v=td.v>>4;td_interact();expect(audio_cue==TD_AUDIO_COMPLETE&&td.mode==TD_RESULT,"final handoff queues completion audio for the result screen");
     reset_case();td.job=0;td_finish(FALSE);expect(audio_cue==TD_AUDIO_FAIL,"failed contracts queue failure audio");
     reset_case();td_message(5);expect(audio_cue==TD_AUDIO_IMPACT,"vehicle impacts queue their audio feedback");
+}
+
+static void settings_press(UBYTE buttons){world_tick(0,1);world_tick(buttons,1);}
+static void test_settings_controller(void){
+    const UBYTE resumes[]={TD_ROAM,TD_WAIT,TD_RIDE};
+    for(unsigned index=0;index<sizeof(resumes)/sizeof(resumes[0]);index++){
+        native_case();td.mode=resumes[index];td.onfoot=index!=0;
+        td.job=0;td_get_job(td.job,&td_job);td.stage=1;td.health=67;td.left=90;
+        td.seconds=7;td.subsecond=13;td.transit_origin=0;td.transit_target=12;td.ride_left=9;
+        td.wanted=2;td.wanted_left=17;td.cooldown=43;
+        td_state_t frozen=td;td_aircraft_state_t aircraft=td_aircraft;
+        UWORD fleet_u[8],fleet_v[8];UBYTE legs[8];actor_t people[22];
+        memcpy(fleet_u,td_traffic_u,sizeof(fleet_u));memcpy(fleet_v,td_traffic_v,sizeof(fleet_v));
+        memcpy(legs,td_traffic_leg,sizeof(legs));memcpy(people,(const void *)actors,sizeof(people));
+        unsigned stores=sram_writes;UBYTE tick=td_tick,traffic_elapsed=td_traffic_elapsed,police_elapsed=td_police_elapsed;
+        world_tick(J_START,1);
+        expect(td.mode==TD_PAUSE&&td.menu==0&&td_resume_mode==resumes[index],
+               "ordinary Start preserves ROAM, WAIT or paid RIDE as the Settings resume mode");
+        settings_press(J_UP);
+        expect(td.menu==8,"main Pause Up wraps from Resume to Settings without entering its submenu");
+        settings_press(J_A);
+        expect(td.mode==TD_PAUSE&&td.menu==TD_SETTINGS_SOUND&&audio_mode==0,
+               "main Settings opens its Sound row in every resumable world mode");
+        for(UBYTE sound=1;sound<=TD_AUDIO_MODES;sound++){
+            settings_press(J_A);
+            expect(audio_mode==sound%TD_AUDIO_MODES&&td.menu==TD_SETTINGS_SOUND&&td.mode==TD_PAUSE,
+                   "Sound cycles Music+Effects, Effects Only and All Sound Off without leaving Settings");
+            world_tick(J_A,240);
+            expect(audio_mode==sound%TD_AUDIO_MODES,
+                   "holding the Sound confirmation cannot repeatedly cycle the preference");
+        }
+        settings_press(J_UP);expect(td.menu==TD_SETTINGS_BACK,"Settings Up wraps Sound to its own Back row");
+        settings_press(J_DOWN);expect(td.menu==TD_SETTINGS_SOUND,"Settings Down wraps Back to Sound, never the main Resume row");
+        settings_press(J_DOWN);expect(td.menu==TD_SETTINGS_CONTROLS,"Settings Down selects its visible Control Guide");
+        for(UBYTE dismissal=0;dismissal<2;dismissal++){
+            settings_press(J_A);
+            expect(td.mode==TD_HELP&&td.menu==TD_SETTINGS_CONTROLS&&td_resume_mode==resumes[index],
+                   "Control Guide opens ordinary HELP with its Settings return marker and original resume mode");
+            world_tick(0,240);settings_press(dismissal?J_A:J_B);
+            expect(td.mode==TD_PAUSE&&td.menu==TD_SETTINGS_CONTROLS,
+                   "both A and B close the Control Guide to its own Settings row");
+            world_tick(dismissal?J_A:J_B,240);
+            expect(td.mode==TD_PAUSE&&td.menu==TD_SETTINGS_CONTROLS,
+                   "a held guide dismissal cannot choose another setting or resume the world");
+        }
+        settings_press(J_DOWN);settings_press(J_A);
+        expect(td.mode==TD_PAUSE&&td.menu==8,"the Settings Back row returns to main Settings without resuming");
+        settings_press(J_A);settings_press(J_DOWN);settings_press(J_DOWN);settings_press(J_START);
+        expect(td.mode==TD_PAUSE&&td.menu==8,"Start closes the Settings submenu to main Settings");
+        world_tick(J_START,240);
+        expect(td.mode==TD_PAUSE&&td.menu==8,"held submenu Start cannot leak a second resume action");
+        settings_press(J_A);settings_press(J_B);
+        expect(td.mode==TD_PAUSE&&td.menu==8,"B closes the Settings submenu to main Settings");
+        world_tick(J_B,240);
+        expect(td.mode==TD_PAUSE&&td.menu==8,"held submenu B cannot resume or cancel a paid or waiting journey");
+        frozen.mode=TD_PAUSE;frozen.menu=8;
+        expect(!memcmp(&td,&frozen,sizeof(td))&&td_resume_mode==resumes[index]&&sram_writes==stores,
+               "all Settings and guide actions preserve every58-byte world, mission, fare and saved field");
+        expect(!memcmp(fleet_u,td_traffic_u,sizeof(fleet_u))&&!memcmp(fleet_v,td_traffic_v,sizeof(fleet_v))&&
+               !memcmp(legs,td_traffic_leg,sizeof(legs))&&!memcmp(people,(const void *)actors,sizeof(people))&&
+               !memcmp(&aircraft,&td_aircraft,sizeof(aircraft))&&td_tick==tick&&
+               td_traffic_elapsed==traffic_elapsed&&td_police_elapsed==police_elapsed,
+               "long Settings waits freeze fleet, pedestrian actors, aircraft and autonomous timing accumulators");
+        settings_press(J_B);
+        expect(td.mode==resumes[index]&&td.speed==0&&!audio_braking&&(td_result_b_release&J_B),
+               "a fresh main Pause B resumes its original world mode while consuming that brake input");
+        for(UBYTE update=0;update<8;update++)world_tick(J_B,4);
+        expect(td.mode==resumes[index]&&td.speed==0&&td.left==90&&td.ride_left==9&&td.cash==frozen.cash&&!audio_braking,
+               "held Settings-close B neither reverses a car, cancels WAIT nor alights from a paid RIDE");
+        if(!index){
+            world_tick(0,1);for(UBYTE update=0;update<24;update++)world_tick(J_B,4);
+            expect(td.speed<0&&audio_braking,"physical release then a fresh B restores braking and reverse after Settings");
+        }
+    }
+    reset_case();td.mode=TD_HELP;td.menu=0;td_resume_mode=TD_ROAM;world_tick(J_A,1);
+    expect(td.mode==TD_ROAM&&td.menu==0,"cold Welcome HELP retains its existing A/B Start Game destination");
 }
 
 static void test_bounded_corner_assist(void) {
@@ -996,8 +1111,8 @@ static void test_pickup_damage_lifecycle(void) {
         if(hazard==0) {
             geometry=CLEAR_GROUND;td_traffic_u[0]=td.u;td_traffic_v[0]=td.v;
             td_traffic_step();damage=12;
-            expect(td.speed==12&&td_vx==192&&td.cooldown==60&&td.msg==5,
-                   "traffic still slows and warns an empty, carrying or retired vehicle");
+            expect(td.speed==12&&td_vx==-192&&td_vehicle_recoil==6&&td.cooldown==60&&td.msg==5,
+                   "traffic reverses half the actual momentum for bounded rebound and warns each cargo lifecycle once");
         }else if(hazard==1) {
             geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;
             driving_tick(0);damage=kind==1?20:8;
@@ -1009,7 +1124,7 @@ static void test_pickup_damage_lifecycle(void) {
             expect(td.u==392*16&&td.v>450*16&&td.speed==24&&!td_vx&&td_vy>0&&td.cooldown==30&&td.msg==5,
                    "glancing curb recovery keeps forward speed and its warning independently of cargo occupancy");
         }else {
-            geometry=CLEAR_GROUND;td_turn_tick=13;driving_tick(J_RIGHT);
+            geometry=CLEAR_GROUND;td_turn_tick=17;driving_tick(J_RIGHT);
             damage=kind==2?1:0;
             expect(td.heading==1&&td.speed==24,
                    "the same high-speed steering input turns empty, occupied and retired cars normally");
@@ -1330,8 +1445,10 @@ static void test_menu_held_drive_buttons(void) {
     reset_case();td.onfoot=1;td.park_u=td.u;td.park_v=td.v;
     world_tick(J_A,4);
     for(unsigned update=0;update<12;update++)world_tick(J_A,4);
-    expect(!td.onfoot&&!td_entry_timer&&td.speed>0,
-           "ordinary ROAM A entry still finishes and accelerates while A remains held");
+    expect(!td.onfoot&&!td_entry_timer&&!td.speed&&(td_result_b_release&J_A),
+           "vehicle entry consumes its interaction A until physical release, avoiding accidental acceleration");
+    world_tick(0,1);for(unsigned update=0;update<8;update++)world_tick(J_A,4);
+    expect(td.speed>0,"fresh A after vehicle-entry release accelerates normally");
 
     reset_case();geometry=SOUTHWEST_CORNER;td.u=406*16;td.v=392*16;
     td.heading=4;td.speed=16;td_vy=256;td.mode=TD_PAUSE;td.menu=0;
@@ -1561,9 +1678,10 @@ static void test_v5_migration_and_interrupted_upgrade(void) {
 }
 
 static void test_district_semantic_fallback(void) {
-    native_case();td.cash=111;td_save();td.cash=222;td_save();
+    native_case();td.u=td.safe_u=312*16;td.v=td.safe_v=16*16;td.park_u=td.u;td.park_v=td.v;
+    td.cash=111;td_save();td.cash=222;td_save();
     UBYTE newest=td_save_slot,image[sizeof(td_test_sram)];memcpy(image,td_test_sram,sizeof(image));
-    expect(td_district_drivable(0,560,720)&&!td_district_drivable(1,560,720),
+    expect(td_district_drivable(0,312,16)&&!td_district_drivable(1,312,16),
            "semantic fixture uses a real core road that is blocked in the requested western district");
     for(unsigned fault=0;fault<7;fault++) {
         memcpy(td_test_sram,image,sizeof(image));volatile UBYTE *record=td_save_address(newest);
@@ -1818,7 +1936,7 @@ static void test_cross_district_streetcar(void) {
         td_state_t retry=td;memset(&td,0,sizeof(td));
         expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
                "failed Queen arrival commits a recoverable origin ride rather than an invalid remote paid state");
-        actor_t old_actors[21];UWORD old_traffic_u[6],old_traffic_v[6];
+        actor_t old_actors[22];UWORD old_traffic_u[8],old_traffic_v[8];
         memcpy(old_actors,actors,sizeof(actors));memcpy(old_traffic_u,td_traffic_u,sizeof(td_traffic_u));
         memcpy(old_traffic_v,td_traffic_v,sizeof(td_traffic_v));
         UBYTE old_tick=td_tick;UWORD old_second=td.seconds;
@@ -1956,7 +2074,7 @@ static void test_first_frame_actors(void) {
         td.park_u=locations[district][0]*16;td.park_v=td.v;td.onfoot=1;
         if(district==TD_DISTRICT_ISLANDS){td.u=320*16;td.park_district=TD_DISTRICT_CITY;td.park_u=560*16;td.park_v=720*16;}
         toronto_init();
-        expect((district==TD_DISTRICT_ISLANDS?!td_drivable(locations[district][0],locations[district][1]):
+        expect((district==TD_DISTRICT_ISLANDS?td.park_district==TD_DISTRICT_CITY:
                 td_drivable(locations[district][0],locations[district][1]))&&td_road_walkable(td.u>>4,td.v>>4),
                "each first-frame neighborhood uses actual walking ground and preserves the Island road exclusion");
         expect(actors_len==TD_ACTORS&&PLAYER.pos.x==(td.u>>4)*32&&PLAYER.pos.y==(td.v>>4)*32,
@@ -2232,8 +2350,8 @@ static void test_port_freight_transit_and_riverbank_walk(void) {
         for(unsigned x=(client.u-2)>>3;x<=(unsigned)(client.u+2)>>3;x++)
             if(native_collision[4][y*native_widths[4]+x]&15)full_foot=0;
     expect(client.u==352&&client.v==592&&client.district==4&&(client.reserved&TD_STOP_FOOT)&&!client.transit&&
-           !td_drivable(client.u,client.v)&&full_foot&&td_drivable(192,552),
-           "Riverbank is a real full-foot-only client with a clear road parking anchor, not a vehicle handoff or new transit station");
+           full_foot&&td_drivable(192,552),
+           "Riverbank retains authored foot delivery even though sidewalk driving is legal; its road parking anchor and full human body remain clear");
     expect(td_target.u==192&&td_target.v==552&&td_target.district==4,
            "driving job93 stage1 marks Riverbank's real legal road approach");
     td_interact();expect(td.stage==1&&td.msg==16&&td.job==93,"the Riverbank parking beacon cannot deliver from inside the car");
@@ -2281,8 +2399,8 @@ static void test_atlas_driver_handoff_and_freeze(void) {
                "atlas browsing does not reuse serialized police attention fields");
         td_state_t frozen=td;td_job_t frozen_job=td_job;
         td_stop_t frozen_target=td_target,frozen_cursor=td_cursor;
-        actor_t frozen_actors[21];memcpy(frozen_actors,actors,sizeof(actors));
-        UWORD frozen_traffic_u[6],frozen_traffic_v[6];UBYTE frozen_traffic_leg[6],frozen_ped_route[6];
+        actor_t frozen_actors[22];memcpy(frozen_actors,actors,sizeof(actors));
+        UWORD frozen_traffic_u[8],frozen_traffic_v[8];UBYTE frozen_traffic_leg[8],frozen_ped_route[8];
         memcpy(frozen_traffic_u,td_traffic_u,sizeof(frozen_traffic_u));
         memcpy(frozen_traffic_v,td_traffic_v,sizeof(frozen_traffic_v));
         memcpy(frozen_traffic_leg,td_traffic_leg,sizeof(frozen_traffic_leg));
@@ -2349,7 +2467,7 @@ static void test_streetcar_loader_binding(void) {
         if(active&&has_tram)activate_actor(&actors[1]);
         actors[1].script.bank=7;actors[1].script_update.bank=8;
         actors[1].hscript_hit=111;actors[1].hscript_update=222;
-        UBYTE bound=td_streetcar_runtime_bind();actor_t *tram=&actors[15];
+        UBYTE bound=td_streetcar_runtime_bind();actor_t *tram=&actors[TD_STREETCAR_ACTOR];
         expect(bound==has_tram&&tram->sprite.ptr==(has_tram?&test_tram_sprite:&test_player_sprite)&&
                tram->base_tile==(has_tram?96:4),
                "binding captures the authored sheet only in the three registered Queen districts");
@@ -2373,8 +2491,8 @@ static void test_queen_visual_save_follow_and_loaded_arrival(void) {
     expect(!memcmp(&td,&queued,58)&&sram_writes==writes&&td.district==0&&test_current_district==3&&
            td_streetcar_view_district==3&&td_streetcar_ride_view,
            "loading the paid rider's visual scene preserves every58-byte saved field without writing a new trip");
-    expect(actors[15].sprite.ptr==&test_tram_sprite&&actors[15].base_tile==96&&
-           !(actors[15].flags&ACTOR_FLAG_HIDDEN)&&(PLAYER.flags&ACTOR_FLAG_HIDDEN)&&
+    expect(actors[TD_STREETCAR_ACTOR].sprite.ptr==&test_tram_sprite&&actors[TD_STREETCAR_ACTOR].base_tile==96&&
+           !(actors[TD_STREETCAR_ACTOR].flags&ACTOR_FLAG_HIDDEN)&&(PLAYER.flags&ACTOR_FLAG_HIDDEN)&&
            PLAYER.pos.x==td_streetcar_focus_u*2&&PLAYER.pos.y==td_streetcar_focus_v*2&&
            (actors[8].flags&ACTOR_FLAG_HIDDEN),
            "the first East ride frame uses the authored tram, tracks its Q4 focus and hides the courier and remotely parked car");
@@ -2403,7 +2521,7 @@ static void test_queen_cold_derived_view(void) {
            "cold reset derives the moving East view from the paid clock without modifying the committed origin record");
     td_state_t restored=td;memset(td_test_sram,0,sizeof(td_test_sram));apply_queued_scene();
     expect(!memcmp(&td,&restored,58)&&td_cursor.district==3&&td_cursor.u==128&&td_cursor.v==556&&
-           (PLAYER.flags&ACTOR_FLAG_HIDDEN)&&!(actors[15].flags&ACTOR_FLAG_HIDDEN),
+           (PLAYER.flags&ACTOR_FLAG_HIDDEN)&&!(actors[TD_STREETCAR_ACTOR].flags&ACTOR_FLAG_HIDDEN),
            "warm visual entry does not restore twice and presents the recovered paid rider on the correct native tram");
 }
 
@@ -2435,7 +2553,7 @@ static void test_queen_visual_queue_retry_clock(void) {
     expect(td_transition_pending==2&&td.mode==TD_RIDE&&td.district==0&&td.cash==27&&
            td_streetcar_view_district==3&&test_queued_district==TD_DISTRICT_NONE,
            "failed visual scene allocation preserves the paid origin trip and records the derived East retry");
-    td_state_t frozen=td;unsigned writes=sram_writes;actor_t old_actors[21];memcpy(old_actors,actors,sizeof(actors));
+    td_state_t frozen=td;unsigned writes=sram_writes;actor_t old_actors[22];memcpy(old_actors,actors,sizeof(actors));
     world_tick(0,600);
     expect(td_transition_pending==2&&!memcmp(&td,&frozen,58)&&sram_writes==writes&&!memcmp(actors,old_actors,sizeof(actors)),
            "pending failed presentation allocation freezes the saved trip, deadline, cash and native road users");
@@ -2451,16 +2569,16 @@ static void test_queen_visual_queue_retry_clock(void) {
 static void test_streetcar_pause_and_map_pose(void) {
     for(UBYTE closed=0;closed<2;closed++){
         queen_runtime_case(closed);world_tick(0,1);
-        td_state_t running=td;actor_t tram=actors[15];
+        td_state_t running=td;actor_t tram=actors[TD_STREETCAR_ACTOR];
         UWORD focus_u=td_streetcar_focus_u,focus_v=td_streetcar_focus_v;
         UBYTE district=td_streetcar_view_district;
         world_tick(J_START,600);
         expect(td.mode==TD_PAUSE&&td.seconds==running.seconds&&td.subsecond==running.subsecond&&
-               !memcmp(&tram,&actors[15],sizeof(tram)),
+               !memcmp(&tram,&actors[TD_STREETCAR_ACTOR],sizeof(tram)),
                "opening pause freezes the actual autonomous tram pose on the same paid or waiting update");
         td.menu=1;world_tick(J_A,600);td_state_t frozen=td;
         world_tick(J_RIGHT|J_DOWN,600);world_tick(J_A,600);world_tick(0,600);
-        expect(td.mode==TD_MAP&&!memcmp(&td,&frozen,58)&&!memcmp(&tram,&actors[15],sizeof(tram))&&
+        expect(td.mode==TD_MAP&&!memcmp(&td,&frozen,58)&&!memcmp(&tram,&actors[TD_STREETCAR_ACTOR],sizeof(tram))&&
                td_streetcar_focus_u==focus_u&&td_streetcar_focus_v==focus_v&&td_streetcar_view_district==district,
                "map pan/focus leaves the autonomous pose, derived ride view and every persistent trip field frozen");
         world_tick(J_B,600);world_tick(0,1);world_tick(J_B,600);
@@ -3227,7 +3345,7 @@ static void test_human_impacts_and_police(void){
     td.mode=TD_ROAM;
     expect(!td_people_police(td.u+600,td.v),"a patrol outside its stop range cannot fine the player");
     expect(td_people_police(td.u+383,td.v)&&td.cash==275&&!td.wanted&&!td.wanted_left,
-           "a nearby patrol charges fifteen dollars per attention level then resolves the episode");
+           "a nearby patrol charges the accepted quadratic25-dollar attention penalty then resolves the episode");
     expect(!td_people_police(td.u,td.v)&&td.cash==275,"resolved attention cannot generate repeated patrol fines");
     td.wanted=2;td.wanted_left=2;td_people_second();
     expect(td.wanted==2&&td.wanted_left==1,"attention counts active simulation seconds");
@@ -3241,7 +3359,7 @@ static void test_human_impacts_and_police(void){
 }
 
 static UBYTE route83_slot(void){
-    for(UBYTE i=0;i<6;i++)if(td_people[i].route==83)return i;
+    for(UBYTE i=0;i<TD_PEOPLE_COUNT;i++)if(td_people[i].route==83)return i;
     return TD_NONE;
 }
 static void test_visible_human_reverse_start(void){
@@ -3256,7 +3374,11 @@ static void test_visible_human_reverse_start(void){
     for(UBYTE i=0;i<6;i++){
         td_traffic_u[i]=cu[i]*16;td_traffic_v[i]=cv[i]*16;td_traffic_leg[i]=i==5?2:0;
     }
-    td_people_reset();world_tick(0,0);UBYTE slot=route83_slot();
+    td_people_reset();world_tick(0,0);
+    /* Isolate the historical reverse-start safety regression from the new
+       independently tested social detour: keep all eight visible identities. */
+    for(unsigned i=0;i<TD_PEOPLE_COUNT;i++){td_people[i].state&=TD_PERSON_ADMITTED;td_people[i].timer=255;td_people[i].ox=td_people[i].oy=0;}
+    UBYTE slot=route83_slot();
     expect(slot!=TD_NONE,"the actual loaded selector registers native Bay route83 near the courier");
     if(slot==TD_NONE)return;
     expect(td_people[slot].phase==35&&actors[9+slot].pos.x==555*32&&!(actors[9+slot].flags&ACTOR_FLAG_HIDDEN),
@@ -3308,10 +3430,10 @@ static void test_road_police_pursuit(void){
     td_state_t captured=td;for(unsigned step=0;step<120;step++)td_traffic_step();
     expect(td.cash==captured.cash&&!td.wanted,"capture clears attention without repeated fines while the police returns to patrol");
 
-    reset_case();td.wanted=2;td.wanted_left=1;td.cash=500;
+    reset_case();td.wanted=2;td.wanted_left=1;td.cash=500;td_traffic_u[2]=td.u+32*16;td_traffic_v[2]=td.v;
     expect(!td_people_police(td.u+32*16,td.v)&&td.wanted_left==30,
            "nearby pursuit refreshes attention without charging outside capture range");
-    td_people_second();expect(td.wanted==2&&td.wanted_left==29,"active nearby chase cannot immediately decay a level");
+    td_people_second();expect(td.wanted==2&&td.wanted_left==30,"an actually nearby observed road chase refreshes its escape clock instead of decaying a level");
     expect(td_people_police(td.u,td.v)&&td.cash==400&&!td.wanted,"level-two capture charges a tougher quadratic penalty");
     reset_case();td.mode=TD_PAUSE;td.wanted=3;td.wanted_left=1;sys_time=120;
     toronto_update();expect(td.wanted==3&&td.wanted_left==1,"pause freezes pursuit attention with the rest of the world");
@@ -3724,32 +3846,32 @@ static void test_reserved_islands_traffic_gates(void) {
             reset_case();td.mode=mode;td.onfoot=foot;td.job=0;td.stage=1;
             td.wanted=3;td.wanted_left=1;td.cash=913;td.health=73;
             td.speed=28;td_vx=448;td_vy=-64;
-            for(unsigned i=0;i<6;i++){
+            for(unsigned i=0;i<8;i++){
                 td_traffic_u[i]=td.u;td_traffic_v[i]=td.v;td_traffic_leg[i]=255;
                 memset(&td_traffic_samples[i],255,sizeof(td_traffic_samples[i]));
-                actors[i+2].pos.x=12000+i;actors[i+2].pos.y=13000+i;
-                actors[i+2].frame_start=231+i;actors[i+2].frame_end=232+i;
-                actors[i+2].flags=ACTOR_FLAG_ACTIVE|ACTOR_FLAG_PERSISTENT;
+                actors[i<6?i+2:i+11].pos.x=12000+i;actors[i<6?i+2:i+11].pos.y=13000+i;
+                actors[i<6?i+2:i+11].frame_start=231+i;actors[i<6?i+2:i+11].frame_end=232+i;
+                actors[i<6?i+2:i+11].flags=ACTOR_FLAG_ACTIVE|ACTOR_FLAG_PERSISTENT;
             }
-            td_traffic_retreat_mask=63;td_vehicle_contact_mask=63;td_police_waypoint.valid=1;
+            td_traffic_retreat_mask=255;td_vehicle_contact_mask=255;td_police_waypoint.valid=1;
             td_police_waypoint.u=td.u;td_police_waypoint.v=td.v;td_police_stuck=61;
             actors[8].flags=ACTOR_FLAG_ACTIVE;
-            for(unsigned i=9;i<15;i++)actors[i].flags=ACTOR_FLAG_ACTIVE|((i&1)?ACTOR_FLAG_HIDDEN:0);
+            for(unsigned i=9;i<17;i++)actors[i].flags=ACTOR_FLAG_ACTIVE|((i&1)?ACTOR_FLAG_HIDDEN:0);
             actor_t before_actors[TD_ACTORS];memcpy(before_actors,actors,sizeof(before_actors));
             td_state_t before=td;WORD vx=td_vx,vy=td_vy;unsigned stores=sram_writes,draws=ui_draws,impacts=audio_impacts;
-            UWORD before_u[6],before_v[6];UBYTE before_leg[6];td_traffic_sample_t before_samples[6];
+            UWORD before_u[8],before_v[8];UBYTE before_leg[8];td_traffic_sample_t before_samples[8];
             memcpy(before_u,td_traffic_u,sizeof(before_u));memcpy(before_v,td_traffic_v,sizeof(before_v));
             memcpy(before_leg,td_traffic_leg,sizeof(before_leg));memcpy(before_samples,td_traffic_samples,sizeof(before_samples));
             td_streetcar_view_district=TD_DISTRICT_ISLANDS;
             expect(td_traffic_free(td.u,td.v)&&td_traffic_free(td.u+167,td.v+167),
                    "stale fleet coordinates cannot occupy the reserved foot-only view");
-            td_traffic_contacts();td_traffic_step();td_traffic_motion(63);
+            td_traffic_contacts();td_traffic_step();td_traffic_motion(255);
             expect(!memcmp(&td,&before,58)&&td_vx==vx&&td_vy==vy&&sram_writes==stores&&
                    ui_draws==draws&&audio_impacts==impacts,
                    "disabled fleet cannot damage cargo, capture, refresh attention, charge or write SRAM");
             expect(!memcmp(before_u,td_traffic_u,sizeof(before_u))&&!memcmp(before_v,td_traffic_v,sizeof(before_v))&&
                    !memcmp(before_leg,td_traffic_leg,sizeof(before_leg))&&!memcmp(before_samples,td_traffic_samples,sizeof(before_samples))&&
-                   td_traffic_retreat_mask==63&&td_vehicle_contact_mask==63&&td_police_waypoint.valid&&td_police_stuck==61,
+                   td_traffic_retreat_mask==255&&td_vehicle_contact_mask==255&&td_police_waypoint.valid&&td_police_stuck==61,
                    "disabled motion rejects even malformed stale routes without advancing caches or pursuit");
             td_traffic_present();
             for(unsigned i=2;i<9;i++){
@@ -3757,7 +3879,8 @@ static void test_reserved_islands_traffic_gates(void) {
                 expect(!memcmp(&actors[i],&hidden,sizeof(hidden)),
                        "reserved view hides all six fleet actors and parked car without positioning stale data");
             }
-            for(unsigned i=0;i<TD_ACTORS;i++)if(i<2||i>=9)
+            for(unsigned i=17;i<19;i++){actor_t hidden=before_actors[i];hidden.flags|=ACTOR_FLAG_HIDDEN;expect(!memcmp(&actors[i],&hidden,sizeof(hidden)),"Islands suppress both additional road cars without affecting other actors");}
+            for(unsigned i=0;i<TD_ACTORS;i++)if((i<2||i>=9)&&i!=17&&i!=18)
                 expect(!memcmp(&actors[i],&before_actors[i],sizeof(actors[i])),
                        "fleet suppression preserves player, beacon, civilian and aircraft actor state");
             expect(!memcmp(&td,&before,58)&&sram_writes==stores,"fleet presentation changes no saved fields or booked state");
@@ -3770,8 +3893,8 @@ static void test_reserved_islands_traffic_gates(void) {
     td_streetcar_view_district=TD_DISTRICT_CITY;
     expect(!td_traffic_free(td_traffic_u[0],td_traffic_v[0]),"mainland cached traffic occupancy resumes after an Island view");
     td_state_t before=td;td_traffic_present();
-    for(unsigned i=0;i<6;i++)expect(!(actors[i+2].flags&ACTOR_FLAG_HIDDEN)&&
-        actors[i+2].pos.x==td_traffic_u[i]*2&&actors[i+2].pos.y==td_traffic_v[i]*2,
+    for(unsigned i=0;i<8;i++)expect(!(actors[i<6?i+2:i+11].flags&ACTOR_FLAG_HIDDEN)&&
+        actors[i<6?i+2:i+11].pos.x==td_traffic_u[i]*2&&actors[i<6?i+2:i+11].pos.y==td_traffic_v[i]*2,
         "ordinary mainland presentation restores each fleet actor at its unchanged route coordinate");
     expect(!(actors[8].flags&ACTOR_FLAG_HIDDEN)&&!memcmp(&td,&before,58),
            "the visible mainland parked car and saved state retain their original presentation rules");
@@ -3838,13 +3961,26 @@ static void test_hardware_motion_feedback(void){
     td_traffic_samples[0].u=600*16;td_traffic_samples[0].v=td.v;
     td_traffic_advance=128;UWORD moving_from=td_traffic_u[0];
     td_traffic_motion(1);
-    expect(td_traffic_u[0]==moving_from+128&&td_player_hurt==72&&td.cooldown==120&&td.onfoot,
-           "an actual admitted NPC movement batch injures the unprotected foot courier as it crosses the human body");
+    expect(td_traffic_u[0]==moving_from&&!td_player_hurt&&!td.cooldown&&td.onfoot,
+           "ordinary admitted traffic now yields before crossing a newly approached foot courier; direct and pursuing contacts remain recoverable above");
 }
 
+#include "sandbox_save_harness.h"
+#include "sandbox_harness.h"
+#include "boat_traffic_harness.h"
+#include "police_aircraft_harness.h"
+#include "ramming_harness.h"
+#include "traffic_courier_harness.h"
+
 int main(void) {
+    if(getenv("TD_COURIER_YIELD_ONLY")){test_ordinary_courier_yielding();printf("Ordinary courier yielding actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+    if(getenv("TD_SETTINGS_ONLY")){test_settings_controller();test_audio_event_integration();printf("Settings controller actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+    if(getenv("TD_BOAT_TRAFFIC_ONLY")){test_boat_traffic_exclusions();printf("Boat passenger/road traffic actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+    if(getenv("TD_POLICE_AIRCRAFT_ONLY")){test_police_aircraft_attention();printf("Police aircraft/attention actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+    if(getenv("TD_RAMMING_ONLY")){test_two_body_ramming();test_corner_physical_admission();printf("Two-body ramming actual-C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+    if(getenv("TD_SANDBOX_ONLY")){test_sandbox_actual();printf("Road sandbox actual-C regressions: %u checks, %u failures\n",checks,failures);return failures?1:0;}
     if(getenv("TD_HARDWARE_MOTION_ONLY")){test_hardware_motion_feedback();printf("Hardware motion actual-C regressions: %u checks, %u failures\n",checks,failures);return failures?1:0;}
-    test_hardware_motion_feedback();
+    test_ordinary_courier_yielding();test_hardware_motion_feedback();test_sandbox_entry_and_boat_save();test_boat_traffic_exclusions();test_police_aircraft_attention();test_two_body_ramming();test_corner_physical_admission();
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
     test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_clock_boundaries();
@@ -3852,7 +3988,7 @@ int main(void) {
     test_signal_and_autonomous_traffic();
     test_fractional_fleet_presentation();test_parked_visibility_context();test_route_selection_invalid_context();
     test_core_bus_lane_joint_loop();test_city_routes_and_walking();
-    test_audio_event_integration();
+    test_audio_event_integration();test_settings_controller();
     test_bounded_corner_assist();
     test_atomic_saves();test_valid_crc_invalid_states();test_legacy_and_transit_recovery();
     test_wait_cancellation();

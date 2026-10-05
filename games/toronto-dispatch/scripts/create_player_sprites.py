@@ -8,7 +8,6 @@ from pathlib import Path
 import argparse
 import hashlib
 import json
-import math
 import uuid
 from PIL import Image, ImageDraw
 
@@ -31,6 +30,34 @@ def car_east():
     d.line((6,5,9,5),fill=COLOURS[3]);d.line((6,11,9,11),fill=COLOURS[3])
     d.line((14,6,14,10),fill=COLOURS[3])
     d.point((2,5),fill=COLOURS[3]);d.point((2,11),fill=COLOURS[3])
+    # Tires stay exposed beside a narrower cabin; pale hood lights and a dark
+    # windshield distinguish the front even at the native16px canvas.
+    d.rectangle((3,3,5,4),fill=COLOURS[0]);d.rectangle((10,3,12,4),fill=COLOURS[0])
+    d.rectangle((3,12,5,13),fill=COLOURS[0]);d.rectangle((10,12,12,13),fill=COLOURS[0])
+    d.line((12,6,12,10),fill=COLOURS[2]);d.point((14,6),fill=COLOURS[3]);d.point((14,10),fill=COLOURS[3])
+    d.point((8,4),fill=COLOURS[3]);d.point((8,12),fill=COLOURS[0])
+    return image
+
+def vehicle_east(kind):
+    image=Image.new('RGB',(16,16),TRANSPARENT);d=ImageDraw.Draw(image)
+    if kind==1:
+        # Broad parcel box, cab glass, bumper and two visible axle pairs.
+        d.rectangle((1,3,10,12),fill=COLOURS[0]);d.rectangle((2,4,9,11),fill=COLOURS[2])
+        d.rectangle((10,5,14,10),fill=COLOURS[0]);d.rectangle((11,5,13,10),fill=COLOURS[3])
+        d.line((12,6,12,9),fill=COLOURS[0]);d.line((5,4,5,11),fill=COLOURS[3])
+        for x in (3,11):
+            d.rectangle((x,2,x+2,3),fill=COLOURS[0]);d.rectangle((x,12,x+2,13),fill=COLOURS[0])
+    else:
+        # Two exposed tires, a saddle and human rider separate two-wheelers
+        # from narrow painted rectangles. Scooter has a distinct step-through.
+        d.rectangle((1,7,3,9),fill=COLOURS[0]);d.rectangle((12,7,14,9),fill=COLOURS[0])
+        d.line((3,8,12,8),fill=COLOURS[2],width=3)
+        d.rectangle((6,5,9,10),fill=COLOURS[0]);d.rectangle((7,5,9,7),fill=COLOURS[3])
+        d.rectangle((5,7,8,9),fill=COLOURS[2]);d.line((10,5,10,11),fill=COLOURS[0])
+        d.point((12,6),fill=COLOURS[3]);d.point((7,10),fill=COLOURS[0])
+        if kind==3:
+            d.line((10,6,10,10),fill=COLOURS[3]);d.rectangle((4,7,5,9),fill=COLOURS[3])
+            d.point((12,6),fill=COLOURS[2])
     return image
 
 def courier(direction,step):
@@ -56,11 +83,7 @@ def artwork():
                 d=ImageDraw.Draw(pose);d.line((8,12,11,15),fill=COLOURS[2],width=2)
             sheet.paste(pose,(ox,oy))
         elif frame<32:
-            # Retain the original truck/motorcycle/scooter silhouettes.
-            a=heading*math.pi/4;dx,dy=math.cos(a),math.sin(a)
-            length=(6,7,5,4)[veh];width=(3,4,2,2)[veh]
-            pts=[(ox+8+dx*f-dy*s,oy+8+dy*f+dx*s) for f,s in ((length,width),(length,-width),(-length,-width),(-length,width))]
-            sd.polygon(pts,fill=COLOURS[2],outline=COLOURS[0]);sd.line((ox+8+dx*2-dy*width,oy+8+dy*2+dx*width,ox+8+dx*2+dy*width,oy+8+dy*2-dx*width),fill=COLOURS[3],width=2)
+            sheet.paste(vehicle_east(veh).rotate(-45*heading,resample=Image.Resampling.NEAREST,fillcolor=TRANSPARENT),(ox,oy))
         elif frame<40:sheet.paste(courier((frame-32)//2,frame&1),(ox,oy))
         else:
             sd.polygon([(ox+8,oy+1),(ox+14,oy+7),(ox+8,oy+14),(ox+2,oy+7)],fill=COLOURS[3],outline=COLOURS[0]);sd.rectangle((ox+7,oy+4,ox+9,oy+9),fill=COLOURS[2])
@@ -88,6 +111,8 @@ def normalized(value):
 def check():
     sheet,meta=artwork();png=PROJECT/'original-art/dispatch_topdown.png'
     with Image.open(png) as image:assert image.convert('RGB').tobytes()==sheet.tobytes()
+    assert hashlib.sha256(sheet.crop((0,32,128,48)).tobytes()).hexdigest()=='e0dd0b7e8406cabb36a510e8767dda3a8e057f56d6e4936f5035cdbfebe65569','Approved courier pixels changed'
+    assert hashlib.sha256(sheet.crop((128,32,192,48)).tobytes()).hexdigest()=='92e251f5697a1670309048b4ff2bccd7008aaec63340e3017b64acd83ebacc3b','Approved objective beacon pixels changed'
     assert (PROJECT/'assets/sprites/dispatch_topdown.png').read_bytes()==png.read_bytes()
     meta['checksum']=hashlib.sha1(png.read_bytes()).hexdigest()
     assert json.loads((PROJECT/'dispatch_topdown.metadata.json').read_text())==meta

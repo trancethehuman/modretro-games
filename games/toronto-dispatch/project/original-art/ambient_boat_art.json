@@ -1,8 +1,9 @@
 {
-  "status": "Original source; compiled scratch isolation, scene allocation and native play remain separate gates",
+  "status": "Original source; compiled allocation/native driving and hardware remain separate gates",
   "native_frame_order": [
     "north_hull",
-    "independent_scratch",
+    "east_hull",
+    "four_independent_scratch_pairs",
     "empty_startup"
   ],
   "source_colours": [
@@ -27,13 +28,13 @@
       33
     ]
   ],
-  "hull_objects": 1,
-  "scratch_tile_pairs": 1,
-  "compiled_reserved_tiles_per_bank_limit": 6,
+  "hull_objects": 4,
+  "scratch_tile_pairs": 4,
+  "compiled_reserved_tiles_per_bank_limit": 10,
   "sprite_palette": 7,
-  "loader_frame": 2,
-  "persistent_native_state_target_bytes": 13,
-  "maximum_persistent_state_bytes": 20,
+  "loader_frame": 3,
+  "persistent_native_state_target_bytes": 38,
+  "maximum_persistent_state_bytes": 40,
   "fictional_routes": [
     {
       "district": 0,
@@ -60,11 +61,124 @@
       256,
       96,
       64
+    ],
+    [
+      160,
+      144,
+      64,
+      96
+    ],
+    [
+      160,
+      448,
+      64,
+      104
+    ],
+    [
+      160,
+      624,
+      64,
+      96
+    ],
+    [
+      776,
+      792,
+      64,
+      64
     ]
   ],
-  "player_control": false,
+  "water_rectangles": [
+    [
+      0,
+      168,
+      96,
+      760
+    ],
+    [
+      96,
+      168,
+      392,
+      48
+    ],
+    [
+      432,
+      0,
+      64,
+      528
+    ],
+    [
+      96,
+      464,
+      400,
+      72
+    ],
+    [
+      96,
+      640,
+      704,
+      64
+    ],
+    [
+      752,
+      608,
+      112,
+      120
+    ],
+    [
+      792,
+      704,
+      32,
+      224
+    ],
+    [
+      0,
+      936,
+      1024,
+      40
+    ]
+  ],
+  "dock_foot_points": [
+    [
+      0,
+      560,
+      800
+    ],
+    [
+      0,
+      400,
+      800
+    ],
+    [
+      0,
+      736,
+      800
+    ],
+    [
+      4,
+      424,
+      72
+    ],
+    [
+      4,
+      424,
+      352
+    ],
+    [
+      4,
+      504,
+      384
+    ]
+  ],
+  "player_control": true,
   "passenger_service": false,
   "save_fields": false,
-  "water_full_hull_checks": 54528,
-  "source_raw_8x8_patterns": 4
+  "hull_size_pixels": [
+    16,
+    24
+  ],
+  "visible_seated_people": 2,
+  "wake": "Animated original ripple pixels reuse hull scratch objects without additional OBJ/BKG tiles",
+  "source_unique_8x16_pairs_with_flips": 8,
+  "source_raw_8x8_patterns_upper_bound": 16,
+  "water_full_hull_checks": 163584
 }

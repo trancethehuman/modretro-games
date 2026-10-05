@@ -2,11 +2,42 @@
 
 ## Player experience
 
+The second physical feedback batch on 2026-10-04 accepts quick theft of parked
+and occupied vehicles, larger controllable boats, marked enterable shop levels,
+natural off-screen actor arrivals, social pedestrians, greater street activity,
+readable crossings/water/architecture and on-screen objective arrows. Player
+cars may drive on sidewalks, and stationary cars must not rotate. Preserve the
+approved human designs and slower north-up courier foundation. The user confirmed
+the full 23-point list and requested implementation/reload; the complete requirements
+and verification checklist are in [SANDBOX_FEEDBACK_2026_10_04.md](docs/SANDBOX_FEEDBACK_2026_10_04.md).
+These supersede earlier exclusions of theft, boat control and sidewalk shortcuts;
+historical implementation descriptions below remain scoped to their named ROMs.
+
 The 2026-10-04 hardware feedback accepts a slower, more controllable driving pace, slower visually scheduled Queen trams, clearer menu navigation, smaller pedestrians and a broader car silhouette. NPC impacts gain non-graphic flight/prone death poses within the loaded district; the on-foot courier gets recoverable vehicle impacts. Added street/park/background details must preserve usable roads and collision footprints. This supersedes the first prototype's temporary stumble-only presentation; see [DECISIONS.md](DECISIONS.md) for the accepted scope and [TESTING.md](TESTING.md) for implementation evidence.
 
 You are a Toronto courier working a shift. Accept a job, collect the package, find a route, handle traffic, park, and deliver. The tension comes from route planning and controlled driving: braking early, choosing a usable lane, waiting for a streetcar, or taking a legal shortcut can outperform constant acceleration.
 
 The city remains open between jobs. Landmarks help navigation; neighbourhoods change in building shapes, density, road width, trees, and industrial character. A compact readable city is the starting point for a larger world, not the full Toronto map on day one. The accepted direction includes a GTA-inspired street simulation around the courier: visible civilian pedestrians, collision consequences, service vehicles, drivers obeying lights and activity on the waterfront. The user selected chaotic sandbox play with escalating police pursuits and tougher penalties. Current source integrates bounded road pursuits and the first street systems below; scoped native street functionality passes, while broader pacing/gameplay and hardware remain pending. Geographic scope stays within Old Toronto.
+
+## Dialogue camera direction — accepted, not implemented
+
+On 2026-10-04 the user accepted dialogue cutscenes with a Pokémon battle-camera
+composition reference: an original over-the-shoulder courier portrait in the
+foreground faces the conversation partner farther into the scene. Use bright
+pixel art, clear character silhouettes and a readable text box. All portraits,
+dialogue, music and scene art remain original; Nintendo sprites and music are
+not game assets. This camera composition applies to dialogue only. City driving
+and walking retain the accepted straight, north-up view and approved human art.
+
+The existing shopkeeper interaction provides a short greeting in a timed text
+window. It does not implement this camera or a dialogue/story system. A future
+first prototype should use one keeper and one original conversation page, with
+A to advance and B to return, without leaking held interaction input into
+walking or another action. Static background/window portraits should avoid
+extra actors or per-frame pixel composition. Tile ownership/restoration, room
+and courier state, existing world-clock/audio behavior and native readability
+need their own checks before dialogue content expands. The current native
+performance build and cartridge acceptance remain separate work.
 
 ## Vehicle eligibility feedback — 2026-10-04
 
@@ -32,7 +63,7 @@ Current NPC traffic follows authored lanes with red-light stopping, body clearan
 
 The 2026-10-04 correction gives all 36 active road-role circuits right-hand lanes: east eight pixels south of the centre, west eight north, south eight west and north eight east, with explicit bounded junction/endcap connectors. Core cold spawns, targets and frames use the same world cache as the other districts. Police follows cardinal graph edges and a finite return policy to its exact authored patrol target; ordinary signal, body, pedestrian, parked-car and tram admission remain active. Original geometry/art, quests, portals, paid schedules and save layout are preserved. [Build/source audit](docs/RIGHT_HAND_TRAFFIC_BUILD_AUDIT.json) and [fresh e4a9 native evidence](docs/NATIVE_RIGHT_HAND_TRAFFIC.json) establish separate scopes; broader queues, global chase routing and full-city performance remain open.
 
-Legal route choice is the environmental advantage: connected lanes, alleys that permit the selected vehicle, avoiding queues, and timing intersections. Buildings, rails, and sidewalks are not free shortcuts. Add industrial-yard access and restricted missions after geography and collision are verified.
+Route choice is the environmental advantage: connected lanes, permitted alleys, avoiding queues and timing intersections. The second hardware feedback allows the player's vehicle on sidewalks while keeping buildings, rail barriers and water solid. Ordinary NPC road traffic retains its lane rules. Add industrial-yard access and restricted missions after geography and collision are verified.
 
 Cargo condition is part of the native contract rules. Damage starts after the first successful pickup; accepting work does not put the package or passenger in the vehicle. Traffic impacts, curb scrapes and head-on collisions then reduce condition; fragile art takes a larger curb/wall penalty. Passenger jobs use condition as comfort, with an additional penalty for steering at high speed while carrying the passenger. Completion pays the base reward scaled by remaining condition, plus a remaining-time bonus. Native tests verify the first-job payout and host checks cover passenger steering comfort; the other job types and reward balance still need full playtests. The current street source adds human-impact consequences and patrol fines below. Service incidents/jobs, weather traction and fuel remain proposals. Traffic rules need understandable feedback and tuning.
 
@@ -142,7 +173,23 @@ Use original low-resolution pixel art: readable vehicles, warm brick blocks, gla
 
 The target Game Boy Color display is 160 × 144 pixels. Palette, tile, sprite, VRAM, scene, and ROM limits must be checked against the installed toolchain; do not design a desktop-resolution asset pack and scale it down later. Reserve screen space for a small HUD without hiding approaching traffic.
 
-The native prototype now includes the original City Shift score, vehicle engine pitches, braking noise and impact, pickup, completion, transit, failure and menu cues. The pause menu offers music + effects, effects only and silent modes. Captured native PCM verifies output and mode behaviour; human listening, mix quality, and physical speaker/headphone checks remain pending. See [audio source and integration](docs/AUDIO.md). Dedicated moving-streetcar audio remains future work.
+The native prototype includes the original 8-bit City Shift score, vehicle engine pitches, braking noise and impact, pickup, completion, transit, failure and menu cues. Current source places the existing three session modes under Start → Settings → Sound, labelled Music + Effects, Effects Only and All Sound Off. Boot restores the default mode; this preference adds no save field. Previously captured native PCM verifies the retained audio output and mode behaviour, rather than the new Settings controller. Human listening, mix quality, and physical speaker/headphone checks remain pending. See [audio source and integration](docs/AUDIO.md). Dedicated moving-streetcar audio remains future work.
+
+## Current pause controls and performance design — 2026-10-04
+
+Start opens the main menu, with explicit Resume, Save Game and Settings labels. Up/down browses and A selects; Settings contains Sound, Control Guide and Back. Back, B or Start from Settings returns to the main menu, and A/B from the guide returns to Settings. The same submenu remains available during transit waiting and riding; the main menu then labels saving Save After Trip and shows TTC: Map/Settings, preserving its existing action restrictions and automatic transit saves. Settings says Sound Resets at Boot. All these screens freeze the world and deadlines, preserve the mode to resume and consume menu-used A/B until release. The welcome guide retains its existing start-game path. These controls reuse the existing menu and input state without expanding the 58-byte save.
+
+Saving during car entry commits a safe completed driver entry at the parked vehicle while letting the live animation continue. Reload resumes inside that car rather than placing a walking courier within its body. Boat saves similarly commit the validated boarding shore, retaining the parked road vehicle and job. These are projections of the saved state, not changes to the current animation or additions to the save layout.
+
+The current driving update owns a 12-byte automatic cache. Six bytes retain the exact whole-pixel terrain-body result; the other six retain the exact Q4 stationary centre and separate clear/blocked results for vehicle and tram clearance. It starts invalid for each movement batch and expires with that update. Traffic, pedestrians and tram geometry are unchanged during repeated stationary substeps. Movement, on-foot travel, entry, injury and active ramming invalidate stationary reuse; scene transitions end the update. Moving sweeps, pedestrian impacts and corner clearance retain their full checks. This extends the historical six-byte terrain cache below without creating persistent WRAM or save data.
+
+Other current fast paths add no persistent state: signal admission skips lane/phase searches only when a validated sweep crosses no possible stop line, while body clearance remains live; traffic reuses its exact swept hull for road range queries in the same bank, preserving masks, bounds and tile-hit globals; actor metadata binds count, frame and pose during one temporary ROM-bank selection and restores the caller bank. Scenery with no broken props skips geometry/VRAM work using a spare bit in its existing flash-ring byte. Conservative off-screen and distant-body rejection preserves all nearby rules, art, actor order and hardware admission limits.
+
+Distant fleet checks read coordinate bytes before constructing full fixed-point centres; closer bodies keep their exact margins and collision sweeps. Pedestrian route selection searches the already sorted Y coordinates for its possible vertical range, then retains original identity order and tie handling. Ground rendering and helicopter observation use private calls within their existing ROM bank while retaining public BANKED wrappers for callers in other banks. These avoid redundant work and bank transitions without changing population, art, schedules, observation rules or persistent RAM.
+
+Host/source equivalence and boundary tests check these optimizations separately from new features. Final acceptance requires complete checks, ROM-specific linked memory and native timing, ordinary gameplay and physical testing. Earlier ROM measurements below keep their original identities and do not establish the current revision's pace.
+
+The closed [v12 UI/save diagnostic](docs/NATIVE_SANDBOX_UI_SAVE_DIAGNOSTIC_V12.json) observes Settings labels/guide/back, one Market delivery and a genuine same-worker reset after saving during partial car entry, followed by safe exit/re-entry. It remains `needs-review`: v12 performance was below the installed baseline and source continued changing. These scoped observations do not accept the final ROM, prove audio playback or change cartridge status.
 
 ## Engine feasibility before production
 

@@ -4,7 +4,7 @@ Original open-source homebrew games for ModRetro Chromatic / Game Boy Color. Eac
 
 | Game | Features | Status |
 | --- | --- | --- |
-| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven compressed Toronto districts, 104 contracts, walking/driving and scheduled transit | 9c155 cartridge write succeeded after an explicitly requested retry. The tested update adds slower driving/trams, four smaller pedestrian types, impacts, simpler menus and richer scenery. The user confirmed cold boot and physical buttons; extended gameplay and balance review remain open. |
+| [Toronto Dispatch](games/toronto-dispatch/) | North-up courier sandbox, seven compressed Toronto districts, 104 contracts, walking/driving and scheduled transit | Selected sandbox-stable ROM passes official build, repository checks and scoped native play. Its cartridge write and cold boot are pending; 9c155 remains the last physically confirmed build. |
 
 ## Toronto Dispatch
 
@@ -12,13 +12,17 @@ Deliver packages, fragile art, freight and passengers through Toronto-inspired s
 
 The city contains 344 original buildings, 657 pedestrian routes, 64 service points and nine mainland parking anchors. Commuters, workers, backpackers and seniors walk nearby. Road traffic follows fictional signals; pedestrian impacts show non-graphic airborne/prone poses and escalate police consequences. The walking courier can be struck and recover. Original roof details, signs, benches and planters enrich the streets; planes, helicopters and boats add movement. Paid transit uses fictional fares and timetables.
 
+The selected build adds playable shops, controllable boats, vehicle theft, taxis, larger jet shadows and a clearer police-star display. Start opens a main menu with Save Game and Settings; Settings offers sound choices and a control guide. The existing original 8-bit song, engine/brake sounds and event cues can play together, as effects only, or with all sound off. Sound choices reset at boot.
+
 ![Baldwin Steps on foot](games/toronto-dispatch/docs/playtest-north-current/baldwin-stairs-63970.png) ![Manitou walking bridge](games/toronto-dispatch/docs/playtest-relay-island-current/manitou-bridge-82748.png)
 
 Original 160 × 144 frames from the retained `7ab28…` ROM, at frames 63,970 and 82,748 in separate native continuations. Exact provenance is in the [North](games/toronto-dispatch/docs/NATIVE_NORTH_CURRENT_CONTINUATION.json) and [relay/Island](games/toronto-dispatch/docs/NATIVE_RELAY_ISLAND_CURRENT_CONTINUATION.json) records.
 
-Read the [game guide and controls](games/toronto-dispatch/README.md) and [Chromatic loading instructions](games/toronto-dispatch/docs/LOADING.md). The selected 1 MiB update `toronto-dispatch-hardware-feedback.gbc` has SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Generated binaries stay outside Git; the prior 8be1 ROM file and all earlier bundles remain preserved separately.
+Read the [game guide and controls](games/toronto-dispatch/README.md) and [Chromatic loading instructions](games/toronto-dispatch/docs/LOADING.md). The selected 1 MiB update `toronto-dispatch-sandbox-stable.gbc` has SHA-256 `096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`. Generated binaries stay outside Git; earlier ROMs and bundles remain preserved separately.
 
-Official compilation and repository checks pass. The [fresh update record](games/toronto-dispatch/docs/NATIVE_HARDWARE_FEEDBACK.json) completes the first delivery at full condition, checks cardinal driving, walking/entry, human impacts, menus/map freeze, scheduled Queen travel, tram injury/recovery and saved in-worker reset. [Update details](games/toronto-dispatch/docs/HARDWARE_FEEDBACK_2026_10_04.md) separate those samples from prior 7ab sixteen-job evidence. The [user-requested retry](games/toronto-dispatch/docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed the 9c155 cartridge write with vendor-reported success after the separately retained first failure. No complete read-back digest was supplied. The user confirmed this new ROM cold-boots with USB disconnected and responds to physical buttons; extended physical gameplay remains pending. Full 104-contract play, two enjoyable measured human hours, slower-speed balance, broader performance/stack and physical save/audio/flicker checks remain pending.
+Official compilation, four compiled guards and full `make check` pass. The [fresh native record](games/toronto-dispatch/docs/NATIVE_SANDBOX_STABLE.json) includes a full tram-cycle idle check, Settings/map freeze, one delivery, interrupted-entry save/reset, boat driving/docking, grocery entry/return, vehicle theft and sampled police pursuit. [Build](games/toronto-dispatch/docs/SANDBOX_STABLE_BUILD.json), [timing](games/toronto-dispatch/docs/SANDBOX_STABLE_TIMING.json) and [memory optimization](games/toronto-dispatch/docs/SANDBOX_STABLE_OPTIMIZATION.json) retain the exact scope. The failed `668727…` candidate remains ineligible. These samples do not establish universal smoothness, every sandbox interaction, all 104 contracts or two enjoyable human hours.
+
+The last physically confirmed ROM is `toronto-dispatch-hardware-feedback.gbc`, SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Its [user-requested retry](games/toronto-dispatch/docs/CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed with vendor-reported success and a closed writer; the user confirmed cold boot with USB disconnected and physical buttons. Complete read-back was unavailable. The selected sandbox-stable ROM still needs its own cartridge write, cold boot and physical save/audio/flicker checks.
 
 ## Develop
 

@@ -31,6 +31,7 @@ PALETTES = (
     ("Ambulance fleet", ["F8F0E0", "FFF5E4", "EA6253", "263C53"], 5),
     ("City bus fleet", ["F8F0E0", "F8EBC1", "E3AD35", "203545"], 6),
 )
+FLEET_PALETTE_SLOTS = (3, 4, 5, 6, 6)  # Taxi reuses the original gold bus palette.
 
 
 def ident(key):
@@ -44,17 +45,36 @@ def encoded(value):
 def fleet_east(kind):
     image = Image.new("RGB", (16, 16), TRANSPARENT)
     d = ImageDraw.Draw(image)
-    if kind == 0:  # Sedan: narrow roof, two windows and transverse light bar.
-        d.rectangle((1, 5, 14, 10), fill=DARK)
-        d.rectangle((2, 4, 12, 11), fill=DARK)
-        d.rectangle((2, 5, 13, 10), fill=LIGHT)
-        d.rectangle((4, 4, 10, 11), fill=MID)
-        d.rectangle((4, 5, 5, 10), fill=DARK)
-        d.rectangle((10, 5, 11, 10), fill=DARK)
-        d.line((7, 4, 7, 11), fill=LIGHT)
-        d.point((7, 4), fill=MID)
-        d.point((7, 11), fill=DARK)
-        d.line((13, 6, 13, 9), fill=LIGHT)
+    if kind == 4:  # Original gold taxi sedan: short roof light and checker trim.
+        d.rectangle((2,3,4,4),fill=DARK);d.rectangle((10,3,12,4),fill=DARK)
+        d.rectangle((2,11,4,12),fill=DARK);d.rectangle((10,11,12,12),fill=DARK)
+        d.rectangle((1,5,14,10),fill=DARK)
+        d.rectangle((2,4,12,11),fill=DARK)
+        d.rectangle((2,5,13,10),fill=MID)
+        d.rectangle((4,4,9,11),fill=MID)
+        d.line((4,5,4,10),fill=DARK)  # Separate rear and front windows.
+        d.line((10,5,10,10),fill=DARK)
+        d.line((11,6,11,9),fill=LIGHT)
+        d.rectangle((6,7,8,8),fill=LIGHT)
+        d.point((7,7),fill=DARK)  # Readable roof sign, independent of siren art.
+        for x in (5,7,9):
+            d.point((x,4),fill=DARK);d.point((x,11),fill=LIGHT)
+        d.point((13,5),fill=LIGHT);d.point((13,10),fill=LIGHT)
+        d.line((1,6,1,9),fill=DARK)
+    elif kind == 0:  # Recognisable patrol sedan: wheels, hood, glass and lightbar.
+        d.rectangle((2,3,4,4),fill=DARK);d.rectangle((10,3,12,4),fill=DARK)
+        d.rectangle((2,11,4,12),fill=DARK);d.rectangle((10,11,12,12),fill=DARK)
+        d.rectangle((1,5,14,10),fill=DARK)
+        d.rectangle((2,4,12,11),fill=DARK)
+        d.rectangle((2,5,13,10),fill=LIGHT)
+        d.rectangle((4,4,9,11),fill=MID)
+        d.line((4,5,4,10),fill=DARK)  # Rear glass.
+        d.line((10,5,10,10),fill=DARK)  # Front windshield.
+        d.line((11,6,11,9),fill=MID)  # Hood visibly ahead of cabin.
+        d.line((7,5,7,10),fill=LIGHT)
+        d.point((7,5),fill=DARK);d.point((7,10),fill=MID)
+        d.point((13,5),fill=LIGHT);d.point((13,10),fill=LIGHT)
+        d.line((1,6,1,9),fill=MID)
     else:
         # All compact service vehicles have a separate front cab and box body.
         d.rectangle((1, 3, 14, 12), fill=DARK)
@@ -62,6 +82,10 @@ def fleet_east(kind):
         d.rectangle((10, 4, 13, 11), fill=LIGHT)
         d.line((12, 5, 12, 10), fill=DARK)
         d.line((9, 4, 9, 11), fill=DARK)
+        # Exposed tire pairs and front lights anchor the vehicle to the road.
+        d.rectangle((2,2,4,3),fill=DARK);d.rectangle((10,2,12,3),fill=DARK)
+        d.rectangle((2,12,4,13),fill=DARK);d.rectangle((10,12,12,13),fill=DARK)
+        d.point((14,4),fill=LIGHT);d.point((14,11),fill=LIGHT)
         if kind == 1:  # Fire apparatus: longitudinal ladder with cross rungs.
             d.rectangle((3, 5, 8, 10), fill=DARK)
             d.line((3, 5, 8, 5), fill=LIGHT)
@@ -171,13 +195,13 @@ def resource(name, models, poses):
 def artwork():
     fleet_models = []
     fleet_poses = []
-    for kind in range(4):
+    for kind,palette in enumerate(FLEET_PALETTE_SLOTS):
         east = fleet_east(kind)
         fleet_models.extend((east, east.transpose(Image.Transpose.ROTATE_270)))
-        fleet_poses.extend(((kind * 2, False, False, kind + 3),
-                            (kind * 2 + 1, False, False, kind + 3),
-                            (kind * 2, True, False, kind + 3),
-                            (kind * 2 + 1, False, True, kind + 3)))
+        fleet_poses.extend(((kind * 2, False, False, palette),
+                            (kind * 2 + 1, False, False, palette),
+                            (kind * 2, True, False, palette),
+                            (kind * 2 + 1, False, True, palette)))
     civilian_models = [civilian_east(step,kind) for kind in range(4) for step in range(2)] + [airborne(),prone()]
     civilian_poses = []
     for variant in range(4):
@@ -256,14 +280,14 @@ def check_poses(name, sheet, meta):
             image.paste(crop, (tile["x"], 0))
         rendered.append(image)
     if name == "city_fleet":
-        for kind in range(4):
+        for kind,palette in enumerate(FLEET_PALETTE_SLOTS):
             east, south, west, north = rendered[kind * 4:kind * 4 + 4]
             assert south.tobytes() == east.transpose(Image.Transpose.ROTATE_270).tobytes()
             assert west.tobytes() == east.transpose(Image.Transpose.FLIP_LEFT_RIGHT).tobytes()
             assert north.tobytes() == south.transpose(Image.Transpose.FLIP_TOP_BOTTOM).tobytes()
             assert {t["paletteIndex"] for f in frames[kind * 4:kind * 4 + 4]
-                    for t in f["tiles"]} == {kind + 3}
-        assert len({rendered[kind * 4].tobytes() for kind in range(4)}) == 4
+                    for t in f["tiles"]} == {palette}
+        assert len({rendered[kind * 4].tobytes() for kind in range(5)}) == 5
     else:
         for variant in range(4):
             east0, east1, west0, west1, hit, fallen = rendered[variant * 6:variant * 6 + 6]
@@ -313,8 +337,8 @@ def main():
             "objects_per_visible_pose": objects, "palette_slots": sorted({
                 t["paletteIndex"] for f in frames for t in f["tiles"]}),
             "source_unique_8x16_patterns": meta["numTiles"],
-            "allocation_target_max_8x8_per_obj_bank": 16 if name == "city_fleet" else 24,
-            "frame_layout": "police/fire/ambulance/bus each E,S,W,N" if name == "city_fleet" else
+            "allocation_target_max_8x8_per_obj_bank": 24,
+            "frame_layout": "police/fire/ambulance/bus/taxi each E,S,W,N; taxi shares gold bus palette6" if name == "city_fleet" else
                 "commuter/worker/backpacker/senior each E0,E1,W0,W1,airborne,prone; palettes1/2 reused",
             "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"}
         for path, content in ((ART / (name + ".metadata.json"), meta_bytes),

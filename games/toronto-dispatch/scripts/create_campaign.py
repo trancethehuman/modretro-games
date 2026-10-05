@@ -324,7 +324,8 @@ def main(content_only=False):
     stops += [(560, 928, 'HANLAN SERVICE', 0), (760, 944, 'CENTRE PARK POST', 0),
               (912, 912, 'WARD COTTAGE POST', 0)]
     assert [(s['u'], s['v'], s['name'], s['transit']) for s in preserved['stops'][:27]] == stops, 'Historical original-stop authoring changed'
-    stops = [dict(stop) for stop in preserved['stops'][:27]]
+    from stop_names import current_name
+    stops = [current_name(stop) for stop in preserved['stops'][:27]]
     for stop in stops:
         if stop['id'] in ISLAND_IDS:
             stop.update(zip(('u', 'v', 'district'), NEW_ISLAND_GEOMETRY[stop['id']]))

@@ -8,6 +8,7 @@
 #include "td_game.h"
 #include "td_atlas.h"
 #include "atlas_under_test.c"
+#include "guidance_under_test.c"
 #include "ui_under_test.c"
 #include "ui_content_oracle.h"
 
@@ -19,8 +20,10 @@ UBYTE td_resume_mode;
 UBYTE td_board_route;
 UWORD td_streetcar_focus_u,td_streetcar_focus_v;
 UBYTE td_streetcar_view_district,td_streetcar_ride_view;
-actor_t actors[21];
+actor_t actors[22];
 UBYTE actors_len;
+static UBYTE boat_control_fixture;
+UBYTE td_boats_controlled(void){return boat_control_fixture;}
 UWORD camera_x,camera_y;
 UBYTE camera_settings,VBK_REG,text_drawn;
 
@@ -29,6 +32,7 @@ UBYTE camera_settings,VBK_REG,text_drawn;
 static UBYTE window_tiles[2][18][20],vram[2][256][16];
 static UBYTE window_x,window_y;
 static unsigned checks,failures,window_writes,tile_uploads,ground_uploads;
+static UBYTE ground_upload_indices[TD_ATLAS_VISIBLE_LIMIT];
 static unsigned light_resets;
 static UBYTE audio_fixture_mode;
 void td_traffic_lights_reset(void){light_resets++;}
@@ -37,7 +41,7 @@ static void expected_centre(UBYTE district,UWORD u,UWORD v,UBYTE *x,UBYTE *y);
 
 static void expect(int condition,const char *name) {
     checks++;
-    if(!condition){failures++;if(failures<30)fprintf(stderr,"FAIL %s\n",name);}
+    if(!condition){failures++;if(failures<30||getenv("TD_UI_DIAGNOSTICS"))fprintf(stderr,"FAIL %s\n",name);}
 }
 
 void set_win_tiles(UBYTE x,UBYTE y,UBYTE width,UBYTE height,const UBYTE *tiles) {
@@ -56,9 +60,13 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
     int marker=first>=8&&(unsigned)first+count<=15;
     int ground=first>=16&&(unsigned)first+count<=188;
     int font=first>=192&&(unsigned)first+count<=241;
-    expect(marker||ground||font,"uploads stay within marker8..14, ground16..187 or font192..240 reservations");
+    int guidance=first==241&&count==12;
+    expect(marker||ground||font||guidance,"uploads stay within marker, atlas, font and twelve reserved original guidance/accent tiles");
     if(VBK_REG!=1||!tiles||!count||(unsigned)first+count>256)return;
-    if(ground)ground_uploads+=count;
+    if(ground){
+        for(unsigned i=0;i<count;i++)ground_upload_indices[(ground_uploads+i)%TD_ATLAS_VISIBLE_LIMIT]=first+i;
+        ground_uploads+=count;
+    }
     memcpy(vram[VBK_REG][first],tiles,(size_t)count*16);
 }
 
@@ -93,14 +101,14 @@ static void expect_game_unchanged(const game_snapshot_t *snapshot) {
 static void reset_case(void) {
     memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));memset(&td_offer,0,sizeof(td_offer));
     memset(&td_target,0,sizeof(td_target));memset(&td_cursor,0,sizeof(td_cursor));
-    memset(actors,0,sizeof(actors));memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
+    memset(actors,0,sizeof(actors));actors[1].flags=ACTOR_FLAG_HIDDEN;memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
     td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;
     td.park_district=1;td.park_u=400*16;td.park_v=528*16;td.cash=123;td.seconds=4321;
     td.left=199;td.health=100;td.job=84;td.stage=3;td.wanted=2;td.wanted_left=21;td.mode=TD_PAUSE;
     td_target.district=3;td_target.u=320;td_target.v=144;td_target.reserved=TD_STOP_FOOT;strcpy(td_target.name,"WITHROW PARK");
     td_job.count=5;td_job.route[3]=36;td_job.seconds=199;td_job.reward=130;
     td_route_district=0;td_resume_mode=TD_ROAM;actors_len=TD_ACTORS;
-    for(unsigned i=0;i<21;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
+    for(unsigned i=0;i<22;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
     window_x=window_y=0;window_writes=tile_uploads=ground_uploads=0;
     audio_fixture_mode=TD_AUDIO_FULL;
@@ -136,26 +144,59 @@ static UBYTE decoded_pixel(const UBYTE *tile,unsigned x,unsigned y) {
     return ((tile[y*2]>>bit)&1)|(((tile[y*2+1]>>bit)&1)<<1);
 }
 
+/* The previous unpacked table is an independent logical reference. Keep its
+ * original insertion/probe order: a different slot or upload order would
+ * change native tile bytes even when the rendered pattern looks alike. */
+static void verify_original_dictionary(void){
+    UWORD cache[TD_ATLAS_VISIBLE_LIMIT],patterns[20];unsigned count=0;
+    for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)cache[i]=65535;
+    for(unsigned y=0;y<12;y++){
+        expect(td_atlas_row(td_map_x,td_map_y+y,20,patterns),"logical cache reference reads an unchanged native atlas row");
+        for(unsigned x=0;x<20;x++){
+            if(expected_marker(td_map_x+x,td_map_y+y))continue;
+            unsigned slot=patterns[x]%TD_ATLAS_VISIBLE_LIMIT,stride=1+((patterns[x]&15)<<1),probes;
+            for(probes=0;probes<TD_ATLAS_VISIBLE_LIMIT;probes++){
+                if(cache[slot]==patterns[x]||cache[slot]==65535)break;
+                slot+=stride;if(slot>=TD_ATLAS_VISIBLE_LIMIT)slot-=TD_ATLAS_VISIBLE_LIMIT;
+            }
+            expect(probes<TD_ATLAS_VISIBLE_LIMIT,"original unpacked reference fits each genuine viewport");
+            if(probes==TD_ATLAS_VISIBLE_LIMIT)return;
+            if(cache[slot]==65535){
+                cache[slot]=patterns[x];
+                expect(ground_upload_indices[(ground_uploads-td_map_count+count)%TD_ATLAS_VISIBLE_LIMIT]==16+slot,
+                    "packed atlas preserves the original ordered sequence of native VRAM upload slots");
+                count++;
+            }
+            expect(window_tiles[0][2+y][x]==16+slot,
+                "packed atlas preserves each exact window tile byte from the original sparse hash/probe sequence");
+        }
+    }
+    expect(count==td_map_count,"packed and original logical atlas cache insert the same number of dictionary IDs");
+    for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)expect(td_map_cache_get(i)==cache[i],
+        "every packed atlas slot exactly matches the original unpacked logical dictionary including vacant slots");
+}
+
 static void verify_viewport(void) {
     UWORD patterns[20];UBYTE expected[16];
     expect(td_map_count<=TD_ATLAS_VISIBLE_LIMIT,"real renderer cache fits the reserved native pattern count");
     unsigned occupied=0;
-    for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)if(td_ui_cache.patterns[i]!=65535) {
+    for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)if(td_map_cache_get(i)!=65535) {
         occupied++;
-        expect(td_ui_cache.patterns[i]<TD_ATLAS_PATTERNS,"every occupied sparse cache slot contains a valid actual dictionary ID");
-        for(unsigned j=0;j<i;j++)if(td_ui_cache.patterns[j]!=65535)
-            expect(td_ui_cache.patterns[i]!=td_ui_cache.patterns[j],"real viewport cache assigns one tile slot per unique dictionary pattern");
+        expect(td_map_cache_get(i)<TD_ATLAS_PATTERNS,"every occupied sparse cache slot contains a valid actual dictionary ID");
+        for(unsigned j=0;j<i;j++)if(td_map_cache_get(j)!=65535)
+            expect(td_map_cache_get(i)!=td_map_cache_get(j),"real viewport cache assigns one tile slot per unique dictionary pattern");
     }
     expect(occupied==td_map_count,"renderer unique count exactly matches all occupied sparse table slots");
+    verify_original_dictionary();
     for(unsigned y=0;y<12;y++) {
         expect(td_atlas_row(td_map_x,td_map_y+y,20,patterns),"actual atlas API supplies the rendered viewport row");
         for(unsigned x=0;x<20;x++) {
             UBYTE marker=expected_marker(td_map_x+x,td_map_y+y),tile=window_tiles[0][2+y][x];
             expect(window_tiles[1][2+y][x]==15,"rendered ground retains UI palette7 and CGB tile bank1 attributes");
             if(marker){expect(tile==7+marker,"marker tile bitset preserves current player, parked car and remote objective overlap");continue;}
-            expect(tile>=16&&tile<188&&td_ui_cache.patterns[tile-16]!=65535,"completed ground cells refer to bounded occupied atlas cache slots");
-            if(tile<16||tile>=188||td_ui_cache.patterns[tile-16]==65535)continue;
-            expect(td_ui_cache.patterns[tile-16]==patterns[x],"ground cache slot preserves the actual atlas dictionary ID");
+            expect(tile>=16&&tile<188&&td_map_cache_get(tile-16)!=65535,"completed ground cells refer to bounded occupied atlas cache slots");
+            if(tile<16||tile>=188||td_map_cache_get(tile-16)==65535)continue;
+            expect(td_map_cache_get(tile-16)==patterns[x],"ground cache slot preserves the actual atlas dictionary ID");
             expect(td_atlas_pattern(patterns[x],expected),"actual atlas dictionary supplies ground wire bytes");
             expect(!memcmp(vram[1][tile],expected,16),"ground VRAM tile matches its actual native atlas pattern bytes");
             for(unsigned py=0;py<8;py++)for(unsigned px=0;px<8;px++)
@@ -187,7 +228,8 @@ static void verify_marker_patterns(void) {
 static void read_window_text(unsigned y,char out[21]) {
     for(unsigned x=0;x<20;x++) {
         UBYTE tile=window_tiles[0][y][x];
-        out[x]=tile>=192&&tile<=240?td_chars[tile-192]:'?';
+        out[x]=tile>=192&&tile<=240?td_chars[tile-192]:tile==252?'>':tile==251?'-':
+            tile>=241&&tile<=250?(char)(tile-240):'?';
     }
     out[20]=0;
 }
@@ -203,7 +245,7 @@ static void expect_window_text(unsigned row,const char *text,const char *name) {
 static void expect_text_screen_safe(void) {
     UBYTE safe=1;
     for(unsigned row=0;row<18;row++)for(unsigned column=0;column<20;column++)
-        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>252||
            window_tiles[1][row][column]!=15)safe=0;
     expect(safe&&window_x==0&&window_y==0&&VBK_REG==0,
            "dispatch/result screen uses bounded native twenty-column font rows and neutral VRAM bank");
@@ -211,13 +253,32 @@ static void expect_text_screen_safe(void) {
            "itinerary and payment draws preserve actual uploaded font patterns");
 }
 
+static void expect_compact_status(unsigned row,int active){
+    char expected[7];UBYTE star;
+    if(active){
+        unsigned seconds=td.left>999?999:td.left;
+        snprintf(expected,sizeof(expected),"%3uS ",seconds);
+        for(unsigned i=0;i<5;i++)expect(window_tiles[0][row][12+i]==td_glyph(expected[i]),
+             "the visible compact job strip preserves the actual bounded remaining deadline");
+    }else{
+        snprintf(expected,sizeof(expected),"%5u",td.cash);
+        expect(window_tiles[0][row][11]==237,"idle compact notices retain their wallet dollar glyph");
+        for(unsigned i=0;i<5;i++)expect(window_tiles[0][row][12+i]==td_glyph(expected[i]),
+             "idle compact notices preserve every digit of the actual wallet");
+    }
+    for(unsigned i=0;i<3;i++){
+        star=i<td.wanted&&!(td.wanted_left<30&&(td.seconds&1))?249:250;
+        expect(window_tiles[0][row][17+i]==star,"the visible strip has exactly three attention stars and blinks during actual evasion");
+    }
+}
+
 static void expect_three_row_hud_safe(void){
     UBYTE safe=1;
     for(unsigned row=0;row<3;row++)for(unsigned column=0;column<20;column++)
-        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>240||
+        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>252||
            window_tiles[1][row][column]!=15)safe=0;
-    expect(safe&&window_x==0&&window_y==120&&VBK_REG==0,
-           "three-row gameplay HUD uses bounded native font rows at its actual sliding-window position");
+    expect(safe&&window_x==0&&window_y==(td.mode==TD_ROAM?(td.msg?128:136):120)&&VBK_REG==0,
+           "gameplay HUD occupies one row normally, two for notices and three for transit, within reserved native patterns");
     expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),
            "ferry cancellation HUD preserves the actual uploaded font patterns");
 }
@@ -230,13 +291,9 @@ static void expect_board_preserves_game(const game_snapshot_t *before) {
 }
 
 static void test_pause_audio_labels_and_map_cache(void){
-    static const char *const labels[3][2]={
-        {"  AUDIO: MUSIC+SFX","> AUDIO: MUSIC+SFX"},
-        {"  AUDIO: SFX ONLY","> AUDIO: SFX ONLY"},
-        {"  AUDIO: SILENT","> AUDIO: SILENT"}
-    };
+    static const char *const labels[3]={"  MUSIC + EFFECTS","  EFFECTS ONLY","  ALL SOUND OFF"};
     expect(TD_AUDIO_FULL==0&&TD_AUDIO_EFFECTS==1&&TD_AUDIO_SILENT==2,
-           "pause audio oracle covers the three real serialized preference modes");
+           "settings sound oracle covers the three actual session preference modes");
     for(UBYTE riding=0;riding<2;riding++){
         reset_case();td.district=TD_DISTRICT_ISLANDS;td.u=512*16;td.v=448*16;
         td.park_district=TD_DISTRICT_CITY;td.park_u=560*16;td.park_v=720*16;
@@ -245,14 +302,16 @@ static void test_pause_audio_labels_and_map_cache(void){
         td_streetcar_ride_view=riding;
         if(riding){td_resume_mode=TD_RIDE;td.transit_origin=43;td.transit_target=48;td.ride_left=4;}
         for(UBYTE audio=0;audio<3;audio++)for(UBYTE selected=0;selected<2;selected++){
-            td.mode=TD_PAUSE;td.menu=selected?8:1;audio_fixture_mode=audio;
-            game_snapshot_t before=snapshot_game();actor_t original_actors[21];
+            td.mode=TD_PAUSE;td.menu=selected?TD_SETTINGS_SOUND:TD_SETTINGS_CONTROLS;audio_fixture_mode=audio;
+            game_snapshot_t before=snapshot_game();actor_t original_actors[22];
             memcpy(original_actors,actors,sizeof(actors));UWORD old_camera_x=camera_x,old_camera_y=camera_y;
             UBYTE old_camera_settings=camera_settings;
             td_ui_draw();
-            expect_window_text(12,labels[audio][selected],"pause audio mode and selection have the exact bounded visible label");
-            expect(memchr(td_line,0,sizeof(td_line))&&strlen(td_line)<=18&&!strcmp(td_line,labels[audio][selected]),
-                   "pause audio formatting terminates inside its40-byte buffer with at most18 characters");
+            expect_window_text(6,labels[audio],"settings sound mode has the exact readable label");
+            expect_window_text(17,"SOUND RESETS AT BOOT","sound preferences explicitly explain their existing session lifetime");
+            expect_window_text(5,selected?"> SOUND":"  SOUND","settings identifies the selected sound option");
+            expect(memchr(td_line,0,sizeof(td_line))&&strlen(td_line)<=20,
+                   "pause formatting terminates inside its40-byte buffer and the visible twenty-column width");
             expect_text_screen_safe();expect_game_unchanged(&before);
             expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
                    camera_settings==old_camera_settings,"pause audio repaint changes no actor or camera state");
@@ -274,7 +333,14 @@ static void test_pause_audio_labels_and_map_cache(void){
             expect(!memcmp(actors,original_actors,sizeof(actors))&&camera_x==old_camera_x&&camera_y==old_camera_y&&
                    camera_settings==old_camera_settings,"closing the audio-to-map replay restores the same actors and camera");
             td.mode=TD_PAUSE;before=snapshot_game();td_ui_draw();
-            expect_window_text(12,labels[audio][selected],"map close repaints the same selected audio preference without stale longer text");
+            expect_window_text(6,labels[audio],"map close repaints the same sound preference without stale longer text");
+            td.menu=8;td_ui_draw();
+            expect_window_text(12,"> SETTINGS","main menu returns to its Settings option");
+            expect_window_text(10,riding?"  SAVE AFTER TRIP":"  SAVE GAME","manual save availability is visible while transit keeps its existing automatic saves");
+            expect_window_text(17,riding?"TTC: MAP/SETTINGS":"SELECT CITY MAP","travel pause explains its allowed planning controls");
+            expect_window_text(6,"  JOBS","settings-to-menu removes the old sound label");
+            expect_window_text(8,"  CHANGE VEHICLE","main menu does not retain the submenu cursor");
+            td.menu=selected?TD_SETTINGS_SOUND:TD_SETTINGS_CONTROLS;
             expect_game_unchanged(&before);
         }
     }
@@ -369,7 +435,7 @@ static void test_dispatch_board_itineraries(void) {
     expect_game_unchanged(&before);
 
     td.mode=TD_RESULT;td_ui_draw();
-    expect_window_text(1,"","leaving dispatch clears the chapter caption rather than leaking it onto the result");
+    expect_window_text(1,"--------------------","leaving dispatch replaces its chapter caption with the original coloured panel rule");
     expect_window_text(3,"","leaving dispatch clears the chapter shortcut caption");
     for(unsigned invalid=TD_QUESTS;invalid<=255;invalid++){
         td.mode=TD_BOARD;td.menu=invalid;before=snapshot_game();td_ui_draw();
@@ -520,7 +586,7 @@ static void test_car_entry_hud_repaint(void) {
         reset_case();td.mode=TD_ROAM;td.job=TD_NONE;td.msg=0;td.vehicle=vehicle;td.onfoot=1;
         game_snapshot_t before=snapshot_game();td_ui_draw();
         expect_window_text(1,"$123 WALK H2","car-entry fixture begins with the actual walking vehicle-status row");
-        expect_window_text(2,"A CAR / B TRANSIT","car-entry fixture begins with the actual walking controls");
+        expect_window_text(2,"A/B CAR A DOOR/BOAT","car-entry fixture begins with the actual walking controls");
         expect_game_unchanged(&before);
         /* The engine harness proves completion calls the renderer after the
            on-foot transition. Exercise that real repaint against its cache. */
@@ -533,7 +599,7 @@ static void test_car_entry_hud_repaint(void) {
         expect(window_writes==writes,"unchanged occupied-car HUD uses its existing row cache after the completion repaint");
         td.onfoot=1;before=snapshot_game();td_ui_draw();
         expect_window_text(1,"$123 WALK H2","a later ordinary exit still restores the walking status without vehicle-name remnants");
-        expect_window_text(2,"A CAR / B TRANSIT","a later ordinary exit restores the walking controls");
+        expect_window_text(2,"A/B CAR A DOOR/BOAT","a later ordinary exit restores the walking controls");
         expect_game_unchanged(&before);
     }
 }
@@ -654,9 +720,9 @@ static void test_reserved_islands_assistance_ui(void) {
     expect_window_text(7,"RIDE 8 SEC / $4","an outward ferry keeps its ordinary fare even under the reserved UI enum");
     expect_window_text(11,"","no outward trip advertises return assistance");expect_game_unchanged(&before);
     td.mode=TD_ROAM;td.msg=0;before=snapshot_game();td_ui_draw();
-    expect_window_text(2,"B: FERRY AT DOCK","reserved foot-only roaming points to a ferry rather than car entry");expect_game_unchanged(&before);
+    expect_window_text(2,"A BOAT / B FERRY","reserved foot-only roaming points to a ferry rather than car entry");expect_game_unchanged(&before);
     td.district=TD_DISTRICT_CITY;before=snapshot_game();td_ui_draw();
-    expect_window_text(2,"A CAR / B TRANSIT","mainland walking keeps its original car and transit controls");expect_game_unchanged(&before);
+    expect_window_text(2,"A/B CAR A DOOR/BOAT","mainland walking keeps its original car and transit controls");expect_game_unchanged(&before);
 }
 
 static void test_island_objective_hud(void){
@@ -760,20 +826,21 @@ static void test_island_no_fare_guidance(void){
                            "only an active low-cash Island notice exposes the cancellation recovery action");
         if(active){
             sprintf(status,"3/%u 103S C67 H3",td_job.count);
-            expect_window_text(1,status,"recovery guidance preserves actual condition, deadline and attention");
+            if(rescue_cue)expect_window_text(1,status,"the special cancellation notice retains the full recovery status");
+            else expect_compact_status(1,1);
             expect_window_text(2,rescue_cue?"CANCEL JOB TO RETURN":local?td_target.name:
                                island?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL",
                                "no-fare cancellation replaces only the eligible objective row");
         }else{
             sprintf(status,"$%u WALK H3",cash);
-            expect_window_text(1,status,"idle insufficient-fare notices retain wallet and walking/attention status");
-            expect_window_text(2,island?"B: FERRY AT DOCK":"A CAR / B TRANSIT",
+            expect_compact_status(1,0);
+            expect_window_text(2,island?"A BOAT / B FERRY":"A/B CAR A DOOR/BOAT",
                                "no-job and mainland notices retain their normal controls");
         }
         expect_game_unchanged(&before);expect_three_row_hud_safe();
         td.msg=0;before=snapshot_game();td_ui_draw();
         expect_window_text(2,active?(local?td_target.name:island?"RETURN FERRY AT DOCK":"GO TO FERRY TERMINAL"):
-                           island?"B: FERRY AT DOCK":"A CAR / B TRANSIT",
+                           island?"A BOAT / B FERRY":"A/B CAR A DOOR/BOAT",
                            "clearing no-fare guidance restores the exact ordinary objective/control text");
         expect_game_unchanged(&before);
     }
@@ -818,9 +885,9 @@ static void test_every_viewport(void) {
         td_map_x=x;td_map_y=y;td_map_begin();td_map_headers();
         unsigned uploads_before=ground_uploads;
         for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)
-            expect(td_ui_cache.patterns[i]==65535,"every viewport begins with all172sparse table slots empty");
+            expect(td_map_cache_get(i)==65535,"every viewport begins with all172sparse table slots empty");
         for(unsigned row=0;row<12;row++) {
-            UBYTE cache_before[360];memcpy(cache_before,&td_ui_cache,sizeof(cache_before));
+            UBYTE cache_before[sizeof(td_ui_cache)];memcpy(cache_before,&td_ui_cache,sizeof(cache_before));
             td_ui_draw();
             expect(!memcmp(cache_before,&td_ui_cache,sizeof(cache_before)),
                    "map header redraws never overwrite the shared active pattern dictionary cache");
@@ -836,7 +903,7 @@ static void test_every_viewport(void) {
     expect_game_unchanged(&before);td_map_close();
     expect(light_resets==resets_before+1,"closing the atlas invalidates native signal pattern residency");
     for(unsigned i=0;i<sizeof(td_ui_cache);i++)
-        expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the360-byte text/pattern union cache");
+        expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the270-byte text/pattern union cache");
     td.mode=TD_PAUSE;unsigned writes=window_writes;td_ui_draw();
     expect(window_writes>writes,"return from atlas repaints actual text despite reuse of the pattern cache union");
 }
@@ -962,10 +1029,10 @@ static void test_paid_transit_objective_context(void) {
 }
 
 static void test_interrupt_restore_and_idempotence(void) {
-    const UBYTE lengths[]={0,1,TD_ACTORS,21};
+    const UBYTE lengths[]={0,1,TD_ACTORS,21,23,255};
     for(unsigned hidden=0;hidden<3;hidden++)for(unsigned scenario=0;scenario<sizeof(lengths);scenario++) {
-        reset_case();actors_len=lengths[scenario];actor_t original[21];memcpy(original,actors,sizeof(actors));
-        for(unsigned i=0;i<21;i++) {
+        reset_case();actors_len=lengths[scenario];actor_t original[22];memcpy(original,actors,sizeof(actors));
+        for(unsigned i=0;i<22;i++) {
             actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|
                 (hidden==1||(hidden==2&&(i&1))?ACTOR_FLAG_HIDDEN:0);
         }
@@ -973,7 +1040,7 @@ static void test_interrupt_restore_and_idempotence(void) {
         UWORD saved_x=camera_x,saved_y=camera_y;UBYTE saved_settings=camera_settings;
         open_case();game_snapshot_t before=snapshot_game();
         unsigned count=actors_len<TD_ACTORS?actors_len:TD_ACTORS;
-        for(unsigned i=0;i<21;i++)expect(actors[i].flags==(i<count?original[i].flags|ACTOR_FLAG_HIDDEN:original[i].flags),
+        for(unsigned i=0;i<22;i++)expect(actors[i].flags==(i<count?original[i].flags|ACTOR_FLAG_HIDDEN:original[i].flags),
                                         "map open hides only the bounded actual actor list");
         td_map_update(0,0);td_map_update(0,0);
         UBYTE before_row=td_map_row,before_count=td_map_count;unsigned uploads=tile_uploads;
@@ -981,21 +1048,21 @@ static void test_interrupt_restore_and_idempotence(void) {
         td_map_open();
         expect(td_map_row==before_row&&td_map_count==before_count&&tile_uploads==uploads,
                "repeated map open preserves partial paint and does not reload marker or ground tiles");
-        for(unsigned i=0;i<21;i++)actors[i].flags^=0x20;
-        UBYTE flags_before_close[21];for(unsigned i=0;i<21;i++)flags_before_close[i]=actors[i].flags;
+        for(unsigned i=0;i<22;i++)actors[i].flags^=0x20;
+        UBYTE flags_before_close[22];for(unsigned i=0;i<22;i++)flags_before_close[i]=actors[i].flags;
         /* Driver handles B/Start by invoking this production close before
          * changing modes. The driver path itself is tested in test_engine.py. */
         td_map_close();
         expect(camera_x==saved_x&&camera_y==saved_y&&camera_settings==saved_settings&&VBK_REG==0,
                "partial-paint close restores exact camera words/settings and neutral VRAM bank");
-        for(unsigned i=0;i<21;i++) {
+        for(unsigned i=0;i<22;i++) {
             UBYTE expected=i<count?(flags_before_close[i]&~ACTOR_FLAG_HIDDEN)|(original[i].flags&ACTOR_FLAG_HIDDEN):flags_before_close[i];
             expect(actors[i].flags==expected,"map close restores only the prior hidden bit and retains other actor flag changes");
             expect(actors[i].pos.x==original[i].pos.x&&actors[i].pos.y==original[i].pos.y,
                    "map never moves native actors during partial paint or cancellation");
         }
         expect_game_unchanged(&before);
-        for(unsigned i=0;i<360;i++)expect(((UBYTE*)&td_ui_cache)[i]==255,"partial close invalidates the entire union cache");
+        for(unsigned i=0;i<sizeof(td_ui_cache);i++)expect(((UBYTE*)&td_ui_cache)[i]==255,"partial close invalidates the entire union cache");
         camera_x=333;camera_y=444;camera_settings=17;actors[0].flags^=ACTOR_FLAG_HIDDEN;
         UBYTE after=actors[0].flags;uploads=tile_uploads;unsigned writes=window_writes;
         td_map_close();td_map_update(J_A|J_SELECT|J_LEFT,J_A|J_SELECT);
@@ -1014,7 +1081,7 @@ static void test_error_recovery_and_repeated_sessions(void) {
          * valid generated origins never produce it. The second fixture tests
          * the renderer's bounded capacity guard without altered atlas data. */
         if(!error)td_map_x=255;
-        else {td_map_count=TD_ATLAS_VISIBLE_LIMIT;for(unsigned i=0;i<td_map_count;i++)td_ui_cache.patterns[i]=65535;}
+        else {td_map_count=TD_ATLAS_VISIBLE_LIMIT;for(unsigned i=0;i<td_map_count;i++)td_map_cache_set(i,65535);}
         unsigned uploads=tile_uploads;td_map_update(0,0);
         expect(td_map_error&&td_map_row==12,"real renderer safely enters its error UI for bad rows or a saturated dictionary");
         expect(tile_uploads==uploads&&VBK_REG==0,"renderer error cannot upload an out-of-range pattern or leave another VRAM bank selected");
@@ -1066,24 +1133,24 @@ static void test_sparse_table_full_and_single_holes(void) {
             /* Deliberately force congestion with synthetic occupied IDs that
              * cannot match any actual pattern. No hash/home/stride calculation
              * is mirrored: each possible sole empty slot must be reachable. */
-            for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=TD_ATLAS_PATTERNS+i;
-            td_ui_cache.patterns[hole]=65535;
+            for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_map_cache_set(i,TD_ATLAS_PATTERNS+i);
+            td_map_cache_set(hole,65535);
             game_snapshot_t before=snapshot_game();unsigned uploads=ground_uploads;
             td_map_paint_row();
-            expect(td_ui_cache.patterns[hole]==row[0]&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
+            expect(td_map_cache_get(hole)==row[0]&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
                    "actual lookup reaches every possible sole empty slot even after adversarial collisions and wraparound");
             expect(ground_uploads==uploads+1&&!memcmp(vram[1][16+hole],pattern,16),
                    "single-hole insertion uploads the correct real pattern exactly once to its stable bounded slot");
             for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)if(i!=hole)
-                expect(td_ui_cache.patterns[i]==TD_ATLAS_PATTERNS+i,"collision probing never overwrites an occupied cache slot");
+                expect(td_map_cache_get(i)==TD_ATLAS_PATTERNS+i,"collision probing never overwrites an occupied cache slot");
             if(distinct)expect(td_map_error&&td_map_row==12,"a second distinct row pattern terminates safely when the table has become full");
             else expect(!td_map_error,"an already inserted row pattern remains retrievable after the table becomes full");
             expect_game_unchanged(&before);td_map_close();
         }
         reset_case();open_case();td_map_x=cases[fixture][0];td_map_y=cases[fixture][1];td_map_row=cases[fixture][2];
         td_map_count=TD_ATLAS_VISIBLE_LIMIT;
-        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_ui_cache.patterns[i]=TD_ATLAS_PATTERNS+i;
-        UWORD before[TD_ATLAS_VISIBLE_LIMIT];memcpy(before,td_ui_cache.patterns,sizeof(before));
+        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)td_map_cache_set(i,TD_ATLAS_PATTERNS+i);
+        UBYTE before[sizeof(td_ui_cache.patterns)];memcpy(before,td_ui_cache.patterns,sizeof(before));
         unsigned uploads=ground_uploads;td_map_paint_row();
         expect(td_map_error&&td_map_row==12&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
                "a completely occupied table with no match stops bounded probing in the real error path");
@@ -1104,7 +1171,200 @@ static void test_walking_vehicle_hit_caption(void) {
     }
 }
 
+static void test_live_objective_arrows(void){
+    static const int offsets[4][2]={{0,-80},{80,0},{0,80},{-80,0}};
+    reset_case();td.mode=TD_ROAM;td.job=0;td.msg=0;td_target.district=td.district;
+    strcpy(td_target.name,"COURIER DEPOT");actors[1].flags=0;
+    for(unsigned direction=0;direction<4;direction++){
+        actors[1].pos.x=((td.u>>4)+offsets[direction][0])*32;
+        actors[1].pos.y=((td.v>>4)+offsets[direction][1]-12)*32;
+        game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect(window_tiles[0][2][0]==241+direction,
+               "normal gameplay shows the independently expected north/east/south/west objective arrow");
+        expect(window_tiles[0][2][1]==192,"graphic guidance separates the arrow from the objective name");
+        for(unsigned i=0;i<13;i++)expect(window_tiles[0][2][i+2]==td_glyph("COURIER DEPOT"[i]),
+                                         "live arrow preserves the complete named objective");
+        expect_three_row_hud_safe();expect_game_unchanged(&before);
+    }
+    td_target.district=TD_DISTRICT_WEST;td_route_district=TD_DISTRICT_WEST;
+    actors[1].pos.x=((td.u>>4)-160)*32;actors[1].pos.y=((td.v>>4)-12)*32;
+    td_ui_draw();expect(window_tiles[0][2][0]==244,
+                       "remote objective arrows follow the loaded-scene portal beacon rather than remote map coordinates");
+    actors[1].flags=ACTOR_FLAG_HIDDEN;td_ui_draw();
+    expect(window_tiles[0][2][0]>=192&&window_tiles[0][2][0]<=240,
+           "unreachable or unavailable objective beacons never invent a directional route");
+    actors[1].flags=0;td_target.district=td.district;
+    actors[1].pos.x=td.u*2;actors[1].pos.y=td.v*2-12*32;
+    td_ui_draw();expect(window_tiles[0][2][0]==233,"arrival replaces directional guidance with the original interaction plus glyph");
+    for(unsigned arrow=0;arrow<4;arrow++)
+        expect(!memcmp(vram[1][241+arrow],td_arrows+arrow*16,16),"all four graphic arrows are uploaded to their own reserved native patterns");
+}
+
+static void test_compact_navigation_and_stars(void){
+    static const int offset[8][2]={{0,-80},{80,0},{0,80},{-80,0},{80,-80},{80,80},{-80,80},{-80,-80}};
+    reset_case();td.mode=TD_ROAM;td.job=0;td.left=93;td.wanted=2;td.wanted_left=30;td.msg=0;
+    strcpy(td_target.name,"MARKET PICKUP");td_target.district=td.district;actors[1].flags=0;
+    for(unsigned i=0;i<8;i++){
+        actors[1].pos.x=((td.u>>4)+offset[i][0])*32;
+        actors[1].pos.y=((td.v>>4)+offset[i][1]-12)*32;
+        game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect(window_y==136&&window_x==0,"normal driving leaves136 of144 native screen rows for the city");
+        expect(window_tiles[0][0][0]==241+i,"each of eight independent target quadrants has its visible graphic direction");
+        for(unsigned c=0;c<9;c++)expect(window_tiles[0][0][2+c]==td_glyph("MARKET PICKUP"[c]),
+            "the visible strip preserves a readable short objective beside its arrow");
+        expect_compact_status(0,1);expect_game_unchanged(&before);
+    }
+    td.msg=19;td_ui_draw();expect(window_y==128,"collision notices temporarily add exactly one extra row");
+    expect_window_text(0,"HUMAN HIT: FINE + H","the transient notice stays complete above the compact objective");
+    expect_compact_status(1,1);
+    td.msg=0;td.wanted_left=29;td.seconds=1;td_ui_draw();expect_compact_status(0,1);
+    td.seconds=2;td_ui_draw();expect_compact_status(0,1);
+    td.wanted=td.wanted_left=0;td.job=TD_NONE;td.cash=60000;td_ui_draw();expect_compact_status(0,0);
+    expect(window_y==136,"idle roaming also uses the compact eight-pixel strip");
+    static const UBYTE gold_star[16]={0,0x10,0,0x38,0,0xfe,0,0x7c,0,0x38,0,0x6c,0,0x44,0,0};
+    static const UBYTE mint_outline[16]={0x10,0,0x28,0,0xc6,0,0x44,0,0x28,0,0x54,0,0x44,0,0,0};
+    expect(!memcmp(vram[1][249],gold_star,16)&&!memcmp(vram[1][250],mint_outline,16),
+        "attention stars retain the independently authored gold fill and mint outline pixel planes");
+}
+
+/* Bit-at-a-time oracle deliberately shares no byte grouping, shift/index
+ * arithmetic or mask expressions with the production codecs. */
+static unsigned cache_bits_get(const UBYTE *bytes,unsigned first,unsigned width){
+    unsigned value=0;
+    for(unsigned bit=0;bit<width;bit++)if(bytes[(first+bit)/8]&(1u<<((first+bit)%8)))value|=1u<<bit;
+    return value;
+}
+static void cache_bits_set(UBYTE *bytes,unsigned first,unsigned width,unsigned value){
+    for(unsigned bit=0;bit<width;bit++){
+        unsigned index=(first+bit)/8,mask=1u<<((first+bit)%8);
+        bytes[index]=(bytes[index]&~mask)|((value&(1u<<bit))?mask:0);
+    }
+}
+static void test_packed_row_codec(void){
+    struct {UBYTE before[4],row[15],after[4];} guarded;
+    UBYTE logical[20],expected[15],tiles[20];
+    expect(sizeof(td_ui_cache)==270&&sizeof(td_cached_rows)==270&&sizeof(td_ui_cache.patterns)==215,
+        "native cache union is exactly270 bytes with eighteen15-byte rows and172 ten-bit atlas slots");
+    expect(sizeof(td_map_hidden)==3,
+        "all22 native actor hidden flags occupy exactly three bytes with no actor/save-state growth");
+    for(unsigned column=0;column<20;column++)for(unsigned glyph=192;glyph<=252;glyph++){
+        memset(&guarded,0xA5,sizeof(guarded));memset(guarded.row,255,sizeof(guarded.row));
+        memset(logical,255,sizeof(logical));memset(expected,255,sizeof(expected));
+        for(unsigned i=0;i<20;i++)tiles[i]=192+(i*7+column)%61;
+        tiles[column]=glyph;
+        for(unsigned step=0;step<3;step++){
+            UBYTE changed=memcmp(logical,tiles,sizeof(logical))!=0;
+            memcpy(logical,tiles,sizeof(logical));
+            for(unsigned i=0;i<20;i++)cache_bits_set(expected,i*6,6,logical[i]-192);
+            expect(td_row_cache_apply(guarded.row,tiles)==changed,
+                "packed text cache reports exactly the original twenty-byte logical row change/no-op result");
+            expect(!memcmp(expected,guarded.row,sizeof(expected)),
+                "every glyph at every column has the independent exact six-bit wire encoding");
+            for(unsigned i=0;i<20;i++)expect(cache_bits_get(guarded.row,i*6,6)+192==logical[i],
+                "six-bit row fields preserve every neighboring glyph across all byte/group boundaries");
+            for(unsigned i=0;i<4;i++)expect(guarded.before[i]==0xA5&&guarded.after[i]==0xA5,
+                "text codec cannot overwrite either surrounding guard region including its last glyph");
+            if(step==1)tiles[(column+1)%20]=192+(tiles[(column+1)%20]-191)%61;
+        }
+    }
+    /* An invalidated cache is all63; no actual character can generate that
+     * code. Exercise every signed/unsigned char input through the real mapper. */
+    for(unsigned character=0;character<256;character++){
+        UBYTE glyph=td_glyph((char)character);
+        expect(glyph>=192&&glyph<=252&&glyph-192!=63,
+            "all256 character inputs map to real six-bit native glyphs distinct from the empty sentinel");
+    }
+    for(unsigned y=0;y<18;y++){
+        memset(td_cached_rows,255,sizeof(td_cached_rows));
+        UBYTE logical_cache[18][20];memset(logical_cache,255,sizeof(logical_cache));td.mode=TD_PAUSE;
+        static const char text[]="A\1B\2C\3D\4E\5F\6G\7H\10I\11J\12";
+        for(unsigned step=0;step<2;step++){
+            UBYTE expected_tiles[20];for(unsigned i=0;i<20;i++)expected_tiles[i]=i&1?241+i/2:193+i/2;
+            unsigned changed=memcmp(logical_cache[y],expected_tiles,20)!=0,writes=window_writes;
+            memcpy(logical_cache[y],expected_tiles,20);td_row(y,text);
+            expect(window_writes==writes+changed&&!memcmp(window_tiles[0][y],expected_tiles,20),
+                "each actual text row preserves original upload bytes and suppresses the same cached no-op write");
+            for(unsigned row=0;row<18;row++)for(unsigned column=0;column<20;column++){
+                unsigned code=cache_bits_get(td_cached_rows[row],column*6,6);
+                expect((code==63?255:code+192)==logical_cache[row][column],
+                    "real row updates preserve the original logical values of all eighteen rows including empty neighbors");
+            }
+        }
+    }
+}
+static void test_packed_atlas_codec(void){
+    UBYTE original[sizeof(td_ui_cache)],expected[sizeof(td_ui_cache)];
+    for(unsigned slot=0;slot<TD_ATLAS_VISIBLE_LIMIT;slot++){
+        memset(&td_ui_cache,0xA5,sizeof(td_ui_cache));
+        memset(td_ui_cache.patterns,255,sizeof(td_ui_cache.patterns));
+        memcpy(expected,&td_ui_cache,sizeof(expected));
+        for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++){
+            unsigned value=(i*977+slot*13)%1023;
+            td_map_cache_set(i,value);cache_bits_set(expected,i*10,10,value);
+        }
+        expect(!memcmp(&td_ui_cache,expected,sizeof(expected)),
+            "all ten-bit atlas fields match independent bit encoding while retaining the union's inactive tail");
+        for(unsigned value=0;value<=1023;value++){
+            UWORD logical=value==1023?65535:value;
+            td_map_cache_set(slot,logical);cache_bits_set(expected,slot*10,10,value);
+            expect(td_map_cache_get(slot)==logical,
+                "all1023 dictionary/fixture IDs and the empty sentinel roundtrip at every one of172 slots");
+            expect(!memcmp(&td_ui_cache,expected,sizeof(expected)),
+                "each ten-bit insertion changes only its own exact bits and preserves neighbors and inactive union guard bytes");
+            if(slot)expect(td_map_cache_get(slot-1)==(unsigned)((slot-1)*977+slot*13)%1023,
+                "ten-bit writes cannot alias the previous sparse slot");
+            if(slot+1<TD_ATLAS_VISIBLE_LIMIT)expect(td_map_cache_get(slot+1)==(unsigned)((slot+1)*977+slot*13)%1023,
+                "ten-bit writes cannot alias the next sparse slot");
+        }
+    }
+    memcpy(original,&td_ui_cache,sizeof(original));
+    for(unsigned slot=TD_ATLAS_VISIBLE_LIMIT;slot<256;slot++){
+        td_map_cache_set(slot,77);
+        expect(td_map_cache_get(slot)==65535&&!memcmp(original,&td_ui_cache,sizeof(original)),
+            "invalid eight-bit atlas slots return empty and cannot touch packed storage");
+    }
+    for(unsigned value=1023;value<65535;value++){
+        td_map_cache_set(0,value);
+        expect(!memcmp(original,&td_ui_cache,sizeof(original)),
+            "out-of-range pattern IDs cannot truncate into valid dictionary entries or overwrite the sentinel");
+    }
+    memset(td_ui_cache.patterns,255,sizeof(td_ui_cache.patterns));
+    for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)expect(td_map_cache_get(i)==65535,
+        "the original all-FF reset empties all ten-bit sparse cache slots");
+}
+static void test_packed_actor_visibility(void){
+    for(unsigned slot=0;slot<TD_ACTORS;slot++)for(unsigned flags=0;flags<256;flags++){
+        reset_case();actors[slot].flags=flags;
+        UBYTE original[TD_ACTORS];for(unsigned i=0;i<TD_ACTORS;i++)original[i]=actors[i].flags;
+        td.mode=TD_MAP;td_map_open();
+        for(unsigned i=0;i<TD_ACTORS;i++)expect(!!(td_map_hidden[i/8]&(1u<<(i%8)))==!!(original[i]&ACTOR_FLAG_HIDDEN),
+            "every actor slot and every original flag byte retain their exact independent hidden bit in the packed pool");
+        for(unsigned i=0;i<TD_ACTORS;i++)actors[i].flags^=0x20;
+        td_map_close();
+        for(unsigned i=0;i<TD_ACTORS;i++)expect(actors[i].flags==(original[i]^0x20),
+            "map close restores each original hidden flag while preserving concurrent changes to every other flag");
+    }
+}
+
 int main(void) {
+    test_packed_row_codec();test_packed_atlas_codec();test_packed_actor_visibility();
+    reset_case();boat_control_fixture=1;td.job=TD_NONE;td.mode=TD_ROAM;
+    game_snapshot_t boat_controls_before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"A GAS DOWN+A DOCK","controlled boat guidance distinguishes acceleration from deliberate docking");
+    expect_game_unchanged(&boat_controls_before);
+    td.mode=TD_HELP;td.menu=0;boat_controls_before=snapshot_game();td_ui_draw();
+    expect_window_text(2,"WELCOME COURIER","cold boot starts with a short beginner overview");
+    expect_window_text(16,"A OR B: START GAME","the welcome screen explains how either action starts play");
+    expect_game_unchanged(&boat_controls_before);
+    td.menu=TD_SETTINGS_CONTROLS;boat_controls_before=snapshot_game();td_ui_draw();
+    expect_window_text(13,"DOCK: DOWN+A EXIT","the Settings control guide teaches the actual deliberate boat exit chord");
+    expect_game_unchanged(&boat_controls_before);boat_control_fixture=0;
+    test_compact_navigation_and_stars();
+    td.onfoot=1;td_map_focus=0;boat_control_fixture=1;td_map_headers();
+    expect_window_text(15,"YOU ON A BOAT","the paused map correctly identifies a controlled boat passenger");
+    boat_control_fixture=0;td_map_headers();
+    expect_window_text(15,"YOU ON FOOT","disembarking restores the actual walking caption");
+    test_live_objective_arrows();
     test_walking_vehicle_hit_caption();
     test_every_viewport();test_focus_and_partial_restart();test_panning_and_bounds();
     test_paid_transit_objective_context();test_interrupt_restore_and_idempotence();

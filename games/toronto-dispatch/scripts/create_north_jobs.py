@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import re
 import sys
+from stop_names import historical_name
 from create_district_jobs import (BASE_QUEST_FIELDS, FOOT_SPEED, SPEEDS,
                                   RouteModel, canonical, decode_grid, point,
                                   read_json, sha)
@@ -65,7 +66,7 @@ def preserved_prefix(campaign):
     assert len(stops) == 59 and len(jobs) == 96
     assert [s['id'] for s in stops] == list(range(59))
     assert [q['id'] for q in jobs] == [f'contract-{i:02d}' for i in range(1,97)]
-    native_stops = [{key:s.get(key,0) for key in STOP_FIELDS} for s in stops]
+    native_stops = [{key:historical_name(s).get(key,0) for key in STOP_FIELDS} for s in stops]
     native_jobs = [{key:q[key] for key in BASE_QUEST_FIELDS} for q in jobs]
     assert sha(canonical(native_stops)) == PREFIX_STOPS_SHA256, 'Existing current59 native stop geometries/identities changed'
     assert sha(canonical(native_jobs)) == PREFIX_QUESTS_SHA256, 'Existing96 native job fields/briefs/ordinals changed'

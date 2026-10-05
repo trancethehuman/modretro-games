@@ -44,3 +44,27 @@ UBYTE td_traffic_signal_stop(UBYTE district,UWORD seconds,UWORD old_u,
     return FALSE;
 }
 
+/* Player physics sweeps horizontal motion at old_v, then vertical motion at
+ * the accepted new_u. Reuse the same authored stop lines and fictional phase
+ * as NPCs, splitting each validated component into their strict8Q4 queries.
+ * Malformed movement is not evidence of a traffic violation. */
+UBYTE td_traffic_player_red(UBYTE district,UWORD seconds,UWORD old_u,
+    UWORD old_v,UWORD u,UWORD v) BANKED {
+    UWORD next,amount;
+    if(district>=TD_DISTRICT_COUNT||district>=TD_TRAFFIC_SIGNAL_DISTRICTS||
+       old_u>=1024*16||u>=1024*16||old_v>=976*16||v>=976*16||
+       td_traffic_distance(old_u,u)>16||td_traffic_distance(old_v,v)>16)return FALSE;
+    while(old_u!=u){
+        amount=td_traffic_distance(old_u,u);if(amount>8)amount=8;
+        next=u>old_u?old_u+amount:old_u-amount;
+        if(td_traffic_signal_stop(district,seconds,old_u,old_v,next,old_v))return TRUE;
+        old_u=next;
+    }
+    while(old_v!=v){
+        amount=td_traffic_distance(old_v,v);if(amount>8)amount=8;
+        next=v>old_v?old_v+amount:old_v-amount;
+        if(td_traffic_signal_stop(district,seconds,u,old_v,u,next))return TRUE;
+        old_v=next;
+    }
+    return FALSE;
+}

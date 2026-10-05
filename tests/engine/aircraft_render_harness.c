@@ -8,22 +8,25 @@
 #include "td_aircraft.h"
 #include "art_oracle.h"
 
-actor_t actors[21],*actors_inactive_head;
+actor_t actors[22],*actors_inactive_head;
 UBYTE actors_len,allocated_hardware_sprites,VBK_REG,__render_shadow_OAM;
 UBYTE win_pos_x,win_pos_y,win_dest_pos_x,win_dest_pos_y,WX_REG,WY_REG;
 _Alignas(256) volatile OAM_item_t shadow_OAM[40];
 _Alignas(256) volatile OAM_item_t shadow_OAM2[40];
 WORD draw_scroll_x,draw_scroll_y;
 far_ptr_t current_scene;
+UBYTE image_attr_bank,image_tile_width=128,image_tile_height=122;
+static UBYTE world_attrs[128*122];
+UBYTE *image_attr_ptr=world_attrs;
 td_state_t td;
 td_aircraft_state_t td_aircraft;
 static UBYTE district,selected_frame;
 static UBYTE address_page[1024],maps[2][1024],base_maps[2][1024];
 static UBYTE bkg_data[2][256][16],obj_data[2][256][16];
 static tileset_t rom_tiles[2];
-static metasprite_t poses[14][5];
-static const metasprite_t *frames[14];
-static spritesheet_t sheet={14,frames,{8,&rom_tiles[0]},{9,&rom_tiles[1]}};
+static metasprite_t poses[18][5];
+static const metasprite_t *frames[18];
+static spritesheet_t sheet={18,frames,{8,&rom_tiles[0]},{9,&rom_tiles[1]}};
 static unsigned long checks;
 static unsigned long metadata_reads,rom_tile_bytes,bkg_tile_reads;
 static void require(int result,const char *message){
@@ -46,6 +49,7 @@ void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank){
     memcpy(dest,src,length);
 }
 UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank){
+    if(bank==10){require(src>=world_attrs&&src<world_attrs+sizeof(world_attrs),"World cover lookup escaped authored map");return *src;}
     require(bank==7,"Compiled aircraft bank changed during frame-count read");metadata_reads++;return *src;
 }
 UBYTE *GetBkgAddr(void){return address_page;}
@@ -62,7 +66,7 @@ void get_bkg_data(UBYTE first,UBYTE count,UBYTE *data){
     memcpy(data,bkg_data[VBK_REG][first],16);
 }
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *data){
-    require(count==1&&VBK_REG==1&&first>=32&&first<=46,"BKG scratch allocation crossed native ownership");
+    require(count==1&&VBK_REG==1&&first>=64&&first<=78,"BKG scratch allocation crossed native ownership");
     memcpy(bkg_data[VBK_REG][first],data,16);
 }
 void get_sprite_data(UBYTE first,UBYTE count,UBYTE *data){
@@ -73,24 +77,25 @@ void get_sprite_data(UBYTE first,UBYTE count,UBYTE *data){
 #include "renderer_under_test.c"
 
 static void fixture(UBYTE object_flip){
-    UBYTE frame,i,count,cx,cy,x,y,value,bank,tile=16,last_x,last_y;
+    UBYTE frame,i,count,cx,cy,x,y,value,bank,tile[2]={16,16},last_x,last_y;
     memset(obj_data,0,sizeof(obj_data));
-    for(frame=0;frame<14;frame++){
+    for(frame=0;frame<18;frame++){
         frames[frame]=poses[frame];count=frame==13?0:frame==12?2:4;last_x=last_y=0;
         for(i=0;i<count;i++){
             if(frame==12){cx=8+i*8;cy=8;}
+            else if(frame>=14){cx=i*8;cy=(((frame-14)&1)?i<2:i>=2)?16:0;}
             else if(frame%4==0||frame%4==2){cx=i*8;cy=8;}
             else{cx=8+(i&1)*8;cy=(i>>1)*16;}
             poses[frame][i].dx=(BYTE)(cx-8-last_x);poses[frame][i].dy=(BYTE)(cy-last_y);
-            poses[frame][i].dtile=tile-16;bank=(i+frame)&1;
+            bank=(i+frame)&1;poses[frame][i].dtile=tile[bank]-16;
             poses[frame][i].props=bank*8|(object_flip<<5)|((frame+i)&7)|0x80;
             last_x=cx-8;last_y=cy;
             for(y=0;y<16;y++)for(x=0;x<8;x++){
                 value=original_pixels[frame][cy+(object_flip&2?15-y:y)][cx+(object_flip&1?7-x:x)];
-                if(value&1)obj_data[bank][tile+y/8][(y&7)*2]|=1<<(7-x);
-                if(value&2)obj_data[bank][tile+y/8][(y&7)*2+1]|=1<<(7-x);
+                if(value&1)obj_data[bank][tile[bank]+y/8][(y&7)*2]|=1<<(7-x);
+                if(value&2)obj_data[bank][tile[bank]+y/8][(y&7)*2+1]|=1<<(7-x);
             }
-            tile+=2;
+            tile[bank]+=2;
         }
         poses[frame][count].dy=metasprite_end;
     }
@@ -471,12 +476,99 @@ static void final_outcome_checks(void){
     require(seen[0]&&seen[1]&&seen[2],"Randomized final-outcome oracle must exercise all0/4/6 branches");
 }
 
+static void world_cover_checks(void){
+    reset(0);image_attr_bank=10;memset(world_attrs,0,sizeof(world_attrs));
+    /*Camera/VRAM is intentionally unrelated to every authored world cell. */
+    for(unsigned y=0;y<122;y++)for(unsigned x=0;x<128;x++){
+        world_attrs[y*128+x]=(x*7+y*11)&1?0x80:0x19;
+        require(td_aircraft_render_exposed(x*128+63,y*128+95)==!(world_attrs[y*128+x]&0x80),
+                "Air sight used cameraVRAM instead of exact full-world roof attributes");
+    }
+    require(!td_aircraft_render_exposed(16384,100)&&!td_aircraft_render_exposed(100,15616),
+            "Outside-world coordinates must not expose an invalid authored cell");
+    image_attr_bank=0;require(td_aircraft_render_exposed(5000,5000),"A background without roof attributes is exposed");
+    image_attr_bank=10;current_scene.ptr=&actors[0];
+    require(!td_aircraft_render_exposed(5000,5000),"Stale renderer scene cannot supply cover from another district");
+    td_aircraft_render_reset();require(!td_aircraft_render_exposed(100,100),"Unbound indoor scene hides courier from aerial observation");
+    image_attr_bank=0;
+}
+
+/* Independent PNG oracle for large ground shadows. Original air fixtures
+ * above keep their twelve-pose roof/ellipse/OAM contracts unchanged. */
+static void jet_shadow_checks(void){
+    UBYTE frame,flip,alignment_x,alignment_y,i;WORD x,y,wx,wy;
+    unsigned long reads,bytes,bg_reads;
+    OAM_item_t ground[40];
+    for(frame=14;frame<18;frame++)for(flip=0;flip<4;flip++)
+        for(alignment_y=0;alignment_y<8;alignment_y++)for(alignment_x=0;alignment_x<8;alignment_x++){
+            reset(flip);selected_frame=frame;td_aircraft.kind=2;
+            x=260+alignment_x;y=260+alignment_y;td_aircraft.u=x*16;td_aircraft.v=y*16;
+            for(i=0;i<2;i++){ground[i]=(OAM_item_t){88,80,(UBYTE)(i*2),(UBYTE)i};shadow_OAM[i]=ground[i];}
+            allocated_hardware_sprites=2;memcpy(base_maps,maps,sizeof(maps));bg_reads=bkg_tile_reads;VBK_REG=1;
+            td_aircraft_render();
+            require(allocated_hardware_sprites==6&&VBK_REG==1,"Ground jet must append exactly four objects while preserving VBK");
+            require(!memcmp((void*)shadow_OAM,ground,8),"Ground jet must preserve every pre-existing person/vehicle object ahead of its shadow");
+            require(!td_aircraft_patch_count&&bkg_tile_reads==bg_reads&&!memcmp(base_maps,maps,sizeof(maps)),
+                    "Ground jet must never punch roofs, fetch BKG pixels or use aircraft/scenery scratch");
+            for(wy=y-16;wy<y+16;wy++)for(wx=x-16;wx<x+16;wx++){
+                UBYTE actual=0;
+                for(i=2;i<6;i++){
+                    OAM_item_t object=shadow_OAM[i];
+                    UBYTE pixel=object_pixel(&object,wx-draw_scroll_x,wy-draw_scroll_y);
+                    if(!actual)actual=pixel;
+                    require(!(object.prop&0x80),"Ground jet must remain visible on colored roads with normal CGB OBJ priority");
+                }
+                require(actual==original_pixels[frame][wy-y+16][wx-x+16],
+                        "Ground jet selected/flipped native tile pairs must reconstruct every original32x32 PNG pixel");
+            }
+            reads=metadata_reads;bytes=rom_tile_bytes;allocated_hardware_sprites=2;td_aircraft_render();
+            require(metadata_reads==reads&&rom_tile_bytes==bytes,"A cached jet must not decode metadata/pixels again on its next rendered frame");
+        }
+    for(frame=14;frame<18;frame++)for(y=-32;y<=176;y+=4)for(x=-32;x<=192;x+=4){
+        reset(0);selected_frame=frame;td_aircraft.u=(184+x)*16;td_aircraft.v=(184+y)*16;
+        td_aircraft_render();
+        require(!td_aircraft_patch_count,"Edge jet must not allocate roof patches");
+        for(i=0;i<allocated_hardware_sprites;i++)require(!shadow_OAM[i].y||
+            (shadow_OAM[i].x>0&&shadow_OAM[i].x<168&&shadow_OAM[i].y<160),
+            "Large ground shadow clips signed coordinates before OAM conversion, without opposite-edge wrapping");
+    }
+    for(frame=14;frame<18;frame++)for(y=90;y<=150;y++){
+        reset(0);selected_frame=frame;td_aircraft.u=264*16;td_aircraft.v=(184+y)*16;
+        win_pos_y=win_dest_pos_y=WY_REG=120;WX_REG=7;
+        td_aircraft_render();
+        require(!allocated_hardware_sprites||allocated_hardware_sprites==4,"Window admission must keep all four jet cells together");
+        for(i=0;i<allocated_hardware_sprites;i++)require(!shadow_OAM[i].y||shadow_OAM[i].y-1<120,
+            "A large jet cannot cover the current or destination HUD window");
+    }
+    reset(0);selected_frame=14;td_aircraft.u=td_aircraft.v=264*16;
+    for(i=0;i<40;i++){ground[i]=(OAM_item_t){120,(UBYTE)(i+20),(UBYTE)(i*2),(UBYTE)(i&7)};shadow_OAM[i]=ground[i];}
+    allocated_hardware_sprites=37;td_aircraft_render();
+    require(allocated_hardware_sprites==37&&!memcmp((void*)shadow_OAM,ground,37*4),
+            "Insufficient total OAM rejects the whole jet and preserves all37 street objects");
+    allocated_hardware_sprites=36;td_aircraft_render();
+    require(allocated_hardware_sprites==40&&!memcmp((void*)shadow_OAM,ground,36*4),
+            "Exact40-object boundary appends the complete jet behind all36 street objects");
+    reset(0);selected_frame=14;td_aircraft.u=td_aircraft.v=264*16;
+    for(i=0;i<9;i++)shadow_OAM[i].y=80;allocated_hardware_sprites=9;
+    td_aircraft_render();require(allocated_hardware_sprites==9,"Eleven objects on one line rejects all jet cells atomically");
+    reset(0);selected_frame=14;td_aircraft.u=td_aircraft.v=264*16;
+    __render_shadow_OAM=(UBYTE)((UWORD)(uintptr_t)shadow_OAM2>>8);td_aircraft_render();
+    require(shadow_OAM2[0].y&&!shadow_OAM[0].y,"Ground jet respects the stock double-buffered OAM page");
+    reset(0);selected_frame=14;td_aircraft.u=264*16;td_aircraft.v=294*16;
+    win_pos_y=144;win_dest_pos_y=116;td_aircraft_render();
+    require(!allocated_hardware_sprites,"Sliding window destination suppresses the complete large jet");
+    for(i=0;i<9;i++){
+        reset(0);selected_frame=14;td_aircraft.u=td_aircraft.v=264*16;td.mode=i;
+        td_aircraft_render();require((i==TD_ROAM||i==TD_WAIT||i==TD_RIDE)?allocated_hardware_sprites==4:!allocated_hardware_sprites,
+            "Jet rendering shares the original live-world/modal suppression contract");
+    }
+}
 int main(void){
     UBYTE x,y,frame,flip,obj_flip;
     for(frame=0;frame<12;frame++)for(flip=0;flip<4;flip++)for(obj_flip=0;obj_flip<4;obj_flip++)
         for(y=0;y<8;y++)for(x=0;x<8;x++)pixel_checks(260+x,260+y,frame,flip,obj_flip);
     sparse_pixel_checks();restoration_checks();binding_checks();capacity_checks();edge_checks();window_checks();untouched_ground_checks();
-    cache_checks();capacity_differential_checks();final_outcome_checks();
+    cache_checks();capacity_differential_checks();final_outcome_checks();world_cover_checks();jet_shadow_checks();
     printf("Aircraft renderer: %lu checks, 0 failures (host VRAM/OAM adapters, no timing claim)\n",checks);
     return 0;
 }

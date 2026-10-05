@@ -5,6 +5,8 @@
 #include "td_transit.h"
 #include "td_island_legacy.h"
 #include "td_north_legacy.h"
+#include "td_boats.h"
+#include "td_motion.h"
 #include "compat.h"
 #include "system.h"
 static UBYTE td_save_slot=TD_NONE,td_save_seq;
@@ -27,7 +29,7 @@ static UBYTE td_valid_fields(td_state_t *s,UBYTE version){
     if(version<10&&(s->mode==TD_WAIT||s->mode==TD_RIDE)&&
        ((s->transit_origin&63)>=59||s->transit_target>=59))return FALSE;
     if(s->wanted>3||s->wanted_left>30||(!s->wanted!=!s->wanted_left))return FALSE;
-    if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP)return FALSE;
+    if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP||s->msg>21)return FALSE;
     if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
     if(s->district>=TD_DISTRICT_COUNT||s->park_district>=TD_DISTRICT_COUNT||(s->reserved&~TD_STREETCAR_HOLD))return FALSE;
     if(version<9&&(s->district>=TD_DISTRICT_ISLANDS||s->park_district>=TD_DISTRICT_ISLANDS))return FALSE;
@@ -127,7 +129,19 @@ static UBYTE td_prepare_state(td_state_t *s,UBYTE version){
 }
 void td_save(void) BANKED {
     UBYTE i,slot=td_save_slot==0?1:0,mode=td.mode;UWORD crc=0xFFFF;
+    UWORD live_u=td.u,live_v=td.v,live_safe_u=td.safe_u,live_safe_v=td.safe_v;
+    UBYTE live_onfoot=td.onfoot;
     const UBYTE *src=(const UBYTE*)&td;volatile UBYTE *ram=td_save_address(slot);
+    /* A boat is a loaded-scene world object, not a fifth serialized road
+       vehicle. Reset resumes at the validated boarding shore without moving
+       the owned car or losing the mission, payment, clock or health. */
+    if(td_boats_restore_shore(&td.u,&td.v)){
+        td.safe_u=td.u;td.safe_v=td.v;td.onfoot=1;
+    }else if(td_entry_timer&&!td_entry_target&&td.onfoot){
+        /* Save the completed entry, rather than a human halfway through a
+           solid parked-car body. Live animation is restored after commit. */
+        td.u=td.park_u;td.v=td.park_v;td.safe_u=td.u;td.safe_v=td.v;td.onfoot=0;
+    }
     /* Two records in SRAM bank 3 retain the last committed snapshot during power loss. */
     if(mode==TD_PAUSE||mode==TD_MAP||mode==TD_HELP)td.mode=td_resume_mode;
     if(td.mode!=TD_WAIT&&td.mode!=TD_RIDE)td.mode=TD_ROAM;
@@ -138,6 +152,7 @@ void td_save(void) BANKED {
     for(i=0;i<sizeof(td);i++){ram[8+i]=src[i];crc=td_crc_byte(crc,src[i]);}
     ram[5]=crc;ram[6]=crc>>8;ram[7]=0;ram[0]=0x54;
     td_save_slot=slot;td_save_seq=ram[4];SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);td.mode=mode;
+    td.u=live_u;td.v=live_v;td.safe_u=live_safe_u;td.safe_v=live_safe_v;td.onfoot=live_onfoot;
 }
 static void td_migrate_old(td_state_t *dest){
     UBYTE *dst=(UBYTE*)dest;

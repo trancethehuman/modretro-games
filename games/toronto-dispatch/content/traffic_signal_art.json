@@ -1,0 +1,2639 @@
+{
+  "schema": 1,
+  "source": "create_signal_art.py",
+  "heads": [
+    {
+      "district": 0,
+      "junction": [
+        80,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        4
+      ],
+      "ns_cell": [
+        14,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        4
+      ],
+      "ns_cell": [
+        30,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        4
+      ],
+      "ns_cell": [
+        46,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        4
+      ],
+      "ns_cell": [
+        64,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        4
+      ],
+      "ns_cell": [
+        74,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        4
+      ],
+      "ns_cell": [
+        84,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        93,
+        4
+      ],
+      "ns_cell": [
+        94,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        4
+      ],
+      "ns_cell": [
+        106,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        944,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        4
+      ],
+      "ns_cell": [
+        122,
+        4
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        80,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        18
+      ],
+      "ns_cell": [
+        14,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        18
+      ],
+      "ns_cell": [
+        30,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        18
+      ],
+      "ns_cell": [
+        46,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        18
+      ],
+      "ns_cell": [
+        64,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        18
+      ],
+      "ns_cell": [
+        74,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        18
+      ],
+      "ns_cell": [
+        84,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        93,
+        18
+      ],
+      "ns_cell": [
+        94,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        18
+      ],
+      "ns_cell": [
+        106,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        944,
+        176
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        18
+      ],
+      "ns_cell": [
+        122,
+        18
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        80,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        32
+      ],
+      "ns_cell": [
+        14,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        32
+      ],
+      "ns_cell": [
+        30,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        32
+      ],
+      "ns_cell": [
+        46,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        32
+      ],
+      "ns_cell": [
+        64,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        32
+      ],
+      "ns_cell": [
+        74,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        32
+      ],
+      "ns_cell": [
+        84,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        93,
+        32
+      ],
+      "ns_cell": [
+        94,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        32
+      ],
+      "ns_cell": [
+        106,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        944,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        32
+      ],
+      "ns_cell": [
+        122,
+        32
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        80,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        46
+      ],
+      "ns_cell": [
+        14,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        46
+      ],
+      "ns_cell": [
+        30,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        46
+      ],
+      "ns_cell": [
+        46,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        46
+      ],
+      "ns_cell": [
+        64,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        46
+      ],
+      "ns_cell": [
+        74,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        46
+      ],
+      "ns_cell": [
+        84,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        93,
+        46
+      ],
+      "ns_cell": [
+        94,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        46
+      ],
+      "ns_cell": [
+        106,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        944,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        46
+      ],
+      "ns_cell": [
+        122,
+        46
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        80,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        62
+      ],
+      "ns_cell": [
+        14,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        62
+      ],
+      "ns_cell": [
+        30,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        62
+      ],
+      "ns_cell": [
+        46,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        62
+      ],
+      "ns_cell": [
+        64,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        62
+      ],
+      "ns_cell": [
+        74,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        62
+      ],
+      "ns_cell": [
+        84,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        93,
+        62
+      ],
+      "ns_cell": [
+        94,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        62
+      ],
+      "ns_cell": [
+        106,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        944,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        62
+      ],
+      "ns_cell": [
+        122,
+        62
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        80,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        76
+      ],
+      "ns_cell": [
+        14,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        76
+      ],
+      "ns_cell": [
+        30,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        76
+      ],
+      "ns_cell": [
+        46,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        76
+      ],
+      "ns_cell": [
+        64,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        76
+      ],
+      "ns_cell": [
+        74,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        76
+      ],
+      "ns_cell": [
+        84,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        86,
+        76
+      ],
+      "ns_cell": [
+        87,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        640
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        76
+      ],
+      "ns_cell": [
+        104,
+        76
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        80,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        13,
+        86
+      ],
+      "ns_cell": [
+        12,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        208,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        86
+      ],
+      "ns_cell": [
+        28,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        336,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        86
+      ],
+      "ns_cell": [
+        44,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        480,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        86
+      ],
+      "ns_cell": [
+        62,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        560,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        73,
+        86
+      ],
+      "ns_cell": [
+        72,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        83,
+        93
+      ],
+      "ns_cell": [
+        84,
+        93
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        93,
+        86
+      ],
+      "ns_cell": [
+        92,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        720
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        86
+      ],
+      "ns_cell": [
+        104,
+        86
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        640,
+        784
+      ],
+      "arms": 11,
+      "ew_cell": [
+        83,
+        94
+      ],
+      "ns_cell": [
+        84,
+        94
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        720,
+        784
+      ],
+      "arms": 11,
+      "ew_cell": [
+        93,
+        94
+      ],
+      "ns_cell": [
+        94,
+        94
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        816,
+        784
+      ],
+      "arms": 11,
+      "ew_cell": [
+        105,
+        94
+      ],
+      "ns_cell": [
+        106,
+        94
+      ]
+    },
+    {
+      "district": 0,
+      "junction": [
+        944,
+        784
+      ],
+      "arms": 11,
+      "ew_cell": [
+        121,
+        94
+      ],
+      "ns_cell": [
+        122,
+        94
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        912,
+        64
+      ],
+      "arms": 14,
+      "ew_cell": [
+        117,
+        4
+      ],
+      "ns_cell": [
+        118,
+        4
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        800,
+        112
+      ],
+      "arms": 13,
+      "ew_cell": [
+        103,
+        10
+      ],
+      "ns_cell": [
+        104,
+        10
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        384,
+        160
+      ],
+      "arms": 7,
+      "ew_cell": [
+        51,
+        16
+      ],
+      "ns_cell": [
+        52,
+        16
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        416,
+        160
+      ],
+      "arms": 14,
+      "ew_cell": [
+        55,
+        16
+      ],
+      "ns_cell": [
+        56,
+        16
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        416,
+        240
+      ],
+      "arms": 7,
+      "ew_cell": [
+        55,
+        26
+      ],
+      "ns_cell": [
+        56,
+        26
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        800,
+        288
+      ],
+      "arms": 7,
+      "ew_cell": [
+        103,
+        32
+      ],
+      "ns_cell": [
+        104,
+        32
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        912,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        117,
+        32
+      ],
+      "ns_cell": [
+        118,
+        32
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        416,
+        320
+      ],
+      "arms": 7,
+      "ew_cell": [
+        55,
+        36
+      ],
+      "ns_cell": [
+        54,
+        36
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        480,
+        320
+      ],
+      "arms": 11,
+      "ew_cell": [
+        63,
+        36
+      ],
+      "ns_cell": [
+        62,
+        36
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        544,
+        320
+      ],
+      "arms": 14,
+      "ew_cell": [
+        71,
+        36
+      ],
+      "ns_cell": [
+        72,
+        36
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        640,
+        320
+      ],
+      "arms": 14,
+      "ew_cell": [
+        83,
+        36
+      ],
+      "ns_cell": [
+        84,
+        36
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        800,
+        320
+      ],
+      "arms": 13,
+      "ew_cell": [
+        103,
+        36
+      ],
+      "ns_cell": [
+        104,
+        36
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        416,
+        352
+      ],
+      "arms": 13,
+      "ew_cell": [
+        55,
+        40
+      ],
+      "ns_cell": [
+        56,
+        40
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        800,
+        352
+      ],
+      "arms": 13,
+      "ew_cell": [
+        103,
+        40
+      ],
+      "ns_cell": [
+        104,
+        40
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        800,
+        400
+      ],
+      "arms": 7,
+      "ew_cell": [
+        103,
+        46
+      ],
+      "ns_cell": [
+        104,
+        46
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        912,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        117,
+        46
+      ],
+      "ns_cell": [
+        118,
+        46
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        800,
+        528
+      ],
+      "arms": 7,
+      "ew_cell": [
+        103,
+        62
+      ],
+      "ns_cell": [
+        104,
+        62
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        912,
+        528
+      ],
+      "arms": 11,
+      "ew_cell": [
+        117,
+        62
+      ],
+      "ns_cell": [
+        118,
+        62
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        704,
+        576
+      ],
+      "arms": 11,
+      "ew_cell": [
+        91,
+        68
+      ],
+      "ns_cell": [
+        92,
+        68
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        512,
+        608
+      ],
+      "arms": 7,
+      "ew_cell": [
+        67,
+        72
+      ],
+      "ns_cell": [
+        68,
+        72
+      ]
+    },
+    {
+      "district": 1,
+      "junction": [
+        640,
+        608
+      ],
+      "arms": 11,
+      "ew_cell": [
+        83,
+        72
+      ],
+      "ns_cell": [
+        82,
+        72
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        960,
+        96
+      ],
+      "arms": 14,
+      "ew_cell": [
+        123,
+        8
+      ],
+      "ns_cell": [
+        124,
+        8
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        432,
+        192
+      ],
+      "arms": 7,
+      "ew_cell": [
+        57,
+        20
+      ],
+      "ns_cell": [
+        58,
+        20
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        432,
+        224
+      ],
+      "arms": 13,
+      "ew_cell": [
+        57,
+        24
+      ],
+      "ns_cell": [
+        58,
+        24
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        944,
+        240
+      ],
+      "arms": 7,
+      "ew_cell": [
+        121,
+        26
+      ],
+      "ns_cell": [
+        122,
+        26
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        944,
+        272
+      ],
+      "arms": 13,
+      "ew_cell": [
+        121,
+        30
+      ],
+      "ns_cell": [
+        122,
+        30
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        432,
+        304
+      ],
+      "arms": 7,
+      "ew_cell": [
+        57,
+        34
+      ],
+      "ns_cell": [
+        58,
+        34
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        176,
+        352
+      ],
+      "arms": 11,
+      "ew_cell": [
+        25,
+        40
+      ],
+      "ns_cell": [
+        26,
+        40
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        256,
+        352
+      ],
+      "arms": 14,
+      "ew_cell": [
+        35,
+        40
+      ],
+      "ns_cell": [
+        36,
+        40
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        432,
+        352
+      ],
+      "arms": 13,
+      "ew_cell": [
+        57,
+        40
+      ],
+      "ns_cell": [
+        58,
+        40
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        944,
+        384
+      ],
+      "arms": 7,
+      "ew_cell": [
+        121,
+        44
+      ],
+      "ns_cell": [
+        122,
+        44
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        576,
+        640
+      ],
+      "arms": 7,
+      "ew_cell": [
+        75,
+        76
+      ],
+      "ns_cell": [
+        76,
+        76
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        736,
+        640
+      ],
+      "arms": 14,
+      "ew_cell": [
+        95,
+        76
+      ],
+      "ns_cell": [
+        96,
+        76
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        944,
+        640
+      ],
+      "arms": 11,
+      "ew_cell": [
+        121,
+        76
+      ],
+      "ns_cell": [
+        122,
+        76
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        384,
+        688
+      ],
+      "arms": 7,
+      "ew_cell": [
+        51,
+        82
+      ],
+      "ns_cell": [
+        52,
+        82
+      ]
+    },
+    {
+      "district": 2,
+      "junction": [
+        736,
+        832
+      ],
+      "arms": 11,
+      "ew_cell": [
+        95,
+        100
+      ],
+      "ns_cell": [
+        96,
+        100
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        224,
+        64
+      ],
+      "arms": 14,
+      "ew_cell": [
+        31,
+        4
+      ],
+      "ns_cell": [
+        32,
+        4
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        384,
+        64
+      ],
+      "arms": 14,
+      "ew_cell": [
+        51,
+        4
+      ],
+      "ns_cell": [
+        52,
+        4
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        544,
+        64
+      ],
+      "arms": 14,
+      "ew_cell": [
+        71,
+        4
+      ],
+      "ns_cell": [
+        72,
+        4
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        704,
+        64
+      ],
+      "arms": 14,
+      "ew_cell": [
+        91,
+        4
+      ],
+      "ns_cell": [
+        92,
+        4
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        944,
+        64
+      ],
+      "arms": 14,
+      "ew_cell": [
+        121,
+        4
+      ],
+      "ns_cell": [
+        122,
+        4
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        224,
+        208
+      ],
+      "arms": 7,
+      "ew_cell": [
+        31,
+        22
+      ],
+      "ns_cell": [
+        32,
+        22
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        384,
+        208
+      ],
+      "arms": 15,
+      "ew_cell": [
+        51,
+        22
+      ],
+      "ns_cell": [
+        52,
+        22
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        704,
+        256
+      ],
+      "arms": 15,
+      "ew_cell": [
+        91,
+        28
+      ],
+      "ns_cell": [
+        92,
+        28
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        816,
+        256
+      ],
+      "arms": 14,
+      "ew_cell": [
+        105,
+        28
+      ],
+      "ns_cell": [
+        106,
+        28
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        944,
+        256
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        28
+      ],
+      "ns_cell": [
+        122,
+        28
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        224,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        31,
+        32
+      ],
+      "ns_cell": [
+        32,
+        32
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        384,
+        288
+      ],
+      "arms": 15,
+      "ew_cell": [
+        51,
+        32
+      ],
+      "ns_cell": [
+        52,
+        32
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        544,
+        288
+      ],
+      "arms": 14,
+      "ew_cell": [
+        71,
+        32
+      ],
+      "ns_cell": [
+        72,
+        32
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        704,
+        368
+      ],
+      "arms": 15,
+      "ew_cell": [
+        91,
+        42
+      ],
+      "ns_cell": [
+        92,
+        42
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        816,
+        368
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        42
+      ],
+      "ns_cell": [
+        106,
+        42
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        944,
+        368
+      ],
+      "arms": 15,
+      "ew_cell": [
+        121,
+        42
+      ],
+      "ns_cell": [
+        122,
+        42
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        224,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        31,
+        46
+      ],
+      "ns_cell": [
+        32,
+        46
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        384,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        51,
+        46
+      ],
+      "ns_cell": [
+        52,
+        46
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        544,
+        400
+      ],
+      "arms": 15,
+      "ew_cell": [
+        71,
+        46
+      ],
+      "ns_cell": [
+        72,
+        46
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        704,
+        496
+      ],
+      "arms": 11,
+      "ew_cell": [
+        91,
+        58
+      ],
+      "ns_cell": [
+        92,
+        58
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        816,
+        496
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        58
+      ],
+      "ns_cell": [
+        106,
+        58
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        944,
+        496
+      ],
+      "arms": 11,
+      "ew_cell": [
+        121,
+        58
+      ],
+      "ns_cell": [
+        122,
+        58
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        224,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        31,
+        62
+      ],
+      "ns_cell": [
+        32,
+        62
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        384,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        51,
+        62
+      ],
+      "ns_cell": [
+        52,
+        62
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        544,
+        528
+      ],
+      "arms": 15,
+      "ew_cell": [
+        71,
+        62
+      ],
+      "ns_cell": [
+        72,
+        62
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        816,
+        656
+      ],
+      "arms": 15,
+      "ew_cell": [
+        105,
+        78
+      ],
+      "ns_cell": [
+        106,
+        78
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        384,
+        688
+      ],
+      "arms": 7,
+      "ew_cell": [
+        51,
+        82
+      ],
+      "ns_cell": [
+        52,
+        82
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        544,
+        688
+      ],
+      "arms": 11,
+      "ew_cell": [
+        71,
+        82
+      ],
+      "ns_cell": [
+        72,
+        82
+      ]
+    },
+    {
+      "district": 3,
+      "junction": [
+        224,
+        720
+      ],
+      "arms": 11,
+      "ew_cell": [
+        31,
+        86
+      ],
+      "ns_cell": [
+        32,
+        86
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        736,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        95,
+        4
+      ],
+      "ns_cell": [
+        96,
+        4
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        912,
+        64
+      ],
+      "arms": 15,
+      "ew_cell": [
+        117,
+        4
+      ],
+      "ns_cell": [
+        118,
+        4
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        192,
+        128
+      ],
+      "arms": 15,
+      "ew_cell": [
+        27,
+        12
+      ],
+      "ns_cell": [
+        28,
+        12
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        544,
+        128
+      ],
+      "arms": 14,
+      "ew_cell": [
+        71,
+        12
+      ],
+      "ns_cell": [
+        72,
+        12
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        544,
+        192
+      ],
+      "arms": 13,
+      "ew_cell": [
+        71,
+        20
+      ],
+      "ns_cell": [
+        72,
+        20
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        672,
+        224
+      ],
+      "arms": 14,
+      "ew_cell": [
+        87,
+        24
+      ],
+      "ns_cell": [
+        86,
+        24
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        736,
+        224
+      ],
+      "arms": 11,
+      "ew_cell": [
+        95,
+        24
+      ],
+      "ns_cell": [
+        96,
+        24
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        912,
+        224
+      ],
+      "arms": 13,
+      "ew_cell": [
+        117,
+        24
+      ],
+      "ns_cell": [
+        118,
+        24
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        544,
+        288
+      ],
+      "arms": 11,
+      "ew_cell": [
+        71,
+        32
+      ],
+      "ns_cell": [
+        72,
+        32
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        192,
+        352
+      ],
+      "arms": 7,
+      "ew_cell": [
+        27,
+        40
+      ],
+      "ns_cell": [
+        28,
+        40
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        272,
+        352
+      ],
+      "arms": 11,
+      "ew_cell": [
+        37,
+        40
+      ],
+      "ns_cell": [
+        38,
+        40
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        192,
+        576
+      ],
+      "arms": 13,
+      "ew_cell": [
+        27,
+        68
+      ],
+      "ns_cell": [
+        28,
+        68
+      ]
+    },
+    {
+      "district": 4,
+      "junction": [
+        352,
+        824
+      ],
+      "arms": 14,
+      "ew_cell": [
+        47,
+        99
+      ],
+      "ns_cell": [
+        48,
+        99
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        208,
+        160
+      ],
+      "arms": 14,
+      "ew_cell": [
+        29,
+        16
+      ],
+      "ns_cell": [
+        30,
+        16
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        336,
+        160
+      ],
+      "arms": 14,
+      "ew_cell": [
+        45,
+        16
+      ],
+      "ns_cell": [
+        46,
+        16
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        480,
+        160
+      ],
+      "arms": 14,
+      "ew_cell": [
+        63,
+        16
+      ],
+      "ns_cell": [
+        64,
+        16
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        640,
+        160
+      ],
+      "arms": 14,
+      "ew_cell": [
+        83,
+        16
+      ],
+      "ns_cell": [
+        84,
+        16
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        640,
+        280
+      ],
+      "arms": 7,
+      "ew_cell": [
+        83,
+        31
+      ],
+      "ns_cell": [
+        84,
+        31
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        640,
+        336
+      ],
+      "arms": 7,
+      "ew_cell": [
+        83,
+        38
+      ],
+      "ns_cell": [
+        84,
+        38
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        640,
+        432
+      ],
+      "arms": 7,
+      "ew_cell": [
+        83,
+        50
+      ],
+      "ns_cell": [
+        84,
+        50
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        208,
+        488
+      ],
+      "arms": 7,
+      "ew_cell": [
+        29,
+        57
+      ],
+      "ns_cell": [
+        30,
+        57
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        640,
+        552
+      ],
+      "arms": 7,
+      "ew_cell": [
+        83,
+        65
+      ],
+      "ns_cell": [
+        84,
+        65
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        208,
+        576
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        68
+      ],
+      "ns_cell": [
+        30,
+        68
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        336,
+        576
+      ],
+      "arms": 14,
+      "ew_cell": [
+        45,
+        68
+      ],
+      "ns_cell": [
+        46,
+        68
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        408,
+        680
+      ],
+      "arms": 7,
+      "ew_cell": [
+        54,
+        81
+      ],
+      "ns_cell": [
+        55,
+        81
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        480,
+        680
+      ],
+      "arms": 13,
+      "ew_cell": [
+        63,
+        81
+      ],
+      "ns_cell": [
+        62,
+        81
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        208,
+        768
+      ],
+      "arms": 15,
+      "ew_cell": [
+        29,
+        92
+      ],
+      "ns_cell": [
+        30,
+        92
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        280,
+        768
+      ],
+      "arms": 14,
+      "ew_cell": [
+        38,
+        92
+      ],
+      "ns_cell": [
+        39,
+        92
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        336,
+        768
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        92
+      ],
+      "ns_cell": [
+        46,
+        92
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        480,
+        784
+      ],
+      "arms": 15,
+      "ew_cell": [
+        63,
+        94
+      ],
+      "ns_cell": [
+        64,
+        94
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        640,
+        784
+      ],
+      "arms": 13,
+      "ew_cell": [
+        83,
+        94
+      ],
+      "ns_cell": [
+        84,
+        94
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        280,
+        848
+      ],
+      "arms": 7,
+      "ew_cell": [
+        38,
+        102
+      ],
+      "ns_cell": [
+        39,
+        102
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        336,
+        848
+      ],
+      "arms": 15,
+      "ew_cell": [
+        45,
+        102
+      ],
+      "ns_cell": [
+        46,
+        102
+      ]
+    },
+    {
+      "district": 6,
+      "junction": [
+        480,
+        848
+      ],
+      "arms": 13,
+      "ew_cell": [
+        63,
+        102
+      ],
+      "ns_cell": [
+        64,
+        102
+      ]
+    }
+  ],
+  "reserved_tiles": [
+    47,
+    48
+  ],
+  "red_palette": 3,
+  "green_palette": 6,
+  "phase_seconds": 12,
+  "ew_green_seconds": 7,
+  "new_oam_objects": 0
+}

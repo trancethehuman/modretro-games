@@ -28,4 +28,7 @@ UBYTE td_world_traffic_init(UBYTE district,UWORD *u,UWORD *v,UBYTE *legs,
                            td_traffic_sample_t *samples) BANKED;
 UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,
                               td_traffic_sample_t *samples) BANKED;
+/* One authored route leg, for bounded phase-offset extra civilian cars. */
+UBYTE td_world_traffic_one(UBYTE district,UBYTE route,UBYTE leg,
+                         td_traffic_sample_t *sample) BANKED;
 #endif

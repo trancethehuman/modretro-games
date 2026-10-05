@@ -9,6 +9,7 @@
 #include "police_fixture.h"
 
 UBYTE joy,joy_pressed,tile_hit_x,tile_hit_y;
+far_ptr_t current_scene;
 static UBYTE loaded,grid[128*122];
 static unsigned checks,failures,queries;
 static void expect(int truth,const char *message){
@@ -275,9 +276,10 @@ static void test_invalid_and_obstructions(void){
     }
 }
 static void test_caller_admission(void){
-    load(0);td_police_plan_t plan={0,0,0,0};UWORD us[6],vs[6];
-    actor_t people[6];memset(people,0,sizeof(people));
-    for(unsigned i=0;i<6;i++){us[i]=(24+i*40)*16;vs[i]=720*16;people[i].flags=ACTOR_FLAG_HIDDEN;}
+    load(0);td_police_plan_t plan={0,0,0,0};UWORD us[TD_TRAFFIC_SLOTS],vs[TD_TRAFFIC_SLOTS];
+    actor_t people[TD_TRAFFIC_PEOPLE];memset(people,0,sizeof(people));
+    for(unsigned i=0;i<TD_TRAFFIC_SLOTS;i++){us[i]=(24+i*40)*16;vs[i]=720*16;}
+    for(unsigned i=0;i<TD_TRAFFIC_PEOPLE;i++)people[i].flags=ACTOR_FLAG_HIDDEN;
     us[2]=184*16;vs[2]=72*16;
     td_traffic_context_t ctx={us,vs,people,NULL,NULL,0,0,0,4};
     expect(td_police_plan(0,3,us[2],vs[2],480*16,72*16,0,&plan)&&plan.heading==0,
@@ -292,6 +294,12 @@ static void test_caller_admission(void){
     us[0]=24*16;vs[0]=720*16;people[0].flags=0;people[0].pos.x=198*32;people[0].pos.y=72*32;
     expect(!td_traffic_admit(&ctx,0,0,2,us[2],vs[2],us[2]+128,vs[2],1),
            "pursuing police still respects a visible pedestrian footprint");
+    people[0].flags=ACTOR_FLAG_HIDDEN;us[7]=198*16;vs[7]=72*16;
+    expect(!td_traffic_admit(&ctx,0,0,2,us[2],vs[2],us[2]+128,vs[2],1),
+           "pursuing police also queues behind the eighth live fleet body");
+    us[7]=304*16;vs[7]=720*16;people[7].flags=0;people[7].pos.x=198*32;people[7].pos.y=72*32;
+    expect(!td_traffic_admit(&ctx,0,0,2,us[2],vs[2],us[2]+128,vs[2],1),
+           "pursuing police respects the eighth visible pedestrian as well");
 }
 int main(void){
     expect(sizeof(td_police_plan_t)==6,"the caller-owned public waypoint remains exactly six bytes");

@@ -1,12 +1,12 @@
 # Load Toronto Dispatch onto your Chromatic
 
-Select the tested local update, **`toronto-dispatch-hardware-feedback.gbc`**, **1,048,576 bytes**, SHA-256 **`9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes, with slower driving/trams, four smaller pedestrian types, impact animations, simpler menus and richer scenery. The supported target is your **writable ModRetro DevDay cartridge**. This is a CGB-only homebrew ROM.
+Select the tested local update, **`toronto-dispatch-sandbox-stable.gbc`**, **1,048,576 bytes**, SHA-256 **`096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`**. It contains seven compressed districts, 104 contracts, 64 service points and save v10 / 58 bytes, with walking/driving, scheduled transit, controllable boats, playable shops, vehicle theft and police attention. The supported target is your **writable ModRetro DevDay cartridge**. This is a CGB-only homebrew ROM.
 
-Use **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`**, described in step 2. Official compilation and repository checks pass. The [fresh native run](NATIVE_HARDWARE_FEEDBACK.json) completes the first delivery at full condition and checks cardinal driving, walking/entry, airborne/prone civilians, menu navigation/map freeze, one Queen ride, tram injury/recovery and saved in-worker reset. [Build identity](BUILD.md), [update details](HARDWARE_FEEDBACK_2026_10_04.md) and [test scopes](../TESTING.md) preserve earlier results separately.
+Use the inspected local ROM named in step 2. Official compilation, four compiled guards and full `make check` pass. The [fresh native run](NATIVE_SANDBOX_STABLE.json) includes a full tram-cycle idle check, Settings/map freeze, a delivery, interrupted-entry save/reset, boat driving/docking, grocery entry/return, vehicle theft and sampled police pursuit. [Build identity](BUILD.md), [memory evidence](SANDBOX_STABLE_OPTIMIZATION.json) and [test scopes](../TESTING.md) preserve earlier results separately. A matching source-pinned package has not yet been recorded here.
 
-This update still needs full 104-contract play, measured two-hour human enjoyment, slower-speed balance and physical checks. Motorcycle74 previously had a one-second deadline margin; all deadlines remain unchanged. Emulator reset proves committed in-worker progress, rather than physical battery persistence. The supported prior 8be1 write succeeded on 2026-10-04 and the user confirmed cold boot, buttons and sampled gameplay; see the [installation record](CARTRIDGE_INSTALL_2026_10_04.json). After the separately retained [first failure](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json), the [explicitly requested 9c155 retry](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed with vendor-reported success and a closed writer. No complete read-back digest was supplied. The user confirmed this new ROM cold-boots with USB disconnected and responds to physical buttons. Extended physical gameplay, flicker, handling, saving and audio remain pending.
+This update still needs its own cartridge write and cold boot, full 104-contract play, measured two-hour human enjoyment, broader performance/balance and physical checks. Motorcycle 74 previously had a one-second deadline margin; all deadlines remain unchanged. Emulator reset proves committed in-worker progress, rather than physical battery persistence. The last physically confirmed baseline is `toronto-dispatch-hardware-feedback.gbc`, SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. After the separately retained [first failure](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_2026_10_04.json), the [explicitly requested 9c155 retry](CARTRIDGE_UPDATE_HARDWARE_FEEDBACK_RETRY_2026_10_04.json) completed with vendor-reported success and a closed writer. No complete read-back digest was supplied. The user confirmed that baseline cold-boots with USB disconnected and responds to physical buttons. Its earlier 8be1 [installation](CARTRIDGE_INSTALL_2026_10_04.json) and all historical packages remain separate.
 
-A focused host test reproduces blocked walking after saving/resetting during car entry. If this occurs beside your parked vehicle, press A to finish entering and recover; avoid saving mid-entry until the repair and native test are complete. This is host reproduction, separate from the current native playtest.
+The selected ROM repairs the interrupted-entry save problem. Saving during entry commits the completed driver's safe position while the live animation continues; the native reset check restores completed entry and career progress. Physical power-off persistence still needs testing. The earlier `668727…` sandbox-polish candidate failed native state-corruption checks and must not be loaded; its [diagnostic](NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains preserved.
 
 ## 1. Prepare the computer and console
 
@@ -22,26 +22,24 @@ The updater activates the computer and handles console firmware. The game itself
 The editable project is `games/toronto-dispatch/project/project.gbsproj`. The selected loading ROM is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-dispatch-hardware-feedback.gbc
+games/toronto-dispatch/project/build/toronto-dispatch-sandbox-stable.gbc
 ```
 
 Generated ROMs are excluded from Git. Any later source change needs a distinct output with its own matching debug artifacts, inspection and native record; do not reuse this measured candidate hash. Official downloadable bundles include `SHA256SUMS`, instructions and notices. Do not rename a browser export or `.gbsproj` file to `.gbc`.
 
-The loading bundle filename is **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`**. Extract it and verify `SHA256SUMS` against the selected 9c155 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO identifies the matching committed source; the bundled guide stays frozen at that revision. Preserve the prior 8be1 driving-only ROM file/reviewed ZIP and all earlier packages unchanged. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
-
-The ZIP is **155,795 bytes**, SHA-256 **`9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570`**, frozen at matching source **`538e504453d009ec6246ceca80e8639776ba91d9`**. Its [independent package check](HARDWARE_FEEDBACK_PACKAGE.json) passes. This current repository guide includes later package metadata; the bundled guide remains frozen at its source commit.
+For a later reviewed bundle, verify its `SHA256SUMS` against the selected 096862 ROM digest above. Retain `BUILDINFO.json`, the loading guide, licence and notices alongside the game. BUILDINFO must identify the matching committed source; the bundled guide stays frozen at that revision. Preserve the 9c155 hardware-feedback ROM/reviewed ZIP, prior 8be1 files and all earlier packages unchanged. Generated ROMs and ZIPs remain local unless a release explicitly publishes them.
 
 For a source build, ask Codex:
 
-> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-hardware-feedback.gbc`, the previously installed `toronto-dispatch-driving-only.gbc` file and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
+> Use the ModRetro Chromatic plugin. Select Toronto Dispatch and build current source to a new distinct filename under `build/` with matching debug artifacts, preserving measured `toronto-dispatch-sandbox-stable.gbc`, the physically confirmed `toronto-dispatch-hardware-feedback.gbc` and all older files. Run the memory and compiled resource/frame/isolation/progress-table guards, inspect its exact path/size/SHA-256 and test that same ROM's quest previews/payment, street/courier/transit/save behavior and pacing before preparing installation. Retain older measured binaries separately.
 
 Use `rom_inspect` on the final file. Match its digest to the tested build in [TESTING.md](../TESTING.md) or the downloaded release's checksum. A new build can have a different hash: compare it to its own new inspection/playtest rather than silently adopting an old checksum. The current engine uses MBC5 and battery SRAM; ROM header validity alone does not prove that a cartridge supports it.
 
 Optional read-only checks for the expanded candidate from the repository root on macOS (substitute the exact new filename for a new build):
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-hardware-feedback.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-dispatch-hardware-feedback.gbc
+shasum -a 256 games/toronto-dispatch/project/build/toronto-dispatch-sandbox-stable.gbc
+wc -c < games/toronto-dispatch/project/build/toronto-dispatch-sandbox-stable.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:
@@ -82,8 +80,9 @@ After a successful write, power off and disconnect USB, then power on with the s
 | Northern district | Follow Spadina or Yonge north of Bloor. Complete three starter jobs to unlock chapter 13's Baldwin Book Box, collect at Union and park below Baldwin Steps; walk the public stair route to deliver |
 | Northern train stops | Walk to Summerhill or St Clair, press B, choose the other stop and board with A. Each trip costs $3; the parked car stays at its original location |
 | Street consequences | Human impacts show non-graphic flight and prone bodies until district loading, with condition loss after pickup, $20/$40/$60 escalation and H1/H2/H3 pursuit. Capture clears attention and clamps its $25/$100/$225 fine at available cash. A car blocking a lane makes NPCs wait; move it clear and check police return |
-| Saving | Use the pause menu's Save action, record cash and completed count, power off/on and confirm both persist |
-| Audio | Start → Audio, then A cycles music + effects, effects only and silent; B returns. Check the city score, engine and braking sounds, short delivery/transit cues, and silence in silent mode. Menu/world pause stops music and engine; short interface/result cues may finish. The mode defaults on each boot |
+| Boats and shops | On foot, A boards near a Core/Port Lands dock; A drives, B brakes/reverses and Down+A exits when stopped at a dock. A at a marked doorway enters a shop; A talks, B or the bottom door leaves |
+| Saving | While roaming, use Start → Save Game → A, record cash and completed count, power off/on and confirm both persist. Transit saves automatically and shows Save After Trip in the menu |
+| Audio | Start → Settings → Sound; A cycles Music + Effects, Effects Only and All Sound Off. B returns to the main menu. Check the city score, engine/braking sounds, delivery/transit cues and silence. Menu/world pause stops music and engine; short interface/result cues may finish. Sound resets at boot |
 | Readability/performance | Check text, building occlusion, traffic and pedestrians for flicker, slowdown or delayed input |
 
 Keep a note of the ROM SHA-256 and any problem's location/action. Save v10 preserves the old 96 contract IDs, appends eight North contracts and explicitly imports valid v9 and older supported records through documented migration. Host and compiled checks cover older saves; native old-save imports and physical migration are unverified. See BUILD/TESTING. Emulator reset persistence does not prove power-off persistence on a physical cartridge.
@@ -98,9 +97,11 @@ Keep a note of the ROM SHA-256 and any problem's location/action. Save v10 prese
 
 A host-streamed `play` demo is optional and never writes the cartridge. It can help assess the screen/buttons, but it cannot replace the cold-boot and save checks above.
 
-Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected hardware-feedback ROM was inspected on 2026-10-04. No activation code, device token or private preview URL is required in these instructions.
+Device procedure reviewed against installed plugin 1.0.33 deployment documentation; the selected sandbox-stable ROM was inspected and natively tested on 2026-10-05. No activation code, device token or private preview URL is required in these instructions.
 
 ## Evidence and older builds
+
+The physically confirmed 9c155 baseline's **`project/build/toronto-dispatch-hardware-feedback-reviewed.zip`** remains **155,795 bytes**, SHA-256 **`9dd43b59841a2bc5dba399ba88722fabddff1f835f05d32d0048e13628d9b570`**, pinned to source **`538e504453d009ec6246ceca80e8639776ba91d9`**. Its [independent package check](HARDWARE_FEEDBACK_PACKAGE.json), frozen guide and installation evidence describe that baseline rather than the selected sandbox-stable ROM.
 
 The retained installed 8be1 driving-only build's [focused audit](DRIVING_ONLY_BUILD_AUDIT.json) authenticates 206 inputs with only one same-length UI literal changed from 7ab. Its [fresh scoped replay](NATIVE_DRIVING_ONLY_WARNING.json) completes four unique deliveries, verifies both freight stages' visible warning, required-truck handoffs, funded H3 fine and later committed in-worker reset. UI/helper/gameplay banks have 150/1/10 free bytes, reserve 1,096, deepest stack unmeasured. Source inspection shows the custom Toronto bank 3 journal does not use the changed stock-save signature; native cross-ROM import and physical save persistence remain untested. Earlier supported discovery on 2026-10-04 found zero connected Chromatics. The later [installation record](CARTRIDGE_INSTALL_2026_10_04.json) reports a successful write and user-confirmed cartridge boot/button response.
 
@@ -115,7 +116,7 @@ The historical menu-input build's [resource audit](MENU_INPUT_BUILD_AUDIT.json) 
 
 ### Historical initial North build
 
-The old `toronto-dispatch-north-initial.zip` remains unchanged: 138,530 bytes, SHA-256 `c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac`, ROM `22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95`, source `8290eefba2c909ef004970669b05588c471b2d10`. Its [package audit](NORTH_PACKAGE_AUDIT.json) passes 1,235 checks. This older build has the reproduced Pause B-input leak; select the current 9c155 hardware-feedback update above for current playtesting. Its bundled guide and same-ROM evidence retain their original identities.
+The old `toronto-dispatch-north-initial.zip` remains unchanged: 138,530 bytes, SHA-256 `c721f8597f8b50f7bcff2fc61ca1a0dedef53004499b1588182ec4e3e4bb49ac`, ROM `22157d720c8746118da93bb7c3027ef24693a2e4697118e70e5a95fecddf0d95`, source `8290eefba2c909ef004970669b05588c471b2d10`. Its [package audit](NORTH_PACKAGE_AUDIT.json) passes 1,235 checks. This older build has the reproduced Pause B-input leak; select the current sandbox-stable update above for current playtesting. Its bundled guide and same-ROM evidence retain their original identities.
 
 The historical `22157…` North build's [compiled audit](NORTH_BUILD_AUDIT.json) verifies 47,502 assertions and 203 frozen project inputs. Its [fresh record](NATIVE_NORTH_FRESH.json) completes three Core jobs and loads North while carrying job 96. Its [separately recorded continuation](NATIVE_NORTH_CONTINUED.json) completes the Baldwin stairs delivery, verifies two train trips and map/reset/car retention, and exercises reciprocal northern seams. Progress imported from the fresh same-ROM checkpoint is disclosed. Independent fresh and continued reviews pass 37,871 and 55,785 evidence checks, respectively; the continuation also passes 359 documentation/link/privacy checks. A [third scoped record](NATIVE_NORTH_SUPPLEMENT.json) imports those four genuine completions and adds only jobs 3 and 6: undamaged truck pay 157 and condition-80 signed-return pay 120, ending cash 455 / done 6 after $20/$40/$60 pedestrian fines and a $225 H3 police fine. Its independent evidence review passes 31,888 checks. It adds no other northern job or measured campaign-duration proof. Wider regional jobs and performance remain pending. Main code bank 2 is full, UI bank 1 has three bytes free and save bank 29 has fifteen; further code changes require a fresh capacity review. The linked 1,096-byte static reserve does not measure deepest stack use.
 

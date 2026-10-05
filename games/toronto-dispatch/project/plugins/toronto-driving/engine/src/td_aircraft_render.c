@@ -12,10 +12,10 @@
 #include "ui.h"
 #include "compat.h"
 
-/* Gameplay's bank-1 BKG allocation is at most 16 tiles. IDs 32..46 are
+/* Gameplay's bank-1 BKG allocation is at most64 tiles. IDs64..78 are
  * signed BKG tiles, physically separate from bank-1 OBJ tiles 0..127.
  * The atlas owns these IDs only while flybys are suppressed/restored. */
-#define TD_AIRCRAFT_SCRATCH_FIRST 32
+#define TD_AIRCRAFT_SCRATCH_FIRST 64
 #define TD_AIRCRAFT_PATCHES 15
 #define TD_AIRCRAFT_OBJECTS 4
 #define TD_AIRCRAFT_SHADOWS 2
@@ -42,6 +42,13 @@ static UBYTE td_aircraft_reverse(UBYTE value){
     value=((value&0x55)<<1)|((value>>1)&0x55);
     value=((value&0x33)<<2)|((value>>2)&0x33);
     return (value<<4)|(value>>4);
+}
+
+UBYTE td_aircraft_render_exposed(UWORD u,UWORD v) BANKED {
+    UWORD x=u>>7,y=v>>7;
+    if(!td_aircraft_bound||!td_aircraft_same_scene()||x>=image_tile_width||y>=image_tile_height)return FALSE;
+    if(!image_attr_bank||!image_attr_ptr)return TRUE;
+    return !(ReadBankedUBYTE(image_attr_ptr+y*image_tile_width+x,image_attr_bank)&0x80);
 }
 
 void td_aircraft_render_reset(void) BANKED {
@@ -127,13 +134,13 @@ static UBYTE td_aircraft_cache_pose(UBYTE frame,td_aircraft_object_t *objects,
 }
 
 static UBYTE td_aircraft_cache(UBYTE frame){
-    UBYTE base=frame<4?frame:4+((frame-4)&3);
-    if(frame>=12)return FALSE;
+    UBYTE base=frame<4||frame>=14?frame:4+((frame-4)&3);
+    if(frame==12||frame==13||frame>=18)return FALSE;
     if(td_aircraft_cache_ready&&td_aircraft_cache_frame==base)return TRUE;
     td_aircraft_cache_ready=0;
     if(!td_aircraft_cache_pose(base,td_aircraft_poses[0].objects,4,td_aircraft_poses[0].masks)||
-       (base>=4&&!td_aircraft_cache_pose(base+4,td_aircraft_poses[1].objects,4,td_aircraft_poses[1].masks))||
-       !td_aircraft_cache_pose(12,td_aircraft_shadow,2,NULL))return FALSE;
+       (base>=4&&base<8&&!td_aircraft_cache_pose(base+4,td_aircraft_poses[1].objects,4,td_aircraft_poses[1].masks))||
+       (base<14&&!td_aircraft_cache_pose(12,td_aircraft_shadow,2,NULL)))return FALSE;
     td_aircraft_cache_frame=base;td_aircraft_cache_ready=1;return TRUE;
 }
 
@@ -294,11 +301,19 @@ void td_aircraft_render(void) BANKED {
        (td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE))return;
     frame=td_aircraft_frame();
     if(!td_aircraft_cache(frame))return;
-    pose=&td_aircraft_poses[frame>=8?1:0];
+    pose=&td_aircraft_poses[frame>=8&&frame<12?1:0];
     x=(td_aircraft.u>>4)-draw_scroll_x;y=(td_aircraft.v>>4)-draw_scroll_y;
     td_aircraft_objects(pose->objects,objects,TD_AIRCRAFT_OBJECTS,x,y);
     if(!td_aircraft_clear_window(objects,TD_AIRCRAFT_OBJECTS))return;
     ground=allocated_hardware_sprites;oam=td_aircraft_oam();
+    if(frame>=14){
+        /* A larger jet is represented by its shadow on the streets below.
+         * Append all four cells atomically behind people/vehicles; authored
+         * roof priority hides it without reading or punching any BKG tile. */
+        if(!td_aircraft_capacity(objects,TD_AIRCRAFT_OBJECTS,oam,ground))return;
+        for(i=0;i<TD_AIRCRAFT_OBJECTS;i++)oam[ground+i]=objects[i];
+        allocated_hardware_sprites=ground+TD_AIRCRAFT_OBJECTS;return;
+    }
     td_aircraft_objects(td_aircraft_shadow,objects+TD_AIRCRAFT_OBJECTS,TD_AIRCRAFT_SHADOWS,x+8,y+24);
     /* Most flybys fit with their shadow. Check that combined occupancy once;
      * only crowded/window-limited frames need the aircraft-only fallback. */

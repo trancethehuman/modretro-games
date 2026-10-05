@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "e2d8b145-697e-57e8-97e8-c3517f6abbc0",
+  "_index": 8,
+  "type": "TORONTO_SHOP",
+  "name": "Toronto Shop grocery",
+  "symbol": "scene_toronto_shop_grocery",
+  "x": 480,
+  "y": 1344,
+  "width": 20,
+  "height": 18,
+  "backgroundId": "ef12ddb3-2834-5eae-99f5-ed16f9bfa1c1",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "10c26dfc-656e-513f-8e7b-0b23cfe0fa5e",
+    "895b5791-cab0-5e02-bbab-4486f6a2c7ca",
+    "a836a2bb-8434-583e-a9d0-7b7d68e058e5",
+    "6973f5bd-54db-5433-8457-5ffa542510b9",
+    "31152bcc-b039-5ab5-a6a3-6e3666f9390d",
+    "cb66440b-a024-5c73-89c9-3eb74648aab2",
+    "f0854ef8-e994-56e6-9bf7-5b63d34d3a1b"
+  ],
+  "spritePaletteIds": [
+    "",
+    "97eb7488-7e5a-5ad1-939c-19eec7b68a6e",
+    "c53b8aee-f40b-51fa-a724-cb0cb0997699",
+    "a6a78a31-6a21-5261-9022-975433921aef",
+    "de235d6b-c384-5092-90ce-ce38190279f5",
+    "8393d91e-46ef-5689-86db-e29b7050867c",
+    "04b8f44f-160e-57b8-a478-32eb6fe45fbf",
+    "4f09c0e2-01e7-57a7-9868-ffdc3d84cc79"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0f51+1012+0f2+10!0f5+10!0f4+10!0f5+10!0f2+10!0f5+10!0f4+10!0f5+10!0f2+10!0f5+106+0f5+10!0f2+1012+0f2+1012+0f2+102+0f4+106+0f4+102+0f2+102+0f4+106+0f4+102+0f2+102+0f4+106+0f4+102+0f2+102+0f4+106+0f4+102+0f2+1012+0f2+1012+0f2+1012+0f15+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

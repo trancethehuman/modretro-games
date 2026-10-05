@@ -9,4 +9,6 @@ void td_aircraft_render_bind(void) BANKED;
 void td_aircraft_render_restore(void) BANKED;
 /* Called after ground actors have populated the current shadow OAM. */
 void td_aircraft_render(void) BANKED;
+/* Full authored world attribute map, independent of scrolling/overlayVRAM. */
+UBYTE td_aircraft_render_exposed(UWORD u,UWORD v) BANKED;
 #endif

@@ -87,7 +87,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="toronto-police-tests-") as directory:
         work = Path(directory)
         shutil.copyfile(ROOT / "tests/engine/gbvm_stubs.h", work / "gbvm_stubs.h")
-        for name in ("actor", "bankdata", "input"):
+        for name in ("actor", "bankdata", "input", "data_manager"):
             (work / f"{name}.h").write_text('#include "gbvm_stubs.h"\n')
         (work / "collision.h").write_text('#include "gbvm_stubs.h"\n'
             'extern UBYTE tile_hit_x,tile_hit_y;\n'
@@ -98,7 +98,7 @@ def main():
         (work / "police_fixture.h").write_text(fixture)
         binary = work / "police-checks"
         subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
-                        "-Wno-unknown-pragmas", "-fsanitize=address,undefined",
+                    "-Wno-unknown-pragmas", "-fsanitize=address,undefined", "-DACTOR_H",
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(ROOT / "tests/engine/police_harness.c"),
                         str(Path(sys.argv[sys.argv.index("--source")+1]) if "--source" in sys.argv else ENGINE / "src/td_police.c"),

@@ -1,12 +1,14 @@
 """Pin saved campaign identities while relocating six Island endpoints.
 
-Only u/v/district may change, and only between the two explicit triples below.
+Only six u/v/district triples and the separate reviewed stop18 display name may
+normalize for historical checks. The display exception never moves a stop.
 Native tables must separately match current source; historical normalization is
 solely for old-prefix hashes, never a substitute for current geometry checks.
 """
 import hashlib
 import json
 from pathlib import Path
+from stop_names import historical_name
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "content/districts/island_campaign_v8.json"
@@ -42,7 +44,7 @@ def frozen_campaign():
 
 def historical_stop(stop):
     """Return a copy with only an allowed Island geometry restored to v8."""
-    result = dict(stop)
+    result = historical_name(stop)
     index = stop["id"]
     if index in ISLAND_IDS:
         geometry = (stop["u"], stop["v"], stop.get("district", 0))

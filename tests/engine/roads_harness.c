@@ -6,6 +6,7 @@
 #include "roads_fixture.h"
 
 UBYTE joy,joy_pressed,tile_hit_x,tile_hit_y;
+far_ptr_t current_scene;
 static UBYTE grid[128*122],current_bank=13,collision_bank=7;
 static unsigned checks,failures,row_queries,column_queries,point_queries,bank_switches;
 static void expect(int truth,const char *message){

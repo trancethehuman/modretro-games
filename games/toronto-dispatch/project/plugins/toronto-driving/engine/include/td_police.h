@@ -19,4 +19,6 @@ typedef struct { UWORD u,v; UBYTE heading,valid; } td_police_plan_t;
  * courier and future tram sweeps, and must obey red lights. */
 UBYTE td_police_plan(UBYTE district,UBYTE wanted,UWORD u,UWORD v,
     UWORD target_u,UWORD target_v,UBYTE heading,td_police_plan_t *out) BANKED;
+/* Actual loaded road patrol plus visible aerial pursuit; no saved state. */
+UBYTE td_police_observed(void) BANKED;
 #endif

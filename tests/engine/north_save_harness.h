@@ -12,7 +12,7 @@ static UBYTE north_old_point(unsigned u,unsigned v){
 static UBYTE north_old_body(unsigned u,unsigned v){
     if(u<8||v<8||u>1016||v>968)return 0;
     for(unsigned y=(v-5)/8;y<=(v+5)/8;y++)for(unsigned x=(u-5)/8;x<=(u+5)/8;x++)
-        if(td_fixture_north_core_old[y*128+x])return 0;
+        if(td_fixture_north_core_old[y*128+x]&15)return 0;
     return 1;
 }
 static void test_north_old_field_bounds(void){
@@ -58,7 +58,7 @@ static void test_north_historical_core_overlay(void){
         expect((td_district_walkable(0,u,v)&&td_north_legacy_clear(u,v,0))==north_old_point(u,v),
                "point overlay matches actual frozen old Core ground, not expanded foot-body semantics");
         if(v>=8)expect((td_district_drivable(0,u,v)&&td_north_legacy_clear(u,v,5))==north_old_body(u,v),
-               "old half5 full-body acceptance matches every touched historical tile at borders");
+               "saved half5 body respects every frozen historical solid tile while accepted player sidewalks remain driveable");
     }
     for(unsigned x=0;x<128;x++)for(unsigned y=0;y<3;y++){
         if(!((x>=38&&x<=45)||(x>=76&&x<=83)))continue;

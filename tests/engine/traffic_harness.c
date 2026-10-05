@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 #include "td_traffic.h"
@@ -8,8 +9,8 @@
 #include "traffic_fixture.h"
 
 static unsigned checks,failures;
-static UWORD us[6],vs[6];
-static actor_t people[6];
+static UWORD us[TD_TRAFFIC_SLOTS],vs[TD_TRAFFIC_SLOTS];
+static actor_t people[TD_TRAFFIC_PEOPLE];
 static td_traffic_context_t ctx;
 static void expect(int ok,const char *message){
     checks++;if(!ok){if(failures<15)fprintf(stderr,"FAIL: %s\n",message);failures++;}
@@ -19,23 +20,74 @@ static void expect(int ok,const char *message){
  * harnesses exercise their real implementations; here we inspect delegation
  * units, complete swept extents, short-circuit order and commit ownership. */
 typedef struct { UWORD old_u,old_v,u,v;UBYTE half,district; } guard_call_t;
-static guard_call_t road_call,tram_call;
+static guard_call_t tram_call;
+typedef struct { UBYTE mask,axis,fixed,first,last; } road_range_t;
+static road_range_t road_ranges[128];
+UBYTE tile_hit_x,tile_hit_y;
+static unsigned road_wrapper_calls;
 static unsigned road_calls,tram_calls,guard_order,road_order,tram_order;
-static UBYTE guard_loaded,road_solid,tram_body;
+static UBYTE guard_loaded,road_solid,tram_body,road_native;
 static int solid_left,solid_right,solid_top,solid_bottom;
 static int tram_left,tram_right,tram_top,tram_bottom;
 static void guard_reset(UBYTE district){
     road_calls=tram_calls=guard_order=road_order=tram_order=0;
-    guard_loaded=district;road_solid=tram_body=0;
-    memset(&road_call,0,sizeof(road_call));memset(&tram_call,0,sizeof(tram_call));
+    guard_loaded=district;road_solid=tram_body=road_native=0;road_wrapper_calls=0;
+    tile_hit_x=87;tile_hit_y=146;
+    memset(road_ranges,0,sizeof(road_ranges));memset(&tram_call,0,sizeof(tram_call));
 }
+
+/* Real fixed-bank range contract: each visited tile sees every solid bit;
+ * a hit writes engine scratch coordinates, which the road query must restore.
+ * Keep a trace so the new path can be compared with independent pixel-domain
+ * tile bounds and with the previous actual traffic source, not a forced flag. */
+static UBYTE road_range(UBYTE mask,UBYTE axis,UBYTE fixed,UBYTE first,UBYTE last){
+    expect(road_calls<128&&first<=last&&last<=(axis?122:128)&&fixed<=(axis?128:122),
+           "terrain ranges stay within the real loaded collision grid");
+    if(road_calls<128)road_ranges[road_calls]=(road_range_t){mask,axis,fixed,first,last};
+    road_calls++;road_order=++guard_order;
+    for(unsigned moving=first;moving<=last;moving++){
+        unsigned x=axis?fixed:moving,y=axis?moving:fixed;
+        tile_hit_x=x;tile_hit_y=y;
+        if(x>=128||y>=122)return mask&15;
+        if(road_native&&(oracle_road_grids[guard_loaded][y*128+x]&mask))return oracle_road_grids[guard_loaded][y*128+x];
+        if(road_solid&&x>=(unsigned)solid_left&&x<=(unsigned)solid_right&&
+           y>=(unsigned)solid_top&&y<=(unsigned)solid_bottom){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+UBYTE tile_col_test_range_x(UBYTE mask,UBYTE row,UBYTE first,UBYTE last){return road_range(mask,0,row,first,last);}
+UBYTE tile_col_test_range_y(UBYTE mask,UBYTE column,UBYTE first,UBYTE last){return road_range(mask,1,column,first,last);}
+/* Retained pixel-domain reference for the pre-refactor source comparison.
+ * It intentionally derives its rectangle from truncated pixels, separately
+ * from the production traffic helper's already validated Q4 union. */
 UBYTE td_road_sweep(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
-    road_calls++;road_order=++guard_order;road_call=(guard_call_t){old_u,old_v,u,v,half,guard_loaded};
+    road_wrapper_calls++;
     if(!half||half>8||(old_u!=u&&old_v!=v)||old_u<8||u<8||old_v<8||v<8||
        old_u>1016||u>1016||old_v>968||v>968)return FALSE;
-    int left=((old_u<u?old_u:u)-half)/8,right=((old_u>u?old_u:u)+half)/8;
-    int top=((old_v<v?old_v:v)-half)/8,bottom=((old_v>v?old_v:v)+half)/8;
-    return !road_solid||right<solid_left||left>solid_right||bottom<solid_top||top>solid_bottom;
+    unsigned left=((old_u<u?old_u:u)-half)/8,right=((old_u>u?old_u:u)+half)/8;
+    unsigned top=((old_v<v?old_v:v)-half)/8,bottom=((old_v>v?old_v:v)+half)/8;
+    UBYTE sx=tile_hit_x,sy=tile_hit_y,clear=TRUE;
+    if(bottom-top<=right-left){
+        for(unsigned row=top;row<=bottom;row++)if(tile_col_test_range_x(255,row,left,right)){clear=FALSE;break;}
+    }else{
+        for(unsigned column=left;column<=right;column++)if(tile_col_test_range_y(255,column,top,bottom)){clear=FALSE;break;}
+    }
+    tile_hit_x=sx;tile_hit_y=sy;return clear;
+}
+static int road_hull_matches(UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half){
+    unsigned ox=old_u/16,oy=old_v/16,x=u/16,y=v/16;
+    unsigned left=((ox<x?ox:x)-half)/8,right=((ox>x?ox:x)+half)/8;
+    unsigned top=((oy<y?oy:y)-half)/8,bottom=((oy>y?oy:y)+half)/8;
+    unsigned axis=bottom-top<=right-left?0:1,first=axis?left:top,last=axis?right:bottom;
+    if(road_calls!=last-first+1||tile_hit_x!=87||tile_hit_y!=146)return 0;
+    for(unsigned i=0;i<road_calls;i++){
+        const road_range_t *r=&road_ranges[i];
+        if(r->mask!=255||r->axis!=axis||r->fixed!=first+i||
+           r->first!=(axis?top:left)||r->last!=(axis?bottom:right))return 0;
+    }
+    return 1;
 }
 UBYTE td_streetcar_runtime_traffic_sweep_clear(UBYTE district,UWORD old_u,UWORD old_v,
     UWORD u,UWORD v,UBYTE half) BANKED {
@@ -56,7 +108,7 @@ static UBYTE admit_checked(const td_traffic_context_t *context,UBYTE district,UW
     UBYTE strict=td_traffic_admit(context,district,seconds,slot,old_u,old_v,u,v,escape),fast=0;
     td_traffic_epoch_t epoch;memset(&epoch,0xCC,sizeof(epoch));
     if(td_traffic_epoch_begin(context,district,seconds,&epoch)){
-        UWORD before_u[6],before_v[6];memcpy(before_u,epoch.u,sizeof(before_u));memcpy(before_v,epoch.v,sizeof(before_v));
+        UWORD before_u[TD_TRAFFIC_SLOTS],before_v[TD_TRAFFIC_SLOTS];memcpy(before_u,epoch.u,sizeof(before_u));memcpy(before_v,epoch.v,sizeof(before_v));
         fast=td_traffic_epoch_admit(&epoch,slot,old_u,old_v,u,v,escape);
         expect(!memcmp(before_u,epoch.u,sizeof(before_u))&&!memcmp(before_v,epoch.v,sizeof(before_v)),
                "snapshot admission records pending ownership without moving any fleet body");
@@ -72,7 +124,11 @@ static UBYTE admit_checked(const td_traffic_context_t *context,UBYTE district,UW
 static void reset(void){
     memset(&ctx,0,sizeof(ctx));memset(people,0,sizeof(people));
     ctx.u=us;ctx.v=vs;ctx.peds=people;
-    for(unsigned i=0;i<6;i++){us[i]=(120+i*140)*16;vs[i]=900*16;people[i].flags=ACTOR_FLAG_HIDDEN;}
+    /* Preserve all six original independently tested bodies. The added cars
+     * have valid full 5px hulls far from those cases, not zero-filled padding. */
+    for(unsigned i=0;i<6;i++){us[i]=(120+i*140)*16;vs[i]=900*16;}
+    us[6]=960*16;vs[6]=880*16;us[7]=960*16;vs[7]=940*16;
+    for(unsigned i=0;i<TD_TRAFFIC_PEOPLE;i++)people[i].flags=ACTOR_FLAG_HIDDEN;
     us[0]=500*16;vs[0]=500*16;
 }
 static int overlap(int x,int y,int ox,int oy,int hx,int hy){
@@ -92,7 +148,7 @@ static int obstacle_oracle(int ox,int oy,int x,int y,int bx,int by,int hx,int hy
  * through an admission query would miss a
  * stale cache after an external-guard abort or sequential commit. */
 static int fleet_buckets_match(const td_traffic_epoch_t *epoch,const td_traffic_context_t *context){
-    for(unsigned i=0;i<6;i++){
+    for(unsigned i=0;i<TD_TRAFFIC_SLOTS;i++){
         if(epoch->bucket_u[i]!=(unsigned)context->u[i]/256||
            epoch->bucket_v[i]!=(unsigned)context->v[i]/256)return 0;
     }
@@ -112,6 +168,82 @@ static int signal_oracle(unsigned district,unsigned seconds,unsigned ou,unsigned
         if((next>pos&&pos<=line&&next>line)||(next<pos&&pos>=line&&next<line))return 1;
     }
     return 0;
+}
+static int player_red_oracle(unsigned district,unsigned seconds,unsigned ou,unsigned ov,unsigned u,unsigned v){
+    /* Independent full-interval geometry: no production splitting, search,
+     * traffic helper or validation branch participates in this oracle. */
+    if(district>=TD_DISTRICT_COUNT||ou>=16384||u>=16384||ov>=15616||v>=15616||
+       abs((int)u-(int)ou)>16||abs((int)v-(int)ov)>16)return 0;
+    return signal_oracle(district,seconds,ou,ov,u,ov)||
+        signal_oracle(district,seconds,u,ov,u,v);
+}
+static void test_player_red_signals(void){
+    static const unsigned times[]={0,6,7,11,12,65535};
+    static const unsigned fractions[]={0,1,7,8,9,15,16};
+    static const unsigned amounts[]={0,1,7,8,9,15,16};
+    static const int laterals[]={-19,-18,-8,0,8,18,19};
+    static const int side_motion[]={-16,-1,0,1,16};
+    unsigned cardinal_seen[TD_DISTRICT_COUNT]={0},corner_seen[TD_DISTRICT_COUNT]={0};
+    for(unsigned d=0;d<TD_DISTRICT_COUNT;d++)for(unsigned i=oracle_offsets[d];i<oracle_offsets[d+1];i++){
+        const unsigned *node=oracle_signals[i];
+        for(unsigned direction=0;direction<4;direction++){
+            int horizontal=direction<2,sign=(direction&1)?-1:1;
+            unsigned arm=horizontal?(sign>0?8:2):(sign>0?1:4);
+            for(unsigned t=0;t<sizeof(times)/sizeof(times[0]);t++)
+            for(unsigned l=0;l<sizeof(laterals)/sizeof(laterals[0]);l++)
+            for(unsigned f=0;f<sizeof(fractions)/sizeof(fractions[0]);f++)
+            for(unsigned a=0;a<sizeof(amounts)/sizeof(amounts[0]);a++)
+            for(unsigned side=0;side<sizeof(side_motion)/sizeof(side_motion[0]);side++){
+                int ou=(int)node[0]*16,ov=(int)node[1]*16;
+                if(horizontal){ou-=sign*(24*16+(int)fractions[f]);ov+=laterals[l]*16;}
+                else{ov-=sign*(24*16+(int)fractions[f]);ou+=laterals[l]*16;}
+                int u=ou+(horizontal?sign*(int)amounts[a]:side_motion[side]);
+                int v=ov+(horizontal?side_motion[side]:sign*(int)amounts[a]);
+                int expected=player_red_oracle(d,times[t],ou,ov,u,v);
+                expect(td_traffic_player_red(d,times[t],ou,ov,u,v)==expected,
+                       "player cardinal/corner momentum matches independent full stop-line geometry across all actual districts and phase boundaries");
+                if(expected&&side_motion[side]==0)cardinal_seen[d]|=1u<<direction;
+                if(expected&&side_motion[side]!=0)corner_seen[d]|=1u<<direction;
+            }
+            if(!(node[2]&arm))continue;
+            int ou=(int)node[0]*16,ov=(int)node[1]*16;
+            if(horizontal)ou-=sign*24*16;else ov-=sign*24*16;
+            unsigned red=horizontal?7:0,green=horizontal?6:7;
+            int u=ou+(horizontal?sign*16:1),v=ov+(horizontal?1:sign*16);
+            expect(td_traffic_player_red(d,red,ou,ov,u,v)&&
+                   !td_traffic_player_red(d,green,ou,ov,u,v),
+                   "each real supported approach fines red entry while a small diagonal under green creates no erroneous fine");
+            if(horizontal){ou+=sign;u=ou+sign*16;}else{ov+=sign;v=ov+sign*16;}
+            expect(!td_traffic_player_red(d,red,ou,ov,u,v),
+                   "already-entered player motion clears an intersection without repeated red-line penalties");
+        }
+    }
+    for(unsigned d=0;d<TD_DISTRICT_COUNT;d++){
+        if(d==TD_DISTRICT_ISLANDS){
+            expect(oracle_offsets[d]==oracle_offsets[d+1]&&!cardinal_seen[d]&&!corner_seen[d],
+                   "Island paths have no invented road traffic signals");
+            expect(!td_traffic_player_red(d,0,8000,8000,8016,8016)&&
+                   !td_traffic_player_red(d,7,8000,8000,7984,7984),"both diagonal Island directions remain free of road fines");
+        }else expect(cardinal_seen[d]==15&&corner_seen[d]==15,
+                     "every non-Island district exercises all four real red approaches and all four diagonal corner directions");
+    }
+    /* A real Core line proves excessive movement would cross red if it were
+     * incorrectly accepted. Reject each invalid component before querying. */
+    expect(!td_traffic_player_red(TD_DISTRICT_COUNT,7,184*16,64*16,184*16+1,64*16)&&
+           !td_traffic_player_red(255,7,184*16,64*16,184*16+1,64*16)&&
+           !td_traffic_player_red(0,7,184*16,64*16,184*16+17,64*16)&&
+           !td_traffic_player_red(0,7,184*16,64*16,184*16+1,64*16+17)&&
+           !td_traffic_player_red(0,7,184*16,64*16,184*16-17,64*16)&&
+           !td_traffic_player_red(0,7,65535,64*16,0,64*16)&&
+           !td_traffic_player_red(0,7,0,64*16,65535,64*16)&&
+           !td_traffic_player_red(0,7,184*16,65535,184*16,0)&&
+           !td_traffic_player_red(0,7,184*16,15615,184*16,15616)&&
+           !td_traffic_player_red(0,7,16383,64*16,16384,64*16)&&
+           !td_traffic_player_red(0,7,184*16,64*16,184*16,64*16),
+           "invalid district/wrap/bounds/capped components and stationary player input never cause spurious fines");
+    expect(td_traffic_player_red(0,7,184*16-8,64*16,184*16+8,64*16)&&
+           td_traffic_player_red(0,7,184*16-9,64*16,184*16+7,64*16),
+           "both exact midpoint and second-substep red crossings are detected at the16Q4 cap");
 }
 static void test_signals(void){
     const unsigned times[]={0,6,7,11,12,65534,65535};
@@ -149,7 +281,7 @@ static void test_body_truth(void){
         if(kind==0){us[1]=bx;vs[1]=by;}
         else if(kind==1){ctx.parked_active=1;ctx.park_u=bx;ctx.park_v=by;}
         else{people[0].flags=0;people[0].pos.x=bx*2;people[0].pos.y=by*2;}
-        td_traffic_context_t saved=ctx;UWORD before_u[6],before_v[6];actor_t saved_people[6];
+        td_traffic_context_t saved=ctx;UWORD before_u[TD_TRAFFIC_SLOTS],before_v[TD_TRAFFIC_SLOTS];actor_t saved_people[TD_TRAFFIC_PEOPLE];
         memcpy(before_u,us,sizeof(us));memcpy(before_v,vs,sizeof(vs));memcpy(saved_people,people,sizeof(people));
         expect(td_traffic_motion_clear(&ctx,0,8000,8000,u,v,escape)==obstacle_oracle(8000,8000,u,v,bx,by,margin,margin,escape),
                "full-body sweep and monotonic prior-overlap escape agree for vehicles, parked cars and visible civilians");
@@ -180,7 +312,7 @@ static void test_priority_and_traps(void){
     expect(td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"hidden walkers do not cause an invisible traffic queue");
     people[0].flags=0;
     expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"visible walker blocks its full foot body");
-    UBYTE half_u[6]={10,5,5,5,5,5},half_v[6]={5,5,5,5,5,5};
+    UBYTE half_u[TD_TRAFFIC_SLOTS]={10,5,5,5,5,5,5,5},half_v[TD_TRAFFIC_SLOTS]={5,5,5,5,5,5,5,5};
     reset();us[1]=514*16;vs[1]=500*16;
     expect(td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"stock small car fits a14px centre gap");
     ctx.half_u=half_u;ctx.half_v=half_v;
@@ -191,12 +323,12 @@ static void test_priority_and_traps(void){
 static void test_invalid(void){
     reset();
     expect(!td_traffic_motion_clear(NULL,0,8000,8000,8008,8000,0)&&
-           !td_traffic_motion_clear(&ctx,6,8000,8000,8008,8000,0)&&
+           !td_traffic_motion_clear(&ctx,TD_TRAFFIC_SLOTS,8000,8000,8008,8000,0)&&
            !td_traffic_motion_clear(&ctx,0,8000,8000,8008,8008,0)&&
            !td_traffic_motion_clear(&ctx,0,8000,8000,8009,8000,0)&&
            !td_traffic_motion_clear(&ctx,0,8001,8000,8008,8000,0)&&
            !td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,2),"invalid pointer, slot, shape, extent, cache mismatch and escape value fail closed");
-    ctx.priority_mask=64;expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"out-of-pool priority mask fails closed");
+    ctx.priority_mask=64;expect(td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"slot6 priority is valid and distant emergency bodies do not block ordinary motion");
     reset();us[1]=65535;expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"invalid other-vehicle geometry cannot silently clear a queue");
     reset();ctx.u=NULL;expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0),"missing cache cannot be dereferenced");
     reset();people[0].flags=0;people[0].pos.x=1;people[0].pos.y=1;
@@ -220,7 +352,7 @@ static void test_junction_entry(void){
            !td_traffic_junction_clear(&ctx,TD_DISTRICT_COUNT,0,us[0],vs[0],us[0]+8,vs[0]),"invalid junction query fails closed");
 }
 static void test_long_vehicle_junctions(void){
-    const UBYTE extents[6]={5,6,5,7,6,7};
+    const UBYTE extents[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};
     reset();ctx.half_u=ctx.half_v=extents;
     us[3]=184*16;vs[3]=72*16;us[5]=232*16;vs[5]=56*16;
     expect(td_traffic_junction_clear(&ctx,0,3,us[3],vs[3],us[3]+8,vs[3])&&
@@ -259,7 +391,7 @@ static void test_long_vehicle_junctions(void){
     /* All cardinal waiting boundaries and subpixel entries use the same
        centre proof; service half extents must not change phase ownership. */
     for(unsigned direction=0;direction<4;direction++)for(unsigned half=5;half<=7;half++){
-        UBYTE sizes[6]={5,5,5,5,5,5};sizes[1]=half;
+        UBYTE sizes[TD_TRAFFIC_SLOTS]={5,5,5,5,5,5,5,5};sizes[1]=half;
         reset();ctx.half_u=ctx.half_v=sizes;us[0]=184*16;vs[0]=64*16;
         us[1]=208*16;vs[1]=64*16;
         if(direction==0)us[1]-=24*16;else if(direction==1)us[1]+=24*16;
@@ -283,7 +415,7 @@ static void test_admit_sweeps(void){
         if(kind==0){us[1]=bx;vs[1]=by;}
         else if(kind==1){ctx.parked_active=1;ctx.park_u=bx;ctx.park_v=by;}
         else{people[0].flags=0;people[0].pos.x=bx*2;people[0].pos.y=by*2;}
-        td_traffic_context_t before=ctx;UWORD before_u[6],before_v[6];actor_t before_people[6];
+        td_traffic_context_t before=ctx;UWORD before_u[TD_TRAFFIC_SLOTS],before_v[TD_TRAFFIC_SLOTS];actor_t before_people[TD_TRAFFIC_PEOPLE];
         memcpy(before_u,us,sizeof(us));memcpy(before_v,vs,sizeof(vs));memcpy(before_people,people,sizeof(people));
         int margin=(5+(kind==1?7:kind==2?3:5))*16;
         expect(admit_checked(&ctx,0,0,0,8000,8000,u,v,escape)==obstacle_oracle(8000,8000,u,v,bx,by,margin,margin,escape),
@@ -291,7 +423,7 @@ static void test_admit_sweeps(void){
         expect(!memcmp(&before,&ctx,sizeof(ctx))&&!memcmp(before_u,us,sizeof(us))&&!memcmp(before_v,vs,sizeof(vs))&&
                !memcmp(before_people,people,sizeof(people)),"combined traffic admission preserves all caller/cache/actor state");
     }
-    reset();UBYTE sizes[6]={1,1,5,5,5,5};ctx.half_u=ctx.half_v=sizes;
+    reset();UBYTE sizes[TD_TRAFFIC_SLOTS]={1,1,5,5,5,5,5,5};ctx.half_u=ctx.half_v=sizes;
     us[0]=496*16;vs[0]=500*16;us[1]=500*16;vs[1]=500*16;
     expect(!overlap(us[0],vs[0],us[1],vs[1],32,32)&&!overlap(504*16,500*16,us[1],vs[1],32,32)&&
            !admit_checked(&ctx,0,0,0,us[0],vs[0],504*16,500*16,1),
@@ -342,18 +474,18 @@ static void test_admit_invalid_and_stationary(void){
     reset();
     expect(!admit_checked(NULL,0,0,0,8000,8000,8008,8000,1)&&
            !admit_checked(&ctx,TD_DISTRICT_COUNT,0,0,8000,8000,8008,8000,1)&&
-           !admit_checked(&ctx,0,0,6,8000,8000,8008,8000,1)&&
+           !admit_checked(&ctx,0,0,TD_TRAFFIC_SLOTS,8000,8000,8008,8000,1)&&
            !admit_checked(&ctx,0,0,0,8000,8000,8129,8000,1)&&
            !admit_checked(&ctx,0,0,0,8000,8000,8008,8008,1)&&
            !admit_checked(&ctx,0,0,0,7999,8000,8008,8000,1)&&
            !admit_checked(&ctx,0,0,0,8000,8000,8008,8000,2)&&
            !admit_checked(&ctx,0,0,0,65535,8000,0,8000,1),
            "combined invalid pointer/district/slot/129step/diagonal/cache/escape/wrap inputs fail closed");
-    ctx.priority_mask=64;expect(!admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"combined invalid priority fails closed");
+    ctx.priority_mask=128;expect(admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"combined admission accepts valid distant slot7 priority");
     reset();ctx.parked_active=2;expect(!admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"combined invalid parked-active flag fails closed");
     reset();ctx.u=NULL;expect(!admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"combined missing array fails closed");
     reset();us[1]=65535;expect(!admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"far-away invalid actor geometry remains rejected by the optimized common path");
-    reset();UBYTE sizes[6]={5,0,5,5,5,5};ctx.half_u=sizes;
+    reset();UBYTE sizes[TD_TRAFFIC_SLOTS]={5,0,5,5,5,5,5,5};ctx.half_u=sizes;
     expect(!admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"far-away invalid extents remain rejected by the optimized common path");
     reset();ctx.parked_active=1;ctx.park_u=1;ctx.park_v=1;
     expect(!admit_checked(&ctx,0,0,0,8000,8000,8008,8000,1),"combined invalid parked body fails closed");
@@ -365,7 +497,7 @@ static void test_admit_invalid_and_stationary(void){
 }
 static void test_epoch_protocol(void){
     td_traffic_epoch_t epoch;reset();
-    expect(sizeof(epoch)==88,"host snapshot retains exactly the87-byte packed fields plus one alignment byte");
+    expect(sizeof(epoch)==112,"host snapshot retains exactly the111-byte packed fields plus one alignment byte");
     expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&
            td_traffic_epoch_admit(&epoch,0,8000,8000,8008,8000,1),"valid epoch begins and admits an ordinary candidate");
     td_traffic_epoch_t before=epoch;
@@ -379,14 +511,14 @@ static void test_epoch_protocol(void){
     expect(!td_traffic_epoch_admit(&epoch,1,us[1],vs[1],us[1]+8,vs[1],1)&&
            !td_traffic_epoch_commit(&epoch,1),"stale cached origins after commit cannot admit or commit a second movement");
     expect(td_traffic_epoch_admit(&epoch,0,8000,8000,8008,8000,1)&&
-           !td_traffic_epoch_admit(&epoch,6,8000,8000,8008,8000,1)&&
+           !td_traffic_epoch_admit(&epoch,TD_TRAFFIC_SLOTS,8000,8000,8008,8000,1)&&
            !td_traffic_epoch_commit(&epoch,0),"even an invalid later proposal discards the previous uncommitted ownership");
     us[5]=65535;
     expect(!td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!epoch.valid&&
            !td_traffic_epoch_admit(&epoch,0,8000,8000,8008,8000,1)&&
            !td_traffic_epoch_commit(&epoch,0),"failed initialization rejects malformed distant bodies and invalidates the old epoch");
-    reset();UBYTE halves[6]={5,6,5,7,6,7};ctx.half_u=ctx.half_v=halves;
-    for(unsigned i=0;i<6;i++){
+    reset();UBYTE halves[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};ctx.half_u=ctx.half_v=halves;
+    for(unsigned i=0;i<TD_TRAFFIC_SLOTS;i++){
         halves[i]=0;expect(!td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!epoch.valid,
                            "each malformed distant fleet extent invalidates initialization");halves[i]=5;
     }
@@ -397,7 +529,7 @@ static void test_epoch_protocol(void){
     expect(td_traffic_epoch_begin(&ctx,0,0,&epoch),"hidden malformed actors are excluded exactly like retained strict queries");
     ctx.parked_active=1;ctx.park_u=ctx.park_v=1;
     expect(!td_traffic_epoch_begin(&ctx,0,0,&epoch),"malformed active parked body invalidates initialization");
-    reset();ctx.priority_mask=64;expect(!td_traffic_epoch_begin(&ctx,0,0,&epoch),"unsupported priority bits invalidate initialization");
+    reset();ctx.priority_mask=255;expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&epoch.priority_mask==255,"all eight priority bits are captured as valid fleet roles");
     reset();ctx.parked_active=2;expect(!td_traffic_epoch_begin(&ctx,0,0,&epoch),"unsupported parked flag invalidates initialization");
     reset();ctx.v=NULL;expect(!td_traffic_epoch_begin(&ctx,0,0,&epoch),"missing cache array invalidates initialization");
     expect(!td_traffic_epoch_begin(NULL,0,0,&epoch)&&!td_traffic_epoch_begin(&ctx,0,0,NULL)&&
@@ -423,7 +555,7 @@ static void test_epoch_protocol(void){
 }
 static void test_epoch_sequential(void){
     static const unsigned amounts[]={0,1,8,64,127,128,129};
-    static const UBYTE sizes[6]={5,6,5,7,6,7};
+    static const UBYTE sizes[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned phase=0;phase<12;phase++)
     for(unsigned variant=0;variant<32;variant++){
         reset();ctx.half_u=ctx.half_v=sizes;ctx.priority_mask=variant&31;
@@ -431,8 +563,8 @@ static void test_epoch_sequential(void){
         if(variant&1){ctx.parked_active=1;ctx.park_u=208*16;ctx.park_v=64*16;}
         if(variant&2){people[0].flags=0;people[0].pos.x=208*32;people[0].pos.y=64*32;}
         td_traffic_epoch_t epoch;
-        expect(td_traffic_epoch_begin(&ctx,district,phase,&epoch),"whole six-mover epoch initializes real varying bodies/priority/people/park state");
-        for(unsigned slot=0;slot<6;slot++){
+        expect(td_traffic_epoch_begin(&ctx,district,phase,&epoch),"whole eight-mover epoch initializes real varying bodies/priority/people/park state");
+        for(unsigned slot=0;slot<TD_TRAFFIC_SLOTS;slot++){
             int direction=(variant+slot)&3,amount=amounts[(variant+slot)%7];
             UWORD u=us[slot],v=vs[slot];
             if(direction==0)u+=amount;else if(direction==1)v+=amount;
@@ -453,15 +585,16 @@ static void test_epoch_sequential(void){
     }
 }
 static void test_epoch_buckets(void){
-    UBYTE half_u[6],half_v[6];
+    UBYTE half_u[TD_TRAFFIC_SLOTS],half_v[TD_TRAFFIC_SLOTS];
     /* Every public extent, both axes, fractional centres and every slot.
      * Alternate between an external abort and accepted commit; queries may
      * change pending ownership but must never move the obstacle bucket. */
-    for(unsigned half=1;half<=16;half++)for(unsigned slot=0;slot<6;slot++)for(unsigned axis=0;axis<2;axis++){
+    for(unsigned half=1;half<=16;half++)for(unsigned slot=0;slot<TD_TRAFFIC_SLOTS;slot++)for(unsigned axis=0;axis<2;axis++){
         reset();ctx.half_u=half_u;ctx.half_v=half_v;
-        for(unsigned i=0;i<6;i++){
+        for(unsigned i=0;i<TD_TRAFFIC_SLOTS;i++){
             half_u[i]=(half+i-1)%16+1;half_v[i]=(16+half-i-1)%16+1;
-            us[i]=(80+i*150)*16+((half+i)&15);vs[i]=(400+i*48)*16+((half+3*i)&15);
+            us[i]=(i<6?80+i*150:960)*16+((half+i)&15);
+            vs[i]=(i<6?400+i*48:i==6?800:880)*16+((half+3*i)&15);
         }
         td_traffic_epoch_t epoch;
         expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&fleet_buckets_match(&epoch,&ctx),
@@ -481,13 +614,13 @@ static void test_epoch_buckets(void){
                td_traffic_admit(&ctx,0,0,slot,us[slot],vs[slot],u,v,1)&&fleet_buckets_match(&epoch,&ctx),
                "an aborted reverse proposal leaves current buckets resident for every later mover");
         td_traffic_epoch_t before=epoch;
-        expect(!td_traffic_epoch_commit(&epoch,(slot+1)%6)&&!memcmp(&before,&epoch,sizeof(epoch)),
+        expect(!td_traffic_epoch_commit(&epoch,(slot+1)%TD_TRAFFIC_SLOTS)&&!memcmp(&before,&epoch,sizeof(epoch)),
                "wrong-slot commit leaves pending ownership and all fleet buckets unchanged");
     }
     /* Exact touching edges remain open; a single Q4 penetration blocks.
      * Validated near-map-boundary bodies must not wrap cache arithmetic. */
     reset();ctx.half_u=half_u;ctx.half_v=half_v;
-    for(unsigned i=0;i<6;i++)half_u[i]=half_v[i]=16;
+    for(unsigned i=0;i<TD_TRAFFIC_SLOTS;i++)half_u[i]=half_v[i]=16;
     us[0]=16*16;vs[0]=16*16;us[1]=48*16;vs[1]=16*16;
     td_traffic_epoch_t epoch;
     expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&fleet_buckets_match(&epoch,&ctx)&&epoch.bucket_u[0]==1&&epoch.bucket_v[0]==1,
@@ -508,7 +641,7 @@ static void bucket_pair(unsigned old_fraction,unsigned other_fraction,unsigned g
     int old=32*256+(int)old_fraction,other=(32+direction*(int)gap)*256+(int)other_fraction;
     int next=old+direction*(int)amount,ou=axis?8000:old,ov=axis?old:8000;
     int u=axis?8000:next,v=axis?next:8000,bu=axis?8000:other,bv=axis?other:8000;
-    reset();static const UBYTE sizes[6]={16,16,16,16,16,16};ctx.half_u=ctx.half_v=sizes;
+    reset();static const UBYTE sizes[TD_TRAFFIC_SLOTS]={16,16,16,16,16,16,5,5};ctx.half_u=ctx.half_v=sizes;
     us[0]=ou;vs[0]=ov;us[1]=bu;vs[1]=bv;ctx.priority_mask=priority?2:0;
     int expected=obstacle_oracle(ou,ov,u,v,bu,bv,32*16,32*16,escape);
     int before=old-other,after=next-other;
@@ -540,7 +673,7 @@ static void test_bucket_threshold(void){
         bucket_pair(fractions[a],fractions[b],gap,axis,direction,amount,priority,escape);
     /* This case must remain near: a4-cell difference can still require
      * civilian yielding. A5-cell difference at its closest edge is clear. */
-    reset();static const UBYTE sizes[6]={16,16,16,16,16,16};ctx.half_u=ctx.half_v=sizes;
+    reset();static const UBYTE sizes[TD_TRAFFIC_SLOTS]={16,16,16,16,16,16,5,5};ctx.half_u=ctx.half_v=sizes;
     us[0]=32*256+255;vs[0]=8000;us[1]=36*256;vs[1]=8000;ctx.priority_mask=2;
     td_traffic_epoch_t epoch;
     expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&
@@ -551,13 +684,43 @@ static void test_bucket_threshold(void){
            td_traffic_epoch_admit(&epoch,0,us[0],vs[0],us[0]+128,vs[0],1),
            "closest5-cell gap is safely rejected before word geometry even when the mover enters the next bucket");
 }
+static void test_epoch_pedestrian_bucket_threshold(void){
+    static const unsigned fractions[]={0,1,127,128,254,255},amounts[]={0,1,8,127,128};
+    UBYTE halfs[TD_TRAFFIC_SLOTS];td_traffic_epoch_t epoch;
+    for(unsigned half=1;half<=16;half++)for(unsigned a=0;a<6;a++)for(unsigned b=0;b<6;b++)
+    for(unsigned gap=0;gap<=3;gap++)for(unsigned axis=0;axis<2;axis++)
+    for(int direction=-1;direction<=1;direction+=2)for(unsigned q=0;q<5;q++)for(unsigned escape=0;escape<2;escape++){
+        reset();for(unsigned i=0;i<TD_TRAFFIC_SLOTS;i++)halfs[i]=half;
+        ctx.half_u=ctx.half_v=halfs;
+        int old=32*256+(int)fractions[a],other=(32+direction*(int)gap)*256+(int)fractions[b];
+        int ou=axis?8000:old,ov=axis?old:8000,next=old+direction*(int)amounts[q];
+        int u=axis?8000:next,v=axis?next:8000,pu=axis?8000:other,pv=axis?other:8000;
+        us[0]=ou;vs[0]=ov;unsigned person=(a+b+gap+half)%TD_TRAFFIC_PEOPLE;
+        people[person].flags=0;people[person].pos.x=pu*2;people[person].pos.y=pv*2;
+        unsigned expected=obstacle_oracle(ou,ov,u,v,pu,pv,(half+3)*16,(half+3)*16,escape);
+        expect(td_traffic_epoch_begin(&ctx,5,0,&epoch),"pedestrian threshold epoch validates every original full body for all public extents");
+        expect(td_traffic_epoch_admit(&epoch,0,ou,ov,u,v,escape)==expected,
+               "three-bucket pedestrian gate preserves independent full hull and old-overlap escape at every half/fraction/sign/sweep boundary");
+        expect(epoch.u[0]==ou&&epoch.v[0]==ov&&epoch.pending_slot==(expected?0:255),
+               "far rejection changes neither position nor pending commit protocol");
+        if(expected){expect(td_traffic_epoch_commit(&epoch,0)&&epoch.u[0]==u&&epoch.v[0]==v&&
+                           epoch.bucket_u[0]==(u>>8)&&epoch.bucket_v[0]==(v>>8),
+                           "successful threshold motion commits exact endpoint and refreshes crossed fleet buckets");}
+        else expect(!td_traffic_epoch_commit(&epoch,0),"a near human blocks commit even when it shares a bucket with a far accepted body");
+    }
+    reset();people[7].flags=0;people[7].pos.x=65535;people[7].pos.y=65535;
+    expect(!td_traffic_epoch_begin(&ctx,5,0,&epoch),"apparently distant malformed human still fails complete epoch construction before byte rejection");
+    people[7].flags=ACTOR_FLAG_HIDDEN;
+    expect(td_traffic_epoch_begin(&ctx,5,0,&epoch)&&!epoch.people_mask,
+           "hidden malformed human remains absent rather than becoming a new query obstacle");
+}
 static int epoch_live_matches(const td_traffic_epoch_t *epoch){
     return !memcmp(us,epoch->u,sizeof(us))&&!memcmp(vs,epoch->v,sizeof(vs))&&fleet_buckets_match(epoch,&ctx);
 }
 static void test_epoch_move(void){
-    static const UBYTE sizes[6]={5,6,5,7,6,7};
+    static const UBYTE sizes[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};
     static const unsigned amounts[]={0,1,8,127,128,129};
-    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned slot=0;slot<6;slot++)
+    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned slot=0;slot<TD_TRAFFIC_SLOTS;slot++)
     for(unsigned axis=0;axis<2;axis++)for(int direction=-1;direction<=1;direction+=2)
     for(unsigned a=0;a<6;a++){
         reset();guard_reset(district);ctx.half_u=ctx.half_v=sizes;
@@ -570,10 +733,10 @@ static void test_epoch_move(void){
         UBYTE moved=td_traffic_epoch_move(&epoch,slot,u,v,0,0);
         expect(moved==expected,"fused clear-ground movement preserves strict admission at every motion-limit and fractional whole-pixel boundary");
         if(moved){
-            expect(road_calls==1&&tram_calls==1&&road_order<tram_order&&
-                   road_call.old_u==old_u/16&&road_call.old_v==old_v/16&&road_call.u==u/16&&road_call.v==v/16&&road_call.half==sizes[slot]&&
+            expect(road_calls>0&&tram_calls==1&&road_order<tram_order&&
+                   road_hull_matches(old_u,old_v,u,v,sizes[slot])&&
                    tram_call.old_u==old_u&&tram_call.old_v==old_v&&tram_call.u==u&&tram_call.v==v&&tram_call.half==sizes[slot]&&tram_call.district==district,
-                   "fused guards run road first with full whole-pixel hull, then matching district and exact Q4 future-tram hull");
+                   "fused guards read every whole-pixel hull tile in canonical order and restore engine hit scratch before exact Q4 future-tram admission");
             us[slot]=u;vs[slot]=v;
         }else expect(!road_calls&&!tram_calls,"red/body/129Q4 rejection occurs before either external guard");
         expect(epoch_live_matches(&epoch)&&epoch.pending_slot==255&&!td_traffic_epoch_commit(&epoch,slot),
@@ -590,7 +753,7 @@ static void test_epoch_move(void){
         expect(!td_traffic_epoch_move(&epoch,0,508*16,500*16,0,0)&&epoch_live_matches(&epoch)&&epoch.pending_slot==255&&
                !td_traffic_epoch_commit(&epoch,0)&&!td_traffic_epoch_commit(&epoch,2),
                "terrain/future-tram/presentation mismatch discards all pending ownership without moving any body or bucket");
-        expect(road_calls==1&&tram_calls==(failure?1:0),"terrain rejection short-circuits future tram; a clear road reaches the matching future guard once");
+        expect(road_calls>0&&tram_calls==(failure?1:0),"terrain rejection short-circuits future tram; a clear road reaches the matching future guard once");
         road_solid=tram_body=0;guard_loaded=0;
         expect(td_traffic_epoch_move(&epoch,1,us[1]+8,vs[1],0,0),"a later clear mover can commit after another body's external guard abort");
         us[1]+=8;
@@ -609,17 +772,17 @@ static void test_epoch_move(void){
     reset();guard_reset(0);us[0]=184*16;vs[0]=72*16;us[1]=208*16;vs[1]=48*16;
     expect(td_traffic_epoch_begin(&ctx,0,6,&epoch)&&!td_traffic_epoch_move(&epoch,0,us[0]+8,vs[0],0,0)&&!road_calls&&!tram_calls,
            "fused normal move retains occupied-junction entry before external guards");
-    expect(td_traffic_epoch_move(&epoch,0,us[0]+8,vs[0],1,0)&&road_calls==1&&tram_calls==1,
+    expect(td_traffic_epoch_move(&epoch,0,us[0]+8,vs[0],1,0)&&road_calls>0&&tram_calls==1,
            "rare legacy-policy retreat omits only entry while retaining road and future-tram checks");
     us[0]+=8;expect(epoch_live_matches(&epoch),"retreat commit updates the same body and bucket sequence as ordinary traffic");
     reset();guard_reset(0);tram_body=1;tram_left=490*16;tram_right=499*16;tram_top=495*16;tram_bottom=505*16;
-    expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!td_traffic_epoch_move(&epoch,0,8008,8000,1,0)&&road_calls==1&&tram_calls==1,
+    expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!td_traffic_epoch_move(&epoch,0,8008,8000,1,0)&&road_calls>0&&tram_calls==1,
            "retreat without separate caller proof cannot waive its obstructing future tram body");
     guard_reset(0);tram_body=1;tram_left=490*16;tram_right=499*16;tram_top=495*16;tram_bottom=505*16;
     /* The fixture's courier/tram centres lie behind the old position; this
      * half-pixel forward segment strictly separates. Actual route/current-
      * and future-tram retreat proof remains the caller's native responsibility. */
-    expect(td_traffic_epoch_move(&epoch,0,8008,8000,1,1)&&road_calls==1&&!tram_calls,
+    expect(td_traffic_epoch_move(&epoch,0,8008,8000,1,1)&&road_calls>0&&!tram_calls,
            "only explicit caller-proven separating retreat skips future admission while preserving the whole-body road guard");
     us[0]=8008;expect(epoch_live_matches(&epoch),"separating retreat privately commits once and refreshes the shared bucket cache");
     reset();guard_reset(0);us[0]=184*16;vs[0]=72*16;
@@ -629,19 +792,19 @@ static void test_epoch_move(void){
     expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!td_traffic_epoch_move(&epoch,0,8008,8000,1,1)&&!road_calls&&!tram_calls,
            "separating proof does not waive a newly entered neighbouring fleet body");
     reset();guard_reset(0);road_solid=1;solid_left=solid_right=63;solid_top=solid_bottom=62;
-    expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!td_traffic_epoch_move(&epoch,0,8008,8000,1,1)&&road_calls==1&&!tram_calls&&epoch_live_matches(&epoch),
+    expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!td_traffic_epoch_move(&epoch,0,8008,8000,1,1)&&road_calls>0&&!tram_calls&&epoch_live_matches(&epoch),
            "caller-proven separating retreat still rejects a solid road tile and never commits");
     /* All input failures precede external guards. Invalid snapshots, flags,
      * unsupported footprints and coordinates cannot revive older pending. */
     for(unsigned invalid=0;invalid<13;invalid++){
-        reset();guard_reset(0);UBYTE halves[6]={5,6,5,7,6,7},vertical[6]={5,6,5,7,6,7};ctx.half_u=halves;ctx.half_v=vertical;
+        reset();guard_reset(0);UBYTE halves[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5},vertical[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};ctx.half_u=halves;ctx.half_v=vertical;
         if(invalid==8)vertical[0]=6;
         if(invalid==9)halves[0]=vertical[0]=4;
         if(invalid==10)halves[0]=vertical[0]=9;
         expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&td_traffic_epoch_admit(&epoch,2,us[2],vs[2],us[2]+8,vs[2],1),
                "invalid fused request begins with a real but unrelated pending candidate");
         UBYTE slot=0,retreat=0,separating=0;UWORD u=8008,v=8000;
-        if(invalid==0)slot=6;else if(invalid==1)retreat=2;else if(invalid==2)separating=2;
+        if(invalid==0)slot=TD_TRAFFIC_SLOTS;else if(invalid==1)retreat=2;else if(invalid==2)separating=2;
         else if(invalid==3)separating=1;else if(invalid==4)u=8129;
         else if(invalid==5){u=8008;v=8008;}else if(invalid==6)u=65535;
         else if(invalid==7){retreat=1;u=8009;}else if(invalid==11)epoch.valid=0;
@@ -653,7 +816,72 @@ static void test_epoch_move(void){
     expect(!td_traffic_epoch_move(NULL,0,8008,8000,0,0),"NULL fused snapshot fails closed");
     reset();guard_reset(0);us[0]=vs[0]=5*16;
     expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&!td_traffic_epoch_move(&epoch,0,us[0],vs[0],0,0)&&
-           road_calls==1&&!tram_calls&&epoch_live_matches(&epoch),"full road centre-domain bounds reject a valid5px snapshot outside the loaded engine's8px inset");
+           !road_calls&&!tram_calls&&epoch_live_matches(&epoch),"full road centre-domain bounds reject a valid5px snapshot outside the loaded engine's8px inset");
+}
+/* This oracle visits the original inclusive body at every pixel centre
+ * along the continuous cardinal segment. It uses wide signed pixel math and
+ * raw authored tile bytes, never the helper's Q4 hull or native range APIs. */
+static int road_pixel_oracle(unsigned d,unsigned ou,unsigned ov,unsigned u,unsigned v,unsigned half){
+    ou/=16;ov/=16;u/=16;v/=16;
+    if(!half||half>8||(ou!=u&&ov!=v)||ou<8||u<8||ov<8||v<8||ou>1016||u>1016||ov>968||v>968)return 0;
+    unsigned horizontal=ou!=u,low=horizontal?(ou<u?ou:u):(ov<v?ov:v);
+    unsigned high=horizontal?(ou>u?ou:u):(ov>v?ov:v);
+    for(unsigned center=low;center<=high;center++){
+        int cx=horizontal?(int)center:(int)u,cy=horizontal?(int)v:(int)center;
+        for(int y=cy-(int)half;y<=cy+(int)half;y++)for(int x=cx-(int)half;x<=cx+(int)half;x++)
+            if(x<0||x>=1024||y<0||y>=976||oracle_road_grids[d][(y/8)*128+x/8])return 0;
+    }
+    return 1;
+}
+static void road_tile_case(unsigned district,UWORD ou,UWORD ov,UWORD u,UWORD v,UBYTE half,UBYTE retreat){
+    reset();guard_reset(district);road_native=1;
+    UBYTE sizes[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};sizes[0]=half;ctx.half_u=ctx.half_v=sizes;us[0]=ou;vs[0]=ov;
+    td_traffic_epoch_t epoch;UBYTE begun=td_traffic_epoch_begin(&ctx,district,0,&epoch),expected=FALSE;
+    if(begun){
+        expected=retreat?td_traffic_epoch_retreat_admit(&epoch,0,ou,ov,u,v,1):td_traffic_admit(&ctx,district,0,0,ou,ov,u,v,1);
+        if(expected)expected=road_pixel_oracle(district,ou,ov,u,v,half);
+        /* Clear any reference admission's pending proposal: move must own its
+         * own complete admission/terrain/tram/commit sequence. */
+        epoch.pending_slot=255;
+    }
+    UBYTE actual=begun?td_traffic_epoch_move(&epoch,0,u,v,retreat,0):FALSE;
+    expect(actual==expected,"same-bank validated hull matches independent connected footprint pixels on every authored city collision tile");
+    expect(tile_hit_x==87&&tile_hit_y==146,"map solids, clear hulls and rejected endpoints preserve collision hit coordinates");
+    expect(!road_wrapper_calls,"NPC terrain reaches fixed-bank ranges without a second banked road-wrapper call");
+    if(begun){
+        expect(epoch.u[0]==(actual?u:ou)&&epoch.v[0]==(actual?v:ov)&&epoch.pending_slot==255&&
+               !td_traffic_epoch_commit(&epoch,0),"terrain verdict advances only the approved real endpoint and cannot leave a stale candidate");
+        if(actual)expect(road_hull_matches(ou,ov,u,v,half)&&tram_calls==1&&road_order<tram_order,
+                         "clear registered hull reads exactly the canonical shorter-axis tile ranges before matching future tram");
+        else expect(!tram_calls,"a failed admission or full terrain sweep never reaches future tram or commit");
+    }
+}
+static void test_epoch_road_tiles(void){
+    /* Every authored tile at both extreme sub-tile phases and Q4 fractions,
+     * all supported fleet widths and all four8px cardinal directions. */
+    for(unsigned d=0;d<TD_DISTRICT_COUNT;d++)for(unsigned half=5;half<=8;half++)
+    for(unsigned ty=0;ty<122;ty++)for(unsigned tx=0;tx<128;tx++)
+    for(unsigned phase=0;phase<=7;phase+=7)for(unsigned fraction=0;fraction<=15;fraction+=15)
+    for(unsigned direction=0;direction<4;direction++){
+        int ou=(tx*8+phase)*16+fraction,ov=(ty*8+phase)*16+fraction;
+        int u=ou+(direction==0?128:direction==1?-128:0),v=ov+(direction==2?128:direction==3?-128:0);
+        road_tile_case(d,ou,ov,u,v,half,0);
+    }
+    /* Fine fractions at exact inner-domain/endceil boundaries and retreat
+     * limits supplement the whole-map traversal, including signed/wrapped
+     * values which must fail before any tile query. */
+    static const unsigned pixels[]={0,4,5,7,8,9,15,16,1015,1016,1017,1023,1024,4095};
+    static const unsigned rows[]={0,4,5,7,8,9,15,16,967,968,969,975,976,4095};
+    static const unsigned amounts[]={0,1,7,8,9,127,128,129};
+    for(unsigned d=0;d<TD_DISTRICT_COUNT;d++)for(unsigned half=5;half<=8;half++)
+    for(unsigned i=0;i<sizeof(pixels)/sizeof(pixels[0]);i++)for(unsigned f=0;f<16;f++)
+    for(unsigned a=0;a<sizeof(amounts)/sizeof(amounts[0]);a++)for(unsigned direction=0;direction<4;direction++)
+    for(unsigned retreat=0;retreat<2;retreat++){
+        unsigned ou=pixels[i]*16+f,ov=rows[i]*16+f;
+        int u=(int)ou+(direction==0?(int)amounts[a]:direction==1?-(int)amounts[a]:0);
+        int v=(int)ov+(direction==2?(int)amounts[a]:direction==3?-(int)amounts[a]:0);
+        road_tile_case(d,ou,ov,u,v,half,retreat);
+    }
 }
 static void test_epoch_retreat(void){
     const int offsets[]={-170,-144,-64,0,64,144,170};
@@ -686,9 +914,59 @@ static void test_epoch_retreat(void){
            !td_traffic_epoch_retreat_admit(&epoch,0,us[0],vs[0],us[0]+8,vs[0],1)&&
            !td_traffic_epoch_commit(&epoch,0),"rare retreat never gains permission to run a red light");
 }
+static void test_added_slots(void){
+    static const UBYTE halves[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};
+    static const unsigned amounts[]={0,1,8,128};
+    _Static_assert(TD_TRAFFIC_SLOTS==8&&TD_TRAFFIC_PEOPLE==8,"Eight real bodies and people are required by these fixtures");
+    /* The original six-slot oracles above are unchanged. Independently test
+     * both new cars and both new people as actual swept-body obstructions,
+     * including exact touching and fractional penetration on either axis. */
+    for(unsigned added=6;added<TD_TRAFFIC_SLOTS;added++)for(unsigned kind=0;kind<2;kind++)
+    for(unsigned axis=0;axis<2;axis++)for(int direction=-1;direction<=1;direction+=2)
+    for(unsigned escape=0;escape<2;escape++)for(unsigned a=0;a<sizeof(amounts)/sizeof(amounts[0]);a++)
+    for(int along=-200;along<=200;along+=8)for(int across=-168;across<=168;across+=24){
+        reset();ctx.half_u=ctx.half_v=halves;
+        int bx=8000+(axis?across:along),by=8000+(axis?along:across);
+        int u=8000+(axis?0:direction*(int)amounts[a]),v=8000+(axis?direction*(int)amounts[a]:0);
+        if(!kind){us[added]=bx;vs[added]=by;}
+        else{people[added].flags=0;people[added].pos.x=bx*2;people[added].pos.y=by*2;}
+        int expected=obstacle_oracle(8000,8000,u,v,bx,by,(kind?8:10)*16,(kind?8:10)*16,escape);
+        expect(admit_checked(&ctx,0,0,0,8000,8000,u,v,escape)==expected,
+               "seventh/eighth real car and pedestrian preserve independent continuous full-body truth");
+        if(amounts[a]<=8)expect(td_traffic_motion_clear(&ctx,0,8000,8000,u,v,escape)==expected,
+                               "strict small-step query includes both added body and people slots");
+    }
+    for(unsigned added=6;added<TD_TRAFFIC_SLOTS;added++){
+        reset();ctx.half_u=ctx.half_v=halves;ctx.priority_mask=1u<<added;
+        us[added]=524*16;vs[added]=500*16;
+        expect(!admit_checked(&ctx,0,0,0,8000,8000,8128,8000,1)&&
+               admit_checked(&ctx,0,0,0,8000,8000,7872,8000,1),
+               "both high priority bits hold approaching civilians before contact while allowing safe retreat");
+        reset();ctx.half_u=ctx.half_v=halves;
+        us[0]=520*16;vs[0]=500*16;us[added]=500*16;vs[added]=500*16;
+        td_traffic_epoch_t epoch;
+        expect(td_traffic_epoch_begin(&ctx,0,0,&epoch)&&
+               td_traffic_epoch_admit(&epoch,added,500*16,500*16,508*16,500*16,0)&&
+               td_traffic_epoch_commit(&epoch,added),"each added car admits and explicitly commits its own validated full body");
+        us[added]=508*16;
+        expect(fleet_buckets_match(&epoch,&ctx)&&
+               !td_traffic_epoch_admit(&epoch,0,520*16,500*16,512*16,500*16,0)&&
+               !td_traffic_epoch_commit(&epoch,0),"a later original car sees an added car's committed position and cannot penetrate its hull");
+        reset();us[added]=65535;
+        expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0)&&
+               !td_traffic_epoch_begin(&ctx,0,0,&epoch),"malformed distant added cars fail closed instead of escaping validation");
+        reset();UBYTE invalid[TD_TRAFFIC_SLOTS]={5,6,5,7,6,7,5,5};invalid[added]=0;
+        ctx.half_u=ctx.half_v=invalid;
+        expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0)&&
+               !td_traffic_epoch_begin(&ctx,0,0,&epoch),"zero-filled added hull padding is rejected by actual public and epoch C");
+        reset();people[added].flags=0;people[added].pos.x=people[added].pos.y=1;
+        expect(!td_traffic_motion_clear(&ctx,0,8000,8000,8008,8000,0)&&
+               !td_traffic_epoch_begin(&ctx,0,0,&epoch),"malformed seventh/eighth visible pedestrian footprints invalidate the complete fleet query");
+    }
+}
 int main(void){
-    test_signals();test_body_truth();test_priority_and_traps();test_invalid();test_junction_entry();test_long_vehicle_junctions();
+    test_signals();test_player_red_signals();test_body_truth();test_priority_and_traps();test_invalid();test_junction_entry();test_long_vehicle_junctions();
     test_admit_sweeps();test_admit_signals();test_admit_invalid_and_stationary();
-    test_epoch_protocol();test_epoch_sequential();test_epoch_retreat();test_epoch_buckets();test_bucket_threshold();test_epoch_move();
+    test_epoch_protocol();test_epoch_sequential();test_epoch_retreat();test_epoch_buckets();test_bucket_threshold();test_epoch_pedestrian_bucket_threshold();test_epoch_move();test_epoch_road_tiles();test_added_slots();
     printf("Traffic helpers: %u checks, %u failures\n",checks,failures);return failures?1:0;
 }

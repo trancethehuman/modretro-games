@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-stable-scoped-native-timing",
+  "date": "2026-10-05",
+  "romSha256": "096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b",
+  "sessionId": "89b5368257224377a05001017130188e",
+  "startFrame": 244,
+  "endFrame": 1084,
+  "nativeFrames": 840,
+  "startGameTimeByte": "57",
+  "samples": [
+    {
+      "frame": 364,
+      "gameTimeHex": "6d"
+    },
+    {
+      "frame": 484,
+      "gameTimeHex": "85"
+    },
+    {
+      "frame": 604,
+      "gameTimeHex": "98"
+    },
+    {
+      "frame": 724,
+      "gameTimeHex": "ae"
+    },
+    {
+      "frame": 844,
+      "gameTimeHex": "c3"
+    },
+    {
+      "frame": 964,
+      "gameTimeHex": "d7"
+    },
+    {
+      "frame": 1084,
+      "gameTimeHex": "ec"
+    }
+  ],
+  "completedUpdates": 149,
+  "nominalUpdatesPerSecond": 10.642857142857142,
+  "comparison": {
+    "v12RomSha256": "18e61b7a7e9a939c544a0babf72df10fc36ab5d8daf171b7fa4dac7af04a0105",
+    "v12CompletedUpdates": 135,
+    "percentageMoreUpdates": 10.370370370370363,
+    "note": "Comparison is to the retained v12 sandbox candidate at the same starting view/input. Distinct builds and autonomous phases; not a universal FPS measurement or comparison to the simpler installed9c155 baseline."
+  },
+  "limitations": [
+    "One stationary starting-view trial, not a whole-city or hardware benchmark.",
+    "No constant60FPS or always-smooth claim.",
+    "Detailed historic v12 identity is retained in SANDBOX_PERFORMANCE_DIAGNOSTICS.json."
+  ]
+}

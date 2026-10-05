@@ -8,11 +8,11 @@
   "source_png": "original-art/city_fleet.png",
   "source_metadata": "original-art/city_fleet.metadata.json",
   "destination": "assets/sprites/city_fleet.png",
-  "png_sha256": "700759291d2c729ccaf35015555673f22cc402fda788020210585203447ff334",
-  "metadata_sha256": "be558a6bf05767b0b173d90ff5f37f81bb257be0da5f6173a79173480e3c38e4",
-  "decoded_rgb_sha256": "162ee7692967d2f6d1133bfc1716fdb1b55818fbd4d6f7b63f45d350f08a8350",
-  "visible_frames": 16,
-  "hidden_frame": 16,
+  "png_sha256": "1a2983306cb1a633220351e0a0565a0ccba52d632efb654ee6169e736d1812fb",
+  "metadata_sha256": "85f55f574463979e90631cb7d6309dedda525ab62acd7e38d5d28e7282dcd4d8",
+  "decoded_rgb_sha256": "43b71cc876139fb1eaf7df57eb6c484dea9921db3f8e9a432cd33d5fda39fe00",
+  "visible_frames": 20,
+  "hidden_frame": 20,
   "objects_per_visible_pose": 2,
   "palette_slots": [
     3,
@@ -20,8 +20,8 @@
     5,
     6
   ],
-  "source_unique_8x16_patterns": 16,
-  "allocation_target_max_8x8_per_obj_bank": 16,
-  "frame_layout": "police/fire/ambulance/bus each E,S,W,N",
+  "source_unique_8x16_patterns": 20,
+  "allocation_target_max_8x8_per_obj_bank": 24,
+  "frame_layout": "police/fire/ambulance/bus/taxi each E,S,W,N; taxi shares gold bus palette6",
   "verification": "Source and import checks only; compiler allocation/native rendering/hardware separate"
 }

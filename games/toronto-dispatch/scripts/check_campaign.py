@@ -91,6 +91,8 @@ def check():
                                  validate_preserved_campaign, validate_relocated_stops)
 
     campaign = json.loads((ROOT / 'content/campaign.json').read_text())
+    from stop_names import validate_current
+    validate_current(campaign['stops'][18])
     city = json.loads((ROOT / 'content/city_art.json').read_text())
     scene = json.loads((ROOT / 'project/project/scenes/toronto_city/scene.gbsres').read_text())
     background = json.loads((ROOT / 'project/assets/backgrounds/toronto_city.png.gbsres').read_text())
@@ -256,7 +258,7 @@ def check():
     completed_bytes = int(re.search(r'#define\s+TD_COMPLETE_BYTES\s+(\d+)', header).group(1))
     assert completed_bytes * 8 >= TOTAL_QUESTS
     assert re.search(r'UBYTE\s+td_get_parking\s*\(\s*UBYTE\s+stop\s*,\s*UWORD\s*\*\s*u\s*,\s*UWORD\s*\*\s*v\s*\)\s+BANKED\s*;', header), 'Parking getter must retain its banked whole-pixel API'
-    print(f'Native campaign source: {TOTAL_QUESTS} contracts/{TOTAL_STOPS} stops and briefs match C; {parking_count} parking anchors match clear bodies/footpaths; all 96 native job fields and 59 stop identities preserved with only six declared Island geometries relocated. Typed ferry spokes, conservative full-body Island routes/deadline models, ordinary harbour disconnection, Port routes and unlock closure passed. Native play and measured duration require separate evidence.')
+    print(f'Native campaign source: {TOTAL_QUESTS} contracts/{TOTAL_STOPS} stops and briefs match C; {parking_count} parking anchors match clear bodies/footpaths; all 96 native job fields and 59 stop ordinals preserved with six declared Island geometries relocated and one exact Bloorcourt display correction. Typed ferry spokes, conservative full-body Island routes/deadline models, ordinary harbour disconnection, Port routes and unlock closure passed. Native play and measured duration require separate evidence.')
 
 
 if __name__ == '__main__':

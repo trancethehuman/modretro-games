@@ -1,6 +1,24 @@
 # Native build and preview
 
-## Current hardware feedback build
+## Selected sandbox-stable build — 2026-10-05
+
+Selected ROM **`toronto-dispatch-sandbox-stable.gbc`** is **1,048,576 bytes**, SHA-256 **`096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`**. The official source-debug build succeeds in **90,460 ms**; source fingerprint **`a9fa9f957ef8dda5c24f9c76508289af8725cdc73645e8485010c5b1423b1324`**, NOI **`aa8c5d17b23cfb69f1dd567f8df2f2a817133a285220825ff3aacdb39464e676`**. All 200 captured native inputs remain unchanged after building and native play. Full `make check` and four compiled guards pass; the [build record](SANDBOX_STABLE_BUILD.json) binds their identities.
+
+| Component | Version / identity |
+| --- | --- |
+| ModRetro Chromatic plugin | 1.0.33 |
+| GB Studio CLI | 4.3.2, commit `ccb891b2670134ba8237416772eea4ed09d34e1e` |
+| GBVM engine | `bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3` |
+| GBDK | 4.5.0, macOS arm64 |
+| Python / PyBoy | 3.13.12 / 2.7.0 |
+| Pillow | 12.3.0 (plugin emulator); 12.1.1 (repository art/content scripts and CI) |
+| Node.js | 26.6.0 |
+
+Compiled checks cover city/boat/aircraft poses and tile ownership, actor-bank dispatch, Queen poses and 8,684 exact timetable resource bytes. Scenes peak at 120/128 OBJ tiles per bank; West uses 44 bank-1 background tiles before signal scratch begins at 47. Save v10 remains 58 bytes and the actor pool is 22. Fixed HOME has 221 bytes free; the heap ends at `DCBD`, leaving 579 bytes below stack origin `DF00`. [Optimization evidence](SANDBOX_STABLE_OPTIMIZATION.json) records lossless 109-byte UI packing and shallower tram branches; this static margin is not a measured whole-game stack maximum.
+
+The [fresh native run](NATIVE_SANDBOX_STABLE.json) includes a full tram-cycle idle check, Settings/map freeze, Market Start, interrupted-entry save/reset, boat driving/docking, grocery entry/return, occupied vehicle theft and sampled police pursuit. Its [starting-view timing](SANDBOX_STABLE_TIMING.json) is scoped to one workload and does not guarantee universal smoothness. The earlier `668727…` [corruption diagnostic](NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains failed and ineligible. The selected ROM has not yet been written to the cartridge; the physically confirmed 9c155 baseline below retains its own hardware evidence. Packaging follows the matching source commit and has no recorded new ZIP identity here.
+
+## Retained physically confirmed hardware feedback build
 
 Selected update **`toronto-dispatch-hardware-feedback.gbc`** is **1,048,576 bytes**, SHA-256 **`9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`**. Official source-debug build succeeds in **67,663 ms**; source fingerprint **`b45d7dbb0b2d9f384ff70e412b549e3cf9c636c8ad3ae8efa9f7d7fe35e0e5fb`**, NOI **`171956c8796e7b5664361d30e9aa036166455917fad5cb9e68adab693ca03818`**. Full `make check`, source graphics analysis, compiled city poses/progress tables and native memory guards pass. [Build record](HARDWARE_FEEDBACK_BUILD.json) retains exact identity and the failed/intermediate attempts. Static reserve is 1,046 bytes; save v10 remains 58 bytes. Scene allocation peaks at 120/128 OBJ tiles per bank; maximum runtime stack/performance remain unmeasured.
 
@@ -170,19 +188,9 @@ python3 scripts/check_streetcar_rom.py games/toronto-dispatch/project/build/toro
 
 The new native stationary sequence counts 381 updates / 1,080 VBlanks, the same as separate tram-only `a638…`, versus repeated-phase baseline `c625…` 348. See [PERFORMANCE.md](PERFORMANCE.md) for scope and phase variation; this is not whole-city or hardware acceptance.
 
-## Tested toolchain
+## Toolchain preparation and earlier renderer notes
 
 The aircraft renderer uses the compiled-pose cache, checks combined aircraft/shadow capacity before an aircraft-only fallback and computes roof-mask anchors once per tile. [TESTING.md](../TESTING.md) retains the earlier portability replay and original `8e7af3ec…` recordings separately from `9c1a9fcb…` / `4b83cfb6…` attempts. Native inactive/visible-flight samples still differ in NPC timing; compiled gates, reserve and host checks do not certify whole-city performance. Each later build needs its own identity and replay.
-
-| Component | Version / identity |
-| --- | --- |
-| ModRetro Chromatic plugin | 1.0.33 |
-| GB Studio CLI | 4.3.2, commit `ccb891b2670134ba8237416772eea4ed09d34e1e` |
-| GBVM engine | `bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3` |
-| GBDK | 4.5.0, macOS arm64 |
-| Python / PyBoy | 3.13.12 / 2.7.0 |
-| Pillow | 12.3.0 (plugin emulator); 12.1.1 (repository art/content scripts and CI) |
-| Node.js | 26.6.0 |
 
 The plugin manages dependencies outside the repo. Start with its setup skill and `toolchain_doctor` for authoring, projectBuild and play. Prepare missing build/emulator components using `toolchain_prepare`; do not modify the installed plugin cache.
 

@@ -1,4 +1,4 @@
-"""Independent source regressions for six geometry-only Island relocations.
+"""Independent source regressions for six Island relocations and one label.
 
 No native runtime, ROM, save or elapsed-gameplay acceptance is implied. Pin the
 public pre-migration 59/96 fields independently, reject broadened exceptions,
@@ -54,9 +54,16 @@ def check():
         if stop['id'] in NEW:
             require((fields['u'], fields['v'], fields['district']) == NEW[stop['id']], 'Current Island geometry differs from independent expected triple')
             fields.update(zip(('u', 'v', 'district'), OLD[stop['id']]))
-        require(fields == expected, 'A field other than the six declared geometries changed')
+        if stop['id']==18:
+            require(tuple(fields[k] for k in STOP_FIELDS)==(18,144,64,'BLOORCOURT BUS',2,0,0),
+                    'Stop18 display correction changed current native geometry/service/flags or label')
+            fields['name']='OSSINGTON BUS'
+        require(fields == expected, 'A field other than six declared geometries or the exact stop18 label changed')
     require([{key: quest[key] for key in JOB_FIELDS} for quest in campaign['quests'][:96]] == old['quests'], 'A native job/brief/reward/deadline/completion ordinal changed')
     validate_preserved_campaign(campaign)
+    for field,value in (('u',145),('v',65),('district',1),('transit',1),('reserved',1),('name','ANNEX BUS')):
+        bad=copy.deepcopy(campaign);bad['stops'][18][field]=value
+        rejects(lambda bad=bad:validate_preserved_campaign(bad),'Stop18 display correction broadened geometry/service/flag/name exceptions')
     for index in OLD:
         for geometry in (OLD[index], NEW[index]):
             stop = dict(campaign['stops'][index])

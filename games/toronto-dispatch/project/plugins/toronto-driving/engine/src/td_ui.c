@@ -9,6 +9,8 @@
 #include "td_audio.h"
 #include "td_atlas.h"
 #include "td_traffic_lights.h"
+#include "td_boats.h"
+#include "td_guidance.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "ui.h"
@@ -17,14 +19,18 @@
 #include "system.h"
 
 static UBYTE td_tiles[20];
-/* The atlas is paused and owns this cache until the text UI is repainted. */
-static union { UBYTE rows[18][20]; UWORD patterns[TD_ATLAS_VISIBLE_LIMIT]; } td_ui_cache;
+/* The paused atlas owns this cache until text is repainted. Text uses six
+ * bits per glyph (192..252, with 63 empty); atlas IDs use ten bits (0..772,
+ * with 1023 empty). Packing preserves the logical cache and saves 90 bytes. */
+static union { UBYTE rows[18][15]; UBYTE patterns[(TD_ATLAS_VISIBLE_LIMIT*10+7)/8]; } td_ui_cache;
 #define td_cached_rows td_ui_cache.rows
-typedef char td_atlas_cache_fits_existing_wram[(sizeof(td_ui_cache)==360)?1:-1];
+typedef char td_atlas_cache_fits_packed_wram[(sizeof(td_ui_cache)==270)?1:-1];
+typedef char td_atlas_cache_ids_fit[(TD_ATLAS_PATTERNS<1023)?1:-1];
 typedef char td_atlas_tiles_leave_font[(16+TD_ATLAS_VISIBLE_LIMIT<=192)?1:-1];
 typedef char td_atlas_hash_capacity[(TD_ATLAS_VISIBLE_LIMIT==172)?1:-1];
 static UBYTE td_map_x,td_map_y,td_map_row,td_map_count,td_map_focus,td_map_active,td_map_error;
-static UBYTE td_map_camera_settings,td_map_actor_count,td_map_hidden[TD_ACTORS];
+static UBYTE td_map_camera_settings,td_map_actor_count,td_map_hidden[(TD_ACTORS+7)/8];
+typedef char td_map_hidden_pool_fits[(TD_ACTORS>0&&TD_ACTORS<=24)?1:-1];
 static UWORD td_map_camera_x,td_map_camera_y;
 static UBYTE td_ui_mode=255;
 static char td_line[40];
@@ -48,17 +54,47 @@ static const char * const td_chapters[]={
 typedef char td_chapter_offer_count[(TD_QUESTS==8*(sizeof(td_chapters)/sizeof(td_chapters[0])))?1:-1];
 static const char *td_kinds[]={"PARCEL ROUND","FRAGILE: NO CRASH","EXPRESS DEADLINE","TRUCK FREIGHT","TRANSIT FRIENDLY","PASSENGER: SMOOTH","RETURN DOCUMENTS","ISLAND FERRY POST"};
 static UBYTE td_glyph(char c) {
+    if(c>=1&&c<=12)return 240+c;
     if(c>='a'&&c<='z')c-=32;
     if(c>='A'&&c<='Z')return 193+c-'A';
     if(c>='0'&&c<='9')return 219+c-'0';
-    switch(c){case ':':return 229;case '/':return 230;case '.':return 231;case '-':return 232;case '+':return 233;case '?':return 234;case '<':return 235;case '>':return 236;case '$':return 237;case '%':return 238;case '#':return 239;case '=':return 240;}
+    switch(c){case ':':return 229;case '/':return 230;case '.':return 231;case '-':return 232;case '+':return 233;case '?':return 234;case '<':return 235;case '>':return 252;case '$':return 237;case '%':return 238;case '#':return 239;case '=':return 240;}
     return 192;
 }
+/* Four native glyphs occupy exactly three bytes. No temporary row buffer or
+ * individual bit-walk is needed, and the caller supplies td_glyph output. */
+static UBYTE td_row_cache_apply(UBYTE *cache,const UBYTE *tiles){
+    UBYTE i,j,a,b,c,changed=0;
+    for(i=j=0;i<20;i+=4,j+=3){
+        a=(tiles[i]-192)|((tiles[i+1]-192)<<6);
+        b=((tiles[i+1]-192)>>2)|((tiles[i+2]-192)<<4);
+        c=((tiles[i+2]-192)>>4)|((tiles[i+3]-192)<<2);
+        if(cache[j]!=a||cache[j+1]!=b||cache[j+2]!=c)changed=1;
+        cache[j]=a;cache[j+1]=b;cache[j+2]=c;
+    }
+    return changed;
+}
+static UWORD td_map_cache_get(UBYTE slot){
+    UBYTE index,shift;UWORD pattern;
+    if(slot>=TD_ATLAS_VISIBLE_LIMIT)return 65535;
+    index=slot+(slot>>2);shift=(slot&3)<<1;
+    pattern=((UWORD)td_ui_cache.patterns[index]|((UWORD)td_ui_cache.patterns[index+1]<<8))>>shift;
+    pattern&=1023;return pattern==1023?65535:pattern;
+}
+static void td_map_cache_set(UBYTE slot,UWORD pattern){
+    UBYTE index,shift;UWORD mask,value;
+    if(slot>=TD_ATLAS_VISIBLE_LIMIT||(pattern!=65535&&pattern>=1023))return;
+    index=slot+(slot>>2);shift=(slot&3)<<1;
+    mask=(UWORD)1023<<shift;value=(pattern==65535?(UWORD)1023:pattern)<<shift;
+    td_ui_cache.patterns[index]=(td_ui_cache.patterns[index]&~(UBYTE)mask)|(UBYTE)value;
+    td_ui_cache.patterns[index+1]=(td_ui_cache.patterns[index+1]&~(UBYTE)(mask>>8))|(UBYTE)(value>>8);
+}
+static void td_row(UBYTE y,const char *s);
+static void td_guided_row(const char *label){td_guidance_label(td_line,label);td_row(2,td_line);td_guidance_compact(td_line,TRUE);td_row(td.msg?1:0,td_line);}
 static void td_row(UBYTE y,const char *s) {
     UBYTE i; for(i=0;i<20;i++){td_tiles[i]=td_glyph(*s);if(*s)s++;}
     if(td.mode!=TD_MAP){
-        if(!memcmp(td_cached_rows[y],td_tiles,20))return;
-        memcpy(td_cached_rows[y],td_tiles,20);
+        if(!td_row_cache_apply(td_cached_rows[y],td_tiles))return;
     }
     VBK_REG=0; set_win_tiles(0,y,20,1,td_tiles);
 }
@@ -86,7 +122,7 @@ static void td_map_headers(void){
     if(td_atlas_district((td_map_x+10)*8,(td_map_y+6)*8,td_line))td_row(1,td_line);
     else td_row(1,"CITY EDGE");
     td_row(14,trip?"P YOU C CAR O STOP":td.job==TD_NONE?"P YOU C CAR O DEPOT":"P YOU C CAR O JOB");
-    if(!td_map_focus)td_row(15,td_streetcar_ride_view?"YOU ON STREETCAR":td.onfoot?"YOU ON FOOT":"YOU DRIVING");
+    if(!td_map_focus)td_row(15,td_streetcar_ride_view?"YOU ON STREETCAR":td_boats_controlled()?"YOU ON A BOAT":td.onfoot?"YOU ON FOOT":"YOU DRIVING");
     else if(td_map_focus==1)td_row(15,td.onfoot?"YOUR PARKED VEHICLE":"YOUR DRIVING VEHICLE");
     else{sprintf(td_line,"%s%s",trip?"TRIP: ":td.job==TD_NONE?"DEPOT: ":"JOB: ",target->name);td_row(15,td_line);}
     td_row(16,"DPAD PAN SELECT VIEW");
@@ -127,15 +163,15 @@ static void td_map_paint_row(void){
         hash=patterns[i];while(hash>=TD_ATLAS_VISIBLE_LIMIT)hash-=TD_ATLAS_VISIBLE_LIMIT;
         slot=hash;stride=1+((patterns[i]&15)<<1);
         for(probes=0;probes<TD_ATLAS_VISIBLE_LIMIT;probes++){
-            if(td_ui_cache.patterns[slot]==patterns[i]||td_ui_cache.patterns[slot]==65535)break;
+            if(td_map_cache_get(slot)==patterns[i]||td_map_cache_get(slot)==65535)break;
             slot+=stride;if(slot>=TD_ATLAS_VISIBLE_LIMIT)slot-=TD_ATLAS_VISIBLE_LIMIT;
         }
         if(probes==TD_ATLAS_VISIBLE_LIMIT){td_map_error=1;td_map_row=12;td_map_headers();return;}
-        if(td_ui_cache.patterns[slot]==65535){
+        if(td_map_cache_get(slot)==65535){
             if(td_map_count>=TD_ATLAS_VISIBLE_LIMIT||!td_atlas_pattern(patterns[i],(UBYTE *)td_line)){
                 td_map_error=1;td_map_row=12;td_map_headers();return;
             }
-            td_ui_cache.patterns[slot]=patterns[i];td_map_count++;
+            td_map_cache_set(slot,patterns[i]);td_map_count++;
             VBK_REG=1;set_bkg_data(16+slot,1,(UBYTE *)td_line);
         }
         td_tiles[i]=16+slot;
@@ -149,8 +185,10 @@ void td_map_open(void) BANKED {
     td_map_camera_x=camera_x;td_map_camera_y=camera_y;td_map_camera_settings=camera_settings;
     camera_settings=0;td_map_focus=0;td_map_active=1;
     td_map_actor_count=actors_len<TD_ACTORS?actors_len:TD_ACTORS;
+    memset(td_map_hidden,0,sizeof(td_map_hidden));
     for(i=0;i<td_map_actor_count;i++){
-        td_map_hidden[i]=actors[i].flags&ACTOR_FLAG_HIDDEN;actors[i].flags|=ACTOR_FLAG_HIDDEN;
+        if(actors[i].flags&ACTOR_FLAG_HIDDEN)td_map_hidden[i>>3]|=1<<(i&7);
+        actors[i].flags|=ACTOR_FLAG_HIDDEN;
     }
     if(!td_atlas_bounds(&width,&height)||width!=TD_ATLAS_WIDTH_PIXELS||height!=TD_ATLAS_HEIGHT_PIXELS){
         td_map_error=1;td_map_row=12;return;
@@ -175,7 +213,8 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
 void td_map_close(void) BANKED {
     UBYTE i;
     if(!td_map_active)return;
-    for(i=0;i<td_map_actor_count;i++)actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|td_map_hidden[i];
+    for(i=0;i<td_map_actor_count;i++)actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|
+        (td_map_hidden[i>>3]&(1<<(i&7))?ACTOR_FLAG_HIDDEN:0);
     camera_x=td_map_camera_x;camera_y=td_map_camera_y;camera_settings=td_map_camera_settings;
     td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;
     td_traffic_lights_reset();
@@ -184,19 +223,21 @@ void td_ui_init(void) BANKED {
     UBYTE i;td_board_route=0;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
     /* The window always uses font bank 1 / UI palette 7; attributes need one upload. */
     VBK_REG=1;for(i=0;i<18;i++)set_win_tiles(0,i,20,1,td_tiles);
-    VBK_REG=1;set_bkg_data(192,sizeof(td_font)/16,td_font);VBK_REG=0;
+    VBK_REG=1;set_bkg_data(192,sizeof(td_font)/16,td_font);td_guidance_init();VBK_REG=0;
     text_drawn=TRUE;td_ui_draw();
 }
 void td_ui_draw(void) BANKED {
-    UBYTE i,wait,service,fare,changed=td_ui_mode!=td.mode; UWORD u=td.u>>4,v=td.v>>4;
-    td_ui_mode=td.mode;
+    UBYTE i,wait,service,fare,page=(td.mode==TD_PAUSE&&td.menu>=TD_SETTINGS_SOUND)?(TD_PAUSE|128):td.mode;
+    UBYTE changed=td_ui_mode!=page; UWORD u=td.u>>4,v=td.v>>4;
+    td_ui_mode=page;
     text_drawn=TRUE;
     if(td.mode==TD_MAP){
         ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
         td_map_headers();return;
     }
     if(td.mode==TD_ROAM || td.mode==TD_WAIT || td.mode==TD_RIDE) {
-        ui_set_pos(0,120);
+        /* Normal driving has one8px strip; notices and transit get16px. */
+        ui_set_pos(0,td.mode==TD_ROAM?(td.msg?128:136):120);
         if(td.mode==TD_WAIT){
             wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
             sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(0,td_line);
@@ -210,11 +251,8 @@ void td_ui_draw(void) BANKED {
         if(td.mode==TD_RIDE){sprintf(td_line,"RIDING %u SEC",td.ride_left);td_row(0,td_line);td_row(1,td_cursor.name);td_row(2,"FARE PAID / ON TIME");return;}
         fare=td.msg==4&&td.district==TD_DISTRICT_ISLANDS&&td.job!=TD_NONE&&td.cash<4;
         if(td.msg){
-            const char *m[]={"","STOP TO INTERACT",td_wrong_vehicle,"JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","DRIVE FOR THIS JOB","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE"};
+            const char *m[]={"","STOP TO INTERACT",td_wrong_vehicle,"JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","DRIVE FOR THIS JOB","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK","NO PARKING ON RAILS","TRAM: STEP CLEAR","HUMAN HIT: FINE + H","POLICE: STOP + FINE","STREET BUSY: RETRY"};
             td_row(0,td.msg==5&&td.onfoot?"VEHICLE HIT: RECOVER":fare?"NO FARE: START MENU":td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":m[td.msg]);
-        }else {
-            if(td.district==0&&u>608&&u<672&&v>496&&v<560)td_row(0,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
-            else{td_get_street(u,v,td_line);td_row(0,td_line);}
         }
         if(td.job!=TD_NONE){
             sprintf(td_line,"%u/%u %uS C%u H%u",td.stage+1,td_job.count,td.left,td.health,td.wanted);td_row(1,td_line);
@@ -224,25 +262,47 @@ void td_ui_draw(void) BANKED {
                 else if(td.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"RETURN FERRY AT DOCK");
                 else if(td_target.district==TD_DISTRICT_ISLANDS)strcpy(td_line,"GO TO FERRY TERMINAL");
                 else strcpy(td_line,"NO ROAD ROUTE");
-                td_row(2,td_line);
-            }else td_row(2,td_target.name);
+                td_guided_row(td_line);
+            }else td_guided_row(td_target.name);
         }
-        else {sprintf(td_line,"$%u %s H%u",td.cash,td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td.onfoot?(td.district==TD_DISTRICT_ISLANDS?"B: FERRY AT DOCK":"A CAR / B TRANSIT"):"SELECT JOBS START UI");}
+        else {sprintf(td_line,"$%u %s H%u",td.cash,td_boats_controlled()?"BOAT":td.onfoot?"WALK":td_vehicles[td.vehicle],td.wanted);td_row(1,td_line);td_row(2,td_boats_controlled()?"A GAS DOWN+A DOCK":td.onfoot?(td.district==TD_DISTRICT_ISLANDS?"A BOAT / B FERRY":"A/B CAR A DOOR/BOAT"):"SELECT JOBS START UI");
+            td_get_street(u,v,td_line);td_guidance_compact(td_line,FALSE);td_row(td.msg?1:0,td_line);}
         return;
     }
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
-    td_row(0," TORONTO DISPATCH");
+    td_row(0," TORONTO DISPATCH");if(td.mode!=TD_BOARD)td_row(1,"\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13");
     if(td.mode==TD_HELP){
-        td_row(2,"A GAS / B BRAKE");td_row(3,"LEFT RIGHT STEERING");td_row(4,"B HELD: REVERSE");td_row(6,"SELECT: DELIVER/JOBS");td_row(7,"START: PAUSE MENU");td_row(8,"STOP NEAR THE BEACON");td_row(10,"PARK TO WALK / TTC");td_row(12,"ON FOOT: A ENTER CAR");td_row(13,"B TTC AT A STATION");td_row(11,"FARES + TIMETABLES");td_row(14,"H: POLICE ATTENTION");td_row(15,"A OR B: ENTER CITY");return;
+        if(td.menu!=TD_SETTINGS_CONTROLS){
+            td_row(2,"WELCOME COURIER");
+            td_row(4,"MAKE DELIVERIES");td_row(5,"EXPLORE TORONTO");
+            td_row(7,"A GAS / B BRAKE");td_row(8,"L/R STEER IN MOTION");
+            td_row(10,"SELECT JOBS/DELIVER");td_row(11,"FOLLOW THE JOB ARROW");
+            td_row(13,"START MENU / SAVE");td_row(14,"SETTINGS: CONTROLS");
+            td_row(16,"A OR B: START GAME");td_row(17,"PROGRESS AUTO-SAVES");return;
+        }
+        td_row(2,"QUICK CONTROLS");
+        td_row(4,"A GAS / B BRAKE");td_row(5,"L/R STEER IN MOTION");td_row(6,"HOLD B TO REVERSE");
+        td_row(7,"SELECT JOBS/DELIVER");td_row(8,"START MENU / SAVE");
+        td_row(10,"D PAD WALK ON FOOT");td_row(11,"A/B ENTER/TAKE CAR");td_row(12,"A DOOR/BOAT B TTC");
+        td_row(13,"DOCK: DOWN+A EXIT");td_row(14,"FOLLOW THE JOB ARROW");td_row(15,"STARS: POLICE CHASE");
+        td_row(16,td.menu==TD_SETTINGS_CONTROLS?"A OR B: SETTINGS":"A OR B: START GAME");
+        td_row(17,"PROGRESS AUTO-SAVES");return;
     }
     if(td.mode==TD_PAUSE){
+        if(td.menu>=TD_SETTINGS_SOUND){
+            td_row(2,"SETTINGS");
+            td_row(5,td.menu==TD_SETTINGS_SOUND?"> SOUND":"  SOUND");
+            td_row(6,td_audio_get_mode()==TD_AUDIO_FULL?"  MUSIC + EFFECTS":td_audio_get_mode()==TD_AUDIO_EFFECTS?"  EFFECTS ONLY":"  ALL SOUND OFF");
+            td_row(8,td.menu==TD_SETTINGS_CONTROLS?"> CONTROL GUIDE":"  CONTROL GUIDE");
+            td_row(10,td.menu==TD_SETTINGS_BACK?"> BACK TO MENU":"  BACK TO MENU");
+            td_row(13,"UP/DOWN CHOOSE");td_row(14,"A SELECT / B BACK");
+            td_row(16,"SOUND: A TO CHANGE");td_row(17,"SOUND RESETS AT BOOT");return;
+        }
         sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);
-        td_row(4,td.menu==0?"> RESUME":"  RESUME");td_row(5,td.menu==1?"> CITY MAP":"  CITY MAP");td_row(6,td.menu==2?"> JOBS":"  JOBS");td_row(7,td.menu==3?(td.onfoot?"> ENTER YOUR CAR":"> GET OUT OF CAR"):(td.onfoot?"  ENTER YOUR CAR":"  GET OUT OF CAR"));td_row(8,td.menu==4?"> CHANGE VEHICLE":"  CHANGE VEHICLE");td_row(9,td.menu==5?"> TTC SCHEDULE":"  TTC SCHEDULE");td_row(10,td.menu==6?"> SAVE":"  SAVE");td_row(11,td.menu==7?"> CANCEL JOB":"  CANCEL JOB");
-        /* GBDK %c consumes one byte; integer ternaries shift later varargs.
-           This bounded label is at most18 characters plus its terminator. */
-        strcpy(td_line,td.menu==8?"> AUDIO: ":"  AUDIO: ");
-        strcat(td_line,td_audio_get_mode()==TD_AUDIO_FULL?"MUSIC+SFX":td_audio_get_mode()==TD_AUDIO_EFFECTS?"SFX ONLY":"SILENT");td_row(12,td_line);
-        td_row(14,"HOLD UP/DOWN A PICK");td_row(15,td_vehicles[td.vehicle]);td_row(17,"SELECT MAP B BACK");return;
+        td_row(4,td.menu==0?"> RESUME":"  RESUME");td_row(5,td.menu==1?"> CITY MAP":"  CITY MAP");td_row(6,td.menu==2?"> JOBS":"  JOBS");td_row(7,td.menu==3?(td.onfoot?"> ENTER YOUR CAR":"> GET OUT OF CAR"):(td.onfoot?"  ENTER YOUR CAR":"  GET OUT OF CAR"));td_row(8,td.menu==4?"> CHANGE VEHICLE":"  CHANGE VEHICLE");td_row(9,td.menu==5?"> TTC SCHEDULE":"  TTC SCHEDULE");td_row(10,(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)?(td.menu==6?"> SAVE AFTER TRIP":"  SAVE AFTER TRIP"):(td.menu==6?"> SAVE GAME":"  SAVE GAME"));td_row(11,td.menu==7?"> CANCEL JOB":"  CANCEL JOB");
+        td_row(12,td.menu==8?"> SETTINGS":"  SETTINGS");
+        td_row(14,"UP/DOWN CHOOSE");td_row(15,"A SELECT / B RESUME");
+        td_row(17,(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)?"TTC: MAP/SETTINGS":"SELECT CITY MAP");return;
     }
     if(td.mode==TD_BOARD){
         td_row(1,td.menu<TD_QUESTS?td_chapters[td.menu>>3]:"DISPATCH CHAPTER");

@@ -1,5 +1,23 @@
 # Roadmap
 
+## Second physical feedback batch — accepted, implementation in progress
+
+The user approved the current character designs, supplied 23 points and confirmed
+the full batch for implementation/reload. [Complete requirements and acceptance
+checks](docs/SANDBOX_FEEDBACK_2026_10_04.md) track natural off-screen arrivals,
+quick vehicle theft, controllable boats, playable shop interiors, sidewalks,
+stationary steering, improved collisions/driving, crossings/signals, street
+density/social activity, parking/buildings/water, original music, objective
+arrows and an official-source geographic audit. Existing9c155 remains the tested
+physical baseline; no new implementation/build/write is established by capture.
+
+## Dialogue cutscenes — accepted future direction, 2026-10-04
+
+- [x] Record the accepted Pokémon battle-camera composition reference: original over-the-shoulder courier foreground facing the speaker, bright pixel art and a readable text box. Preserve north-up city gameplay and approved human sprites.
+- [ ] Prototype one original shopkeeper conversation with static background/window portraits, A advance and B return; the current timed greeting is not this cutscene.
+- [ ] Verify native tile/palette ownership, full room/text restoration, held-button consumption, world-clock/audio behavior and exact courier/mission/vehicle state. Avoid extra actors and saved fields; measure any transient memory.
+- [ ] Author and review further original dialogue content after the prototype is playable. No story, quest dialogue coverage, new-ROM build or hardware result is established by this accepted art direction.
+
 ## Hardware feedback update — 2026-10-04
 
 - [x] Slow and stabilise player driving; actual-C motion tests and native cardinal runs/braking/reverse pass. Human corner feel remains open.

@@ -5,6 +5,8 @@
  * Changes: restore aircraft at actors_render entry; after ground actors,
  * render signal tiles, capacity-admitted harbour boats, then ambient aircraft.
  * Ground poses now use signed clipping and whole-pose scanline admission.
+ * Scene-bounded ground traversal and ordered overlay dispatch are banked;
+ * stock emote/player/window logic and final saved-bank restore remain here.
  *
  * MIT License
  * Copyright (c) 2020 Toxa
@@ -31,6 +33,9 @@
 
 #include "actor.h"
 #include "td_aircraft_render.h"
+#include "data_manager.h"
+#include "td_sandbox.h"
+#include "td_scenery.h"
 #include "td_boats.h"
 #include "td_traffic_lights.h"
 #include "td_actor_render.h"
@@ -201,10 +206,8 @@ void actors_update(void) BANKED {
 
 void actors_render(void) NONBANKED {
     UBYTE _save = CURRENT_BANK;
-    static actor_t *actor;
-    UBYTE ground_index;
 
-    td_aircraft_render_restore();
+    td_actor_render_before();
 
     if (emote_actor) {
         SWITCH_ROM(emote_actor->sprite.bank);
@@ -250,33 +253,12 @@ void actors_render(void) NONBANKED {
         }
     }
 
-    // Stable runtime slot order: fleet/parked car, people, tram, then marker.
-    // The stock activation-list order can rotate when actors enter/leave view.
-    for (ground_index = 2; ground_index <= MAX_ACTORS; ground_index++) {
-        actor = &actors[ground_index == MAX_ACTORS ? 1 : ground_index];
-        if (!CHK_FLAG(actor->flags, ACTOR_FLAG_ACTIVE) ||
-            CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
-           continue;
-        }
+    if(td_boats_controlled())td_boats_render();
 
-        if (CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
-            screen_x = SUBPX_TO_PX(actor->pos.x);
-            screen_y = SUBPX_TO_PX(actor->pos.y);
-        } else {
-            screen_x = SUBPX_TO_PX(actor->pos.x) - draw_scroll_x;
-            screen_y = SUBPX_TO_PX(actor->pos.y) - draw_scroll_y;
-        }
-
-        if (((window_hide_actors) && (((screen_x + 8) > WX_REG) && ((screen_y - 8) > WY_REG)))) {
-            continue;
-        }
-        td_actor_render_actor(actor);
-    }
+    td_actor_render_ground(window_hide_actors);
 
     SWITCH_ROM(_save);
-    td_traffic_lights_render();
-    td_boats_render();
-    td_aircraft_render();
+    td_actor_render_after();
 }
 
 static void deactivate_actor_impl(actor_t *actor) {

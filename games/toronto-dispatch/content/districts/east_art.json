@@ -17033,7 +17033,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "9a5c6ddfe50bf7439361a7bc27e8f249e9f82e67fbc9f6f51b9f3232b5dcb027",
+  "background_sha256": "066fc89020671fc61f6fd822ee55981af83d5bd17757aea4634efa6f24a4a35e",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -18250,8 +18250,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 106,
-    "flip_canonical_unique_tiles": 85,
+    "raw_unique_tiles": 124,
+    "flip_canonical_unique_tiles": 98,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
@@ -18373,11 +18373,21 @@
     "original_pixels": true,
     "decorative_game_placements_not_surveyed": true,
     "counts": {
-      "bench": 18,
-      "bin": 21,
-      "flowers": 20,
+      "bench": 13,
+      "bin": 12,
+      "crossing_sign": 62,
+      "crosswalk": 654,
+      "facade_module": 50,
+      "fence": 13,
+      "flowers": 15,
+      "light_pole": 10,
+      "parking_bay": 8,
+      "parking_lot": 1,
       "roof_module": 47,
-      "street_sign": 20
+      "shop_entrance": 1,
+      "stop_line": 327,
+      "street_sign": 14,
+      "streetcar_stop": 3
     },
     "placements": [
       {
@@ -18386,9 +18396,19 @@
         "y": 120
       },
       {
+        "kind": "facade_module",
+        "x": 56,
+        "y": 128
+      },
+      {
         "kind": "roof_module",
         "x": 440,
         "y": 120
+      },
+      {
+        "kind": "facade_module",
+        "x": 440,
+        "y": 128
       },
       {
         "kind": "roof_module",
@@ -18399,6 +18419,16 @@
         "kind": "roof_module",
         "x": 616,
         "y": 120
+      },
+      {
+        "kind": "facade_module",
+        "x": 600,
+        "y": 144
+      },
+      {
+        "kind": "facade_module",
+        "x": 616,
+        "y": 144
       },
       {
         "kind": "roof_module",
@@ -18406,9 +18436,19 @@
         "y": 120
       },
       {
+        "kind": "facade_module",
+        "x": 760,
+        "y": 128
+      },
+      {
         "kind": "roof_module",
         "x": 824,
         "y": 120
+      },
+      {
+        "kind": "facade_module",
+        "x": 824,
+        "y": 128
       },
       {
         "kind": "roof_module",
@@ -18416,14 +18456,29 @@
         "y": 152
       },
       {
+        "kind": "facade_module",
+        "x": 56,
+        "y": 168
+      },
+      {
         "kind": "roof_module",
         "x": 440,
         "y": 152
       },
       {
+        "kind": "facade_module",
+        "x": 440,
+        "y": 160
+      },
+      {
         "kind": "roof_module",
         "x": 824,
         "y": 184
+      },
+      {
+        "kind": "facade_module",
+        "x": 824,
+        "y": 192
       },
       {
         "kind": "roof_module",
@@ -18436,6 +18491,16 @@
         "y": 216
       },
       {
+        "kind": "facade_module",
+        "x": 56,
+        "y": 240
+      },
+      {
+        "kind": "facade_module",
+        "x": 72,
+        "y": 240
+      },
+      {
         "kind": "roof_module",
         "x": 120,
         "y": 216
@@ -18446,9 +18511,24 @@
         "y": 216
       },
       {
+        "kind": "facade_module",
+        "x": 120,
+        "y": 240
+      },
+      {
+        "kind": "facade_module",
+        "x": 136,
+        "y": 240
+      },
+      {
         "kind": "roof_module",
         "x": 56,
         "y": 344
+      },
+      {
+        "kind": "facade_module",
+        "x": 56,
+        "y": 352
       },
       {
         "kind": "roof_module",
@@ -18456,9 +18536,19 @@
         "y": 344
       },
       {
+        "kind": "facade_module",
+        "x": 120,
+        "y": 352
+      },
+      {
         "kind": "roof_module",
         "x": 440,
         "y": 344
+      },
+      {
+        "kind": "facade_module",
+        "x": 440,
+        "y": 352
       },
       {
         "kind": "roof_module",
@@ -18466,9 +18556,19 @@
         "y": 344
       },
       {
+        "kind": "facade_module",
+        "x": 600,
+        "y": 352
+      },
+      {
         "kind": "roof_module",
         "x": 280,
         "y": 472
+      },
+      {
+        "kind": "facade_module",
+        "x": 280,
+        "y": 480
       },
       {
         "kind": "roof_module",
@@ -18481,9 +18581,29 @@
         "y": 472
       },
       {
+        "kind": "facade_module",
+        "x": 440,
+        "y": 480
+      },
+      {
+        "kind": "facade_module",
+        "x": 448,
+        "y": 480
+      },
+      {
+        "kind": "facade_module",
+        "x": 464,
+        "y": 480
+      },
+      {
         "kind": "roof_module",
         "x": 600,
         "y": 472
+      },
+      {
+        "kind": "facade_module",
+        "x": 600,
+        "y": 480
       },
       {
         "kind": "roof_module",
@@ -18496,14 +18616,39 @@
         "y": 568
       },
       {
+        "kind": "facade_module",
+        "x": 728,
+        "y": 576
+      },
+      {
+        "kind": "facade_module",
+        "x": 736,
+        "y": 576
+      },
+      {
+        "kind": "facade_module",
+        "x": 752,
+        "y": 576
+      },
+      {
         "kind": "roof_module",
         "x": 888,
         "y": 568
       },
       {
+        "kind": "facade_module",
+        "x": 888,
+        "y": 576
+      },
+      {
         "kind": "roof_module",
         "x": 952,
         "y": 568
+      },
+      {
+        "kind": "facade_module",
+        "x": 952,
+        "y": 576
       },
       {
         "kind": "roof_module",
@@ -18514,6 +18659,16 @@
         "kind": "roof_module",
         "x": 72,
         "y": 600
+      },
+      {
+        "kind": "facade_module",
+        "x": 56,
+        "y": 624
+      },
+      {
+        "kind": "facade_module",
+        "x": 72,
+        "y": 624
       },
       {
         "kind": "roof_module",
@@ -18526,14 +18681,34 @@
         "y": 600
       },
       {
+        "kind": "facade_module",
+        "x": 120,
+        "y": 624
+      },
+      {
+        "kind": "facade_module",
+        "x": 136,
+        "y": 624
+      },
+      {
         "kind": "roof_module",
         "x": 280,
         "y": 600
       },
       {
+        "kind": "facade_module",
+        "x": 280,
+        "y": 608
+      },
+      {
         "kind": "roof_module",
         "x": 600,
         "y": 600
+      },
+      {
+        "kind": "facade_module",
+        "x": 600,
+        "y": 608
       },
       {
         "kind": "roof_module",
@@ -18541,9 +18716,19 @@
         "y": 600
       },
       {
+        "kind": "facade_module",
+        "x": 664,
+        "y": 608
+      },
+      {
         "kind": "roof_module",
         "x": 728,
         "y": 600
+      },
+      {
+        "kind": "facade_module",
+        "x": 728,
+        "y": 608
       },
       {
         "kind": "roof_module",
@@ -18551,9 +18736,19 @@
         "y": 600
       },
       {
+        "kind": "facade_module",
+        "x": 888,
+        "y": 608
+      },
+      {
         "kind": "roof_module",
         "x": 952,
         "y": 600
+      },
+      {
+        "kind": "facade_module",
+        "x": 952,
+        "y": 608
       },
       {
         "kind": "roof_module",
@@ -18561,9 +18756,19 @@
         "y": 632
       },
       {
+        "kind": "facade_module",
+        "x": 280,
+        "y": 648
+      },
+      {
         "kind": "roof_module",
         "x": 600,
         "y": 632
+      },
+      {
+        "kind": "facade_module",
+        "x": 600,
+        "y": 640
       },
       {
         "kind": "roof_module",
@@ -18576,9 +18781,29 @@
         "y": 664
       },
       {
+        "kind": "facade_module",
+        "x": 56,
+        "y": 672
+      },
+      {
+        "kind": "facade_module",
+        "x": 64,
+        "y": 672
+      },
+      {
+        "kind": "facade_module",
+        "x": 80,
+        "y": 672
+      },
+      {
         "kind": "roof_module",
         "x": 120,
         "y": 664
+      },
+      {
+        "kind": "facade_module",
+        "x": 120,
+        "y": 672
       },
       {
         "kind": "roof_module",
@@ -18586,9 +18811,19 @@
         "y": 728
       },
       {
+        "kind": "facade_module",
+        "x": 888,
+        "y": 744
+      },
+      {
         "kind": "roof_module",
         "x": 952,
         "y": 728
+      },
+      {
+        "kind": "facade_module",
+        "x": 952,
+        "y": 744
       },
       {
         "kind": "roof_module",
@@ -18596,9 +18831,19 @@
         "y": 760
       },
       {
+        "kind": "facade_module",
+        "x": 440,
+        "y": 768
+      },
+      {
         "kind": "roof_module",
         "x": 504,
         "y": 760
+      },
+      {
+        "kind": "facade_module",
+        "x": 504,
+        "y": 768
       },
       {
         "kind": "roof_module",
@@ -18606,9 +18851,19 @@
         "y": 760
       },
       {
+        "kind": "facade_module",
+        "x": 568,
+        "y": 768
+      },
+      {
         "kind": "roof_module",
         "x": 632,
         "y": 760
+      },
+      {
+        "kind": "facade_module",
+        "x": 632,
+        "y": 768
       },
       {
         "kind": "roof_module",
@@ -18616,32 +18871,5336 @@
         "y": 760
       },
       {
+        "kind": "facade_module",
+        "x": 696,
+        "y": 768
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 40
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 48
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 224,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 232,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 80
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 64
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 80
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 32
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 88
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 40
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 48
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 384,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 392,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 80
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 64
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 80
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 32
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 88
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 40
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 48
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 544,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 552,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 80
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 64
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 80
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 32
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 88
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 40
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 48
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 696,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 704,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 720,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 704,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 712,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 80
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 64
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 80
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 32
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 88
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 40
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 48
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 920,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 936,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 944,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 960,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 944,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 952,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 80
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 40
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 48
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 56
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 64
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 72
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 80
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 64
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 72
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 80
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 32
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 88
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 192
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 184
+      },
+      {
+        "kind": "stop_line",
+        "x": 208,
+        "y": 184
+      },
+      {
+        "kind": "stop_line",
+        "x": 216,
+        "y": 184
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 184
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 200
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 208
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 184
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 192
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 200
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 216
+      },
+      {
+        "kind": "stop_line",
+        "x": 224,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 232,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 224
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 176
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 192
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 184
+      },
+      {
+        "kind": "stop_line",
+        "x": 368,
+        "y": 184
+      },
+      {
+        "kind": "stop_line",
+        "x": 376,
+        "y": 184
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 184
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 200
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 208
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 184
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 192
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 200
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 216
+      },
+      {
+        "kind": "stop_line",
+        "x": 384,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 392,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 224
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 184
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 192
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 200
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 208
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 216
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 224
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 208
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 216
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 224
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 176
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 696,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 704,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 720,
+        "y": 240
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 696,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 256
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 240
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 696,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 704,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 720,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 704,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 712,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 256
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 256
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 272
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 224
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 256
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 240
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 816,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 824,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 256
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 256
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 272
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 224
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 920,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 936,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 944,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 960,
+        "y": 240
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 928,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 936,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 256
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 232
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 240
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 920,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 936,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 944,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 960,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 944,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 952,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 232
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 240
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 248
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 256
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 256
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 272
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 224
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 208,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 216,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 224,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 232,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 304
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 288
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 304
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 256
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 312
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 368,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 376,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 384,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 392,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 304
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 288
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 304
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 256
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 312
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 544,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 552,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 304
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 288
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 304
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 256
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 312
+      },
+      {
+        "kind": "crosswalk",
+        "x": 648,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 664,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 672,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 656,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 664,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 264
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 272
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 264
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 272
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 280
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 288
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 296
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 304
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 288
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 296
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 304
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 640,
+        "y": 256
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 696,
+        "y": 312
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 696,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 704,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 720,
+        "y": 352
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 696,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 368
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 352
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 696,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 704,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 720,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 704,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 712,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 368
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 368
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 384
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 336
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 352
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 800,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 808,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 368
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 352
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 816,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 824,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 368
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 368
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 384
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 336
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 920,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 936,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 944,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 960,
+        "y": 352
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 928,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 936,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 368
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 344
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 352
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 920,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 936,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 944,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 960,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 944,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 952,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 344
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 352
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 360
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 368
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 368
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 384
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 336
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 208,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 216,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 224,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 232,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 416
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 400
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 416
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 368
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 424
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 368,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 376,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 384,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 392,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 416
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 400
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 416
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 368
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 424
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 528,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 536,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 544,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 552,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 416
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 400
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 416
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 368
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 424
+      },
+      {
+        "kind": "crosswalk",
+        "x": 648,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 664,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 672,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 656,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 664,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 376
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 384
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 376
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 384
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 392
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 400
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 408
+      },
+      {
+        "kind": "crosswalk",
+        "x": 656,
+        "y": 416
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 400
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 408
+      },
+      {
+        "kind": "stop_line",
+        "x": 648,
+        "y": 416
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 640,
+        "y": 368
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 696,
+        "y": 424
+      },
+      {
+        "kind": "crosswalk",
+        "x": 680,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 696,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 704,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 720,
+        "y": 480
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 688,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 696,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 496
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 712,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 480
+      },
+      {
+        "kind": "stop_line",
+        "x": 720,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 496
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 688,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 496
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 680,
+        "y": 512
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 464
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 480
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 800,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 808,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 496
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 480
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 816,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 824,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 496
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 496
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 512
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 464
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 920,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 936,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 944,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 960,
+        "y": 480
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 928,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 936,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 496
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 952,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 472
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 480
+      },
+      {
+        "kind": "stop_line",
+        "x": 960,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 472
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 480
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 488
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 496
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 928,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 496
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 920,
+        "y": 512
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 464
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 208,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 216,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 528
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 536
+      },
+      {
+        "kind": "stop_line",
+        "x": 224,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 232,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 544
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 528
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 528
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 536
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 544
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 496
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 552
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 368,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 376,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 528
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 536
+      },
+      {
+        "kind": "stop_line",
+        "x": 384,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 392,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 544
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 528
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 528
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 536
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 544
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 496
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 552
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 528,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 536,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 528
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 504
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 512
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 536
+      },
+      {
+        "kind": "stop_line",
+        "x": 544,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 552,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 544
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 504
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 512
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 520
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 528
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 536
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 544
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 528
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 536
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 544
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 496
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 552
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 640
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 632
+      },
+      {
+        "kind": "stop_line",
+        "x": 800,
+        "y": 632
+      },
+      {
+        "kind": "stop_line",
+        "x": 808,
+        "y": 632
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 632
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 648
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 656
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 632
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 640
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 648
+      },
+      {
+        "kind": "crosswalk",
+        "x": 792,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 808,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 816,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 824,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 832,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 816,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 824,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 832,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 632
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 640
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 648
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 656
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 800,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 656
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 792,
+        "y": 672
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 624
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 680
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 360,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 368,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 376,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 680
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 688
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 680
+      },
+      {
+        "kind": "crosswalk",
+        "x": 360,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 368,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 376,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 384,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 392,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 400,
+        "y": 696
+      },
+      {
+        "kind": "stop_line",
+        "x": 384,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 392,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 400,
+        "y": 704
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 656
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 712
+      },
+      {
+        "kind": "crosswalk",
+        "x": 520,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 536,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 544,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 560,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 528,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 536,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 680
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 688
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 552,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 664
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 672
+      },
+      {
+        "kind": "stop_line",
+        "x": 560,
+        "y": 680
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 664
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 672
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 680
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 688
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 528,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 688
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 696
+      },
+      {
+        "kind": "stop_line",
+        "x": 520,
+        "y": 704
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 656
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 712
+      },
+      {
+        "kind": "crosswalk",
+        "x": 200,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 216,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 224,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 240,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 696
+      },
+      {
+        "kind": "stop_line",
+        "x": 208,
+        "y": 696
+      },
+      {
+        "kind": "stop_line",
+        "x": 216,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 712
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 720
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 728
+      },
+      {
+        "kind": "crosswalk",
+        "x": 232,
+        "y": 736
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 696
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 704
+      },
+      {
+        "kind": "stop_line",
+        "x": 240,
+        "y": 712
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 696
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 704
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 712
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 720
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 728
+      },
+      {
+        "kind": "crosswalk",
+        "x": 208,
+        "y": 736
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 720
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 728
+      },
+      {
+        "kind": "stop_line",
+        "x": 200,
+        "y": 736
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 688
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 744
+      },
+      {
+        "kind": "parking_bay",
+        "x": 72,
+        "y": 32,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 72,
+        "y": 80,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 72,
+        "y": 256,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 72,
+        "y": 304,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 752,
+        "y": 224,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 752,
+        "y": 272,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 72,
+        "y": 368,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_bay",
+        "x": 72,
+        "y": 416,
+        "width": 32,
+        "height": 16
+      },
+      {
+        "kind": "parking_lot",
+        "x": 736,
+        "y": 192,
+        "width": 64,
+        "height": 32,
+        "fictional": true
+      },
+      {
+        "kind": "streetcar_stop",
+        "x": 152,
+        "y": 576
+      },
+      {
+        "kind": "streetcar_stop",
+        "x": 744,
+        "y": 544
+      },
+      {
+        "kind": "streetcar_stop",
+        "x": 904,
+        "y": 544
+      },
+      {
+        "kind": "shop_entrance",
+        "x": 760,
+        "y": 144
+      },
+      {
         "kind": "bench",
         "x": 256,
         "y": 120
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 488,
         "y": 104
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 648,
         "y": 104
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 872,
         "y": 104
       },
       {
-        "kind": "bench",
+        "kind": "street_sign",
         "x": 904,
         "y": 104
       },
       {
-        "kind": "bench",
+        "kind": "street_sign",
         "x": 488,
         "y": 136
       },
@@ -18666,12 +24225,12 @@
         "y": 168
       },
       {
-        "kind": "flowers",
+        "kind": "bin",
         "x": 488,
         "y": 168
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 584,
         "y": 168
       },
@@ -18681,12 +24240,12 @@
         "y": 168
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 904,
         "y": 168
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 168,
         "y": 200
       },
@@ -18696,22 +24255,12 @@
         "y": 200
       },
       {
-        "kind": "street_sign",
-        "x": 744,
-        "y": 200
-      },
-      {
-        "kind": "bin",
-        "x": 776,
-        "y": 200
-      },
-      {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 872,
         "y": 200
       },
       {
-        "kind": "bin",
+        "kind": "fence",
         "x": 904,
         "y": 200
       },
@@ -18731,12 +24280,12 @@
         "y": 232
       },
       {
-        "kind": "flowers",
+        "kind": "bin",
         "x": 744,
         "y": 296
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 776,
         "y": 296
       },
@@ -18746,7 +24295,7 @@
         "y": 328
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 264,
         "y": 328
       },
@@ -18756,17 +24305,17 @@
         "y": 328
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 648,
         "y": 328
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 744,
         "y": 328
       },
       {
-        "kind": "bin",
+        "kind": "fence",
         "x": 776,
         "y": 328
       },
@@ -18776,17 +24325,17 @@
         "y": 328
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 168,
         "y": 360
       },
       {
-        "kind": "flowers",
+        "kind": "bin",
         "x": 296,
         "y": 360
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 328,
         "y": 360
       },
@@ -18811,7 +24360,7 @@
         "y": 456
       },
       {
-        "kind": "bench",
+        "kind": "street_sign",
         "x": 168,
         "y": 456
       },
@@ -18821,7 +24370,7 @@
         "y": 456
       },
       {
-        "kind": "bin",
+        "kind": "fence",
         "x": 648,
         "y": 456
       },
@@ -18836,12 +24385,12 @@
         "y": 456
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 40,
         "y": 488
       },
       {
-        "kind": "flowers",
+        "kind": "bin",
         "x": 168,
         "y": 488
       },
@@ -18851,42 +24400,42 @@
         "y": 488
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 328,
         "y": 584
       },
       {
-        "kind": "street_sign",
+        "kind": "light_pole",
         "x": 328,
         "y": 616
       },
       {
-        "kind": "bench",
+        "kind": "street_sign",
         "x": 776,
         "y": 616
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 328,
         "y": 648
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 424,
         "y": 648
       },
       {
-        "kind": "bin",
+        "kind": "fence",
         "x": 456,
         "y": 648
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 488,
         "y": 648
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 648,
         "y": 648
       },
@@ -18896,32 +24445,32 @@
         "y": 680
       },
       {
-        "kind": "street_sign",
+        "kind": "light_pole",
         "x": 264,
         "y": 680
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 296,
         "y": 680
       },
       {
-        "kind": "bench",
+        "kind": "street_sign",
         "x": 328,
         "y": 680
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 40,
         "y": 712
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 744,
         "y": 712
       },
       {
-        "kind": "bin",
+        "kind": "fence",
         "x": 776,
         "y": 712
       },
@@ -18931,7 +24480,7 @@
         "y": 744
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 776,
         "y": 744
       },
@@ -18941,42 +24490,42 @@
         "y": 776
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 136,
         "y": 776
       },
       {
-        "kind": "street_sign",
+        "kind": "light_pole",
         "x": 168,
         "y": 776
       },
       {
-        "kind": "bin",
+        "kind": "flowers",
         "x": 200,
         "y": 776
       },
       {
-        "kind": "bench",
+        "kind": "street_sign",
         "x": 232,
         "y": 776
       },
       {
-        "kind": "flowers",
+        "kind": "bin",
         "x": 264,
         "y": 776
       },
       {
-        "kind": "street_sign",
+        "kind": "bench",
         "x": 296,
         "y": 776
       },
       {
-        "kind": "bin",
+        "kind": "fence",
         "x": 328,
         "y": 776
       },
       {
-        "kind": "bench",
+        "kind": "light_pole",
         "x": 360,
         "y": 776
       },
@@ -18996,7 +24545,7 @@
         "y": 776
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 104,
         "y": 808
       },
@@ -19006,16 +24555,2812 @@
         "y": 808
       },
       {
-        "kind": "flowers",
+        "kind": "fence",
         "x": 872,
         "y": 808
       }
     ],
     "new_oam_objects": 0,
     "new_runtime_state_bytes": 0,
+    "destructible_furniture": [
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 32,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 0
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 32,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 1
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 32,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 2
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 32,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 3
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 32,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 4
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 88,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 5
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 88,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 6
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 88,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 7
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 88,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 8
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 88,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 9
+      },
+      {
+        "kind": "flowers",
+        "x": 488,
+        "y": 104,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 10
+      },
+      {
+        "kind": "light_pole",
+        "x": 648,
+        "y": 104,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 11
+      },
+      {
+        "kind": "flowers",
+        "x": 872,
+        "y": 104,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 12
+      },
+      {
+        "kind": "street_sign",
+        "x": 904,
+        "y": 104,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 13
+      },
+      {
+        "kind": "street_sign",
+        "x": 488,
+        "y": 136,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 14
+      },
+      {
+        "kind": "flowers",
+        "x": 648,
+        "y": 136,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 15
+      },
+      {
+        "kind": "street_sign",
+        "x": 264,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 16
+      },
+      {
+        "kind": "bin",
+        "x": 296,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 17
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 18
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 19
+      },
+      {
+        "kind": "light_pole",
+        "x": 584,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 20
+      },
+      {
+        "kind": "street_sign",
+        "x": 648,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 21
+      },
+      {
+        "kind": "bench",
+        "x": 904,
+        "y": 168,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 22
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 176,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 23
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 176,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 24
+      },
+      {
+        "kind": "light_pole",
+        "x": 168,
+        "y": 200,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 25
+      },
+      {
+        "kind": "flowers",
+        "x": 584,
+        "y": 200,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 26
+      },
+      {
+        "kind": "bench",
+        "x": 872,
+        "y": 200,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 27
+      },
+      {
+        "kind": "fence",
+        "x": 904,
+        "y": 200,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 28
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 224,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 29
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 224,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 30
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 224,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 31
+      },
+      {
+        "kind": "flowers",
+        "x": 168,
+        "y": 232,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 32
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 232,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 33
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 232,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 34
+      },
+      {
+        "kind": "street_sign",
+        "x": 584,
+        "y": 232,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 35
+      },
+      {
+        "kind": "bin",
+        "x": 616,
+        "y": 232,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 36
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 256,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 37
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 256,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 38
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 256,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 39
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 640,
+        "y": 256,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 40
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 280,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 41
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 280,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 42
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 280,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 43
+      },
+      {
+        "kind": "bin",
+        "x": 744,
+        "y": 296,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 44
+      },
+      {
+        "kind": "bench",
+        "x": 776,
+        "y": 296,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 45
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 312,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 46
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 312,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 47
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 312,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 48
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 696,
+        "y": 312,
+        "ground_rows": [
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111"
+        ],
+        "palette": 0,
+        "id": 49
+      },
+      {
+        "kind": "bench",
+        "x": 168,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 50
+      },
+      {
+        "kind": "flowers",
+        "x": 264,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 51
+      },
+      {
+        "kind": "street_sign",
+        "x": 488,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 52
+      },
+      {
+        "kind": "flowers",
+        "x": 648,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 53
+      },
+      {
+        "kind": "bench",
+        "x": 744,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 54
+      },
+      {
+        "kind": "fence",
+        "x": 776,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 55
+      },
+      {
+        "kind": "bin",
+        "x": 904,
+        "y": 328,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 56
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 336,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 57
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 336,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 58
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 336,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 59
+      },
+      {
+        "kind": "fence",
+        "x": 168,
+        "y": 360,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 60
+      },
+      {
+        "kind": "bin",
+        "x": 296,
+        "y": 360,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 61
+      },
+      {
+        "kind": "bench",
+        "x": 328,
+        "y": 360,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 62
+      },
+      {
+        "kind": "bin",
+        "x": 488,
+        "y": 360,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 63
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 368,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 64
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 368,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 65
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 368,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 66
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 640,
+        "y": 368,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 67
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 392,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 68
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 392,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 69
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 392,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 70
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 424,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 71
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 424,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 72
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 424,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 73
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 696,
+        "y": 424,
+        "ground_rows": [
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111",
+          "11111111"
+        ],
+        "palette": 0,
+        "id": 74
+      },
+      {
+        "kind": "flowers",
+        "x": 744,
+        "y": 424,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 75
+      },
+      {
+        "kind": "street_sign",
+        "x": 776,
+        "y": 424,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 76
+      },
+      {
+        "kind": "bench",
+        "x": 40,
+        "y": 456,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 77
+      },
+      {
+        "kind": "street_sign",
+        "x": 168,
+        "y": 456,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 78
+      },
+      {
+        "kind": "flowers",
+        "x": 328,
+        "y": 456,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 79
+      },
+      {
+        "kind": "fence",
+        "x": 648,
+        "y": 456,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 80
+      },
+      {
+        "kind": "street_sign",
+        "x": 744,
+        "y": 456,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 81
+      },
+      {
+        "kind": "bin",
+        "x": 776,
+        "y": 456,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 82
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 672,
+        "y": 464,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 83
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 464,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 84
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 912,
+        "y": 464,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 85
+      },
+      {
+        "kind": "fence",
+        "x": 40,
+        "y": 488,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 86
+      },
+      {
+        "kind": "bin",
+        "x": 168,
+        "y": 488,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 87
+      },
+      {
+        "kind": "street_sign",
+        "x": 328,
+        "y": 488,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 88
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 496,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 89
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 496,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 90
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 496,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 91
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 728,
+        "y": 520,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 92
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 520,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 93
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 968,
+        "y": 520,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 94
+      },
+      {
+        "kind": "bus_stop",
+        "x": 744,
+        "y": 544,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 95
+      },
+      {
+        "kind": "bus_stop",
+        "x": 904,
+        "y": 544,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 96
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 552,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 97
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 552,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 98
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 552,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 99
+      },
+      {
+        "kind": "bus_stop",
+        "x": 152,
+        "y": 576,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 100
+      },
+      {
+        "kind": "fence",
+        "x": 328,
+        "y": 584,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 101
+      },
+      {
+        "kind": "light_pole",
+        "x": 328,
+        "y": 616,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 102
+      },
+      {
+        "kind": "street_sign",
+        "x": 776,
+        "y": 616,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 103
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 784,
+        "y": 624,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 104
+      },
+      {
+        "kind": "flowers",
+        "x": 328,
+        "y": 648,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 105
+      },
+      {
+        "kind": "bench",
+        "x": 424,
+        "y": 648,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 106
+      },
+      {
+        "kind": "fence",
+        "x": 456,
+        "y": 648,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 107
+      },
+      {
+        "kind": "light_pole",
+        "x": 488,
+        "y": 648,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 108
+      },
+      {
+        "kind": "fence",
+        "x": 648,
+        "y": 648,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 109
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 352,
+        "y": 656,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 110
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 512,
+        "y": 656,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 111
+      },
+      {
+        "kind": "bin",
+        "x": 168,
+        "y": 680,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 112
+      },
+      {
+        "kind": "light_pole",
+        "x": 264,
+        "y": 680,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 113
+      },
+      {
+        "kind": "flowers",
+        "x": 296,
+        "y": 680,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 114
+      },
+      {
+        "kind": "street_sign",
+        "x": 328,
+        "y": 680,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 115
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 840,
+        "y": 680,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 116
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 192,
+        "y": 688,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 117
+      },
+      {
+        "kind": "light_pole",
+        "x": 40,
+        "y": 712,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 118
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 408,
+        "y": 712,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 119
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 568,
+        "y": 712,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 120
+      },
+      {
+        "kind": "bench",
+        "x": 744,
+        "y": 712,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 121
+      },
+      {
+        "kind": "fence",
+        "x": 776,
+        "y": 712,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 122
+      },
+      {
+        "kind": "flowers",
+        "x": 40,
+        "y": 744,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 123
+      },
+      {
+        "kind": "crossing_sign",
+        "x": 248,
+        "y": 744,
+        "ground_rows": [
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333",
+          "33333333"
+        ],
+        "palette": 0,
+        "id": 124
+      },
+      {
+        "kind": "light_pole",
+        "x": 776,
+        "y": 744,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 125
+      },
+      {
+        "kind": "bin",
+        "x": 72,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 126
+      },
+      {
+        "kind": "fence",
+        "x": 136,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 127
+      },
+      {
+        "kind": "light_pole",
+        "x": 168,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 128
+      },
+      {
+        "kind": "flowers",
+        "x": 200,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 129
+      },
+      {
+        "kind": "street_sign",
+        "x": 232,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 130
+      },
+      {
+        "kind": "bin",
+        "x": 264,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 131
+      },
+      {
+        "kind": "bench",
+        "x": 296,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 132
+      },
+      {
+        "kind": "fence",
+        "x": 328,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 133
+      },
+      {
+        "kind": "light_pole",
+        "x": 360,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 134
+      },
+      {
+        "kind": "flowers",
+        "x": 392,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 135
+      },
+      {
+        "kind": "flowers",
+        "x": 776,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 136
+      },
+      {
+        "kind": "bench",
+        "x": 872,
+        "y": 776,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 137
+      },
+      {
+        "kind": "fence",
+        "x": 104,
+        "y": 808,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 138
+      },
+      {
+        "kind": "street_sign",
+        "x": 776,
+        "y": 808,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 139
+      },
+      {
+        "kind": "fence",
+        "x": 872,
+        "y": 808,
+        "ground_rows": [
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222",
+          "22222222"
+        ],
+        "palette": 6,
+        "id": 140
+      }
+    ],
+    "destruction_runtime": "td_scenery.c shared bounded transient state; buildings/trees/shoreline remain solid",
     "collision_bytes_changed": 0,
     "palette_priority_bytes_changed": 0,
     "building_footprints_changed": 0,
-    "formal_corridors_protected": true
+    "formal_corridors_protected": true,
+    "junctions": [
+      {
+        "x": 224,
+        "y": 64,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 384,
+        "y": 64,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 544,
+        "y": 64,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 704,
+        "y": 64,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 944,
+        "y": 64,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 224,
+        "y": 208,
+        "arms": [
+          "north",
+          "east",
+          "south"
+        ]
+      },
+      {
+        "x": 384,
+        "y": 208,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 704,
+        "y": 256,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 816,
+        "y": 256,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 944,
+        "y": 256,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 224,
+        "y": 288,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 384,
+        "y": 288,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 544,
+        "y": 288,
+        "arms": [
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 672,
+        "y": 288,
+        "arms": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "x": 704,
+        "y": 368,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 816,
+        "y": 368,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 944,
+        "y": 368,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 224,
+        "y": 400,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 384,
+        "y": 400,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 544,
+        "y": 400,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 672,
+        "y": 400,
+        "arms": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "x": 704,
+        "y": 496,
+        "arms": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "x": 816,
+        "y": 496,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 944,
+        "y": 496,
+        "arms": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "x": 224,
+        "y": 528,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 384,
+        "y": 528,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 544,
+        "y": 528,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 816,
+        "y": 656,
+        "arms": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      {
+        "x": 384,
+        "y": 688,
+        "arms": [
+          "north",
+          "east",
+          "south"
+        ]
+      },
+      {
+        "x": 544,
+        "y": 688,
+        "arms": [
+          "north",
+          "east",
+          "west"
+        ]
+      },
+      {
+        "x": 224,
+        "y": 720,
+        "arms": [
+          "north",
+          "east",
+          "west"
+        ]
+      }
+    ],
+    "parked_vehicle_candidates": [
+      {
+        "x": 88,
+        "y": 40,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 88,
+        "y": 88,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 88,
+        "y": 264,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 88,
+        "y": 312,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 768,
+        "y": 232,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 768,
+        "y": 280,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 88,
+        "y": 376,
+        "heading": 0,
+        "kind": "curb_bay"
+      },
+      {
+        "x": 88,
+        "y": 424,
+        "heading": 0,
+        "kind": "curb_bay"
+      }
+    ],
+    "parking_lots": [
+      {
+        "x": 736,
+        "y": 192,
+        "width": 64,
+        "height": 32,
+        "fictional": true
+      }
+    ],
+    "shop_entrances": [
+      {
+        "key": "repair_shop",
+        "district": 3,
+        "x": 768,
+        "y": 148,
+        "marker_x": 760,
+        "marker_y": 144,
+        "building": [
+          752,
+          112,
+          32,
+          24
+        ],
+        "name": "EAST END REPAIRS"
+      }
+    ],
+    "water_wave_frames": [
+      [
+        "22222222",
+        "22222222",
+        "23332222",
+        "22233322",
+        "22222222",
+        "22222222",
+        "22112222",
+        "22221122"
+      ],
+      [
+        "22222222",
+        "22222222",
+        "22223332",
+        "23332222",
+        "22222222",
+        "22222222",
+        "22221122",
+        "22112222"
+      ]
+    ],
+    "water_animation": "Static background waves; moving boat wake belongs to native boat module"
   }
 }

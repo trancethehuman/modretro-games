@@ -2,7 +2,6 @@
 #include "td_roads.h"
 #include "collision.h"
 #include "input.h"
-
 static UBYTE td_road_rectangle(UBYTE left,UBYTE right,UBYTE top,UBYTE bottom){
     UBYTE axis,clear=TRUE,saved_x=tile_hit_x,saved_y=tile_hit_y;
     /* The pinned engine range API executes in fixed ROM and switches the

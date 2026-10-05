@@ -122,7 +122,10 @@ def main(background_only=False):
             grid.append(15 if blocked or not walkable(u,v) else 0 if road(u,v) else 16)
     roads=[{'points':[[24,v],[848 if v in (640,720) else 992,v]]} for v in ROWS]
     roads += [{'points':[[u,24],[u,816]]} for u in COLS]
-    scenery=decorate(img,grid,attrs,blocks,canopies,'city',{'roads':roads})
+    campaign=json.loads((ROOT/'content/campaign.json').read_text())
+    service_points=[{'x':s['u'],'y':s['v'],'name':s['name']} for s in campaign['stops']
+                    if s['district']==0 and s['transit']]
+    scenery=decorate(img,grid,attrs,blocks,canopies,'city',{'roads':roads,'stop_candidates':service_points})
     img.save(PROJECT/'assets/backgrounds/toronto_city.png')
     content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto mainland and harbour; public Island paths are in their separate ferry-only scene. Full Old Toronto boundaries remain a release check'}
     content['scenery']=scenery

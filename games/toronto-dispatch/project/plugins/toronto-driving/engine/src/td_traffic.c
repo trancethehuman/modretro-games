@@ -3,6 +3,7 @@
 #include "td_district.h"
 #include "td_roads.h"
 #include "td_streetcar_runtime.h"
+#include "collision.h"
 
 typedef struct { UWORD u,v; UBYTE arms,tile_x,tile_y; } td_signal_t;
 #include "td_traffic_signals.h"
@@ -48,7 +49,7 @@ static UBYTE td_traffic_prepare(const td_traffic_context_t *ctx,UBYTE slot,
     UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE escape,UWORD limit,td_traffic_motion_t *m){
     UBYTE hu,hv;
     if(!ctx||!ctx->u||!ctx->v||slot>=TD_TRAFFIC_SLOTS||escape>1||
-       ctx->parked_active>1||(ctx->priority_mask&0xC0)||
+       ctx->parked_active>1||
        !td_traffic_step_limit(old_u,old_v,u,v,limit))return FALSE;
     hu=td_traffic_extent(ctx->half_u,slot);hv=td_traffic_extent(ctx->half_v,slot);
     if(ctx->u[slot]!=old_u||ctx->v[slot]!=old_v||
@@ -210,7 +211,7 @@ UBYTE td_traffic_epoch_begin(const td_traffic_context_t *ctx,UBYTE district,
     UBYTE i,hu,hv,bit;UWORD u,v;
     if(!epoch)return FALSE;
     epoch->valid=0;epoch->pending_slot=255;
-    if(!ctx||!ctx->u||!ctx->v||ctx->parked_active>1||(ctx->priority_mask&0xC0)||
+    if(!ctx||!ctx->u||!ctx->v||ctx->parked_active>1||
        district>=TD_DISTRICT_COUNT||district>=TD_TRAFFIC_SIGNAL_DISTRICTS)return FALSE;
     for(i=0;i<TD_TRAFFIC_SLOTS;i++){
         u=ctx->u[i];v=ctx->v[i];
@@ -260,6 +261,14 @@ static UBYTE td_traffic_epoch_bodies(const td_traffic_epoch_t *epoch,UBYTE slot,
     if(epoch->parked_active&&!td_traffic_outside(m,epoch->park_u,epoch->park_v,7,7)&&
        !td_traffic_obstacle(m,epoch->park_u,epoch->park_v,7,7,escape))return FALSE;
     for(i=0,bit=1;i<TD_TRAFFIC_PEOPLE;i++,bit<<=1)if(epoch->people_mask&bit){
+        /* All public epochs permit at most8px movement and half16 car
+           extents. A human is half3, so maximum reach is27px. Three16px
+           buckets guarantee at least513Q4(32.0625px) separation; nearby
+           humans retain exact swept hull and monotonic escape checks. */
+        bucket=epoch->ped_u[i]>>8;
+        if(bucket>bu?(UBYTE)(bucket-bu)>=3:(UBYTE)(bu-bucket)>=3)continue;
+        bucket=epoch->ped_v[i]>>8;
+        if(bucket>bv?(UBYTE)(bucket-bv)>=3:(UBYTE)(bv-bucket)>=3)continue;
         u=epoch->ped_u[i];v=epoch->ped_v[i];
         if(!td_traffic_outside(m,u,v,3,3)&&!td_traffic_obstacle(m,u,v,3,3,escape))return FALSE;
     }
@@ -309,10 +318,13 @@ static UBYTE td_traffic_epoch_query(const td_traffic_epoch_t *epoch,UBYTE slot,
     }
     return TRUE;
 }
+static UBYTE td_traffic_epoch_commit_inner(td_traffic_epoch_t *epoch,UBYTE slot);
+static UBYTE td_traffic_epoch_road(const td_traffic_motion_t *m);
+
 /* Both public policies share candidate validation and pending ownership.
  * Retreat keeps its smaller sweep and omits only junction entry. */
 static UBYTE td_traffic_epoch_try(td_traffic_epoch_t *epoch,UBYTE slot,
-    UWORD u,UWORD v,UBYTE escape,UBYTE limit,UBYTE junction){
+    UWORD u,UWORD v,UBYTE escape,UBYTE limit,UBYTE junction,UBYTE finish){
     td_traffic_motion_t m;UBYTE hu,hv;UWORD old_u,old_v;
     if(!epoch)return FALSE;
     epoch->pending_slot=255;
@@ -330,6 +342,15 @@ static UBYTE td_traffic_epoch_try(td_traffic_epoch_t *epoch,UBYTE slot,
     m.top=(old_v<v?old_v:v)-hv*16;m.bottom=(old_v>v?old_v:v)+hv*16;
     if(!td_traffic_epoch_query(epoch,slot,&m,escape,junction))return FALSE;
     epoch->pending_u=u;epoch->pending_v=v;epoch->pending_slot=slot;
+    /* Private finish policy: bit0 runs the full move; bit1 omits only the
+     * future-tram guard for caller-proven separating retreat. Keep the
+     * validated local hull alive here without copying it through an output
+     * pointer or adding another18-byte public caller frame. */
+    if(finish&&(!td_traffic_epoch_road(&m)||
+       (!(finish&2)&&!td_streetcar_runtime_traffic_sweep_clear(epoch->district,old_u,old_v,u,v,hu))||
+       !td_traffic_epoch_commit_inner(epoch,slot))){
+        epoch->pending_slot=255;return FALSE;
+    }
     return TRUE;
 }
 UBYTE td_traffic_epoch_admit(td_traffic_epoch_t *epoch,UBYTE slot,
@@ -337,14 +358,14 @@ UBYTE td_traffic_epoch_admit(td_traffic_epoch_t *epoch,UBYTE slot,
     if(!epoch)return FALSE;
     epoch->pending_slot=255;
     if(slot>=TD_TRAFFIC_SLOTS||epoch->u[slot]!=old_u||epoch->v[slot]!=old_v)return FALSE;
-    return td_traffic_epoch_try(epoch,slot,u,v,escape,128,TRUE);
+    return td_traffic_epoch_try(epoch,slot,u,v,escape,128,TRUE,0);
 }
 UBYTE td_traffic_epoch_retreat_admit(td_traffic_epoch_t *epoch,UBYTE slot,
     UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE escape) BANKED {
     if(!epoch)return FALSE;
     epoch->pending_slot=255;
     if(slot>=TD_TRAFFIC_SLOTS||epoch->u[slot]!=old_u||epoch->v[slot]!=old_v)return FALSE;
-    return td_traffic_epoch_try(epoch,slot,u,v,escape,8,FALSE);
+    return td_traffic_epoch_try(epoch,slot,u,v,escape,8,FALSE,0);
 }
 static UBYTE td_traffic_epoch_commit_inner(td_traffic_epoch_t *epoch,UBYTE slot){
     UWORD u,v;
@@ -358,6 +379,26 @@ static UBYTE td_traffic_epoch_commit_inner(td_traffic_epoch_t *epoch,UBYTE slot)
 UBYTE td_traffic_epoch_commit(td_traffic_epoch_t *epoch,UBYTE slot) BANKED {
     return td_traffic_epoch_commit_inner(epoch,slot);
 }
+/* The admitted motion already owns its exact Q4 swept hull. Query that
+ * same union in this bank rather than round-tripping through a seven-argument
+ * road wrapper and rebuilding it. The legacy pixel-centre domain includes
+ * every fraction of pixel1016/968, but excludes pixel1017/969 and centres
+ * below8 even when a smaller fleet footprint itself fits the map. */
+static UBYTE td_traffic_epoch_road(const td_traffic_motion_t *m){
+    UBYTE left,right,top,bottom,axis,clear=TRUE,saved_x,saved_y;
+    if(m->old_u<8*16||m->u<8*16||m->old_v<8*16||m->v<8*16||
+       m->old_u>=1017*16||m->u>=1017*16||m->old_v>=969*16||m->v>=969*16)return FALSE;
+    left=m->left>>7;right=m->right>>7;top=m->top>>7;bottom=m->bottom>>7;
+    saved_x=tile_hit_x;saved_y=tile_hit_y;
+    /* Keep the canonical road sweep's shorter-axis order, mask and hit
+     * restoration. These pinned range APIs are fixed-bank engine calls. */
+    if(bottom-top<=right-left){
+        for(axis=top;axis<=bottom;axis++)if(tile_col_test_range_x(255,axis,left,right)){clear=FALSE;break;}
+    }else{
+        for(axis=left;axis<=right;axis++)if(tile_col_test_range_y(255,axis,top,bottom)){clear=FALSE;break;}
+    }
+    tile_hit_x=saved_x;tile_hit_y=saved_y;return clear;
+}
 UBYTE td_traffic_epoch_move(td_traffic_epoch_t *epoch,UBYTE slot,
     UWORD u,UWORD v,UBYTE retreat,UBYTE separating) BANKED {
     UBYTE half;
@@ -365,12 +406,6 @@ UBYTE td_traffic_epoch_move(td_traffic_epoch_t *epoch,UBYTE slot,
     epoch->pending_slot=255;
     if(slot>=TD_TRAFFIC_SLOTS||retreat>1||separating>1||(separating&&!retreat))return FALSE;
     half=epoch->half_u[slot];
-    if(half<5||half>8||epoch->half_v[slot]!=half||
-       !td_traffic_epoch_try(epoch,slot,u,v,1,retreat?8:128,!retreat))return FALSE;
-    if(!td_road_sweep(epoch->u[slot]>>4,epoch->v[slot]>>4,u>>4,v>>4,half)||
-       (!separating&&!td_streetcar_runtime_traffic_sweep_clear(epoch->district,epoch->u[slot],epoch->v[slot],u,v,half))||
-       !td_traffic_epoch_commit_inner(epoch,slot)){
-        epoch->pending_slot=255;return FALSE;
-    }
-    return TRUE;
+    if(half<5||half>8||epoch->half_v[slot]!=half)return FALSE;
+    return td_traffic_epoch_try(epoch,slot,u,v,1,retreat?8:128,!retreat,separating?3:1);
 }

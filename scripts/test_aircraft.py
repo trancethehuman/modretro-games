@@ -1,4 +1,4 @@
-"""Run sanitizer fixtures against unchanged production ambient-flight C.
+"""Run sanitizer fixtures against actual ambient-flight/police-pursuit C.
 
 Only platform storage types and the BANKED qualifier are adapted. This does not
 build a ROM, verify native sprite rendering, or establish physical performance.

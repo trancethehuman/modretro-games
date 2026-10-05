@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "ef12ddb3-2834-5eae-99f5-ed16f9bfa1c1",
+  "name": "Original grocery interior",
+  "symbol": "bg_original_grocery_interior",
+  "tileColors": "012a+023+01!023+01!023+01!023+0118+0012+012+00!065+00!014+00!065+00!012+00!065+00!014+00!065+00!012+00!065+006+065+00!012+0012+012+0012+012+002+014+006+014+002+012+002+014+006+014+002+012+002+014+006+014+002+012+002+014+006+014+002+012+0012+012+0012+012+0012+0115+",
+  "filename": "shop_grocery.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144,
+  "autoColor": false
+}

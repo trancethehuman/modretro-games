@@ -53,7 +53,7 @@ CONTRACTS = [
       "Parkside roadside drop", "Parkdale stock drop", "Return empty crates"]),
     ("WEST TRANSFER KIT", ("SMALL PACKAGE KIT", "TRAIN BUS OR ROAD"), 4, 255, 8,
      [0, 17, 18, 28, 30, 0],
-     ["Collect small repair kit", "Bloor Yonge handoff", "Ossington relay handoff",
+     ["Collect small repair kit", "Bloor Yonge handoff", "Bloorcourt relay handoff",
       "Lansdowne handoff", "Howard Park handoff", "Return reusable pouch"]),
     ("LODGE LAST MILE", ("PARK THEN WALK", "LODGE LAST MILE"), 0, 255, 12,
      [0, 29, 34, 33, 0],

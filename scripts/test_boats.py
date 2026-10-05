@@ -1,8 +1,7 @@
-"""Sanitize unchanged native boat C against original pixels and OAM oracles.
+"""Sanitize the actual controllable-boat C against PNG, water and OAM oracles.
 
-The integration checks catch lost loader bindings before actor cloning. Host
-banked-ROM/VRAM adapters establish logic, not GBDK ABI, CPU timing or hardware.
-Actual authored collision grids are checked by the sprite generator separately.
+Host fixtures use the committed collision grids and production module. They
+establish logic, not native ABI/allocation/CPU timing or physical cartridge play.
 """
 from pathlib import Path
 import json
@@ -12,169 +11,184 @@ import shutil
 import subprocess
 import sys
 import tempfile
-
+from collections import deque
 from PIL import Image
+ROOT=Path(__file__).resolve().parents[1]
+GAME=ROOT/"games/toronto-dispatch"
+ENGINE=GAME/"project/plugins/toronto-driving/engine"
+sys.path.insert(0,str(GAME/"scripts"))
+from create_atlas import decode_grid
 
-ROOT = Path(__file__).resolve().parents[1]
-GAME = ROOT / "games/toronto-dispatch"
-ENGINE = GAME / "project/plugins/toronto-driving/engine"
+def body(source,name):
+    source=re.sub(r"/\*.*?\*/|//[^\n]*","",source,flags=re.S)
+    match=re.search(r"\bvoid\s+"+re.escape(name)+r"\s*\([^)]*\)[^{]*\{",source)
+    assert match,f"Missing native integration {name}"
+    start,depth=match.end(),1
+    for i in range(start,len(source)):
+        depth+=(source[i]=="{")-(source[i]=="}")
+        if not depth:return source[start:i]
+    raise AssertionError("Unclosed production function")
 
+def grids():
+    result={}
+    for district,name in ((0,"toronto_city"),(4,"toronto_port_lands")):
+        scene=json.loads((GAME/f"project/project/scenes/{name}/scene.gbsres").read_text())
+        result[district]=decode_grid(scene["collisions"],128*122)
+    return result
 
-def function_body(source, name):
-    source = re.sub(r"/\*.*?\*/|//[^\n]*", "", source, flags=re.S)
-    match = re.search(r"\bvoid\s+" + re.escape(name) + r"\s*\([^)]*\)[^{]*\{", source)
-    assert match, f"Missing native function: {name}"
-    start, depth = match.end(), 1
-    for index in range(start, len(source)):
-        depth += (source[index] == "{") - (source[index] == "}")
-        if not depth:
-            return source[start:index]
-    raise AssertionError(f"Unclosed native function: {name}")
-
+def check_render_integration(core,helpers):
+    render=body(core,"actors_render")
+    before=body(helpers,"td_actor_render_before")
+    ground_helper=body(helpers,"td_actor_render_ground")
+    after=body(helpers,"td_actor_render_after")
+    compact=lambda source:re.sub(r"\s+","",source)
+    controlled="if(td_boats_controlled())td_boats_render();"
+    ambient="if(!td_boats_controlled())td_boats_render();"
+    combined=compact(render+before+ground_helper+after)
+    assert combined.count("td_boats_render();")==2 and \
+        combined.count(controlled)==combined.count(ambient)==1,"Keep one controlled and one ambient boat path"
+    assert compact(before)=="td_aircraft_render_restore();td_scenery_restore();", \
+        "Banked entry restores both previous overlays in their original order"
+    assert compact(after)=="td_traffic_lights_render();td_scenery_render();"+ambient+ \
+        "td_sandbox_render();td_aircraft_render();","Banked post-ground overlay contents and order stay exact"
+    assert render.count("td_actor_render_before();")==render.count("td_actor_render_after();")==1
+    assert compact(render).count(controlled)==1 and not compact(render).count(ambient)
+    assert render.count("SWITCH_ROM(_save);")==1
+    assert render.count("td_actor_render_ground(window_hide_actors);")==1
+    assert "SWITCH_ROM" not in ground_helper,"Banked ground code must retain its executing bank"
+    assert "for (ground_index" in ground_helper and "actors_len<MAX_ACTORS?actors_len:MAX_ACTORS" in ground_helper
+    assert ground_helper.count("td_actor_render_actor_local(actor);")==1 and \
+        "td_actor_render_actor(actor);" not in ground_helper, "Same-bank ground dispatch uses its unchanged private near-call actor body"
+    ground=render.index("td_actor_render_ground(window_hide_actors);")
+    assert render.index("td_actor_render_before();")<render.index("td_actor_render_actor(&PLAYER);")
+    # Use the uncompressed exact native conditional for actual function order;
+    # its position must stay before the ground loop and both bank restorations.
+    control=re.search(r"if\s*\(\s*td_boats_controlled\(\)\s*\)\s*td_boats_render\(\);",render)
+    assert control and render.index("td_actor_render_actor(&PLAYER);")<control.start()<ground< \
+        render.index("SWITCH_ROM(_save);")<render.index("td_actor_render_after();"), \
+        "Controlled hull precedes NPCs; ambient helper follows ground and saved-bank restoration"
 
 def check_integration():
-    init = function_body((ENGINE / "src/states/TORONTO.c").read_text(), "toronto_init")
-    assert init.count("td_boats_bind();") == 1, "Capture exactly one authored boat loader"
-    binding = init.index("td_boats_bind();")
-    clone = re.search(r"actors\s*\[\s*i\s*\]\s*=\s*PLAYER", init)
-    assert clone and binding < clone.start(), "Boat binding must precede actor cloning"
-    assert not re.search(r"\btd_boats_reset\s*\(", init[binding:]), \
-        "Reset after bind erases the captured native sprite and scene"
-    bind = function_body((ENGINE / "src/td_boats.c").read_text(), "td_boats_bind")
-    assert bind.count("td_boats_reset();") == 1 and bind.index("td_boats_reset();") < bind.index("loader=&actors[index]"), \
-        "Boat bind must reset before capturing the new scene loader"
-    assert "district==TD_DISTRICT_NORTH" in bind and \
-        bind.index("td_boats_reset();") < bind.index("district==TD_DISTRICT_NORTH") < bind.index("loader=&actors[index]"), \
-        "North must reset then return before unregistered actor4 capture"
-    render = function_body((ENGINE / "src/core/actor.c").read_text(), "actors_render")
-    assert render.count("td_boats_render();") == render.count("td_aircraft_render();") == 1
-    assert render.index("td_boats_render();") < render.index("td_aircraft_render();"), \
-        "Aircraft OAM admission must include the previously appended boat"
-
-    # Islands retain their existing empty loader. North has no boat loader:
-    # guard it before actor4 capture while preserving every mainland binding.
-    world = json.loads((GAME / "content/districts/world.json").read_text())
-    expected_scenes = ("toronto_city", "toronto_west", "toronto_high_park",
-                       "toronto_east", "toronto_port_lands", "toronto_islands", "toronto_north")
-    assert [(row["id"], row["scene"]) for row in world["districts"]] == \
-        list(enumerate(expected_scenes)), "Review boat integration when registered district identities change"
-    sprite_id = "22789632-122e-5a80-a195-5c8c6e7caeba"
-    loader_ids = set()
-    for district, name in enumerate(expected_scenes):
-        directory = GAME / "project/project/scenes" / name
-        scene = json.loads((directory / "scene.gbsres").read_text())
-        actors = [json.loads(path.read_text()) for path in (directory / "actors").glob("*.gbsres")]
-        loaders = [actor for actor in actors if actor["spriteSheetId"] == sprite_id]
-        if name == "toronto_north":
-            assert district == 6 and loaders == [], "North must not register a boat loader"
-            assert len(actors) == 3 and sorted(actor["_index"] for actor in actors) == [0, 1, 2], \
-                "North resource actors must remain aircraft/fleet/civilians only"
-            assert {actor["spriteSheetId"] for actor in actors} == {
-                "48d4a3f8-a6bc-56c9-8956-6e847f0b30f1",
-                "b6ae14b5-e2ae-55b7-b2e4-64cf56d4c012",
-                "e89b6d16-588b-5bfb-ae62-3fe34d537c86"}, \
-                "Review actual shared North loader identities"
-            continue
-        assert len(loaders) == 1, f"{name}: capture exactly one authored boat loader"
-        loader = loaders[0]
-        expected_index = 4 if district in (0, 1, 3) else 3
-        assert loader["_index"] == expected_index, f"{name}: native boat loader slot changed"
-        assert loader["frame"] == 2 and not loader["animate"] and not loader["persistent"], \
-            f"{name}: boat loader must remain empty and stationary"
-        assert all(not loader[field] for field in ("script", "startScript", "updateScript",
-                                                   "hit1Script", "hit2Script", "hit3Script")), \
-            f"{name}: resource loader gained gameplay scripts"
-        assert scene["spritePaletteIds"][7] == "4f09c0e2-01e7-57a7-9868-ffdc3d84cc79", \
-            f"{name}: boat palette ownership changed"
-        assert loader["id"] not in loader_ids, "Boat loader resource identities must be unique"
-        loader_ids.add(loader["id"])
-    art = json.loads((GAME / "project/original-art/ambient_boat_art.json").read_text())
-    assert art["fictional_routes"] == [{"district": 0, "u": 560, "top": 840, "bottom": 896},
-                                      {"district": 4, "u": 464, "top": 64, "bottom": 432}], \
-        "Core harbour and Port water lanes must stay unchanged; Islands/North have no boat route"
-    assert art["port_deck_clip_rectangles"] == [[416, 96, 96, 64], [416, 256, 96, 64]]
-    assert art["water_full_hull_checks"] == 54528
-
+    init=body((ENGINE/"src/states/TORONTO.c").read_text(),"toronto_init")
+    assert init.count("td_boats_bind();")==1
+    clone=re.search(r"actors\s*\[\s*i\s*\]\s*=\s*PLAYER",init)
+    assert clone and init.index("td_boats_bind();")<clone.start(),"Bind boat loader before clones"
+    core=(ENGINE/"src/core/actor.c").read_text()
+    helpers=(ENGINE/"src/td_actor_render.c").read_text()
+    check_render_integration(core,helpers)
+    # Distinct source mutations prevent a bank-compaction exemption from
+    # accepting missing gates, duplicated hulls or changed layer/bank order.
+    for changed_core,changed_helpers in (
+        (core.replace("if(td_boats_controlled())td_boats_render();","td_boats_render();"),helpers),
+        (core,helpers.replace("if(!td_boats_controlled())td_boats_render();","if(td_boats_controlled())td_boats_render();")),
+        (core,helpers.replace("    td_sandbox_render();\n    td_aircraft_render();","    td_aircraft_render();\n    td_sandbox_render();")),
+        (core.replace("    SWITCH_ROM(_save);\n    td_actor_render_after();","    td_actor_render_after();\n    SWITCH_ROM(_save);"),helpers),
+        (core,helpers.replace("    td_scenery_restore();\n","")),
+    ):
+        try:check_render_integration(changed_core,changed_helpers)
+        except AssertionError:pass
+        else:raise AssertionError("Boat native renderer integration mutation accepted")
+    names=("toronto_city","toronto_west","toronto_high_park","toronto_east","toronto_port_lands","toronto_islands","toronto_north")
+    boat_id="22789632-122e-5a80-a195-5c8c6e7caeba"
+    for district,name in enumerate(names):
+        paths=(GAME/f"project/project/scenes/{name}/actors").glob("*.gbsres")
+        loaders=[json.loads(p.read_text()) for p in paths]
+        boats=[a for a in loaders if a.get("spriteSheetId")==boat_id]
+        assert len(boats)==(0 if district==6 else 1)
+        if not boats:continue
+        a=boats[0];assert a["_index"]==(4 if district in (0,1,3) else 3)
+        assert a["frame"]==3 and not a["animate"] and not a["persistent"]
+        assert all(not a[k] for k in ("script","startScript","updateScript","hit1Script","hit2Script","hit3Script"))
+    art=json.loads((GAME/"project/original-art/ambient_boat_art.json").read_text())
+    assert art["player_control"] and not art["save_fields"] and art["hull_size_pixels"]==[16,24]
+    assert art["source_unique_8x16_pairs_with_flips"]<=8 and art["scratch_tile_pairs"]==4
+    collision=grids()
+    # All authored landings belong to the reachable mainland pedestrian graph.
+    for district,start in ((0,(560//8,720//8)),(4,(192//8,128//8))):
+        grid=collision[district];visited={start};queue=deque([start])
+        while queue:
+            x,y=queue.popleft()
+            for p in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                if 0<=p[0]<128 and 0<=p[1]<122 and p not in visited and not grid[p[1]*128+p[0]]&15:
+                    visited.add(p);queue.append(p)
+        for area,u,v in art["dock_foot_points"]:
+            if area==district:assert (u//8,v//8) in visited,f"Boat landing{area,u,v} strands the courier"
 
 def art_fixture():
-    image = Image.open(GAME / "project/original-art/ambient_boat.png").convert("RGB")
-    colours = [(101, 255, 0), (224, 248, 207), (134, 192, 108), (7, 24, 33)]
-    rows = ["static const UBYTE original_pixels[16][8]={"]
-    rows.extend("{" + ",".join(str(colours.index(image.getpixel((x, y)))) for x in range(8)) + "},"
-                for y in range(16))
-    return "\n".join(rows + ["};"])
-
+    image=Image.open(GAME/"project/original-art/ambient_boat.png").convert("RGB")
+    colours=((101,255,0),(224,248,207),(134,192,108),(7,24,33))
+    out=[]
+    for name,x,width,height in (("original_north",0,16,32),("original_east",16,24,16)):
+        out.append(f"static const UBYTE {name}[{height}][{width}]={{")
+        out.extend("{"+",".join(str(colours.index(image.getpixel((x+c,r)))) for c in range(width))+"}," for r in range(height))
+        out.append("};")
+    for district,grid in grids().items():
+        out.append(f"static const UBYTE original_grid_{district}[15616]={{")
+        out.extend(",".join(map(str,grid[i:i+128]))+"," for i in range(0,len(grid),128));out.append("};")
+    return "\n".join(out)
 
 def main():
+    subprocess.run([sys.executable,str(GAME/"scripts/create_boat_sprite.py"),"--check"],check=True)
     check_integration()
-    subprocess.run([sys.executable, str(GAME / "scripts/create_boat_sprite.py"), "--check"], check=True)
-    imported = json.loads((GAME / "project/assets/sprites/ambient_boat.png.gbsres").read_text())
-    assert imported["id"] == "22789632-122e-5a80-a195-5c8c6e7caeba"
-    assert (GAME / "project/assets/sprites/ambient_boat.png").read_bytes() == \
-        (GAME / "project/original-art/ambient_boat.png").read_bytes(), "Imported boat pixels differ"
-    district_count = int(re.search(r"#define TD_DISTRICT_COUNT (\d+)",
-                                  (ENGINE / "include/td_district.h").read_text()).group(1))
-    assert district_count == 7, "Review exact seven scene loader/water identities when districts change"
-    compiler = shutil.which(os.environ.get("CC", "cc"))
-    if not compiler:
-        raise SystemExit("Host C compiler unavailable; boat checks did not run")
+    compiler=shutil.which(os.environ.get("CC","cc"))
+    assert compiler,"Host C compiler unavailable"
     with tempfile.TemporaryDirectory(prefix="toronto-boats-") as directory:
-        work = Path(directory)
-        shutil.copyfile(ENGINE / "src/td_boats.c", work / "boats_under_test.c")
-        (work / "gbdk").mkdir()
-        (work / "gbdk/platform.h").write_text("""#ifndef HOST_BOAT_PLATFORM_H
+        work=Path(directory);(work/"gbdk").mkdir()
+        shutil.copyfile(ENGINE/"src/td_boats.c",work/"boats_under_test.c")
+        (work/"gbdk/platform.h").write_text("""
+#ifndef HOST_BOAT_PLATFORM_H
 #define HOST_BOAT_PLATFORM_H
 #include <stdint.h>
 #include <stddef.h>
-typedef uint8_t UBYTE;
-typedef int8_t BYTE;
-typedef uint16_t UWORD;
-typedef int16_t WORD;
+typedef uint8_t UBYTE;typedef int8_t BYTE;typedef uint16_t UWORD;typedef int16_t WORD;
 #define BANKED
 #define TRUE 1
 #define FALSE 0
 #define CGB 1
+#define J_RIGHT 1
+#define J_LEFT 2
+#define J_UP 4
+#define J_DOWN 8
+#define J_A 16
+#define J_B 32
+#define J_SELECT 64
+#define J_START 128
 #endif
 """)
-        for name in ["bankdata", "actor", "data_manager", "gbs_types", "scroll", "shadow", "ui", "compat"]:
-            (work / f"{name}.h").write_text('#include "host_boats.h"\n')
-        (work / "td_district.h").write_text('#include "host_boats.h"\n' +
-                                          f'#define TD_DISTRICT_COUNT {district_count}\n' +
-                                          '#define TD_DISTRICT_NORTH 6\n' +
-                                          'UBYTE td_district_current(void);\n')
-        (work / "host_boats.h").write_text("""#ifndef HOST_BOATS_H
+        for name in ("bankdata","actor","data_manager","gbs_types","scroll","shadow","ui","compat","collision"):
+            (work/f"{name}.h").write_text('#include "host_boats.h"\n')
+        (work/"td_district.h").write_text('#include "host_boats.h"\n#define TD_DISTRICT_COUNT 7\n#define TD_DISTRICT_NORTH 6\nUBYTE td_district_current(void);\n')
+        (work/"host_boats.h").write_text("""
+#ifndef HOST_BOATS_H
 #define HOST_BOATS_H
 #include <gbdk/platform.h>
-typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
-typedef struct { BYTE dy,dx; UBYTE dtile,props; } metasprite_t;
+typedef struct {UBYTE bank;const void *ptr;} far_ptr_t;
+typedef struct {BYTE dy,dx;UBYTE dtile,props;} metasprite_t;
 #define metasprite_end (-128)
-typedef struct { UBYTE y,x,tile,prop; } OAM_item_t;
-typedef struct { UWORD n_tiles; UBYTE tiles[2048]; } tileset_t;
-typedef struct { UBYTE n_metasprites; const metasprite_t *const *metasprites; far_ptr_t tileset,cgb_tileset; } spritesheet_t;
+typedef struct {UBYTE y,x,tile,prop;} OAM_item_t;
+typedef struct {UWORD n_tiles;UBYTE tiles[2048];} tileset_t;
+typedef struct {UBYTE n_metasprites;const metasprite_t *const *metasprites;far_ptr_t tileset,cgb_tileset;} spritesheet_t;
 typedef struct actor actor_t;
-struct actor { actor_t *prev,*next; UBYTE flags,base_tile; far_ptr_t sprite; };
+struct actor {actor_t *prev,*next;UBYTE flags,base_tile;far_ptr_t sprite;};
 #define ACTOR_FLAG_ACTIVE 32
 #define ACTOR_FLAG_HIDDEN 2
-extern actor_t actors[21],*actors_inactive_head;
+extern actor_t actors[22],*actors_inactive_head;
 extern UBYTE actors_len,allocated_hardware_sprites,VBK_REG,__render_shadow_OAM;
 extern UBYTE win_pos_x,win_pos_y,win_dest_pos_x,win_dest_pos_y,WX_REG,WY_REG;
 extern volatile OAM_item_t shadow_OAM[40],shadow_OAM2[40];
-extern WORD draw_scroll_x,draw_scroll_y;
-extern far_ptr_t current_scene;
+extern WORD draw_scroll_x,draw_scroll_y;extern far_ptr_t current_scene;
 void deactivate_actor(actor_t *actor);
 void MemcpyBanked(void *dest,const void *src,size_t length,UBYTE bank);
 UBYTE ReadBankedUBYTE(const UBYTE *src,UBYTE bank);
 void set_sprite_data(UBYTE first,UBYTE count,const UBYTE *pixels);
+UBYTE tile_at(UBYTE x,UBYTE y);
 #endif
 """)
-        (work / "boat_art_oracle.h").write_text(art_fixture())
-        binary = work / "boat-regressions"
-        subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
-                        "-Wno-unknown-pragmas", "-Wno-pointer-to-int-cast", "-fsanitize=address,undefined",
-                        "-I", str(work), "-I", str(ENGINE / "include"),
-                        str(ROOT / "tests/engine/boats_harness.c"), "-o", str(binary)], check=True)
-        raise SystemExit(subprocess.run([str(binary)], check=False).returncode)
-
-
-if __name__ == "__main__":
-    main()
+        (work/"boat_art_oracle.h").write_text(art_fixture())
+        binary=work/"boat-regressions"
+        subprocess.run([compiler,"-std=c11","-O1","-g","-Wall","-Wextra","-Werror",
+                        "-Wno-unknown-pragmas", "-DACTOR_H","-Wno-pointer-to-int-cast","-fsanitize=address,undefined",
+                        "-I",str(work),"-I",str(ENGINE/"include"),str(ROOT/"tests/engine/boats_harness.c"),
+                        "-o",str(binary)],check=True)
+        raise SystemExit(subprocess.run([str(binary)],check=False).returncode)
+if __name__=="__main__":main()

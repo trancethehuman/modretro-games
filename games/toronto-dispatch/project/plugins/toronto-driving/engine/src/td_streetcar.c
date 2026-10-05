@@ -548,17 +548,29 @@ static UBYTE td_streetcar_travel_hit(UBYTE route,UWORD first,UWORD last,
     }
     return FALSE;
 }
+/* Dwell and instant queries own their pose/body scratch only while those
+ * branches execute. A travel-range sweep must not keep this19-byte pair
+ * live beneath its own cardinal-edge geometry on the native stack. */
+static UBYTE td_streetcar_dwell_hit(UBYTE index,UBYTE direction,const td_streetcar_box_t *box){
+    td_streetcar_pose_t pose;td_streetcar_box_t body;
+    td_streetcar_dwell(index,direction,&pose);
+    td_streetcar_bounds_local(&pose,&body);
+    return td_streetcar_boxes_hit(&body,box);
+}
+static UBYTE td_streetcar_instant_hit(UWORD phase,const td_streetcar_box_t *box){
+    td_streetcar_pose_t pose;td_streetcar_box_t body;
+    td_streetcar_pose_local(phase,&pose);td_streetcar_bounds_local(&pose,&body);
+    return td_streetcar_boxes_hit(&body,box);
+}
 static UBYTE td_streetcar_range_hit(UWORD first,UWORD last,const td_streetcar_box_t *box){
-    UBYTE section=0,route,direction;UWORD base=0,a,b;td_streetcar_pose_t pose;td_streetcar_box_t body;
+    UBYTE section=0,route,direction;UWORD base=0,a,b;
     /* A boundary can belong to the previous travel endpoint and the next
        dwell. Include both; a full-cycle query still visits all16 sections. */
     while(section<15&&base+960<first){section++;base+=960;}
     for(;section<16&&base<=last;section++,base+=960){
         direction=section>=8;
         if(first<=base+239&&last>=base){
-            td_streetcar_dwell(direction?15-section:section,direction,&pose);
-            td_streetcar_bounds_local(&pose,&body);
-            if(td_streetcar_boxes_hit(&body,box))return TRUE;
+            if(td_streetcar_dwell_hit(direction?15-section:section,direction,box))return TRUE;
         }
         if(first<=base+960&&last>=base+240){
             a=first>base+240?first-base-240:0;b=last<base+960?last-base-240:720;
@@ -606,13 +618,10 @@ UBYTE td_streetcar_bounds(const td_streetcar_pose_t *pose,td_streetcar_box_t *bo
 }
 UBYTE td_streetcar_sweep(UWORD seconds,UBYTE subsecond,UWORD elapsed,
                         const td_streetcar_box_t *box) BANKED {
-    UWORD phase,first;td_streetcar_pose_t pose;td_streetcar_box_t body;
+    UWORD phase,first;
     if(!box||subsecond>=60||!td_streetcar_box_valid(box))return TD_STREETCAR_INVALID;
     phase=td_streetcar_clock(seconds,subsecond);
-    if(!elapsed){
-        td_streetcar_pose_local(phase,&pose);td_streetcar_bounds_local(&pose,&body);
-        return td_streetcar_boxes_hit(&body,box);
-    }
+    if(!elapsed)return td_streetcar_instant_hit(phase,box);
     if(elapsed>=TD_STREETCAR_PERIOD_TICKS)return td_streetcar_range_hit(0,TD_STREETCAR_PERIOD_TICKS,box);
     first=phase>=elapsed?phase-elapsed:phase+TD_STREETCAR_PERIOD_TICKS-elapsed;
     return first<=phase?td_streetcar_range_hit(first,phase,box):

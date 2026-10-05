@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-polish-native-build",
+  "date": "2026-10-04",
+  "result": "requires-fix-native-state-corruption",
+  "nativeReviewDate": "2026-10-05",
+  "rom": {
+    "sha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
+    "sizeBytes": 1048576,
+    "selectedForCartridge": false
+  },
+  "build": {
+    "builder": "official ModRetro Chromatic build",
+    "success": true,
+    "durationMs": 92762,
+    "instrumented": false,
+    "tdProfileMarkersRemaining": false
+  },
+  "sourceDebug": {
+    "romSha256": "66872772269eee8c061e81b34f32defa7468d002ee84dc6897ad210169a452bc",
+    "noiSha256": "80c124290f9ad5b86af5889c4d00bcf31c2ff97fb7a4e949ded98944e23f1a81",
+    "sourceFingerprint": "0db5ffdb8e09e10645d601b81c37b325c6569cf7927c1818b5a8a8091ebc609b",
+    "projectRevision": "6be9dfc8923fd83d3e0a05ab9bb0e0282a7763061343426019c4791f43b8499e",
+    "compilerSha256": "78961636939edb44b0539ae26badfa07055be38124dbf08e3b84ec5608a2e627"
+  },
+  "nativeInputSnapshot": {
+    "timing": "prebuild",
+    "files": 200,
+    "pinsSha256": "081dbdd82c4fc04b2c28877f48fe29cd0b348f6d442f93f2dd8cce012f83c1aa",
+    "postbuildEquality": "pending"
+  },
+  "memory": {
+    "staticReserveBytes": 470,
+    "maximumStackMeasured": false,
+    "fixedHomeHeadroomBytes": 180,
+    "fixedHomePoseHelperBytes": 87,
+    "saveVersion": 10,
+    "savedBytes": 58,
+    "actorPool": 22
+  },
+  "graphics": {
+    "aircraftRawTilesPerBank": [
+      32,
+      30
+    ],
+    "maxSceneObjTilesPerBank": {
+      "core": 120,
+      "west": 120,
+      "highPark": 110,
+      "east": 120,
+      "portLands": 110,
+      "islands": 110,
+      "north": 102
+    },
+    "sceneObjLimitPerBank": 128,
+    "largestSignalSceneBackgroundBank1": {
+      "scene": "west",
+      "tiles": 44,
+      "limit": 47
+    },
+    "islandsBackgroundBank1": {
+      "tiles": 0,
+      "limit": 64
+    }
+  },
+  "checks": {
+    "compiledGuardGroupsPassed": 4,
+    "fullMakeCheck": "passed-retained-complete-log",
+    "fullMakeCheckInitialStop": "The protected source-art gate initially needed a narrow exception for the authorized appended jet frames. The retained complete rerun subsequently passed all host checks.",
+    "nativeTiming": "scoped-passed; see SANDBOX_POLISH_TIMING.json",
+    "nativeGameplay": "failed-native-state-corruption; see NATIVE_SANDBOX_STACK_DIAGNOSTIC.json",
+    "physicalCartridge": "not-attempted; candidate-ineligible",
+    "fullMakeCheckEvidence": {
+      "command": "make check",
+      "passingLogSha256": "35070617f01bd34e95bfadae5d184a7e692ffe66864bf9b91122739004a8e209",
+      "completeFinalChecks": true,
+      "failureMarkers": 0,
+      "qualification": "Retained historical host-check evidence only. It does not override the reproduced native state corruption or make this ROM eligible for cartridge loading."
+    }
+  },
+  "limitations": [
+    "Successful compilation and compiled guards do not imply full-suite, gameplay or cartridge acceptance.",
+    "Ordinary native play and clean idle replays revealed reproducible state corruption. This exact ROM is ineligible for selection, packaging or cartridge loading until repaired and independently retested.",
+    "Static reserve is not measured deepest-stack proof.",
+    "The 470-byte static reserve did not establish runtime memory safety. Deep stack plus music interrupt cost is a hypothesis; an exact stack-pointer cause was not measured.",
+    "The scoped stationary timing record does not prove whole-city smoothness or human responsiveness.",
+    "The last confirmed installed ROM remains the separate 9c155 baseline; this build has not been loaded onto the cartridge.",
+    "Public curation omits original machine paths, private artifacts, activation details and request tokens."
+  ]
+}

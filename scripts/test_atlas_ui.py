@@ -107,6 +107,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="toronto-atlas-ui-tests-") as directory:
         work = Path(directory)
         shutil.copyfile(ENGINE / "src/td_ui.c", work / "ui_under_test.c")
+        shutil.copyfile(ENGINE / "src/td_guidance.c", work / "guidance_under_test.c")
         shutil.copyfile(ENGINE / "src/td_atlas.c", work / "atlas_under_test.c")
         shutil.copyfile(ENGINE / "src/td_transit.c", work / "transit_under_test.c")
         shutil.copyfile(ENGINE / "src/td_content.c", work / "content_under_test.c")
@@ -129,7 +130,7 @@ void ui_set_pos(UBYTE x,UBYTE y);
         (work / "gbdk/platform.h").write_text('#include "ui_host.h"\n')
         binary = work / "atlas-ui-regressions"
         subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
-                        "-Wno-unknown-pragmas", "-Wno-deprecated-declarations", "-fsanitize=address,undefined",
+                        "-Wno-unknown-pragmas", "-Wno-deprecated-declarations", "-fsanitize=address,undefined", "-DACTOR_H",
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(FIXTURES / "atlas_ui_harness.c"), str(work / "transit_under_test.c"),
                         str(work / "content_under_test.c"), str(work / "world_under_test.c"),

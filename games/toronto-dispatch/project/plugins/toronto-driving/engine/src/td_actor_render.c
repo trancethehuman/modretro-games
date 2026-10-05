@@ -1,16 +1,29 @@
 #pragma bank 255
 #include <string.h>
 #include "td_actor_render.h"
+#include "bankdata.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "shadow.h"
 #include "scroll.h"
 #include "math.h"
+#include "macro.h"
+#include "td_traffic_lights.h"
+#include "td_scenery.h"
+#include "td_boats.h"
+#include "td_sandbox.h"
+#include "td_aircraft_render.h"
+
+/* Stock actor.c keeps these byte coordinates private to its translation
+ * unit. Match its width so window masking retains native wrap semantics. */
+extern UBYTE screen_x,screen_y;
 
 #define TD_GROUND_POSE_OBJECTS 8
 #define TD_GROUND_POSE_HEIGHT 64
 
-void td_actor_render(const metasprite_t *pose,UBYTE bank,UBYTE base,WORD x,WORD y) BANKED {
+/* Internal calls remain in this switchable code bank. Keep the public BANKED
+ * entry for other units without reselecting this bank for each ground cell. */
+static void td_actor_render_local(const metasprite_t *pose,UBYTE bank,UBYTE base,WORD x,WORD y) {
     OAM_item_t items[TD_GROUND_POSE_OBJECTS];
     BYTE events[TD_GROUND_POSE_HEIGHT+1],total=0;
     metasprite_t item;
@@ -63,14 +76,87 @@ void td_actor_render(const metasprite_t *pose,UBYTE bank,UBYTE base,WORD x,WORD 
     allocated_hardware_sprites=ground+count;
 }
 
-void td_actor_render_actor(actor_t *actor) BANKED {
-    const metasprite_t *const *frames;
+void td_actor_render(const metasprite_t *pose,UBYTE bank,UBYTE base,WORD x,WORD y) BANKED {
+    td_actor_render_local(pose,bank,base,x,y);
+}
+
+/* Only this compact function lives in fixed HOME. Its code remains mapped
+ * while reading the selected sprite bank; every path restores the caller.
+ * Combine count/table/frame binding into one temporary selection, without
+ * caching mutable actor state or reading ahead of a bounded frame index. */
+const metasprite_t *td_actor_render_pose(const void *descriptor,UBYTE bank,UBYTE frame) NONBANKED {
+    const spritesheet_t *sprite=descriptor;
+    UBYTE saved_bank=CURRENT_BANK;
+    const metasprite_t *pose=NULL;
+    if(!sprite||!bank)return NULL;
+    SWITCH_ROM(bank);
+    if(frame<sprite->n_metasprites&&sprite->metasprites)pose=sprite->metasprites[frame];
+    SWITCH_ROM(saved_bank);
+    return pose;
+}
+
+static void td_actor_render_actor_local(actor_t *actor) {
     const metasprite_t *pose;
     WORD x=SUBPX_TO_PX(actor->pos.x),y=SUBPX_TO_PX(actor->pos.y);
-    if(!actor->sprite.bank||!actor->sprite.ptr||
-       actor->frame>=ReadBankedUBYTE(&((const spritesheet_t*)actor->sprite.ptr)->n_metasprites,actor->sprite.bank))return;
-    MemcpyBanked(&frames,&((const spritesheet_t*)actor->sprite.ptr)->metasprites,sizeof(frames),actor->sprite.bank);
-    MemcpyBanked(&pose,frames+actor->frame,sizeof(pose),actor->sprite.bank);
     if(!(actor->flags&ACTOR_FLAG_PINNED)){x-=draw_scroll_x;y-=draw_scroll_y;}
-    td_actor_render(pose,actor->sprite.bank,actor->base_tile,x,y);
+    /* Reject only when every possible original ground cell is outside the
+     * native OAM clip. The compiled gate proves these cumulative bounds for
+     * every frame; edge-crossing and pinned sprites retain the full path. */
+    if(x+TD_GROUND_MAX_X<=0||x+TD_GROUND_MIN_X>=168||
+       y+TD_GROUND_MAX_Y<=0||y+TD_GROUND_MIN_Y>=160)return;
+    if(!actor->sprite.bank||!actor->sprite.ptr)return;
+    pose=td_actor_render_pose(actor->sprite.ptr,actor->sprite.bank,actor->frame);
+    td_actor_render_local(pose,actor->sprite.bank,actor->base_tile,x,y);
+}
+
+void td_actor_render_actor(actor_t *actor) BANKED {
+    td_actor_render_actor_local(actor);
+}
+
+/* Scene-bounded stable ground traversal. Never switch ROM manually while
+ * executing banked code; td_actor_render_actor uses bank-safe metadata reads. */
+void td_actor_render_ground(UBYTE window_hide_actors) BANKED {
+    actor_t *actor;
+    UBYTE ground_index,ground_count;
+    // Stable runtime slot order: fleet/parked car, people, tram, then marker.
+    // The stock activation-list order can rotate when actors enter/leave view.
+    ground_count=actors_len<MAX_ACTORS?actors_len:MAX_ACTORS;
+    for (ground_index = 2; ground_index <= ground_count; ground_index++) {
+        actor = &actors[ground_index == ground_count ? 1 : ground_index];
+        if (!CHK_FLAG(actor->flags, ACTOR_FLAG_ACTIVE) ||
+            CHK_FLAG(actor->flags, ACTOR_FLAG_HIDDEN | ACTOR_FLAG_DISABLED)) {
+           continue;
+        }
+
+        if (CHK_FLAG(actor->flags, ACTOR_FLAG_PINNED)) {
+            screen_x = SUBPX_TO_PX(actor->pos.x);
+            screen_y = SUBPX_TO_PX(actor->pos.y);
+        } else {
+            screen_x = SUBPX_TO_PX(actor->pos.x) - draw_scroll_x;
+            screen_y = SUBPX_TO_PX(actor->pos.y) - draw_scroll_y;
+        }
+
+        if (((window_hide_actors) && (((screen_x + 8) > WX_REG) && ((screen_y - 8) > WY_REG)))) {
+            continue;
+        }
+        td_actor_render_actor_local(actor);
+    }
+
+}
+
+/* Restore previous background overlays before any ground metadata/OAM work.
+ * The caller captures CURRENT_BANK first; each BANKED return restores it. */
+void td_actor_render_before(void) BANKED {
+    td_aircraft_render_restore();
+    td_scenery_restore();
+}
+
+/* Only these dispatches moved out of fixed bank0. Preserve original overlay
+ * order and the ambient/controlled launch distinction after ground OAM. */
+void td_actor_render_after(void) BANKED {
+    td_traffic_lights_render();
+    td_scenery_render();
+    if(!td_boats_controlled())td_boats_render();
+    td_sandbox_render();
+    td_aircraft_render();
 }

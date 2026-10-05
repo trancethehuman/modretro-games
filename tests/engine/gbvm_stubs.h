@@ -11,6 +11,7 @@ typedef int8_t BYTE;
 typedef uint16_t UWORD;
 typedef int16_t WORD;
 typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
+extern far_ptr_t current_scene;
 #define BANKED
 #define NONBANKED
 #define TRUE 1
@@ -27,9 +28,9 @@ struct actor {
     far_ptr_t sprite;
     struct { WORD left,right,top,bottom; } bounds;
 };
-#define MAX_ACTORS 21
+#define MAX_ACTORS 22
 typedef struct { UBYTE width,height; far_ptr_t collisions; } scene_t;
-extern actor_t actors[21];
+extern actor_t actors[22];
 extern actor_t *actors_inactive_head;
 extern UBYTE actors_len;
 #define PLAYER actors[0]
@@ -39,6 +40,7 @@ extern UBYTE actors_len;
 #define ACTOR_FLAG_DISABLED 64
 #define CAMERA_LOCK_FLAG 1
 extern UWORD camera_x,camera_y,image_width,image_height,sys_time;
+extern WORD draw_scroll_x,draw_scroll_y;
 extern UBYTE camera_settings;
 extern BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 extern UBYTE joy,joy_pressed;

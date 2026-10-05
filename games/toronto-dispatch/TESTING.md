@@ -1,6 +1,20 @@
 # Testing record
 
-## Current hardware feedback update — 2026-10-04
+## Selected sandbox-stable update — 2026-10-05
+
+Exact ROM `project/build/toronto-dispatch-sandbox-stable.gbc` is 1,048,576 bytes / SHA-256 `096862abfd1e1fa7d5ceb6dc6d808b08a580ac9dc5b33d428e4f97d297eee45b`. Official source-debug compilation succeeds in 90,460 ms; all 200 native input pins remain unchanged after building and native play. Full `make check` and four compiled guards pass. [Build evidence](docs/SANDBOX_STABLE_BUILD.json) records exact ROM/toolchain/debug identities, save v10/58 bytes, 22 actors, scene OBJ peak 120/128, 221 fixed-HOME bytes free and 579 bytes of static reserve.
+
+The [fresh native record](docs/NATIVE_SANDBOX_STABLE.json) uses ordinary buttons without imported checkpoints/SRAM or game-memory writes. It stops passed at frame 30,153 / 1,325 events, then closes and archives. Neutral idle reaches frame 20,284 / world second 335, including a complete tram schedule cycle. The checked initialized 13-byte prefix `8833020004000100e47f000000` stays intact; the following scene-script tail may legally change after scene return. These observations do not measure minimum SP or establish every possible stack path.
+
+Settings freezes the world for 240 frames and shows all three sound labels plus guide/back; the map freezes for 460 frames while panning and closing to the parent menu. Market Start pays $89 at condition 80, ending cash $89 / done 1 / wanted 2. A deliberately retained initial short Save input is corrected by holding until the native loop observes it: saving during entry timer 9 produces the Saved notice, and a genuine in-worker reset restores completed driver entry with the same career, condition and wanted level. This verifies emulator SRAM recovery rather than physical battery persistence.
+
+The same run boards a boat, drives/brakes and exits at a valid dock with Down+A, retaining an earlier out-of-radius exit attempt. Grocery loads as a separate scene with its keeper greeting and returns outdoors. Occupied vehicle theft completes its entry animation; a two-star helicopter and ordinary police capture are observed. A vehicle collision shows recoil and a crash notice; successful NPC pushing and all three pursuit levels are not established by this native sample.
+
+[Memory optimization](docs/SANDBOX_STABLE_OPTIMIZATION.json) preserves gameplay and exact host state while saving 109 persistent UI bytes and reducing the reviewed ordinary tram collision chain by 57 automatic bytes. The [starting-view timing](docs/SANDBOX_STABLE_TIMING.json) counts 149 updates over 840 VBlanks, nominally 10.64 updates/s, compared with 135 updates in the retained v12 sandbox trial. Different autonomous phases and one viewpoint limit that comparison; no whole-city, physical or always-smooth guarantee is claimed. The simpler installed 9c155 build is separate.
+
+The failed `668727…` [native corruption diagnostic](docs/NATIVE_SANDBOX_STACK_DIAGNOSTIC.json) remains failed and ineligible for loading. The selected 096862 ROM has not yet been flashed; the last physically confirmed 9c155 build and its historical ZIP/write evidence below remain separate. Full 104-contract coverage, motorcycle 74's slower-speed deadline, two enjoyable measured human hours, broader collision/pursuit cases, older-save imports, deepest stack/whole-city performance and physical cold boot/save/audio/flicker remain pending.
+
+## Retained hardware feedback update — 2026-10-04
 
 Exact new ROM `project/build/toronto-dispatch-hardware-feedback.gbc` is 1,048,576 bytes / SHA-256 `9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e`. Official source-debug build and full `make check` pass. [Build evidence](docs/HARDWARE_FEEDBACK_BUILD.json) records compiled artwork/timetable guards, save v10/58 bytes, peak 120/128 OBJ tiles per bank and 1,046 static reserve. The initial fixed-bank failure and intermediate metadata-repair build remain separate.
 

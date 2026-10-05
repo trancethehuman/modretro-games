@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Compare the actual update-local terrain cache with its uncached actual-C reference.
+"""Compare update-local terrain and stationary clearance caches with uncached actual C.
 
 Compare the unchanged actual engine with one exact-centre automatic terrain
 cache. Retained fixtures use a fresh cache for their isolated private calls;
-actual toronto_update calls share only its own six-byte automatic cache.
+actual toronto_update calls share only its own automatic cache.
 """
 from pathlib import Path
 import difflib
@@ -29,24 +29,37 @@ def sha(data):
 
 
 # Compare the current banked driver against the same source with only its
-# cache queries replaced by direct full half7 body reads. Core still owns
-# and initializes the exact six-byte update-local cache in both variants.
+# terrain queries replaced by direct full half7 reads and stationary geometry
+# reuse disabled. Core still owns
+# and initializes the same update-local cache in both variants.
 UNCACHED = """static UBYTE td_proto_uncached(UWORD u,UWORD v,td_terrain_cache_t *cache){
-    (void)cache;return td_road_body(u,v,7);
+    UBYTE x,y,left,right,top,bottom,hx=tile_hit_x,hy=tile_hit_y,result=TRUE;
+    (void)cache;
+    if(u<8||v<8||u>1016||v>968)return FALSE;
+    left=(u-7)>>3;right=(u+7)>>3;top=(v-7)>>3;bottom=(v+7)>>3;
+    /* Independent per-tile oracle: bit16 is a sidewalk available to player
+       tyres; any low collision bit blocks the complete half7 body. */
+    for(y=top;y<=bottom;y++)for(x=left;x<=right;x++)
+        if(tile_at(x,y)&15)result=FALSE;
+    tile_hit_x=hx;tile_hit_y=hy;return result;
 }
 """
 def candidate_source(original):
     assert original.startswith(UNCACHED)
-    return original[len(UNCACHED):].replace('td_proto_uncached(', 'td_terrain_drivable(')
+    return original[len(UNCACHED):].replace('td_proto_uncached(', 'td_terrain_drivable(').replace(
+        '    /* Host reference: retain every original query. */\n    cache->stationary_valid=0;\n','')
 
 def baseline_source(candidate):
-    assert candidate.count('td_terrain_drivable(')==3
-    return UNCACHED+candidate.replace('td_terrain_drivable(', 'td_proto_uncached(')
+    assert candidate.count('td_terrain_drivable(')==4
+    marker='    stationary=nu==(WORD)td.u&&nv==(WORD)td.v;\n'
+    assert candidate.count(marker)==1
+    return UNCACHED+candidate.replace('td_terrain_drivable(', 'td_proto_uncached(').replace(
+        marker,marker+'    /* Host reference: retain every original query. */\n    cache->stationary_valid=0;\n')
 
 
 ADAPTER = '''
 /* Host-only isolated private-call compatibility; no production NULL path. */
-static void td_test_drive(void){td_terrain_cache_t cache;cache.valid=0;td_drive(&cache);}
+static void td_test_drive(void){td_terrain_cache_t cache={0};td_drive(&cache);}
 static UBYTE td_test_drivable(UWORD u,UWORD v){td_terrain_cache_t cache;cache.valid=0;return td_terrain_drivable(u,v,&cache);}
 #define td_drive() td_test_drive()
 #define td_drivable(u,v) td_test_drivable(u,v)
@@ -59,23 +72,28 @@ td td_job td_offer td_target td_cursor td_session_live td_route_district
 td_transition_pending td_transition_district td_traffic_u td_traffic_v
 td_traffic_samples td_traffic_leg td_tick td_notice_timer td_red_cooldown
 td_turn_tick td_entry_timer td_entry_target td_walk_dir td_resume_mode
-td_board_route td_vx td_vy td_last_frame td_corner_used td_contact_episode td_player_hurt td_player_push_x td_player_push_y td_menu_direction td_menu_wait
+td_board_route td_vx td_vy td_last_frame td_corner_used td_contact_episode td_player_hurt td_player_push_x td_player_push_y td_impact_recovery td_vehicle_recoil td_vehicle_recoil_x td_vehicle_recoil_y td_menu_direction td_menu_wait
 td_traffic_retreat_mask td_vehicle_contact_mask td_traffic_advance
 td_traffic_elapsed td_police_elapsed td_police_advance td_police_waypoint
 td_police_from_u td_police_from_v td_police_stuck td_input_edge td_result_b_release
-td_people td_people_dead td_people_last_tick td_nearby_routes td_ped_route td_ped_refresh td_ped_anchor_u
+td_people td_people_dead td_people_last_tick td_people_boot td_people_last_clock td_nearby_routes td_ped_route td_ped_refresh td_ped_anchor_u
 td_ped_anchor_v td_people_last_u td_people_last_v td_streetcar_focus_u
 td_streetcar_focus_v td_streetcar_view_district td_streetcar_ride_view
+td_sandbox_parked td_sandbox_seed td_sandbox_district td_sandbox_mask td_sandbox_owner td_sandbox_skin td_sandbox_drivers td_sandbox_headings td_sandbox_custom_player td_sandbox_ready td_sandbox_last_u td_sandbox_last_v td_inside_shop
+td_broken td_prop_flashes td_prop_flash_next
+td_ram_anchor_u td_ram_anchor_v td_ram_state
+test_boat_shore_active test_boat_shore_u test_boat_shore_v test_boat_active test_shop_pending test_aircraft_exposed test_boat_cover sandbox_render_calls
+test_boat_interact_calls test_boat_drive_calls test_boat_drive_keys test_boat_exit_allowed
 td_streetcar_display td_streetcar_elapsed td_streetcar_bound td_streetcar_valid
-td_streetcar_was_ride td_streetcar_cue td_aircraft td_save_slot td_save_seq
-tile_hit_x tile_hit_y actors_len camera_x camera_y image_width image_height
+td_streetcar_was_ride td_streetcar_cue td_aircraft td_aircraft_police td_save_slot td_save_seq
+tile_hit_x tile_hit_y actors_len camera_x camera_y draw_scroll_x draw_scroll_y image_width image_height
 sys_time camera_settings joy joy_pressed camera_offset_x camera_offset_y
 camera_deadzone_x camera_deadzone_y td_test_sram stop_reads ui_draws ui_last_draw_onfoot audio_updates
 audio_inits audio_impacts audio_mode audio_active audio_cue audio_braking
 stop0_here authored_content test_current_district test_queued_district
 test_queue_fail test_queue_calls test_reset_calls test_map_opens test_map_updates
 test_map_closes test_map_active test_map_buttons test_map_pressed
-test_map_camera_settings test_map_camera_x test_map_camera_y geometry
+test_map_camera_settings test_map_camera_x test_map_camera_y geometry test_corner_tile_x test_corner_tile_y
 sram_writes sram_interrupt_after sram_interrupt_enabled sram_offsets sram_values
 proto_current_bank proto_query_result
 '''.split()
@@ -92,7 +110,7 @@ static void proto_item(const char *name,const void *data,size_t length){
 #define PROTO_ITEM(x) proto_item(#x,&(x),sizeof(x))
 static int proto_actor_index(const actor_t *a){
     if(!a)return -1;
-    for(unsigned i=0;i<21;i++)if(a==&actors[i])return (int)i;
+    for(unsigned i=0;i<22;i++)if(a==&actors[i])return (int)i;
     fprintf(stderr,"Unexpected actor pointer at %u/%u\n",proto_case,proto_step);abort();
 }
 static int proto_resource_index(const void *p){
@@ -101,10 +119,18 @@ static int proto_resource_index(const void *p){
     if(p==&test_tram_sprite)return 2;
     fprintf(stderr,"Unexpected resource pointer at %u/%u\n",proto_case,proto_step);abort();
 }
+static int proto_scene_index(const void *p){
+    if(!p)return 0;
+    for(unsigned i=0;i<TD_DISTRICT_COUNT;i++)if(p==&test_native_scenes[i])return i+1;
+    fprintf(stderr,"Unexpected scene pointer at %u/%u\n",proto_case,proto_step);abort();
+}
 static void proto_snapshot(void){
     PROTO_ITEM(proto_case);PROTO_ITEM(proto_step);
     /*FIELDS*/
-    for(unsigned i=0;i<21;i++){
+    PROTO_ITEM(current_scene.bank);
+    int loaded_scene=proto_scene_index(current_scene.ptr);
+    PROTO_ITEM(loaded_scene);
+    for(unsigned i=0;i<22;i++){
         actor_t *a=&actors[i];
         proto_item("actor.pos",&a->pos,sizeof(a->pos));
         int previous=proto_actor_index(a->prev),next=proto_actor_index(a->next);
@@ -165,13 +191,13 @@ static void proto_queries(unsigned id,int ground,UBYTE district){
     proto_case=id;proto_step=0;
 #ifdef PROTO_CANDIDATE
     td_terrain_cache_t cache;cache.valid=0;
-    expect(sizeof(cache)==6,"automatic terrain cache has six bytes and no persistent state");
+    expect(sizeof(cache)==12,"automatic terrain and stationary caches have twelve bytes and no persistent state");
 #endif
     for(unsigned p=0;p<sizeof(points)/sizeof(points[0]);p++)for(unsigned repeat=0;repeat<2;repeat++){
         UWORD u=points[p][0],v=points[p][1];
         UBYTE expected=u>=8&&v>=8&&u<=1016&&v<=968;
         if(expected)for(unsigned y=(v-7)/8;y<=(v+7)/8;y++)
-            for(unsigned x=(u-7)/8;x<=(u+7)/8;x++)if(district_tile(district,x,y))expected=0;
+            for(unsigned x=(u-7)/8;x<=(u+7)/8;x++)if(district_tile(district,x,y)&15)expected=0;
         unsigned long old_tiles=proto_tile_reads,old_ranges=proto_range_reads,old_bodies=proto_body_calls;
         tile_hit_x=(UBYTE)(200-p);tile_hit_y=(UBYTE)(190-repeat);proto_current_bank=19;
 #ifdef PROTO_CANDIDATE
@@ -257,8 +283,12 @@ def module(path):
 def host_source(toronto,candidate):
     sources = ['td_menu.c','td_transit.c','td_world.c','td_streetcar.c','td_streetcar_runtime.c',
                'td_aircraft.c','td_people.c','td_traffic.c','td_roads.c']
-    sources.append('td_terrain.c')
-    text = '\n'.join((ENGINE/'src'/name).read_text() for name in sources)
+    sources.extend(['td_terrain.c','td_sandbox.c','td_scenery.c','td_ramming.c'])
+    bodies=[]
+    for name in sources:
+        body=(ENGINE/'src'/name).read_text()
+        bodies.append(body)
+    text = '\n'.join(bodies)
     text += '\n' + toronto + '\n' + (ENGINE/'src/states/TORONTO.c').read_text()
     text += '\n' + (ENGINE/'src/td_save.c').read_text()
     text += '\n' + (ENGINE/'src/td_routes.c').read_text()
@@ -286,9 +316,9 @@ def host_harness(candidate):
     if not candidate:
         text=text.replace('return td_terrain_drivable(u,v,&cache);','return td_proto_uncached(u,v,&cache);')
     text=text.replace('int main(void) {','int proto_retained_main(void) {',1)
-    old='UBYTE tile_at(UBYTE x,UBYTE y) {return district_tile(test_current_district,x,y);}'
+    old='UBYTE tile_at(UBYTE x,UBYTE y) {test_road_tile_reads++;return district_tile(test_current_district,x,y);}'
     assert text.count(old)==1
-    text=text.replace(old,'static unsigned long proto_tile_reads,proto_range_reads;\nstatic UBYTE proto_current_bank=13;\nUBYTE tile_at(UBYTE x,UBYTE y) {proto_tile_reads++;return district_tile(test_current_district,x,y);}')
+    text=text.replace(old,'static unsigned long proto_tile_reads,proto_range_reads;\nstatic UBYTE proto_current_bank=13;\nUBYTE tile_at(UBYTE x,UBYTE y) {test_road_tile_reads++;proto_tile_reads++;return district_tile(test_current_district,x,y);}')
     for old in ('UBYTE tile_col_test_range_x(UBYTE mask,UBYTE row,UBYTE first,UBYTE last){',
                 'UBYTE tile_col_test_range_y(UBYTE mask,UBYTE column,UBYTE first,UBYTE last){'):
         assert text.count(old)==1
@@ -343,12 +373,13 @@ def main():
         (work/'gb/gb.h').write_text('#include "gbvm_stubs.h"\n')
         (work/'gbdk').mkdir()
         (work/'gbdk/platform.h').write_text('#include "gbvm_stubs.h"\n')
+        (work/'gbdk/metasprites.h').write_text('typedef struct {signed char dy,dx;unsigned char dtile,props;} metasprite_t;\n')
         for label,text in [('baseline',original),('candidate',candidate)]:
             (work/'engine_under_test.c').write_text(host_source(text,label=='candidate'))
             (work/'harness.c').write_text(host_harness(label=='candidate'))
             binary=work/label
             command=[compiler,'-std=c11','-O1','-g','-Wall','-Wextra','-Werror',
-                     '-Wno-unknown-pragmas','-Wno-parentheses','-fsanitize=address,undefined',
+                     '-Wno-unknown-pragmas','-Wno-parentheses','-DACTOR_H','-fsanitize=address,undefined',
                      '-I',str(work),'-I',str(ENGINE/'include'),'-I',str(FIXTURES),
                      str(work/'harness.c'),str(ENGINE/'src/td_police.c'),str(ENGINE/'src/td_police_lanes.c'),
                      str(ENGINE/'src/td_traffic_signal_stop.c'),'-o',str(binary)]
@@ -372,7 +403,11 @@ def main():
             records+=1
         for a,b in zip(stats['baseline']['counts'],stats['candidate']['counts']):
             assert a[:2]==b[:2]
-            assert all(b[i]<=a[i] for i in range(2,5)),f'Candidate performs extra reads at {a[:2]}'
+            # The independent baseline reads raw tiles directly; the actual
+            # banked helper uses range calls whose internal tile reads are
+            # already counted. Range-call counts are distinct strategies,
+            # not comparable physical reads or a native CPU cost model.
+            assert b[2]<=a[2] and b[4]<=a[4],f'Candidate performs extra tile/body reads at {a[:2]}'
         assert stats['candidate']['reads']['tiles']<stats['baseline']['reads']['tiles']
     assert before=={str(p.relative_to(ROOT)):sha(p.read_bytes()) for p in source_paths},'Tracked production changed during differential checks'
     for label in stats:stats[label].pop('counts')
@@ -381,13 +416,16 @@ def main():
         'candidateDiffSha256':sha(diff.encode()),
         'bankedHelperSha256':sha((ENGINE/'src/td_terrain.c').read_bytes()),
         'cacheHeaderSha256':sha((ENGINE/'include/td_terrain.h').read_bytes()),'prototypeScriptSha256':sha(Path(__file__).read_bytes()),
-        'sourceFilesUnchanged':True,'automaticCacheBytes':6,'persistentBytesAdded':0,
+        'sourceFilesUnchanged':True,'automaticCacheBytes':12,'persistentRoadCacheBytes':0,
         'evidenceType':'host differential; bank capacity, native timing and stack require separate artifact checks',
         'comparedSnapshots':records,'comparedFieldPayloads':comparisons,'results':stats,
         'qualification':['Exact whole-pixel centre only, including false results; no equal-tile-span key claim.',
          'Retained isolated private calls use fresh local cache; real toronto_update owns shared lifetime.',
          'ROM collision is invariant within one update; successful portals return before reuse.',
+         'Independent baseline reads raw low15 tiles; actual banked range-call counts are reported separately, not treated as physical reads.',
          'Actual candidate helper is BANKED; host calls cannot measure its additional far-call cost.',
+         'Stationary geometry uses exact Q4 keys only within one batch; active ramming, moving, foot, entry, hurt and rebound paths invalidate reuse.',
+         'All original failed-clearance collision branches still execute; this compares world, input, save and actor payloads as well as positions.',
          'Host hardware adapters do not prove SDCC ABI, actual bank restoration, performance or maximum stack.']}
     (HERE/'update-terrain-banked.host-result.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps({k:report[k] for k in ('comparedSnapshots','comparedFieldPayloads','sourceFilesUnchanged')},indent=2))

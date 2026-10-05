@@ -3,13 +3,13 @@
 #include <gbdk/platform.h>
 #include "actor.h"
 
-#define TD_TRAFFIC_SLOTS 6
-#define TD_TRAFFIC_PEOPLE 6
+#define TD_TRAFFIC_SLOTS 8
+#define TD_TRAFFIC_PEOPLE 8
 
 /* All pointers, including ctx itself, must reference WRAM (stack is valid).
  * NULL half arrays select the existing 5px traffic footprint. Extents are
  * whole pixels, 1..16, and refer to the current authored cardinal pose.
- * peds points at six contiguous pedestrian actors, or NULL for no people.
+ * peds points at eight contiguous pedestrian actors, or NULL for no people.
  * These pure queries allocate no persistent RAM and mutate no input. */
 typedef struct {
     const UWORD *u,*v;
@@ -25,6 +25,10 @@ typedef struct {
  * Priority does not waive a red light. Coordinates are local Q4. */
 UBYTE td_traffic_signal_stop(UBYTE district,UWORD seconds,UWORD old_u,
     UWORD old_v,UWORD u,UWORD v) BANKED;
+
+/* Player red crossing: small Q4 diagonal movement is decomposed into the
+ * same exact authored cardinal stop-line queries; malformed motion is not fined. */
+UBYTE td_traffic_player_red(UBYTE district,UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v) BANKED;
 
 /* TRUE permits a cardinal step <=8 Q4. Tests the complete body sweep against
  * other traffic, visible people and an active parked car. escape allows only
@@ -60,16 +64,16 @@ UBYTE td_traffic_admit(const td_traffic_context_t *ctx,UBYTE district,UWORD seco
  * begin is required each motion epoch and after scene/time/people/park/pose/
  * priority changes. Live traffic may change only through successful commits
  * followed immediately by the same caller cache update. No module globals.
- * Snapshot is87 bytes on packed native GBVM (host alignment may add one).
+ * Snapshot is111 bytes on packed native GBVM (host alignment may add one).
  * Fleet16px centre buckets update only through accepted commits. */
 typedef struct {
-    UWORD u[6],v[6],ped_u[6],ped_v[6],park_u,park_v,pending_u,pending_v;
-    UBYTE bucket_u[6],bucket_v[6];
-    UBYTE half_u[6],half_v[6],people_mask,parked_active,priority_mask;
+    UWORD u[8],v[8],ped_u[8],ped_v[8],park_u,park_v,pending_u,pending_v;
+    UBYTE bucket_u[8],bucket_v[8];
+    UBYTE half_u[8],half_v[8],people_mask,parked_active,priority_mask;
     UBYTE district,phase,valid,pending_slot;
 } td_traffic_epoch_t;
 
-/* Copies and validates ALL six bodies and every visible foot/park body,
+/* Copies and validates ALL eight bodies and every visible foot/park body,
  * including malformed distant actors. Failure invalidates a non-NULL epoch
  * so an old snapshot cannot accidentally survive a failed new begin.
  * Input context/arrays/actors are never mutated; epoch must not alias them. */
@@ -107,7 +111,8 @@ UBYTE td_traffic_epoch_commit(td_traffic_epoch_t *epoch,UBYTE slot) BANKED;
  * guard. The caller still owns route and courier guards for every move.
  * This convenience API requires square fleet half-extents5..8px. Its epoch
  * district must match the loaded road collision and tram presentation scene;
- * scene/time/actor changes still require begin. No persistent storage.
+ * scene/time/actor changes still require begin. Terrain queries reuse the
+ * candidate's validated hull, with no persistent terrain or dynamic cache.
  * Any failure discards pending ownership and leaves all bodies/buckets fixed;
  * preexisting pending candidates cannot survive or commit after this call. */
 UBYTE td_traffic_epoch_move(td_traffic_epoch_t *epoch,UBYTE slot,

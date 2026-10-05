@@ -59,6 +59,10 @@ def historical_stop(stop, districts):
     new = {20:(320,280,5),21:(512,448,5),22:(920,280,5),
            24:(160,600,5),25:(512,744,5),26:(904,440,5)}
     copy = dict(stop)
+    if stop['id']==18:
+        require((stop['u'],stop['v'],stop['name'],stop['transit'],stop.get('district',0),stop.get('reserved',0))==
+                (144,64,'BLOORCOURT BUS',2,0,0),'Reviewed stop18 label may not move its saved geometry/service/flags.')
+        copy['name']='OSSINGTON BUS'
     if stop['id'] in old:
         expected = new[stop['id']] if districts > 5 else old[stop['id']]
         require((stop['u'],stop['v'],stop.get('district',0)) == expected,
@@ -230,6 +234,9 @@ def main():
                 (ENGINE / "src/td_traffic.c").read_text() + '\n' +
                 (ENGINE / "src/td_roads.c").read_text() + '\n' +
                 (ENGINE / "src/td_terrain.c").read_text() + '\n' +
+                (ENGINE / "src/td_sandbox.c").read_text() + '\n' +
+                (ENGINE / "src/td_scenery.c").read_text() + '\n' +
+                (ENGINE / "src/td_ramming.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +
                 (ENGINE / "src/td_routes.c").read_text())
@@ -266,9 +273,10 @@ def main():
         (work / "gb/gb.h").write_text('#include "gbvm_stubs.h"\n')
         (work / "gbdk").mkdir()
         (work / "gbdk/platform.h").write_text('#include "gbvm_stubs.h"\n')
+        (work / "gbdk/metasprites.h").write_text('typedef struct {signed char dy,dx;unsigned char dtile,props;} metasprite_t;\n')
         binary = work / "engine-regressions"
         command = [compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra",
-                   "-Wno-unknown-pragmas", "-Wno-parentheses", "-fsanitize=address,undefined",
+                   "-Wno-unknown-pragmas", "-Wno-parentheses", "-DACTOR_H", "-fsanitize=address,undefined",
                    "-I", str(work), "-I", str(ENGINE / "include"),
                    str(FIXTURES / "runtime_harness.c"), str(ENGINE / "src/td_police.c"),
                    str(ENGINE / "src/td_police_lanes.c"),

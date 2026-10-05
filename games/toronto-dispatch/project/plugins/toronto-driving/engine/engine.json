@@ -54,6 +54,7 @@
         "include/td_aircraft_render.h",
         "src/td_aircraft.c",
         "src/td_aircraft_render.c",
+        "include/actor.h",
         "src/core/actor.c",
         "include/td_people.h",
         "src/td_people.c",
@@ -81,7 +82,29 @@
         "include/td_motion.h",
         "src/td_motion.c",
         "include/td_actor_render.h",
-        "src/td_actor_render.c"
+        "src/td_actor_render.c",
+        "include/td_shops.h",
+        "src/td_shops.c",
+        "include/td_sandbox.h",
+        "src/td_sandbox.c",
+        "include/td_guidance.h",
+        "src/td_guidance.c",
+        "include/td_scenery.h",
+        "include/td_scenery_data.h",
+        "src/td_scenery.c",
+        "include/td_signal_graphics.h",
+        "include/td_ramming.h",
+        "src/td_ramming.c"
+      ]
+    },
+    {
+      "key": "TORONTO_SHOP",
+      "label": "Toronto walk-in shop",
+      "files": [
+        "include/states/TORONTO_SHOP.h",
+        "src/states/TORONTO_SHOP.c",
+        "include/td_shops.h",
+        "src/td_shops.c"
       ]
     }
   ]

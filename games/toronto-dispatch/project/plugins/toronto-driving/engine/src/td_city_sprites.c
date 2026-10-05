@@ -43,7 +43,7 @@ static void td_city_pose(actor_t *actor,const td_city_sprite_t *cache,UBYTE fram
 }
 
 void td_fleet_present(actor_t *actor,UBYTE kind,UBYTE orientation) BANKED {
-    if(kind>=6||orientation>=4)return;
+    if(kind>=7||orientation>=4)return;
     if(kind<2||(td_city_fleet.sprite.bank==td_city_player.sprite.bank&&
                 td_city_fleet.sprite.ptr==td_city_player.sprite.ptr))
         td_city_pose(actor,&td_city_player,(kind<2?kind:0)*8+orientation*2);
@@ -56,6 +56,10 @@ void td_civilian_present(actor_t *actor,UBYTE variant,UBYTE pose) BANKED {
        td_city_civilian.sprite.ptr==td_city_player.sprite.ptr)
         td_city_pose(actor,&td_city_player,32+(pose<4?pose:0));
     else td_city_pose(actor,&td_city_civilian,variant*6+pose);
+}
+
+void td_vehicle_present(actor_t *actor,UBYTE vehicle,UBYTE heading) BANKED {
+    if(vehicle<4&&heading<16)td_city_pose(actor,&td_city_player,vehicle*8+((heading+1)&15)/2);
 }
 
 void td_player_sprite_restore(void) BANKED {

@@ -149,3 +149,8 @@ UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,td_traffic_sampl
     for(i=0;i<TD_TRAFFIC_COUNT;i++)td_world_sample(district,i,legs[i],&samples[i]);
     return TRUE;
 }
+UBYTE td_world_traffic_one(UBYTE district,UBYTE route,UBYTE leg,td_traffic_sample_t *sample) BANKED {
+    if(!sample||!td_world_valid_traffic(district,NULL)||route>=TD_TRAFFIC_COUNT||
+       leg>=td_traffic_counts[district][route])return FALSE;
+    td_world_sample(district,route,leg,sample);return TRUE;
+}

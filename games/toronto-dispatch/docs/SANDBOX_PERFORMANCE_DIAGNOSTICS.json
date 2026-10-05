@@ -1,0 +1,686 @@
+{
+  "schemaVersion": 1,
+  "kind": "sandbox-native-performance-diagnostics",
+  "date": "2026-10-04",
+  "result": "needs-review",
+  "scope": "Fresh separate ordinary-button boots; paused read-only _game_time sample at244,364,484,604 VBlanks afterboot180/A32/neutral32 atCoreUnion560,720. No imported save/checkpoint, RAM writes, browser or hardware evidence.",
+  "runs": [
+    {
+      "romSha256": "9c155a70c0cc3d6ccec986fc0ab7ddc3a204fd04e80879ad0233926156d4b10e",
+      "role": "preserved-installed-baseline",
+      "debugMode": "rom",
+      "clockAddress": "0xC0B1",
+      "sampleValues": [
+        96,
+        130,
+        164,
+        198
+      ],
+      "completedUpdates": [
+        34,
+        34,
+        34
+      ],
+      "updatesPerSecond": 17,
+      "sessionId": "75c3d2d88df94af58f8356de6d84734b",
+      "eventDigest": "f31e05b4bdc2b4480ec5ce4bdeb4a49eb21301bb6c046512de7c45b15c63858f",
+      "manifestSha256": "110a9751c81f94277aa4126868128e312dec33465d597bc63a345273e50aa116",
+      "outcome": "passed-only-for-timing-comparison"
+    },
+    {
+      "romSha256": "710b75717c0e7a3fd5faf6bd329b242591203fab05cc156496c3255ec8a51ea5",
+      "role": "v7-diagnostic-not-for-loading",
+      "debugMode": "rom",
+      "clockAddress": "0xC0BB",
+      "sampleValues": [
+        43,
+        49,
+        56,
+        62
+      ],
+      "completedUpdates": [
+        6,
+        7,
+        6
+      ],
+      "updatesPerSecond": 3.1666666666666665,
+      "sessionId": "d04f8a91c503490ba47dcb1c7f8a78cf",
+      "eventDigest": "4c58c2c9e377dd91d4b195c581bcbe214f51ab5790c0902eaebaa8a4c9379da1",
+      "manifestSha256": "453626be13696e65ae1be729e571609852133f9f8bd40ec817dc8f26f152b2f8",
+      "outcome": "failed-performance"
+    },
+    {
+      "romSha256": "0b3a05080701f5c85bdeb78d63b0f4dd709fc7fb28040b69bcdbab3765d7de2a",
+      "role": "v8-offscreen-boat-cull-diagnostic-not-for-loading",
+      "debugMode": "source",
+      "clockAddress": "0xC0BB",
+      "sampleValues": [
+        47,
+        62,
+        78,
+        94
+      ],
+      "completedUpdates": [
+        15,
+        16,
+        16
+      ],
+      "updatesPerSecond": 7.833333333333333,
+      "sessionId": "4f5ddb4b453f478f93db8a5dbc0dff8a",
+      "eventDigest": "d01a00d0f9c2270ccb31bd70495737e93efb69c2b3f9bb8df9133476f1178dda",
+      "manifestSha256": "fc4b0890cecc1a43cc4c16eef8a52d70c2ff6c303f6bdc50d0faa9c70e41ec7f",
+      "outcome": "needs-review"
+    },
+    {
+      "romSha256": "a8b5f249ba87dd208f2090281206244a2ae1cc5f871d05f50a1d891643beca9b",
+      "role": "v9-ground-car-culling-social-terrain-diagnostic-not-for-loading",
+      "debugMode": "source",
+      "clockAddress": "0xC0BB",
+      "sampleValues": [
+        83,
+        100,
+        119,
+        137
+      ],
+      "completedUpdates": [
+        17,
+        19,
+        18
+      ],
+      "updatesPerSecond": 9,
+      "sessionId": "a13eaecca3704824ab1e7df9d56016c4",
+      "eventDigest": "5e9d358ca36a71f2ad39a95d0177cd694a7bac789f696c104caea537479f6ca4",
+      "manifestSha256": "9693304df150b9ec8e0bcf90ea73a37cb82eb455546e37409eafe8118ac1f6ba",
+      "outcome": "needs-review"
+    },
+    {
+      "romSha256": "de9d390cceb30dc62f3342bb847e7a6e6978c896a146964365516fd9ecc09956",
+      "role": "v11-terrain-cache-packed-scenery-diagnostic-not-for-loading",
+      "debugMode": "source",
+      "clockAddress": "0xC0BB",
+      "sampleValues": [
+        83,
+        99,
+        118,
+        136,
+        151,
+        169,
+        187,
+        205
+      ],
+      "sampleFrames": [
+        244,
+        364,
+        484,
+        604,
+        724,
+        844,
+        964,
+        1084
+      ],
+      "completedUpdates": [
+        16,
+        19,
+        18,
+        15,
+        18,
+        18,
+        18
+      ],
+      "coldUpdatesPerSecond": 8.833333333333334,
+      "laterUpdatesPerSecond": 8.625,
+      "sessionId": "488fdc447b5a4b07a33ce4cb131b3f16",
+      "eventDigest": "bba7abfe6ac97bb5c72d51b203f6ab9b4a41f70694c3fe2e8172ede715735c88",
+      "manifestSha256": "3cb09cae29faf5713a413fe8b12317bbb59ec08d3ddc7be38d6c68fe8bd9b1dd",
+      "outcome": "needs-review",
+      "limitation": "No measured stationary-Union gain over v9; not selected for cartridge."
+    },
+    {
+      "romSha256": "18e61b7a7e9a939c544a0babf72df10fc36ab5d8daf171b7fa4dac7af04a0105",
+      "role": "v12-byte-broad-rejection-clean-scenery-taxi-settings-diagnostic-not-for-loading",
+      "debugMode": "source",
+      "clockAddress": "0xC0BC",
+      "sampleFrames": [
+        244,
+        364,
+        484,
+        604,
+        724,
+        844,
+        964,
+        1084
+      ],
+      "sampleValues": [
+        85,
+        104,
+        123,
+        143,
+        162,
+        183,
+        202,
+        220
+      ],
+      "completedUpdates": [
+        19,
+        19,
+        20,
+        19,
+        21,
+        19,
+        18
+      ],
+      "coldUpdatesPerSecond": 9.666666666666666,
+      "laterUpdatesPerSecond": 9.625,
+      "sessionId": "92bdf292caa045179ea491b15e19d32e",
+      "eventDigest": "0bd977e22f5d2befe50cd008550dffd1a81e43cf165288966dd8facf18314ac1",
+      "manifestSha256": "087940d16f52ad8f4daedd0b0efef81edd1e7d85e435416d5b9c0679044ab0db",
+      "outcome": "needs-review",
+      "limitation": "Modest stationary improvement over v11, still below preserved baseline. No whole-city speed or gameplay acceptance; never cartridge selected."
+    }
+  ],
+  "runtime": {
+    "name": "PyBoy",
+    "version": "2.7.0",
+    "workerSha256": "6271cbbb9ca76d4d149173f4110705cfa3c567349f0cb7ceb347bf1df7598925"
+  },
+  "recordingStatus": "All separate diagnostic recordings stopped, workers closed, bytes archived unchanged.",
+  "limitations": [
+    "This measures one stationary Core view, not whole-city performance or human gameplay duration.",
+    "v7, v8, v9, instrumented v10b, v11 and v12 are diagnostic ROMs and were never selected for cartridge write.",
+    "Static memory and host check counts do not establish native speed."
+  ],
+  "instrumentedDiagnostic": {
+    "romSha256": "c6030bfc5a44add2318d364d2a17d754a73cd23754ebed785c1e71b4f36cf20f",
+    "sessionId": "367e9b09ce74464e83e2cc52f02980c7",
+    "eventDigest": "c58c749668d62389f5d19478953a3cd9b1fd1c3dd072ba3300b352765a13bb22",
+    "manifestSha256": "cabab49a37532b4921a7d5674cd4ae7ed2f46a6f181bc7d278d589da79705589",
+    "frames": 1324,
+    "scope": "Temporary14-byte native clock marker array; read-only samples can contain adjacent partial updates. Never a cartridge candidate; exact original source restored after diagnosis.",
+    "phaseOrder": [
+      "update-start",
+      "before-motion",
+      "after-motion",
+      "after-traffic",
+      "after-people/presentation",
+      "after-sound",
+      "render-before",
+      "after-ground",
+      "after-lights",
+      "after-props",
+      "after-boat",
+      "after-sandbox",
+      "after-aircraft"
+    ],
+    "samples": [
+      {
+        "frame": 244,
+        "values": [
+          168,
+          168,
+          169,
+          172,
+          165,
+          165,
+          165,
+          166,
+          166,
+          166,
+          166,
+          167,
+          167,
+          0
+        ],
+        "diffs": [
+          0,
+          1,
+          3,
+          249,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "frame": 364,
+        "values": [
+          37,
+          28,
+          29,
+          32,
+          34,
+          34,
+          34,
+          35,
+          36,
+          36,
+          36,
+          36,
+          36,
+          0
+        ],
+        "diffs": [
+          247,
+          1,
+          3,
+          2,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 484,
+        "values": [
+          156,
+          157,
+          152,
+          152,
+          153,
+          153,
+          154,
+          154,
+          155,
+          155,
+          155,
+          155,
+          155,
+          0
+        ],
+        "diffs": [
+          1,
+          251,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 604,
+        "values": [
+          18,
+          18,
+          19,
+          12,
+          14,
+          14,
+          14,
+          15,
+          15,
+          15,
+          15,
+          16,
+          17,
+          0
+        ],
+        "diffs": [
+          0,
+          1,
+          249,
+          2,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
+      },
+      {
+        "frame": 724,
+        "values": [
+          135,
+          135,
+          136,
+          138,
+          140,
+          141,
+          141,
+          141,
+          133,
+          133,
+          133,
+          134,
+          134,
+          0
+        ],
+        "diffs": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          0,
+          0,
+          248,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "frame": 844,
+        "values": [
+          5,
+          253,
+          254,
+          0,
+          2,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          0
+        ],
+        "diffs": [
+          248,
+          1,
+          2,
+          2,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 964,
+        "values": [
+          123,
+          124,
+          125,
+          125,
+          120,
+          121,
+          121,
+          121,
+          122,
+          122,
+          122,
+          122,
+          122,
+          0
+        ],
+        "diffs": [
+          1,
+          1,
+          0,
+          251,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 1084,
+        "values": [
+          240,
+          240,
+          241,
+          245,
+          237,
+          237,
+          237,
+          238,
+          238,
+          239,
+          239,
+          239,
+          239,
+          0
+        ],
+        "diffs": [
+          0,
+          1,
+          4,
+          248,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 1204,
+        "values": [
+          109,
+          99,
+          100,
+          104,
+          106,
+          107,
+          107,
+          107,
+          108,
+          108,
+          108,
+          108,
+          108,
+          0
+        ],
+        "diffs": [
+          246,
+          1,
+          4,
+          2,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 1324,
+        "values": [
+          226,
+          226,
+          227,
+          227,
+          229,
+          229,
+          229,
+          229,
+          224,
+          224,
+          224,
+          224,
+          224,
+          0
+        ],
+        "diffs": [
+          0,
+          1,
+          0,
+          2,
+          0,
+          0,
+          0,
+          251,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "finding": "Ordinary traffic observed2\u20134VBlank phase deltas; people/presentation1\u20132. This motivates cache work; coarse clocks do not prove instruction-level attribution.",
+    "failedInitialAttempt": "v10 rejected an unnecessary extern sys_time declaration; v10b uses the engine's existing declaration."
+  },
+  "instrumentedAccumulatorDiagnostics": [
+    {
+      "name": "v13b",
+      "result": "needs-review",
+      "role": "temporary-phase-accumulators-not-for-loading",
+      "build": {
+        "state": "succeeded",
+        "elapsedMs": 87576,
+        "romSha256": "66a0c0e0654d8ffb8a7b4d1682c120fced42d3dbcac7b8cdb372feaa27edfe6f",
+        "romBytes": 1048576,
+        "noiSha256": "ecb015730f21175cf862ad8fb12f32abce644fd9361af840f3b832c6c66524dc",
+        "sourceFingerprint": "32648415b6f1b3d6bd9f3f47ada2814a0aaa0fafbb9e54c4c59eea3c31d8eade",
+        "initialFailedAttempt": {
+          "name": "v13",
+          "elapsedMs": 84183,
+          "state": "failed",
+          "reason": "td_traffic CODE bank-pack overflow",
+          "codeBytes": 16434,
+          "bankCapacityBytes": 16384,
+          "romProduced": false
+        },
+        "retryChange": "A smaller finish-policy variant fit the traffic bank; this is a distinct diagnostic build, not the failed v13 output.",
+        "resourceObservations": {
+          "temporaryProfileBytes": 14,
+          "staticReserveBytes": 456,
+          "correspondingProductionReserveBytes": 470,
+          "fixedHomeHeadroomBytes": 180,
+          "fixedHomePoseHelperBytes": 87,
+          "maxObjRawTilesPerBank": 120,
+          "objRawTileCapacityPerBank": 128,
+          "westBackgroundBank1Tiles": 44,
+          "signalBearingBackgroundBank1Limit": 47
+        }
+      },
+      "recording": {
+        "sessionId": "2f8ae8314f0546d8adb86aeeab146159",
+        "status": "stopped-closed-archived",
+        "stopOutcome": "needs-review",
+        "frames": 1594,
+        "eventDigest": "8e7c7ac90f83bce041e1344f26a407a1ee46732cfa161f182718768e0081dc5e",
+        "manifestSha256": "577de5a0e87ecd64942fbcc776ba64211fd6df8bc1eadbfeb31189022f960532",
+        "archiveFiles": 29,
+        "archiveBytes": 77508
+      },
+      "scope": "Stationary Core samples of 14 temporary byte accumulators driven by sys_time. Read-only observations use VBlank quantization rather than instruction-level profiling.",
+      "stationarySamples": [
+        {
+          "frame": 244,
+          "profileHex": "0a01000c14000600040700000000",
+          "gameTimeHex": "55"
+        },
+        {
+          "frame": 364,
+          "profileHex": "1f03002041040d000c1300000100",
+          "gameTimeHex": "6a"
+        },
+        {
+          "frame": 484,
+          "profileHex": "3704003970040d01211400000100",
+          "gameTimeHex": "82"
+        },
+        {
+          "frame": 604,
+          "profileHex": "4a06005199081801222303000101",
+          "gameTimeHex": "95"
+        },
+        {
+          "frame": 724,
+          "profileHex": "60090066c7081a01312a03000104",
+          "gameTimeHex": "ab"
+        },
+        {
+          "frame": 844,
+          "profileHex": "750a007bec081f013f2e03030112",
+          "gameTimeHex": "c0"
+        },
+        {
+          "frame": 964,
+          "profileHex": "890d009013112201473a03030115",
+          "gameTimeHex": "d4"
+        },
+        {
+          "frame": 1084,
+          "profileHex": "9e0e00ac3e1822014d4303030116",
+          "gameTimeHex": "e9"
+        }
+      ],
+      "window": {
+        "fromFrame": 244,
+        "toFrame": 1084,
+        "elapsedVBlanks": 840,
+        "completedUpdatesByInterval": [21, 24, 19, 22, 21, 20, 21],
+        "completedUpdates": 148,
+        "nominal60VBlankUpdatesPerSecond": 10.571428571428571,
+        "method": "Sum adjacent unsigned-byte game_time deltas modulo 256. Phase totals likewise sum adjacent accumulator deltas, retaining observed wraps."
+      },
+      "phaseTotals": [
+        {"index": 1, "phase": "preparation", "quantizedVBlanks": 13},
+        {"index": 2, "phase": "motion", "quantizedVBlanks": 0},
+        {"index": 3, "phase": "traffic", "quantizedVBlanks": 160},
+        {"index": 4, "phase": "people/presentation", "quantizedVBlanks": 298},
+        {"index": 5, "phase": "post-update", "quantizedVBlanks": 24},
+        {"index": 6, "phase": "ambient/UI", "quantizedVBlanks": 28},
+        {"index": 7, "phase": "render-restore", "quantizedVBlanks": 1},
+        {"index": 8, "phase": "ground", "quantizedVBlanks": 73},
+        {"index": 9, "phase": "lights", "quantizedVBlanks": 60},
+        {"index": 10, "phase": "scenery", "quantizedVBlanks": 3},
+        {"index": 11, "phase": "boat", "quantizedVBlanks": 3},
+        {"index": 12, "phase": "sandbox", "quantizedVBlanks": 1},
+        {"index": 13, "phase": "aircraft", "quantizedVBlanks": 22}
+      ],
+      "subsequentInputs": [
+        {"buttons": ["a"], "frames": 300},
+        {"buttons": ["b"], "frames": 90},
+        {"buttons": [], "frames": 120}
+      ],
+      "finalOamSnapshot": {
+        "frame": 1594,
+        "visibleObjects": 6,
+        "peakObjectsPerScanline": 2,
+        "overLimitScanlines": 0
+      },
+      "sourceRestoration": {
+        "instrumentedFilesRestoredExactly": 2,
+        "tdProfileMarkersRemaining": false,
+        "timing": "After the diagnostic session closed",
+        "scope": "Temporary instrumentation was removed; subsequent independent source work remains outside this ROM identity."
+      },
+      "limitations": [
+        "Performance remained below the preserved installed baseline's nominal 17 updates per second; this diagnostic remains needs-review.",
+        "These quantized phase totals can include partial-update boundaries and do not account for all untimed core/interrupt work. They are not an instruction profile or a complete partition of elapsed VBlanks.",
+        "Zero motion VBlanks in this stationary window does not imply zero motion CPU cost or predict driving performance.",
+        "The later A/brake/neutral sequence and final bounded OAM snapshot do not establish gameplay acceptance, every intervening frame or crowded whole-city performance.",
+        "Neither failed v13 nor instrumented v13b was selected for hardware or cartridge loading. Production source and final build acceptance remain separate."
+      ]
+    }
+  ]
+}

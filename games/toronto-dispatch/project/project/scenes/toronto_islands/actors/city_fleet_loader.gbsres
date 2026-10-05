@@ -8,7 +8,7 @@
   "coordinateType": "tiles",
   "x": 0,
   "y": 0,
-  "frame": 16,
+  "frame": 20,
   "animate": false,
   "spriteSheetId": "b6ae14b5-e2ae-55b7-b2e4-64cf56d4c012",
   "paletteId": "",

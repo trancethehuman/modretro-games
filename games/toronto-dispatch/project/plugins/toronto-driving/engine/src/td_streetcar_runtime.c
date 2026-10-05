@@ -72,6 +72,13 @@ static UBYTE td_streetcar_runtime_held_body(td_streetcar_pose_t *pose,td_streetc
     return td_streetcar_destination(td.transit_origin,td.transit_target,pose)&&
         td_streetcar_bounds(pose,body);
 }
+/* Held-arrival scratch is never live while a normal future sweep descends
+ * through the timetable range/edge helpers. Query order is unchanged. */
+static UBYTE td_streetcar_runtime_held_clear(const td_streetcar_box_t *box){
+    td_streetcar_pose_t pose;td_streetcar_box_t body;
+    return td_streetcar_runtime_held_body(&pose,&body)&&
+        !td_streetcar_runtime_overlap(box,&body);
+}
 
 void td_streetcar_runtime_reset(void) BANKED {
     td_streetcar_bound=td_streetcar_valid=td_streetcar_cue=0;td_streetcar_elapsed=0;
@@ -171,10 +178,9 @@ UBYTE td_streetcar_runtime_foot_clear(UWORD u,UWORD v) BANKED {
     return td_streetcar_runtime_clear(u,v,3*16,td.district,td_streetcar_elapsed);
 }
 UBYTE td_streetcar_runtime_pedestrian_clear(UBYTE district,UWORD u,UWORD v) BANKED {
-    td_streetcar_box_t box,body;td_streetcar_pose_t pose;
+    td_streetcar_box_t box;
     if(td.subsecond>=60||!td_streetcar_runtime_box(u,v,3*16,3*16,district,&box))return FALSE;
-    if(td_streetcar_runtime_held())return td_streetcar_runtime_held_body(&pose,&body)&&
-        !td_streetcar_runtime_overlap(&box,&body);
+    if(td_streetcar_runtime_held())return td_streetcar_runtime_held_clear(&box);
     return !td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(td.seconds,td.subsecond,td_streetcar_elapsed,&box)==TD_STREETCAR_CLEAR;
 }
@@ -191,7 +197,7 @@ UBYTE td_streetcar_runtime_car_clear(UWORD old_u,UWORD old_v,UWORD u,UWORD v) BA
         td_streetcar_sweep(td.seconds,td.subsecond,td_streetcar_elapsed,&box)==TD_STREETCAR_CLEAR);
 }
 UBYTE td_streetcar_runtime_traffic_sweep_clear(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
-    td_streetcar_box_t box,old_box,body;td_streetcar_pose_t pose;UWORD future=td.seconds+1;
+    td_streetcar_box_t box,old_box;UWORD future=td.seconds+1;
     if(half<5||half>8||td.subsecond>=60||
        !td_streetcar_runtime_box(u,v,half*16,half*16,district,&box)||
        !td_streetcar_runtime_box(old_u,old_v,half*16,half*16,district,&old_box))return FALSE;
@@ -199,8 +205,7 @@ UBYTE td_streetcar_runtime_traffic_sweep_clear(UBYTE district,UWORD old_u,UWORD 
     if(old_box.right>box.right)box.right=old_box.right;
     if(old_box.top<box.top)box.top=old_box.top;
     if(old_box.bottom>box.bottom)box.bottom=old_box.bottom;
-    if(td_streetcar_runtime_held())return td_streetcar_runtime_held_body(&pose,&body)&&
-        !td_streetcar_runtime_overlap(&box,&body);
+    if(td_streetcar_runtime_held())return td_streetcar_runtime_held_clear(&box);
     return !td_streetcar_runtime_near(&box)||
         td_streetcar_sweep(future,td.subsecond,60,&box)==TD_STREETCAR_CLEAR;
 }
@@ -325,10 +330,10 @@ static UBYTE td_streetcar_runtime_others(UBYTE district,UWORD u,UWORD v,UBYTE fo
     if(foot&&td.park_district==district&&td_streetcar_runtime_distance(u,td.park_u)<168&&
        td_streetcar_runtime_distance(v,td.park_v)<168)return FALSE;
     if(district!=td_district_current())return TRUE;
-    for(i=2;i<15;i++){
-        radius=i<8?180:foot?96:160;
+    for(i=2;i<21;i++){
+        radius=i<8||i==17||i==18?180:foot?96:160;
         if(i==8)continue;
-        if(i>=9&&(actors[i].flags&ACTOR_FLAG_HIDDEN))continue;
+        if(actors[i].flags&ACTOR_FLAG_HIDDEN)continue;
         if(td_streetcar_runtime_distance(u,actors[i].pos.x>>1)<radius&&
            td_streetcar_runtime_distance(v,actors[i].pos.y>>1)<radius)return FALSE;
     }

@@ -1,10 +1,16 @@
 .PHONY: check
 
 check:
+	python3 scripts/check_actor_header.py
 	python3 games/toronto-dispatch/scripts/create_atlas.py --check
 	python3 scripts/test_atlas.py
 	python3 scripts/test_atlas_ui.py
 	python3 scripts/test_menu_repeat.py
+	python3 scripts/test_motion_feedback.py
+	python3 scripts/test_scenery.py
+	python3 scripts/test_shops.py
+	python3 scripts/test_sandbox.py
+	python3 scripts/check_stop_names.py
 	python3 scripts/test_atlas_banks.py
 	python3 scripts/check_repository.py
 	python3 games/toronto-dispatch/scripts/check_campaign.py
@@ -25,6 +31,7 @@ check:
 	python3 scripts/check_aircraft_rom.py --self-test
 	python3 scripts/test_aircraft_render.py
 	python3 scripts/test_actor_render.py
+	python3 scripts/test_actor_scene_render.py
 	python3 games/toronto-dispatch/scripts/check_district_world.py
 	python3 scripts/test_district_seams.py
 	python3 games/toronto-dispatch/scripts/create_district_world.py --check
@@ -51,3 +58,4 @@ check:
 	python3 scripts/test_district_bridge.py
 	python3 scripts/test_world_navigation.py
 	python3 tests/test_rom_memory.py
+	python3 tests/test_rom_package.py
