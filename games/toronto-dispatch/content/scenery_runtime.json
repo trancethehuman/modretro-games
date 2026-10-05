@@ -57,6 +57,7 @@
   "total_props": 1135,
   "underlay_patterns": 16,
   "native_static_bytes": 233,
+  "row_lookup_rom_bytes": 1736,
   "broken_bits_bytes": 142,
   "active_animations": 4,
   "bkg_bank": 1,

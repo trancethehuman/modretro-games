@@ -1,0 +1,58 @@
+{
+  "schema": "td-original-menu-frames-v1",
+  "authorship": "Original pixel patterns authored for Toronto Dispatch, 2026-10-05. No game reference assets used.",
+  "tile_bank": 1,
+  "first_tile": 188,
+  "last_tile": 190,
+  "palette_slot": 7,
+  "palette_name": "Dispatch Navy / Mint / Gold",
+  "colors": [
+    "112439",
+    "45DEC2",
+    "FFD46A",
+    "EFFBE8"
+  ],
+  "patterns": [
+    {
+      "name": "bevel_corner",
+      "rows": [
+        "00000000",
+        "00000000",
+        "00022222",
+        "00211111",
+        "00213333",
+        "00213000",
+        "00213000",
+        "00213000"
+      ]
+    },
+    {
+      "name": "bevel_rail",
+      "rows": [
+        "00000000",
+        "00000000",
+        "22222222",
+        "11111111",
+        "33333333",
+        "00000000",
+        "00000000",
+        "00000000"
+      ]
+    },
+    {
+      "name": "bevel_side",
+      "rows": [
+        "00213000",
+        "00213000",
+        "00213000",
+        "00213000",
+        "00213000",
+        "00213000",
+        "00213000",
+        "00213000"
+      ]
+    }
+  ],
+  "ownership": "Full-screen menu-only patterns. Atlas/story pattern uploads end at187; font starts192; guidance241..252, combat253 and hospital254 stay untouched.",
+  "fidelity": "Driving HUD, atlas ground cells, actor population, native city art, audio and save layout remain unchanged."
+}

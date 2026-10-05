@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 from PIL import Image, ImageDraw
 from street_scenery import decorate
+from crossing_art import native_bytes as crossing_native_bytes
 from north_layout import (WIDTH, HEIGHT, ROAD_HALF, WALK_HALF,
                           FOOT_HALF, RAIL_HALF, read_layout,
                           pairs, pixel_points)
@@ -481,6 +482,8 @@ def main():
     if not args.dry_run:
         files={ART/'toronto_north.png':png,ART/'north_attributes.json':(json.dumps(attrs)+'\n').encode(),
                CONTENT/'north_art.json':(json.dumps(metadata,indent=2)+'\n').encode()}
+        native=ROOT/'project/assets/backgrounds/toronto_north.png'
+        if native.exists():files[native]=crossing_native_bytes(png,metadata)
         for path,data in files.items():
             if args.check:assert path.read_bytes()==data,('Stale source candidate',path)
             else:path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data)

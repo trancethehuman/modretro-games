@@ -1,5 +1,15 @@
 # Roadmap
 
+## R8 physical feedback: crossings, speed and framed menus — 2026-10-05
+
+- [ ] Repaint crossings with clear, separated strokes and asphalt padding; preserve road geometry, stop bars, signal positions and every non-crossing pixel.
+- [ ] Improve actual ROM city update throughput, retaining all eight fleet slots, eight pedestrians, two scooter riders, street objects, collision guards and graphical fidelity. Require native R8 comparison rather than transferring an older timing result.
+- [ ] Give fullscreen menus original Game Boy frames, cards and a readable selection hierarchy; preserve controls, saves, settings, sound, map, missions, transit and the compact city HUD.
+- [ ] Run complete repository and native resource checks, then inspect genuine crossings/menu screens and repeat matched idle/driving measurements before selecting a new ROM.
+
+The accepted feedback reports severe R8 lag despite successful cartridge boot.
+Cold boot and button confirmation do not establish smooth city performance.
+
 ## Selected campus and scooter R8 — 2026-10-05
 
 Current local ROM: `toronto-dispatch-campus-scooters-r8.gbc`, SHA-256

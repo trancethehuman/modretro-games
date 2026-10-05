@@ -185,7 +185,7 @@ static void test_cover_render_edges(void){
     expect(!td_scooter_foot_clear(400*16,450*16)&&td_scooter_foot_clear(420*16,450*16),"normal pedestrians and door probes yield to the actual rider body");
     expect(td_scooter_clear(400*16,450*16,401*16,450*16,7,240),"an autonomous rider skips only its own body");
     expect(td_scooter_clear(8*16,8*16,9*16,8*16,7,TD_NONE)&&!td_scooter_clear(65535,0,0,0,7,TD_NONE),"opposite map edges remain clear without wrapped coordinate admission");
-    tile_hit_x=41;tile_hit_y=92;wall_x=50;expect(!td_scooter_terrain(399*16,450*16,400*16,450*16,7)&&tile_hit_x==41&&tile_hit_y==92,"whole-body wall rejection restores collision hit ownership");
+    tile_hit_x=41;tile_hit_y=92;wall_x=50;expect(!td_scooter_terrain(399*16,450*16,400*16,450*16,7,NULL)&&tile_hit_x==41&&tile_hit_y==92,"whole-body wall rejection restores collision hit ownership");
     wall_x=-1;draw_scroll_x=320;draw_scroll_y=362;td_scooter_render();expect(render_calls==1&&rendered[0]>=24&&rendered[0]<=31,"mounted rider renders original scooter art through the existing safe renderer");
     render_calls=0;td_scooter_riders[0].flags=3;td_scooter_riders[0].hit=0;td_scooter_render();expect(render_calls==2&&rendered[0]==49&&rendered[1]==100+6+TD_CIVILIAN_HIT,"crash renders one empty scooter OBJ plus one original airborne civilian");
     render_calls=0;td_scooter_riders[0].hit=96;td_scooter_render();expect(render_calls==2&&rendered[1]==100+6+TD_CIVILIAN_PRONE,"grounded wreck and prone rider retain the same two-object rendering budget");
@@ -247,7 +247,9 @@ static uint32_t rider_oracle_seed=0x39247ac1;
 static uint32_t rider_oracle_random(void){rider_oracle_seed=rider_oracle_seed*1664525u+1013904223u;return rider_oracle_seed;}
 static void test_split_differential(void){
     reset_case(0);UBYTE extents[8]={5,6,5,7,6,7,5,5};td_traffic_context_t ctx={td_traffic_u,td_traffic_v,&actors[9],extents,extents,0,0,0,0};
+    td_rider_batch_t batch;
     for(unsigned i=0;i<8;i++){td_traffic_u[i]=(800+i*20)*16;td_traffic_v[i]=920*16;}
+    expect(td_traffic_external_begin(&ctx,&batch),"all authored signal samples borrow one validated immutable fleet context");
     for(unsigned d=0;d<7;d++)for(unsigned i=td_signal_offsets[d];i<td_signal_offsets[d+1];i++)
         for(unsigned direction=0;direction<4;direction++)for(int offset=-33;offset<=33;offset++)for(unsigned phase=0;phase<12;phase++){
             int x=td_signals_h[i].u*16,y=td_signals_h[i].v*16;
@@ -255,6 +257,8 @@ static void test_split_differential(void){
             UWORD u=x-dx*24*16+(dy?offset*16:0),v=y-dy*24*16+(dx?offset*16:0);
             expect(td_traffic_external_admit(&ctx,d,phase,u,v,u+dx*8,v+dy*8,7)==reference_external(&ctx,d,phase,u,v,u+dx*8,v+dy*8,7),
                    "split rider bank matches immutable old-body/linear-signal oracle at every light, direction, phase and sidewalk boundary");
+            expect(td_traffic_external_batch_admit(&batch,d,phase,u,v,u+dx*8,v+dy*8,7)==reference_external(&ctx,d,phase,u,v,u+dx*8,v+dy*8,7),
+                   "borrowed rider batch matches independent oracle at every authored signal, direction, phase and sidewalk boundary");
         }
     for(unsigned n=0;n<100000;n++){
         UBYTE half=1+n%8,d=n%7,dir=(n/7)%4;
@@ -274,7 +278,98 @@ static void test_split_differential(void){
                "split private helpers retain exact full bodies, priority, old overlap escape, malformed far actors and parked/person admission");
     }
 }
+static void test_rider_batch_differential(void){
+    UBYTE extents[8]={5,6,5,7,6,7,5,5};td_rider_batch_t batch;
+    td_traffic_context_t ctx={td_traffic_u,td_traffic_v,&actors[9],extents,extents,0,0,0,0};
+    reset_case(0);
+    expect(!td_traffic_external_begin(NULL,&batch)&&!batch.valid&&!batch.ctx,
+           "missing context invalidates a borrowed batch rather than retaining an earlier proof");
+    expect(!td_traffic_external_begin(&ctx,NULL)&&
+           !td_traffic_external_batch_admit(NULL,0,0,400*16,450*16,400*16+8,450*16,7),
+           "null borrowed batch fails closed without changing context");
+    expect(!td_traffic_external_batch_admit(&batch,0,0,400*16,450*16,400*16+8,450*16,7),
+           "failed begin cannot authorize any rider admission");
+    for(unsigned n=0;n<30000;n++){
+        reset_case(n%7);
+        for(unsigned i=0;i<8;i++){
+            td_traffic_u[i]=(16+rider_oracle_random()%992)*16+(rider_oracle_random()&15);
+            td_traffic_v[i]=(16+rider_oracle_random()%944)*16+(rider_oracle_random()&15);
+            extents[i]=1+rider_oracle_random()%16;
+            actors[9+i].flags=(rider_oracle_random()&3)?ACTOR_FLAG_HIDDEN:0;
+            actors[9+i].pos.x=(16+rider_oracle_random()%992)*32;
+            actors[9+i].pos.y=(16+rider_oracle_random()%944)*32;
+        }
+        ctx.priority_mask=rider_oracle_random();ctx.parked_active=n%13==0?2:n%3==0;
+        ctx.park_u=(16+rider_oracle_random()%992)*16;ctx.park_v=(16+rider_oracle_random()%944)*16;
+        if(!(n&7))td_traffic_u[n%8]=65535;
+        if(!(n&15)){actors[9+n%8].flags=0;actors[9+n%8].pos.x=0;}
+        if(n%29==0)extents[n%8]=0;
+        td_traffic_context_t original=ctx;actor_t people[8];UWORD fleet_u[8],fleet_v[8];
+        memcpy(people,&actors[9],sizeof(people));memcpy(fleet_u,td_traffic_u,sizeof(fleet_u));memcpy(fleet_v,td_traffic_v,sizeof(fleet_v));
+        UBYTE valid=td_traffic_external_begin(&ctx,&batch);
+        expect(valid==(batch.valid==TD_RIDER_BATCH_VALID),"batch proof is published only after whole immutable context validation");
+        UWORD seconds=rider_oracle_random();
+        /* Multiple arbitrary riders reuse one proof; no candidate or blocked
+           move can change the fleet/pedestrian/park data it borrows. */
+        for(unsigned j=0;j<12;j++){
+            UBYTE half=1+rider_oracle_random()%8,d=rider_oracle_random()%9,dir=rider_oracle_random()%4;
+            UWORD u=(16+rider_oracle_random()%992)*16+(rider_oracle_random()&15),v=(16+rider_oracle_random()%944)*16+(rider_oracle_random()&15);
+            UWORD nu=u+td_scooter_dx[dir]*(rider_oracle_random()%10),nv=v+td_scooter_dy[dir]*(rider_oracle_random()%10);
+            if(j==3)nu=nv=65535;
+            if(j==4){nu=u;nv=v;}
+            if(j==5){nu=u+8;nv=v+8;}
+            expect(td_traffic_external_batch_admit(&batch,d,seconds,u,v,nu,nv,half)==
+                   reference_external(&ctx,d,seconds,u,v,nu,nv,half),
+                   "reused rider validation matches immutable old-body/linear-signal oracle across full bodies, malformed geometry, priority, people, park, diagonals and zero movement");
+        }
+        expect(!memcmp(&ctx,&original,sizeof(ctx))&&!memcmp(people,&actors[9],sizeof(people))&&
+               !memcmp(fleet_u,td_traffic_u,sizeof(fleet_u))&&!memcmp(fleet_v,td_traffic_v,sizeof(fleet_v)),
+               "borrowed rider batch never mutates context, authored fleet or people");
+    }
+}
+static UBYTE reference_scooter_terrain(UWORD ou,UWORD ov,UWORD u,UWORD v,UBYTE half){
+    if(!half||half>8||ou<half*16||u<half*16||ov<half*16||v<half*16||
+       ou>(1024-half)*16||u>(1024-half)*16||ov>(976-half)*16||v>(976-half)*16||
+       (ou!=u&&ov!=v))return FALSE;
+    unsigned l=((ou<u?ou:u)-half*16)/128,r=((ou>u?ou:u)+half*16)/128;
+    unsigned t=((ov<v?ov:v)-half*16)/128,b=((ov>v?ov:v)+half*16)/128;
+    for(unsigned y=t;y<=b;y++)for(unsigned x=l;x<=r;x++)if(tile_at(x,y)&15)return FALSE;
+    return TRUE;
+}
+static void test_scooter_terrain_reuse(void){
+    td_scooter_terrain_cache_t cache={0};
+    reset_case(0);UBYTE expected;
+    for(unsigned blocked=0;blocked<2;blocked++){
+        wall_x=blocked?50:-1;cache.valid=0;
+        for(unsigned i=0;i<8;i++){
+            UWORD ou=405*16+i,u=ou+1,v=450*16;
+            unsigned before=terrain_calls;tile_hit_x=41;tile_hit_y=92;
+            expected=reference_scooter_terrain(ou,v,u,v,7);
+            expect(td_scooter_terrain(ou,v,u,v,7,&cache)==expected&&tile_hit_x==41&&tile_hit_y==92,
+                   "identical validated terrain union reuses both clear and blocked outcomes without changing collision hit ownership");
+            expect(i?terrain_calls==before:terrain_calls>before,
+                   "a raw-collision rectangle is queried once then reused across fractional steps in the same update");
+        }
+    }
+    static const UWORD malformed[]={0,1,111,127,128,16383,16384,15615,15616,32767,65535};
+    for(unsigned d=0;d<7;d++){
+        reset_case(d);use_raw=1;cache.valid=0;
+        for(unsigned n=0;n<65000;n++){
+            UBYTE half=n%11,dir=rider_oracle_random()%4;
+            UWORD ou=rider_oracle_random()%16500,ov=rider_oracle_random()%16000;
+            if(!(n&7))ou=malformed[n%11];
+            if(!(n&15))ov=malformed[(n/11)%11];
+            UWORD u=ou+td_scooter_dx[dir]*(rider_oracle_random()%130),v=ov+td_scooter_dy[dir]*(rider_oracle_random()%130);
+            if(n%19==0){u=ou+1;v=ov+1;}
+            tile_hit_x=41;tile_hit_y=92;
+            expected=reference_scooter_terrain(ou,ov,u,v,half);
+            expect(td_scooter_terrain(ou,ov,u,v,half,&cache)==expected&&tile_hit_x==41&&tile_hit_y==92,
+                   "local terrain reuse matches independent raw tile union across every district, half extent, fraction, malformed/cardinal/diagonal input and map edge");
+        }
+    }
+    use_raw=0;wall_x=-1;
+}
 int main(void){
-    test_routes();test_admission_and_freeze();test_native_parking();test_borrowing();test_ramming();test_elapsed_partitions();test_cover_render_edges();test_external_traffic();test_split_differential();
+    test_routes();test_admission_and_freeze();test_native_parking();test_borrowing();test_ramming();test_elapsed_partitions();test_cover_render_edges();test_external_traffic();test_split_differential();test_rider_batch_differential();test_scooter_terrain_reuse();
     printf("Actual scooter/sandbox/external-traffic checks: %u checks, %u failures\n",checks,failures);return failures?1:0;
 }

@@ -1,11 +1,12 @@
 """Original, tile-aligned top-down pixel art. Requires Pillow; no downloaded art."""
 from pathlib import Path
-import json, math, uuid, hashlib, sys
+import json, math, uuid, hashlib, sys, io
 from PIL import Image, ImageDraw
 from city_layout import *
 from streetcar_art import paint_streetcar_stops
 from street_scenery import decorate
 from campus_art import paint as paint_campus
+from crossing_art import native_bytes as crossing_native_bytes
 ROOT=Path(__file__).resolve().parents[1]; PROJECT=ROOT/'project'
 COLORS=['#071821','#306850','#86c06c','#e0f8cf']; TRANSPARENT='#65ff00'
 def ident(name):return str(uuid.uuid5(uuid.NAMESPACE_URL,'toronto-dispatch/topdown/'+name))
@@ -128,9 +129,12 @@ def main(background_only=False):
                     if s['district']==0 and s['transit']]
     scenery=decorate(img,grid,attrs,blocks,canopies,'city',{'roads':roads,'stop_candidates':service_points})
     paint_campus(img,blocks)
-    img.save(PROJECT/'assets/backgrounds/toronto_city.png')
     content={'projection':'orthogonal north-up; x=u, y=v','dimensions':[WIDTH,HEIGHT],'rows':ROWS,'columns':COLS,'road_half_width':ROAD_HALF,'walk_half_width':WALK_HALF,'river':RIVER,'bridges':BRIDGES,'mainland':MAINLAND,'islands':ISLANDS,'blocks':blocks,'canopies':canopies,'scope':'Compressed central Toronto mainland and harbour; public Island paths are in their separate ferry-only scene. Full Old Toronto boundaries remain a release check'}
     content['scenery']=scenery
+    # The crossing repaint is a final native-only layer. Retain historical
+    # scenery metadata and campus proof instead of recapturing either fixture.
+    buffer=io.BytesIO();img.save(buffer,format='PNG')
+    (PROJECT/'assets/backgrounds/toronto_city.png').write_bytes(crossing_native_bytes(buffer.getvalue(),content))
     (ROOT/'content/city_art.json').write_text(json.dumps(content,indent=2)+'\n')
     (PROJECT/'original-art/city_attributes.json').write_text(json.dumps(attrs)+'\n')
     if background_only:

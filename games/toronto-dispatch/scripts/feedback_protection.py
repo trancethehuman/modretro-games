@@ -50,6 +50,11 @@ def raw_sha(relative,payload,old_expected,proof=None):
   from campus_protection import png_history
   try:payload=png_history(payload)
   except (AssertionError,OSError):return False
+ else:
+  from crossing_protection import PNG_FILES as crossing_pngs,png_history as crossing_history
+  if relative in crossing_pngs:
+   try:payload=crossing_history(relative,payload)
+   except (AssertionError,OSError,ValueError):return False
  proof=fixture() if proof is None else proof;scope=proof['raw_scopes'].get(relative)
  if scope is None:return hashlib.sha256(payload).hexdigest()==old_expected
  assert scope['before_sha256']==old_expected,('Predecessor pin changed',relative)

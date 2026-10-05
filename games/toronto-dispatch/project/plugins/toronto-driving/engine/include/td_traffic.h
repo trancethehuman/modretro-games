@@ -68,6 +68,19 @@ UBYTE td_traffic_admit(const td_traffic_context_t *ctx,UBYTE district,UWORD seco
 UBYTE td_traffic_external_admit(const td_traffic_context_t *ctx,UBYTE district,
     UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED;
 
+/* Borrowed, caller-owned rider batch. begin validates every fleet/visible
+ * human/active parked body once, including distant malformed coordinates.
+ * The context, arrays, extents, people, park and priority MUST remain unchanged
+ * until the batch goes out of scope; a later world/fleet update needs begin.
+ * This is three native stack bytes, with no persistent cache or save fields.
+ * Each admission still checks its full moving hull, signals, junction and
+ * current body positions. Independent riders/props stay caller-owned. */
+typedef struct { const td_traffic_context_t *ctx; UBYTE valid; } td_rider_batch_t;
+UBYTE td_traffic_external_begin(const td_traffic_context_t *ctx,
+    td_rider_batch_t *batch) BANKED;
+UBYTE td_traffic_external_batch_admit(const td_rider_batch_t *batch,UBYTE district,
+    UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED;
+
 /* Caller-owned transient WRAM/stack snapshot, never serialized. Fields are
  * implementation-private: only begin/admit/commit may write them. A fresh
  * begin is required each motion epoch and after scene/time/people/park/pose/

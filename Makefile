@@ -2,10 +2,12 @@
 
 check:
 	python3 scripts/test_campus.py
+	python3 scripts/test_crossings.py
 	python3 scripts/check_actor_header.py
 	python3 games/toronto-dispatch/scripts/create_atlas.py --check
 	python3 scripts/test_atlas.py
 	python3 scripts/test_atlas_ui.py
+	python3 scripts/test_menu_frames.py
 	python3 games/toronto-dispatch/scripts/create_story.py --check
 	python3 scripts/test_story.py
 	python3 games/toronto-dispatch/scripts/create_navigation.py --check

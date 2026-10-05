@@ -22,6 +22,26 @@ void td_guidance_road_restore(void){
 }
 static unsigned random_state=7171;
 static unsigned rng(void){random_state^=random_state<<13;random_state^=random_state>>17;random_state^=random_state<<5;return random_state;}
+/* Retained R8 lower bound. Compare exact indices, including the first item
+ * on the next row when this row is empty or its x range is exhausted. */
+static unsigned legacy_lower(unsigned d,unsigned y,unsigned x){
+ unsigned first=td_prop_offsets[d],end=td_prop_offsets[d+1],mid;
+ while(first<end){mid=first+(end-first)/2;
+  if(td_props[mid].y<y||(td_props[mid].y==y&&td_props[mid].x<x))first=mid+1;else end=mid;}
+ return first;
+}
+static void row_lookup(void){
+ const unsigned extremes[]={122,123,255,256,32767,65535};
+ for(unsigned d=0;d<7;d++){
+  expect(td_prop_rows[d][0]==td_prop_offsets[d]&&td_prop_rows[d][122]==td_prop_offsets[d+1],"ROM row sentinels retain every district bound");
+  for(unsigned y=0;y<122;y++)for(unsigned x=0;x<=128;x++)
+   expect(td_prop_lower(d,y,x)==legacy_lower(d,y,x),"actual optimized scenery lower bound equals R8 for every map row and x boundary");
+  for(unsigned y=0;y<122;y++)for(unsigned x=0;x<6;x++)
+   expect(td_prop_lower(d,y,extremes[x])==legacy_lower(d,y,extremes[x]),"wide x diagnostics retain exact row-end behavior");
+  for(unsigned y=0;y<6;y++)for(unsigned x=0;x<6;x++)
+   expect(td_prop_lower(d,extremes[y],extremes[x])==legacy_lower(d,extremes[y],extremes[x]),"out-of-map word queries retain original district end");
+ }
+}
 static int slab(double old,double delta,double low,double high,double *a,double *b){
  if(delta==0)return old>=low&&old<=high;
  double first=(low-old)/delta,last=(high-old)/delta,t;if(first>last){t=first;first=last;last=t;}
@@ -232,4 +252,4 @@ static void retained_arrow_underlay(void){
   expect(map[0][arrow_offset]==17&&map[1][arrow_offset]==2,"restoring rubble cannot leave an orphaned road arrow");
  }
 }
-int main(void){packing();contact();fastpath();render();retained_arrow_underlay();printf("Scenery actual C: %u checks, %u failures\n",checks,failures);return failures?1:0;}
+int main(void){row_lookup();packing();contact();fastpath();render();retained_arrow_underlay();printf("Scenery actual C: %u checks, %u failures\n",checks,failures);return failures?1:0;}

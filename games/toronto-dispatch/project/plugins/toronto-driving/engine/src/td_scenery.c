@@ -50,8 +50,14 @@ static UBYTE td_prop_dead(UWORD index){
     return (td_broken[index>>3]>>(index&7))&1;
 }
 static UWORD td_prop_lower(UBYTE district,UWORD y,UWORD x){
-    UWORD first=td_prop_offsets[district],end=td_prop_offsets[district+1],mid;
-    while(first<end){mid=first+(end-first)/2;if(td_props[mid].y<y||(td_props[mid].y==y&&td_props[mid].x<x))first=mid+1;else end=mid;}
+    UWORD first,end,mid;const UWORD *rows;
+    /* Same immutable y/x ordering, exact lower bound, no runtime cache.
+     * Empty rows need no district-wide binary search. A query past the last
+     * physical row still returns the original district end (including large
+     * UWORD diagnostic coordinates). Row122 is the final sentinel. */
+    if(y>=122)return td_prop_offsets[district+1];
+    rows=td_prop_rows[district];first=rows[y];end=rows[y+1];
+    while(first<end){mid=first+(end-first)/2;if(td_props[mid].x<x)first=mid+1;else end=mid;}
     return first;
 }
 /* Exact segment against expanded whole-body prop rectangle. Products are

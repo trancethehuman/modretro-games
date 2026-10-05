@@ -17,6 +17,7 @@
 #include "scroll.h"
 
 typedef struct {UWORD u,v;UBYTE leg,hit,flags;} td_rider_t;
+typedef struct {UBYTE left,right,top,bottom,clear,valid;} td_scooter_terrain_cache_t;
 static td_rider_t td_scooter_riders[2];
 static UBYTE td_scooter_district=TD_NONE,td_scooter_elapsed;
 /* SDCC has byte-aligned words. The host's optional structure tail padding
@@ -40,6 +41,7 @@ static const UWORD td_scooter_routes[7][2][4][2]={
  {{{32,120},{240,120},{240,136},{32,136}},{{576,248},{784,248},{784,264},{576,264}}}
 };
 static const BYTE td_scooter_dx[4]={1,0,-1,0},td_scooter_dy[4]={0,1,0,-1};
+static const UBYTE td_scooter_fleet_extents[8]={5,6,5,7,6,7,5,5};
 static UWORD td_scooter_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
 static UBYTE td_scooter_active(void){
     return td_scooter_district<7&&td_scooter_district!=5&&
@@ -54,15 +56,23 @@ static UBYTE td_scooter_view(UWORD u,UWORD v){
     return (WORD)(u>>4)+24>=left&&(WORD)(u>>4)-24<=left+159&&
         (WORD)(v>>4)+24>=top&&(WORD)(v>>4)-24<=top+143;
 }
-static UBYTE td_scooter_terrain(UWORD ou,UWORD ov,UWORD u,UWORD v,UBYTE half){
+static UBYTE td_scooter_terrain(UWORD ou,UWORD ov,UWORD u,UWORD v,UBYTE half,td_scooter_terrain_cache_t *cache){
     UBYTE row,left,right,top,bottom,hx=tile_hit_x,hy=tile_hit_y,clear=TRUE;
     if(!half||half>8||ou<half*16||u<half*16||ov<half*16||v<half*16||
        ou>(1024-half)*16||u>(1024-half)*16||ov>(976-half)*16||v>(976-half)*16||
        (ou!=u&&ov!=v))return FALSE;
     left=((ou<u?ou:u)-half*16)>>7;right=((ou>u?ou:u)+half*16)>>7;
     top=((ov<v?ov:v)-half*16)>>7;bottom=((ov>v?ov:v)+half*16)>>7;
+    /* This local result is valid only during one synchronous rider update:
+     * its registered collision page and mask15 cannot change. Bounds, half
+     * extent and cardinal geometry above are checked on EVERY proposed step.
+     * Identical tile unions have identical terrain results; cached hits make
+     * no collision call and preserve exactly the current tile_hit globals. */
+    if(cache&&cache->valid&&cache->left==left&&cache->right==right&&cache->top==top&&cache->bottom==bottom)return cache->clear;
     for(row=top;row<=bottom;row++)if(tile_col_test_range_x(15,row,left,right)){clear=FALSE;break;}
-    tile_hit_x=hx;tile_hit_y=hy;return clear;
+    tile_hit_x=hx;tile_hit_y=hy;
+    if(cache){cache->left=left;cache->right=right;cache->top=top;cache->bottom=bottom;cache->clear=clear;cache->valid=1;}
+    return clear;
 }
 static UBYTE td_scooter_body_clear(UWORD ou,UWORD ov,UWORD u,UWORD v,UWORD cu,UWORD cv,UBYTE radius){
     UWORD r=radius*16,lo=ou<u?ou:u,hi=ou>u?ou:u;
@@ -107,14 +117,10 @@ static UBYTE td_scooter_courier_clear(UWORD ou,UWORD ov,UWORD u,UWORD v,UBYTE ha
        !td_scooter_body_clear(ou,ov,u,v,td.park_u,td.park_v,half+7))return FALSE;
     return TRUE;
 }
-static UBYTE td_scooter_move(UBYTE index,UWORD u,UWORD v,UBYTE half,UBYTE signals){
-    UBYTE extents[8]={5,6,5,7,6,7,5,5};td_traffic_context_t ctx;
+static UBYTE td_scooter_move(UBYTE index,UWORD u,UWORD v,UBYTE half,UBYTE signals,const td_rider_batch_t *batch,td_scooter_terrain_cache_t *terrain){
     td_rider_t *rider=&td_scooter_riders[index];UBYTE i;
-    ctx.u=td_traffic_u;ctx.v=td_traffic_v;ctx.peds=&actors[9];ctx.half_u=ctx.half_v=extents;
-    ctx.park_u=td.park_u;ctx.park_v=td.park_v;ctx.parked_active=td.onfoot&&td.park_district==td_scooter_district;
-    ctx.priority_mask=td.wanted?4:0;
-    if(signals&&!td_traffic_external_admit(&ctx,td_scooter_district,td.seconds,rider->u,rider->v,u,v,half))return FALSE;
-    if(!td_scooter_terrain(rider->u,rider->v,u,v,half)||
+    if(signals&&!td_traffic_external_batch_admit(batch,td_scooter_district,td.seconds,rider->u,rider->v,u,v,half))return FALSE;
+    if(!td_scooter_terrain(rider->u,rider->v,u,v,half,terrain)||
        !td_sandbox_clear(rider->u,rider->v,u,v,half,240+index)||
        !td_scooter_courier_clear(rider->u,rider->v,u,v,half)||
        !td_streetcar_runtime_traffic_clear_extent(td_scooter_district,u,v,half<5?5:half))return FALSE;
@@ -131,27 +137,42 @@ void td_scooter_bind(UBYTE district) BANKED {
     if(district==td_scooter_district)return;
     memset(td_scooter_riders,0,sizeof(td_scooter_riders));td_scooter_elapsed=0;td_scooter_district=district;
 }
-static UBYTE td_scooter_admit(UBYTE index){
+static UBYTE td_scooter_admit(UBYTE index,const td_rider_batch_t *batch,td_scooter_terrain_cache_t *terrain){
     UBYTE i;UWORD u,v;td_rider_t *rider=&td_scooter_riders[index];
     for(i=0;i<4;i++){
         u=td_scooter_routes[td_scooter_district][index][i][0]*16;
         v=td_scooter_routes[td_scooter_district][index][i][1]*16;
         if(td_scooter_view(u,v))continue;
         rider->u=u;rider->v=v;
-        if(!td_scooter_move(index,u,v,7,TRUE))continue;
+        if(!td_scooter_move(index,u,v,7,TRUE,batch,terrain))continue;
         rider->leg=(i+1)&3;rider->flags=TD_SCOOTER_ACTIVE;rider->hit=0;return TRUE;
     }
     return FALSE;
 }
 UBYTE td_scooter_update(UWORD elapsed) BANKED {
     UBYTE i,budget,phase,dir,amount,dirty=FALSE;UWORD u,v,tu,tv;
+    UBYTE extents[8];td_traffic_context_t ctx;td_rider_batch_t batch;
+    td_scooter_terrain_cache_t terrain[2];
     td_rider_t *rider;
     if(!td_scooter_active()||!elapsed)return FALSE;
     /* Preserve pending contact count in the high nibble. Capped8 motion
      * quanta avoid an unbounded catch-up loop after a slow native frame. */
     if(elapsed>64)elapsed=64;budget=((td_scooter_elapsed&7)+elapsed)/8;
     td_scooter_elapsed=(td_scooter_elapsed&0xF0)|(((td_scooter_elapsed&7)+elapsed)&7);
-    for(i=0;i<2;i++)if(!(td_scooter_riders[i].flags&TD_SCOOTER_ACTIVE))dirty|=td_scooter_admit(i);
+    if(!budget&&(td_scooter_riders[0].flags&TD_SCOOTER_ACTIVE)&&
+       (td_scooter_riders[1].flags&TD_SCOOTER_ACTIVE))return FALSE;
+    terrain[0].valid=terrain[1].valid=0;
+    memcpy(extents,td_scooter_fleet_extents,sizeof(extents));
+    /* Fleet, people, their extents, park and priority do not change inside
+     * this update. Validate that immutable geometry once for all half-pixel
+     * rider quanta. Wrecks, vacant scooters, scenery, courier and other rider
+     * bodies still use their existing LIVE full-sweep checks on every move.
+     * Failed begin leaves the batch invalid: riders stay blocked while wreck
+     * clocks and vacant impulses keep their original independent behavior. */
+    ctx.u=td_traffic_u;ctx.v=td_traffic_v;ctx.peds=&actors[9];ctx.half_u=ctx.half_v=extents;
+    ctx.park_u=td.park_u;ctx.park_v=td.park_v;ctx.parked_active=td.onfoot&&td.park_district==td_scooter_district;
+    ctx.priority_mask=td.wanted?4:0;td_traffic_external_begin(&ctx,&batch);
+    for(i=0;i<2;i++)if(!(td_scooter_riders[i].flags&TD_SCOOTER_ACTIVE))dirty|=td_scooter_admit(i,&batch,&terrain[i]);
     while(budget--){
       dirty|=td_sandbox_scooter_step();
       for(i=0;i<2;i++){
@@ -160,7 +181,7 @@ UBYTE td_scooter_update(UWORD elapsed) BANKED {
             if(rider->hit<96){
                 if(rider->hit<24){dir=(rider->flags>>2)&3;amount=(rider->flags>>4)*2;
                     u=rider->u+td_scooter_dx[dir]*amount;v=rider->v+td_scooter_dy[dir]*amount;
-                    if(amount&&td_scooter_move(i,u,v,2,FALSE))dirty=TRUE;
+                    if(amount&&td_scooter_move(i,u,v,2,FALSE,NULL,&terrain[i]))dirty=TRUE;
                 }rider->hit+=8;
             }else if(!td_scooter_view(rider->u,rider->v)){rider->flags=0;dirty=TRUE;}
             continue;
@@ -170,7 +191,7 @@ UBYTE td_scooter_update(UWORD elapsed) BANKED {
         if(u!=tu){amount=td_scooter_distance(u,tu)<8?td_scooter_distance(u,tu):8;u+=u<tu?amount:-(WORD)amount;}
         else if(v!=tv){amount=td_scooter_distance(v,tv)<8?td_scooter_distance(v,tv):8;v+=v<tv?amount:-(WORD)amount;}
         else{rider->leg=(phase+1)&3;continue;}
-        if(td_scooter_move(i,u,v,7,TRUE)){dirty=TRUE;if(u==tu&&v==tv)rider->leg=(phase+1)&3;}
+        if(td_scooter_move(i,u,v,7,TRUE,&batch,&terrain[i])){dirty=TRUE;if(u==tu&&v==tv)rider->leg=(phase+1)&3;}
       }
     }
     return dirty;
@@ -193,7 +214,7 @@ UBYTE td_scooter_ram(UWORD ou,UWORD ov,UWORD u,UWORD v) BANKED {
         pu=rider->u+td_scooter_dx[dir]*amount;pv=rider->v+td_scooter_dy[dir]*amount;
         /* The first checked tiny shove admits the grounded bike body; if
          * a wall/fleet/person blocks it, no wreck or transfer is invented. */
-        if(!td_scooter_move(i,pu,pv,2,FALSE))continue;
+        if(!td_scooter_move(i,pu,pv,2,FALSE,NULL,NULL))continue;
         rider->flags=TD_SCOOTER_ACTIVE|TD_SCOOTER_WRECK|(dir<<2)|(impulse<<4);rider->hit=0;
         if((td_scooter_elapsed>>4)<2)td_scooter_elapsed+=16;
         keep=(speed*pm+(npc>0?npc:0))/(pm+1);if(!keep)keep=1;td_motion_transfer(keep);hit=TRUE;

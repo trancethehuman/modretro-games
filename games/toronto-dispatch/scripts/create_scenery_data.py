@@ -29,7 +29,7 @@ def decompress(text):
 
 def generate():
  from street_scenery import PROPS
- props=[];grounds=[];offsets=[0];counts=[];provenance=[]
+ props=[];grounds=[];offsets=[0];counts=[];provenance=[];row_offsets=[]
  for district,(filename,slug) in enumerate(zip(ARTS,FILENAMES)):
   art=json.loads((ROOT/'content'/filename).read_text())
   scene=json.loads((ROOT/f'project/project/scenes/toronto_{slug}/scene.gbsres').read_text())
@@ -47,6 +47,10 @@ def generate():
    ground=encode(p['ground_rows'])
    if ground not in grounds:grounds.append(ground)
    props.append([x,y,KINDS.index(p['kind']),grounds.index(ground)])
+  district_props=props[offsets[-1]:]
+  assert district_props==sorted(district_props,key=lambda p:(p[1],p[0]))
+  assert all(0<=p[1]<122 for p in district_props)
+  row_offsets.append([offsets[-1]+sum(p[1]<y for p in district_props) for y in range(123)])
   offsets.append(len(props));counts.append(len(registered))
   provenance.append({'district':district,'source':filename,'count':len(registered),'registry_sha256':hashlib.sha256(json.dumps(registered,sort_keys=True,separators=(',',':')).encode()).hexdigest()})
  assert len(grounds)<256
@@ -55,11 +59,17 @@ def generate():
         'static const td_prop_t td_props['+str(len(props))+']={']
  lines+=['    {'+','.join(map(str,p))+'},' for p in props];lines+=['};',
  'static const UBYTE td_prop_ground['+str(len(grounds))+'][16]={']
- lines+=['    {'+','.join(map(str,g))+'},' for g in grounds];lines+=['};',
+ lines+=['    {'+','.join(map(str,g))+'},' for g in grounds];lines+=['};']
+ # Exact same-bank row prefixes narrow only the lower-bound search domain.
+ # No property, order, collision, pixel, runtime bitmap or save field changes.
+ for district,rows in enumerate(row_offsets):
+  lines+=['static const UWORD td_prop_rows_'+str(district)+'[123]={',
+          '    '+','.join(map(str,rows)),'};']
+ lines+=['static const UWORD * const td_prop_rows[7]={'+','.join('td_prop_rows_'+str(d) for d in range(7))+'};',
  'static const UBYTE td_prop_flash[8]={0,36,0,129,24,129,0,36};',
  'static const UBYTE td_prop_falling[8]={0,0,66,0,24,66,0,36};',
  'static const UBYTE td_prop_rubble[2][8]={{0,0,0,0,0,16,66,36},{0,0,0,0,0,8,36,66}};']
- return ('\n'.join(lines)+'\n').encode(),{'schema':1,'source':'create_scenery_data.py','districts':provenance,'counts':counts,'total_props':len(props),'underlay_patterns':len(grounds),'native_static_bytes':233,'broken_bits_bytes':(len(props)+7)//8,'active_animations':4,'bkg_bank':1,'scratch_range':[80,97],'max_visible_patches':18,'new_oam_objects':0,'terrain_collision_bytes_changed':0,'structural_buildings_trees_water_destructible':False}
+ return ('\n'.join(lines)+'\n').encode(),{'schema':1,'source':'create_scenery_data.py','districts':provenance,'counts':counts,'total_props':len(props),'underlay_patterns':len(grounds),'native_static_bytes':233,'row_lookup_rom_bytes':7*123*2+7*2,'broken_bits_bytes':(len(props)+7)//8,'active_animations':4,'bkg_bank':1,'scratch_range':[80,97],'max_visible_patches':18,'new_oam_objects':0,'terrain_collision_bytes_changed':0,'structural_buildings_trees_water_destructible':False}
 
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()

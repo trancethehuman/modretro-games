@@ -44,6 +44,8 @@ def fixture():
 
 def png_history(payload, proof=None):
     """Return authenticated prior PNG bytes only after complete current checks."""
+    from crossing_protection import png_history as crossing_history
+    payload = crossing_history(BACKGROUND,payload)
     proof = fixture() if proof is None else proof
     assert sha(payload) == proof["files"][BACKGROUND], "Unapproved current campus PNG"
     old_payload = (ROOT / PREVIOUS).read_bytes()
@@ -70,7 +72,11 @@ def check():
         "project/assets/backgrounds/toronto_city.png.gbsres", "project/original-art/city_attributes.json",
         "project/project/scenes/toronto_city/scene.gbsres", "content/city_art.json"}
     for relative, expected in proof["files"].items():
-        assert sha((ROOT / relative).read_bytes()) == expected, ("Campus protected source changed", relative)
+        payload = (ROOT / relative).read_bytes()
+        if relative == BACKGROUND:
+            from crossing_protection import png_history as crossing_history
+            payload = crossing_history(BACKGROUND,payload)
+        assert sha(payload) == expected, ("Campus protected source changed", relative)
     assert sha(png_history((ROOT / BACKGROUND).read_bytes(), proof)) == OLD_SHA256
     # Old fixtures continue to protect all geometry, paths, signals and jobs.
     older = json.loads((REPO / "tests/fixtures/city_feedback_protected.json").read_text())
@@ -84,7 +90,8 @@ def check():
     previous = Image.open(ROOT / PREVIOUS).convert("RGB")
     authored = previous.copy()
     value = paint(authored, json.loads((ROOT / "content/city_art.json").read_text())["blocks"])
-    actual = Image.open(ROOT / BACKGROUND).convert("RGB")
+    from crossing_protection import png_history as crossing_history
+    actual = Image.open(io.BytesIO(crossing_history(BACKGROUND,(ROOT / BACKGROUND).read_bytes()))).convert("RGB")
     assert authored.tobytes() == actual.tobytes(), "Campus generator is stale"
     assert value == area["source_checks"] and value["stamp_cells"] == proof["stamp_cells"]
     assert {k: v for k, v in value.items() if k != "stamp_cells"} == proof["pattern_counts"]

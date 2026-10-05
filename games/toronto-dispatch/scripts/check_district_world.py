@@ -15,6 +15,7 @@ from island_campaign import ISLAND_DISTRICT, ISLAND_IDS
 import create_district_world
 import create_world_routes
 import check_traffic_lanes
+from crossing_protection import PNG_FILES as CROSSING_PNGS, png_history as crossing_png_history
 
 SOURCE_COLORS = {tuple(bytes.fromhex(value)) for value in ('071821', '306850', '86c06c', 'e0f8cf')}
 
@@ -164,7 +165,15 @@ def check():
             assert meta['dimensions'] == [1024, 976] and meta['tile_dimensions'] == [128, 122]
             assert meta['collisions'] == grid, f'{slug}: registered collision differs from original metadata'
             assert meta['background_filename'] == filename
-            assert meta['background_sha256'] == hashlib.sha256(background_path.read_bytes()).hexdigest()
+            # Historical world/geography metadata remains byte-exact. Prove
+            # the complete current crossing repaint before reconstructing the
+            # retained R8 bytes for its original background identity. Actual
+            # current native pixels still supply the pattern/palette checks.
+            payload = background_path.read_bytes()
+            relative = background_path.relative_to(ROOT).as_posix()
+            if relative in CROSSING_PNGS:
+                payload = crossing_png_history(relative, payload)
+            assert meta['background_sha256'] == hashlib.sha256(payload).hexdigest()
             assert meta['validation']['raw_unique_tiles'] == len(raw_patterns)
             assert meta['validation']['flip_canonical_unique_tiles'] == len(flipped_patterns)
             if district.get('traffic_enabled', True):

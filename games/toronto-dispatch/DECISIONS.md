@@ -1,5 +1,24 @@
 # Decisions
 
+## Accepted R8 crossing, performance and menu revision — 2026-10-05
+
+The user reports that crossing paint looks unrealistic, the physical game is
+very slow and fullscreen menus need designed frames/layouts. Redesign crossing
+paint and fullscreen menu presentation with original art. Preserve city
+geometry, every non-crossing pixel, the compact HUD and established controls.
+
+Optimize repeated calculations without reducing the eight fleet vehicles,
+eight pedestrians, two independent riders, street objects, collision rules,
+visual fidelity or simulation cadence. Caller-owned synchronous reuse must
+retain invalid-input/scene/owner guards and expire before its inputs change.
+Read-only ROM lookup tables may replace repeated searches exactly; no save
+version change or persistent gameplay cache is authorized by this feedback.
+
+Compare genuine native R8 and new-ROM completed-loop counts under matched
+ordinary input recipes. Host operation counts and cartridge boot alone are
+insufficient speed evidence. Inspect genuine menu/crossing frames and preserve
+the old ROM's evidence separately before selecting the replacement build.
+
 ## Accepted presentation and sandbox extension — 2026-10-04
 
 The physical-feedback update also adopts a compact gameplay HUD with graphic

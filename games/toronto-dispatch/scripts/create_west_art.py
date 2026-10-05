@@ -9,6 +9,7 @@ from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 from street_scenery import decorate
+from crossing_art import native_bytes as crossing_native_bytes
 from west_layout import DISTRICTS, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 from streetcar_art import paint_streetcar_stops
 
@@ -241,9 +242,11 @@ def generate(spec):
 
     filename=f"toronto_{spec['slug']}.png"
     out=PROJECT/"assets/backgrounds"/filename
-    img.save(out)
-    metadata={**spec,"projection":"original compressed orthogonal north-up; not GIS coordinates","dimensions":[WIDTH,HEIGHT],"tile_dimensions":[TW,TH],"road_half_width":ROAD_HALF,"walk_half_width":WALK_HALF,"blocks":blocks,"canopies":canopies,"collisions":collisions,"collision_rules":{"road":0,"foot_only":16,"solid":15},"background_filename":filename,"background_sha256":hashlib.sha256(out.read_bytes()).hexdigest(),"source_research":"content/districts/west-research.json","validation":{"raw_unique_tiles":len(raw_patterns),"flip_canonical_unique_tiles":len(patterns),"traffic_loops":len(spec["traffic_loops"]),"traffic_footprint_half_pixels":8,"traffic_swept_all_overlapped_tiles_clear":True,"portal_car_offsets_verified":[-12,0,12],"all_foot_clients_and_ports_connected":True,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
+    import io
+    buffer=io.BytesIO();img.save(buffer,format='PNG');png=buffer.getvalue()
+    metadata={**spec,"projection":"original compressed orthogonal north-up; not GIS coordinates","dimensions":[WIDTH,HEIGHT],"tile_dimensions":[TW,TH],"road_half_width":ROAD_HALF,"walk_half_width":WALK_HALF,"blocks":blocks,"canopies":canopies,"collisions":collisions,"collision_rules":{"road":0,"foot_only":16,"solid":15},"background_filename":filename,"background_sha256":hashlib.sha256(png).hexdigest(),"source_research":"content/districts/west-research.json","validation":{"raw_unique_tiles":len(raw_patterns),"flip_canonical_unique_tiles":len(patterns),"traffic_loops":len(spec["traffic_loops"]),"traffic_footprint_half_pixels":8,"traffic_swept_all_overlapped_tiles_clear":True,"portal_car_offsets_verified":[-12,0,12],"all_foot_clients_and_ports_connected":True,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
     metadata['scenery']=scenery
+    out.write_bytes(crossing_native_bytes(png,metadata))
     # Canonical stable candidate keys consumed by campaign tooling.
     keys=["dufferin_college","lansdowne_bloor","parkdale_queen","roncy_howard_park","sorauren"] if spec["id"]==1 else ["bloor_park_gate","parkside_south","colborne_service"]
     metadata["stop_candidates"]=[{"key":key,**stop} for key,stop in zip(keys,spec["stop_candidates"])]

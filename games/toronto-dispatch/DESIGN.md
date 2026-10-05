@@ -1,5 +1,11 @@
 # Toronto Dispatch — design
 
+Accepted Oct5 physical feedback: redesign crossing paint with separated,
+readable strokes and asphalt padding; give fullscreen menus framed Game Boy
+cards and a clear selection hierarchy. Preserve the city viewport and controls.
+Speed work must retain all people, vehicles, street objects and visual detail;
+measure the actual new ROM against R8, with the same simulation/collision rules.
+
 Selected local build: **`toronto-dispatch-campus-scooters-r8.gbc`**, SHA-256
 `bdcebd6ff4463cb745f2fe47255119b381d5a098e57a8ba27d5652bfc2a97b0d`. [R8 build](docs/CAMPUS_SCOOTERS_BUILD.json)
 and [native campus/scooter evidence](docs/NATIVE_CAMPUS_SCOOTERS.json) select this

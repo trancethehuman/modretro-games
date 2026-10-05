@@ -1,4 +1,5 @@
 #pragma bank 255
+#include <stddef.h>
 #include "td_traffic.h"
 #include "td_district.h"
 
@@ -70,50 +71,69 @@ static UBYTE td_rider_obstacle(const td_rider_motion_t *m,UWORD other_u,UWORD ot
      * increases separation; no four-distance sum or16bit wrap is needed. */
     return TRUE;
 }
-static UBYTE td_rider_bodies(const td_traffic_context_t *ctx,UBYTE slot,const td_rider_motion_t *m,UBYTE escape){
-    UBYTE i,other_hu,other_hv;UWORD other_u,other_v;
-    for(i=0;i<TD_TRAFFIC_SLOTS;i++)if(i!=slot){
+#define td_rider_bucket_far(a,b,n) ((a)>(b)?(UBYTE)((a)-(b))>=(n):(UBYTE)((b)-(a))>=(n))
+static UBYTE td_rider_bodies(const td_traffic_context_t *ctx,const td_rider_motion_t *m,UBYTE escape,UBYTE validated){
+    UBYTE i,bit,other_hu,other_hv,bucket,bu=m->old_u>>8,bv=m->old_v>>8;UWORD other_u,other_v;const actor_t *person;
+    /* An external rider never owns a fleet slot. Iterate the same eight
+     * bodies directly and shift the priority bit once, avoiding a dynamic
+     * 16-bit 1<<slot/1<<i sequence for every body on the native CPU. */
+    for(i=0,bit=1;i<TD_TRAFFIC_SLOTS;i++,bit<<=1){
+        /* begin proved every body, including apparently distant ones.
+         * Four16px buckets imply at least48.0625px separation. A half8
+         * rider, half16 fleet, 18px priority halo and half-pixel step can
+         * reach only42.5px. Reject only beyond both exact policies. */
+        if(validated){
+            bucket=ctx->u[i]>>8;if(td_rider_bucket_far(bucket,bu,4))continue;
+            bucket=ctx->v[i]>>8;if(td_rider_bucket_far(bucket,bv,4))continue;
+        }
         other_u=ctx->u[i];other_v=ctx->v[i];
         other_hu=td_rider_extent(ctx->half_u,i);other_hv=td_rider_extent(ctx->half_v,i);
-        if(!td_rider_body_valid(other_u,other_v,other_hu,other_hv))return FALSE;
+        if(!validated&&!td_rider_body_valid(other_u,other_v,other_hu,other_hv))return FALSE;
         if(!td_rider_outside(m,other_u,other_v,other_hu,other_hv)&&
            !td_rider_obstacle(m,other_u,other_v,other_hu,other_hv,escape))return FALSE;
-        if(!(ctx->priority_mask&(1<<slot))&&(ctx->priority_mask&(1<<i))){
+        if(ctx->priority_mask&bit){
             if((m->u!=m->old_u?td_rider_distance(m->u,other_u)<td_rider_distance(m->old_u,other_u):
                  td_rider_distance(m->v,other_v)<td_rider_distance(m->old_v,other_v))&&
                td_rider_overlap(m->u,m->v,m->hu,m->hv,other_u,other_v,other_hu+18,other_hv+18))return FALSE;
         }
     }
     if(ctx->parked_active){
-        if(!td_rider_body_valid(ctx->park_u,ctx->park_v,7,7))return FALSE;
+        if(!validated&&!td_rider_body_valid(ctx->park_u,ctx->park_v,7,7))return FALSE;
         if(!td_rider_outside(m,ctx->park_u,ctx->park_v,7,7)&&
            !td_rider_obstacle(m,ctx->park_u,ctx->park_v,7,7,escape))return FALSE;
     }
-    if(ctx->peds)for(i=0;i<TD_TRAFFIC_PEOPLE;i++){
-        if(ctx->peds[i].flags&ACTOR_FLAG_HIDDEN)continue;
-        other_u=ctx->peds[i].pos.x>>1;other_v=ctx->peds[i].pos.y>>1;
-        if(!td_rider_body_valid(other_u,other_v,3,3))return FALSE;
+    if(ctx->peds)for(i=0,person=ctx->peds;i<TD_TRAFFIC_PEOPLE;i++,person++){
+        if(person->flags&ACTOR_FLAG_HIDDEN)continue;
+        /* Q5>>9 is exactly Q4>>8. Two buckets imply16.0625px, beyond
+         * half8+half3+0.5=11.5px. Full malformed human geometry was already
+         * validated; close humans retain exact sweep and escape tests. */
+        if(validated){
+            bucket=(UBYTE)(person->pos.x>>8)>>1;if(td_rider_bucket_far(bucket,bu,2))continue;
+            bucket=(UBYTE)(person->pos.y>>8)>>1;if(td_rider_bucket_far(bucket,bv,2))continue;
+        }
+        other_u=person->pos.x>>1;other_v=person->pos.y>>1;
+        if(!validated&&!td_rider_body_valid(other_u,other_v,3,3))return FALSE;
         if(!td_rider_outside(m,other_u,other_v,3,3)&&
            !td_rider_obstacle(m,other_u,other_v,3,3,escape))return FALSE;
     }
     return TRUE;
 }
 
-static UBYTE td_rider_entry_clear(const td_traffic_context_t *ctx,UBYTE slot,UWORD u,UWORD v){
-    UBYTE i;UWORD other_u,other_v;
-    for(i=0;i<TD_TRAFFIC_SLOTS;i++)if(i!=slot&&
+static UBYTE td_rider_entry_clear(const td_traffic_context_t *ctx,UWORD u,UWORD v){
+    UBYTE i;UWORD other_u,other_v;const actor_t *person;
+    for(i=0;i<TD_TRAFFIC_SLOTS;i++)if(
        td_rider_distance(ctx->u[i],u)<24*16&&td_rider_distance(ctx->v[i],v)<24*16)return FALSE;
     if(ctx->parked_active&&td_rider_overlap(ctx->park_u,ctx->park_v,7,7,u,v,18,18))return FALSE;
-    if(ctx->peds)for(i=0;i<TD_TRAFFIC_PEOPLE;i++){
-        if(ctx->peds[i].flags&ACTOR_FLAG_HIDDEN)continue;
-        other_u=ctx->peds[i].pos.x>>1;other_v=ctx->peds[i].pos.y>>1;
+    if(ctx->peds)for(i=0,person=ctx->peds;i<TD_TRAFFIC_PEOPLE;i++,person++){
+        if(person->flags&ACTOR_FLAG_HIDDEN)continue;
+        other_u=person->pos.x>>1;other_v=person->pos.y>>1;
         if(td_rider_overlap(other_u,other_v,3,3,u,v,18,18))return FALSE;
     }
     return TRUE;
 }
 
-UBYTE td_traffic_external_admit(const td_traffic_context_t *ctx,UBYTE district,
-    UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
+static UBYTE td_rider_admit(const td_traffic_context_t *ctx,UBYTE district,
+    UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half,UBYTE validated) {
     td_rider_motion_t m;const td_rider_signal_t *signals;
     UWORD i,end,line,pos,next,lateral,centre;UBYTE horizontal,arm;
     if(!ctx||!ctx->u||!ctx->v||ctx->parked_active>1||!half||half>8||
@@ -123,7 +143,7 @@ UBYTE td_traffic_external_admit(const td_traffic_context_t *ctx,UBYTE district,
     m.old_u=old_u;m.old_v=old_v;m.u=u;m.v=v;m.hu=m.hv=half;
     m.left=(old_u<u?old_u:u)-half*16;m.right=(old_u>u?old_u:u)+half*16;
     m.top=(old_v<v?old_v:v)-half*16;m.bottom=(old_v>v?old_v:v)+half*16;
-    if(!td_rider_bodies(ctx,8,&m,1))return FALSE;
+    if(!td_rider_bodies(ctx,&m,1,validated))return FALSE;
     if(old_u==u&&old_v==v)return TRUE;
     horizontal=old_u!=u;pos=horizontal?old_u:old_v;next=horizontal?u:v;lateral=horizontal?v:u;
     if(next>pos?((pos-1)>>7)==((next-1)>>7):(pos>>7)==(next>>7))return TRUE;
@@ -141,8 +161,37 @@ UBYTE td_traffic_external_admit(const td_traffic_context_t *ctx,UBYTE district,
         line=next>pos?centre-24*16:centre+24*16;
         if(next>pos?(pos<=line&&next>line):(pos>=line&&next<line)){
             if(horizontal?seconds%12>=7:seconds%12<7)return FALSE;
-            if(!td_rider_entry_clear(ctx,8,signals[i].u*16,signals[i].v*16))return FALSE;
+            if(!td_rider_entry_clear(ctx,signals[i].u*16,signals[i].v*16))return FALSE;
         }
     }
     return TRUE;
+}
+
+UBYTE td_traffic_external_admit(const td_traffic_context_t *ctx,UBYTE district,
+    UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
+    return td_rider_admit(ctx,district,seconds,old_u,old_v,u,v,half,FALSE);
+}
+
+#define TD_RIDER_BATCH_VALID 0xB6
+UBYTE td_traffic_external_begin(const td_traffic_context_t *ctx,td_rider_batch_t *batch) BANKED {
+    UBYTE i,hu,hv;UWORD u,v;const actor_t *person;
+    if(!batch)return FALSE;
+    batch->valid=0;batch->ctx=NULL;
+    if(!ctx||!ctx->u||!ctx->v||ctx->parked_active>1)return FALSE;
+    for(i=0;i<TD_TRAFFIC_SLOTS;i++){
+        u=ctx->u[i];v=ctx->v[i];hu=td_rider_extent(ctx->half_u,i);hv=td_rider_extent(ctx->half_v,i);
+        if(!td_rider_body_valid(u,v,hu,hv))return FALSE;
+    }
+    if(ctx->parked_active&&!td_rider_body_valid(ctx->park_u,ctx->park_v,7,7))return FALSE;
+    if(ctx->peds)for(i=0,person=ctx->peds;i<TD_TRAFFIC_PEOPLE;i++,person++){
+        if(person->flags&ACTOR_FLAG_HIDDEN)continue;
+        u=person->pos.x>>1;v=person->pos.y>>1;
+        if(!td_rider_body_valid(u,v,3,3))return FALSE;
+    }
+    batch->ctx=ctx;batch->valid=TD_RIDER_BATCH_VALID;return TRUE;
+}
+UBYTE td_traffic_external_batch_admit(const td_rider_batch_t *batch,UBYTE district,
+    UWORD seconds,UWORD old_u,UWORD old_v,UWORD u,UWORD v,UBYTE half) BANKED {
+    if(!batch||batch->valid!=TD_RIDER_BATCH_VALID||!batch->ctx)return FALSE;
+    return td_rider_admit(batch->ctx,district,seconds,old_u,old_v,u,v,half,TRUE);
 }

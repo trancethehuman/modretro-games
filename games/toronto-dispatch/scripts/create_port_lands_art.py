@@ -12,6 +12,7 @@ from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 from street_scenery import decorate
+from crossing_art import native_bytes as crossing_native_bytes
 from port_lands_layout import PORT_LANDS, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -352,7 +353,7 @@ def main():
         assert same_png_artwork(png,canonical),"Port Lands source pixels/palette differ"
         png=canonical;metadata["background_sha256"]=hashlib.sha256(png).hexdigest()
     if not args.dry_run:
-        files={ART/"toronto_port_lands.png":png,ROOT/"project/assets/backgrounds/toronto_port_lands.png":png,
+        files={ART/"toronto_port_lands.png":png,ROOT/"project/assets/backgrounds/toronto_port_lands.png":crossing_native_bytes(png,metadata),
                ART/"port_lands_attributes.json":(json.dumps(attrs)+"\n").encode(),
                ROOT/"content/districts/port_lands_art.json":(json.dumps(metadata,indent=2)+"\n").encode()}
         for filename,data in files.items():

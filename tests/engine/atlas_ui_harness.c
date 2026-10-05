@@ -68,7 +68,8 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
     int ground=first>=16&&(unsigned)first+count<=188;
     int font=first>=192&&(unsigned)first+count<=241;
     int guidance=first==241&&count==12;
-    expect(marker||ground||font||guidance,"uploads stay within marker, atlas, font and twelve reserved original guidance/accent tiles");
+    int frame=first==188&&count==3;
+    expect(marker||ground||font||guidance||frame,"uploads stay within marker, atlas, original three-tile frame gap, font and twelve reserved original guidance/accent tiles");
     if(VBK_REG!=1||!tiles||!count||(unsigned)first+count>256)return;
     if(ground){
         for(unsigned i=0;i<count;i++)ground_upload_indices[(ground_uploads+i)%TD_ATLAS_VISIBLE_LIMIT]=first+i;
@@ -241,21 +242,50 @@ static void read_window_text(unsigned y,char out[21]) {
     out[20]=0;
 }
 
+/* Independent row-layout oracle: paused panels have eighteen-column cards,
+ * while world HUD, map, chapter labels and contextual footers stay twenty.
+ * This table specifies the design; it never calls the renderer's helper. */
+static unsigned expected_frame(unsigned row){
+    static const UBYTE cards[7][18]={
+        {2,1,1,4,1,1,1,1,1,1,1,1,1,1,3,0,0,0}, /* Pause */
+        {2,1,1,4,1,1,1,1,1,1,1,1,3,0,0,0,0,0}, /* Settings */
+        {2,1,1,4,1,1,1,1,1,1,1,1,1,1,1,3,0,0}, /* Welcome */
+        {2,1,1,1,1,1,1,1,1,3,2,1,1,1,1,1,3,0}, /* Controls */
+        {2,0,0,2,1,1,1,1,1,1,2,1,1,1,3,0,0,0}, /* Dispatch */
+        {2,1,1,4,1,1,1,1,1,1,1,1,1,1,3,0,0,0}, /* TTC */
+        {2,1,1,4,1,1,1,1,1,1,1,1,3,0,0,0,0,0}, /* Result */
+    };
+    if(row>=18)return 0;
+    if(td.mode==TD_PAUSE)return cards[td.menu>=TD_SETTINGS_SOUND?1:0][row];
+    if(td.mode==TD_HELP)return cards[td.menu==TD_SETTINGS_CONTROLS?3:2][row];
+    if(td.mode==TD_BOARD)return cards[4][row];
+    if(td.mode==TD_TRANSIT)return cards[5][row];
+    if(td.mode==TD_RESULT)return cards[6][row];
+    return 0;
+}
+
 static void expect_window_text(unsigned row,const char *text,const char *name) {
-    char actual[21],expected[21];size_t length=strlen(text);
-    expect(row<18&&length<=20,"HUD fixture text fits its native twenty-column row");
-    if(row>=18||length>20)return;
-    memset(expected,' ',20);memcpy(expected,text,length);expected[20]=0;
-    read_window_text(row,actual);expect(!strcmp(actual,expected),name);
+    UBYTE expected[20];size_t length=strlen(text);unsigned frame=expected_frame(row);
+    unsigned limit=frame?18:20,start=frame?1:0;
+    expect(row<18&&length<=limit,"every complete caption fits its native card interior or twenty-column footer/HUD");
+    if(length>limit)fprintf(stderr,"Caption overflow: mode=%u menu=%u row=%u width=%u text=%s\n",td.mode,td.menu,row,limit,text);
+    if(row>=18||length>limit)return;
+    memset(expected,frame>1?189:192,sizeof(expected));
+    if(frame){expected[0]=expected[19]=(frame==1||frame==4)?190:188;}
+    if(frame>1)start=1+(18-length)/2;
+    for(unsigned i=0;i<length;i++)expected[start+i]=td_glyph(text[i]);
+    expect(!memcmp(window_tiles[0][row],expected,sizeof(expected)),name);
 }
 
 static void expect_text_screen_safe(void) {
     UBYTE safe=1;
     for(unsigned row=0;row<18;row++)for(unsigned column=0;column<20;column++)
-        if(window_tiles[0][row][column]<192||window_tiles[0][row][column]>252||
-           window_tiles[1][row][column]!=15)safe=0;
+        if(window_tiles[0][row][column]<188||window_tiles[0][row][column]>252||
+           (window_tiles[1][row][column]&~96)!=15||
+           ((window_tiles[1][row][column]&96)&&
+            (window_tiles[0][row][column]<188||window_tiles[0][row][column]>190)))safe=0;
     expect(safe&&window_x==0&&window_y==0&&VBK_REG==0,
-           "dispatch/result screen uses bounded native twenty-column font rows and neutral VRAM bank");
+           "dispatch/result cards use only bounded original border/font tiles, upright text and neutral VRAM bank");
     expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),
            "itinerary and payment draws preserve actual uploaded font patterns");
 }
@@ -497,7 +527,7 @@ static void test_dispatch_board_itineraries(void) {
             if(page+1==offer->count){if(offer->route[page]==offer->route[0])saw_return=1;else saw_delivery=1;}
             if(!page) {
                 expect_window_text(1,host_ui_chapters[job/8],"each actual offer displays its authored chapter and position within twelve groups");
-                expect_window_text(3,"SELECT NEXT CHAPTER","board exposes the chapter shortcut without hiding the individual offer and itinerary controls");
+                expect_window_text(3,"SELECT: CHAPTER","board exposes the chapter shortcut without hiding the individual offer and itinerary controls");
                 sprintf(expected,"CONTRACT %02u/%u",job+1,TD_QUESTS);expect_window_text(2,expected,"board displays its actual contract ID and expanded count");
                 expect_window_text(4,offer->title,"board retains the exact authored contract title");
                 memcpy(brief,host_ui_briefs[job],18);brief[18]=0;expect_window_text(5,brief,"first brief line remains visible above itinerary");
@@ -549,7 +579,7 @@ static void test_dispatch_board_itineraries(void) {
     expect_game_unchanged(&before);
 
     td.mode=TD_RESULT;td_ui_draw();
-    expect_window_text(1,"--------------------","leaving dispatch replaces its chapter caption with the original coloured panel rule");
+    expect_window_text(1,"","leaving dispatch removes the chapter caption inside the original result card");
     expect_window_text(3,"","leaving dispatch clears the chapter shortcut caption");
     for(unsigned invalid=TD_QUESTS;invalid<=255;invalid++){
         td.mode=TD_BOARD;td.menu=invalid;before=snapshot_game();td_ui_draw();
@@ -647,20 +677,20 @@ static void result_fixture(unsigned job,UBYTE condition,UWORD left,UWORD previou
     sprintf(expected,"CONDITION %u%%",condition);expect_window_text(5,expected,"result displays the actual final cargo condition");
     if(condition&&left) {
         sprintf(expected,"BASE $%u",host_ui_jobs[job].reward);expect_window_text(6,expected,"result preserves authored base separately from scaled payment");
-        sprintf(expected,"CONDITION PAY $%u",condition_pay);expect_window_text(7,expected,"condition payment matches independent wide multiply/floor");
-        sprintf(expected,"TIME %uS +$%u",left,bonus);expect_window_text(8,expected,"time bonus matches independent five-second floor");
+        sprintf(expected,"CARGO PAY $%u",condition_pay);expect_window_text(7,expected,"condition payment matches independent wide multiply/floor");
+        sprintf(expected,"%uS BONUS$%u",left,bonus);expect_window_text(8,expected,"time bonus matches independent five-second floor");
         sprintf(expected,"CREDIT $%u",after-previous);expect_window_text(9,expected,"credit shows the actual balance increase including cash cap");
         expect_window_text(10,total>60000u-previous?"BALANCE CAP $60000":
-                           done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT",
+                           done==TD_QUESTS?"MASTER COURIER":"MORE ROUTES AWAIT",
                            "result cap/master cue follows actual credit rather than nominal reward");
     }else {
         expect_window_text(6,"NO PAYMENT","failure explicitly receives no payment");
         sprintf(expected,"TIME %uS",left);expect_window_text(7,expected,"failure retains actual remaining time");
         expect_window_text(8,"","failure clears a previously visible bonus row");
         expect_window_text(9,"CREDIT $0","failure clears a previously positive credit");
-        expect_window_text(10,"RETRY OR PICK A JOB","failure offers a useful continuation cue");
+        expect_window_text(10,"RETRY / CHOOSE JOB","failure offers a useful continuation cue");
     }
-    sprintf(expected,"$%u DONE %u/%u",after,done,TD_QUESTS);expect_window_text(11,expected,"result retains final cash and expanded unique-completion count");
+    sprintf(expected,"$%u DONE%u/%u",after,done,TD_QUESTS);expect_window_text(11,expected,"result retains final cash and expanded unique-completion count");
     expect_window_text(13,"A: DISPATCH BOARD","result retains dispatch continuation");
     expect_window_text(14,"B: FREE ROAM","result retains free-roam continuation");
     expect_window_text(16,"PROGRESS AUTO-SAVED","result retains its persistence cue");
@@ -1355,7 +1385,7 @@ static void test_packed_row_codec(void){
         "native cache union is exactly270 bytes with eighteen15-byte rows and172 ten-bit atlas slots");
     expect(sizeof(td_map_hidden)==3,
         "all22 native actor hidden flags occupy exactly three bytes with no actor/save-state growth");
-    for(unsigned column=0;column<20;column++)for(unsigned glyph=192;glyph<=252;glyph++){
+    for(unsigned column=0;column<20;column++)for(unsigned glyph=192;glyph<=255;glyph++){
         memset(&guarded,0xA5,sizeof(guarded));memset(guarded.row,255,sizeof(guarded.row));
         memset(logical,255,sizeof(logical));memset(expected,255,sizeof(expected));
         for(unsigned i=0;i<20;i++)tiles[i]=192+(i*7+column)%61;
@@ -1384,7 +1414,7 @@ static void test_packed_row_codec(void){
     }
     for(unsigned y=0;y<18;y++){
         memset(td_cached_rows,255,sizeof(td_cached_rows));
-        UBYTE logical_cache[18][20];memset(logical_cache,255,sizeof(logical_cache));td.mode=TD_PAUSE;
+        UBYTE logical_cache[18][20];memset(logical_cache,255,sizeof(logical_cache));td.mode=TD_ROAM;
         static const char text[]="A\1B\2C\3D\4E\5F\6G\7H\10I\11J\12";
         for(unsigned step=0;step<2;step++){
             UBYTE expected_tiles[20];for(unsigned i=0;i<20;i++)expected_tiles[i]=i&1?241+i/2:193+i/2;
@@ -1454,10 +1484,73 @@ static void test_packed_actor_visibility(void){
     }
 }
 
+static void test_original_menu_cards(void){
+    static const UBYTE cases[][2]={
+        {TD_PAUSE,0},{TD_PAUSE,8},{TD_PAUSE,TD_SETTINGS_SOUND},
+        {TD_PAUSE,TD_SETTINGS_CONTROLS},{TD_PAUSE,TD_SETTINGS_BACK},
+        {TD_HELP,0},{TD_HELP,TD_SETTINGS_CONTROLS},{TD_BOARD,0},
+        {TD_TRANSIT,0},{TD_RESULT,0}
+    };
+    for(unsigned page=0;page<sizeof(cases)/sizeof(cases[0]);page++){
+        reset_case();td.mode=cases[page][0];td.menu=cases[page][1];
+        td.job=TD_NONE;td.onfoot=0;td_get_job(0,&td_offer);td_get_stop(1,&td_cursor);
+        td.transit_origin=0;td.transit_target=1;
+        game_snapshot_t before=snapshot_game();td_ui_draw();
+        expect_board_preserves_game(&before);
+        unsigned frame_cells=0,flipped=0;
+        for(unsigned y=0;y<18;y++)for(unsigned x=0;x<20;x++){
+            unsigned kind=expected_frame(y),tile=window_tiles[0][y][x],attr=window_tiles[1][y][x];
+            if(tile>=188&&tile<=190){
+                frame_cells++;unsigned expected_attr=15|(x==19?32:0)|(kind==3?64:0);
+                expect(kind&&attr==expected_attr,"every native border has the exact independently expected corner/rail/side flip and palette7/bank1 ownership");
+                expect(tile==(x==0||x==19?(kind==1||kind==4?190:188):189),"all visible frame edges and all four corners use their original pattern role");
+                flipped+=!!(attr&96);
+            }else expect(tile>=192&&tile<=252&&attr==15,"all panel text and footer glyphs remain upright and outside the world/combat/hospital tiles");
+        }
+        expect(frame_cells>=32&&flipped>=8,"every full-screen menu is a visibly bordered original card rather than a text-only page");
+        expect(!memcmp(vram[1][188],td_menu_frame_pixels,48),"all menus preserve the exact deliberately authored three-pattern pixels");
+        expect(vram[1][253][0]==0xEE&&vram[1][254][0]==0xEE&&vram[1][255][0]==0xEE,
+               "menu card uploads never claim combat253, hospital254 or the unused tail255");
+        unsigned writes=window_writes,uploads=tile_uploads;td_ui_draw();
+        expect(window_writes==writes&&tile_uploads==uploads,"an unchanged designed card performs no tilemap, attribute or pattern uploads");
+        /* A menu change followed by world resume must not leave flipped
+         * borders in the compact HUD, nor change its approved viewport. */
+        td.mode=TD_ROAM;td.msg=0;td_ui_draw();
+        expect(window_x==0&&window_y==136,"leaving a framed menu restores the original eight-pixel driving viewport strip");
+        for(unsigned y=0;y<18;y++)for(unsigned x=0;x<20;x++)
+            expect(window_tiles[1][y][x]==15,"every framed-menu flip is reset before any later gameplay HUD/map/dialogue upload");
+        expect_three_row_hud_safe();
+    }
+    /* Welcome->guide->welcome keeps the same mode value but changes card
+     * geometry. Invalidate that page once; never retain either page's text. */
+    reset_case();td.mode=TD_HELP;td.menu=0;td_ui_draw();
+    td.menu=TD_SETTINGS_CONTROLS;td_ui_draw();expect_window_text(11,"A/B ENTER/TAKE CAR","guide replaces the welcome objective arrow hint");
+    td.menu=0;td_ui_draw();expect_window_text(11,"FOLLOW JOB ARROW","returning to welcome clears the former control-guide rows");
+
+    /* Optional source-only render export: these are actual-C host tilemap
+     * outputs, not emulator screenshots or native LCD/performance evidence. */
+    const char *directory=getenv("TD_MENU_SOURCE_PREVIEW_DIR");
+    if(directory){
+        static const char *const names[]={"pause","settings","welcome","controls","dispatch","transit","result"};
+        static const UBYTE pages[][2]={{TD_PAUSE,1},{TD_PAUSE,TD_SETTINGS_SOUND},{TD_HELP,0},{TD_HELP,TD_SETTINGS_CONTROLS},
+                                    {TD_BOARD,0},{TD_TRANSIT,0},{TD_RESULT,0}};
+        for(unsigned page=0;page<7;page++){
+            reset_case();td.mode=pages[page][0];td.menu=pages[page][1];td.job=TD_NONE;
+            td.health=100;td.left=108;td.cash=137;td.done=1;td.wanted=0;td.onfoot=0;
+            td_get_job(0,&td_job);td_get_job(0,&td_offer);td_get_stop(1,&td_cursor);
+            td.transit_origin=0;td.transit_target=1;td_ui_draw();
+            char path[2048];snprintf(path,sizeof(path),"%s/%s.bin",directory,names[page]);
+            FILE *file=fopen(path,"wb");expect(file!=NULL,"source-only menu preview output opens inside the explicitly requested ignored build directory");
+            if(file){fwrite(window_tiles,1,sizeof(window_tiles),file);fwrite(vram[1],1,sizeof(vram[1]),file);fclose(file);}
+        }
+    }
+}
+
 void td_hospital_init(void){}
 
 int main(void) {
     test_packed_row_codec();test_packed_atlas_codec();test_packed_actor_visibility();
+    test_original_menu_cards();
     reset_case();boat_control_fixture=1;td.job=TD_NONE;td.mode=TD_ROAM;
     game_snapshot_t boat_controls_before=snapshot_game();td_ui_draw();
     expect_window_text(2,"A GAS DOWN+A DOCK","controlled boat guidance distinguishes acceleration from deliberate docking");

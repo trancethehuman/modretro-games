@@ -15,12 +15,16 @@
 #include "td_story.h"
 #include "td_combat.h"
 #include "td_menu_hint.h"
+#include "td_menu_frames.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "ui.h"
 #include "camera.h"
 #include "scroll.h"
 #include "system.h"
+
+typedef char td_menu_patterns_fit_gap[(TD_MENU_FRAME_FIRST>=16+TD_ATLAS_VISIBLE_LIMIT&&
+    TD_MENU_FRAME_FIRST+TD_MENU_FRAME_COUNT<=192)?1:-1];
 
 static UBYTE td_tiles[20];
 /* The paused atlas owns this cache until text is repainted. Text uses six
@@ -95,12 +99,70 @@ static void td_map_cache_set(UBYTE slot,UWORD pattern){
 }
 static void td_row(UBYTE y,const char *s);
 static void td_guided_row(const char *label){td_guidance_label(td_line,label);td_row(2,td_line);td_guidance_compact(td_line,TRUE);td_row(td.msg?(td.onfoot?2:1):0,td_line);}
+/* Original bevel cards use the unused atlas/story gap188..190. The existing
+ * six-bit text cache represents these as253..255 until the final upload;
+ * live combat253, hospital254, font and guidance patterns remain untouched.
+ * No row is all255 (the invalid sentinel): each side row contains real text
+ * or space, and each rail contains distinct corner/rail codes. */
+static UBYTE td_frame_row(UBYTE row){
+    UBYTE bottom;
+    if(td.mode==TD_PAUSE)bottom=td.menu>=TD_SETTINGS_SOUND?12:14;
+    else if(td.mode==TD_HELP){
+        if(td.menu==TD_SETTINGS_CONTROLS){
+            if(row==9||row==16)return 3;
+            if(row==0||row==10)return 2;
+            return row<16?1:0;
+        }
+        bottom=15;
+    }else if(td.mode==TD_TRANSIT)bottom=14;
+    else if(td.mode==TD_RESULT)bottom=12;
+    else if(td.mode==TD_BOARD){
+        if(row==0||row==3||row==10)return 2;
+        if(row==14)return 3;
+        return row>3&&row<14?1:0;
+    }else return 0;
+    if(!row)return 2;
+    if(row==bottom)return 3;
+    if(row>bottom)return 0;
+    /* Interior rules separate status from actions without adding another
+     * row or taking any pixels from the live city viewport. */
+    if(row==3)return 4;
+    return 1;
+}
+static void td_ui_plain_attributes(void){
+    UBYTE row;
+    memset(td_tiles,15,sizeof(td_tiles));VBK_REG=1;
+    for(row=0;row<18;row++)set_win_tiles(0,row,20,1,td_tiles);
+    VBK_REG=0;
+}
 static void td_row(UBYTE y,const char *s) {
-    UBYTE i; for(i=0;i<20;i++){td_tiles[i]=td_glyph(*s);if(*s)s++;}
+    /* Normal driving/walking bypasses the paused-layout helper entirely. */
+    UBYTE i,start=0,end=20,frame=td.mode==TD_ROAM?0:td_frame_row(y);
+    if(frame){
+        memset(td_tiles,frame==1?192:254,sizeof(td_tiles));
+        td_tiles[0]=td_tiles[19]=(frame==1||frame==4)?255:253;
+        start=1;end=19;
+        /* Text embedded in a bevel rail is centered; ordinary card text is
+         * left aligned within the eighteen-column interior. */
+        if(frame!=1){
+            i=0;while(i<18&&s[i])i++;
+            start=1+((18-i)>>1);end=start+i;
+        }
+    }
+    for(i=start;i<end;i++){td_tiles[i]=td_glyph(*s);if(*s)s++;}
     if(td.mode!=TD_MAP){
         if(!td_row_cache_apply(td_cached_rows[y],td_tiles))return;
     }
+    if(frame)for(i=0;i<20;i++)if(td_tiles[i]>=253)td_tiles[i]=TD_MENU_FRAME_FIRST+td_tiles[i]-253;
     VBK_REG=0; set_win_tiles(0,y,20,1,td_tiles);
+    if(frame){
+        /* Native flips turn one original corner/side into its opposite.
+         * Only border cells flip: embedded letters always remain upright. */
+        for(i=0;i<20;i++)td_tiles[i]=15|
+            (i==19?32:0)|
+            (frame==3&&td_tiles[i]>=TD_MENU_FRAME_FIRST&&td_tiles[i]<TD_MENU_FRAME_FIRST+TD_MENU_FRAME_COUNT?64:0);
+        VBK_REG=1;set_win_tiles(0,y,20,1,td_tiles);VBK_REG=0;
+    }
 }
 static const td_stop_t *td_map_destination(void){
     return td.job==TD_NONE&&(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)?&td_cursor:&td_target;
@@ -227,7 +289,7 @@ void td_map_close(void) BANKED {
  * Their ownership never overlaps: both are full-screen frozen modes. */
 void td_ui_story_frame(void) BANKED {
     UBYTE i;
-    ui_set_pos(0,0);td_ui_mode=255;memset(td_cached_rows,255,sizeof(td_cached_rows));
+    ui_set_pos(0,0);td_ui_mode=255;memset(td_cached_rows,255,sizeof(td_cached_rows));td_ui_plain_attributes();
     td_map_actor_count=actors_len<TD_ACTORS?actors_len:TD_ACTORS;
     memset(td_map_hidden,0,sizeof(td_map_hidden));
     for(i=0;i<td_map_actor_count;i++){
@@ -247,18 +309,20 @@ void td_ui_story_close(void) BANKED {
 }
 
 void td_ui_init(void) BANKED {
-    UBYTE i;td_board_route=0;td_ui_mode=255;td_story_restore_background();td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_tiles,15,20);
-    /* The window always uses font bank 1 / UI palette 7; attributes need one upload. */
-    VBK_REG=1;for(i=0;i<18;i++)set_win_tiles(0,i,20,1,td_tiles);
-    VBK_REG=1;set_bkg_data(192,sizeof(td_font)/16,td_font);td_guidance_init();td_hospital_init();VBK_REG=0;
+    td_board_route=0;td_ui_mode=255;td_story_restore_background();td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));td_ui_plain_attributes();
+    VBK_REG=1;set_bkg_data(192,sizeof(td_font)/16,td_font);
+    set_bkg_data(TD_MENU_FRAME_FIRST,TD_MENU_FRAME_COUNT,td_menu_frame_pixels);
+    td_guidance_init();td_hospital_init();VBK_REG=0;
     text_drawn=TRUE;td_ui_draw();
 }
 void td_ui_draw(void) BANKED {
-    UBYTE i,wait,service,fare,page=(td.mode==TD_PAUSE&&td.menu>=TD_SETTINGS_SOUND)?(TD_PAUSE|128):td.mode;
+    UBYTE i,wait,service,fare,page=((td.mode==TD_PAUSE&&td.menu>=TD_SETTINGS_SOUND)||
+        (td.mode==TD_HELP&&td.menu==TD_SETTINGS_CONTROLS))?(td.mode|128):td.mode;
     UBYTE changed=td_ui_mode!=page; UWORD u=td.u>>4,v=td.v>>4;
     td_ui_mode=page;
     text_drawn=TRUE;
     if(td.mode==TD_DIALOG){td_story_draw();return;}
+    if(changed){td_ui_plain_attributes();memset(td_cached_rows,255,sizeof(td_cached_rows));}
     if(td.mode==TD_MAP){
         ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
         td_map_headers();return;
@@ -304,19 +368,19 @@ void td_ui_draw(void) BANKED {
         return;
     }
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
-    td_row(0," TORONTO DISPATCH");if(td.mode!=TD_BOARD)td_row(1,"\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13\13");
+    td_row(0,"TORONTO DISPATCH");
     if(td.mode==TD_HELP){
         if(td.menu!=TD_SETTINGS_CONTROLS){
             td_row(2,"WELCOME COURIER");
             td_row(4,"MAKE DELIVERIES");td_row(5,"EXPLORE TORONTO");
             td_row(7,"A GAS / B BRAKE");td_row(8,"L/R STEER IN MOTION");
-            td_row(10,"SELECT JOBS/DELIVER");td_row(11,"FOLLOW THE JOB ARROW");
+            td_row(10,"SELECT JOBS / DROP");td_row(11,"FOLLOW JOB ARROW");
             td_row(13,"START MENU / SAVE");td_row(14,"SETTINGS: CONTROLS");
             td_row(16,"A OR B: START GAME");td_row(17,"PROGRESS AUTO-SAVES");return;
         }
         td_row(2,"QUICK CONTROLS");
         td_row(4,"A GAS / B BRAKE");td_row(5,"L/R STEER IN MOTION");td_row(6,"HOLD B TO REVERSE");
-        td_row(7,"SELECT JOBS/DELIVER");td_row(8,"START MENU / SAVE");
+        td_row(7,"SELECT JOBS / DROP");td_row(8,"START MENU / SAVE");
         td_row(10,"D PAD WALK ON FOOT");td_row(11,"A/B ENTER/TAKE CAR");td_row(12,"A DOOR/BOAT B TTC");
         td_row(13,"B ELSEWHERE: FIRE");td_row(14,"DOCK: DOWN+A EXIT");td_row(15,"STARS: POLICE CHASE");
         td_row(16,td.menu==TD_SETTINGS_CONTROLS?"A OR B: SETTINGS":"A OR B: START GAME");
@@ -332,16 +396,16 @@ void td_ui_draw(void) BANKED {
             td_row(13,"UP/DOWN CHOOSE");td_row(14,"A SELECT / B BACK");
             td_row(16,"SOUND: A TO CHANGE");td_row(17,"SOUND RESETS AT BOOT");return;
         }
-        sprintf(td_line,"$%u  DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);
+        sprintf(td_line,"$%u DONE%u/%u",td.cash,td.done,TD_QUESTS);td_row(2,td_line);
         td_row(4,td.menu==0?"> RESUME":"  RESUME");td_row(5,td.menu==1?"> CITY MAP":"  CITY MAP");td_row(6,td.menu==2?"> JOBS":"  JOBS");td_row(7,td.menu==3?(td.onfoot?"> ENTER YOUR CAR":"> GET OUT OF CAR"):(td.onfoot?"  ENTER YOUR CAR":"  GET OUT OF CAR"));td_row(8,td.menu==4?"> CHANGE VEHICLE":"  CHANGE VEHICLE");td_row(9,td.menu==5?"> TTC SCHEDULE":"  TTC SCHEDULE");td_row(10,(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)?(td.menu==6?"> SAVE AFTER TRIP":"  SAVE AFTER TRIP"):(td.menu==6?"> SAVE GAME":"  SAVE GAME"));td_row(11,td.menu==7?"> CANCEL JOB":"  CANCEL JOB");
         td_row(12,td.menu==8?"> SETTINGS":"  SETTINGS");
         sprintf(td_line,"HEALTH %u AMMO %u",td.vitality,td.ammo);td_row(13,td_line);
-        td_row(14,"UP/DOWN CHOOSE");td_row(15,"A SELECT / B RESUME");
+        td_row(15,"UP/DOWN CHOOSE");td_row(16,"A SELECT / B RESUME");
         td_menu_hint(td_line);td_row(17,td_line);return;
     }
     if(td.mode==TD_BOARD){
         td_row(1,td.menu<TD_QUESTS?td_chapters[td.menu>>3]:"DISPATCH CHAPTER");
-        td_row(3,"SELECT NEXT CHAPTER");
+        td_row(3,"SELECT: CHAPTER");
         sprintf(td_line,"CONTRACT %02u/%u",td.menu+1,TD_QUESTS);td_row(2,td_line);td_row(4,td_offer.title);
         td_get_brief(td.menu,td_line);td_row(6,td_line+18);td_line[18]=0;td_row(5,td_line);td_row(7,td_kinds[td_offer.kind]);
         sprintf(td_line,"%u STOPS  %u SEC",td_offer.count,td_offer.seconds);td_row(8,td_line);sprintf(td_line,"BASE $%u + TIME",td_offer.reward);td_row(9,td_line);td_row(10,td_offer.vehicle==TD_NONE?"ANY VEHICLE / TTC":td_vehicles[td_offer.vehicle]);
@@ -372,7 +436,7 @@ void td_ui_draw(void) BANKED {
     }
     if(td.mode==TD_TRANSIT){
         service=td_transit_service(td.transit_origin);td_transit_label(td.transit_origin,td_line);td_row(2,td_line);td_row(4,td_cursor.name);
-        td_row(5,service==4?(td.transit_target>=td.transit_origin?"STREETCAR EASTBOUND":"STREETCAR WESTBOUND"):"");
+        td_row(5,service==4?(td.transit_target>=td.transit_origin?"QUEEN EASTBOUND":"QUEEN WESTBOUND"):"");
         wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);sprintf(td_line,"DEPARTS IN %u SEC",wait);td_row(6,td_line);
         fare=td_transit_booking_fare(td.transit_origin,td.transit_target,td.job,td.cash,td.district);
         sprintf(td_line,"RIDE %u SEC / $%u",td_transit_duration(td.transit_origin,td.transit_target),fare);td_row(7,td_line);
@@ -389,20 +453,20 @@ void td_ui_draw(void) BANKED {
             v=td.left/5;
             sprintf(td_line,"CONDITION %u%%",td.health);td_row(5,td_line);
             sprintf(td_line,"BASE $%u",td_job.reward);td_row(6,td_line);
-            sprintf(td_line,"CONDITION PAY $%u",u);td_row(7,td_line);
-            sprintf(td_line,"TIME %uS +$%u",td.left,v);td_row(8,td_line);
+            sprintf(td_line,"CARGO PAY $%u",u);td_row(7,td_line);
+            sprintf(td_line,"%uS BONUS$%u",td.left,v);td_row(8,td_line);
             if(td.cash>=td_offer.reward)sprintf(td_line,"CREDIT $%u",td.cash-td_offer.reward);
             else sprintf(td_line,"BALANCE -$%u",td_offer.reward-td.cash);
             td_row(9,td_line);
             td_row(10,td.cash==60000&&(td_offer.reward>td.cash||u+v>td.cash-td_offer.reward)?
-                "BALANCE CAP $60000":td.done==TD_QUESTS?"CITY COURIER MASTER":"MORE ROUTES AWAIT");
+                "BALANCE CAP $60000":td.done==TD_QUESTS?"MASTER COURIER":"MORE ROUTES AWAIT");
         }else{
             sprintf(td_line,"CONDITION %u%%",td.health);td_row(5,td_line);
             td_row(6,"NO PAYMENT");
             sprintf(td_line,"TIME %uS",td.left);td_row(7,td_line);
-            td_row(8,"");td_row(9,"CREDIT $0");td_row(10,"RETRY OR PICK A JOB");
+            td_row(8,"");td_row(9,"CREDIT $0");td_row(10,"RETRY / CHOOSE JOB");
         }
-        sprintf(td_line,"$%u DONE %u/%u",td.cash,td.done,TD_QUESTS);td_row(11,td_line);
+        sprintf(td_line,"$%u DONE%u/%u",td.cash,td.done,TD_QUESTS);td_row(11,td_line);
         td_row(13,"A: DISPATCH BOARD");td_row(14,"B: FREE ROAM");td_row(16,"PROGRESS AUTO-SAVED");
     }
 }

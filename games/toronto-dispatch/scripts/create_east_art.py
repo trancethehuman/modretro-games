@@ -11,6 +11,7 @@ from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 from street_scenery import decorate
+from crossing_art import native_bytes as crossing_native_bytes
 from east_layout import EAST, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 from streetcar_art import paint_streetcar_stops
 
@@ -273,7 +274,7 @@ def main():
         canonical=(ART/"toronto_east.png").read_bytes()
         assert same_png_artwork(png,canonical),"Eastern source pixels/palette differ"
         png=canonical;metadata["background_sha256"]=hashlib.sha256(png).hexdigest()
-    files={ART/"toronto_east.png":png,ROOT/"project/assets/backgrounds/toronto_east.png":png,ART/"east_attributes.json":(json.dumps(attrs)+"\n").encode(),ROOT/"content/districts/east_art.json":(json.dumps(metadata,indent=2)+"\n").encode()}
+    files={ART/"toronto_east.png":png,ROOT/"project/assets/backgrounds/toronto_east.png":crossing_native_bytes(png,metadata),ART/"east_attributes.json":(json.dumps(attrs)+"\n").encode(),ROOT/"content/districts/east_art.json":(json.dumps(metadata,indent=2)+"\n").encode()}
     for filename,data in files.items():
         if args.check:assert filename.read_bytes()==data,f"Eastern source differs: {filename}"
         else:filename.parent.mkdir(parents=True,exist_ok=True);filename.write_bytes(data)
