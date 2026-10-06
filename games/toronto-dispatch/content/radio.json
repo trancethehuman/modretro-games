@@ -1,0 +1,139 @@
+{
+  "status": "engine-integrated",
+  "notice": "Original fictional dialogue. Rosa and the depot are invented; street and landmark names are flavour only and make no claims about real services or events.",
+  "speaker": "ROSA",
+  "role": "DISPATCH",
+  "chapter_short_names": [
+    "FIRST SHIFT",
+    "NEIGHBOURHOODS",
+    "CITY EVENTS",
+    "CROSS THE CITY",
+    "WATERFRONT",
+    "ARTS + AUDIENCES",
+    "EVENING DISPATCH",
+    "THE NETWORK",
+    "MASTER COURIER",
+    "WEST END ROUTES",
+    "EAST END ROUTES"
+  ],
+  "scripts": {
+    "INTRO": [
+      "MORNING, ROOKIE.|ROSA ON DISPATCH.",
+      "YOUR CAR IS OUT|FRONT OF UNION.",
+      "PRESS SELECT FOR|THE JOB BOARD.",
+      "FOLLOW THE BEACON|AND DRIVE NICE."
+    ],
+    "JOB_PARCEL": [
+      "PARCEL ROUND.|STOP AT EACH PIN."
+    ],
+    "JOB_FRAGILE": [
+      "FRAGILE ART.|GO EASY ON CURBS."
+    ],
+    "JOB_EXPRESS": [
+      "EXPRESS FILES.|CLOCK IS TIGHT."
+    ],
+    "JOB_FREIGHT": [
+      "HEAVY FREIGHT.|BRAKE EARLY, OK?"
+    ],
+    "JOB_RELAY": [
+      "TRANSIT RELAY.|TRY THE TTC."
+    ],
+    "JOB_PASSENGER": [
+      "PASSENGER RUN.|SMOOTH TURNS."
+    ],
+    "JOB_RETURN": [
+      "SIGNED RETURNS.|BRING THEM BACK."
+    ],
+    "JOB_ISLAND": [
+      "ISLAND POST.|FERRY, THEN WALK."
+    ],
+    "PICKUP": [
+      "GOT IT? GOOD.|NOW THE DROP-OFF."
+    ],
+    "DONE_0": [
+      "NICE WORK. CLIENT|IS HAPPY. PAID."
+    ],
+    "DONE_1": [
+      "DELIVERED. THAT'S|HOW WE DO IT."
+    ],
+    "DONE_2": [
+      "GOOD RUN. MORE ON|THE BOARD."
+    ],
+    "FAIL": [
+      "CLIENT CALLED.|WE LOST THAT ONE."
+    ],
+    "MASTER": [
+      "EVERY CONTRACT|DONE. A LEGEND."
+    ],
+    "OPEN_ENDS": [
+      "WEST AND EAST END|ROUTES ARE OPEN."
+    ],
+    "CHAPTER_1": [
+      "NEW WORK: THE|NEIGHBOURHOODS.",
+      "LEARN THE SIDE|STREETS, ROOKIE."
+    ],
+    "CHAPTER_2": [
+      "CITY EVENTS ARE|BOOKING US NOW."
+    ],
+    "CHAPTER_3": [
+      "LONG HAULS NOW.|CROSS THE CITY."
+    ],
+    "CHAPTER_4": [
+      "WATERFRONT JOBS|ARE ON THE BOARD."
+    ],
+    "CHAPTER_5": [
+      "GALLERIES AND|THEATRES CALLING."
+    ],
+    "CHAPTER_6": [
+      "EVENING DISPATCH|IS YOURS NOW."
+    ],
+    "CHAPTER_7": [
+      "TTC RELAYS ACROSS|THE NETWORK."
+    ],
+    "CHAPTER_8": [
+      "MASTER CONTRACTS.|ONLY THE BEST."
+    ],
+    "WANTED": [
+      "COPS ARE ON YOU.|LOSE THEM, FAST."
+    ],
+    "LOST": [
+      "YOU SHOOK THEM.|BACK TO WORK."
+    ],
+    "BUSTED": [
+      "BAIL IS PAID.|KEEP IT CLEAN."
+    ],
+    "WASTED": [
+      "HOSPITAL CALLED.|TAKE IT EASY."
+    ],
+    "NIGHT": [
+      "NIGHT SHIFT NOW.|LIGHTS ARE ON."
+    ],
+    "MORNING": [
+      "SUN'S UP. COFFEE|AND BACK TO IT."
+    ],
+    "CHATTER_0": [
+      "STREETCARS ARE|BUNCHED ON QUEEN."
+    ],
+    "CHATTER_1": [
+      "BALL GAME LATER.|FRONT WILL JAM."
+    ],
+    "CHATTER_2": [
+      "THE GARDINER IS|A PARKING LOT."
+    ],
+    "CHATTER_3": [
+      "RACCOONS GOT INTO|THE PARCEL BINS."
+    ],
+    "CHATTER_4": [
+      "FERRY'S RUNNING|LATE. AS USUAL."
+    ],
+    "CHATTER_5": [
+      "PIGEONS ON THE|DEPOT ROOF AGAIN."
+    ],
+    "CHATTER_6": [
+      "CONSTRUCTION ON|KING. GO AROUND."
+    ],
+    "CHATTER_7": [
+      "NEW JOBS POSTED.|PRESS SELECT."
+    ]
+  }
+}

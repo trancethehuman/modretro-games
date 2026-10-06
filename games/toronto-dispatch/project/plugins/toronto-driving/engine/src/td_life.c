@@ -28,15 +28,15 @@ UBYTE lf_patrol,lf_lost,lf_drop,lf_amb;
 
 /* ------------------------------------------------------------ effects */
 void td_lf_fx(UBYTE kind,UWORD u,UWORD v,UBYTE timer) BANKED {
-    td_fx_kind=kind;fx_u=u<<4;fx_v=v<<4;fx_timer=timer;fx_du=fx_dv=0;
+    TD_PALETTE(&actors[TD_ACTOR_FX])=0;td_fx_kind=kind;fx_u=u<<4;fx_v=v<<4;fx_timer=timer;fx_du=fx_dv=0;
 }
 
 static void lf_fx_end(void){td_fx_kind=0;actors[TD_ACTOR_FX].flags|=ACTOR_FLAG_HIDDEN;}
 
 /* ------------------------------------------------------------ police attention */
 static UBYTE lf_is_officer(UBYTE i){
-    if(td_ped_ovr&(1<<i))return pk_look[i]==4&&pk_mode[i]==PK_CHASE;
-    return td_ped_route[i]!=TD_NONE&&lf_route_look[td_ped_route[i]&7]==4;
+    if(td_ped_ovr&(1<<i))return pk_look[i]==LF_LOOK_OFFICER&&pk_mode[i]==PK_CHASE;
+    return td_ped_route[i]!=TD_NONE&&(td_ped_route[i]&7)==LF_LOOK_OFFICER;
 }
 
 static UBYTE lf_police_near(UWORD range_u,UWORD range_v){
@@ -79,14 +79,14 @@ static void lf_own_ped(UBYTE i,UBYTE look){
 void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED {
     UBYTE look,mode=pk_mode[i],bit=1<<i;
     if(td_ped_ovr&bit)look=pk_look[i];
-    else look=td_ped_route[i]!=TD_NONE?lf_route_look[td_ped_route[i]&7]:0;
+    else look=td_ped_route[i]!=TD_NONE?td_ped_route[i]&7:0;
     if((td_ped_ovr&bit)&&(mode==PK_FLY||mode==PK_DEAD))return;
     lf_own_ped(i,look);
     pk_vu[i]=lf_clamp(vu,48);pk_vv[i]=lf_clamp(vv,48);
     pk_span[i]=pk_timer[i]=lethal?32:(vu||vv)?20:12;
     pk_mode[i]=PK_FLY;pk_drawn&=~bit;
     if(lethal)pk_lethal|=bit;else pk_lethal&=~bit;
-    if(look==4)td_lf_crime(lethal?CR_COP_KILL:CR_COP);
+    if(look==LF_LOOK_OFFICER)td_lf_crime(lethal?CR_COP_KILL:CR_COP);
     else td_lf_crime(lethal?CR_KILL:CR_MINOR);
 }
 
@@ -170,7 +170,7 @@ static void lf_peds_tick(void){
 /* ------------------------------------------------------------ road vehicles */
 UBYTE td_lf_tr_heading(UBYTE i) BANKED {
     if(td_tr_ctrl&(1<<i))return tr_head[i];
-    return (UBYTE)(actors[2+i].frame-lf_traffic_base[i])&6;
+    return (UBYTE)(actors[2+i].frame-td_traffic_bases[i])&6;
 }
 
 void td_lf_own_car(UBYTE i,UBYTE mode) BANKED {
@@ -179,9 +179,31 @@ void td_lf_own_car(UBYTE i,UBYTE mode) BANKED {
     td_tr_ctrl|=bit;tr_mode[i]=mode;
 }
 
+/* A traffic slot entering play out of view takes a new design and colour:
+ * sedans, hatchbacks, pickups, coupes, taxis, vans and motorcycles. The
+ * core bus-loop proxy (slot 5) stays a van. */
+static const UBYTE lf_design[8]={TD_FRAME_PLAYER_CAR,TD_FRAME_TRAFFIC_COMPACT,TD_FRAME_PLAYER_CAR,TD_FRAME_TRAFFIC_PICKUP,
+    TD_FRAME_TRAFFIC_SPORTS,TD_FRAME_TRAFFIC_TAXI,TD_FRAME_PLAYER_VAN,TD_FRAME_PLAYER_MOTORCYCLE};
+static const UBYTE lf_colour[8]={TD_PAL_RED,TD_PAL_BLUE,TD_PAL_TEAL,TD_PAL_VIOLET,TD_PAL_NAVY,TD_PAL_RED,TD_PAL_BLUE,TD_PAL_YELLOW};
+/* xorshift16 for road vehicle looks, stirred by the update counter so
+ * recycled vehicles do not repeat a design within a second. */
+static UWORD lf_rng=0xACE1;
+static UBYTE lf_random(void){
+    lf_rng^=lf_rng<<7;lf_rng^=lf_rng>>9;lf_rng^=lf_rng<<8;
+    return (UBYTE)lf_rng^(UBYTE)td_tick;
+}
+void td_lf_new_look(UBYTE i,UBYTE seed) BANKED {
+    UBYTE base;
+    if(!td.district&&i==5){td_traffic_bases[i]=TD_FRAME_PLAYER_VAN;TD_PALETTE(&actors[2+i])=TD_PAL_YELLOW;return;}
+    base=lf_design[seed&7];
+    td_traffic_bases[i]=base;
+    TD_PALETTE(&actors[2+i])=base==TD_FRAME_TRAFFIC_TAXI?TD_PAL_YELLOW:lf_colour[(seed>>3)&7];
+}
+
 static void lf_free_car(UBYTE i){
     td_tr_ctrl&=~(1<<i);tr_mode[i]=0;
-    if(i==TD_POLICE_SLOT)lf_patrol=0;
+    /* The patrol car changes back to an ordinary car out of view. */
+    if(i==TD_POLICE_SLOT&&lf_patrol){lf_patrol=0;td_lf_new_look(i,lf_random());}
 }
 
 /* Is a vehicle body at Q4 (u,v) clear of the courier? */
@@ -338,6 +360,7 @@ static void lf_ambient(void){
     if(td.district){
         if(!td_world_traffic_recycle(td.district,i,pu,pv,LF_VIEW_U,LF_VIEW_V,&u,&v,&leg,&sample)||!lf_spot_clear(i,u,v))return;
         td_traffic_u[i]=u;td_traffic_v[i]=v;td_traffic_leg[i]=leg;td_traffic_samples[i]=sample;
+        td_lf_new_look(i,lf_random());
         return;
     }
     if(i<4){
@@ -359,6 +382,7 @@ static void lf_ambient(void){
     u<<=4;v<<=4;
     if(!lf_spot_clear(i,u,v))return;
     td_traffic_u[i]=u;td_traffic_v[i]=v;td_traffic_leg[i]=leg;
+    td_lf_new_look(i,lf_random());
 }
 
 /* ------------------------------------------------------------ police response */
@@ -377,7 +401,7 @@ static void lf_recruit(void){
     for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS&&count<target;i++,bit<<=1,a++){
         if((td_ped_ovr&bit)||(a->flags&ACTOR_FLAG_HIDDEN)||!lf_is_officer(i))continue;
         if(lf_dist(a->pos.x>>5,pu)>=176||lf_dist(a->pos.y>>5,pv)>=128)continue;
-        lf_own_ped(i,4);pk_mode[i]=PK_CHASE;count++;
+        lf_own_ped(i,LF_LOOK_OFFICER);pk_mode[i]=PK_CHASE;count++;
     }
     /* Backup on foot from three stars: take a walker slot that is out of view. */
     if(td.wanted>=3&&count<target){
@@ -385,7 +409,7 @@ static void lf_recruit(void){
             if(td_ped_ovr&bit)continue;
             if(!(a->flags&ACTOR_FLAG_HIDDEN)&&td_ped_route[i]!=TD_NONE&&lf_on_screen(a->pos.x>>5,a->pos.y>>5))continue;
             if(!lf_spot(0,&u,&v))break;
-            td_ped_ovr|=bit;pk_fresh&=~bit;pk_u[i]=u<<4;pk_v[i]=v<<4;pk_look[i]=4;pk_mode[i]=PK_CHASE;
+            td_ped_ovr|=bit;pk_fresh&=~bit;pk_u[i]=u<<4;pk_v[i]=v<<4;pk_look[i]=LF_LOOK_OFFICER;pk_mode[i]=PK_CHASE;TD_PALETTE(a)=LF_OFFICER_PAL;
             break;
         }
     }
@@ -396,7 +420,7 @@ static void lf_recruit(void){
             if(td_ped_ovr&bit)continue;
             if(!(a->flags&ACTOR_FLAG_HIDDEN)&&td_ped_route[i]!=TD_NONE&&lf_on_screen(a->pos.x>>5,a->pos.y>>5))continue;
             td_ped_ovr|=bit;pk_fresh&=~bit;pk_u[i]=td_traffic_u[TD_POLICE_SLOT];pk_v[i]=td_traffic_v[TD_POLICE_SLOT];
-            pk_look[i]=4;pk_mode[i]=PK_CHASE;pk_dir[i]=0;count++;
+            pk_look[i]=LF_LOOK_OFFICER;pk_mode[i]=PK_CHASE;pk_dir[i]=0;TD_PALETTE(a)=LF_OFFICER_PAL;count++;
             break;
         }
     }
@@ -408,7 +432,7 @@ static void lf_recruit(void){
              !lf_on_screen(td_traffic_u[TD_POLICE_SLOT]>>4,td_traffic_v[TD_POLICE_SLOT]>>4)&&lf_spot(1,&u,&v)){
         /* The slot-4 car leaves its lane out of view; a patrol car arrives
          * from just beyond the screen edge after a short delay. */
-        td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;lf_stuck=0;lf_lost=0;
+        td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;lf_stuck=0;lf_lost=0;TD_PALETTE(&actors[2+TD_POLICE_SLOT])=TD_PAL_BLUE;
         td_traffic_u[TD_POLICE_SLOT]=u<<4;td_traffic_v[TD_POLICE_SLOT]=v<<4;tr_timer[TD_POLICE_SLOT]=60;
     }
 }
@@ -474,7 +498,7 @@ void td_life_reset(UBYTE cold) BANKED {
 UBYTE td_life_locked(void) BANKED {return lf_down||lf_arrest||lf_hurt>22;}
 
 static void lf_fx_tick(void){
-    UBYTE i,bit;UWORD bu,bv;actor_t *a;
+    UBYTE i,bit,step;UWORD bu,bv;actor_t *a;
     if(!td_fx_kind)return;
     if(!fx_timer||!--fx_timer){lf_fx_end();return;}
     if(td_fx_kind==FX_RUNNER){
@@ -482,20 +506,24 @@ static void lf_fx_tick(void){
         return;
     }
     if(td_fx_kind!=FX_BULLET)return;
-    fx_u+=fx_du;fx_v+=fx_dv;bu=fx_u>>4;bv=fx_v>>4;
-    if(!lf_walk(bu,bv)){td_lf_fx(FX_SPARK,bu,bv,6);return;}
-    for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
-        if(a->flags&ACTOR_FLAG_HIDDEN)continue;
-        if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD))continue;
-        if(lf_dist(a->pos.x>>5,bu)<7&&lf_dist(a->pos.y>>5,bv)<9){
-            td_lf_knock(i,fx_du>>2,fx_dv>>2,1);td_lf_fx(FX_SPARK,bu,bv,6);return;
+    /* Tracer rounds cover 8 px a tick in two 4-pixel checks, so nothing is
+     * skipped. */
+    for(step=0;step<2;step++){
+        fx_u+=fx_du;fx_v+=fx_dv;bu=fx_u>>4;bv=fx_v>>4;
+        if(!lf_walk(bu,bv)){td_lf_fx(FX_SPARK,bu,bv,6);return;}
+        for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
+            if(a->flags&ACTOR_FLAG_HIDDEN)continue;
+            if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD))continue;
+            if(lf_dist(a->pos.x>>5,bu)<6&&lf_dist(a->pos.y>>5,bv)<7){
+                td_lf_knock(i,fx_du>>2,fx_dv>>2,1);td_lf_fx(FX_SPARK,bu,bv,6);return;
+            }
         }
-    }
-    for(i=0;i<6;i++){
-        if(tr_mode[i]==TR_GONE)continue;
-        if(lf_dist(td_traffic_u[i]>>4,bu)<8&&lf_dist(td_traffic_v[i]>>4,bv)<8){
-            if(LF_IS_PATROL(i))td_lf_crime(CR_COP);
-            td_lf_fx(FX_SPARK,bu,bv,6);return;
+        for(i=0;i<6;i++){
+            if(tr_mode[i]==TR_GONE)continue;
+            if(lf_dist(td_traffic_u[i]>>4,bu)<8&&lf_dist(td_traffic_v[i]>>4,bv)<8){
+                if(LF_IS_PATROL(i))td_lf_crime(CR_COP);
+                td_lf_fx(FX_SPARK,bu,bv,6);return;
+            }
         }
     }
 }
@@ -553,7 +581,7 @@ UBYTE td_life_buy(void) BANKED {
     if(td.cash<TD_SUPPLY_PRICE){td_message(TD_MSG_NO_CASH);return FALSE;}
     td.cash-=TD_SUPPLY_PRICE;
     td.ammo=td.ammo>TD_AMMO_MAX-12?TD_AMMO_MAX:td.ammo+12;
-    td.vitality=100;
+    td.vitality=100;td_car_damage=0;
     td_message(TD_MSG_SUPPLIES);
     return TRUE;
 }

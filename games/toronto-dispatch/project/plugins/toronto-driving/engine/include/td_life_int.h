@@ -36,6 +36,8 @@ extern UWORD tr_au[6],tr_av[6];
 #define FX_BULLET 2
 #define FX_RUNNER 3
 extern UBYTE fx_timer,fx_look;
+/* A pistol round flies for this many updates (8 px each). */
+#define LF_BULLET_TICKS 20
 extern UWORD fx_u,fx_v;
 extern BYTE fx_du,fx_dv;
 
@@ -48,14 +50,18 @@ extern WORD lf_scale_x,lf_scale_y;
 #define LF_BUST_TICKS 90
 /* ROM tables are read from code in this file's own bank, so every module
  * keeps a private copy: a const table in another bank is not mapped.
- * Walker look per route&7 matches TORONTO.c td_walker_bases (0..3
- * civilians, 4 officer, 5 courier): one route in eight is an officer.
- * Road slot liveries match td_traffic_bases; slot 4 shows the patrol
- * livery only while lf_patrol is set. */
-static const UBYTE lf_route_look[8]={0,1,2,3,1,4,0,2};
-static const UBYTE lf_look_walk[6]={TD_FRAME_WALKER_A,TD_FRAME_WALKER_B,TD_FRAME_WALKER_C,TD_FRAME_WALKER_D,TD_FRAME_OFFICER,TD_FRAME_COURIER_WALK};
-static const UBYTE lf_traffic_base[6]={TD_FRAME_TRAFFIC_RED,TD_FRAME_TRAFFIC_VAN,TD_FRAME_TRAFFIC_TAXI,
-    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_TRAFFIC_BLUE,TD_FRAME_TRAFFIC_VAN};
+ * A walker's look is its route identity&7 (TORONTO.c td_walker_bases):
+ * look 5 is a police officer (navy cap), so one route in eight is an
+ * officer; LF_LOOK_COURIER is the courier. Clothing colour is the actor's
+ * palette offset. Road slot designs live in td_traffic_bases; slot 4 shows
+ * the patrol car only while lf_patrol is set. */
+#define LF_LOOK_OFFICER 5
+#define LF_LOOK_COURIER 8
+static const UBYTE lf_look_walk[9]={TD_FRAME_PERSON_SHORT,TD_FRAME_PERSON_LONG,TD_FRAME_PERSON_BUN,TD_FRAME_PERSON_PACK,
+    TD_FRAME_PERSON_UMBRELLA,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_LONG,TD_FRAME_PERSON_SHORT};
+/* Civilian clothing colours by (route>>3)&3 (offsets for the people palette). */
+static const UBYTE lf_civilian_pal[4]={TD_PEOPLE_PAL(TD_PAL_RED),TD_PEOPLE_PAL(TD_PAL_YELLOW),TD_PEOPLE_PAL(TD_PAL_TEAL),TD_PEOPLE_PAL(TD_PAL_VIOLET)};
+#define LF_OFFICER_PAL TD_PEOPLE_PAL(TD_PAL_NAVY)
 #define LF_IS_PATROL(i) ((i)==TD_POLICE_SLOT&&lf_patrol)
 
 #define CR_MINOR 0
@@ -118,6 +124,8 @@ void td_lf_crime(UBYTE kind) BANKED;
 void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED;
 void td_lf_own_car(UBYTE i,UBYTE mode) BANKED;
 UBYTE td_lf_tr_heading(UBYTE i) BANKED;
+/* Give traffic slot i a new design and colour (call while it is out of view). */
+void td_lf_new_look(UBYTE i,UBYTE seed) BANKED;
 /* Vehicle bodies (whole-pixel centre): 11px courier car, 13px road vehicle. */
 UBYTE td_lf_drive(UWORD u,UWORD v) BANKED;
 UBYTE td_lf_body(UWORD u,UWORD v) BANKED;

@@ -13,7 +13,23 @@
 static const BYTE lf_dx[16]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
 static const BYTE lf_dy[16]={0,6,11,15,16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6};
 static const BYTE lf_face_u[4]={1,-1,0,0},lf_face_v[4]={0,0,1,-1};
-static const UBYTE lf_mass_player[4]={4,7,2,2},lf_mass_slot[6]={4,7,4,2,5,7};
+static const UBYTE lf_mass_player[4]={4,7,2,2};
+/* Mass of a traffic design: vans 7, pickups 6, motorcycles 2, cars 4. */
+static UBYTE lf_mass_slot(UBYTE i){
+    UBYTE b=td_traffic_bases[i];
+    if(LF_IS_PATROL(i))return 5;
+    return b==TD_FRAME_PLAYER_VAN?7:b==TD_FRAME_TRAFFIC_PICKUP?6:b==TD_FRAME_PLAYER_MOTORCYCLE?2:4;
+}
+UBYTE td_car_damage,td_car_colour;
+/* Wear on the courier's car; vans shrug off half. The first warning comes
+ * when the engine starts failing, another when it is wrecked. */
+static void lf_wear(UBYTE points){
+    UBYTE before=td_car_damage;
+    if(td.vehicle==1)points=(points+1)>>1;
+    td_car_damage=points>=TD_DAMAGE_WRECK-td_car_damage?TD_DAMAGE_WRECK:td_car_damage+points;
+    if(before<TD_DAMAGE_WRECK&&td_car_damage==TD_DAMAGE_WRECK)td_message(TD_MSG_WRECKED);
+    else if(before<TD_DAMAGE_FAIL&&td_car_damage>=TD_DAMAGE_FAIL)td_message(TD_MSG_SMOKING);
+}
 static WORD lf_div2(WORD x){return x<0?-(WORD)((UWORD)-x>>1):(WORD)((UWORD)x>>1);}
 /* Heading x speed, cached while both are unchanged (the common cruise). */
 static UBYTE lf_scale_key_h=255;static WORD lf_scale_key_s;
@@ -57,7 +73,7 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
         v2=(tr_mode[i]&&tr_mode[i]!=TR_CHASE)?0:8;
         v2=((head==0&&sx>0)||(head==4&&sx<0)||(head==2&&sy>0)||(head==6&&sy<0))?v2:
            ((head==0&&sx<0)||(head==4&&sx>0)||(head==2&&sy<0)||(head==6&&sy>0))?-v2:0;
-        pm=lf_mass_player[td.vehicle&3];nm=lf_mass_slot[i];sum=pm+nm;
+        pm=lf_mass_player[td.vehicle&3];nm=lf_mass_slot(i);sum=pm+nm;
         /* Restitution 3/4: a head-on or heavier body throws the car back. */
         rel=v1-v2;
         n1=((WORD)pm*v1+(WORD)nm*v2-((((WORD)nm*rel)*3)>>2))/sum;
@@ -76,7 +92,7 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
         if(rel>=6){
             td_anim_spawn(TD_PART_FLASH,0,(UWORD)((WORD)(td.u>>4)+(lf_div16(du)>>1)),(UWORD)((WORD)(td.v>>4)+(lf_div16(dv)>>1)));
             if(td.job!=TD_NONE&&td.stage){UBYTE damage=rel>=12?12:4;td.health=td.health>damage?td.health-damage:0;}
-            td_audio_play(TD_AUDIO_IMPACT);td.cooldown=30;td_message(5);
+            td_audio_play(TD_AUDIO_IMPACT);td.cooldown=30;td_message(5);lf_wear((UBYTE)rel);
             if(rel>=14)lf_shake=10;
             /* The driver is jolted: throttle returns after a moment, so the
              * rebound is visible even with A held. */
@@ -125,6 +141,8 @@ UBYTE td_life_drive(void) BANKED {
     if(hand)gas=brake=0;
     if(td_life_locked()){gas=brake=0;hand=1;}
     limit=td.vehicle==1?20:td.vehicle==2?28:td.vehicle==3?18:24;
+    /* A failing engine loses a quarter of its top speed; a wreck crawls. */
+    if(td_car_damage>=TD_DAMAGE_WRECK)limit=6;else if(td_car_damage>=TD_DAMAGE_FAIL)limit-=limit>>2;
     /* Throttle builds quickly from rest and tapers near top speed; the brake
      * stops the car first and only engages reverse after a short hold. */
     if(gas){
@@ -183,9 +201,9 @@ UBYTE td_life_drive(void) BANKED {
         if(nu!=(WORD)td.u&&lf_drive(nu>>4,td.v>>4)){td.u=nu;td_vy=0;slide=1;}
         if(nv!=(WORD)td.v&&lf_drive(td.u>>4,nv>>4)){td.v=nv;td_vx=0;slide=1;}
         if(!slide)slide=lf_corner_slide(nu,nv);
-        if(slide){if(a>8&&!td.cooldown){lf_dust(TD_PART_PUFF);td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
+        if(slide){if(a>8&&!td.cooldown){lf_dust(TD_PART_PUFF);td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);lf_wear(2);}}
         else{
-            if(a>8&&!td.cooldown){lf_dust(TD_PART_SMOKE);if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);if(a>14)lf_shake=8;}
+            if(a>8&&!td.cooldown){lf_dust(TD_PART_SMOKE);if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);lf_wear(a);if(a>14)lf_shake=8;}
             /* A solid wall throws a fast car back a little before it settles. */
             if(a>10){td.speed=-lf_div4(td.speed);td_vx=-lf_div4(td_vx);td_vy=-lf_div4(td_vy);}
             else{td.speed=0;td_vx=td_vy=0;}
@@ -207,14 +225,17 @@ static UBYTE lf_carjack(void){
         d=lf_abs(du)+lf_abs(dv);if(d<best_d){best_d=d;best=i;}
     }
     if(best==TD_NONE)return FALSE;
-    base=lf_traffic_base[best];
-    td.vehicle=base==TD_FRAME_TRAFFIC_VAN?1:base==TD_FRAME_TRAFFIC_MOTORCYCLE?2:0;
+    base=td_traffic_bases[best];
+    td.vehicle=base==TD_FRAME_PLAYER_VAN||base==TD_FRAME_TRAFFIC_PICKUP?1:base==TD_FRAME_PLAYER_MOTORCYCLE?2:0;
     td.heading=td_lf_tr_heading(best)<<1;
+    /* A fresh car in its own paint. */
+    td_car_damage=0;td_car_colour=TD_PALETTE(&actors[2+best]);
     td.park_u=td_traffic_u[best];td.park_v=td_traffic_v[best];td.park_district=td.district;
     td_lf_own_car(best,TR_GONE);actors[2+best].flags|=ACTOR_FLAG_HIDDEN;
     /* The driver bails out and runs off the far side. */
-    fx_look=LF_IS_PATROL(best)?4:best&3;
+    fx_look=LF_IS_PATROL(best)?LF_LOOK_OFFICER:best&3;
     td_lf_fx(FX_RUNNER,td.park_u>>4,td.park_v>>4,54);
+    TD_PALETTE(&actors[TD_ACTOR_FX])=LF_IS_PATROL(best)?LF_OFFICER_PAL:lf_civilian_pal[best&3];
     fx_du=td.park_u>td.u?12:-12;fx_dv=0;
     td_entry_target=0;td_entry_timer=12;td.speed=0;td_vx=td_vy=0;
     td_audio_play(TD_AUDIO_IMPACT);
@@ -244,14 +265,69 @@ void td_life_foot_a(void) BANKED {
     if(!lf_carjack())lf_punch_now();
 }
 
+/* ------------------------------------------------------------ aiming */
+UBYTE td_aim_dir,td_aim_target=TD_NONE;
+/* Sixteen headings from a pixel offset (E=0 clockwise, +y south). */
+static UBYTE lf_heading16(WORD dx,WORD dy){
+    UWORD ax=lf_abs(dx),ay=lf_abs(dy),ax2=ax<<1,ay2=ay<<1;UBYTE k;
+    /* Ratio thresholds with shifts and adds (no multiply helper calls). */
+    if((ay2<<1)+ay<ax)k=0;else if(ay2+ay<ax2)k=1;else if(ay2<ax2+ax)k=2;else if(ay<(ax2<<1)+ax)k=3;else k=4;
+    if(dx>=0)return dy>=0?k:(UBYTE)(16-k)&15;
+    return dy>=0?8-k:8+k;
+}
+/* Nearest walker (0..7) or the patrol car (8) within about 45 degrees of
+ * the aim and 112 px, favouring targets straight ahead. */
+static UBYTE lf_find_target(void){
+    UBYTE i,bit,best=TD_NONE,diff,aim=td_aim_dir<<1;UWORD score,best_score=65535;WORD du,dv;
+    UWORD pu=td.u>>4,pv=td.v>>4;actor_t *a;
+    for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
+        if(a->flags&ACTOR_FLAG_HIDDEN)continue;
+        if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN))continue;
+        du=(WORD)(a->pos.x>>5)-(WORD)pu;dv=(WORD)(a->pos.y>>5)-(WORD)pv;
+        score=lf_abs(du)+lf_abs(dv);if(score>=112||score<4)continue;
+        diff=(UBYTE)(lf_heading16(du,dv)-aim)&15;if(diff>2&&diff<14)continue;
+        if(diff>8)diff=16-diff;
+        score+=diff*24;
+        if(score<best_score){best_score=score;best=i;}
+    }
+    if(LF_IS_PATROL(TD_POLICE_SLOT)&&tr_mode[TD_POLICE_SLOT]!=TR_GONE){
+        du=(WORD)(td_traffic_u[TD_POLICE_SLOT]>>4)-(WORD)pu;dv=(WORD)(td_traffic_v[TD_POLICE_SLOT]>>4)-(WORD)pv;
+        score=lf_abs(du)+lf_abs(dv);diff=(UBYTE)(lf_heading16(du,dv)-aim)&15;
+        if(score<112&&(diff<=2||diff>=14)){if(diff>8)diff=16-diff;if(score+diff*24<best_score)best=8;}
+    }
+    return best;
+}
+static void lf_target_at(UBYTE t,UWORD *u,UWORD *v){
+    if(t==8){*u=td_traffic_u[TD_POLICE_SLOT]>>4;*v=td_traffic_v[TD_POLICE_SLOT]>>4;}
+    else{*u=actors[TD_ACTOR_PEDS+t].pos.x>>5;*v=actors[TD_ACTOR_PEDS+t].pos.y>>5;}
+}
+void td_life_aim(void) BANKED {
+    td_aim_target=(td.onfoot&&td.ammo&&td.mode==TD_ROAM&&!td_life_locked())?lf_find_target():TD_NONE;
+}
+
+/* The pistol: a long tracer round towards the locked-on target, or along
+ * the aim; holding B keeps firing about six times a second. */
 void td_life_foot_b(void) BANKED {
-    UBYTE d=td_walk_dir&3;
+    UBYTE h,d;UWORD tu,tv,pu=td.u>>4,pv=td.v>>4,ax,ay;WORD du=0,dv=0,len=0;
     if(td_life_locked()||td_entry_timer||lf_punch)return;
     if(!td.ammo){td_message(TD_MSG_NO_AMMO);return;}
-    td.ammo--;lf_punch=14;td_anim_pose(TD_FRAME_COURIER_SHOOT,12);
-    td_anim_spawn(TD_PART_FLASH,0,(td.u>>4)+lf_face_u[d]*9,(td.v>>4)+lf_face_v[d]*9);
-    td_lf_fx(FX_BULLET,(td.u>>4)+lf_face_u[d]*6,(td.v>>4)+lf_face_v[d]*6,22);
-    fx_du=lf_face_u[d]*64;fx_dv=lf_face_v[d]*64;
+    td_life_aim();
+    if(td_aim_target!=TD_NONE){
+        lf_target_at(td_aim_target,&tu,&tv);du=(WORD)tu-(WORD)pu;dv=(WORD)tv-(WORD)pv;h=lf_heading16(du,dv);
+        /* Octagonal length, so a locked round flies straight at the target
+         * rather than along the nearest of 16 headings. */
+        ax=lf_abs(du);ay=lf_abs(dv);len=(WORD)(ax>ay?ax+((ay*3)>>3):ay+((ax*3)>>3));
+    }
+    else h=td_aim_dir<<1;
+    /* Face the shot: the nearest of the four walking directions. */
+    d=((h+2)&15)>>2;td_walk_dir=d==0?0:d==1?2:d==2?1:3;
+    td.ammo--;lf_punch=10;td_anim_pose(TD_FRAME_COURIER_SHOOT,10);
+    td_anim_spawn(TD_PART_FLASH,0,pu+((lf_dx[h]*9)>>4),pv+((lf_dy[h]*9)>>4));
+    td_lf_fx(FX_BULLET,pu+((lf_dx[h]*8)>>4),pv+((lf_dy[h]*8)>>4),LF_BULLET_TICKS);
+    if(len){fx_du=(BYTE)((du*64)/len);fx_dv=(BYTE)((dv*64)/len);}
+    else{fx_du=lf_dx[h]<<2;fx_dv=lf_dy[h]<<2;}
+    fx_look=((h+1)&15)>>1;
+    if(lf_shake<2)lf_shake=2;
     td_audio_play(TD_AUDIO_IMPACT);
     td_lf_crime(CR_GUN);
 }

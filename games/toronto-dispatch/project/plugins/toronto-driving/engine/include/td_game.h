@@ -6,13 +6,14 @@
 #define TD_COMPLETE_BYTES 16
 /* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-16 pedestrians,
  * 17 transit vehicle, 18-19 sidewalk pickups, 20 street-life effects
- * (sparks, bullets, a fleeing driver) and 21-22 animation particles (smoke,
- * pops, sparkles). The engine field MAX_ACTORS raises GBVM's pool to 23.
+ * (sparks, tracer rounds, a fleeing driver), 21-22 animation particles
+ * (smoke, pops, sparkles) and 23 the lock-on marker. The engine field
+ * MAX_ACTORS raises GBVM's pool to 24.
  * Pedestrians, pickups and particles use one 8x16 OBJ each, so all actors
  * stay within 40 hardware sprites; the particles render last, so the
  * 10-per-line limit drops them first. Night headlamps are part of the
  * courier vehicle's own frames. */
-#define TD_ACTORS 23
+#define TD_ACTORS 24
 #define TD_PEDS 8
 #define TD_ACTOR_PEDS 9
 #define TD_ACTOR_FX 20
@@ -21,6 +22,22 @@
 #define TD_PICKUP_SLOTS 2
 #define TD_PICKUP_TAKEN 8
 #define TD_ACTOR_PARTS 21
+#define TD_ACTOR_RETICLE 23
+/* Per-actor colour: actor.c.patch adds GBVM's move_speed field (unused by
+ * this scene, which moves its actors itself) to every sprite palette when
+ * an actor is drawn. Vehicle frames use palette 0 and people palette 1,
+ * so a vehicle's offset is its OBJ palette and a person's is one lower. */
+#define TD_PALETTE(a) ((a)->move_speed)
+#define TD_PAL_COURIER 0
+#define TD_PAL_RED 2
+#define TD_PAL_BLUE 3
+#define TD_PAL_YELLOW 4
+#define TD_PAL_NAVY 5
+#define TD_PAL_TEAL 6
+#define TD_PAL_VIOLET 7
+#define TD_PEOPLE_PAL(p) ((p)-1)
+/* Each traffic slot's design (first frame) is chosen when it enters play. */
+extern UBYTE td_traffic_bases[6];
 #define TD_PARTS 2
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
@@ -74,6 +91,32 @@ void td_ui_draw(void) BANKED;
 /* Menu cursor/prompt animation and the HUD compass; cheap when unchanged. */
 void td_ui_tick(void) BANKED;
 void td_ui_compass(void) BANKED;
+/* Dispatcher radio calls (td_ui.c): queue a script from td_radio_data.h;
+ * the tick types, holds and closes calls and raises the story beats that
+ * come from the city's state (stars, nightfall, quiet stretches). */
+void td_radio_say(UBYTE script) BANKED;
+void td_radio_tick(void) BANKED;
+UBYTE td_radio_playing(void) BANKED;
+/* Playing script (TD_NONE when idle), its page, characters typed, frames
+ * the finished page has been up and the one queued script (td_radio.c). */
+extern UBYTE td_radio_script,td_radio_next,td_radio_page,td_radio_pos,td_radio_hold;
+/* Stars when the radio last looked: a change brings a police call. */
+extern UBYTE td_radio_wanted;
+/* The tick only has work during a call, on a change of stars or once a
+ * second for the clock and chatter. */
+#define TD_RADIO_DUE() (td_radio_script!=TD_NONE||td.wanted!=td_radio_wanted||!(td_tick&63))
+/* Updates a finished page stays up (about two and a half seconds). */
+#define TD_RADIO_HOLD 150
+/* Typed part of the current page's line 0 or 1, padded to 17 characters. */
+void td_radio_line(UBYTE line,char *dest) BANKED;
+void td_chapter_name(UBYTE chapter,char *dest) BANKED;
+/* td_ui.c side of a call: TRUE once the card is up (opens it when the HUD
+ * is showing), one typed character, and a repaint for a new page. */
+UBYTE td_ui_radio_ready(void) BANKED;
+void td_ui_radio_put(UBYTE column,UBYTE line,char c) BANKED;
+void td_ui_draw_radio(void) BANKED;
+/* Fee paid for the last delivery, for the result card. */
+extern UWORD td_last_pay;
 void td_map_open(void) BANKED;
 void td_map_update(UBYTE buttons,UBYTE pressed) BANKED;
 void td_map_close(void) BANKED;

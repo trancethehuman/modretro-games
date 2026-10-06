@@ -97,8 +97,11 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Street life revision (candidate, 2026-10-06): gentler police pursuit and fewer officers, sidewalk pickups replacing the curbside props and gulls, eight walkers over 620 routes, traffic that keeps returning near the courier, redrawn cars and a dusk title screen; CLI/emulator evidence in [TESTING.md](TESTING.md).
 - [x] Day/night cycle and animation (candidate, 2026-10-06): a 17-minute day with golden hour, dusk, night and dawn palettes, headlamps, tyre smoke, exhaust and impact effects, a look-ahead driving camera, punch/pistol poses, collection pops and a flashing patrol light bar, at unchanged frame rate; CLI/emulator evidence in [TESTING.md](TESTING.md).
 - [ ] Handheld review of the day length, night readability, smoke frequency and camera look-ahead.
+- [x] City life, menus, story and shooting (candidate, 2026-10-06): Rosa's radio calls with a portrait card (welcome, briefings, chapters, police, night and chatter), bottom-sheet menus with four actions at a time, a distance readout, bigger cars, eight road-vehicle designs in seven paints and six walker designs in four colours, D-pad aim with lock-on and long tracer rounds, and car damage with smoke and repairs; CLI/emulator evidence in [TESTING.md](TESTING.md).
+- [ ] Handheld review of radio pacing, menu legibility, lock-on reach, tracer visibility and damage rates.
+- [ ] Decide whether more road vehicles on screen are worth their frame-rate cost (measured at 3-4 updates per second on busy routes).
 - [ ] Playtest police difficulty, pickup economy and street density on the handheld; decide whether a few clearly readable knock-over props should return.
-- [ ] Expand pedestrian variety, street furniture, local activity and visible transit boarding/riding.
+- [ ] Expand street furniture, local activity and visible transit boarding/riding (pedestrian and vehicle variety added in the city-life revision).
 - [ ] Author streetcar rails and moving streetcars on researched corridors; improve the current partial bus route geometry.
 - [ ] More distinctive Toronto landmark silhouettes, district character, industrial yards and additional navigable streets.
 

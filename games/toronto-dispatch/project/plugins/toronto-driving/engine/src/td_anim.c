@@ -33,9 +33,13 @@ static const UBYTE an_smoke[25]={2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0
 static const UBYTE an_rise[31]={0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1};
 typedef char td_anim_rise_16[(TD_PART_POP_TICKS==30)?1:-1];
 
+/* GBVM's activate_actor resets the idle animation (frame 0, the courier's
+ * car), so the particle's own frame is put back afterwards. */
 static void an_show(actor_t *a){
+    UBYTE f;
     if(!(a->flags&ACTOR_FLAG_ACTIVE)){
-        a->flags&=~(ACTOR_FLAG_DISABLED|ACTOR_FLAG_HIDDEN);activate_actor(a);a->anim_tick=255;
+        f=a->frame_start;a->flags&=~(ACTOR_FLAG_DISABLED|ACTOR_FLAG_HIDDEN);activate_actor(a);
+        a->frame=a->frame_start=f;a->frame_end=f+1;a->anim_tick=255;
     }else a->flags&=~ACTOR_FLAG_HIDDEN;
 }
 static void an_hide(actor_t *a){
@@ -46,7 +50,7 @@ static void an_hide(actor_t *a){
 void td_anim_reset(void) BANKED {
     memset(td_anim_parts,0,sizeof(td_anim_parts));
     td_anim_pose_time=an_cool=an_live=0;an_launch=1;td_look_x=td_look_y=an_tx=an_ty=0;
-    an_hide(&actors[TD_ACTOR_PARTS]);an_hide(&actors[TD_ACTOR_PARTS+1]);
+    an_hide(&actors[TD_ACTOR_PARTS]);an_hide(&actors[TD_ACTOR_PARTS+1]);an_hide(&actors[TD_ACTOR_RETICLE]);td_aim_target=TD_NONE;
 }
 
 void td_anim_spawn(UBYTE kind,UBYTE frame,UWORD u,UWORD v) BANKED {
@@ -72,8 +76,14 @@ static void an_rear(UBYTE kind,UBYTE wheels){
 /* Driving triggers: a launch from rest, hard braking, the handbrake and a
  * sliding tail. Smoke is spaced out so a particle is rarely alive for long. */
 static void an_triggers(void){
-    UBYTE a;
+    UBYTE a,h;
     if(td.onfoot||td.mode!=TD_ROAM||td_entry_timer||lf_down||lf_arrest||lf_hurt>22)return;
+    /* A damaged engine smokes from the bonnet: wisps, then thick smoke. */
+    if(td_car_damage>=TD_DAMAGE_SMOKE&&!(td_tick&(td_car_damage>=TD_DAMAGE_FAIL?30:62))){
+        h=td.heading&15;
+        td_anim_spawn(td_car_damage>=TD_DAMAGE_FAIL?TD_PART_SMOKE:TD_PART_PUFF,0,(td.u>>4)-an_rear_u[h],(td.v>>4)-an_rear_v[h]-2);
+        an_cool=4;return;
+    }
     if(!td.speed){an_launch=1;return;}
     a=td.speed<0?(UBYTE)-td.speed:(UBYTE)td.speed;
     if(INPUT_A&&INPUT_B){if(a>8){an_rear(TD_PART_SMOKE,1);an_cool=8;}}

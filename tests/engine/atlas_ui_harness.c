@@ -18,6 +18,8 @@ UBYTE td_resume_mode;
 /* Objective pointer and arrest/hospital receipt owned by td_life.c. */
 UWORD td_beacon_u,td_beacon_v;
 UBYTE td_beacon_shown,td_life_fine;
+/* Car wear owned by td_drive.c. */
+UBYTE td_car_damage,td_car_colour;
 actor_t actors[TD_ACTORS];
 /* Day/night palettes (td_daynight.c) are not part of this fixture. */
 UBYTE td_daynight_apply(UBYTE flags) {(void)flags;return 0;}
@@ -69,6 +71,9 @@ void set_bkg_palette(UBYTE first,UBYTE count,const UWORD *rgb) {
     if(first==7&&count==1&&rgb)memcpy(palette7,rgb,sizeof(palette7));
 }
 UBYTE td_audio_get_mode(void) {return TD_AUDIO_FULL;}
+/* Radio calls chirp and pace themselves on the update counter. */
+UBYTE td_tick;static unsigned audio_plays;
+void td_audio_play(UBYTE cue) {(void)cue;audio_plays++;}
 UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
 void td_get_street(UWORD u,UWORD v,char *dest) {(void)u;(void)v;content_reads++;strcpy(dest,"TEST ROAD");}
@@ -450,11 +455,79 @@ static void test_sparse_table_full_and_single_holes(void) {
     }
 }
 
+
+static UBYTE glyph_tile(const char *code) {return td_glyph_tile[(UBYTE)code[0]-32];}
+static void test_menus_and_radio(void) {
+    char text[21];
+    /* The pause menu is an eleven-row sheet over the city: four actions at a
+     * time, scroll marks and a hint for the highlighted action. */
+    reset_case();td.mode=TD_PAUSE;td.menu=0;td_ui_init();td_ui_draw();
+    expect(window_y==144-11*8,"the pause menu is a bottom sheet that leaves the city visible");
+    read_window_text(3,text);expect(strstr(text,"RESUME")!=NULL,"the first visible action is resume");
+    read_window_text(6,text);expect(strstr(text,"GET IN CAR")!=NULL,"four actions are listed; on foot the fourth gets back in the car");
+    expect(window_tiles[0][6][18]==glyph_tile(TD_UI_ARROW_S)&&window_tiles[0][3][18]!=glyph_tile(TD_UI_ARROW_N),
+           "a down mark shows more actions below, none above");
+    read_window_text(8,text);expect(strstr(text,"BACK TO THE CITY")!=NULL,"the hint describes the highlighted action");
+    read_window_text(9,text);expect(strstr(text,"1/9")!=NULL,"the footer counts the position in the list");
+    td.menu=8;td_ui_draw();
+    read_window_text(6,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving to the last action scrolls it into view");
+    read_window_text(3,text);expect(strstr(text,"TTC")!=NULL,"the window keeps four actions, ending on the cursor");
+    expect(window_tiles[0][3][18]==glyph_tile(TD_UI_ARROW_N)&&window_tiles[0][6][18]!=glyph_tile(TD_UI_ARROW_S),
+           "an up mark shows more actions above at the end of the list");
+    td.menu=0;td_ui_draw();read_window_text(3,text);
+    expect(strstr(text,"RESUME")!=NULL,"wrapping to the first action scrolls back to the top");
+    td.menu=6;td.mode=TD_BOARD;td_ui_draw();
+    expect(window_y==144-13*8,"the dispatch board is a thirteen-row card");
+    read_window_text(1,text);expect(strstr(text,"FIRST SHIFT")!=NULL,"the board names the contract's chapter");
+    td.menu=12;td_ui_draw();read_window_text(1,text);expect(strstr(text,"NEIGHBOURHOODS")!=NULL,"the next eight contracts are chapter two");
+    td.mode=TD_RESULT;td.health=100;td.left=9;td_last_pay=86;td_ui_draw();
+    read_window_text(3,text);expect(strstr(text,"+$86 PAID")!=NULL,"the result card shows the fee paid");
+
+    /* A radio call raises the HUD and types Rosa's lines, then closes. */
+    reset_case();td.mode=TD_ROAM;td_ui_init();td_ui_draw();
+    expect(window_y==120,"the HUD is three rows without a call");
+    unsigned plays=audio_plays;
+    td_radio_say(TD_RADIO_INTRO);td_tick=1;td_radio_tick();
+    expect(window_y==96&&audio_plays==plays+1,"a call chirps and raises the HUD for the radio card");
+    read_window_text(0,text);expect(!strncmp(text+3,"ROSA - DISPATCH",15),"the card names the speaker beside the portrait");
+    expect(window_tiles[0][0][0]==glyph_tile(TD_UI_PORTRAIT_0)&&window_tiles[0][2][2]==glyph_tile(TD_UI_PORTRAIT_8),
+           "the card shows the portrait's nine tiles");
+    read_window_text(4,text);expect(strstr(text,"199S")!=NULL,"the HUD's job row moves below the card");
+    read_window_text(1,text);expect(text[3]==' ',"text starts blank");
+    for(unsigned i=0;i<40;i++){td_tick++;td_radio_tick();}
+    read_window_text(1,text);expect(!strncmp(text+3,"MORNING, ROOKIE.",16),"the first line types out");
+    read_window_text(2,text);expect(!strncmp(text+3,"ROSA ON DISPATCH.",17),"then the second");
+    td_radio_say(TD_RADIO_JOB);
+    for(unsigned i=0;i<4*(34+TD_RADIO_HOLD)&&window_y==96;i++){td_tick++;td_radio_tick();}
+    read_window_text(1,text);expect(!strcmp(text+3,"PARCEL ROUND.    "),"a queued call follows the current one on a clean card");
+    read_window_text(2,text);expect(!strcmp(text+3,"STOP AT EACH PIN."),"with its own second line");
+    for(unsigned i=0;i<2*(34+TD_RADIO_HOLD);i++){td_tick++;td_radio_tick();}
+    expect(window_y==120&&td_radio_playing()==TD_NONE,"the HUD drops back once the calls end");
+    read_window_text(1,text);expect(strstr(text,"199S")!=NULL,"the HUD repaints in its own rows");
+    /* A call that starts while an old card is still up gets a clean card. */
+    td_radio_say(TD_RADIO_INTRO);for(unsigned i=0;i<20;i++){td_tick++;td_radio_tick();}
+    td_radio_script=TD_NONE;td_radio_say(TD_RADIO_NIGHT);
+    for(unsigned i=0;i<60;i++){td_tick=(UBYTE)(td_tick+1)|1;td_radio_tick();}
+    read_window_text(1,text);expect(!strcmp(text+3,"NIGHT SHIFT NOW. "),"a new call never types over an old card");
+    td_radio_script=td_radio_next=TD_NONE;td.mode=TD_PAUSE;td_ui_draw();td.mode=TD_ROAM;td_ui_draw();
+    /* Stars bring a call; the arrest clears them without "lost them". */
+    td.wanted=1;td_tick=1;td_radio_tick();expect(td_radio_playing()==TD_RADIO_WANTED,"a first star brings a police call");
+    td_radio_script=TD_NONE;td_radio_next=TD_NONE;td_radio_say(TD_RADIO_BUSTED);td.wanted=0;td_radio_tick();
+    expect(td_radio_playing()==TD_RADIO_BUSTED&&td_radio_next==TD_NONE,"an arrest does not also report losing the police");
+
+    /* On a job the HUD shows the distance to the objective before the compass. */
+    td_radio_script=td_radio_next=TD_NONE;reset_case();td.mode=TD_ROAM;td.district=0;td_target.district=0;td_beacon_shown=1;
+    td_beacon_u=(td.u>>4)+100;td_beacon_v=td.v>>4;td_ui_init();td_ui_draw();
+    read_window_text(0,text);expect(!strncmp(text+15,"400M",4),"a hundred pixels reads as 400 m");
+    td_beacon_u=(td.u>>4)+300;td_tick=0;td_ui_compass();
+    read_window_text(0,text);expect(!strncmp(text+15,"1.2K",4),"three hundred pixels reads as 1.2 km");
+}
+
 int main(void) {
     test_every_viewport();test_focus_and_partial_restart();test_panning_and_bounds();
     test_paid_transit_objective_context();test_interrupt_restore_and_idempotence();
     test_error_recovery_and_repeated_sessions();test_overlap_marker_geometry();
-    test_sparse_table_full_and_single_holes();
+    test_sparse_table_full_and_single_holes();test_menus_and_radio();
     printf("Atlas UI host regressions: %u checks, %u failures. Native raster/banking remains separate.\n",checks,failures);
     return failures?1:0;
 }

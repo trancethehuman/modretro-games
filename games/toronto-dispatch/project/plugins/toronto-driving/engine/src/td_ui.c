@@ -10,6 +10,7 @@
 #include "td_atlas.h"
 #include "td_life.h"
 #include "td_daynight.h"
+#include "td_radio_data.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "ui.h"
@@ -31,6 +32,9 @@ static UBYTE td_map_x,td_map_y,td_map_row,td_map_count,td_map_focus,td_map_activ
 static UBYTE td_map_camera_settings,td_map_actor_count,td_map_hidden[TD_ACTORS];
 static UWORD td_map_camera_x,td_map_camera_y;
 static UBYTE td_ui_mode=255;
+/* First window row of the HUD: 0, or 3 below a radio card. */
+static UBYTE td_hud_y;
+UWORD td_last_pay;
 static char td_line[40];
 static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
 static const char *td_kinds[]={"PARCEL ROUND","FRAGILE: NO CRASH","EXPRESS DEADLINE","TRUCK FREIGHT","TRANSIT FRIENDLY","PASSENGER: SMOOTH","RETURN DOCUMENTS","ISLAND FERRY POST"};
@@ -333,7 +337,7 @@ void td_map_close(void) BANKED {
     td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;
 }
 void td_ui_init(void) BANKED {
-    UBYTE i;td_ui_mode=255;td_map_active=0;td_title_shown=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);
+    UBYTE i;td_ui_mode=255;td_map_active=0;td_hud_y=0;td_title_shown=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);
     /* Font in bank 1 from tile 192, art in bank 0 tiles 128..191 (above the
      * scene's 128 bank-0 tiles and outside the sprite tiles). Every window
      * cell starts as a bank-1 font cell on UI palette 7. */
@@ -343,13 +347,19 @@ void td_ui_init(void) BANKED {
     text_drawn=TRUE;td_ui_draw();
 }
 static const char *const td_vehicle_short[]={"CAR","TRUCK","MOTO","SCOOTER"};
-static const char *const td_vehicle_icon[]={TD_UI_CAR,TD_UI_CAR,TD_UI_CAR,TD_UI_CAR};
-static const char *const td_menu_items[9]={
-    TD_UI_RESUME " RESUME",TD_UI_MAP " CITY MAP",TD_UI_JOBS " DISPATCH JOBS",TD_UI_PARK " PARK OR GET CAR",
+/* Pause menu: nine actions, four on screen at a time with scroll marks, and
+ * a one-line hint for the highlighted action. */
+#define TD_MENU_ITEMS 9
+#define TD_MENU_ROWS 4
+static const char *const td_menu_items[TD_MENU_ITEMS]={
+    TD_UI_RESUME " RESUME",TD_UI_MAP " CITY MAP",TD_UI_JOBS " DISPATCH JOBS",TD_UI_PARK " PARK AND WALK",
     TD_UI_CAR " CHANGE VEHICLE",TD_UI_TRANSIT " TTC TIMETABLE",TD_UI_MEDIC " SUPPLIES $20",TD_UI_CANCEL " CANCEL JOB",
-    TD_UI_AUDIO};
-static const char *const td_audio_names[]={"MUSIC+SFX","SFX ONLY","SILENT"};
-static UBYTE td_ui_blink,td_compass;
+    TD_UI_AUDIO " SOUND"};
+static const char *const td_menu_hints[TD_MENU_ITEMS]={
+    "BACK TO THE CITY","SEE ROUTE AND CITY","PICK A DELIVERY","STEP OUT ON FOOT",
+    "PARKED, NO JOB","AT A STOP, ON FOOT","HEAL, AMMO, REPAIR","DROP THE JOB","A: CHANGE SOUND"};
+static const char *const td_audio_names[]={"MUSIC+FX","FX ONLY","SILENT"};
+static UBYTE td_ui_blink,td_compass,td_menu_top;
 static const char *td_service_icon(UBYTE service){
     return service==TD_TRANSIT_TRAIN?TD_UI_SUBWAY:service==TD_TRANSIT_BUS?TD_UI_BUS:service==TD_TRANSIT_FERRY?TD_UI_FERRY:TD_UI_TRANSIT;
 }
@@ -364,16 +374,39 @@ static char td_compass_code(void){
     if(ay>(ax<<1))return south?TD_UI_ARROW_S[0]:TD_UI_ARROW_N[0];
     return south?(east?TD_UI_ARROW_SE[0]:TD_UI_ARROW_SW[0]):(east?TD_UI_ARROW_NE[0]:TD_UI_ARROW_NW[0]);
 }
+/* Writes n characters into window row y from column x, keeping the row
+ * cache in step. */
+static void td_put(UBYTE x,UBYTE y,const char *s,UBYTE n){
+    UBYTE i,c;
+    for(i=0;i<n;i++){c=(UBYTE)s[i];td_cached_rows[y][x+i]=c;c=c>=32?c-32:0;td_tiles[i]=td_glyph_tile[c];td_attrs[i]=td_glyph_attr[c];}
+    VBK_REG=1;set_win_tiles(x,y,n,1,td_attrs);
+    VBK_REG=0;set_win_tiles(x,y,n,1,td_tiles);
+}
+/* Distance to the objective as four characters: tens of metres at about
+ * 4 m per pixel ("320M"), kilometres from 1 km ("1.2K"); blank without a
+ * reachable objective. */
+static void td_distance_text(char *d){
+    UWORD ax,ay,m,pu=td.u>>4,pv=td.v>>4;char t[6],*e;UBYTE n,i;
+    d[0]=d[1]=d[2]=d[3]=' ';
+    if(!td_beacon_shown)return;
+    ax=td_beacon_u>pu?td_beacon_u-pu:pu-td_beacon_u;ay=td_beacon_v>pv?td_beacon_v-pv:pv-td_beacon_v;
+    m=(ax>ay?ax+((ay*3)>>3):ay+((ax*3)>>3))<<2;
+    if(m<1000){e=td_digits(t,m/10*10,0);*e++='M';}
+    else{t[0]='0'+(UBYTE)(m/1000);t[1]='.';t[2]='0'+(UBYTE)((m%1000)/100);t[3]='K';e=t+4;}
+    n=(UBYTE)(e-t);for(i=0;i<n;i++)d[4-n+i]=t[i];
+}
 /* Called every few frames while driving or walking: repaints only the
- * compass cell when the direction changes. */
+ * distance and compass cells when they change. */
 void td_ui_compass(void) BANKED {
-    char c;
+    char c;UBYTE y=td_hud_y;
     if(td.mode!=TD_ROAM||td_ui_mode!=TD_ROAM||td.msg)return;
+    if(td.job!=TD_NONE){
+        td_distance_text(td_line);
+        if(memcmp(&td_cached_rows[y][15],td_line,4))td_put(15,y,td_line,4);
+    }
     c=td_compass_code();
     if(c==td_compass)return;
-    td_compass=c;td_cached_rows[0][19]=c;c=(UBYTE)c-32;
-    VBK_REG=1;set_win_tiles(19,0,1,1,&td_glyph_attr[(UBYTE)c]);
-    VBK_REG=0;set_win_tiles(19,0,1,1,&td_glyph_tile[(UBYTE)c]);
+    td_compass=c;td_put(19,y,&c,1);
 }
 /* Menus animate their cursor (and the title its prompt) every 16 frames. */
 void td_ui_tick(void) BANKED {
@@ -387,34 +420,43 @@ void td_ui_tick(void) BANKED {
  * (changed) always reformats. */
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
             "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","HOLD A+B: GET OUT","HOSPITAL",
-            "FOUND CASH +$15","FIRST AID +40","AMMO +6"};
+            "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
 static UWORD td_hud_key[6];
 static UWORD td_street_u=65535,td_street_v;static UBYTE td_street_d;
 static char td_street_name[20];
+static void td_radio_paint(void);
 static void td_hud(UBYTE changed){
-    UBYTE service,i;UWORD key[6],u=td.u>>4,v=td.v>>4;
-    ui_set_pos(0,120);
+    UBYTE service,i,y;UWORD key[6],u=td.u>>4,v=td.v>>4;
+    /* A radio call raises the HUD by three rows and sits above it. */
+    if(td_radio_script!=TD_NONE){
+        if(!td_hud_y||changed){td_hud_y=3;td_radio_paint();changed=1;}
+        ui_set_pos(0,96);
+    }else{
+        if(td_hud_y){td_hud_y=0;changed=1;}
+        ui_set_pos(0,120);
+    }
+    y=td_hud_y;
     if(td.mode==TD_WAIT){
         service=td_transit_service(td.transit_origin);
-        td_format(td_line,TD_UI_CLOCK "DEPARTS IN %u SEC",td_transit_departure(td.transit_origin,td.transit_target,td.seconds));td_row(0,td_line);
-        strcpy(td_line,td_service_icon(service));td_transit_label(td.transit_origin,td_line+1);td_row(1,td_line);
-        td_row(2,TD_UI_BTN_B "CANCEL WAIT");td_hud_key[0]=255;return;
+        td_format(td_line,TD_UI_CLOCK "DEPARTS IN %u SEC",td_transit_departure(td.transit_origin,td.transit_target,td.seconds));td_row(y,td_line);
+        strcpy(td_line,td_service_icon(service));td_transit_label(td.transit_origin,td_line+1);td_row(y+1,td_line);
+        td_row(y+2,TD_UI_BTN_B "CANCEL WAIT");td_hud_key[0]=255;return;
     }
     if(td.mode==TD_RIDE){
-        td_format(td_line,"%sRIDING %u SEC",td_service_icon(td_transit_service(td.transit_origin)),td.ride_left);td_row(0,td_line);
-        td_line[0]=TD_UI_PIN[0];strcpy(td_line+1,td_cursor.name);td_row(1,td_line);
-        td_row(2,TD_UI_CHECK "FARE PAID / ON TIME");td_hud_key[0]=255;return;
+        td_format(td_line,"%sRIDING %u SEC",td_service_icon(td_transit_service(td.transit_origin)),td.ride_left);td_row(y,td_line);
+        td_line[0]=TD_UI_PIN[0];strcpy(td_line+1,td_cursor.name);td_row(y+1,td_line);
+        td_row(y+2,TD_UI_CHECK "FARE PAID / ON TIME");td_hud_key[0]=255;return;
     }
     if(td.msg){
-        td_row(0,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":td_messages[td.msg]);
+        td_row(y,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":td_messages[td.msg]);
     }else{
         if(td.wanted){
             /* Police attention replaces the street name while it lasts. */
             strcpy(td_line,"WANTED ");
             for(i=0;i<td.wanted;i++)td_line[7+i]=TD_UI_STAR[0];
             td_line[7+i]=0;
-        }else if(td.district==0&&u>608&&u<672&&v>496&&v<560)strcpy(td_line,td.seconds%12<7?"YONGE: E/W GREEN":"YONGE: N/S GREEN");
+        }else if(td.district==0&&u>608&&u<672&&v>496&&v<560)strcpy(td_line,td.seconds%12<7?"YONGE: EW GO":"YONGE: NS GO");
         else{
             if(u!=td_street_u||v!=td_street_v||td.district!=td_street_d){
                 td_get_street(u,v,td_street_name);td_street_u=u;td_street_v=v;td_street_d=td.district;
@@ -424,17 +466,19 @@ static void td_hud(UBYTE changed){
         /* Street name, then the compass in the last column. */
         for(i=0;i<19&&td_line[i];i++);
         for(;i<19;i++)td_line[i]=' ';
-        td_compass=td_compass_code();td_line[19]=td_compass;td_line[20]=0;td_row(0,td_line);
+        /* On a job, the distance to the objective precedes the compass. */
+        if(td.job!=TD_NONE){td_line[14]=' ';td_distance_text(td_line+15);}
+        td_compass=td_compass_code();td_line[19]=td_compass;td_line[20]=0;td_row(y,td_line);
     }
     key[5]=td.district|((UWORD)td_route_district<<8)|((UWORD)td_target.district<<12);
     if(td.job!=TD_NONE){key[0]=1;key[1]=td.stage;key[2]=td_job.count;key[3]=td.left;key[4]=td.health|((UWORD)td.vitality<<8);}
-    else{key[0]=2;key[1]=td.cash;key[2]=td.onfoot|(td.vehicle<<1);key[3]=td.done;key[4]=td.vitality|((UWORD)td.ammo<<8);}
+    else{key[0]=2;key[1]=td.cash;key[2]=td.onfoot|(td.vehicle<<1);key[3]=td.done|((UWORD)td_car_damage<<8);key[4]=td.vitality|((UWORD)td.ammo<<8);}
     if(!changed&&!memcmp(key,td_hud_key,sizeof(key)))return;
     memcpy(td_hud_key,key,sizeof(key));
     if(td.job!=TD_NONE){
         /* The last ten seconds flash a red clock. */
         td_format(td_line,TD_UI_BOX "%u/%u %s%uS " TD_UI_HEART "%u",td.stage+1,td_job.count,
-                  td.left<=10&&(td.left&1)?TD_UI_CLOCK_ALERT:TD_UI_CLOCK,td.left,td.health);td_row(1,td_line);
+                  td.left<=10&&(td.left&1)?TD_UI_CLOCK_ALERT:TD_UI_CLOCK,td.left,td.health);td_row(y+1,td_line);
         td_line[0]=TD_UI_PIN[0];
         if(td_target.district!=td.district){
             if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line+1);
@@ -443,23 +487,116 @@ static void td_hud(UBYTE changed){
         /* Objective name, then the courier's own vitality. */
         td_line[14]=0;for(i=1;i<14&&td_line[i];i++);
         td_format(td_line+i," " TD_UI_MEDIC "%u",td.vitality);
-        td_row(2,td_line);
+        td_row(y+2,td_line);
     }else{
-        td_format(td_line,TD_UI_COIN "%u " TD_UI_MEDIC "%u " TD_UI_AMMO "%u " TD_UI_BOX "%u",td.cash,td.vitality,td.ammo,td.done);td_row(1,td_line);
-        td_row(2,td.onfoot?TD_UI_BTN_A "PUNCH " TD_UI_BTN_B "SHOOT " TD_UI_BTN_START_0 TD_UI_BTN_START_1 TD_UI_BTN_START_2:
+        /* Driving, the last figure is the car's condition; on foot, deliveries. */
+        td_format(td_line,TD_UI_COIN "%u " TD_UI_MEDIC "%u " TD_UI_AMMO "%u %s%u",td.cash,td.vitality,td.ammo,
+                  td.onfoot?TD_UI_BOX:TD_UI_CAR,td.onfoot?td.done:TD_DAMAGE_WRECK-td_car_damage);td_row(y+1,td_line);
+        td_row(y+2,td.onfoot?TD_UI_BTN_A "PUNCH " TD_UI_BTN_B "SHOOT " TD_UI_BTN_START_0 TD_UI_BTN_START_1 TD_UI_BTN_START_2:
                            TD_UI_BTN_SEL_0 TD_UI_BTN_SEL_1 "JOBS " TD_UI_BTN_A TD_UI_BTN_B "HOLD: EXIT");
     }
 }
 /* The controls card below the title illustration starts at row 11. */
 typedef char td_title_leaves_card_rows[(TD_TITLE_ROWS==11)?1:-1];
-static const char td_title_1[]=TD_UI_EMBLEM_TL TD_UI_EMBLEM_TR " TORONTO";
-static const char td_title_2[]=TD_UI_EMBLEM_BL TD_UI_EMBLEM_BR " DISPATCH";
-static void td_page(const char *a,const char *b){
-    /* Common frame: emblem title, then a rule; rows 3..16 belong to the page. */
-    td_row(0,td_frame_top);td_framed(1,a);td_framed(2,b);td_row(3,td_frame_join);td_row(17,td_frame_bottom);
+/* Menus are bottom sheets over the paused city: a frame of `rows` window
+ * rows anchored to the bottom of the screen (rows below it are off screen). */
+static void td_sheet(UBYTE rows){
+    ui_set_pos(0,(UBYTE)(144-(rows<<3)));
+    td_row(0,td_frame_top);td_row(rows-1,td_frame_bottom);
+}
+/* Pads td_line with spaces to n characters. */
+static void td_pad(UBYTE n){
+    UBYTE i;
+    for(i=0;i<n&&td_line[i];i++);
+    for(;i<n;i++)td_line[i]=' ';
+    td_line[n]=0;
+}
+static void td_pause_sheet(UBYTE changed){
+    UBYTE i,n;UWORD minutes;const char *hint;
+    td_sheet(11);
+    /* Status: cash, unique deliveries and the clock with a sun or moon. */
+    minutes=td_daynight_minutes();
+    td_format(td_line,TD_UI_COIN "%u " TD_UI_BOX "%u %s%02u:%02u",td.cash,td.done,
+              minutes>=7*60&&minutes<19*60?TD_UI_SUN:TD_UI_MOON,minutes/60,minutes%60);
+    td_framed(1,td_line);td_row(2,td_frame_join);
+    /* Four actions at a time; the window follows the cursor. */
+    if(changed)td_menu_top=td.menu>=TD_MENU_ROWS?td.menu-(TD_MENU_ROWS-1):0;
+    if(td.menu<td_menu_top)td_menu_top=td.menu;
+    else if(td.menu>=td_menu_top+TD_MENU_ROWS)td_menu_top=td.menu-(TD_MENU_ROWS-1);
+    for(i=0;i<TD_MENU_ROWS;i++){
+        n=td_menu_top+i;
+        td_line[0]=td.menu==n?(td_ui_blink?TD_UI_CURSOR_ALT[0]:TD_UI_CURSOR[0]):' ';
+        strcpy(td_line+1,n==3&&td.onfoot?TD_UI_PARK " GET IN CAR":td_menu_items[n]);
+        if(n==8){strcat(td_line," ");strcat(td_line,td_audio_names[td_audio_get_mode()]);}
+        td_pad(17);
+        td_line[17]=i==0&&td_menu_top?TD_UI_ARROW_N[0]:i==TD_MENU_ROWS-1&&td_menu_top+TD_MENU_ROWS<TD_MENU_ITEMS?TD_UI_ARROW_S[0]:' ';
+        td_line[18]=0;td_framed(3+i,td_line);
+    }
+    td_row(7,td_frame_join);
+    hint=td_menu_hints[td.menu];
+    if(td.menu==2&&td.job!=TD_NONE)hint="VIEW YOUR JOB";
+    else if(td.menu==3&&td.onfoot)hint="STAND BESIDE IT";
+    else if(td.menu==7&&td.job==TD_NONE)hint="NO JOB ACTIVE";
+    if(td.menu==4){td_format(td_line,"NOW: %s",td.onfoot?"ON FOOT":td_vehicles[td.vehicle]);td_framed(8,td_line);}
+    else td_framed(8,hint);
+    td_format(td_line,TD_UI_BTN_A "CHOOSE " TD_UI_BTN_B "BACK  %u/%u",td.menu+1,TD_MENU_ITEMS);td_framed(9,td_line);
+}
+static void td_board_sheet(void){
+    td_sheet(13);
+    td_line[0]=TD_UI_JOBS[0];td_chapter_name(td.menu>>3,td_line+1);td_framed(1,td_line);
+    td_row(2,td_frame_join);
+    td_framed(3,td_offer.title);
+    td_get_brief(td.menu,td_line);td_framed(5,td_line+18);td_line[18]=0;td_framed(4,td_line);
+    td_format(td_line,TD_UI_BOX "%s",td_kinds[td_offer.kind]);td_framed(6,td_line);
+    td_format(td_line,TD_UI_STAR "%u STOPS " TD_UI_CLOCK "%uS",td_offer.count,td_offer.seconds);td_framed(7,td_line);
+    td_format(td_line,TD_UI_COIN "PAYS $%u " TD_UI_CAR "%s",td_offer.reward,td_offer.vehicle==TD_NONE?"ANY":td_vehicle_short[td_offer.vehicle]);td_framed(8,td_line);
+    td_row(9,td_frame_join);
+    if(td.complete[td.menu>>3]&(1<<(td.menu&7)))strcpy(td_line,TD_UI_CHECK "DONE: REPLAY PAYS");
+    else if(td.done<td_offer.min_done)td_format(td_line,TD_UI_CANCEL "NEEDS %u DONE",td_offer.min_done);
+    else strcpy(td_line,TD_UI_STAR "READY TO TAKE");
+    td_framed(10,td_line);
+    td_format(td_line,TD_UI_BTN_A "TAKE " TD_UI_BTN_B "BACK " TD_UI_DPAD "%u/%u",td.menu+1,TD_QUESTS);td_framed(11,td_line);
+}
+static void td_transit_sheet(void){
+    UBYTE service=td_transit_service(td.transit_origin),wait;
+    td_sheet(10);
+    strcpy(td_line,td_service_icon(service));td_transit_label(td.transit_origin,td_line+1);td_framed(1,td_line);
+    td_row(2,td_frame_join);
+    td_format(td_line,TD_UI_PIN "%s",td_cursor.name);td_framed(3,td_line);
+    wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
+    td_format(td_line,TD_UI_CLOCK "DEPARTS IN %uS",wait);td_framed(4,td_line);
+    td_format(td_line,"RIDE %uS " TD_UI_COIN "$%u%s",td_transit_duration(td.transit_origin,td.transit_target),td_transit_fare(td.transit_origin),
+              service==4?(td.transit_target>=td.transit_origin?" EAST":" WEST"):"");td_framed(5,td_line);
+    td_row(6,td_frame_join);
+    td_framed(7,TD_UI_DPAD "STOP " TD_UI_BTN_A "WAIT " TD_UI_BTN_B "BACK");
+    td_framed(8,(td.transit_origin&63)==16?"UP/DOWN: BUS/TRAIN":"SCHEDULES: FICTION");
+}
+static void td_outcome_sheet(void){
+    UBYTE busted=td.mode==TD_BUSTED;
+    td_sheet(10);
+    td_framed(1,busted?"     " TD_UI_STAR " BUSTED " TD_UI_STAR:"     " TD_UI_MEDIC " WASTED " TD_UI_MEDIC);
+    td_row(2,td_frame_join);
+    td_format(td_line,busted?TD_UI_COIN "FINE PAID $%u":TD_UI_COIN "HOSPITAL $%u",td_life_fine);td_framed(3,td_line);
+    td_framed(4,busted?"POLICE TOOK HALF":"YOU WOKE UP AT");
+    td_framed(5,busted?"OF YOUR AMMO":"TORONTO HOSPITAL");
+    td_framed(6,TD_UI_STAR "STARS CLEARED");
+    td_framed(7,TD_UI_CANCEL "ANY JOB IS LOST");
+    td_framed(8,TD_UI_BTN_A "CONTINUE");
+}
+static void td_result_sheet(void){
+    UBYTE ok=td.health&&td.left;
+    td_sheet(9);
+    td_framed(1,ok?"   " TD_UI_STAR " DELIVERED " TD_UI_STAR:" " TD_UI_CANCEL " CONTRACT FAILED");
+    td_row(2,td_frame_join);
+    if(ok)td_format(td_line,TD_UI_COIN "+$%u PAID",td_last_pay);else strcpy(td_line,TD_UI_COIN "NO PAY THIS TIME");
+    td_framed(3,td_line);
+    td_format(td_line,TD_UI_COIN "%u " TD_UI_BOX "%u/%u DONE",td.cash,td.done,TD_QUESTS);td_framed(4,td_line);
+    td_framed(5,td.done==TD_QUESTS?TD_UI_STAR "COURIER MASTER":TD_UI_SAVE "AUTO-SAVED");
+    td_row(6,td_frame_join);
+    td_framed(7,TD_UI_BTN_A "JOBS " TD_UI_BTN_B "FREE ROAM");
 }
 void td_ui_draw(void) BANKED {
-    UBYTE i,wait,service,changed=td_ui_mode!=td.mode;UWORD minutes;
+    UBYTE i,changed=td_ui_mode!=td.mode;
     td_ui_mode=td.mode;
     text_drawn=TRUE;
     if(td.mode!=TD_HELP)td_title_hide();
@@ -468,8 +605,10 @@ void td_ui_draw(void) BANKED {
         td_map_headers();return;
     }
     if(td.mode==TD_ROAM || td.mode==TD_WAIT || td.mode==TD_RIDE){td_hud(changed);return;}
-    ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
+    /* The HUD's rows are reused by the sheets; it repaints in full later. */
+    if(changed)td_hud_y=0;
     if(td.mode==TD_HELP){
+        ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
         /* Title: illustration rows 0..10, then a compact controls card. */
         if(changed)td_title_show();
         td_row(11,td_frame_top);
@@ -480,80 +619,28 @@ void td_ui_draw(void) BANKED {
         td_framed(16,td_ui_blink?" PRESS " TD_UI_BTN_A " TO START":"");
         td_row(17,td_frame_bottom);return;
     }
-    if(td.mode==TD_PAUSE){
-        td_page(td_title_1,td_title_2);
-        td_format(td_line,TD_UI_COIN "%u  " TD_UI_BOX "%u/%u DONE",td.cash,td.done,TD_QUESTS);td_framed(4,td_line);
-        /* Time of day: the sun from 07:00, the moon from 19:00. */
-        minutes=td_daynight_minutes();
-        td_format(td_line,"%s%s %s%02u:%02u",td.onfoot?TD_UI_WALK:td_vehicle_icon[td.vehicle],td.onfoot?"WALK":td_vehicle_short[td.vehicle],
-                  minutes>=7*60&&minutes<19*60?TD_UI_SUN:TD_UI_MOON,minutes/60,minutes%60);td_framed(5,td_line);
-        td_row(6,td_frame_join);
-        for(i=0;i<9;i++){
-            td_line[0]=td.menu==i?(td_ui_blink?TD_UI_CURSOR_ALT[0]:TD_UI_CURSOR[0]):' ';
-            strcpy(td_line+1,td_menu_items[i]);
-            if(i==8){strcat(td_line," ");strcat(td_line,td_audio_names[td_audio_get_mode()]);}
-            td_framed(7+i,td_line);
-        }
-        td_framed(16,TD_UI_BTN_A "CHOOSE  " TD_UI_BTN_B "BACK");return;
-    }
-    if(td.mode==TD_BOARD){
-        td_format(td_line,"< CONTRACT %02u/%u >",td.menu+1,TD_QUESTS);td_page(TD_UI_JOBS " DISPATCH BOARD",td_line);
-        td_framed(4,td_offer.title);
-        td_get_brief(td.menu,td_line);td_framed(6,td_line+18);td_line[18]=0;td_framed(5,td_line);
-        td_format(td_line,TD_UI_BOX "%s",td_kinds[td_offer.kind]);td_framed(7,td_line);
-        td_row(8,td_frame_join);
-        td_format(td_line,TD_UI_STAR "%u STOPS " TD_UI_CLOCK "%uS",td_offer.count,td_offer.seconds);td_framed(9,td_line);
-        td_format(td_line,TD_UI_COIN "PAYS $%u",td_offer.reward);td_framed(10,td_line);
-        td_format(td_line,TD_UI_CAR "%s",td_offer.vehicle==TD_NONE?"ANY VEHICLE/TTC":td_vehicles[td_offer.vehicle]);td_framed(11,td_line);
-        td_get_stop(td_offer.route[0],&td_cursor);td_format(td_line,TD_UI_PIN "%s",td_cursor.name);td_framed(12,td_line);
-        if(td.complete[td.menu>>3]&(1<<(td.menu&7)))strcpy(td_line,TD_UI_CHECK "COMPLETE / REPLAY");
-        else if(td.done<td_offer.min_done)td_format(td_line,TD_UI_CANCEL "NEEDS %u DONE",td_offer.min_done);
-        else strcpy(td_line,TD_UI_STAR "READY TO ACCEPT");
-        td_framed(13,td_line);td_row(14,td_frame_join);
-        td_framed(15,TD_UI_BTN_A "ACCEPT " TD_UI_BTN_B "BACK");td_framed(16,TD_UI_DPAD "BROWSE " TD_UI_CLOCK "PAUSED");return;
-    }
-    if(td.mode==TD_TRANSIT){
-        service=td_transit_service(td.transit_origin);
-        strcpy(td_line,td_service_icon(service));td_transit_label(td.transit_origin,td_line+1);
-        td_page(td_line,service==4?(td.transit_target>=td.transit_origin?"STREETCAR EAST":"STREETCAR WEST"):"");
-        td_format(td_line,TD_UI_PIN "%s",td_cursor.name);td_framed(4,td_line);
-        wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);td_format(td_line,TD_UI_CLOCK "DEPARTS IN %uS",wait);td_framed(5,td_line);
-        td_format(td_line,"RIDE %uS  " TD_UI_COIN "$%u",td_transit_duration(td.transit_origin,td.transit_target),td_transit_fare(td.transit_origin));td_framed(6,td_line);
-        td_row(7,td_frame_join);
-        td_framed(8,TD_UI_DPAD "STOPS " TD_UI_BTN_A "WAIT " TD_UI_BTN_B "BACK");
-        td_row(9,td_frame_join);
-        td_framed(10,TD_UI_SUBWAY "TRAIN $3 " TD_UI_BUS "BUS $2");td_framed(11,TD_UI_TRANSIT "501 $3 " TD_UI_FERRY "FERRY $4");
-        td_framed(12,"");
-        td_framed(13,service==4?"NORMAL QUEEN ROUTE":"UP: BUS OR TRAIN");td_framed(14,service==4?"GAME ROUTE ENDS":"AT WELLESLEY");
-        td_framed(15,"");td_framed(16,"SCHEDULES: FICTION");return;
-    }
-    if(td.mode==TD_BUSTED||td.mode==TD_WASTED){
-        UBYTE busted=td.mode==TD_BUSTED;
-        td_page(td_title_1,td_title_2);
-        td_framed(4,"");
-        td_framed(5,busted?TD_UI_STAR " BUSTED " TD_UI_STAR:TD_UI_MEDIC " WASTED " TD_UI_MEDIC);
-        td_framed(6,"");
-        td_format(td_line,busted?TD_UI_COIN "FINE PAID $%u":TD_UI_COIN "HOSPITAL $%u",td_life_fine);td_framed(7,td_line);
-        td_row(8,td_frame_join);
-        td_framed(9,busted?"POLICE TOOK HALF":"YOU WOKE UP AT");
-        td_framed(10,busted?"OF YOUR AMMO":"TORONTO HOSPITAL");
-        td_framed(11,"");
-        td_framed(12,TD_UI_STAR "STARS CLEARED");
-        td_framed(13,TD_UI_CANCEL "ANY JOB IS LOST");
-        td_row(14,td_frame_join);
-        td_framed(15,TD_UI_BTN_A "CONTINUE");td_framed(16,"");return;
-    }
-    if(td.mode==TD_RESULT){
-        UBYTE ok=td.health&&td.left;
-        td_page(td_title_1,td_title_2);
-        td_framed(4,"");
-        td_framed(5,ok?TD_UI_STAR " DELIVERED " TD_UI_STAR:TD_UI_CANCEL " CONTRACT FAILED");
-        td_framed(6,"");
-        td_format(td_line,TD_UI_COIN "%u  " TD_UI_BOX "%u/%u DONE",td.cash,td.done,TD_QUESTS);td_framed(7,td_line);
-        td_row(8,td_frame_join);
-        td_framed(9,td.done==TD_QUESTS?TD_UI_STAR "CITY COURIER MASTER":"MORE ROUTES AWAIT");
-        td_framed(10,"");
-        td_framed(11,TD_UI_BTN_A "DISPATCH BOARD");td_framed(12,TD_UI_BTN_B "FREE ROAM");
-        td_framed(13,"");td_row(14,td_frame_join);td_framed(15,TD_UI_SAVE "AUTO-SAVED");td_framed(16,"");
+    if(td.mode==TD_PAUSE)td_pause_sheet(changed);
+    else if(td.mode==TD_BOARD)td_board_sheet();
+    else if(td.mode==TD_TRANSIT)td_transit_sheet();
+    else if(td.mode==TD_BUSTED||td.mode==TD_WASTED)td_outcome_sheet();
+    else if(td.mode==TD_RESULT)td_result_sheet();
+}
+
+/* ------------------------------------------------------------ radio calls */
+/* The card above the HUD for td_radio.c: Rosa's portrait and name, then
+ * the typed part of the current page. */
+static void td_radio_paint(void){
+    UBYTE r;
+    for(r=0;r<3;r++){
+        td_line[0]=(char)(TD_UI_PORTRAIT_0[0]+r*3);td_line[1]=td_line[0]+1;td_line[2]=td_line[0]+2;
+        if(!r)strcpy(td_line+3,TD_RADIO_SPEAKER);else td_radio_line(r-1,td_line+3);
+        td_row(r,td_line);
     }
 }
+UBYTE td_ui_radio_ready(void) BANKED {
+    if(td_ui_mode!=td.mode||(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE))return FALSE;
+    if(!td_hud_y){td_ui_draw();return FALSE;}
+    return TRUE;
+}
+void td_ui_radio_put(UBYTE column,UBYTE line,char c) BANKED {td_put(3+column,1+line,&c,1);}
+void td_ui_draw_radio(void) BANKED {if(td_hud_y)td_radio_paint();}

@@ -38,7 +38,7 @@ CANVAS_HEIGHT = 96
 PALETTES = [
     ('courier_vehicle', 'Courier vehicle', ['F8F8F0', 'E87820', 'E87820', '182030']),
     ('courier_person', 'Courier uniform', ['F8C8A0', 'E87820', 'E87820', '182030']),
-    ('traffic_red', 'Traffic red', ['D0E8F8', 'C83028', 'C83028', '101018']),
+    ('traffic_red', 'Traffic red', ['F0D0B8', 'C83028', 'C83028', '101018']),
     ('traffic_blue', 'Traffic blue and ferry', ['D0E8F8', '3068C8', '3068C8', '101018']),
     ('signal_yellow', 'Taxi and beacon yellow', ['F8F8E0', 'F0C020', 'F0C020', '282010']),
     ('police', 'Police navy', ['F0C090', '2850B0', '2850B0', '101828']),
@@ -53,7 +53,12 @@ def ident(name):
 
 
 def frames():
-    """(name, grid, palette, size) in engine frame order."""
+    """(name, grid, palette, size) in engine frame order.
+
+    Vehicles are drawn in the courier vehicle palette (0) and people in the
+    courier uniform palette (1). The engine adds a per-actor palette offset
+    when it draws an actor (actor.c.patch), so one frame set serves the
+    courier, traffic in six colours, civilians in four and the police."""
     out = []
 
     def add(name, g, pal, size=(16, 16)):
@@ -63,86 +68,67 @@ def frames():
                             ('motorcycle', A.moto_frames()), ('scooter', A.scooter_frames())):
         for i, g in enumerate(design):
             add(f'player_{vehicle}_{i}', g, 'courier_vehicle')
-    for i, g in enumerate(A.person_frames(0)):
-        add(f'courier_walk_{i}', g, 'courier_person')
+    for design in A.PEOPLE_DESIGNS:
+        for i, g in enumerate(A.person_frames(design)):
+            add(f'person_{design}_{i}', g, 'courier_person')
     add('beacon', A.grid(A.BEACON), 'signal_yellow')
     add('beacon_pulse', A.grid(A.BEACON_PULSE), 'signal_yellow')
-    add('stop_marker', A.grid(A.BEACON), 'traffic_red')
-    add('depot_marker', A.grid(A.BEACON_PULSE), 'courier_vehicle')
     add('car_door_open', A.door_frame(), 'courier_vehicle')
-    for name, design, pal in (('traffic_red', A.car_frames(), 'traffic_red'),
-                              ('traffic_blue', A.car_frames(), 'traffic_blue'),
-                              ('traffic_taxi', cardinal(A.car_frames(True)), 'signal_yellow'),
-                              ('traffic_van', A.van_frames(), 'traffic_red'),
-                              ('traffic_motorcycle', A.moto_frames(), 'traffic_blue')):
+    # Traffic-only designs (cardinal views), also in the vehicle palette.
+    for name, design in (('traffic_taxi', cardinal(A.car_frames(True))), ('traffic_compact', A.compact_frames()),
+                         ('traffic_pickup', A.pickup_frames()), ('traffic_sports', A.sports_frames()),
+                         ('police', A.police_frames())):
         for i, g in enumerate(design):
-            add(f'{name}_{i}', g, pal)
-    for name, variant, pal in (('walker_a', 0, 'walker_teal'), ('walker_b', 1, 'walker_violet'),
-                               ('walker_c', 1, 'walker_teal'), ('walker_d', 0, 'walker_violet')):
-        for i, g in enumerate(A.person_frames(variant)):
-            add(f'{name}_{i}', g, pal)
-    # Sidewalk pickups: cash, first aid, ammunition; each with a highlight frame.
+            add(f'{name}_{i}', g, 'courier_vehicle')
+    for i, g in enumerate(A.police_flash_frames()):
+        add(f'police_flash_{i}', g, 'courier_vehicle')
+    # Sidewalk pickups: cash, first aid, ammunition (they bob, no glint frame).
     for name, design, pal in (('pickup_cash', A.PICKUP_CASH, 'signal_yellow'),
-                              ('pickup_cash_glint', A.PICKUP_CASH_GLINT, 'signal_yellow'),
                               ('pickup_first_aid', A.PICKUP_FIRST_AID, 'traffic_red'),
-                              ('pickup_first_aid_glint', A.PICKUP_FIRST_AID_GLINT, 'traffic_red'),
-                              ('pickup_ammo', A.PICKUP_AMMO, 'police'),
-                              ('pickup_ammo_glint', A.PICKUP_AMMO_GLINT, 'police')):
+                              ('pickup_ammo', A.PICKUP_AMMO, 'police')):
         add(name, A.grid(design), pal)
+    # Buses and streetcars only run east-west; ferries north-south. A ferry
+    # frame 48 high keeps 16-pixel rows, so north is the flip of south.
     bus_e = A.big_frame(A.bus_zone(), 0, (40, 16))
-    bus_s = A.big_frame(A.bus_zone(), 90, (16, 40))
     add('bus_e', bus_e, 'traffic_red', (40, 16)); add('bus_w', A.flip_h(bus_e), 'traffic_red', (40, 16))
-    add('bus_s', bus_s, 'traffic_red', (16, 40)); add('bus_n', A.flip_v(bus_s), 'traffic_red', (16, 40))
-    car_e = A.big_frame(A.streetcar_zone(), 0, (64, 16))
-    car_s = A.big_frame(A.streetcar_zone(), 90, (16, 64))
-    add('streetcar_e', car_e, 'traffic_red', (64, 16)); add('streetcar_w', A.flip_h(car_e), 'traffic_red', (64, 16))
-    add('streetcar_s', car_s, 'traffic_red', (16, 64)); add('streetcar_n', A.flip_v(car_s), 'traffic_red', (16, 64))
-    ferry_s = A.big_frame(A.ferry_zone(), 90, (16, 40))
-    add('ferry_s', ferry_s, 'traffic_blue', (16, 40)); add('ferry_n', A.flip_v(ferry_s), 'traffic_blue', (16, 40))
-    # Street life.
-    for i, g in enumerate(A.police_frames()):
-        add(f'police_{i}', g, 'traffic_blue')
-    for i, g in enumerate(A.officer_frames()):
-        add(f'officer_{i}', g, 'police')
-    for look, pal in KNOCK_LOOKS:
-        for i, g in enumerate(A.knockdown_frames()):
-            add(f'knock_{look}_{i}', g, pal)
+    car_e = A.big_frame(A.streetcar_zone(), 0, (48, 16))
+    add('streetcar_e', car_e, 'traffic_red', (48, 16)); add('streetcar_w', A.flip_h(car_e), 'traffic_red', (48, 16))
+    ferry_s = A.big_frame(A.ferry_zone(), 90, (16, 48))
+    add('ferry_s', ferry_s, 'traffic_blue', (16, 48)); add('ferry_n', A.flip_v(ferry_s), 'traffic_blue', (16, 48))
+    # Street life: knock-downs in the people palette, effects and pointers.
+    for i, g in enumerate(A.knockdown_frames()):
+        add(f'knock_{i}', g, 'courier_person')
     add('spark', A.grid(A.SPARK), 'signal_yellow')
-    add('bullet', A.grid(A.BULLET), 'signal_yellow')
+    for i, (g, size, _) in enumerate(A.tracer_frames()):
+        add(f'tracer_{i}', g, 'signal_yellow', size)
+    add('reticle', A.RETICLE, 'traffic_red')
     for i, g in enumerate(A.arrow_frames()):
         add(f'arrow_{i}', g, 'signal_yellow')
-    # Animation: courier punch and pistol poses, tyre smoke, collection pops
-    # and night headlamps.
+    # Animation: courier punch and pistol poses, smoke, collection pops and
+    # night headlamps.
     for kind in ('punch', 'shoot'):
         for i, g in enumerate(A.action_frames(kind)):
             add(f'courier_{kind}_{i}', g, 'courier_person')
     for i, g in enumerate(A.SMOKE):
-        add(f'smoke_{i}', g, 'traffic_blue')
+        add(f'smoke_{i}', g, 'courier_vehicle')
     add('parcel', A.PARCEL, 'courier_vehicle')
     for i, g in enumerate(A.SPARKLE):
         add(f'sparkle_{i}', g, 'signal_yellow')
     for i, g in enumerate(A.beam_frames()):
         add(f'beam_{i}', g, 'signal_yellow')
-    for i, g in enumerate(A.police_flash_frames()):
-        add(f'police_flash_{i}', g, 'traffic_blue')
     return out
-
-
-# The courier's vehicles in engine order, and the headlamp beam frame centre
-# relative to the vehicle in the eight headings (E, SE, S, SW, W, NW, N, NE).
-PLAYER_VEHICLES = ('car', 'van', 'motorcycle', 'scooter')
-BEAM_OFFSETS = ((14, 0), (10, 10), (0, 14), (-10, 10), (-14, 0), (-10, -10), (0, -14), (10, -10))
-
-
-# Knock-down looks in engine order: four civilian walkers, officer, courier.
-KNOCK_LOOKS = (('walker_a', 'walker_teal'), ('walker_b', 'walker_violet'), ('walker_c', 'walker_teal'),
-               ('walker_d', 'walker_violet'), ('officer', 'police'), ('courier', 'courier_person'))
 
 
 def cardinal(frames):
     """Road traffic only drives cardinally: diagonal slots repeat a cardinal
     view so they share its tiles."""
     return [frames[i & 6] for i in range(8)]
+
+
+# The courier's vehicles in engine order, and the headlamp beam frame centre
+# relative to the vehicle in the eight headings (E, SE, S, SW, W, NW, N, NE).
+PLAYER_VEHICLES = ('car', 'van', 'motorcycle', 'scooter')
+BEAM_OFFSETS = ((14, 0), (10, 10), (0, 14), (-10, 10), (-14, 0), (-10, -10), (0, -14), (10, -10))
 
 
 def slice_count(fr, sheet, places, frame_defs):
@@ -175,6 +161,9 @@ def tile_boxes(size, g=None):
     w, h = size
     if size == (16, 16) and g is not None and narrow(g):
         return [(4, 0, 4, 0)], (0, 0)
+    if size == (32, 32):
+        # Diagonal tracers: centred like wide frames, growing upward like tall ones.
+        return [(px, 16 - 16 * r, px - 8, 16 * r) for r in range(2) for px in range(0, 32, 8)], (0, 8)
     assert w % 8 == 0 and (h == 16 or (w == 16 and h % 8 == 0)), size
     if h == 16:
         x0 = 8 - w // 2
@@ -220,7 +209,7 @@ def build():
     for i, (name, g, pal, size) in enumerate(fr):
         ox, oy = places[i]
         cells, anchor = tile_boxes(size, g)
-        if size != (16, 16):
+        if size != (16, 16) and not name.startswith('tracer_'):
             anchors[name] = anchor
         tiles = []
         for n, (px, py, cx, cy) in enumerate(cells):
@@ -307,20 +296,31 @@ def outputs():
     lines = ['/* Generated by scripts/create_sprites.py from original sprite designs. */',
              '#ifndef TD_SPRITES_H', '#define TD_SPRITES_H',
              f'#define TD_SPRITE_FRAMES {len(fr)}']
-    for name in ('player_car_0', 'player_van_0', 'player_motorcycle_0', 'player_scooter_0', 'courier_walk_0',
-                 'beacon', 'beacon_pulse', 'stop_marker', 'depot_marker', 'car_door_open',
-                 'traffic_red_0', 'traffic_blue_0', 'traffic_taxi_0', 'traffic_van_0', 'traffic_motorcycle_0',
-                 'walker_a_0', 'walker_b_0', 'walker_c_0', 'walker_d_0',
+    for name in ('player_car_0', 'player_van_0', 'player_motorcycle_0', 'player_scooter_0',
+                 *(f'person_{d}_0' for d in A.PEOPLE_DESIGNS),
+                 'beacon', 'beacon_pulse', 'car_door_open',
+                 'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0', 'police_flash_0',
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
-                 'bus_e', 'bus_w', 'bus_s', 'bus_n', 'streetcar_e', 'streetcar_w', 'streetcar_s', 'streetcar_n',
-                 'ferry_s', 'ferry_n',
-                 'police_0', 'officer_0', 'knock_walker_a_0', 'spark', 'bullet', 'arrow_0',
+                 'bus_e', 'bus_w', 'streetcar_e', 'streetcar_w', 'ferry_s', 'ferry_n',
+                 'knock_0', 'spark', 'tracer_0', 'reticle', 'arrow_0',
                  'courier_punch_0', 'courier_shoot_0', 'smoke_0', 'parcel', 'sparkle_0', 'beam_0',
-                 'police_flash_0', 'player_car_lit_0'):
+                 'player_car_lit_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
         lines.append(f'#define {macro} {index[name]}')
+    lines.append('#define TD_FRAME_COURIER_WALK TD_FRAME_PERSON_SHORT')
     lines.append(f'#define TD_KNOCK_FRAMES {len(A.knockdown_frames())}')
+    lines.append(f'#define TD_PEOPLE_DESIGNS {len(A.PEOPLE_DESIGNS)}')
     lines.append(f'#define TD_SMOKE_FRAMES {len(A.SMOKE)}')
+    # Tracer heads relative to the actor point (whole pixels, screen axes):
+    # the engine draws a round with its head on the bullet's position.
+    heads = []
+    for g, (w, h), (hx, hy) in A.tracer_frames():
+        heads.append((hx - w // 2, hy - h))
+    # Headlamp beam offsets per heading, for a beam drawn as its own actor.
+    lines.append('#define TD_BEAM_DX {' + ','.join(str(dx) for dx, _ in BEAM_OFFSETS) + '}')
+    lines.append('#define TD_BEAM_DY {' + ','.join(str(dy) for _, dy in BEAM_OFFSETS) + '}')
+    lines.append('#define TD_TRACER_HEAD_DX {' + ','.join(str(x) for x, _ in heads) + '}')
+    lines.append('#define TD_TRACER_HEAD_DY {' + ','.join(str(y) for _, y in heads) + '}')
     for name, (dx, dy) in sorted(anchors.items()):
         if dy:
             lines.append(f'#define TD_ANCHOR_{name.upper()}_DY ({dy})')

@@ -503,6 +503,38 @@ for _name, _rows in zip(('btn_start_0', 'btn_start_1', 'btn_start_2'), pill('STA
 for _name, _rows in zip(('emblem_tl', 'emblem_tr', 'emblem_bl', 'emblem_br'), emblem()):
     TILES[_name] = ('ui', _rows)
 
+# Rosa, the dispatcher, for radio calls: a 24x24 portrait in nine tiles
+# (row-major), with her headset, mic and depot jacket badge.
+PORTRAIT = [
+    ".........##.............",
+    "........#ss#####........",
+    ".......#s########.......",
+    "......#s##########......",
+    ".....#s###########......",
+    "....#s#############.....",
+    "....#s##aa#aaa#####.....",
+    "....s##a##aaaa##a##.....",
+    "...#ss#aaaaaaaaaa##.....",
+    "...#ss#aa#aaaa#aa##.....",
+    "...#ss#aa#aaaa#aa#......",
+    "...#ss#aaaaaaaaaa#......",
+    "....##ssaaaaaaaa#.......",
+    ".......#saasssaa#.......",
+    "........##saaaa#........",
+    ".........#aaaa#.........",
+    "..........#aa#..........",
+    "........##aaaa##........",
+    "......##s#aaaa#s##......",
+    "....##ssss#aa#ssss##....",
+    "..##sssssss##sssaass##..",
+    ".#ssssssssssssssaassss#.",
+    ".#ssssssssssssssssssss#.",
+    ".#ssssssssssssssssssss#.",
+]
+for _ty in range(3):
+    for _tx in range(3):
+        TILES[f'portrait_{_ty * 3 + _tx}'] = ('ui', [row[_tx * 8:_tx * 8 + 8] for row in PORTRAIT[_ty * 8:_ty * 8 + 8]])
+
 # Glyph codes 0x80.. in this order; (tile, xflip, yflip).
 CODES = [
     ('FRAME_TL', 'frame_tl', 0, 0), ('FRAME_TR', 'frame_tl', 1, 0),
@@ -532,7 +564,7 @@ CODES = [
     ('EMBLEM_BL', 'emblem_bl', 0, 0), ('EMBLEM_BR', 'emblem_br', 0, 0),
     ('MEDIC', 'icon_medic', 0, 0), ('AMMO', 'icon_ammo', 0, 0),
     ('SUN', 'icon_sun', 0, 0), ('MOON', 'icon_moon', 0, 0),
-]
+] + [(f'PORTRAIT_{_k}', f'portrait_{_k}', 0, 0) for _k in range(9)]
 
 
 # Original bold UI font: 2-pixel stems, 6 pixels wide (M and W use 7), seven

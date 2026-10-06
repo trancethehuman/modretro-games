@@ -1,0 +1,26 @@
+--- a/src/core/actor.c
++++ b/src/core/actor.c
+@@ -213,9 +213,10 @@
+             SWITCH_ROM(PLAYER.sprite.bank);
+             spritesheet_t *sprite = PLAYER.sprite.ptr;
+ 
+-            allocated_hardware_sprites += move_metasprite(
++            allocated_hardware_sprites += move_metasprite_ex(
+                 *(sprite->metasprites + PLAYER.frame),
+                 PLAYER.base_tile,
++                PLAYER.move_speed & 7,
+                 allocated_hardware_sprites,
+                 screen_x,
+                 screen_y
+@@ -243,9 +244,10 @@
+         SWITCH_ROM(actor->sprite.bank);
+         spritesheet_t *sprite = actor->sprite.ptr;
+ 
+-        allocated_hardware_sprites += move_metasprite(
++        allocated_hardware_sprites += move_metasprite_ex(
+             *(sprite->metasprites + actor->frame),
+             actor->base_tile,
++            actor->move_speed & 7,
+             allocated_hardware_sprites,
+             screen_x,
+             screen_y

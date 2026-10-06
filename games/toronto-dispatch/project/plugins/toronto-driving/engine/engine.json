@@ -15,14 +15,14 @@
     },
     {
       "key": "MAX_ACTORS",
-      "label": "Actor pool (Toronto uses 23; keep 23)",
+      "label": "Actor pool (Toronto uses 24; keep 24)",
       "group": "Toronto memory",
       "type": "number",
       "cType": "define",
       "file": "include/actor.h",
-      "defaultValue": 23,
-      "min": 23,
-      "max": 23
+      "defaultValue": 24,
+      "min": 24,
+      "max": 24
     },
     {
       "key": "VM_MAX_CONTEXTS",
@@ -105,7 +105,9 @@
         "include/td_daynight_data.h",
         "src/td_daynight.c",
         "include/td_anim.h",
-        "src/td_anim.c"
+        "src/td_anim.c",
+        "include/td_radio_data.h",
+        "src/td_radio.c"
       ]
     }
   ]

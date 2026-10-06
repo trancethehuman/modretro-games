@@ -90,26 +90,57 @@ def _layers(spec, tyres=True):
 
 
 def _sedan_spec(body=2, sign=False, lightbar=False, shine=True):
-    spec = [('body', 1, 4, 14, 11, body),
-            ('cut', 1, 4, 1, 4, 0), ('cut', 14, 4, 14, 4, 0), ('cut', 1, 11, 1, 11, 0), ('cut', 14, 11, 14, 11, 0),
-            ('cabin', 4, 6, 10, 9, 3), ('roof', 5, 7, 8, 8, body)]
+    """Sedan filling the 16-pixel frame: 16 long, 10 wide plus tyres."""
+    spec = [('body', 0, 3, 15, 12, body),
+            ('cut', 0, 3, 0, 3, 0), ('cut', 15, 3, 15, 3, 0), ('cut', 0, 12, 0, 12, 0), ('cut', 15, 12, 15, 12, 0),
+            ('cabin', 4, 5, 11, 10, 3), ('roof', 5, 6, 9, 9, body)]
     if shine:
-        spec += [('flank', 2, 5, 13, 5, 1), ('roofshine', 5, 7, 5, 7, 1)]
+        spec += [('flank', 1, 4, 14, 4, 1), ('roofshine', 5, 6, 6, 6, 1), ('trunk', 1, 7, 1, 8, 1)]
     if sign:
-        spec += [('sign', 6, 7, 7, 8, 1)]
+        spec += [('sign', 6, 7, 8, 8, 1)]
     if lightbar:
-        spec += [('stripe', 2, 5, 13, 5, 2), ('stripe', 2, 10, 13, 10, 2), ('bar', 6, 6, 7, 9, 2)]
-    spec += [('glint', 10, 7, 10, 7, 1),
-             ('tyre', 3, 3, 4, 3, 3), ('tyre', 11, 3, 12, 3, 3), ('tyre', 3, 12, 4, 12, 3), ('tyre', 11, 12, 12, 12, 3)]
+        spec += [('stripe', 1, 4, 14, 4, 2), ('stripe', 1, 11, 14, 11, 2), ('bar', 6, 6, 7, 9, 2)]
+    spec += [('glint', 11, 6, 11, 6, 1),
+             ('tyre', 2, 2, 4, 2, 3), ('tyre', 11, 2, 13, 2, 3), ('tyre', 2, 13, 4, 13, 3), ('tyre', 11, 13, 13, 13, 3)]
     return spec
 
 
+def _compact_spec():
+    """Hatchback: shorter (13 long), tall glasshouse, stubby hood."""
+    return [('body', 1, 3, 13, 12, 2),
+            ('cut', 1, 3, 1, 3, 0), ('cut', 13, 3, 13, 3, 0), ('cut', 1, 12, 1, 12, 0), ('cut', 13, 12, 13, 12, 0),
+            ('cabin', 3, 5, 10, 10, 3), ('roof', 4, 6, 8, 9, 2),
+            ('flank', 2, 4, 12, 4, 1), ('roofshine', 4, 6, 5, 6, 1), ('glint', 10, 6, 10, 6, 1),
+            ('tyre', 2, 2, 4, 2, 3), ('tyre', 10, 2, 12, 2, 3), ('tyre', 2, 13, 4, 13, 3), ('tyre', 10, 13, 12, 13, 3)]
+
+
+def _pickup_spec():
+    """Pickup truck: open bed with dark floor and ribs, then the cab."""
+    return [('body', 0, 3, 15, 12, 2),
+            ('cut', 0, 3, 0, 3, 0), ('cut', 15, 3, 15, 3, 0), ('cut', 0, 12, 0, 12, 0), ('cut', 15, 12, 15, 12, 0),
+            ('bed', 1, 5, 7, 10, 3), ('floor', 2, 6, 7, 9, 2), ('load', 3, 7, 5, 8, 1),
+            ('cab', 9, 5, 12, 10, 3), ('cabroof', 10, 6, 11, 9, 2), ('glint', 12, 6, 12, 6, 1),
+            ('flank', 9, 4, 14, 4, 1), ('rail', 1, 4, 7, 4, 1),
+            ('tyre', 2, 2, 4, 2, 3), ('tyre', 11, 2, 13, 2, 3), ('tyre', 2, 13, 4, 13, 3), ('tyre', 11, 13, 13, 13, 3)]
+
+
+def _sports_spec():
+    """Low coupe: long hood with twin stripes, small cabin, rear spoiler."""
+    return [('body', 0, 3, 15, 12, 2),
+            ('cut', 0, 3, 0, 3, 0), ('cut', 15, 3, 15, 3, 0), ('cut', 0, 12, 0, 12, 0), ('cut', 15, 12, 15, 12, 0),
+            ('cabin', 4, 5, 9, 10, 3), ('roof', 5, 6, 7, 9, 2),
+            ('stripe', 10, 6, 15, 6, 1), ('stripe', 10, 9, 15, 9, 1), ('stripe', 1, 6, 3, 6, 1), ('stripe', 1, 9, 3, 9, 1),
+            ('spoiler', 0, 4, 0, 11, 3), ('glint', 9, 6, 9, 6, 1),
+            ('tyre', 2, 2, 4, 2, 3), ('tyre', 11, 2, 13, 2, 3), ('tyre', 2, 13, 4, 13, 3), ('tyre', 11, 13, 13, 13, 3)]
+
+
 def _truck_spec():
-    return [('box', 0, 4, 9, 11, 1), ('panel', 1, 5, 8, 5, 2), ('panel', 1, 10, 8, 10, 2),
-            ('rib', 3, 6, 3, 9, 2), ('rib', 6, 6, 6, 9, 2),
-            ('cab', 10, 5, 14, 10, 2), ('divide', 10, 5, 10, 10, 3), ('screen', 12, 6, 12, 9, 3),
-            ('glint', 12, 6, 12, 6, 1), ('flank', 11, 5, 13, 5, 1),
-            ('tyre', 2, 3, 4, 3, 3), ('tyre', 2, 12, 4, 12, 3), ('tyre', 11, 4, 12, 4, 3), ('tyre', 11, 11, 12, 11, 3)]
+    """Box van: cargo box (light) with panels and ribs, then the cab."""
+    return [('box', 0, 3, 10, 12, 1), ('panel', 1, 4, 9, 4, 2), ('panel', 1, 11, 9, 11, 2),
+            ('rib', 3, 5, 3, 10, 2), ('rib', 6, 5, 6, 10, 2), ('rib', 9, 5, 9, 10, 2),
+            ('cab', 11, 4, 15, 11, 2), ('divide', 11, 4, 11, 11, 3), ('screen', 13, 5, 13, 10, 3),
+            ('glint', 13, 5, 13, 5, 1), ('flank', 12, 4, 14, 4, 1),
+            ('tyre', 2, 2, 4, 2, 3), ('tyre', 2, 13, 4, 13, 3), ('tyre', 12, 3, 13, 3, 3), ('tyre', 12, 12, 13, 12, 3)]
 
 
 def _outline(g, lamps=()):
@@ -164,8 +195,9 @@ def _inside(g, x, y):
     return ((0 < x < W - 1 and g[y][x - 1] and g[y][x + 1]) or (0 < y < H - 1 and g[y - 1][x] and g[y + 1][x]))
 
 
-CAR_LAMPS = ((14, 5), (14, 10))
-TRUCK_LAMPS = ((14, 6), (14, 9))
+CAR_LAMPS = ((15, 4), (15, 11))
+TRUCK_LAMPS = ((15, 5), (15, 10))
+COMPACT_LAMPS = ((13, 4), (13, 11))
 
 
 def car_frames(taxi=False):
@@ -176,10 +208,30 @@ def van_frames():
     return _vehicle(_truck_spec(), TRUCK_LAMPS)
 
 
+def _cardinal_vehicle(spec, lamps):
+    """Traffic-only designs drive cardinally: diagonal slots repeat the
+    nearest cardinal view, so a design costs only its east and south tiles."""
+    east = _outline(_layers(spec), lamps)
+    south = transpose(east)
+    return [east, east, south, south, flip_h(east), flip_h(east), flip_v(south), flip_v(south)]
+
+
+def compact_frames():
+    return _cardinal_vehicle(_compact_spec(), COMPACT_LAMPS)
+
+
+def pickup_frames():
+    return _cardinal_vehicle(_pickup_spec(), CAR_LAMPS)
+
+
+def sports_frames():
+    return _cardinal_vehicle(_sports_spec(), CAR_LAMPS)
+
+
 def door_frame():
     """The parked courier car, east-facing, with its door swung open."""
     g = [row[:] for row in car_frames()[0]]
-    for x, y, c in ((6, 12, 3), (6, 13, 3), (7, 13, 2), (7, 14, 3), (8, 14, 3)):
+    for x, y, c in ((5, 13, 3), (5, 14, 3), (6, 14, 2), (6, 15, 3), (7, 15, 3)):
         g[y][x] = c
     return g
 
@@ -253,57 +305,69 @@ def scooter_frames():
 
 
 # ---------------------------------------------------------------- people
-# 1 skin, 2 clothing, 3 hair/shoes/outline.
-PERSON = {
-    'down': [[
-        "................", "......3333......", ".....333333.....", ".....311113.....",
-        ".....311113.....", "......3113......", ".....322223.....", "....32222223....",
-        "....12222221....", "....32222223....", ".....333333.....", ".....33..33.....",
-        ".....33..33.....", ".....3....3.....", "................", "................"],
-        ["................", "......3333......", ".....333333.....", ".....311113.....",
-         ".....311113.....", "......3113......", ".....322223.....", "....32222223....",
-         "....12222221....", "....32222223....", ".....333333.....", "......33.33.....",
-         "......3..33.....", "..........3.....", "................", "................"]],
-    'up': [[
-        "................", "......3333......", ".....333333.....", ".....333333.....",
-        ".....333333.....", "......3113......", ".....322223.....", "....32222223....",
-        "....12222221....", "....32222223....", ".....333333.....", ".....33..33.....",
-        ".....33..33.....", ".....3....3.....", "................", "................"],
-        ["................", "......3333......", ".....333333.....", ".....333333.....",
-         ".....333333.....", "......3113......", ".....322223.....", "....32222223....",
-         "....12222221....", "....32222223....", ".....333333.....", ".....33.33......",
-         ".....33..3......", ".....3..........", "................", "................"]],
-    'right': [[
-        "................", "......3333......", ".....33333......", ".....333113.....",
-        ".....331113.....", "......3113......", "......3223......", ".....322223.....",
-        ".....321223.....", ".....322223.....", "......3333......", "......3..3......",
-        ".....33..33.....", ".....3....3.....", "................", "................"],
-        ["................", "......3333......", ".....33333......", ".....333113.....",
-         ".....331113.....", "......3113......", "......3223......", ".....322223.....",
-         ".....322123.....", ".....322223.....", "......3333......", "......3333......",
-         "......33........", "......3.........", "................", "................"]],
+# People are about 10 px tall (feet on row 13), so vehicles read about
+# one and a half times their length. Each figure is drawn inside columns
+# 4..11 (one 8x16 OBJ) from 8-wide rows: 1 skin, 2 clothing, 3 hair,
+# shoes and outline. Every person uses the courier's palette; an actor's
+# palette offset chooses the clothing colour at run time, so one design
+# serves the courier, civilians in five colours and the police.
+_HEAD = {  # design -> view -> rows ending on row 6 (the chin)
+    'short': {'down': ["..3333..", "..3113..", "..3113.."],
+              'up': ["..3333..", "..3333..", "..3333.."],
+              'right': ["..333...", "..3311..", "..3311.."]},
+    'long': {'down': [".333333.", ".331133.", ".331133."],
+             'up': [".333333.", ".333333.", ".333333."],
+             'right': [".3333...", ".33311..", ".33311.."]},
+    'cap': {'down': ["..2222..", ".322223.", "..3113..", "..3113.."],
+            'up': ["..2222..", "..2222..", "..3333..", "..3333.."],
+            'right': ["..222...", "..22222.", "..3311..", "..3311.."]},
+    'bun': {'down': ["...33...", "..3333..", "..3113..", "..3113.."],
+            'up': ["...33...", "..3333..", "..3333..", "..3333.."],
+            'right': [".33.....", "..333...", "..3311..", "..3311.."]},
+    'pack': None,  # short hair; the backpack changes the torso
+    'umbrella': {'down': ["..3333..", ".322123.", "32222223", "32222223", ".3.33.3.", "..3113.."],
+                 'up': ["..3333..", ".321223.", "32222223", "32222223", ".3.33.3.", "..3333.."],
+                 'right': ["..3333..", ".322123.", "32222223", "32222223", ".3.33.3.", "..3311.."]},
 }
-# Long-haired / ponytail walker: same body, different head silhouette.
-LONG_HAIR = {
-    'down': ["................", "......3333......", ".....333333.....", "....33111133....",
-             "....33111133....", "....33.11.33....", ".....322223....."],
-    'up': ["................", "......3333......", ".....333333.....", ".....333333.....",
-           "....33333333....", "....33.33.33....", ".....322223....."],
-    'right': ["................", "......3333......", ".....333333.....", "....3333113.....",
-              "....3331113.....", "....33.3113.....", "......3223......"],
+_TORSO = {
+    'down': [".322223.", ".122221.", ".322223.", "..3223.."],
+    'up': [".322223.", ".122221.", ".322223.", "..3223.."],
+    'right': ["..3223..", "..3213..", "..3223..", "..333..."],
 }
+_TORSO_PACK = {
+    'down': [".332233.", ".132231.", ".322223.", "..3223.."],
+    'up': [".333333.", ".133331.", ".333333.", "..3223.."],
+    'right': [".33223..", ".33213..", ".33223..", "..333..."],
+}
+_TORSO_LONG = {  # hair falls over the shoulders
+    'down': [".332233.", ".122221.", ".322223.", "..3223.."],
+    'up': [".333333.", ".133331.", ".322223.", "..3223.."],
+    'right': [".33223..", "..3213..", "..3223..", "..333..."],
+}
+_LEGS = {
+    'down': (["..3..3..", "..3..3..", "..3..3.."], ["..3..3..", "..3..3..", ".....3.."]),
+    'up': (["..3..3..", "..3..3..", "..3..3.."], ["..3..3..", "..3..3..", "..3....."]),
+    'right': (["..3.3...", ".3...3..", ".3...3.."], ["..33....", "..33....", "..3....."]),
+}
+PEOPLE_DESIGNS = ('short', 'long', 'cap', 'bun', 'pack', 'umbrella')
 
 
-def person_frames(variant=0):
-    """[right0, right1, left0, left1, down0, down1, up0, up1] for one body."""
-    def head(rows, d):
-        if variant == 1:
-            return LONG_HAIR[d] + rows[len(LONG_HAIR[d]):]
-        return rows
-    r = [grid(head(PERSON['right'][i], 'right')) for i in (0, 1)]
-    d = [grid(head(PERSON['down'][i], 'down')) for i in (0, 1)]
-    u = [grid(head(PERSON['up'][i], 'up')) for i in (0, 1)]
-    return [r[0], r[1], flip_h(r[0]), flip_h(r[1]), d[0], d[1], u[0], u[1]]
+def _figure(head, torso, legs):
+    rows = head + torso + legs
+    top = 14 - len(rows)
+    blank = "." * 16
+    out = [blank] * top + ["...." + r + "...." for r in rows] + [blank] * 2
+    assert len(out) == 16, len(out)
+    return grid(out)
+
+
+def person_frames(design='short'):
+    """[right0, right1, left0, left1, down0, down1, up0, up1] for a design."""
+    heads = _HEAD[design] or _HEAD['short']
+    torsos = _TORSO_PACK if design == 'pack' else _TORSO_LONG if design == 'long' else _TORSO
+    view = {d: [_figure(heads[d], torsos[d], _LEGS[d][i]) for i in (0, 1)] for d in ('right', 'down', 'up')}
+    r = view['right']
+    return [r[0], r[1], flip_h(r[0]), flip_h(r[1]), view['down'][0], view['down'][1], view['up'][0], view['up'][1]]
 
 
 # ---------------------------------------------------------------- markers / props
@@ -407,8 +471,8 @@ def bus_zone(length=38.0, width=9.0):
     return zone
 
 
-def streetcar_zone(length=64.0, width=9.0, sections=5):
-    """Five-section low-floor streetcar seen from above, cabs at both ends."""
+def streetcar_zone(length=48.0, width=9.0, sections=4):
+    """Four-section low-floor streetcar seen from above, cabs at both ends."""
     hl, hw = length / 2, width / 2
     seg = length / sections
 
@@ -476,65 +540,19 @@ def police_flash_frames():
     return [east, south, flip_h(east), flip_v(south)]
 
 
-# Officer: the ordinary walker body under a navy peaked cap (2 = uniform).
-CAP = {
-    'down': ["................", "......2222......", ".....222222.....", "....33333333....",
-             ".....311113.....", "......3113......", ".....322223....."],
-    'up': ["................", "......2222......", ".....222222.....", ".....333333.....",
-           ".....333333.....", "......3113......", ".....322223....."],
-    'right': ["................", "......2222......", ".....22222......", ".....3333333....",
-              ".....331113.....", "......3113......", "......3223......"],
-}
-
-
-def officer_frames():
-    """[right0, right1, left0, left1, down0, down1, up0, up1] with a cap."""
-    def head(rows, d):
-        return CAP[d] + rows[len(CAP[d]):]
-    r = [grid(head(PERSON['right'][i], 'right')) for i in (0, 1)]
-    d = [grid(head(PERSON['down'][i], 'down')) for i in (0, 1)]
-    u = [grid(head(PERSON['up'][i], 'up')) for i in (0, 1)]
-    return [r[0], r[1], flip_h(r[0]), flip_h(r[1]), d[0], d[1], u[0], u[1]]
-
-
 # A struck person tumbles through the air (four quarter turns made from one
-# drawing by flips), then lies on the ground. Non-graphic: no blood.
+# drawing by flips), then lies on the ground. Non-graphic: no blood. Drawn
+# in the people palette, so the actor's clothing colour carries over.
 TUMBLE = [
-    "................",
-    "................",
-    "...333..........",
-    "..31113.........",
-    "..31113..33.....",
-    "...333.3223.....",
-    "....3322223.....",
-    ".....322223.....",
-    ".....3222233....",
-    "......32223.....",
-    ".......3333.....",
-    "......33..33....",
-    ".....33....33...",
-    "................",
-    "................",
-    "................",
-]
+    "................", "................", "................", "................",
+    "................", ".....33.........", "....3113........", ".....3332.......",
+    ".......3223.....", "........323.....", ".......3..3.....", "......3....3....",
+    "................", "................", "................", "................"]
 PRONE = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "......33........",
-    "..333..33.......",
-    ".31113322222.33.",
-    ".31113322222333.",
-    ".31113322222.33.",
-    "..333..33.......",
-    "......33........",
-    "................",
-    "................",
-    "................",
-    "................",
-]
+    "................", "................", "................", "................",
+    "................", "................", "................", "................",
+    ".....3....3.....", "....31132223....", "....31132223....", ".....3....3.....",
+    "................", "................", "................", "................"]
 
 
 def knockdown_frames():
@@ -584,38 +602,24 @@ def flip_h_col(g):
 
 
 # ---------------------------------------------------------------- animation
-# Courier action poses [right, left, down, up]: a punch (fist out) and the
-# pistol held out. Each stays inside columns 4..11 (one 8x16 OBJ).
-_PUNCH = {
-    'right': {7: ".....3222221....", 8: ".....322223.....", 11: "......3...3.....",
-              12: ".....33...33....", 13: ".....3.....3...."},
-    'down': {8: "....12222222....", 9: "....32222232....", 10: ".....3333332....",
-             11: ".....33..331...."},
-    'up': {3: ".....3333331....", 4: ".....3333332....", 5: "......3113.2....",
-           6: ".....3222232....", 8: "....12222223...."},
+# Courier action poses [right, left, down, up] on the short-haired figure:
+# a punch (fist out) and the pistol held out (3 = the gun).
+_ACTION = {
+    'punch': {'right': (None, ["..3223..", "..32221.", "..3223..", "..333..."]),
+              'down': (None, [".322223.", ".122222.", ".322232.", "..3223.1"]),
+              'up': (["..3333.1", "..33332.", "..33332."], [".322232.", ".12222..", ".322223.", "..3223.."])},
+    'shoot': {'right': (None, ["..3223.3", "..322213", "..3223..", "..333..."]),
+              'down': (None, [".322223.", ".122222.", ".322232.", "..3223.3"]),
+              'up': (["..3333.3", "..33331.", "..33332."], [".322232.", ".12222..", ".322223.", "..3223.."])},
 }
-_SHOOT = {
-    'right': {6: "......3223.3....", 7: ".....3222213....", 8: ".....322223....."},
-    'down': {8: "....12222222....", 9: "....32222232....", 10: ".....3333331....",
-             11: ".....33..333...."},
-    'up': {2: ".....3333333....", 3: ".....3333331....", 4: ".....3333332....",
-           5: "......3113.2....", 6: ".....3222232....", 8: "....12222223...."},
-}
-
-
-def _pose(changes, d):
-    rows = list(PERSON[d][0])
-    for r, row in changes.items():
-        assert len(row) == 16, (d, r, row)
-        rows[r] = row
-    return grid(rows)
 
 
 def action_frames(kind):
     """[right, left, down, up] punch ('punch') or pistol ('shoot') pose."""
-    table = _PUNCH if kind == 'punch' else _SHOOT
-    r = _pose(table['right'], 'right')
-    return [r, flip_h(r), _pose(table['down'], 'down'), _pose(table['up'], 'up')]
+    out = {}
+    for d, (head, torso) in _ACTION[kind].items():
+        out[d] = _figure(head or _HEAD['short'][d], torso, _LEGS[d][0])
+    return [out['right'], flip_h(out['right']), out['down'], out['up']]
 
 
 def _centre8(rows8, top=4):
@@ -644,8 +648,9 @@ SPARKLE = [
 def _beam(angle_deg):
     """Night headlamp light ahead of the vehicle, dithered so the road shows
     through: a bright spot at each lamp, then two soft cones that thin out.
-    The frame centre sits 14 px ahead of the vehicle centre; the lamps are
-    2.5 px either side of its axis."""
+    The frame centre sits 14 px ahead of the vehicle centre and the light
+    starts at the 16-pixel vehicle's bumper; the lamps are 2.5 px either
+    side of its axis."""
     a = math.radians(angle_deg)
     ca, sa = math.cos(a), math.sin(a)
     g = [[0] * 16 for _ in range(16)]
@@ -654,23 +659,77 @@ def _beam(angle_deg):
             # Pixel centre relative to the vehicle centre, in its own frame.
             px, py = x + 0.5 - 8 + 14 * ca, y + 0.5 - 8 + 14 * sa
             f, s = px * ca + py * sa, -px * sa + py * ca
-            if f < 7.5 or f > 20.5:
+            if f < 8.5 or f > 21.5:
                 continue
             near = min(abs(s - lamp) for lamp in (-2.5, 2.5))
-            if near > 0.7 + (f - 7.5) * 0.3:
+            if near > 0.7 + (f - 8.5) * 0.3:
                 continue
-            if f < 11 and near < 1.0:
-                lit = (x + y) % 2 == 0
-            elif f < 15.5:
-                lit = (x + y) % 2 == 0 and near < 0.6 + (f - 7.5) * 0.18
+            yy = min(y, 15 - y) if angle_deg == 0 else y
+            if f < 12 and near < 1.0:
+                lit = (x + yy) % 2 == 0
+            elif f < 16.5:
+                lit = (x + yy) % 2 == 0 and near < 0.6 + (f - 8.5) * 0.18
             else:
-                lit = (x + 2 * y) % 4 == 0
+                lit = (x + 2 * yy) % 4 == 0
             if lit:
                 g[y][x] = 1
     return g
 
 
 def beam_frames():
-    """Engine heading order E, SE, S, SW, W, NW, N, NE (south is +y)."""
-    e, se, s = _beam(0), _beam(45), _beam(90)
+    """Engine heading order E, SE, S, SW, W, NW, N, NE (south is +y). East is
+    mirror-symmetric about its axis, so south (its transpose) shares tiles."""
+    e, se = _beam(0), _beam(45)
+    s = transpose(e)
     return [e, se, s, flip_h(se), flip_h(e), flip_v(flip_h(se)), flip_v(s), flip_v(se)]
+
+
+# Tracer rounds (beacon yellow: 1 white-hot, 2 gold): a long streak with a
+# fat white-hot head, like an arcade shooter's tracers, so every shot reads
+# at a glance. East is 32 px long, south its transpose and south-east a 32 px
+# diagonal; the other headings are flips. The bodies repeat one tile (the
+# diagonal's two halves are each other's 180-degree turn), so the long trails
+# cost six tiles in all. Each frame reports the pixel of its head.
+def _tracer_e():
+    g = [[0] * 32 for _ in range(16)]
+    for x in range(32):
+        g[5][x] = 1
+        g[6][x] = 2 if x < 24 else 1
+    for x in range(26, 31):
+        g[4][x] = g[7][x] = 2
+    g[5][31] = g[6][31] = 1
+    return g
+
+
+def _tracer_se():
+    g = [[0] * 32 for _ in range(32)]
+    for x in range(32):
+        g[x][x] = 1
+        # Glow either side, kept inside the 8-pixel tile column.
+        if x % 8:
+            g[x][x - 1] = 2
+        if x % 8 != 7:
+            g[x][x + 1] = 2
+    for y, x in ((29, 30), (30, 29), (30, 31), (31, 30), (28, 30), (30, 28)):
+        g[y][x] = 1 if abs(y - x) <= 1 else 2
+    for y, x in ((27, 29), (29, 27), (28, 31), (31, 28)):
+        g[y][x] = 2
+    return g
+
+
+def tracer_frames():
+    """[(grid, size, head pixel)] in engine heading order E, SE, S, SW, W, NW, N, NE."""
+    e, se = _tracer_e(), _tracer_se()
+    s = transpose(e)
+    wide, tall, square = (32, 16), (16, 32), (32, 32)
+    return [(e, wide, (31, 6)), (se, square, (31, 31)), (s, tall, (6, 31)), (flip_h(se), square, (0, 31)),
+            (flip_h(e), wide, (0, 6)), (flip_v(flip_h(se)), square, (0, 0)), (flip_v(s), tall, (6, 0)),
+            (flip_v(se), square, (31, 0))]
+
+
+# Lock-on marker (traffic red, dark tips): corner brackets framing the
+# whole target walker, inside one 8x16 tile.
+RETICLE = grid(["................", "....22....22....", "....3......3....", "................",
+                "................", "................", "................", "................",
+                "................", "................", "................", "................",
+                "................", "....3......3....", "....22....22....", "................"])

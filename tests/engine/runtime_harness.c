@@ -20,7 +20,7 @@
 #undef td_get_west_street
 #include "native_collision_fixture.h"
 
-actor_t actors[23];
+actor_t actors[24];
 typedef char host_actor_pool_matches[(sizeof(actors)/sizeof(actors[0])==TD_ACTORS)?1:-1];
 actor_t *actors_inactive_head;
 UBYTE actors_len;
@@ -79,12 +79,19 @@ UBYTE tile_at(UBYTE x,UBYTE y) {return district_tile(test_current_district,x,y);
 void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end) {
     actor->frame=actor->frame_start=first; actor->frame_end=end;
 }
-void activate_actor(actor_t *actor) { actor->flags|=ACTOR_FLAG_ACTIVE; }
+/* Like GBVM, activation resets the idle animation (frame 0 onwards). */
+void activate_actor(actor_t *actor) { actor->flags|=ACTOR_FLAG_ACTIVE;actor->frame=actor->frame_start=0;actor->frame_end=TD_SPRITE_FRAMES-1; }
 void deactivate_actor(actor_t *actor) { actor->flags&=~ACTOR_FLAG_ACTIVE; }
 void td_ui_init(void) { ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
 void td_ui_tick(void) {}
 void td_ui_compass(void) {}
+/* Radio calls are drawn by td_ui.c (atlas_ui_harness); here the runtime
+ * only records which script it queued last. */
+UBYTE radio_said=255,td_radio_script=255,td_radio_wanted;UWORD td_last_pay;
+void td_radio_say(UBYTE script) { radio_said=script; }
+void td_radio_tick(void) {}
+UBYTE td_radio_playing(void) { return radio_said; }
 void td_map_open(void) {
     test_map_opens++;test_map_active=1;
     test_map_camera_x=camera_x;test_map_camera_y=camera_y;test_map_camera_settings=camera_settings;
@@ -139,7 +146,8 @@ static void reset_case(void) {
     memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));
     memset(&td_offer,0,sizeof(td_offer));memset(actors,0,sizeof(actors));
     memset(&td_cursor,0,sizeof(td_cursor));memset(&td_target,0,sizeof(td_target));
-    memset(td_test_sram,0,sizeof(td_test_sram));
+    memset(td_test_sram,0,sizeof(td_test_sram));td_car_damage=0;td_car_colour=0;
+    for(unsigned i=0;i<6;i++)td_traffic_bases[i]=TD_FRAME_PLAYER_CAR;
     td.u=400*16;td.v=450*16;td.park_u=100*16;td.park_v=100*16;
     td.job=TD_NONE;td.mode=TD_ROAM;td.health=100;td.cash=30;
     td.safe_u=td.u;td.safe_v=td.v;
@@ -391,6 +399,24 @@ static void test_audio_event_integration(void) {
     td_interact();expect(audio_cue==TD_AUDIO_PICKUP,"pickup queues its distinct audio cue");
     td.left=100;td_target.u=td.u>>4;td_target.v=td.v>>4;td_interact();expect(audio_cue==TD_AUDIO_COMPLETE&&td.mode==TD_RESULT,"final handoff queues completion audio for the result screen");
     reset_case();td.job=0;td_finish(FALSE);expect(audio_cue==TD_AUDIO_FAIL,"failed contracts queue failure audio");
+    expect(radio_said==TD_RADIO_FAIL,"Rosa reports a failed contract");
+    /* Story beats: the first pickup, chapters at every sixth new delivery,
+     * the west/east routes at three, a word on other deliveries. */
+    reset_case();td.job=0;td_job.count=3;td_target.u=td.u>>4;td_target.v=td.v>>4;radio_said=255;
+    td_interact();expect(radio_said==TD_RADIO_PICKUP,"the first pickup brings a radio line");
+    reset_case();td.job=9;td.done=5;td.health=100;td.left=50;td_job.reward=100;td_finish(TRUE);
+    expect(td.done==6&&radio_said==TD_RADIO_CHAPTER&&td_last_pay==110,"the sixth delivery opens chapter two on the radio and records the fee");
+    reset_case();td.job=9;td.done=6;td.complete[1]=2;td_finish(TRUE);
+    expect(radio_said==TD_RADIO_DONE+0,"a replay at a chapter boundary is an ordinary delivery");
+    reset_case();td.job=1;td.done=2;td_finish(TRUE);expect(radio_said==TD_RADIO_OPEN_ENDS,"the third delivery opens the west and east routes");
+    reset_case();td.job=4;td.done=TD_QUESTS-1;td_finish(TRUE);expect(radio_said==TD_RADIO_MASTER,"the last contract brings the master line");
+    /* Taking a job briefs its kind; dismissing the title of a fresh game welcomes the courier. */
+    reset_case();td.job=TD_NONE;td.mode=TD_BOARD;td.menu=0;td_get_job(0,&td_offer);td.onfoot=0;radio_said=255;
+    joy=joy_pressed=J_A;sys_time+=2;toronto_update();
+    expect(td.job==0&&radio_said==TD_RADIO_JOB+td_offer.kind,"accepting a contract plays its kind's briefing");
+    reset_case();td.job=TD_NONE;td.done=0;td.mode=TD_HELP;td_resume_mode=TD_ROAM;radio_said=255;
+    joy=joy_pressed=J_A;sys_time+=2;toronto_update();
+    expect(td.mode==TD_ROAM&&radio_said==TD_RADIO_INTRO,"leaving the title on a fresh shift starts the welcome call");
     reset_case();td_message(5);expect(audio_cue==TD_AUDIO_IMPACT,"vehicle impacts queue their audio feedback");
 }
 
@@ -420,9 +446,10 @@ static void test_bounded_corner_assist(void) {
 }
 
 static void test_street_life(void) {
+    UBYTE found_bad=0;
     /* Car theft: A beside a road vehicle drags its driver out and takes it. */
     reset_case();td.onfoot=1;td.u=300*16;td.v=292*16;td.park_u=100*16;td.park_v=100*16;
-    td_traffic_u[1]=300*16;td_traffic_v[1]=280*16;actors[3].frame=TD_FRAME_TRAFFIC_VAN;
+    td_traffic_u[1]=300*16;td_traffic_v[1]=280*16;td_traffic_bases[1]=TD_FRAME_PLAYER_VAN;actors[3].frame=TD_FRAME_PLAYER_VAN;
     td_input_edge=1;driving_tick(J_A);
     expect(td_entry_timer&&td.park_u==300*16&&td.park_v==280*16&&td.vehicle==1,"A beside a van steals it and keeps its position");
     expect((td_tr_ctrl&2)&&tr_mode[1]==TR_GONE&&td_fx_kind==FX_RUNNER,"the stolen slot leaves traffic and its driver runs off");
@@ -441,6 +468,44 @@ static void test_street_life(void) {
     expect(td.ammo==2&&td_fx_kind==FX_BULLET,"B on foot fires one round");
     td.ammo=0;for(unsigned i=0;i<20;i++)td_life_tick();td_life_foot_b();
     expect(td.msg==TD_MSG_NO_AMMO,"an empty pistol only reports no ammunition");
+
+    /* Aiming: the pistol locks on to a walker roughly along the aim and the
+     * tracer round travels eight pixels a tick until it hits. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;td.u=300*16;td.v=300*16;td.ammo=5;td_aim_dir=0;geometry=CLEAR_GROUND;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    actors[10].pos.x=340*32;actors[10].pos.y=310*32;actors[10].flags=0;td_ped_route[1]=0;
+    actors[11].pos.x=300*32;actors[11].pos.y=250*32;actors[11].flags=0;td_ped_route[2]=0;
+    td_life_aim();
+    expect(td_aim_target==1,"aiming east locks on to the walker ahead, not the one behind the courier's shoulder");
+    td_life_present();
+    expect((actors[TD_ACTOR_RETICLE].flags&ACTOR_FLAG_ACTIVE)&&actors[TD_ACTOR_RETICLE].frame==TD_FRAME_RETICLE&&
+           actors[TD_ACTOR_RETICLE].pos.x==actors[10].pos.x,"the lock-on marker sits on the target");
+    td_aim_dir=6;td_life_aim();
+    expect(td_aim_target==2,"turning to aim north switches the lock to the walker in that direction");
+    td_aim_dir=4;td_life_aim();
+    expect(td_aim_target==TD_NONE,"nothing to the west means no lock");
+    td_aim_dir=0;td_life_foot_b();
+    expect(td_fx_kind==FX_BULLET&&td.ammo==4&&fx_du>0&&fx_dv>0&&td_walk_dir==0,
+           "a locked shot heads for the target and the courier turns to face it");
+    actors[TD_ACTOR_FX].flags|=ACTOR_FLAG_DISABLED;td_life_present();
+    expect(!(actors[TD_ACTOR_FX].flags&(ACTOR_FLAG_DISABLED|ACTOR_FLAG_HIDDEN))&&actors[TD_ACTOR_FX].frame_start>=TD_FRAME_TRACER&&
+           actors[TD_ACTOR_FX].frame_start<TD_FRAME_TRACER+8,"the tracer shows at once even if GBVM had flagged the actor off screen");
+    for(unsigned i=0;i<8&&td_fx_kind==FX_BULLET;i++)td_life_tick();
+    expect((td_ped_ovr&2)&&pk_mode[1]==PK_FLY,"the tracer reaches the locked walker within a few ticks");
+    td.onfoot=0;td_life_aim();
+    expect(td_aim_target==TD_NONE,"no lock-on while driving");
+
+    /* Road vehicles get a random design and colour; the yellow van keeps its
+     * slot downtown and a taxi is always yellow. */
+    reset_case();
+    for(UBYTE seed=0;seed<64;seed++){
+        td.district=1;td_lf_new_look(2,seed);
+        if(td_traffic_bases[2]==TD_FRAME_TRAFFIC_TAXI&&actors[4].move_speed!=TD_PAL_YELLOW)found_bad=1;
+        if(actors[4].move_speed>7)found_bad=1;
+    }
+    expect(!found_bad,"traffic looks always use a valid palette offset and taxis stay yellow");
+    td.district=0;td_lf_new_look(5,9);
+    expect(td_traffic_bases[5]==TD_FRAME_PLAYER_VAN&&actors[7].move_speed==TD_PAL_YELLOW,"downtown keeps the yellow delivery van in slot 5");
 
     /* A moving car throws a struck walker; it loses a quarter of its speed. */
     reset_case();td.speed=20;td_vx=320;td.mode=TD_ROAM;td_ped_route[2]=0;
@@ -496,11 +561,11 @@ static void test_street_life(void) {
 
     /* Officers on foot are slower than a walking courier below four stars,
      * and an arrest needs sustained contact. */
-    reset_case();td.onfoot=1;td.wanted=2;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=4;
+    reset_case();td.onfoot=1;td.wanted=2;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=LF_LOOK_OFFICER;
     pk_u[0]=td.u-60*16;pk_v[0]=td.v;
     { UWORD u0=pk_u[0];for(unsigned i=0;i<60;i++){td_tick++;lf_peds_tick();}
       expect(pk_u[0]-u0<60*8,"a two-star officer is slower than a walking courier"); }
-    reset_case();td.onfoot=1;td.wanted=1;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=4;
+    reset_case();td.onfoot=1;td.wanted=1;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=LF_LOOK_OFFICER;
     pk_u[0]=td.u;pk_v[0]=td.v;
     for(unsigned i=0;i<20;i++){td_tick++;td_life_tick();}
     expect(!lf_arrest&&td.mode==TD_ROAM,"brief contact with an officer is not an arrest");
@@ -508,7 +573,7 @@ static void test_street_life(void) {
     expect(lf_arrest,"an officer holding the courier for about a second and a half makes an arrest");
 
     /* Shooting starts at four stars. */
-    reset_case();td.onfoot=1;td.wanted=3;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=4;
+    reset_case();td.onfoot=1;td.wanted=3;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=LF_LOOK_OFFICER;
     pk_u[0]=td.u-40*16;pk_v[0]=td.v;geometry=CLEAR_GROUND;
     for(unsigned i=0;i<300;i++)lf_police_fire();
     expect(td.vitality==100,"three-star officers do not shoot");
@@ -780,7 +845,7 @@ static void test_pickup_damage_lifecycle(void) {
         if(hazard==0) {
             /* Rear-ending an eastbound car of equal mass (restitution 3/4)
                shoves it ahead and keeps the courier behind it. */
-            geometry=CLEAR_GROUND;td_traffic_u[0]=td.u+176;td_traffic_v[0]=td.v;actors[2].frame=td_traffic_bases[0];
+            geometry=CLEAR_GROUND;td_traffic_u[0]=td.u+176;td_traffic_v[0]=td.v;td_traffic_bases[0]=TD_FRAME_PLAYER_CAR;actors[2].frame=td_traffic_bases[0];
             UWORD before_u=td.u;driving_tick(0);damage=12;
             expect(td.speed==10&&td_vx==160&&td.cooldown==30&&td.msg==5&&td.u==before_u&&(td_tr_ctrl&1)&&tr_pu[0]==22,
                    "a traffic impact shoves the other car, slows and warns an empty, carrying or retired vehicle");
@@ -1632,7 +1697,7 @@ static void test_sidewalk_pickups(void) {
     for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)if(td_pickup_slot[s]==0)slot=s;
     expect(slot!=255&&td_pickup_su[slot]==pu&&td_pickup_sv[slot]==pv,"a nearby pickup takes an actor slot");
     expect(!(actors[TD_ACTOR_PICKUPS+slot].flags&ACTOR_FLAG_HIDDEN)&&
-           (UBYTE)(actors[TD_ACTOR_PICKUPS+slot].frame_start-TD_FRAME_PICKUP_CASH-(kind<<1))<2&&
+           actors[TD_ACTOR_PICKUPS+slot].frame_start==TD_FRAME_PICKUP_CASH+kind&&
            actors[TD_ACTOR_PICKUPS+slot].pos.x==pu*32,"a pickup shows its item frame at its pavement position");
     audio_cue=255;td.u=pu*16;td.v=pv*16;td_pickups_present();
     expect(td_pickup_slot[slot]==255&&audio_cue==TD_AUDIO_PICKUP&&
@@ -1779,7 +1844,7 @@ static void test_animation(void) {
     /* A collection pop rises 16 px and blinks out, then frees its actor. */
     td_anim_spawn(TD_PART_POP,TD_FRAME_PARCEL,500,600);
     anim_present_ticks(1);
-    expect((p0->flags&ACTOR_FLAG_ACTIVE)&&!(p0->flags&ACTOR_FLAG_HIDDEN)&&p0->frame_start==TD_FRAME_PARCEL,"a pop shows its icon");
+    expect((p0->flags&ACTOR_FLAG_ACTIVE)&&!(p0->flags&ACTOR_FLAG_HIDDEN)&&p0->frame_start==TD_FRAME_PARCEL&&p0->frame==TD_FRAME_PARCEL,"a pop shows its icon, not the idle frame activation resets to");
     td_anim_spawn(TD_PART_SMOKE,0,510,600);td_anim_spawn(TD_PART_SMOKE,0,520,600);
     expect(td_anim_parts[0].kind==TD_PART_POP,"smoke never replaces a collection pop");
     anim_present_ticks(TD_PART_POP_TICKS);
@@ -1823,6 +1888,38 @@ static void test_animation(void) {
     expect(camera_offset_x==0&&camera_offset_y==-16,"the camera recentres on foot");
 }
 
+
+static void test_car_damage(void) {
+    /* A hard wall strike wears the car by its speed; vans take half. */
+    reset_case();prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;
+    UBYTE speed=(UBYTE)td.speed;driving_tick(J_A);
+    expect(td_car_damage==speed,"a wall strike at speed damages the car by that speed");
+    reset_case();td.vehicle=1;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;
+    speed=(UBYTE)td.speed;driving_tick(J_A);
+    expect(td_car_damage==(speed+1)/2,"a van shrugs off half the damage");
+    /* Past seventy the engine fails: a warning, smoke and a lower top speed. */
+    reset_case();td_car_damage=60;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
+    expect(td_car_damage>=TD_DAMAGE_FAIL&&td.msg==TD_MSG_SMOKING,"crossing the failing threshold warns of a smoking engine");
+    geometry=CLEAR_GROUND;td.cooldown=0;td.speed=0;td_vx=td_vy=0;
+    for(unsigned i=0;i<400;i++)driving_tick(J_A);
+    expect(td.speed==18,"a failing car tops out at three quarters of its speed");
+    native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;td.onfoot=0;geometry=CLEAR_GROUND;
+    td_car_damage=TD_DAMAGE_FAIL;memset(td_anim_parts,0,sizeof(td_anim_parts));
+    for(unsigned i=0;i<40;i++){td_tick++;td_anim_update();}
+    expect(td_anim_parts[0].time&&td_anim_parts[0].kind==TD_PART_SMOKE,"a failing engine smokes from the bonnet");
+    /* At a hundred the car is wrecked and only crawls until repaired. */
+    reset_case();td_car_damage=95;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
+    expect(td_car_damage==TD_DAMAGE_WRECK&&td.msg==TD_MSG_WRECKED,"a wrecked car says so");
+    geometry=CLEAR_GROUND;td.speed=0;td_vx=td_vy=0;for(unsigned i=0;i<200;i++)driving_tick(J_A);
+    expect(td.speed==6,"a wreck crawls");
+    td.cash=40;expect(td_life_buy()&&td_car_damage==0,"supplies repair the car");
+    /* A stolen car starts fresh in its own paint. */
+    reset_case();td_car_damage=80;td.onfoot=1;td.u=300*16;td.v=292*16;td.park_u=100*16;td.park_v=100*16;
+    td_traffic_u[1]=300*16;td_traffic_v[1]=280*16;td_traffic_bases[1]=TD_FRAME_PLAYER_CAR;actors[3].move_speed=TD_PAL_TEAL;
+    td_input_edge=1;driving_tick(J_A);
+    expect(td_car_damage==0&&td_car_colour==TD_PAL_TEAL,"a stolen car is undamaged and keeps its colour");
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -1846,7 +1943,7 @@ int main(void) {
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
     test_sidewalk_pickups();test_visible_transit();test_ambient_traffic();
-    test_day_night();test_animation();
+    test_day_night();test_animation();test_car_damage();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

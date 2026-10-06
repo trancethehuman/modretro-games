@@ -4,7 +4,13 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 **Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, 211 buildings, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
 
-![Title screen](docs/screenshots/title-screen.png) ![Driving HUD](docs/screenshots/driving-hud.png) ![Pause menu at night](docs/screenshots/pause-menu.png)
+![Rosa's welcome call](docs/screenshots/radio-welcome.png) ![Pause menu](docs/screenshots/pause-menu.png) ![Pause menu scrolled](docs/screenshots/pause-menu-scrolled.png) ![Dispatch board](docs/screenshots/dispatch-board.png)
+
+![Job briefing and distance](docs/screenshots/job-briefing.png) ![Lock-on](docs/screenshots/lock-on.png) ![Tracer round](docs/screenshots/tracer-flight.png) ![Smoking engine](docs/screenshots/engine-smoke.png) ![Stolen car at night](docs/screenshots/night-stolen-car.png)
+
+Development build: Rosa's radio calls, the pause menu and dispatch board as bottom sheets, a contract briefing with the distance readout, pistol lock-on and a long tracer round, a damaged car smoking and a stolen blue car with its own headlamp beam at night. Some frames are staged by writing car damage, paint or the play clock in emulator memory, as listed in the [provenance](docs/screenshots/provenance.json).
+
+![Title screen](docs/screenshots/title-screen.png) ![Driving HUD](docs/screenshots/driving-hud.png)
 
 ![Golden hour](docs/screenshots/golden-hour.png) ![Dusk with headlamps](docs/screenshots/dusk-headlamps.png) ![Night](docs/screenshots/night-headlamps.png) ![Dawn](docs/screenshots/dawn.png)
 
@@ -30,15 +36,16 @@ Current source adds eight original curb signs and a scheduled [501 Queen game se
 | Steer the vehicle | Left / right; brake for tighter corners |
 | Brake / reverse | B; keep holding near rest to reverse |
 | Accept or deliver a package | Select opens dispatch, then A accepts; Select at a beacon while stopped collects/delivers |
-| Pause menu | Start; up/down and A choose |
+| Pause menu | Start; up/down scroll four actions at a time, A chooses |
 | Park and exit | Stop, then hold A+B, or pause → Park / recover car |
 | Walk | D-pad; A near the parked car animates entry |
-| On foot | A beside a road vehicle takes it, otherwise punches; B away from a stop fires the pistol |
+| On foot | D-pad walks and aims; A beside a road vehicle takes it, otherwise punches; B away from a stop fires at the locked-on target (red brackets), hold B to keep firing |
 | Pickups | Walk or drive over cash, first aid or ammunition on the pavement |
 | Transit | On foot, B at a station/terminal/platform; left/right chooses destination, A waits/boards |
 | Change service | Up/down at Wellesley switches Line 1 / 94 bus |
 | Scrollable city map | Pause → map; D-pad pans, A centres job / booked transit stop / depot; Select changes focus, B returns |
 | Change vehicle / save | Pause menu; change vehicle while stopped without an active job |
+| Repair | Pause → Supplies ($20) heals, adds ammunition and repairs the car |
 | Sound | Pause → Audio; cycle full music/effects, effects only, or silent |
 
 First job: accept contract 1 at the Union depot, press Select to collect, drive east along Front Street to St. Lawrence Market, brake and press Select to deliver. The marker and HUD identify the next waypoint. Pickup is the first of the displayed stops. The 72 original contracts, plus eight western and eight eastern jobs, have distinct routes/titles, brief instructions and nine progression chapters. Completion unlocks truck/transit jobs, passenger work and Island walking rounds. Dispatch selects the next eligible unfinished contract. Replays pay but do not increment unique completion twice.
@@ -47,7 +54,7 @@ Transit runs on a repeating **fictional game clock**, even without the player. F
 
 Driving retains momentum through steering and glancing curb contact. A bounded sideways adjustment helps clear narrow tile corners while accelerating; broad walls still stop the vehicle. Fragile crates take greater crash damage. Fast passenger turns reduce comfort, and base rewards scale with condition. Two alternating CRC-checked save records retain a previous checkpoint if a write is interrupted. Paid rides resume from their latest second after a reset. Physical power-off persistence still needs a cartridge test.
 
-Pedestrians follow 620 fixed sidewalk routes across the four areas with eight nearby people rendered at a time. Traffic follows continuous loops, yields to the courier crossing on foot and keeps returning just beyond the screen edge so nearby streets stay busy. Crimes draw police attention in stars; the police chase without overwhelming speed, arrests need a firm hold and officers only shoot from four stars. Sidewalk pickups give cash, first aid or ammunition. The visible bus currently uses a truck-shaped placeholder and has a separate animation path from the boarding timetable. Dedicated TTC vehicle art and matching visible service schedules remain planned. Original city music, engine, braking and event effects have been verified through emulator PCM capture; physical speaker/headphone testing remains open. See [audio design and reproduction](docs/AUDIO.md).
+Rosa, the depot dispatcher, calls in on the radio with briefings, chapter news, police warnings and city chatter while play continues; the HUD shows the distance to the objective. The car wears from crashes, smokes and loses power until repaired. Pedestrians follow 620 fixed sidewalk routes across the four areas with eight nearby people rendered at a time, in six designs and four colours; road vehicles come in eight designs and seven paints. Traffic follows continuous loops, yields to the courier crossing on foot and keeps returning just beyond the screen edge so nearby streets stay busy. Crimes draw police attention in stars; the police chase without overwhelming speed, arrests need a firm hold and officers only shoot from four stars. Sidewalk pickups give cash, first aid or ammunition. The visible bus currently uses a truck-shaped placeholder and has a separate animation path from the boarding timetable. Dedicated TTC vehicle art and matching visible service schedules remain planned. Original city music, engine, braking and event effects have been verified through emulator PCM capture; physical speaker/headphone testing remains open. See [audio design and reproduction](docs/AUDIO.md).
 
 For installation, use the [loading instructions](docs/LOADING.md). ROM bundles require the [distribution notices](docs/DISTRIBUTION.md). This prototype has not been verified for two hours of gameplay.
 

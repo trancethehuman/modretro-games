@@ -45,7 +45,9 @@
 #define TD_MSG_CASH 27
 #define TD_MSG_FIRST_AID 28
 #define TD_MSG_AMMO 29
-#define TD_MSG_COUNT 30
+#define TD_MSG_SMOKING 30
+#define TD_MSG_WRECKED 31
+#define TD_MSG_COUNT 32
 
 /* Sidewalk pickups (td_street.c tables, collected in TORONTO.c). */
 #define TD_PICKUP_CASH 15
@@ -72,9 +74,20 @@ UBYTE td_near_cells(void) NONBANKED;
 /* Nonzero while actor 20 shows a spark, bullet or fleeing driver. */
 extern UBYTE td_fx_kind;
 /* Objective position in whole pixels; actor 1 shows a beacon or pointer. */
+/* The courier's current car (not saved): damage 0..100 from walls and
+ * impacts, smoke from TD_DAMAGE_SMOKE, a failing engine (three-quarter top
+ * speed) from TD_DAMAGE_FAIL and a crawl when wrecked; supplies repair it
+ * and a stolen car starts fresh. Its colour is a sprite palette offset:
+ * the courier's orange, or the stolen car's own paint. */
+extern UBYTE td_car_damage,td_car_colour;
+#define TD_DAMAGE_SMOKE 40
+#define TD_DAMAGE_FAIL 70
+#define TD_DAMAGE_WRECK 100
 extern UWORD td_beacon_u,td_beacon_v;
 extern UBYTE td_beacon_shown;
 extern UBYTE td_life_event,td_life_fine;
+/* Give traffic slot i a new design and colour (call while it is out of view). */
+void td_lf_new_look(UBYTE i,UBYTE seed) BANKED;
 
 void td_life_reset(UBYTE cold) BANKED;
 /* One driving step for the courier's vehicle; returns TD_DRIVE_* bits. */
@@ -83,6 +96,12 @@ UBYTE td_life_drive(void) BANKED;
 void td_life_foot_a(void) BANKED;
 /* On-foot B away from TTC: fire the pistol in the walking direction. */
 void td_life_foot_b(void) BANKED;
+/* On foot: aim direction (eight headings, E=0 clockwise) from the D-pad,
+ * and the soft lock-on refreshed every few ticks: the nearest walker or
+ * patrol car within about 45 degrees of the aim and 112 px (TD_NONE when
+ * there is none). The lock-on marker shows it. */
+extern UBYTE td_aim_dir,td_aim_target;
+void td_life_aim(void) BANKED;
 /* TRUE while the courier is knocked down, being arrested or hurt-stunned. */
 UBYTE td_life_locked(void) BANKED;
 void td_life_tick(void) BANKED;

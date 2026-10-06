@@ -2,6 +2,7 @@
 #include <string.h>
 #include "states/TORONTO.h"
 #include "td_game.h"
+#include "td_radio_data.h"
 #include "td_world_routes.h"
 #include "td_audio.h"
 #include "td_district.h"
@@ -93,7 +94,9 @@ static void td_position(actor_t *a,UWORD u,UWORD v){
 }
 static void td_frame(actor_t *a,UBYTE f){if(a->frame_start!=f||a->frame_end!=f+1)actor_set_frames(a,f,f+1);a->anim_tick=255;}
 /* The courier's vehicle; from dusk to dawn its frames carry the headlamp beam. */
-static UBYTE td_vehicle_frame(void){return (td_daynight_lights?TD_FRAME_PLAYER_CAR_LIT:0)+(td.vehicle<<3)+(((td.heading+1)&15)>>1);}
+/* The lit composites carry the beam in the courier's palette; a stolen car
+ * in another paint draws its beam with a separate actor (td_life_draw.c). */
+static UBYTE td_vehicle_frame(void){return (td_daynight_lights&&td_car_colour==TD_PAL_COURIER?TD_FRAME_PLAYER_CAR_LIT:0)+(td.vehicle<<3)+(((td.heading+1)&15)>>1);}
 void td_message(UBYTE m) BANKED {td.msg=m;td_notice_timer=90;if(m==5||m==13)td_audio_play(TD_AUDIO_IMPACT);td_ui_draw();}
 static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!INPUT_B,td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
 static UBYTE td_near(td_stop_t *s){return s->district==td.district&&td_distance(td.u>>4,s->u)<15&&td_distance(td.v>>4,s->v)<15;}
@@ -185,6 +188,7 @@ static void td_enter_exit(void){
         }
         if(!found){td_message(15);return;}
         td.park_u=td.u;td.park_v=td.v;td.park_district=td.district;td.u=door_u;td.v=door_v;td.onfoot=1;td_entry_target=1;
+        td_aim_dir=((td.heading+1)&15)>>1;
     }
     td.speed=0;td_vx=td_vy=0;td_entry_timer=12;td.mode=TD_ROAM;td_set_target();td_save();td_ui_draw();
 }
@@ -220,15 +224,23 @@ static UBYTE td_cross_portal(UWORD old_u,UWORD old_v){
     return td_change_district(crossing.district,crossing.u,crossing.v);
 }
 void td_finish(UBYTE success) BANKED {
+    UBYTE done_before=td.done;
     td_audio_play(success?TD_AUDIO_COMPLETE:TD_AUDIO_FAIL);
     if(success){
         if(!(td.complete[td.job>>3]&(1<<(td.job&7)))){td.complete[td.job>>3]|=1<<(td.job&7);td.done++;}
         { UWORD reward=td_job.reward/100*td.health+(td_job.reward%100)*td.health/100+td.left/5;
-          td.cash=td.cash>60000-reward?60000:td.cash+reward; }
+          td.cash=td.cash>60000-reward?60000:td.cash+reward;td_last_pay=reward; }
         /* The fee pops up over the courier once the result closes. */
-        td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_CASH+1,td.u>>4,(td.v>>4)-10);
+        td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_CASH,td.u>>4,(td.v>>4)-10);
         td_anim_spawn(TD_PART_FLASH,0,td.u>>4,(td.v>>4)-12);
     }
+    /* Rosa calls once the result card closes: a new chapter, the west/east
+     * routes opening, the last contract, or a word on the delivery. */
+    if(!success)td_radio_say(TD_RADIO_FAIL);
+    else if(td.done==TD_QUESTS)td_radio_say(TD_RADIO_MASTER);
+    else if(td.done!=done_before&&td.done%6==0&&td.done<=6*TD_RADIO_CHAPTER_COUNT)td_radio_say(TD_RADIO_CHAPTER+td.done/6-1);
+    else if(td.done!=done_before&&td.done==3)td_radio_say(TD_RADIO_OPEN_ENDS);
+    else td_radio_say(TD_RADIO_DONE+td.done%TD_RADIO_DONE_COUNT);
     td.job=TD_NONE;td.speed=0;td_vx=td_vy=0;td.mode=TD_RESULT;td_set_target();td_save();td_ui_draw();
 }
 static void td_ready_offer(void){
@@ -248,6 +260,7 @@ static void td_interact(void){
     td.stage++;
     if(td.stage==td_job.count){td_finish(TRUE);return;}
     td_audio_play(TD_AUDIO_PICKUP);td_anim_spawn(TD_PART_POP,TD_FRAME_PARCEL,td.u>>4,(td.v>>4)-10);
+    if(td.stage==1)td_radio_say(TD_RADIO_PICKUP);
     td_set_target();td_save();td_ui_draw();
 }
 static UBYTE td_origin(void){
@@ -287,10 +300,10 @@ static void td_tv_show(UBYTE service,UBYTE stop,UBYTE heading,UWORD offset,UBYTE
     else if(heading==TD_HEADING_SOUTH){if(arriving)v-=offset;else v+=offset;}
     else{if(arriving)v+=offset;else v-=offset;}
     if(u>4000||v>4000){a->flags|=ACTOR_FLAG_HIDDEN;return;}
-    if(service==TD_TRANSIT_FERRY)frame=heading==TD_HEADING_NORTH?TD_FRAME_FERRY_N:TD_FRAME_FERRY_S;
-    else frame=(service==TD_TRANSIT_BUS?TD_FRAME_BUS_E:TD_FRAME_STREETCAR_E)+heading;
-    /* Tall frames grow upward from their bottom row; centre them on (u,v). */
-    if(heading>=TD_HEADING_SOUTH)v+=service==TD_TRANSIT_STREETCAR?TD_ANCHOR_STREETCAR_S_DY:TD_ANCHOR_BUS_S_DY;
+    /* Buses and streetcars run east-west, ferries north-south. Tall frames
+     * grow upward from their bottom row; centre them on (u,v). */
+    if(service==TD_TRANSIT_FERRY){frame=heading==TD_HEADING_NORTH?TD_FRAME_FERRY_N:TD_FRAME_FERRY_S;v+=TD_ANCHOR_FERRY_S_DY;}
+    else frame=(service==TD_TRANSIT_BUS?TD_FRAME_BUS_E:TD_FRAME_STREETCAR_E)+(heading&1);
     td_position(a,u,v);td_frame(a,frame);a->flags&=~ACTOR_FLAG_HIDDEN;td_tv_shown=1;
 }
 static void td_transit_present(UBYTE frames){
@@ -330,7 +343,7 @@ static void td_pickup_collect(UBYTE i){
         td.cash=td.cash>60000-TD_PICKUP_CASH?60000:td.cash+TD_PICKUP_CASH;td_message(TD_MSG_CASH);
     }
     td_audio_play(TD_AUDIO_PICKUP);
-    td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_CASH+(k<<1)+1,td_pickup_su[i],td_pickup_sv[i]);
+    td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_CASH+k,td_pickup_su[i],td_pickup_sv[i]);
     td_street_take(i);
 }
 static void td_pickups_present(void){
@@ -344,14 +357,14 @@ static void td_pickups_present(void){
             if(td_distance(td_pickup_su[i],pu)<9&&td_distance(td_pickup_sv[i],pv)<10)td_pickup_collect(i);
         }
     }
-    /* A highlight blinks every half second. */
-    if(!(td_tick&31))td_pickup_dirty=(1<<TD_PICKUP_SLOTS)-1;
+    /* Pickups bob a pixel every quarter second. */
+    if(!(td_tick&15))td_pickup_dirty=(1<<TD_PICKUP_SLOTS)-1;
     if(!td_pickup_dirty)return;
     for(i=0,mask=1,a=&actors[TD_ACTOR_PICKUPS];i<TD_PICKUP_SLOTS;i++,a++,mask<<=1){
         if(!(td_pickup_dirty&mask))continue;
         if(td_pickup_slot[i]==TD_NONE||td_pickups_hidden){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
-        td_position(a,td_pickup_su[i],td_pickup_sv[i]);
-        td_frame(a,TD_FRAME_PICKUP_CASH+(td_pickup_sk[i]<<1)+((td_tick>>5)&1));
+        td_position(a,td_pickup_su[i],td_pickup_sv[i]-((td_tick>>4)&1));
+        td_frame(a,TD_FRAME_PICKUP_CASH+td_pickup_sk[i]);
         a->flags&=~ACTOR_FLAG_HIDDEN;
     }
     td_pickup_dirty=0;
@@ -389,7 +402,7 @@ static void td_pause_choose(void){
         case 3:td_enter_exit();return;
         case 4:
             if(td.job!=TD_NONE||td.speed>2||td.speed<-2||td.onfoot){td_message(2);return;}
-            td.vehicle=(td.vehicle+1)&3;td_save();break;
+            td.vehicle=(td.vehicle+1)&3;td_car_damage=0;td_car_colour=TD_PAL_COURIER;td_save();break;
         case 5:td_transit_open();return;
         case 6:if(td_life_buy())td_save();td.mode=TD_ROAM;break;
         case 7:td.job=TD_NONE;td.speed=0;td.mode=TD_ROAM;td_set_target();td_save();break;
@@ -400,7 +413,14 @@ static void td_pause_choose(void){
 }
 static void td_menu_update(void){
     td_ui_tick();
-    if(td.mode==TD_HELP){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=td_resume_mode;td_ui_draw();}return;}
+    if(td.mode==TD_HELP){
+        if(INPUT_A_PRESSED||INPUT_B_PRESSED){
+            /* A fresh shift starts with Rosa's welcome. */
+            if(!td.done&&td.job==TD_NONE)td_radio_say(TD_RADIO_INTRO);
+            td.mode=td_resume_mode;td_ui_draw();
+        }
+        return;
+    }
     if(td.mode==TD_BUSTED||td.mode==TD_WASTED){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=TD_ROAM;td_resume_mode=TD_ROAM;td_ui_draw();}return;}
     if(td.mode==TD_MAP){
         if(INPUT_B_PRESSED||INPUT_START_PRESSED){td_map_close();td.mode=TD_PAUSE;td.menu=1;td_ui_draw();}
@@ -419,7 +439,8 @@ static void td_menu_update(void){
             if(td.job!=TD_NONE){td_message(2);return;}
             if(td.done<td_offer.min_done){td_message(3);return;}
             if(td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)){td_message(2);return;}
-            td.job=td.menu;td_job=td_offer;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);td_set_target();td_save();td_ui_draw();return;
+            td.job=td.menu;td_job=td_offer;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);
+            td_radio_say(TD_RADIO_JOB+td_job.kind);td_set_target();td_save();td_ui_draw();return;
         }
     }else if(td.mode==TD_TRANSIT){
         if((INPUT_UP_PRESSED||INPUT_DOWN_PRESSED)&&(td.transit_origin&63)==16){
@@ -1104,13 +1125,14 @@ collide:
 /* Whole-pixel world position to GBVM Q5: (u>>4)*32 == (u&0xFFF0)<<1. */
 #define TD_Q4_TO_ACTOR(q) ((UWORD)(((q)&0xFFF0)<<1))
 /* Presentation only: each traffic slot keeps its heading (frame&7) and
- * draws a fixed livery; walkers take one of four looks from their route. */
+ * draws its slot's design and colour; walkers take a design from their
+ * route identity and a clothing colour from td_pedestrians. */
 /* Slot 4 is an ordinary car; td_life.c turns it into the patrol car out of
  * view when a pursuit starts and draws it while it is owned. */
-const UBYTE td_traffic_bases[6]={TD_FRAME_TRAFFIC_RED,TD_FRAME_TRAFFIC_VAN,TD_FRAME_TRAFFIC_TAXI,
-    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_TRAFFIC_BLUE,TD_FRAME_TRAFFIC_VAN};
-const UBYTE td_walker_bases[8]={TD_FRAME_WALKER_A,TD_FRAME_WALKER_B,TD_FRAME_WALKER_C,TD_FRAME_WALKER_D,
-    TD_FRAME_WALKER_B,TD_FRAME_OFFICER,TD_FRAME_WALKER_A,TD_FRAME_WALKER_C};
+UBYTE td_traffic_bases[6];
+/* Walker design per route identity&7; look 5 (cap, navy) is an officer. */
+const UBYTE td_walker_bases[8]={TD_FRAME_PERSON_SHORT,TD_FRAME_PERSON_LONG,TD_FRAME_PERSON_BUN,TD_FRAME_PERSON_PACK,
+    TD_FRAME_PERSON_UMBRELLA,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_LONG};
 #ifdef __SDCC
 #include <stddef.h>
 /* The assembly below addresses actor_t fields directly. */
@@ -1586,8 +1608,19 @@ static void td_traffic_present(void){
         a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(frame&7));
     }
 #endif
-    td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:(td.vehicle<<3)+(((td.heading+1)&15)>>1));
+    TD_PALETTE(&actors[8])=td_car_colour;
+    td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?TD_FRAME_CAR_DOOR_OPEN:(td.vehicle<<3)+(((td.heading+1)&15)>>1));
     if(td.onfoot&&td.park_district==td.district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
+}
+/* Clothing colours: civilians by route identity, navy for officers. */
+static const UBYTE td_civilian_pal[4]={TD_PEOPLE_PAL(TD_PAL_RED),TD_PEOPLE_PAL(TD_PAL_YELLOW),TD_PEOPLE_PAL(TD_PAL_TEAL),TD_PEOPLE_PAL(TD_PAL_VIOLET)};
+static void td_walker_colours(void){
+    UBYTE i,bit,route;actor_t *a=&actors[TD_ACTOR_PEDS];
+    for(i=0,bit=1;i<TD_PEDS;i++,bit<<=1,a++){
+        route=td_ped_route[i];
+        if((td_ped_ovr&bit)||route==TD_NONE)continue;
+        TD_PALETTE(a)=(route&7)==5?TD_PEOPLE_PAL(TD_PAL_NAVY):td_civilian_pal[(route>>3)&3];
+    }
 }
 static void td_pedestrians(void){
     UBYTE refresh,near,moved;UWORD player_u=td.u>>4,player_v=td.v>>4;
@@ -1598,6 +1631,7 @@ static void td_pedestrians(void){
         td_ped_refresh=16;td_ped_anchor_u=player_u;td_ped_anchor_v=player_v;
         /* Slots still waiting for a route are picked over the next frames. */
         if(td_life_routes(moved))td_ped_refresh=2;
+        td_walker_colours();
     }
 #ifdef __SDCC
     td_pl_base=td_ped_base();td_pl_step=(td_tick>>3)&1;td_pl_pu=player_u;td_pl_pv=player_v;
@@ -1608,12 +1642,15 @@ static void td_pedestrians(void){
     /* Struck walkers are thrown and fall; owned slots are drawn by td_life. */
     td_life_peds(near);
 }
+/* D-pad (x,y) to aim heading: index (y+1)*3+(x+1), E=0 clockwise. */
+static const UBYTE td_aim_of[9]={5,6,7,4,0,0,3,2,1};
+static UBYTE td_fire_hold;
 static void td_drive(void){
     WORD nu,nv;BYTE walk_x,walk_y;UBYTE moving=0;
     if(td_entry_timer){
         if(!td_entry_target){td.u=(td.u*3+td.park_u)/4;td.v=(td.v*3+td.park_v)/4;}
         if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();}
-        td_frame(&PLAYER,td.onfoot?32:td_vehicle_frame());return;
+        td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());return;
     }
     if(td.onfoot){
         if(td_life_locked()){td.speed=0;return;}
@@ -1622,15 +1659,23 @@ static void td_drive(void){
         /* Alternate5/6 per axis: diagonal pace stays below cardinal8 Q4. */
         if(walk_x){nu+=walk_x*(walk_y?5+(td_tick&1):8);td_walk_dir=walk_x>0?0:1;moving=1;}
         if(walk_y){nv+=walk_y*(walk_x?6-(td_tick&1):8);td_walk_dir=walk_y>0?2:3;moving=1;}
+        /* Aim follows the D-pad in eight directions; the lock-on refreshes
+         * every eighth tick. */
+        if(moving)td_aim_dir=td_aim_of[(UBYTE)((walk_y+1)*3+walk_x+1)];
+        if(!(td_tick&7))td_life_aim();
         if(td_foot_free(nu,nv)){td.u=nu;td.v=nv;}
         else{if(nu!=(WORD)td.u&&td_foot_free(nu,td.v))td.u=nu;if(nv!=(WORD)td.v&&td_foot_free(td.u,nv))td.v=nv;}
         td.speed=0;
         if(td_anim_pose_time){td_anim_pose_time--;td_frame(&PLAYER,td_anim_pose_base+td_walk_dir);}
-        else td_frame(&PLAYER,32+td_walk_dir*2+(moving?((td_tick>>3)&1):0));
+        else td_frame(&PLAYER,TD_FRAME_COURIER_WALK+td_walk_dir*2+(moving?((td_tick>>3)&1):0));
         /* A: own car, then a nearby road vehicle, else a punch.
          * B: TTC at a station, otherwise the pistol. */
         if(td_input_edge&&INPUT_A_PRESSED){if(td_near_car())td_enter_exit();else td_life_foot_a();}
-        if(td_input_edge&&INPUT_B_PRESSED&&!td_entry_timer){if(td_origin()!=TD_NONE)td_transit_open();else td_life_foot_b();}
+        /* B at a station opens the TTC; elsewhere it fires, and holding it
+         * keeps firing at the pistol's rate. */
+        if(td_input_edge&&INPUT_B_PRESSED&&!td_entry_timer){if(td_origin()!=TD_NONE)td_transit_open();else{td_fire_hold=1;td_life_foot_b();}}
+        else if(td_fire_hold&&td_input_edge&&INPUT_B)td_life_foot_b();
+        if(!INPUT_B)td_fire_hold=0;
         return;
     }
     if(td_life_drive()&TD_DRIVE_EXIT){td_enter_exit();return;}
@@ -1647,12 +1692,12 @@ static void td_life_handle(void){
         td_life_busted();
         /* Officers take the courier out of the vehicle; it stays parked. */
         if(!td.onfoot)td_enter_exit();
-        td.mode=TD_BUSTED;
+        td.mode=TD_BUSTED;td_radio_say(TD_RADIO_BUSTED);
     }else if(event==TD_EVENT_WASTED){
         if(!td.onfoot){td.park_u=td.u;td.park_v=td.v;td.park_district=td.district;td.onfoot=1;}
         td_entry_timer=0;
         td_life_hospital(&u,&v);
-        td.mode=TD_WASTED;td_resume_mode=TD_ROAM;
+        td.mode=TD_WASTED;td_resume_mode=TD_ROAM;td_radio_say(TD_RADIO_WASTED);
         if(td.district!=TD_HOSPITAL_DISTRICT){
             if(td_change_district(TD_HOSPITAL_DISTRICT,u,v)){td_audio_play(TD_AUDIO_FAIL);return;}
         }else{td.u=u;td.v=v;td.safe_u=u;td.safe_v=v;}
@@ -1687,6 +1732,8 @@ void toronto_init(void) BANKED {
     if(td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)td_get_stop(td.transit_target,&td_cursor);
     if(td.job!=TD_NONE){td_get_job(td.job,&td_job);if(td.stage>=td_job.count)td.job=TD_NONE;}
     actors_len=TD_ACTORS;
+    /* No palette offsets yet (GBVM set the player's move speed). */
+    TD_PALETTE(&PLAYER)=TD_PAL_COURIER;
     for(i=1;i<TD_ACTORS;i++){
         actors[i]=PLAYER;actors[i].prev=actors[i].next=NULL;actors[i].flags=ACTOR_FLAG_PERSISTENT;actors[i].collision_group=0;actors[i].script.bank=actors[i].script_update.bank=0;
         // Place copied actors on the inactive list before activating them.
@@ -1699,8 +1746,9 @@ void toronto_init(void) BANKED {
     for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_life_reset(cold);td_anim_reset();
-    td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
-    td_frame(&PLAYER,td.onfoot?32:td_vehicle_frame());td_traffic_present();td_pedestrians();
+    for(i=0;i<6;i++)td_lf_new_look(i,(UBYTE)(i*37+td.seconds+(td.district<<3)));
+    td_frame(&actors[1],TD_FRAME_BEACON);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
+    td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());td_traffic_present();td_pedestrians();
     td_street_reset(cold);td_transit_present(0);td_pickups_present();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=-16;camera_deadzone_x=8;camera_deadzone_y=8;
     if(cold)td_audio_init();td_ui_init();
@@ -1741,9 +1789,10 @@ void toronto_update(void) BANKED {
     if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
     if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){
         td_traffic_present();td_pedestrians();td_transit_present(motion);td_pickups_present();
-        td_life_present();td_anim_update();
+        td_life_present();td_anim_update();if(TD_RADIO_DUE())td_radio_tick();
     }
     if(!(td_tick&7))td_ui_compass();
+    TD_PALETTE(&PLAYER)=td.onfoot?TD_PAL_COURIER:td_car_colour;
     td_position(&PLAYER,td.u>>4,td.v>>4);
     td_sound_update();
 }

@@ -5,9 +5,14 @@
 #include "td_life_int.h"
 #include "td_audio.h"
 #include "td_district.h"
+#include "td_daynight.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
+
+/* Tracer head offsets from the actor point, per heading (create_sprites.py). */
+static const BYTE lf_tracer_dx[8]=TD_TRACER_HEAD_DX;
+static const BYTE lf_tracer_dy[8]=TD_TRACER_HEAD_DY;
 
 void td_life_peds(UBYTE near) BANKED {
     UBYTE i,bit,a,mode,f,hop;actor_t *p;
@@ -39,9 +44,9 @@ void td_life_peds(UBYTE near) BANKED {
         if(mode==PK_FLY){
             /* Arc: height grows then falls over the flight. */
             UBYTE t=pk_timer[i],s=pk_span[i];UWORD h=(UWORD)t*(UBYTE)(s-t);hop=(UBYTE)((h+(h<<1))>>5);
-            f=TD_FRAME_KNOCK_WALKER_A+pk_look[i]*TD_KNOCK_FRAMES+((t>>2)&3);
+            f=TD_FRAME_KNOCK+((t>>2)&3);
         }else if(mode==PK_DOWN||mode==PK_DEAD){
-            f=TD_FRAME_KNOCK_WALKER_A+pk_look[i]*TD_KNOCK_FRAMES+4+(i&1);
+            f=TD_FRAME_KNOCK+4+(i&1);
             lf_place_q4(p,pk_u[i],pk_v[i]);lf_frame(p,f);p->flags&=~ACTOR_FLAG_HIDDEN;pk_drawn|=bit;continue;
         }else{
             static const UBYTE dir_frame[4]={0,2,4,6};
@@ -74,6 +79,34 @@ static void lf_beacon(void){
     b->flags&=~ACTOR_FLAG_HIDDEN;
 }
 
+/* Lock-on marker over the walker or patrol car a shot would take; its
+ * actor only joins GBVM's active list while it is shown. */
+/* Actor 23: the lock-on marker on foot; at night in a stolen car of another
+ * paint, that car's headlamp beam (the courier's own car carries its beam in
+ * its lit frames). */
+static const BYTE lf_beam_dx[8]=TD_BEAM_DX;
+static const BYTE lf_beam_dy[8]=TD_BEAM_DY;
+static void lf_marker(void){
+    actor_t *r=&actors[TD_ACTOR_RETICLE];UBYTE t=td_aim_target,f,d;
+    if(td.onfoot&&t!=TD_NONE&&td.mode==TD_ROAM){
+        if(t==8)lf_place_q4(r,td_traffic_u[TD_POLICE_SLOT],td_traffic_v[TD_POLICE_SLOT]);
+        else{r->pos.x=actors[TD_ACTOR_PEDS+t].pos.x;r->pos.y=actors[TD_ACTOR_PEDS+t].pos.y;}
+        f=TD_FRAME_RETICLE;
+    }else if(!td.onfoot&&td_daynight_lights&&td_car_colour!=TD_PAL_COURIER&&!td_entry_timer&&(td.mode==TD_ROAM||td.mode==TD_WAIT)){
+        d=((td.heading+1)&15)>>1;
+        lf_place(r,(UWORD)((WORD)(td.u>>4)+lf_beam_dx[d]),(UWORD)((WORD)(td.v>>4)+lf_beam_dy[d]));
+        f=TD_FRAME_BEAM+d;
+    }else{
+        if(r->flags&ACTOR_FLAG_ACTIVE){r->flags|=ACTOR_FLAG_HIDDEN;deactivate_actor(r);}
+        return;
+    }
+    TD_PALETTE(r)=0;
+    /* Activation resets the idle animation, so the frame is set after it. */
+    if(!(r->flags&ACTOR_FLAG_ACTIVE)){r->flags&=~(ACTOR_FLAG_DISABLED|ACTOR_FLAG_HIDDEN);activate_actor(r);}
+    else r->flags&=~ACTOR_FLAG_HIDDEN;
+    lf_frame(r,f);
+}
+
 void td_life_present(void) BANKED {
     UBYTE i,bit;actor_t *a;
     /* Owned road vehicles: impact slides, pursuit and stolen cars. */
@@ -83,20 +116,30 @@ void td_life_present(void) BANKED {
         lf_place_q4(a,td_traffic_u[i],td_traffic_v[i]);
         /* A pursuing patrol car flashes its light bar. */
         if(LF_IS_PATROL(i))lf_frame(a,td.wanted&&(td_tick&8)?TD_FRAME_POLICE_FLASH+(tr_head[i]>>1):TD_FRAME_POLICE+tr_head[i]);
-        else lf_frame(a,lf_traffic_base[i]+tr_head[i]);
+        else lf_frame(a,td_traffic_bases[i]+tr_head[i]);
     }
     if(td_fx_kind){
         a=&actors[TD_ACTOR_FX];
-        lf_place_q4(a,fx_u,fx_v);
-        lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:td_fx_kind==FX_BULLET?TD_FRAME_BULLET:
-                   lf_look_walk[fx_look]+(fx_du>0?0:2)+((fx_timer>>2)&1));
-        a->flags&=~ACTOR_FLAG_HIDDEN;
+        if(td_fx_kind==FX_BULLET){
+            /* The tracer's head sits on the round at chest height with its
+             * long trail behind; the courier, drawn first, hides the part of
+             * the trail still behind the gun. */
+            lf_place(a,(UWORD)((fx_u>>4)-lf_tracer_dx[fx_look]),(UWORD)((fx_v>>4)-7-lf_tracer_dy[fx_look]));
+            lf_frame(a,TD_FRAME_TRACER+fx_look);
+            /* GBVM re-checks an off-screen actor only every fourth frame;
+             * a round placed in view shows at once. */
+            a->flags&=~(ACTOR_FLAG_HIDDEN|ACTOR_FLAG_DISABLED);
+        }else{
+            lf_place_q4(a,fx_u,fx_v);
+            lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:lf_look_walk[fx_look]+(fx_du>0?0:2)+((fx_timer>>2)&1));
+            a->flags&=~(ACTOR_FLAG_HIDDEN|ACTOR_FLAG_DISABLED);
+        }
     }
     /* The courier lies down when knocked out, flashes when hit. */
-    if(lf_down&&td.onfoot)lf_frame(&PLAYER,TD_FRAME_KNOCK_WALKER_A+5*TD_KNOCK_FRAMES+4);
+    if(lf_down&&td.onfoot)lf_frame(&PLAYER,TD_FRAME_KNOCK+4);
     if(lf_hurt&&!lf_down){if(lf_hurt&4)PLAYER.flags|=ACTOR_FLAG_HIDDEN;else PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
     else if(lf_flash){lf_flash=0;PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
     /* The impact shake is applied with the camera look-ahead (td_anim.c). */
-    lf_beacon();
+    lf_beacon();lf_marker();
 }
 
