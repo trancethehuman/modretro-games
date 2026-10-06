@@ -7,6 +7,7 @@
 #include "td_district.h"
 #include "td_world.h"
 #include "td_transit.h"
+#include "td_sprites.h"
 #include "actor.h"
 #include "camera.h"
 #include "scroll.h"
@@ -925,6 +926,11 @@ collide:
 #define TD_FRAME(a,f) do{UBYTE td_f=(f);if((a)->frame_start!=td_f||(a)->frame_end!=td_f+1)actor_set_frames((a),td_f,td_f+1);(a)->anim_tick=255;}while(0)
 /* Whole-pixel world position to GBVM Q5: (u>>4)*32 == (u&0xFFF0)<<1. */
 #define TD_Q4_TO_ACTOR(q) ((UWORD)(((q)&0xFFF0)<<1))
+/* Presentation only: each traffic slot keeps its heading (frame&7) and
+ * draws a fixed livery; walkers take one of four looks from their route. */
+const UBYTE td_traffic_bases[6]={TD_FRAME_TRAFFIC_RED,TD_FRAME_TRAFFIC_VAN,TD_FRAME_TRAFFIC_TAXI,
+    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_TRAFFIC_BLUE,TD_FRAME_TRAFFIC_VAN};
+const UBYTE td_walker_bases[4]={TD_FRAME_WALKER_A,TD_FRAME_WALKER_B,TD_FRAME_WALKER_C,TD_FRAME_WALKER_D};
 #ifdef __SDCC
 #include <stddef.h>
 /* The assembly below addresses actor_t fields directly. */
@@ -1046,17 +1052,33 @@ UBYTE td_ped_layout(void) NAKED {
         ld (hl+), a
         ld a, b
         ld (hl), a
-        ld de, #12
-        add hl, de
+        ld hl, #_td_pl_rp
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        ld a, (hl)
+        and a, #3
+        add a, #<(_td_walker_bases)
+        ld l, a
+        ld a, #0
+        adc a, #>(_td_walker_bases)
+        ld h, a
+        ld b, (hl)
         ld a, (_td_pl_phase)
         cp a, #64
-        ld b, #32
         jr c, 13$
-        ld b, #34
+        inc b
+        inc b
     13$:
         ld a, (_td_pl_step)
         add a, b
         ld b, a
+        ld hl, #_td_pl_ap
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        ld de, #16
+        add hl, de
         ld a, (hl+)
         cp a, b
         jr nz, 14$
@@ -1187,7 +1209,7 @@ static UBYTE td_ped_layout_c(UBYTE base,UBYTE step,UWORD player_u,UWORD player_v
         phase=td_ped_phase(base,route);
         u=(*nearby)[0];v=(*nearby)[1];
         u+=phase<64?phase:127-phase;
-        a->pos.x=u<<5;a->pos.y=v<<5;TD_FRAME(a,32+(phase<64?0:2)+step);
+        a->pos.x=u<<5;a->pos.y=v<<5;TD_FRAME(a,td_walker_bases[route&3]+(phase<64?0:2)+step);
         gap=player_u>u?player_u-u:u-player_u;
         if(gap<112&&(player_v>v?player_v-v:v-player_v)<96){
             a->flags&=~ACTOR_FLAG_HIDDEN;
@@ -1262,7 +1284,15 @@ void td_traffic_layout(void) NAKED {
         jr z, 49$
         ld e, #8
     49$:
+        ld a, (_td_pl_count)
+        add a, #<(_td_traffic_bases)
+        ld l, a
+        ld a, #0
+        adc a, #>(_td_traffic_bases)
+        ld h, a
         ld a, e
+        and a, #7
+        add a, (hl)
         ld (_td_pl_phase), a
         ld a, (_td_pl_count)
         add a, a
@@ -1348,7 +1378,7 @@ static void td_traffic_present(void){
             leg=*legs;
             frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
         }
-        a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,frame);
+        a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(frame&7));
     }
 #endif
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:(td.vehicle<<3)+(((td.heading+1)&15)>>1));
