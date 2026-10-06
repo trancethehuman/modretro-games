@@ -79,11 +79,24 @@ def curb_runs(w, h, at):
     return runs
 
 
-def place_pickups(district, w, h, at, avoid):
+def load_priority(scene):
+    """CGB background-priority flags (attribute bit 7) per tile: roof lips,
+    canopies and overhanging upper floors that hide sprites."""
+    attrs = json.loads((ROOT / 'project/original-art' / (scene.removeprefix('toronto_') + '_attributes.json')).read_text())
+    return [bool(a & 0x80) for a in attrs]
+
+
+def place_pickups(district, w, h, at, avoid, priority):
     """Pickups on the pavement side of straight curbs, at most one per run
-    stretch and at least SPACING apart, spread evenly over the district."""
+    stretch and at least SPACING apart, spread evenly over the district. The
+    icon is drawn above its position (x -4..+3, y -13..-4); it must not touch
+    a tile whose background priority would hide it."""
     def clear(u, v):
         return all(max(abs(u - a), abs(v - b)) >= CLEARANCE for a, b in avoid)
+
+    def visible(u, v):
+        return not any(priority[(y // 8) * w + x // 8]
+                       for x in (u - 4, u + 3) for y in (v - 13, v - 8, v - 4) if 0 <= y < h * 8)
 
     candidates = []
     for axis, line, start, end, side in curb_runs(w, h, at):
@@ -92,7 +105,7 @@ def place_pickups(district, w, h, at, avoid):
             # The pavement lies on the other side of the curb from the road.
             kerb = line - side * KERB - (1 if side > 0 else 0)
             u, v = (pos, kerb) if axis == 'h' else (kerb, pos)
-            if clear(u, v) and at(u // 8, v // 8) == WALK:
+            if clear(u, v) and at(u // 8, v // 8) == WALK and visible(u, v):
                 candidates.append((u, v, seed(district, axis == 'h', line, pos, side)))
             pos += 96
     # Deterministic shuffle, then greedy spacing.
@@ -173,7 +186,7 @@ def build():
             for end in (p['from'], p['to']):
                 if end['district'] == did:
                     avoid.append((end['u'], end['v']))
-        pickups = place_pickups(did, w, h, at, avoid)
+        pickups = place_pickups(did, w, h, at, avoid, load_priority(d['scene']))
         assert len(pickups) >= 12, (d['scene'], len(pickups))
         starts.append(len(flat)); counts.append(len(pickups)); flat += pickups
         summary.append(f"{d['scene'].removeprefix('toronto_')}:{len(pickups)}")

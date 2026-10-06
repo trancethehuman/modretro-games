@@ -72,7 +72,7 @@
   {
     "file": "title-screen.png",
     "frame": 279,
-    "rom_sha256": "3207b1fa9f37e9f693b0045a7f1e327a38bb86555fd94fb2de8d3e060bba120f",
+    "rom_sha256": "836c3af3efb0ec914a05ba725996836265d8c8b8ad4e0589b88193372518fc30",
     "png_sha256": "9baeb6030430316c4f0b2efd8bda133cc43d3e116790bf110acd0d3a587c01af",
     "inputs": "cold boot, no input",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
@@ -80,15 +80,15 @@
   {
     "file": "driving-hud.png",
     "frame": 641,
-    "rom_sha256": "3207b1fa9f37e9f693b0045a7f1e327a38bb86555fd94fb2de8d3e060bba120f",
-    "png_sha256": "7277641cfb0de1b2fb8401041112bb4165ba21e5037ffb780b2c73dd917ebd50",
+    "rom_sha256": "836c3af3efb0ec914a05ba725996836265d8c8b8ad4e0589b88193372518fc30",
+    "png_sha256": "9f07babe45a418778ed78f06fba04ebb6233ea956d749473756343888d06512b",
     "inputs": "A for two frames, 300 frames, then A held for 60 frames",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
   },
   {
     "file": "pause-menu.png",
     "frame": 675,
-    "rom_sha256": "3207b1fa9f37e9f693b0045a7f1e327a38bb86555fd94fb2de8d3e060bba120f",
+    "rom_sha256": "836c3af3efb0ec914a05ba725996836265d8c8b8ad4e0589b88193372518fc30",
     "png_sha256": "4393658595f554c34e2ef96905695b8558830478460684da955d4cb4a5e07515",
     "inputs": "then Start for four frames and 30 frames",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
