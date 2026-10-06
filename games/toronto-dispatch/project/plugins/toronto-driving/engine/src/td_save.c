@@ -3,6 +3,7 @@
 #include "td_game.h"
 #include "td_district.h"
 #include "td_transit.h"
+#include "td_life.h"
 #include "compat.h"
 #include "system.h"
 static UBYTE td_save_slot=TD_NONE,td_save_seq;
@@ -91,6 +92,7 @@ static UBYTE td_valid_state(td_state_t *s){
     if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP)return FALSE;
     if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
     if(s->district>=TD_DISTRICT_COUNT||s->park_district>=TD_DISTRICT_COUNT||s->reserved)return FALSE;
+    if(s->vitality>100||s->ammo>TD_AMMO_MAX||s->wanted>TD_WANTED_MAX||s->heat>TD_HEAT_SECONDS)return FALSE;
     if(!td_district_drivable(s->park_district,s->park_u>>4,s->park_v>>4)||!(s->onfoot?td_district_walkable(s->district,s->u>>4,s->v>>4):td_district_drivable(s->district,s->u>>4,s->v>>4)))return FALSE;
     for(i=0;i<TD_COMPLETE_BYTES;i++){
         value=s->complete[i];
@@ -117,7 +119,7 @@ void td_save(void) BANKED {
     if(mode==TD_PAUSE||mode==TD_MAP||mode==TD_HELP)td.mode=td_resume_mode;
     if(td.mode!=TD_WAIT&&td.mode!=TD_RIDE)td.mode=TD_ROAM;
     ENABLE_RAM_MBC5;SWITCH_RAM_BANK(3,RAM_BANKS_ONLY);
-    ram[0]=0;ram[1]=0xD7;ram[2]=6;ram[3]=sizeof(td);ram[4]=td_save_seq+1;
+    ram[0]=0;ram[1]=0xD7;ram[2]=7;ram[3]=sizeof(td);ram[4]=td_save_seq+1;
     TD_CRC(crc,ram[2]);TD_CRC(crc,ram[3]);TD_CRC(crc,ram[4]);
 #ifdef __SDCC
     /* Same bytes and store order; the CRC over td runs in assembly. */
@@ -136,14 +138,21 @@ static void td_migrate_old(td_state_t *dest){
     memmove(dst+48,dst+40,8);memmove(dst+42,dst+35,5);
     memset(dst+35,0,7);dst[47]=0;dst[56]=dst[57]=0;
 }
+/* Version 7 keeps the 58-byte layout: courier vitality, ammunition and police
+ * attention occupy v6's unused atlas-cursor words. Older records start the
+ * courier healthy, armed with the starting rounds and unwanted. */
+static void td_street_defaults(td_state_t *dest){
+    dest->vitality=100;dest->ammo=TD_AMMO_START;dest->wanted=0;dest->heat=0;
+}
 static UBYTE td_read_slot(UBYTE slot,td_state_t *dest,UBYTE *seq){
     UBYTE i,version,length;UWORD crc=0xFFFF;UBYTE *dst=(UBYTE*)dest;volatile UBYTE *ram=td_save_address(slot);
     version=ram[2];length=ram[3];
-    if(ram[0]!=0x54||ram[1]!=0xD7||!((version==6&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
+    if(ram[0]!=0x54||ram[1]!=0xD7||!(((version==7||version==6)&&length==sizeof(td))||(version==5&&length==48)))return FALSE;
     for(i=2;i<=4;i++)crc=td_crc_byte(crc,ram[i]);
     for(i=0;i<length;i++){dst[i]=ram[8+i];crc=td_crc_byte(crc,ram[8+i]);}
     if(crc!=(ram[5]|(UWORD)ram[6]<<8))return FALSE;
     if(version==5)td_migrate_old(dest);
+    if(version<7)td_street_defaults(dest);
     *seq=ram[4];return TRUE;
 }
 UBYTE td_restore(void) BANKED {
@@ -167,6 +176,6 @@ UBYTE td_restore(void) BANKED {
     valid=ram[0]==0x54&&ram[1]==0xD7&&ram[2]==4;
     if(valid){for(i=0;i<48;i++){raw[i]=ram[4+i];check^=raw[i];}valid=check==ram[3];if(valid)td_migrate_old(&candidate);}
     SWITCH_RAM_BANK(0,RAM_BANKS_ONLY);
-    if(valid){candidate.job=TD_NONE;candidate.stage=0;candidate.left=0;candidate.health=100;candidate.mode=TD_ROAM;candidate.speed=0;if(td_valid_state(&candidate)){td=candidate;td_save_slot=0;td_save();return TRUE;}}
+    if(valid){candidate.job=TD_NONE;candidate.stage=0;candidate.left=0;candidate.health=100;candidate.mode=TD_ROAM;candidate.speed=0;td_street_defaults(&candidate);if(td_valid_state(&candidate)){td=candidate;td_save_slot=0;td_save();return TRUE;}}
     return FALSE;
 }

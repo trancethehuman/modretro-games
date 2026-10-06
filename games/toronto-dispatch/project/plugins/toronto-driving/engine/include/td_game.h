@@ -22,6 +22,8 @@
 #define TD_RIDE 6
 #define TD_RESULT 7
 #define TD_HELP 8
+#define TD_BUSTED 9
+#define TD_WASTED 10
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
 typedef struct {
@@ -31,7 +33,10 @@ typedef struct {
     UBYTE complete[TD_COMPLETE_BYTES];
     UBYTE transit_origin,transit_target,ride_left,cooldown,msg;
     UBYTE reserved;
-    UWORD safe_u,safe_v,map_x,map_y;
+    UWORD safe_u,safe_v;
+    /* Courier vitality 0..100 (separate from cargo health), pistol rounds,
+     * police attention in stars 0..5 and seconds until it cools one star. */
+    UBYTE vitality,ammo,wanted,heat;
     UBYTE district,park_district;
 } td_state_t;
 extern td_state_t td;
@@ -60,6 +65,9 @@ void td_map_close(void) BANKED;
 void td_save(void) BANKED;
 UBYTE td_restore(void) BANKED;
 void td_set_target(void) BANKED;
+/* HUD notice (td_ui.c message list) and contract end, shared with td_life.c. */
+void td_message(UBYTE m) BANKED;
+void td_finish(UBYTE success) BANKED;
 UBYTE td_service(UBYTE origin) BANKED;
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED;
 /* Curbside props and transit berths (td_street.c). Not serialized. */

@@ -22,7 +22,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "scene_sha256": "10bc82b4454d5d8dc10017300e4872626af93a2c28013f12045a9b060ae020aa",
+      "scene_sha256": "3360e7e4db9f359069f1c03ed4e2f7c7a0b0d230f9dd9259e354c5a3354da046",
       "collision_encoding_sha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92",
       "collision_bytes_sha256": "081c14a28c866c8d7285f1697ac3ecff3d5429f18a2c6e321e351be0ffaec5d8",
       "art_metadata": "content/city_art.json",
@@ -31,7 +31,7 @@
     {
       "district": 1,
       "scene": "project/project/scenes/toronto_west/scene.gbsres",
-      "scene_sha256": "18b749d2d8d1f449e4e925cc2ad4210f9902455abccaf6a1b3976a4f488e797b",
+      "scene_sha256": "819d0619797fc77612c5b0f840f7af7d303b708deba0b6e73cd126f2ac1d64cd",
       "collision_encoding_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e",
       "collision_bytes_sha256": "ab4d0215477aa433df3824a4b3131b193bea42ba3ea8c837f10f69e936a56891",
       "art_metadata": "content/districts/west_art.json",
@@ -40,7 +40,7 @@
     {
       "district": 2,
       "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
-      "scene_sha256": "3f041c81da33dee62b0e0c45a1b1a10cc7657f6790ca47e4f1a00790995c3d89",
+      "scene_sha256": "6cf86d44fbeac1c9e079136e2fbc4cc7db8e4ac4aff6d64394827249d1957434",
       "collision_encoding_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c",
       "collision_bytes_sha256": "4c89e9ff15874e740988156e2f0f0786ec98ccefce83437963718055115b4de4",
       "art_metadata": "content/districts/high_park_art.json",
@@ -49,7 +49,7 @@
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "scene_sha256": "a429cbaccff530dac870c0d4b03d0f68bf088d54570d8aab984acb189778862c",
+      "scene_sha256": "68fb9d339e01cc5e73c6a45918837ec45c1fe4e77e34d5e7fed3888dcec76b59",
       "collision_encoding_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71",
       "collision_bytes_sha256": "82e17ec7bd893e6e503103e80e1f8eb77e26e3e104a8f823a1100226ffe1af48",
       "art_metadata": "content/districts/east_art.json",

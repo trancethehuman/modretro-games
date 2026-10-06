@@ -468,3 +468,142 @@ def ferry_zone(length=40.0, width=14.0):
 
 def big_frame(zone, heading, size):
     return raster(zone, heading, size)
+
+
+# ---------------------------------------------------------------- police and street life
+# Patrol car: white body (1), blue side stripes and roof light bar (2), dark
+# glass and outline (3). Same footprint as the ordinary car.
+POLICE_E = [
+    "................",
+    "................",
+    "................",
+    "...33.....33....",
+    "..333333333333..",
+    ".32222222222213.",
+    ".31331122113313.",
+    ".31331122113313.",
+    ".31331122113313.",
+    ".31331122113313.",
+    ".32222222222213.",
+    "..333333333333..",
+    "...33.....33....",
+    "................",
+    "................",
+    "................",
+]
+
+
+def police_frames():
+    """Patrol units drive cardinally; diagonal slots repeat the nearest
+    cardinal view so they cost no extra tiles."""
+    east = grid(POLICE_E)
+    south = transpose(east)
+    west, north = flip_h(east), flip_v(south)
+    return [east, east, south, south, west, west, north, north]
+
+
+# Officer: the ordinary walker body under a navy peaked cap (2 = uniform).
+CAP = {
+    'down': ["................", "......2222......", ".....222222.....", "....33333333....",
+             ".....311113.....", "......3113......", ".....322223....."],
+    'up': ["................", "......2222......", ".....222222.....", ".....333333.....",
+           ".....333333.....", "......3113......", ".....322223....."],
+    'right': ["................", "......2222......", ".....22222......", ".....3333333....",
+              ".....331113.....", "......3113......", "......3223......"],
+}
+
+
+def officer_frames():
+    """[right0, right1, left0, left1, down0, down1, up0, up1] with a cap."""
+    def head(rows, d):
+        return CAP[d] + rows[len(CAP[d]):]
+    r = [grid(head(PERSON['right'][i], 'right')) for i in (0, 1)]
+    d = [grid(head(PERSON['down'][i], 'down')) for i in (0, 1)]
+    u = [grid(head(PERSON['up'][i], 'up')) for i in (0, 1)]
+    return [r[0], r[1], flip_h(r[0]), flip_h(r[1]), d[0], d[1], u[0], u[1]]
+
+
+# A struck person tumbles through the air (four quarter turns made from one
+# drawing by flips), then lies on the ground. Non-graphic: no blood.
+TUMBLE = [
+    "................",
+    "................",
+    "...333..........",
+    "..31113.........",
+    "..31113..33.....",
+    "...333.3223.....",
+    "....3322223.....",
+    ".....322223.....",
+    ".....3222233....",
+    "......32223.....",
+    ".......3333.....",
+    "......33..33....",
+    ".....33....33...",
+    "................",
+    "................",
+    "................",
+]
+PRONE = [
+    "................",
+    "................",
+    "................",
+    "................",
+    "................",
+    "......33........",
+    "..333..33.......",
+    ".31113322222.33.",
+    ".31113322222333.",
+    ".31113322222.33.",
+    "..333..33.......",
+    "......33........",
+    "................",
+    "................",
+    "................",
+    "................",
+]
+
+
+def knockdown_frames():
+    """[tumble x4 (quarter turns), prone, prone facing the other way]."""
+    t = grid(TUMBLE)
+    p = grid(PRONE)
+    return [t, flip_h(t), flip_v(flip_h(t)), flip_v(t), p, flip_h(p)]
+
+
+# Effects drawn inside the left 8-pixel column so each needs one OAM object.
+SPARK = [
+    "................", "................", "................", "................",
+    "...3............", ".3.1.3..........", "..111...........", "31111 13........",
+    "..111...........", ".3.1.3..........", "...3............", "................",
+    "................", "................", "................", "................"]
+SPARK = [row.replace(' ', '1') for row in SPARK]
+BULLET = [
+    "................", "................", "................", "................",
+    "................", "................", "................", "...33...........",
+    "...31...........", "................", "................", "................",
+    "................", "................", "................", "................"]
+# Objective pointers, 8x8 in the left 8-pixel column (rows 4-11): east,
+# south-east and south are drawn; the other five directions are flips.
+_ARROW_E8 = ["33......", "3233....", "322233..", "32222233", "32222233", "322233..", "3233....", "33......"]
+_ARROW_SE8 = [".......3", "......33", ".....323", "....3223", "...32223", "..322223", ".3222223", "33333333"]
+
+
+def _left_column(rows8):
+    blank = "." * 16
+    return [blank] * 4 + [r + "." * 8 for r in rows8] + [blank] * 4
+
+
+ARROW_E = _left_column(_ARROW_E8)
+ARROW_SE = _left_column(_ARROW_SE8)
+ARROW_S = _left_column(["".join(col) for col in zip(*_ARROW_E8)])
+
+
+def arrow_frames():
+    """Engine heading order E, SE, S, SW, W, NW, N, NE."""
+    e, se, s = grid(ARROW_E), grid(ARROW_SE), grid(ARROW_S)
+    return [e, se, s, flip_h_col(se), flip_h_col(e), flip_v(flip_h_col(se)), flip_v(s), flip_v(se)]
+
+
+def flip_h_col(g):
+    """Mirror a left-column drawing about that 8-pixel column."""
+    return [row[:8][::-1] + row[8:] for row in g]

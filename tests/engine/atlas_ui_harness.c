@@ -15,6 +15,9 @@ td_job_t td_job,td_offer;
 td_stop_t td_target,td_cursor;
 UBYTE td_route_district;
 UBYTE td_resume_mode;
+/* Objective pointer and arrest/hospital receipt owned by td_life.c. */
+UWORD td_beacon_u,td_beacon_v;
+UBYTE td_beacon_shown,td_life_fine;
 actor_t actors[21];
 UBYTE actors_len;
 UWORD camera_x,camera_y,sys_time;
@@ -96,7 +99,7 @@ static void reset_case(void) {
     memset(actors,0,sizeof(actors));memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
     td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;
     td.park_district=1;td.park_u=400*16;td.park_v=528*16;td.cash=123;td.seconds=4321;
-    td.left=199;td.health=100;td.job=84;td.stage=3;td.map_x=43210;td.map_y=32109;td.mode=TD_PAUSE;
+    td.left=199;td.health=100;td.job=84;td.stage=3;td.vitality=77;td.ammo=33;td.mode=TD_PAUSE;
     td_target.district=3;td_target.u=320;td_target.v=144;td_target.reserved=TD_STOP_FOOT;strcpy(td_target.name,"WITHROW PARK");
     td_job.count=5;td_job.route[3]=36;td_job.seconds=199;td_job.reward=130;
     td_route_district=0;td_resume_mode=TD_ROAM;actors_len=TD_ACTORS;

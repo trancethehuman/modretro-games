@@ -35,7 +35,7 @@ PALETTES = [
     ('traffic_red', 'Traffic red', ['D0E8F8', 'C83028', 'C83028', '101018']),
     ('traffic_blue', 'Traffic blue and ferry', ['D0E8F8', '3068C8', '3068C8', '101018']),
     ('signal_yellow', 'Taxi and beacon yellow', ['F8F8E0', 'F0C020', 'F0C020', '282010']),
-    ('transit', 'Transit red and white', ['F8F8F8', 'D82020', 'D82020', '282828']),
+    ('police', 'Police navy', ['F0C090', '2850B0', '2850B0', '101828']),
     ('walker_teal', 'Pedestrian teal', ['F0C090', '309878', '309878', '282030']),
     ('walker_violet', 'Pedestrian violet', ['C89070', '8858B8', '8858B8', '302018']),
 ]
@@ -61,13 +61,13 @@ def frames():
         add(f'courier_walk_{i}', g, 'courier_person')
     add('beacon', A.grid(A.BEACON), 'signal_yellow')
     add('beacon_pulse', A.grid(A.BEACON_PULSE), 'signal_yellow')
-    add('stop_marker', A.grid(A.BEACON), 'transit')
+    add('stop_marker', A.grid(A.BEACON), 'traffic_red')
     add('depot_marker', A.grid(A.BEACON_PULSE), 'courier_vehicle')
     add('car_door_open', A.grid(A.DOOR_E), 'courier_vehicle')
     for name, design, pal in (('traffic_red', A.car_frames(), 'traffic_red'),
                               ('traffic_blue', A.car_frames(), 'traffic_blue'),
-                              ('traffic_taxi', A.car_frames(True), 'signal_yellow'),
-                              ('traffic_van', A.van_frames(), 'transit'),
+                              ('traffic_taxi', cardinal(A.car_frames(True)), 'signal_yellow'),
+                              ('traffic_van', A.van_frames(), 'traffic_red'),
                               ('traffic_motorcycle', A.moto_frames(), 'traffic_blue')):
         for i, g in enumerate(design):
             add(f'{name}_{i}', g, pal)
@@ -83,18 +83,55 @@ def frames():
         add(name, A.grid(design), pal)
     bus_e = A.big_frame(A.bus_zone(), 0, (40, 16))
     bus_s = A.big_frame(A.bus_zone(), 90, (16, 40))
-    add('bus_e', bus_e, 'transit', (40, 16)); add('bus_w', A.flip_h(bus_e), 'transit', (40, 16))
-    add('bus_s', bus_s, 'transit', (16, 40)); add('bus_n', A.flip_v(bus_s), 'transit', (16, 40))
+    add('bus_e', bus_e, 'traffic_red', (40, 16)); add('bus_w', A.flip_h(bus_e), 'traffic_red', (40, 16))
+    add('bus_s', bus_s, 'traffic_red', (16, 40)); add('bus_n', A.flip_v(bus_s), 'traffic_red', (16, 40))
     car_e = A.big_frame(A.streetcar_zone(), 0, (64, 16))
     car_s = A.big_frame(A.streetcar_zone(), 90, (16, 64))
-    add('streetcar_e', car_e, 'transit', (64, 16)); add('streetcar_w', A.flip_h(car_e), 'transit', (64, 16))
-    add('streetcar_s', car_s, 'transit', (16, 64)); add('streetcar_n', A.flip_v(car_s), 'transit', (16, 64))
+    add('streetcar_e', car_e, 'traffic_red', (64, 16)); add('streetcar_w', A.flip_h(car_e), 'traffic_red', (64, 16))
+    add('streetcar_s', car_s, 'traffic_red', (16, 64)); add('streetcar_n', A.flip_v(car_s), 'traffic_red', (16, 64))
     ferry_s = A.big_frame(A.ferry_zone(), 90, (16, 40))
     add('ferry_s', ferry_s, 'traffic_blue', (16, 40)); add('ferry_n', A.flip_v(ferry_s), 'traffic_blue', (16, 40))
     for name, design in (('gull_e_0', A.grid(A.GULL_UP)), ('gull_e_1', A.grid(A.GULL_LEVEL)),
                          ('gull_w_0', A.flip_h(A.grid(A.GULL_UP))), ('gull_w_1', A.flip_h(A.grid(A.GULL_LEVEL)))):
         add(name, design, 'courier_vehicle')
+    # Street life added after the original 140 frames so their indices stay put.
+    for i, g in enumerate(A.police_frames()):
+        add(f'police_{i}', g, 'traffic_blue')
+    for i, g in enumerate(A.officer_frames()):
+        add(f'officer_{i}', g, 'police')
+    for look, pal in KNOCK_LOOKS:
+        for i, g in enumerate(A.knockdown_frames()):
+            add(f'knock_{look}_{i}', g, pal)
+    add('spark', A.grid(A.SPARK), 'signal_yellow')
+    add('bullet', A.grid(A.BULLET), 'signal_yellow')
+    for i, g in enumerate(A.arrow_frames()):
+        add(f'arrow_{i}', g, 'signal_yellow')
     return out
+
+
+# Knock-down looks in engine order: four civilian walkers, officer, courier.
+KNOCK_LOOKS = (('walker_a', 'walker_teal'), ('walker_b', 'walker_violet'), ('walker_c', 'walker_teal'),
+               ('walker_d', 'walker_violet'), ('officer', 'police'), ('courier', 'courier_person'))
+
+
+def cardinal(frames):
+    """Road traffic only drives cardinally: diagonal slots repeat a cardinal
+    view so they share its tiles."""
+    return [frames[i & 6] for i in range(8)]
+
+
+def slice_count(fr, sheet, places, frame_defs):
+    """Unique 8x16 OBJ tiles after GB Studio's flip-aware de-duplication."""
+    seen = set()
+    for (name, g, pal, size), fd in zip(fr, frame_defs):
+        for t in fd['tiles']:
+            sx, sy = t['sliceX'], t['sliceY']
+            px = tuple(tuple(sheet.getpixel((sx + a, sy + b)) if 0 <= sy + b < sheet.height else SHADES[0]
+                             for a in range(8)) for b in range(16))
+            variants = {px, tuple(r[::-1] for r in px), px[::-1], tuple(r[::-1] for r in px[::-1])}
+            if not variants & seen:
+                seen.add(px)
+    return len(seen)
 
 
 def tile_boxes(size):
@@ -163,6 +200,10 @@ def build():
                           'objPalette': 'OBP0', 'priority': False})
         assert tiles, name
         frame_defs.append({'id': ident(f'{name}-frame'), 'tiles': tiles})
+    # Colour-only scenes split OBJ tiles evenly over both VRAM banks below the
+    # UI art at tile 128: at most 64 8x16 tiles (128 8x8 tiles) per bank.
+    unique = slice_count(fr, sheet, places, frame_defs)
+    assert unique <= 128, f'Actor sprites need {unique} 8x16 tiles; the VRAM budget is 128'
     return fr, sheet, frame_defs, anchors
 
 
@@ -218,9 +259,11 @@ def outputs():
                  'walker_a_0', 'walker_b_0', 'walker_c_0', 'walker_d_0',
                  'cone', 'cone_down', 'bin', 'bin_down', 'newsbox', 'newsbox_down', 'barrel', 'barrel_down', 'debris',
                  'bus_e', 'bus_w', 'bus_s', 'bus_n', 'streetcar_e', 'streetcar_w', 'streetcar_s', 'streetcar_n',
-                 'ferry_s', 'ferry_n', 'gull_e_0', 'gull_w_0'):
+                 'ferry_s', 'ferry_n', 'gull_e_0', 'gull_w_0',
+                 'police_0', 'officer_0', 'knock_walker_a_0', 'spark', 'bullet', 'arrow_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
         lines.append(f'#define {macro} {index[name]}')
+    lines.append(f'#define TD_KNOCK_FRAMES {len(A.knockdown_frames())}')
     for name, (dx, dy) in sorted(anchors.items()):
         if dy:
             lines.append(f'#define TD_ANCHOR_{name.upper()}_DY ({dy})')
@@ -237,6 +280,13 @@ def main():
         if path.suffix == '.png':
             # PNG encoders differ: compare decoded pixels, not bytes.
             if not path.exists() or Image.open(path).convert('RGB').tobytes() != Image.open(io.BytesIO(data)).convert('RGB').tobytes():
+                stale.append(path)
+            continue
+        if path == PROJECT / 'assets/sprites/dispatch_topdown.png.gbsres' and path.exists():
+            # The checksum belongs to the on-disk PNG, whose encoder can differ.
+            expected = json.loads(data)
+            expected['checksum'] = hashlib.sha1(path.with_suffix('').read_bytes()).hexdigest()
+            if json.loads(path.read_text()) != expected:
                 stale.append(path)
             continue
         if not path.exists() or path.read_bytes() != data:

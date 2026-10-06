@@ -1,5 +1,28 @@
 # Testing record
 
+## Latest main cartridge installation, 2026-10-06
+
+Remote `main` was pulled to `d6cbcc4`; unfinished local work was preserved in a
+named Git stash. The official plugin built `project/build/toronto-dispatch-main-20261006.gbc`
+from that native game source: 524,288 bytes, SHA-256
+`229159d83dea5d20a841ae44c4984d0d818d9d4dba2fb92051cf1881a65635cc`.
+Header validation and the linked memory guard passed with 1,078 bytes of stack reserve.
+`make check` passed after correcting the sprite validator to check its checksum
+against the existing PNG bytes while retaining decoded-pixel validation across
+PNG encoders. This validator change does not alter the native game inputs.
+The host suite reports 3,468 engine checks, zero failures.
+
+On that exact ROM, plugin PyBoy 2.7.0 showed the title at frame 180, gameplay
+after A2 / neutral300 at frame 482, movement after A120 at frame 602, and the
+new pause menu after Start30 at frame 632. These are bounded smoke checks.
+
+Fresh supported discovery found the intended sole Chromatic without diagnostics,
+conflicts or unmatched functions. One supported write succeeded in 47,846 ms;
+vendor CLI 1.2.1 exited and closed with code 0. No automatic retry or complete
+read-back digest was supplied. Physical cold boot, gameplay, audio and power-off
+save persistence remain pending. The [sanitized installation record](docs/CARTRIDGE_MAIN_INSTALL_2026_10_06.json)
+keeps this build and write separate from previous cartridge evidence.
+
 ## Menu, HUD and title art, gulls — candidate, 2026-10-06
 
 Same Linux toolchain as the entry below (GB Studio CLI 4.3.2, GBDK 4.5.0, PyBoy 2.7.0); emulator evidence only, not plugin, device or cartridge evidence.

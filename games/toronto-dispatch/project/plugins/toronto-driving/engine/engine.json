@@ -51,7 +51,12 @@
         "src/td_transit.c",
         "include/td_sprites.h",
         "include/td_street.h",
-        "src/td_street.c"
+        "src/td_street.c",
+        "include/td_life.h",
+        "include/td_life_int.h",
+        "src/td_life.c",
+        "src/td_drive.c",
+        "src/td_life_draw.c"
       ]
     }
   ]

@@ -381,7 +381,7 @@
     {
       "index": 42,
       "name": "stop_marker",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -624,7 +624,7 @@
     {
       "index": 69,
       "name": "traffic_van_0",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -633,7 +633,7 @@
     {
       "index": 70,
       "name": "traffic_van_1",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -642,7 +642,7 @@
     {
       "index": 71,
       "name": "traffic_van_2",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -651,7 +651,7 @@
     {
       "index": 72,
       "name": "traffic_van_3",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -660,7 +660,7 @@
     {
       "index": 73,
       "name": "traffic_van_4",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -669,7 +669,7 @@
     {
       "index": 74,
       "name": "traffic_van_5",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -678,7 +678,7 @@
     {
       "index": 75,
       "name": "traffic_van_6",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -687,7 +687,7 @@
     {
       "index": 76,
       "name": "traffic_van_7",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -1137,7 +1137,7 @@
     {
       "index": 126,
       "name": "bus_e",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         40,
         16
@@ -1146,7 +1146,7 @@
     {
       "index": 127,
       "name": "bus_w",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         40,
         16
@@ -1155,7 +1155,7 @@
     {
       "index": 128,
       "name": "bus_s",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         40
@@ -1164,7 +1164,7 @@
     {
       "index": 129,
       "name": "bus_n",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         40
@@ -1173,7 +1173,7 @@
     {
       "index": 130,
       "name": "streetcar_e",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         64,
         16
@@ -1182,7 +1182,7 @@
     {
       "index": 131,
       "name": "streetcar_w",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         64,
         16
@@ -1191,7 +1191,7 @@
     {
       "index": 132,
       "name": "streetcar_s",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         64
@@ -1200,7 +1200,7 @@
     {
       "index": 133,
       "name": "streetcar_n",
-      "palette": "transit",
+      "palette": "traffic_red",
       "size": [
         16,
         64
@@ -1259,6 +1259,564 @@
         16,
         16
       ]
+    },
+    {
+      "index": 140,
+      "name": "police_0",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 141,
+      "name": "police_1",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 142,
+      "name": "police_2",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 143,
+      "name": "police_3",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 144,
+      "name": "police_4",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 145,
+      "name": "police_5",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 146,
+      "name": "police_6",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 147,
+      "name": "police_7",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 148,
+      "name": "officer_0",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 149,
+      "name": "officer_1",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 150,
+      "name": "officer_2",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 151,
+      "name": "officer_3",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 152,
+      "name": "officer_4",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 153,
+      "name": "officer_5",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 154,
+      "name": "officer_6",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 155,
+      "name": "officer_7",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 156,
+      "name": "knock_walker_a_0",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 157,
+      "name": "knock_walker_a_1",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 158,
+      "name": "knock_walker_a_2",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 159,
+      "name": "knock_walker_a_3",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 160,
+      "name": "knock_walker_a_4",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 161,
+      "name": "knock_walker_a_5",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 162,
+      "name": "knock_walker_b_0",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 163,
+      "name": "knock_walker_b_1",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 164,
+      "name": "knock_walker_b_2",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 165,
+      "name": "knock_walker_b_3",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 166,
+      "name": "knock_walker_b_4",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 167,
+      "name": "knock_walker_b_5",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 168,
+      "name": "knock_walker_c_0",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 169,
+      "name": "knock_walker_c_1",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 170,
+      "name": "knock_walker_c_2",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 171,
+      "name": "knock_walker_c_3",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 172,
+      "name": "knock_walker_c_4",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 173,
+      "name": "knock_walker_c_5",
+      "palette": "walker_teal",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 174,
+      "name": "knock_walker_d_0",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 175,
+      "name": "knock_walker_d_1",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 176,
+      "name": "knock_walker_d_2",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 177,
+      "name": "knock_walker_d_3",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 178,
+      "name": "knock_walker_d_4",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 179,
+      "name": "knock_walker_d_5",
+      "palette": "walker_violet",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 180,
+      "name": "knock_officer_0",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 181,
+      "name": "knock_officer_1",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 182,
+      "name": "knock_officer_2",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 183,
+      "name": "knock_officer_3",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 184,
+      "name": "knock_officer_4",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 185,
+      "name": "knock_officer_5",
+      "palette": "police",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 186,
+      "name": "knock_courier_0",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 187,
+      "name": "knock_courier_1",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 188,
+      "name": "knock_courier_2",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 189,
+      "name": "knock_courier_3",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 190,
+      "name": "knock_courier_4",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 191,
+      "name": "knock_courier_5",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 192,
+      "name": "spark",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 193,
+      "name": "bullet",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 194,
+      "name": "arrow_0",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 195,
+      "name": "arrow_1",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 196,
+      "name": "arrow_2",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 197,
+      "name": "arrow_3",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 198,
+      "name": "arrow_4",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 199,
+      "name": "arrow_5",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 200,
+      "name": "arrow_6",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 201,
+      "name": "arrow_7",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
     }
   ],
   "palettes": [
@@ -1313,13 +1871,13 @@
       ]
     },
     {
-      "key": "transit",
-      "name": "Transit red and white",
+      "key": "police",
+      "name": "Police navy",
       "colors": [
-        "F8F8F8",
-        "D82020",
-        "D82020",
-        "282828"
+        "F0C090",
+        "2850B0",
+        "2850B0",
+        "101828"
       ]
     },
     {
@@ -1387,7 +1945,7 @@
   },
   "sheet": [
     256,
-    272
+    320
   ],
   "note": "Original pixel art from scripts/sprite_art.py; colour 0 transparent."
 }

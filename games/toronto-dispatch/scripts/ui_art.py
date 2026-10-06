@@ -292,6 +292,28 @@ TILES = {
         "#a#.#a#.",
         "##...##.",
     ]),
+    # Courier first aid: a red cross on a white tile edge.
+    'icon_medic': ('ui', [
+        "........",
+        "..####..",
+        "..#ss#..",
+        "###ss###",
+        "#ssssss#",
+        "###ss###",
+        "..#ss#..",
+        "..####..",
+    ]),
+    # Pistol rounds: an amber cartridge.
+    'icon_ammo': ('ui', [
+        "........",
+        "...##...",
+        "..#aa#..",
+        "..#aa#..",
+        "..####..",
+        "..#ss#..",
+        "..#ss#..",
+        "..####..",
+    ]),
     'icon_check': ('green', [
         "........",
         "......##",
@@ -487,6 +509,7 @@ CODES = [
     ('DPAD', 'dpad', 0, 0),
     ('EMBLEM_TL', 'emblem_tl', 0, 0), ('EMBLEM_TR', 'emblem_tr', 0, 0),
     ('EMBLEM_BL', 'emblem_bl', 0, 0), ('EMBLEM_BR', 'emblem_br', 0, 0),
+    ('MEDIC', 'icon_medic', 0, 0), ('AMMO', 'icon_ammo', 0, 0),
 ]
 
 

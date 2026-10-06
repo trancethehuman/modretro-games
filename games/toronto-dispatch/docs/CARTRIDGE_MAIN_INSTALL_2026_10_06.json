@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-06",
+  "sourceCommit": "d6cbcc4",
+  "rom": {
+    "path": "project/build/toronto-dispatch-main-20261006.gbc",
+    "sizeBytes": 524288,
+    "sha256": "229159d83dea5d20a841ae44c4984d0d818d9d4dba2fb92051cf1881a65635cc"
+  },
+  "build": {
+    "tool": "ModRetro Chromatic plugin rom_build",
+    "success": true,
+    "exitCode": 0,
+    "stackReserveBytes": 1078
+  },
+  "checks": {
+    "makeCheck": "passed after PNG checksum validator portability correction; native game inputs unchanged",
+    "emulator": "PyBoy 2.7.0: title at frame 180, gameplay at 482, driving at 602, pause menu at 632"
+  },
+  "write": {
+    "status": "vendor-reported-success",
+    "vendorVersion": "1.2.1",
+    "elapsedMs": 47846,
+    "exitCode": 0,
+    "processCloseCode": 0,
+    "finishedAt": "2026-10-06T06:17:57.913Z",
+    "requests": 1,
+    "automaticRetry": false,
+    "completeReadBackDigest": "not supplied"
+  },
+  "physical": {
+    "coldBoot": "pending",
+    "gameplay": "pending",
+    "audio": "pending",
+    "savePersistence": "pending"
+  }
+}

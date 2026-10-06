@@ -5,6 +5,7 @@
 #include <gbdk/platform.h>
 #include <string.h>
 #include "td_game.h"
+#include "scroll.h"
 #define TD_STREET_DATA
 #include "td_street.h"
 
@@ -17,10 +18,12 @@ UWORD td_prop_su[TD_PROP_SLOTS],td_prop_sv[TD_PROP_SLOTS];
 UBYTE td_prop_sk[TD_PROP_SLOTS],td_prop_su8[TD_PROP_SLOTS],td_prop_sv8[TD_PROP_SLOTS];
 UBYTE td_prop_sdown,td_prop_dirty;
 extern UBYTE td_ss_i;
+/* Refreshes left during which props may appear in view (scene fade-in). */
+static UBYTE td_prop_warm;
 
 void td_street_reset(void) BANKED {
     memset(td_prop_slot,255,sizeof(td_prop_slot));
-    td_prop_sdown=0;td_prop_dirty=(1<<TD_PROP_SLOTS)-1;td_ss_i=255;
+    td_prop_sdown=0;td_prop_dirty=(1<<TD_PROP_SLOTS)-1;td_ss_i=255;td_prop_warm=12;
 }
 
 /* Range scan over the interleaved coarse table: examines td_ss_budget
@@ -116,7 +119,7 @@ void td_street_scan(void) {
  * courier, so it never flickers at the edge; sixteen table entries are
  * examined per frame. */
 void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED {
-    UBYTE s,n,i,mask,free_slot,start;
+    UBYTE s,n,i,mask,free_slot,start,sl=(UBYTE)(scroll_x>>3),st=(UBYTE)(scroll_y>>3);
     for(s=0,mask=1;s<TD_PROP_SLOTS;s++,mask<<=1){
         if(td_prop_slot[s]==255)continue;
         if((UBYTE)(td_prop_su8[s]-pu8+15)<30&&(UBYTE)(td_prop_sv8[s]-pv8+14)<28)continue;
@@ -131,8 +134,13 @@ void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED {
     }
     td_ss_pu8=pu8;td_ss_pv8=pv8;
     td_street_scan();
+    if(td_prop_warm)td_prop_warm--;
     for(n=0;n<td_ss_found;n++){
         i=td_ss_hits[n];free_slot=255;
+        /* A prop already in view never pops in: it waits until it is outside
+         * the 20x18-tile screen plus one tile, except during scene fade-in. */
+        if(!td_prop_warm&&(UBYTE)(td_prop_uv8[(UWORD)(start+i)*2]-sl+1)<22&&
+           (UBYTE)(td_prop_uv8[(UWORD)(start+i)*2+1]-st+1)<20)continue;
         for(s=0;s<TD_PROP_SLOTS;s++){
             if(td_prop_slot[s]==i){free_slot=254;break;}
             if(td_prop_slot[s]==255&&free_slot==255)free_slot=s;

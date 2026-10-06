@@ -188,7 +188,7 @@ static void test_arbitrary_district_collision(void){
         UBYTE tile=district%3==0?15:district%3==1?16:0;
         expect(td_district_tile(district,10,10)==tile,"identical coordinates read every district's independent collision map");
         expect(td_district_walkable(district,84,84)==(tile!=15),"every district's walking respects walls while retaining existing rail-property behavior");
-        expect(td_district_drivable(district,84,84)==(tile==0),"every district's vehicles block both walls and road-only rail properties");
+        expect(td_district_drivable(district,84,84)==(tile!=15),"every district's vehicles block walls but may use sidewalks and open lots");
         collision_data[district][121*128+127]=4;
         expect(td_district_tile(district,127,121)==4,"every district's last authored tile uses the full16-bit row offset");
         unsigned reads=tile_reads;
@@ -207,7 +207,7 @@ static void test_vehicle_footprint(void){
     /* One obstructed eight-pixel tile lies inside an eleven-pixel footprint
      * whose four corner tiles are clear. A corner-only test would pass. */
     for(UBYTE district=0;district<TD_HOST_DISTRICT_COUNT;district++){
-        collision_data[district][10*128+10]=16;
+        collision_data[district][10*128+10]=15;
         expect(!td_district_drivable(district,84,84),"every district's interior rail tile blocks a three-by-three tile footprint");
         for(UWORD u=72;u<=96;u++)for(UWORD v=72;v<=96;v++){
             /* Geometric oracle: the car rectangle intersects occupied pixel square
@@ -216,10 +216,10 @@ static void test_vehicle_footprint(void){
             expect(td_district_drivable(district,u,v)==!overlaps,"every district footprint position agrees with occupied pixel geometry");
         }
         memset(collision_data[district],0,sizeof(collision_data[district]));
-        for(unsigned x=9;x<=11;x++)collision_data[district][10*128+x]=16;
+        for(unsigned x=9;x<=11;x++)collision_data[district][10*128+x]=15;
         expect(!td_district_drivable(district,84,84),"every district's horizontal thin rail between corner rows blocks the car");
         memset(collision_data[district],0,sizeof(collision_data[district]));
-        for(unsigned y=9;y<=11;y++)collision_data[district][y*128+10]=16;
+        for(unsigned y=9;y<=11;y++)collision_data[district][y*128+10]=15;
         expect(!td_district_drivable(district,84,84),"every district's vertical thin rail between corner columns blocks the car");
         expect(td_district_drivable((district+1)%TD_HOST_DISTRICT_COUNT,84,84),"remote rail does not contaminate another district footprint");
         memset(collision_data[district],0,sizeof(collision_data[district]));

@@ -152,6 +152,9 @@ def main():
                 (ENGINE / "src/td_transit.c").read_text() + '\n' +
                 (ENGINE / "src/td_world.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
+                (ENGINE / "src/td_life.c").read_text() + '\n' +
+                (ENGINE / "src/td_drive.c").read_text() + '\n' +
+                (ENGINE / "src/td_life_draw.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +
                 (ENGINE / "src/td_routes.c").read_text())
 

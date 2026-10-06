@@ -25,6 +25,8 @@ actor_t *actors_inactive_head;
 UBYTE actors_len;
 UWORD camera_x,camera_y,image_width=1024,image_height=976,sys_time;
 UBYTE camera_settings,joy,joy_pressed;
+WORD scroll_x,scroll_y;
+UBYTE image_tile_width=128,image_tile_height=122;
 BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 UBYTE td_test_sram[8192];
 
@@ -157,6 +159,7 @@ static void reset_case(void) {
     td_audio_init();audio_updates=audio_inits=0;
     for(unsigned i=0;i<6;i++) { td_traffic_u[i]=30000;td_traffic_v[i]=30000;td_traffic_leg[i]=0;td_ped_route[i]=TD_NONE; }
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
+    td.vitality=100;td.ammo=0;td.wanted=td.heat=0;scroll_x=scroll_y=0;td_life_reset(0);
 }
 
 static void driving_tick(UBYTE held) {
@@ -207,16 +210,29 @@ static void test_wall_and_brake(void) {
     reset_case();prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;
     UWORD before=td.u;driving_tick(J_A);
     expect(td.u==before,"head-on wall blocks forward movement");
-    expect(td.speed==0&&td_vx==0&&td_vy==0,"head-on wall stops signed speed and both velocity axes");
+    expect(td.speed<0&&td_vx<0&&td_vy==0,"a fast head-on wall impact throws the car back instead of passing through");
     geometry=CLEAR_GROUND;
     for(unsigned i=0;i<120;i++)driving_tick(J_B);
     expect(td.speed<0&&td.u<before,"braking and reversing recover away from wall");
 
     reset_case();WORD baseline=prime_car();
     for(unsigned i=0;i<20;i++)driving_tick(J_A|J_B);
-    expect(td.speed<baseline,"brake wins when acceleration is held simultaneously");
-    for(unsigned i=0;i<100;i++)driving_tick(J_A|J_B);
-    expect(td.speed<0,"held brake permits reverse despite held acceleration");
+    expect(td.speed<baseline,"A+B acts as a handbrake while moving");
+    for(unsigned i=0;i<60&&td.speed;i++)driving_tick(J_A|J_B);
+    expect(td.speed==0&&!td.onfoot,"the handbrake stops the car without engaging reverse");
+    for(unsigned i=0;i<24;i++)driving_tick(J_A|J_B);
+    expect(td.onfoot&&td_entry_timer,"holding A+B at rest leaves the vehicle");
+
+    reset_case();UBYTE heading=td.heading;
+    for(unsigned i=0;i<90;i++)driving_tick(J_RIGHT);
+    expect(td.heading==heading&&td.speed==0,"steering never rotates a stationary car");
+    for(unsigned i=0;i<12;i++)driving_tick(J_LEFT|J_A|J_B);
+    expect(td.heading==heading&&!td.onfoot,"steering with the handbrake held at rest does not rotate the car");
+    for(unsigned i=0;i<9;i++)driving_tick(J_B);
+    expect(td.speed==0,"a short brake hold at rest does not lurch into reverse");
+    for(unsigned i=0;i<40;i++)driving_tick(J_B|J_RIGHT);
+    UBYTE swing=(UBYTE)(heading-td.heading)&15;
+    expect(td.speed<0&&swing>=1&&swing<=8,"reversing with right steering swings the nose the other way");
 }
 
 static void test_momentum_and_coasting(void) {
@@ -254,7 +270,7 @@ static void test_passenger_comfort(void) {
 static void test_entry_collision(void) {
     reset_case();geometry=NATIVE_GRID;
     td.park_u=76*16;td.park_v=744*16;td.u=92*16;td.v=766*16;td.onfoot=1;
-    expect(td_drivable(td.park_u>>4,td.park_v>>4),"rail fixture parked car has a usable footprint");
+    expect(lf_drive(td.park_u>>4,td.park_v>>4),"rail fixture parked car has a usable footprint");
     expect(td_walkable(td.u>>4,td.v>>4),"rail fixture courier endpoint is walkable");
     UWORD before_u=td.u,before_v=td.v;td_enter_exit();
     expect(td.onfoot&&td_entry_timer==0,"entry cannot animate through native rail collision");
@@ -297,15 +313,15 @@ static void test_signal_and_autonomous_traffic(void) {
 
 static void test_city_routes_and_walking(void) {
     reset_case();geometry=NATIVE_GRID;
-    expect(!td_drivable(76,756),"car footprint rejects a narrow solid rail under its centre");
+    expect(!lf_drive(76,756),"car footprint rejects a narrow solid rail under its centre");
     reset_case();geometry=NATIVE_GRID;td.u=793*16+2;td.v=730*16+12;
     td.heading=4;td.speed=21;td_vx=0;td_vy=336;
     for(unsigned i=0;i<16;i++)driving_tick(J_A);
     expect(td.speed>=21&&td.v>738*16,"held throttle clears a small quantised corner overlap without losing forward speed");
-    expect(td_drivable(td.u>>4,td.v>>4),"corner slide retains a collision-valid car footprint");
+    expect(lf_drive(td.u>>4,td.v>>4),"corner slide retains a collision-valid car footprint");
 
     reset_case();geometry=EAST_WALL;td.u=394*16;td.v=450*16;td.heading=0;td.speed=24;td_vx=384;
-    driving_tick(J_A);expect(td.speed==0&&td.u==394*16,"corner assist cannot bypass a broad head-on wall");
+    driving_tick(J_A);expect(td.speed<=0&&td.u==394*16,"corner assist cannot bypass a broad head-on wall");
 
     reset_case();geometry=NATIVE_GRID;toronto_init();td.mode=TD_ROAM;
     td.u=560*16;td.v=720*16;td.onfoot=0;
@@ -314,7 +330,7 @@ static void test_city_routes_and_walking(void) {
         UWORD old_u=td_traffic_u[5],old_v=td_traffic_v[5];
         td.seconds=step/60;td.subsecond=step%60;td_traffic_step();
         if(td_distance(old_u,td_traffic_u[5])+td_distance(old_v,td_traffic_v[5])>8)continuous=0;
-        for(unsigned i=0;i<6;i++)if(!td_drivable(td_traffic_u[i]>>4,td_traffic_v[i]>>4))usable=0;
+        for(unsigned i=0;i<6;i++)if(!lf_drive(td_traffic_u[i]>>4,td_traffic_v[i]>>4))usable=0;
     }
     expect(continuous,"autonomous bus has continuous movement through clock changes and route loops");
     expect(usable,"all six vehicles follow usable native road footprints through a long route run");
@@ -381,22 +397,85 @@ static void test_bounded_corner_assist(void) {
         UWORD old_u=td.u,old_v=td.v;driving_tick(J_A);
         if(shift<=6) {
             expect(td.speed==16&&td.heading==4&&td.v>old_v,"small corner clearance retains heading, throttle and dominant travel");
-            expect((unsigned)(td.u-old_u)==shift*16&&td_drivable(td.u>>4,td.v>>4),"corner assist chooses the nearest collision-valid lateral clearance");
-        }else expect(td.speed==0&&td.u==old_u&&td.v==old_v,"seven-pixel blocked corner exceeds assistance budget and remains solid");
+            expect((unsigned)(td.u-old_u)==shift*16&&lf_drive(td.u>>4,td.v>>4),"corner assist chooses the nearest collision-valid lateral clearance");
+        }else expect(td.speed<=0&&td.u==old_u&&td.v==old_v,"seven-pixel blocked corner exceeds assistance budget and remains solid");
     }
     const UBYTE prohibited[]={0,J_A|J_B,J_B};
     for(unsigned input=0;input<3;input++) {
         reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;td.speed=16;td_vy=256;joy=prohibited[input];
-        expect(!td_corner_slide(td.u,395*16),"coasting and braking do not invoke throttle corner assistance");
+        expect(!lf_corner_slide(td.u,395*16),"coasting and braking do not invoke throttle corner assistance");
     }
     reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;td.speed=-6;td_vy=256;joy=J_A;
-    expect(!td_corner_slide(td.u,395*16),"reverse does not invoke forward corner assistance");
+    expect(!lf_corner_slide(td.u,395*16),"reverse does not invoke forward corner assistance");
     td.speed=16;td_vx=td_vy=256;
-    expect(!td_corner_slide(td.u,395*16),"equal diagonal velocity has no arbitrary assistance axis");
+    expect(!lf_corner_slide(td.u,395*16),"equal diagonal velocity has no arbitrary assistance axis");
     td_vx=0;td_vy=256;td_corner_used=1;
-    expect(!td_corner_slide(td.u,395*16),"catch-up steps cannot apply multiple lateral assists in one rendered update");
+    expect(!lf_corner_slide(td.u,395*16),"catch-up steps cannot apply multiple lateral assists in one rendered update");
     reset_case();joy=J_A;td.speed=16;td_vy=256;td.v=968*16;
-    expect(!td_corner_slide(td.u,td.v+16),"corner assistance cannot push the car beyond the southern map bound");
+    expect(!lf_corner_slide(td.u,td.v+16),"corner assistance cannot push the car beyond the southern map bound");
+}
+
+static void test_street_life(void) {
+    /* Car theft: A beside a road vehicle drags its driver out and takes it. */
+    reset_case();td.onfoot=1;td.u=300*16;td.v=292*16;td.park_u=100*16;td.park_v=100*16;
+    td_traffic_u[1]=300*16;td_traffic_v[1]=280*16;actors[3].frame=TD_FRAME_TRAFFIC_VAN;
+    td_input_edge=1;driving_tick(J_A);
+    expect(td_entry_timer&&td.park_u==300*16&&td.park_v==280*16&&td.vehicle==1,"A beside a van steals it and keeps its position");
+    expect((td_tr_ctrl&2)&&tr_mode[1]==TR_GONE&&td_fx_kind==FX_RUNNER,"the stolen slot leaves traffic and its driver runs off");
+    for(unsigned i=0;i<16;i++)driving_tick(0);
+    expect(!td.onfoot&&td.u==300*16&&td.v==280*16,"the courier ends up driving the stolen vehicle");
+
+    /* A punch knocks a walker down; a pistol shot uses a round. */
+    reset_case();td.onfoot=1;td.u=300*16;td.v=300*16;td_walk_dir=0;td.ammo=3;
+    actors[9].pos.x=307*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=0;
+    td_life_foot_a();
+    expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLY,"a punch throws the walker in front of the courier");
+    for(unsigned i=0;i<40;i++)td_life_tick();
+    expect(pk_mode[0]==PK_DOWN,"a punched walker lands and stays down for a while");
+    for(unsigned i=0;i<20;i++)td_life_tick();
+    td_life_foot_b();
+    expect(td.ammo==2&&td_fx_kind==FX_BULLET,"B on foot fires one round");
+    td.ammo=0;for(unsigned i=0;i<20;i++)td_life_tick();td_life_foot_b();
+    expect(td.msg==TD_MSG_NO_AMMO,"an empty pistol only reports no ammunition");
+
+    /* A moving car throws a struck walker; it loses a quarter of its speed. */
+    reset_case();td.speed=20;td_vx=320;td.mode=TD_ROAM;td_ped_route[2]=0;
+    actors[11].pos.x=(td.u>>4)*32;actors[11].pos.y=(td.v>>4)*32;actors[11].flags=0;
+    td_life_peds(4);
+    expect((td_ped_ovr&4)&&pk_mode[2]==PK_FLY&&pk_vu[2]>0&&td.speed==15,"a car strike throws the walker forward and slows the car");
+    expect(td.msg==TD_MSG_PED,"a car strike reports the pedestrian");
+
+    /* Officers seeing a crime raise attention; unseen chaos builds up. */
+    reset_case();td_lf_crime(CR_GUN);
+    expect(td.wanted==0,"one unseen shot does not summon the police at once");
+    for(unsigned i=0;i<10;i++)td_lf_crime(CR_GUN);
+    expect(td.wanted>=1&&td.heat==TD_HEAT_SECONDS,"repeated unseen chaos eventually draws a star");
+    reset_case();td_lf_crime(CR_COP);
+    expect(td.wanted==2,"assaulting an officer draws at least two stars");
+    td_lf_crime(CR_COP_KILL);
+    expect(td.wanted==5,"killing an officer raises attention by two more, and the chaos adds another");
+
+    /* Attention cools when no officer is near, one star per twenty seconds. */
+    reset_case();td.wanted=1;td.heat=2;td_traffic_u[TD_POLICE_SLOT]=30000;
+    td_life_second();td_life_second();
+    expect(td.wanted==0&&td.heat==0,"unseen courier loses the last star");
+
+    /* Arrest: fine scales with stars, attention clears, half the ammo goes. */
+    reset_case();td.wanted=2;td.cash=500;td.ammo=10;td.job=0;
+    td_life_busted();
+    expect(td.cash==400&&td.wanted==0&&td.ammo==5&&td.job==TD_NONE&&td_life_fine==100,"arrest charges $50 a star and clears attention");
+    reset_case();td.wanted=3;td.cash=40;td_life_busted();
+    expect(td.cash==0&&td_life_fine==40,"an arrest fine never takes cash below zero");
+
+    /* Hospital: full vitality, bill capped at cash, core forecourt exit. */
+    reset_case();td.vitality=0;td.cash=60;td.wanted=4;UWORD hu,hv;td_life_hospital(&hu,&hv);
+    expect(td.vitality==100&&td.cash==0&&td.wanted==0&&td_life_fine==60,"hospital restores vitality and bills at most the cash held");
+    expect(lf_dist(hu>>4,TD_HOSPITAL_U)<=16&&lf_dist(hv>>4,TD_HOSPITAL_V)<=16,"recovery starts at the hospital forecourt");
+
+    /* Supplies: twelve rounds and first aid for twenty dollars. */
+    reset_case();td.cash=25;td.ammo=95;td.vitality=40;
+    expect(td_life_buy()&&td.cash==5&&td.ammo==TD_AMMO_MAX&&td.vitality==100,"supplies refill ammunition up to the cap and heal");
+    expect(!td_life_buy()&&td.cash==5&&td.msg==TD_MSG_NO_CASH,"supplies need twenty dollars");
 }
 
 static void test_clock(void) {
@@ -523,7 +602,7 @@ static void test_legacy_and_transit_recovery(void) {
     legacy[0]=0x54;legacy[1]=0xD7;legacy[2]=4;legacy[3]=xor;memset(&td,0,sizeof(td));
     expect(td_restore()&&td.cash==333&&td.done==1,"legacy migration retains earnings and unique completion");
     expect(td.job==TD_NONE&&td.stage==0&&td.left==0&&td.health==100,"legacy changed campaign retires active work safely");
-    expect(td_save_address(td_save_slot)[2]==6,"legacy migration writes a current dual-slot record");
+    expect(td_save_address(td_save_slot)[2]==7,"legacy migration writes a current dual-slot record");
 
     reset_case();td.mode=TD_RIDE;td.onfoot=1;td.transit_origin=0;td.transit_target=12;td.ride_left=4;td.cash=27;
     td_save();memset(&td,0,sizeof(td));toronto_init();
@@ -637,15 +716,17 @@ static void test_pickup_damage_lifecycle(void) {
         td.u=400*16;td.v=450*16;td.safe_u=td.u;td.safe_v=td.v;
         UBYTE damage=0;
         if(hazard==0) {
-            geometry=CLEAR_GROUND;td_traffic_u[0]=td.u;td_traffic_v[0]=td.v;
-            td_traffic_step();damage=12;
-            expect(td.speed==12&&td_vx==192&&td.cooldown==60&&td.msg==5,
-                   "traffic still slows and warns an empty, carrying or retired vehicle");
+            /* Rear-ending an eastbound car of equal mass (restitution 3/4)
+               shoves it ahead and keeps the courier behind it. */
+            geometry=CLEAR_GROUND;td_traffic_u[0]=td.u+176;td_traffic_v[0]=td.v;actors[2].frame=td_traffic_bases[0];
+            UWORD before_u=td.u;driving_tick(0);damage=12;
+            expect(td.speed==10&&td_vx==160&&td.cooldown==30&&td.msg==5&&td.u==before_u&&(td_tr_ctrl&1)&&tr_pu[0]==22,
+                   "a traffic impact shoves the other car, slows and warns an empty, carrying or retired vehicle");
         }else if(hazard==1) {
             geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;
             driving_tick(0);damage=kind==1?20:8;
-            expect(td.u==394*16&&td.speed==0&&!td_vx&&!td_vy&&td.cooldown==45&&td.msg==5,
-                   "a broad wall still stops the vehicle and applies collision cooldown before and after pickup");
+            expect(td.u==394*16&&td.speed==-6&&td_vx==-96&&!td_vy&&td.cooldown==45&&td.msg==5,
+                   "a broad wall still stops the vehicle with a rebound and applies collision cooldown before and after pickup");
         }else if(hazard==2) {
             geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;td.heading=1;td_vy=128;
             driving_tick(0);damage=kind==1?4:1;
@@ -900,7 +981,7 @@ static void write_v5(UBYTE slot,const td_state_t *state,UBYTE sequence) {
     old[24]=state->done;old[25]=state->subsecond;memcpy(old+26,state->complete,9);
     old[35]=state->transit_origin;old[36]=state->transit_target;old[37]=state->ride_left;
     old[38]=state->cooldown;old[39]=state->msg;
-    old_word(old,40,state->safe_u);old_word(old,42,state->safe_v);old_word(old,44,state->map_x);old_word(old,46,state->map_y);
+    old_word(old,40,state->safe_u);old_word(old,42,state->safe_v);old_word(old,44,1400);old_word(old,46,2200);
     record[0]=0x54;record[1]=0xD7;record[2]=5;record[3]=48;record[4]=sequence;record[7]=0;
     for(unsigned i=2;i<=4;i++)crc=td_crc_byte(crc,record[i]);
     for(unsigned i=0;i<48;i++){record[8+i]=old[i];crc=td_crc_byte(crc,old[i]);}
@@ -913,7 +994,8 @@ static td_state_t legacy_work(UBYTE mode) {
     state.job=4;state.stage=3;state.health=89;state.done=4;state.subsecond=29;
     state.complete[0]=7;state.complete[8]=128;state.mode=mode;state.menu=4;
     state.transit_origin=0;state.transit_target=17;state.ride_left=3;state.cooldown=9;state.msg=12;
-    state.map_x=1400;state.map_y=2200;state.onfoot=mode!=TD_ROAM;
+    /* Version 7 street fields replace v5/v6 atlas words with fresh defaults. */
+    state.vitality=100;state.ammo=TD_AMMO_START;state.wanted=0;state.heat=0;state.onfoot=mode!=TD_ROAM;
     return state;
 }
 
@@ -928,7 +1010,7 @@ static void test_v5_migration_and_interrupted_upgrade(void) {
         expect(zero,"migration extends the bitmap with zero bytes and supplies core districts");
         expect(td_save_address(0)[2]==5,"reading v5 alone does not overwrite its committed snapshot");
         td_save();
-        expect(td_save_address(td_save_slot)[2]==6&&td_save_address(td_save_slot)[3]==58,
+        expect(td_save_address(td_save_slot)[2]==7&&td_save_address(td_save_slot)[3]==58,
                "first save after migration writes the actual58-byte v6 record to the other slot");
         memset(&td,0,sizeof(td));expect(td_restore()&&memcmp(&td,&legacy,sizeof(td))==0,
                "upgraded current record restores all preserved legacy fields");
@@ -1300,7 +1382,7 @@ static void test_car_entry_at_portal(void) {
     td.u=25*16;td.v=640*16;td.park_u=24*16;td.park_v=td.v;
     td.safe_u=td.u;td.safe_v=td.v;td.heading=8;
     td_entry_timer=1;td_entry_target=0;
-    expect(td_door_path(td.u,td.v,td.park_u,td.park_v)&&td_drivable(24,640),
+    expect(td_door_path(td.u,td.v,td.park_u,td.park_v)&&lf_drive(24,640),
            "last-entry seam fixture uses a genuine reachable car on the registered King road port");
     world_tick(0,1);
     expect(!td.onfoot&&!td_entry_timer&&td.u==24*16&&td.v==640*16&&td.district==0&&
@@ -1325,7 +1407,7 @@ static void test_first_frame_actors(void) {
         int traffic=1;unsigned visible=0;
         for(unsigned i=0;i<6;i++) {
             if(actors[i+2].pos.x!=(td_traffic_u[i]>>4)*32||actors[i+2].pos.y!=(td_traffic_v[i]>>4)*32||
-               !td_drivable(td_traffic_u[i]>>4,td_traffic_v[i]>>4))traffic=0;
+               !lf_drive(td_traffic_u[i]>>4,td_traffic_v[i]>>4))traffic=0;
             if(!(actors[i+9].flags&ACTOR_FLAG_HIDDEN)) {
                 visible++;
                 expect(td_ped_route[i]<td_route_counts[td.district]&&td_walkable(actors[i+9].pos.x/32,actors[i+9].pos.y/32),
@@ -1359,7 +1441,7 @@ static void test_walk_pace_dispatch_and_foot_delivery(void) {
     native_case();test_current_district=td.district=2;td.job=77;td_get_job(td.job,&td_job);td.stage=2;td.left=180;
     td_set_target();td.u=736*16;td.v=640*16;td.park_district=2;td.park_u=td.u;td.park_v=td.v;
     expect(td_target.reserved&TD_STOP_FOOT,"authored Lodge fixture carries its actual native foot-only delivery flag");
-    expect(td_drivable(736,640)&&td_near(&td_target),"Lodge approach fixture is a genuine driveable parking point inside the interaction radius");
+    expect(lf_drive(736,640)&&td_near(&td_target),"Lodge approach fixture is a genuine driveable parking point inside the interaction radius");
     td_interact();expect(td.stage==2&&td.job==77&&td.msg==16,"car-door proximity cannot hand off a flagged park-and-walk parcel");
     td.onfoot=1;td.u=784*16;td.v=608*16;td_set_target();td_interact();
     expect(td.stage==3&&td.job==77,"on-foot Lodge courier can complete the same flagged handoff");
@@ -1383,7 +1465,7 @@ static void test_park_delivery_guidance(void) {
         expect(td_target.u==anchors[i][0]&&td_target.v==anchors[i][1]&&
                !strcmp(td_target.name,client.name)&&td_target.reserved==client.reserved,
                "driver beacon uses the legal road approach while retaining client identity and foot-only restriction");
-        expect(td_drivable(anchors[i][0],anchors[i][1])&&td_near(&td_target)&&
+        expect(lf_drive(anchors[i][0],anchors[i][1])&&td_near(&td_target)&&
                actors[1].pos.x==anchors[i][0]*32&&actors[1].pos.y==(anchors[i][1]-12)*32,
                "parking marker is displayed at a real driveable approach");
         td_interact();expect(td.stage==stages[i]&&td.msg==16&&td.job==jobs[i],
@@ -1421,7 +1503,7 @@ static void test_atlas_driver_handoff_and_freeze(void) {
         td.onfoot=district&1;td.park_district=(district+1)%TD_DISTRICT_COUNT;
         td.park_u=400*16;td.park_v=528*16;td.speed=0;
         td.job=80;td_get_job(td.job,&td_job);td.stage=1;td.left=199;td.seconds=100;
-        td.map_x=43210;td.map_y=32109;td_set_target();
+        td.vitality=77;td.ammo=33;td_set_target();
         camera_x=12000+district*16;camera_y=8000+district*16;camera_settings=0x5A;
         UWORD original_camera_x=camera_x,original_camera_y=camera_y;
         world_tick(J_START,300);
@@ -1430,8 +1512,8 @@ static void test_atlas_driver_handoff_and_freeze(void) {
         td.menu=1;world_tick(J_A,300);
         expect(td.mode==TD_MAP&&test_map_opens==1&&test_map_active&&camera_settings==0,
                "actual pause choice opens the dedicated atlas UI exactly once");
-        expect(td.map_x==43210&&td.map_y==32109,
-               "atlas browsing does not reuse serialized legacy camera fields");
+        expect(td.vitality==77&&td.ammo==33,
+               "atlas browsing does not reuse serialized courier fields");
         td_state_t frozen=td;td_job_t frozen_job=td_job;
         td_stop_t frozen_target=td_target,frozen_cursor=td_cursor;
         actor_t frozen_actors[21];memcpy(frozen_actors,actors,sizeof(actors));
@@ -1570,7 +1652,7 @@ static void test_ambient_gull(void) {
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
-    test_momentum_and_coasting();test_pressed_edge_once();test_clock();
+    test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_street_life();
     test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();
     test_signal_and_autonomous_traffic();
     test_city_routes_and_walking();
