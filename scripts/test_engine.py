@@ -148,7 +148,8 @@ def main():
         raise SystemExit("Host C compiler unavailable; engine regressions did not run.")
     # First include the real world module's private generated arrays in this
     # shared translation unit so direct portal fixtures inspect production data.
-    original = ((ENGINE / "src/td_transit.c").read_text() + '\n' +
+    original = ((ENGINE / "src/td_street.c").read_text() + '\n' +
+                (ENGINE / "src/td_transit.c").read_text() + '\n' +
                 (ENGINE / "src/td_world.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
                 (ENGINE / "src/td_save.c").read_text() + '\n' +

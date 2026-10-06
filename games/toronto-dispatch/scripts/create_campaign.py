@@ -381,15 +381,48 @@ def main():
     starts[0] = starts[1]
     assert len(street_segments) < 256
     code += ['};',
-             f'static const UBYTE td_west_street_start[{districts + 1}]={{' + ','.join(map(str, starts)) + '};',
+             f'static const UBYTE td_west_street_start[{districts + 1}]={{' + ','.join(map(str, starts)) + '};']
+    # Exact candidate lists per 64-pixel region: a segment is kept only if
+    # its least distance to the region does not exceed the best worst-case
+    # distance of any segment there, so every possible first minimum stays
+    # in the list, in its original order.
+    def box_score(seg, u, v):
+        x1, y1, x2, y2 = seg[:4]
+        return (x1 - u if u < x1 else u - x2 if u > x2 else 0) + (y1 - v if v < y1 else v - y2 if v > y2 else 0)
+    region_start, region_list = [], []
+    for district in range(1, districts):
+        segs = list(enumerate(street_segments))[starts[district]:starts[district + 1]]
+        for ry in range(16):
+            for rx in range(16):
+                X1, X2, Y1, Y2 = rx * 64, min(rx * 64 + 63, 1023), ry * 64, min(ry * 64 + 63, 975)
+                region_start.append(len(region_list))
+                if X1 > X2 or Y1 > Y2 or not segs:
+                    continue
+                lows = [max(0, seg[0] - X2, X1 - seg[2]) + max(0, seg[1] - Y2, Y1 - seg[3]) for _, seg in segs]
+                worst = min(max(box_score(seg, u, v) for u in (X1, X2) for v in (Y1, Y2)) for _, seg in segs)
+                region_list += [index for (index, _), low in zip(segs, lows) if low <= worst]
+    region_start.append(len(region_list))
+    assert len(region_start) == (districts - 1) * 256 + 1 and len(region_list) < 65536
+    code += [f'static const UWORD td_west_region_start[{len(region_start)}]={{' + ','.join(map(str, region_start)) + '};',
+             f'static const UBYTE td_west_region_list[{len(region_list)}]={{' + ','.join(map(str, region_list)) + '};',
+             '/* First segment with the least Manhattan distance from (u,v) to its box.',
+             '   On the map, only the 64-pixel region\'s exact candidate list is scanned;',
+             '   a segment whose x distance alone reaches the best cannot win, and nothing',
+             '   beats zero. Positions off the map scan the whole district. */',
              'void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {',
-             ' UBYTE name=0,i=0,end=0;UWORD score,best=65535;const td_street_t *s;',
-             f' if(district<{districts}){{i=td_west_street_start[district];end=td_west_street_start[district+1];}}',
-             ' for(s=&td_west_streets[i];i<end;i++,s++){',
-             ' score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);',
-             ' if(score<best){best=score;name=s->name;}',
+             ' UBYTE name=0;UWORD k=0,stop=0,dx,dy,lo,hi,best=65535;const td_street_t *s;const UBYTE *list=0;',
+             f' if(district&&district<{districts}&&u<1024&&v<976){{',
+             '  k=(UWORD)(district-1)*256+((v>>6)<<4)+(u>>6);stop=td_west_region_start[k+1];k=td_west_region_start[k];list=td_west_region_list;',
+             f' }}else if(district<{districts}){{k=td_west_street_start[district];stop=td_west_street_start[district+1];}}',
+             ' for(;k<stop;k++){',
+             '  s=list?&td_west_streets[list[k]]:&td_west_streets[k];',
+             '  lo=s->x1;hi=s->x2;dx=u<lo?lo-u:u>hi?u-hi:0;if(dx>=best)continue;',
+             '  lo=s->y1;hi=s->y2;dy=v<lo?lo-v:v>hi?v-hi:0;dx+=dy;',
+             '  if(dx<best){best=dx;name=s->name;if(!best)break;}',
              ' }memcpy(d,td_west_street_names[name],19);',
              '}',
+             ]
+    code += [
              'void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }',
              'void td_get_job(UBYTE i,td_job_t *d) BANKED { if(i<TD_QUESTS) memcpy(d,&td_jobs[i],sizeof(td_job_t)); }',
              'void td_get_brief(UBYTE i,char *d) BANKED { if(i<TD_QUESTS) memcpy(d,td_briefs[i],37); else d[0]=0; }',

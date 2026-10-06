@@ -1316,7 +1316,7 @@ static void test_first_frame_actors(void) {
         native_case();td_session_live=1;test_current_district=td.district=td.park_district=district;
         td.u=(locations[district][0]+18)*16;td.v=locations[district][1]*16;
         td.park_u=locations[district][0]*16;td.park_v=td.v;td.onfoot=1;toronto_init();
-        expect(actors_len==15&&PLAYER.pos.x==(td.u>>4)*32&&PLAYER.pos.y==(td.v>>4)*32,
+        expect(actors_len==TD_ACTORS&&PLAYER.pos.x==(td.u>>4)*32&&PLAYER.pos.y==(td.v>>4)*32,
                "each registered district initializes all actors and courier coordinates before its first update");
         expect(actors[8].pos.x==(td.park_u>>4)*32&&actors[8].pos.y==(td.park_v>>4)*32&&!(actors[8].flags&ACTOR_FLAG_HIDDEN),
                "first scene frame shows the locally parked vehicle at its real saved position");
@@ -1475,6 +1475,81 @@ static void test_atlas_driver_handoff_and_freeze(void) {
     }
 }
 
+
+static void test_street_props(void) {
+    /* Props come from the generated district table; the scene keeps four slots. */
+    UBYTE start=td_prop_start[0],slot=255,mask;UWORD pu=td_prop_u[start],pv=td_prop_v[start];
+    native_case();td.mode=TD_ROAM;td.onfoot=0;td.district=0;td_street_reset();
+    td.u=(pu+20)*16;td.v=pv*16;
+    for(unsigned i=0;i<16;i++)td_props_present();
+    for(UBYTE s=0;s<TD_PROP_SLOTS;s++)if(td_prop_slot[s]==0)slot=s;
+    expect(slot!=255&&td_prop_su[slot]==pu&&td_prop_sv[slot]==pv,"a nearby curbside prop takes an actor slot");
+    mask=1<<slot;
+    expect(!(actors[TD_ACTOR_PROPS+slot].flags&ACTOR_FLAG_HIDDEN)&&
+           actors[TD_ACTOR_PROPS+slot].frame_start==TD_FRAME_CONE+(td_prop_kind[start]<<1)&&
+           actors[TD_ACTOR_PROPS+slot].pos.x==pu*32,
+           "a standing prop shows its upright frame at its curbside position");
+    td.speed=0;td.u=pu*16;td_props_present();
+    expect(!(td_prop_sdown&mask),"a stationary car does not knock a prop over");
+    td.speed=40;audio_cue=255;td_props_present();
+    expect((td_prop_sdown&mask)&&td.speed==30&&audio_cue==TD_AUDIO_IMPACT&&
+           actors[TD_ACTOR_PROPS+slot].frame_start==TD_FRAME_CONE+(td_prop_kind[start]<<1)+1,
+           "driving into a prop knocks it over with a quarter loss of speed");
+    td.speed=-40;td_props_present();
+    expect(td.speed==-40,"a knocked prop is not hit twice");
+    td.onfoot=1;td.speed=0;td_prop_sdown=0;td_props_present();
+    expect(!(td_prop_sdown&mask),"the courier on foot walks past props");
+    td.onfoot=0;td.speed=40;td_props_present();td.u=(pu+300)*16;td_props_present();
+    expect(td_prop_slot[slot]!=0&&!(td_prop_sdown&mask)&&
+           (td_prop_slot[slot]==255?(actors[TD_ACTOR_PROPS+slot].flags&ACTOR_FLAG_HIDDEN)!=0:
+            actors[TD_ACTOR_PROPS+slot].pos.x==td_prop_su[slot]*32),
+           "a prop that left the view is tidied up and its slot is reused or hidden");
+    expect(geometry==NATIVE_GRID&&td.mode==TD_ROAM,"props never change mode or collision");
+    /* Every table entry lies on a road tile of its district and away from stops. */
+    for(UBYTE d=0;d<TD_DISTRICT_COUNT;d++)for(UBYTE i=0;i<td_prop_count[d];i++){
+        UWORD u=td_prop_u[td_prop_start[d]+i],v=td_prop_v[td_prop_start[d]+i];
+        expect(td_prop_uv8[2*(td_prop_start[d]+i)]==(u>>3)&&td_prop_uv8[2*(td_prop_start[d]+i)+1]==(v>>3),"coarse prop coordinates match");
+    }
+}
+
+static void test_visible_transit(void) {
+    UWORD u,v,seconds;UBYTE found=0;actor_t *bus=&actors[TD_ACTOR_TRANSIT];
+    native_case();td.district=0;td.onfoot=1;td.mode=TD_WAIT;td.transit_origin=45;td.transit_target=46;
+    expect(td_street_berth(45,0,&u,&v)==1&&!td_street_berth(45,1,&u,&v)&&!td_street_berth(13,0,&u,&v),
+           "street berths belong to their district; Line 1 has none");
+    td_street_berth(45,0,&u,&v);
+    for(seconds=0;seconds<64&&!found;seconds++){td.seconds=seconds;if(td_transit_departure(45,46,seconds)==2)found=1;}
+    expect(found,"fixture finds a departure two seconds away");
+    td.subsecond=0;td_transit_present(0);
+    expect(!(bus->flags&ACTOR_FLAG_HIDDEN)&&bus->frame_start==TD_FRAME_STREETCAR_E&&
+           bus->pos.x==(u-((120u*120u)>>8))*32&&bus->pos.y==(v+8)*32,
+           "an eastbound streetcar approaches its berth in the eastbound lane on schedule");
+    td.seconds+=2;td_transit_present(0);
+    expect(td_transit_departure(45,46,td.seconds)==0&&bus->pos.x==u*32,"the streetcar is at its berth when the boarding window opens");
+    td.seconds-=6;td_transit_present(0);
+    expect(bus->flags&ACTOR_FLAG_HIDDEN,"no vehicle is shown while the next departure is far away");
+    td.mode=TD_RIDE;td_tv_begin(1,45);td_transit_present(16);
+    expect(PLAYER.flags&ACTOR_FLAG_HIDDEN,"the courier is aboard during the ride");
+    expect(!(bus->flags&ACTOR_FLAG_HIDDEN)&&bus->pos.x==(u+1)*32,"the streetcar pulls away east with the courier");
+    td_transit_present(240);
+    expect((bus->flags&ACTOR_FLAG_HIDDEN)&&!td_tv_phase,"the departed streetcar leaves the view");
+    td.mode=TD_ROAM;td_transit_present(1);
+    expect(!(PLAYER.flags&ACTOR_FLAG_HIDDEN),"the courier reappears after alighting");
+    td_tv_begin(2,46);td_street_berth(46,0,&u,&v);td_transit_present(10);
+    expect(!(bus->flags&ACTOR_FLAG_HIDDEN)&&bus->pos.x==u*32,"the vehicle dwells at the destination berth after arrival");
+    td.mode=TD_WAIT;td.transit_origin=10;td.transit_target=21;
+    for(seconds=0,found=0;seconds<64&&!found;seconds++){td.seconds=seconds;if(!td_transit_departure(10,21,seconds))found=1;}
+    td_transit_present(0);td_street_berth(10,0,&u,&v);
+    expect(found&&bus->frame_start==TD_FRAME_FERRY_S&&bus->pos.x==u*32&&bus->pos.y==(v+TD_ANCHOR_FERRY_S_DY)*32,
+           "the island ferry waits off the terminal dock");
+    td.mode=TD_WAIT;td.transit_origin=12;td.transit_target=17;td_transit_present(0);
+    expect(bus->flags&ACTOR_FLAG_HIDDEN,"the subway is never drawn on the street");
+    expect(td_transit_heading(45,46)==TD_HEADING_EAST&&td_transit_heading(46,45)==TD_HEADING_WEST&&
+           td_transit_heading(10,21)==TD_HEADING_SOUTH&&td_transit_heading(21,10)==TD_HEADING_NORTH&&
+           td_transit_heading(80,19)==TD_HEADING_EAST&&td_transit_heading(45,45)==TD_TRANSIT_NONE,
+           "journey headings follow route order and ferry direction");
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -1497,6 +1572,7 @@ int main(void) {
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
+    test_street_props();test_visible_transit();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

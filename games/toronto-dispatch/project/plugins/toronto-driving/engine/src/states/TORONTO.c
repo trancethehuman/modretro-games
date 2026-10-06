@@ -263,6 +263,84 @@ UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED {
 static UBYTE td_route_stop(UBYTE origin,UBYTE idx){
     return td_transit_stop(origin,idx);
 }
+/* Visible transit. While the courier waits, the scheduled bus, streetcar or
+ * ferry decelerates into its berth so that it stops exactly as the boarding
+ * window opens; it then leaves with the courier aboard, and at the
+ * destination it sets the courier down, dwells and pulls away. Positions are
+ * derived from the timetable clock, so nothing here is saved or affects
+ * when a journey departs or arrives. Line 1 runs underground. */
+static UBYTE td_tv_phase,td_tv_stop,td_tv_heading,td_tv_service,td_tv_shown,td_ride_hidden;
+static UWORD td_tv_frames;
+static void td_tv_begin(UBYTE phase,UBYTE stop){
+    td_tv_phase=phase;td_tv_stop=stop;td_tv_frames=0;
+    td_tv_service=td_transit_service(td.transit_origin);
+    td_tv_heading=td_transit_heading(td.transit_origin,td.transit_target);
+}
+/* offset: pixels from the berth, behind it when arriving, ahead when leaving. */
+static void td_tv_show(UBYTE service,UBYTE stop,UBYTE heading,UWORD offset,UBYTE arriving){
+    actor_t *a=&actors[TD_ACTOR_TRANSIT];UWORD u,v;UBYTE frame;
+    td_tv_shown=0;
+    if(service==TD_TRANSIT_TRAIN||heading>TD_HEADING_NORTH||offset>240||!td_street_berth(stop,td.district,&u,&v)){a->flags|=ACTOR_FLAG_HIDDEN;return;}
+    if(heading==TD_HEADING_EAST){v+=8;if(arriving)u-=offset;else u+=offset;}
+    else if(heading==TD_HEADING_WEST){v-=8;if(arriving)u+=offset;else u-=offset;}
+    else if(heading==TD_HEADING_SOUTH){if(arriving)v-=offset;else v+=offset;}
+    else{if(arriving)v+=offset;else v-=offset;}
+    if(u>4000||v>4000){a->flags|=ACTOR_FLAG_HIDDEN;return;}
+    if(service==TD_TRANSIT_FERRY)frame=heading==TD_HEADING_NORTH?TD_FRAME_FERRY_N:TD_FRAME_FERRY_S;
+    else frame=(service==TD_TRANSIT_BUS?TD_FRAME_BUS_E:TD_FRAME_STREETCAR_E)+heading;
+    /* Tall frames grow upward from their bottom row; centre them on (u,v). */
+    if(heading>=TD_HEADING_SOUTH)v+=service==TD_TRANSIT_STREETCAR?TD_ANCHOR_STREETCAR_S_DY:TD_ANCHOR_BUS_S_DY;
+    td_position(a,u,v);td_frame(a,frame);a->flags&=~ACTOR_FLAG_HIDDEN;td_tv_shown=1;
+}
+static void td_transit_present(UBYTE frames){
+    UBYTE departure;UWORD wait;
+    td_tv_frames+=frames;
+    if(td.mode==TD_WAIT){
+        departure=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
+        if(departure==TD_TRANSIT_NONE||departure>4)wait=999;
+        else wait=departure?departure*60-td.subsecond:0;
+        td_tv_show(td_transit_service(td.transit_origin),td.transit_origin&63,
+                   td_transit_heading(td.transit_origin,td.transit_target),wait>240?999:(wait*wait)>>8,1);
+    }else if(td_tv_phase){
+        wait=td_tv_frames;
+        if(td_tv_phase==2)wait=wait<90?0:wait-90;
+        if(wait>248)td_tv_phase=0;
+        td_tv_show(td_tv_service,td_tv_stop,td_tv_heading,wait>248?999:(wait*wait)>>8,0);
+    }else td_tv_show(TD_TRANSIT_TRAIN,0,0,0,0);
+    /* The courier is aboard (or below ground) for the whole ride. */
+    if(td.mode==TD_RIDE){PLAYER.flags|=ACTOR_FLAG_HIDDEN;td_ride_hidden=1;}
+    else if(td_ride_hidden){td_ride_hidden=0;PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
+}
+/* Curbside props: four nearby slots from the district table. Driving into one
+ * knocks it over with a small loss of speed; it stands again once it has left
+ * the view. While a transit vehicle is shown the props are hidden so actors
+ * never need more than 38 of the 40 hardware sprites. Actors are only
+ * rewritten when a slot changes. */
+static UBYTE td_props_hidden;
+static void td_props_present(void){
+    UBYTE i,mask,pu8,pv8;actor_t *a;UWORD pu=td.u>>4,pv=td.v>>4;
+    pu8=pu>>3;pv8=pv>>3;
+    td_street_refresh(td.district,pu8,pv8);
+    if(td_tv_shown!=td_props_hidden){td_props_hidden=td_tv_shown;td_prop_dirty=(1<<TD_PROP_SLOTS)-1;}
+    if(td.mode==TD_ROAM&&!td.onfoot&&!td_entry_timer&&td.speed&&!td_props_hidden){
+        for(i=0,mask=1;i<TD_PROP_SLOTS;i++,mask<<=1){
+            if(td_prop_slot[i]==TD_NONE||(td_prop_sdown&mask)||(UBYTE)(td_prop_su8[i]-pu8+2)>4||(UBYTE)(td_prop_sv8[i]-pv8+2)>4)continue;
+            if(td_distance(td_prop_su[i],pu)<9&&td_distance(td_prop_sv[i],pv)<9){
+                td_prop_sdown|=mask;td_prop_dirty|=mask;
+                td.speed-=td.speed>>2;td_audio_play(TD_AUDIO_IMPACT);
+            }
+        }
+    }
+    if(!td_prop_dirty)return;
+    for(i=0,mask=1,a=&actors[TD_ACTOR_PROPS];i<TD_PROP_SLOTS;i++,a++,mask<<=1){
+        if(!(td_prop_dirty&mask))continue;
+        if(td_prop_slot[i]==TD_NONE||td_props_hidden){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
+        td_position(a,td_prop_su[i],td_prop_sv[i]);
+        td_frame(a,TD_FRAME_CONE+(td_prop_sk[i]<<1)+((td_prop_sdown&mask)?1:0));
+        a->flags&=~ACTOR_FLAG_HIDDEN;
+    }
+    td_prop_dirty=0;
+}
 static UBYTE td_board_current_window(void){
     UBYTE fare;
     if(!td_transit_valid(td.transit_origin,td.transit_target)||td_transit_departure(td.transit_origin,td.transit_target,td.seconds))return FALSE;
@@ -271,6 +349,7 @@ static UBYTE td_board_current_window(void){
     /* A fresh free-roaming trip cannot inherit an old contract failure. */
     if(td.job==TD_NONE)td.health=100;
     td.cash-=fare;td.mode=TD_RIDE;td.ride_left=td_transit_duration(td.transit_origin,td.transit_target);
+    td_tv_begin(1,td.transit_origin&63);
     td_audio_play(TD_AUDIO_TRANSIT);td_save();return TRUE;
 }
 static void td_transit_open(void){
@@ -367,6 +446,7 @@ static UBYTE td_alight_position(UWORD *dest_u,UWORD *dest_v){
     }
     return FALSE;
 }
+static UBYTE td_ui_pending;
 static void td_second(void){
     UWORD arrival_u,arrival_v;
     td.seconds++;
@@ -385,6 +465,7 @@ static void td_second(void){
             /* Commit an alighted state before queuing another scene. A saved
              * paid ride still belongs to its origin district until arrival. */
             td.mode=td.health?TD_ROAM:TD_RESULT;
+            td_tv_begin(2,td.transit_target);
             if(td_cursor.district!=td.district){
                 if(!td_change_district(td_cursor.district,arrival_u,arrival_v)){
                     td.mode=TD_RIDE;td.ride_left=1;td_save();td_ui_draw();return;
@@ -395,7 +476,9 @@ static void td_second(void){
             td_resume_mode=td.mode;td_set_target();td_audio_play(td.health?TD_AUDIO_TRANSIT:TD_AUDIO_FAIL);
         }
     }
-    td_save();td_ui_draw();
+    /* The HUD repaint follows on the next frame so the save and the repaint
+     * never share one frame's CPU time; clocks and state are already final. */
+    td_save();td_ui_pending=1;
 }
 /* Q4 stop lines: td_rows/td_cols*16 -/+ 384 for forward/reverse approaches. */
 #define TD_STOP_LINES(a,b,c,d,e,f,g,h,o) {a*16+o,b*16+o,c*16+o,d*16+o,e*16+o,f*16+o,g*16+o,h*16+o}
@@ -1495,7 +1578,7 @@ void toronto_init(void) BANKED {
         }
         if(td.job!=TD_NONE&&!td.stage)td.health=100;
         td.speed=0;td_resume_mode=td.mode==TD_WAIT||td.mode==TD_RIDE?td.mode:TD_ROAM;td.mode=TD_HELP;td.msg=0;td.menu=0;
-        td_session_live=1;
+        td_session_live=1;td_tv_phase=0;td_ride_hidden=0;
     }
     /* Restoring another district redirects through the same genuine VM path.
        Regular crossings keep velocity, mission, parked car, clock and audio. */
@@ -1523,12 +1606,14 @@ void toronto_init(void) BANKED {
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?32:(td.vehicle<<3)+(((td.heading+1)&15)>>1));td_traffic_present();td_pedestrians();
+    td_street_reset();td_transit_present(0);td_props_present();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=-16;camera_deadzone_x=8;camera_deadzone_y=8;
     if(cold)td_audio_init();td_ui_init();
 }
 void toronto_update(void) BANKED {
     UWORD now,elapsed,seconds,old_u,old_v;UBYTE motion,step,was_entering,consumed=0;
     if(td_transition_pending){if(td_transition_pending==2&&td_district_queue(td.district))td_transition_pending=1;return;}
+    if(td_ui_pending){td_ui_pending=0;td_ui_draw();}
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
     td_corner_used=0;
     motion=elapsed>4?4:elapsed;
@@ -1553,7 +1638,7 @@ void toronto_update(void) BANKED {
         td_traffic_step();
     }
     if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
-    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_traffic_present();td_pedestrians();}
+    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_traffic_present();td_pedestrians();td_transit_present(motion);td_props_present();}
     td_position(&PLAYER,td.u>>4,td.v>>4);
     td_sound_update();
 }
