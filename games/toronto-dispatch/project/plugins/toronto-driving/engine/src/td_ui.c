@@ -278,7 +278,9 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
     if(td_map_row<12)td_map_paint_row();
 }
 #ifdef __SDCC
+#include "palette.h"
 void load_bkg_tileset(const tileset_t *tiles,UBYTE bank) BANKED;
+UBYTE do_load_palette(palette_entry_t *dest,const palette_t *palette,UBYTE bank) BANKED;
 /* The atlas borrows CGB bank-1 background tiles 8..187. Scenes whose own
  * background spills into bank 1 (the core uses IDs 0..9) must get those
  * patterns back before the city is visible again. */
@@ -288,15 +290,34 @@ static void td_restore_scene_tiles(void){
     MemcpyBanked(&bkg,scene.background.ptr,sizeof(bkg),scene.background.bank);
     if(bkg.cgb_tileset.ptr){VBK_REG=1;load_bkg_tileset(bkg.cgb_tileset.ptr,bkg.cgb_tileset.bank);VBK_REG=0;}
 }
+/* The title swaps in its own BG palettes 0..6; the scene's come back from
+ * its ROM data. The title only appears while a scene initializes, before
+ * its fade-in, which applies BkgPalette: writing the hardware palettes here
+ * would flash full colour for a frame. Leaving the title sets them. */
+static void td_title_palettes_on(void){
+    memcpy(BkgPalette,td_title_palettes,sizeof(td_title_palettes));
+}
+static void td_restore_scene_palettes(void){
+    scene_t scene;
+    MemcpyBanked(&scene,current_scene.ptr,sizeof(scene),current_scene.bank);
+    if(scene.palette.ptr)do_load_palette(BkgPalette,scene.palette.ptr,scene.palette.bank);
+    set_bkg_palette(0,7,(const palette_color_t *)BkgPalette);
+}
+typedef char td_title_palettes_fill_seven_slots[(sizeof(td_title_palettes)==7*sizeof(palette_entry_t))?1:-1];
 #else
 static void td_restore_scene_tiles(void){}
+static void td_title_palettes_on(void){}
+static void td_restore_scene_palettes(void){}
 #endif
-/* The title illustration borrows the atlas-owned bank-1 tiles while the
- * fullscreen title hides the city; leaving it restores the scene's tiles. */
+/* The title illustration borrows the atlas-owned bank-1 tiles and BG
+ * palettes 0..6 while the fullscreen title hides the city; leaving it
+ * restores the scene's tiles and palettes. A scene load replaces both, so
+ * td_ui_init forgets that the tiles were loaded. */
 static UBYTE td_title_shown;
 static void td_title_show(void){
     UBYTE y;
     if(!td_title_shown){VBK_REG=1;set_bkg_data(TD_TITLE_FIRST,TD_TITLE_TILES,td_title_tiles);td_title_shown=1;}
+    td_title_palettes_on();
     for(y=0;y<TD_TITLE_ROWS;y++){
         VBK_REG=1;set_win_tiles(0,y,20,1,td_title_attr+(UWORD)y*20);
         VBK_REG=0;set_win_tiles(0,y,20,1,td_title_map+(UWORD)y*20);
@@ -305,7 +326,7 @@ static void td_title_show(void){
 }
 static void td_title_hide(void){
     if(!td_title_shown)return;
-    td_title_shown=0;td_restore_scene_tiles();VBK_REG=0;
+    td_title_shown=0;td_restore_scene_tiles();td_restore_scene_palettes();VBK_REG=0;
 }
 void td_map_close(void) BANKED {
     UBYTE i;
@@ -316,7 +337,7 @@ void td_map_close(void) BANKED {
     td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;
 }
 void td_ui_init(void) BANKED {
-    UBYTE i;td_ui_mode=255;td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);
+    UBYTE i;td_ui_mode=255;td_map_active=0;td_title_shown=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);
     /* Font in bank 1 from tile 192, art in bank 0 tiles 128..191 (above the
      * scene's 128 bank-0 tiles and outside the sprite tiles). Every window
      * cell starts as a bank-1 font cell on UI palette 7. */
@@ -369,7 +390,8 @@ void td_ui_tick(void) BANKED {
  * position whose street name is cached. A repaint after another screen
  * (changed) always reformats. */
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
-            "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","HOLD A+B: GET OUT","HOSPITAL"};
+            "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","HOLD A+B: GET OUT","HOSPITAL",
+            "FOUND CASH +$15","FIRST AID +40","AMMO +6"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
 static UWORD td_hud_key[6];
 static UWORD td_street_u=65535,td_street_v;static UBYTE td_street_d;
@@ -432,6 +454,8 @@ static void td_hud(UBYTE changed){
                            TD_UI_BTN_SEL_0 TD_UI_BTN_SEL_1 "JOBS " TD_UI_BTN_A TD_UI_BTN_B "HOLD: EXIT");
     }
 }
+/* The controls card below the title illustration starts at row 11. */
+typedef char td_title_leaves_card_rows[(TD_TITLE_ROWS==11)?1:-1];
 static const char td_title_1[]=TD_UI_EMBLEM_TL TD_UI_EMBLEM_TR " TORONTO";
 static const char td_title_2[]=TD_UI_EMBLEM_BL TD_UI_EMBLEM_BR " DISPATCH";
 static void td_page(const char *a,const char *b){
@@ -450,16 +474,14 @@ void td_ui_draw(void) BANKED {
     if(td.mode==TD_ROAM || td.mode==TD_WAIT || td.mode==TD_RIDE){td_hud(changed);return;}
     ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
     if(td.mode==TD_HELP){
-        /* Title: illustration rows 0..8, then the controls card. */
+        /* Title: illustration rows 0..10, then a compact controls card. */
         if(changed)td_title_show();
-        td_row(9,td_frame_top);
-        td_framed(10,TD_UI_BTN_A "GAS " TD_UI_BTN_B "BRAKE/REV");
-        td_framed(11,TD_UI_DPAD "STEER " TD_UI_BTN_START_0 TD_UI_BTN_START_1 TD_UI_BTN_START_2 "MENU");
-        td_framed(12,TD_UI_BTN_A TD_UI_BTN_B "HOLD: LEAVE CAR");
-        td_framed(13,TD_UI_BTN_SEL_0 TD_UI_BTN_SEL_1 "DELIVER / JOBS");
-        td_framed(14,TD_UI_WALK TD_UI_BTN_A "PUNCH/CAR/STEAL");
-        td_framed(15,TD_UI_WALK TD_UI_BTN_B "SHOOT / TTC");
-        td_framed(16,td_ui_blink?"   PRESS " TD_UI_BTN_A " START":"");
+        td_row(11,td_frame_top);
+        td_framed(12,TD_UI_BTN_A "GAS " TD_UI_BTN_B "BRAKE " TD_UI_DPAD "STEER");
+        td_framed(13,TD_UI_BTN_SEL_0 TD_UI_BTN_SEL_1 "DELIVER " TD_UI_BTN_START_0 TD_UI_BTN_START_1 TD_UI_BTN_START_2 "MENU");
+        td_framed(14,TD_UI_BTN_A TD_UI_BTN_B "HOLD: LEAVE CAR");
+        td_framed(15,TD_UI_WALK TD_UI_BTN_A "PUNCH " TD_UI_BTN_B "SHOOT/TTC");
+        td_framed(16,td_ui_blink?" PRESS " TD_UI_BTN_A " TO START":"");
         td_row(17,td_frame_bottom);return;
     }
     if(td.mode==TD_PAUSE){

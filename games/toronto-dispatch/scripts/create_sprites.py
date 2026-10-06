@@ -63,7 +63,7 @@ def frames():
     add('beacon_pulse', A.grid(A.BEACON_PULSE), 'signal_yellow')
     add('stop_marker', A.grid(A.BEACON), 'traffic_red')
     add('depot_marker', A.grid(A.BEACON_PULSE), 'courier_vehicle')
-    add('car_door_open', A.grid(A.DOOR_E), 'courier_vehicle')
+    add('car_door_open', A.door_frame(), 'courier_vehicle')
     for name, design, pal in (('traffic_red', A.car_frames(), 'traffic_red'),
                               ('traffic_blue', A.car_frames(), 'traffic_blue'),
                               ('traffic_taxi', cardinal(A.car_frames(True)), 'signal_yellow'),
@@ -75,11 +75,13 @@ def frames():
                                ('walker_c', 1, 'walker_teal'), ('walker_d', 0, 'walker_violet')):
         for i, g in enumerate(A.person_frames(variant)):
             add(f'{name}_{i}', g, pal)
-    for name, design, pal in (('cone', A.CONE, 'courier_vehicle'), ('cone_down', A.CONE_KNOCKED, 'courier_vehicle'),
-                              ('bin', A.BIN, 'traffic_blue'), ('bin_down', A.BIN_KNOCKED, 'traffic_blue'),
-                              ('newsbox', A.NEWSBOX, 'traffic_red'), ('newsbox_down', A.NEWSBOX_KNOCKED, 'traffic_red'),
-                              ('barrel', A.BARREL, 'courier_vehicle'), ('barrel_down', A.BARREL_KNOCKED, 'courier_vehicle'),
-                              ('debris', A.DEBRIS, 'courier_vehicle')):
+    # Sidewalk pickups: cash, first aid, ammunition; each with a highlight frame.
+    for name, design, pal in (('pickup_cash', A.PICKUP_CASH, 'signal_yellow'),
+                              ('pickup_cash_glint', A.PICKUP_CASH_GLINT, 'signal_yellow'),
+                              ('pickup_first_aid', A.PICKUP_FIRST_AID, 'traffic_red'),
+                              ('pickup_first_aid_glint', A.PICKUP_FIRST_AID_GLINT, 'traffic_red'),
+                              ('pickup_ammo', A.PICKUP_AMMO, 'police'),
+                              ('pickup_ammo_glint', A.PICKUP_AMMO_GLINT, 'police')):
         add(name, A.grid(design), pal)
     bus_e = A.big_frame(A.bus_zone(), 0, (40, 16))
     bus_s = A.big_frame(A.bus_zone(), 90, (16, 40))
@@ -91,10 +93,7 @@ def frames():
     add('streetcar_s', car_s, 'traffic_red', (16, 64)); add('streetcar_n', A.flip_v(car_s), 'traffic_red', (16, 64))
     ferry_s = A.big_frame(A.ferry_zone(), 90, (16, 40))
     add('ferry_s', ferry_s, 'traffic_blue', (16, 40)); add('ferry_n', A.flip_v(ferry_s), 'traffic_blue', (16, 40))
-    for name, design in (('gull_e_0', A.grid(A.GULL_UP)), ('gull_e_1', A.grid(A.GULL_LEVEL)),
-                         ('gull_w_0', A.flip_h(A.grid(A.GULL_UP))), ('gull_w_1', A.flip_h(A.grid(A.GULL_LEVEL)))):
-        add(name, design, 'courier_vehicle')
-    # Street life added after the original 140 frames so their indices stay put.
+    # Street life.
     for i, g in enumerate(A.police_frames()):
         add(f'police_{i}', g, 'traffic_blue')
     for i, g in enumerate(A.officer_frames()):
@@ -134,13 +133,22 @@ def slice_count(fr, sheet, places, frame_defs):
     return len(seen)
 
 
-def tile_boxes(size):
+def narrow(g):
+    """TRUE when a 16x16 drawing only uses columns 4..11: one centred 8x16
+    OBJ then shows it, halving its hardware sprites and tiles."""
+    return all(not v for row in g for x, v in enumerate(row) if x < 4 or x > 11)
+
+
+def tile_boxes(size, g=None):
     """8x16 tile cells and their canvas coordinates for a frame size.
 
     Small frames keep the original 16x16 coordinates (x 0/8, y 0) so compiled
-    offsets are unchanged. Wide frames are centred on the same point; tall
-    frames grow upward (GB Studio y is up) and report an anchor offset."""
+    offsets are unchanged; a narrow drawing uses one tile at x 4, centred on
+    the same point. Wide frames are centred on the same point; tall frames
+    grow upward (GB Studio y is up) and report an anchor offset."""
     w, h = size
+    if size == (16, 16) and g is not None and narrow(g):
+        return [(4, 0, 4, 0)], (0, 0)
     assert w % 8 == 0 and (h == 16 or (w == 16 and h % 8 == 0)), size
     if h == 16:
         x0 = 8 - w // 2
@@ -185,7 +193,7 @@ def build():
     frame_defs, anchors = [], {}
     for i, (name, g, pal, size) in enumerate(fr):
         ox, oy = places[i]
-        cells, anchor = tile_boxes(size)
+        cells, anchor = tile_boxes(size, g)
         if size != (16, 16):
             anchors[name] = anchor
         tiles = []
@@ -257,9 +265,9 @@ def outputs():
                  'beacon', 'beacon_pulse', 'stop_marker', 'depot_marker', 'car_door_open',
                  'traffic_red_0', 'traffic_blue_0', 'traffic_taxi_0', 'traffic_van_0', 'traffic_motorcycle_0',
                  'walker_a_0', 'walker_b_0', 'walker_c_0', 'walker_d_0',
-                 'cone', 'cone_down', 'bin', 'bin_down', 'newsbox', 'newsbox_down', 'barrel', 'barrel_down', 'debris',
+                 'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
                  'bus_e', 'bus_w', 'bus_s', 'bus_n', 'streetcar_e', 'streetcar_w', 'streetcar_s', 'streetcar_n',
-                 'ferry_s', 'ferry_n', 'gull_e_0', 'gull_w_0',
+                 'ferry_s', 'ferry_n',
                  'police_0', 'officer_0', 'knock_walker_a_0', 'spark', 'bullet', 'arrow_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
         lines.append(f'#define {macro} {index[name]}')

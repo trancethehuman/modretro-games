@@ -16,14 +16,24 @@ static UWORD td_route_position(UBYTE base,UBYTE identity,UWORD start){
     return start+(phase<64?phase:127-phase);
 }
 
-#define TD_ROUTE_CANDIDATES 32
+#define TD_ROUTE_CANDIDATES 48
+/* A slot keeps its route while the walker is this close (whole pixels);
+   walkers show within 112 x 96 of the courier (TORONTO.c). */
+#define TD_ROUTE_KEEP_U 136
+#define TD_ROUTE_KEEP_V 104
+/* Identities per district stay below TD_ROUTE_IDS (td_world_routes.h);
+   held/window sets keep one bit each. */
+#define TD_ROUTE_BYTES (TD_ROUTE_IDS/8)
+typedef char td_route_ids_fit_sets[(TD_ROUTE_IDS%8==0&&TD_ROUTE_IDS<=248)?1:-1];
+/* The window scan assembly uses literal 20 set bytes and 48 candidates. */
+typedef char td_route_scan_literals_match[(TD_ROUTE_BYTES==20&&TD_ROUTE_CANDIDATES==48)?1:-1];
 /* Refresh scratch lives in WRAM: SDCC indexes static arrays far more cheaply
    than stack frames, and the refresh runs from the main loop only.
    td_route_free[c] is the score of candidate c, or 65535 while a slot holds
    it; real scores never exceed 400, so the first strict minimum below 65535
    is exactly the first available best route. Globals (not static) expose
    the scratch to native emulator verification of the assembly pick. */
-UBYTE td_route_found,td_route_pick_index,td_route_candidates[TD_ROUTE_CANDIDATES],td_route_held[16],td_route_window_set[16];
+UBYTE td_route_found,td_route_pick_index,td_route_candidates[TD_ROUTE_CANDIDATES],td_route_held[TD_ROUTE_BYTES],td_route_window_set[TD_ROUTE_BYTES];
 UWORD td_route_free[TD_ROUTE_CANDIDATES];
 static const UBYTE td_route_bit[8]={1,2,4,8,16,32,64,128};
 #ifdef __SDCC
@@ -70,8 +80,8 @@ static UBYTE td_route_pick(void){
 }
 #endif
 /* Collect identities whose route lies in the refresh window, in ascending
-   identity order: |pu-(x+32)|<=176 and |pv-y|<=112. The generated y-band
-   index limits the scan to nearby rows; a 128-bit set restores identity
+   identity order: |pu-(x+32)|<=144 and |pv-y|<=96. The generated y-band
+   index limits the scan to nearby rows; a 160-bit set restores identity
    order. Scores and availability come from the same pass. Returns FALSE if
    more than 32 routes match. */
 #ifdef __SDCC
@@ -84,7 +94,7 @@ const UBYTE *td_rw_routes;const UBYTE *td_rw_order;
 UBYTE td_route_window_scan(void) NAKED {
     __asm
         ld hl, #_td_route_window_set
-        ld b, #16
+        ld b, #20
         xor a, a
     1$:
         ld (hl+), a
@@ -135,7 +145,7 @@ UBYTE td_route_window_scan(void) NAKED {
         dec a
         jr nz, 9$
         ld a, e
-        cp a, #0x61
+        cp a, #0x21
         jr nc, 9$
     3$:
         ld a, (_td_rw_top)
@@ -150,7 +160,7 @@ UBYTE td_route_window_scan(void) NAKED {
         or a, a
         jr nz, 9$
         ld a, e
-        cp a, #0xe1
+        cp a, #0xc1
         jr nc, 9$
         ld a, (_td_rw_j)
         ld c, a
@@ -206,7 +216,7 @@ UBYTE td_route_window_scan(void) NAKED {
         ld (_td_rw_bits), a
         jp nc, 28$
         ld a, (_td_rw_found)
-        cp a, #32
+        cp a, #48
         jr c, 23$
         ld a, #255
         ret
@@ -332,20 +342,20 @@ UBYTE td_route_window_scan(void) NAKED {
         ld hl, #_td_rw_byte
         inc (hl)
         ld a, (hl)
-        cp a, #16
+        cp a, #20
         jp c, 21$
         ld a, (_td_rw_found)
         ret
     __endasm;
 }
 static UBYTE td_route_window(UBYTE district,UBYTE base,UWORD pu,UWORD pv){
-    UBYTE start,end,found,first=0,last=(UBYTE)((pv+112)>>5);
-    if(pv>=112)first=(UBYTE)((pv-112)>>5);
+    UBYTE start,end,found,first=0,last=(UBYTE)((pv+96)>>5);
+    if(pv>=96)first=(UBYTE)((pv-96)>>5);
     if(last>31)last=31;
     start=td_route_band[district][first];end=td_route_band[district][last+1];
     td_rw_start=start;td_rw_count=end>start?end-start:0;
     td_rw_routes=(const UBYTE *)td_district_routes[district];td_rw_order=td_route_order[district];
-    td_rw_left=pu-208;td_rw_top=pv-112;td_rw_base=base;td_rw_pu=pu;td_rw_pv=pv;
+    td_rw_left=pu-176;td_rw_top=pv-96;td_rw_base=base;td_rw_pu=pu;td_rw_pv=pv;
     found=td_route_window_scan();
     if(found==255)return FALSE;
     td_route_found=found;return TRUE;
@@ -353,17 +363,17 @@ static UBYTE td_route_window(UBYTE district,UBYTE base,UWORD pu,UWORD pv){
 #else
 static UBYTE td_route_window(UBYTE district,UBYTE base,UWORD pu,UWORD pv){
     const UWORD (*routes)[2]=td_district_routes[district];const UBYTE *order=td_route_order[district];
-    UWORD left=pu-208,top=pv-112,u;UBYTE k,end,j,bits,held,first=0,last=(UBYTE)((pv+112)>>5),found=0;
-    if(pv>=112)first=(UBYTE)((pv-112)>>5);
+    UWORD left=pu-176,top=pv-96,u;UBYTE k,end,j,bits,held,first=0,last=(UBYTE)((pv+96)>>5),found=0;
+    if(pv>=96)first=(UBYTE)((pv-96)>>5);
     if(last>31)last=31;
     memset(td_route_window_set,0,sizeof(td_route_window_set));
     end=td_route_band[district][last+1];
     for(k=td_route_band[district][first];k<end;k++){
         j=order[k];
-        if((UWORD)(routes[j][0]-left)>352||(UWORD)(routes[j][1]-top)>224)continue;
+        if((UWORD)(routes[j][0]-left)>288||(UWORD)(routes[j][1]-top)>192)continue;
         td_route_window_set[j>>3]|=td_route_bit[j&7];
     }
-    for(k=0;k<16;k++){
+    for(k=0;k<TD_ROUTE_BYTES;k++){
         bits=td_route_window_set[k];if(!bits)continue;held=td_route_held[k];
         for(j=k<<3;bits;j++,bits>>=1,held>>=1)if(bits&1){
             if(found==TD_ROUTE_CANDIDATES)return FALSE;
@@ -375,33 +385,40 @@ static UBYTE td_route_window(UBYTE district,UBYTE base,UWORD pu,UWORD pv){
 }
 #endif
 
-/* Scan ROM only when the viewport changes. Keep six identities and their
-   coordinates in WRAM, rather than copying the whole 512-byte route table.
+/* Scan ROM only when the viewport changes. Keep TD_PEDS identities and their
+   coordinates in WRAM, rather than copying the whole route table.
    Window candidates and scores do not depend on the slot, so they are
    collected once; each slot then picks the same first minimum (ascending
    identity, strict <) among routes no slot holds, exactly as a full per-slot
    scan does. Authored districts have at most 29 window candidates; a denser
    window falls back to the full scan. */
-void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED {
-    UBYTE i,j,k,c,route,count=td_route_counts[td.district],base=td_route_base(),scanned=0;
+UBYTE td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2],UBYTE retry_empty) BANKED {
+    UBYTE i,j,k,c,route,phase,count=td_route_counts[td.district],base=td_route_base(),scanned=0,picks=0;
     UWORD score,best,u,pu=td.u>>4,pv=td.v>>4;
     const UWORD (*routes)[2]=td_district_routes[td.district];
-    for(i=0;i<6;i++){
+    for(i=0;i<TD_PEDS;i++){
         route=identities[i];
-        if(route<count&&
-           td_route_distance(pu,td_route_position(base,route,nearby[i][0]))<144&&
-           td_route_distance(pv,nearby[i][1])<112)continue;
+        if(route<count){
+            /* Inline td_route_position/td_route_distance: this check runs
+               for every slot on every refresh. */
+            phase=(UBYTE)(base+(UBYTE)(route<<5)+(UBYTE)(route<<2)+route)&127;
+            u=nearby[i][0]+(phase<64?phase:127-phase);
+            if((u>pu?u-pu:pu-u)<TD_ROUTE_KEEP_U){u=nearby[i][1];if((u>pv?u-pv:pv-u)<TD_ROUTE_KEEP_V)continue;}
+        }else if(route==TD_NONE&&!retry_empty)continue;   /* nothing new nearby */
+        /* Bound one call's work: the remaining slots wait for the next call. */
+        if(picks==TD_ROUTE_PICKS)return TRUE;
+        picks++;
         if(!scanned){
-            /* Bit j: some slot holds identity j (identities stay below 128). */
+            /* Bit j: some slot holds identity j (identities stay below TD_ROUTE_IDS). */
             memset(td_route_held,0,sizeof(td_route_held));
-            for(k=0;k<6;k++){j=identities[k];if(j<128)td_route_held[j>>3]|=td_route_bit[j&7];}
+            for(k=0;k<TD_PEDS;k++){j=identities[k];if(j<TD_ROUTE_IDS)td_route_held[j>>3]|=td_route_bit[j&7];}
             scanned=td_route_window(td.district,base,pu,pv)?1:2;
         }
         if(scanned==1){
             identities[i]=TD_NONE;
-            if(route<128){
-                for(k=0;k<6;k++)if(identities[k]==route)break;
-                if(k==6){
+            if(route<TD_ROUTE_IDS){
+                for(k=0;k<TD_PEDS;k++)if(identities[k]==route)break;
+                if(k==TD_PEDS){
                     td_route_held[route>>3]&=~td_route_bit[route&7];
                     if(td_route_window_set[route>>3]&td_route_bit[route&7])
                         for(c=0;c<td_route_found;c++)if(td_route_candidates[c]==route){
@@ -419,12 +436,13 @@ void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED {
         }
         identities[i]=TD_NONE;best=65535;
         for(j=0;j<count;j++){
-            if(td_route_distance(pu,routes[j][0]+32)>176||td_route_distance(pv,routes[j][1])>112)continue;
-            for(k=0;k<6;k++)if(identities[k]==j)break;
-            if(k<6)continue;
+            if(td_route_distance(pu,routes[j][0]+32)>144||td_route_distance(pv,routes[j][1])>96)continue;
+            for(k=0;k<TD_PEDS;k++)if(identities[k]==j)break;
+            if(k<TD_PEDS)continue;
             u=td_route_position(base,j,routes[j][0]);
             score=td_route_distance(pu,u)+td_route_distance(pv,routes[j][1]);
             if(score<best){best=score;identities[i]=j;nearby[i][0]=routes[j][0];nearby[i][1]=routes[j][1];}
         }
     }
+    return FALSE;
 }

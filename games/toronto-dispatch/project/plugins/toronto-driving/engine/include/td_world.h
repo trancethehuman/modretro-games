@@ -28,4 +28,9 @@ UBYTE td_world_traffic_init(UBYTE district,UWORD *u,UWORD *v,UBYTE *legs,
                            td_traffic_sample_t *samples) BANKED;
 UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,
                               td_traffic_sample_t *samples) BANKED;
+/* Ambient traffic: move vehicle i to the nearest point of its loop outside
+ * the |du|<vx,|dv|<vy box around the courier (whole pixels), driving toward
+ * the courier where possible. Outputs Q4 position, leg and its sample. */
+UBYTE td_world_traffic_recycle(UBYTE district,UBYTE i,UWORD pu,UWORD pv,UWORD vx,UWORD vy,
+                              UWORD *u,UWORD *v,UBYTE *leg,td_traffic_sample_t *sample) BANKED;
 #endif

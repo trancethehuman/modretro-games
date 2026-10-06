@@ -7,6 +7,8 @@ from city_layout import ROAD_HALF, ROWS
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADER = ROOT / "project/plugins/toronto-driving/engine/include/td_world_routes.h"
+# Per-district identity pool (the runtime keeps one bit per identity).
+ROUTE_IDS = 160
 
 
 def source():
@@ -20,11 +22,12 @@ def source():
     routes = []
     sidewalk_centre = ROAD_HALF + 4
     for y in [row + side for row in ROWS for side in (-sidewalk_centre, sidewalk_centre)] + [920, 936, 912]:
-        for centre in [128, 272, 408, 552, 688, 816, 952]:
+        # Paces every 96 pixels: neighbouring walkers share a block face.
+        for centre in [128, 224, 320, 416, 512, 608, 704, 800, 896, 952]:
             start, end = centre - 32, centre + 31
             if all(free(x, y) for x in range(start, end + 1)):
                 routes.append((start, y))
-    assert 24 <= len(routes) < 255
+    assert 24 <= len(routes) <= ROUTE_IDS
     core_routes = routes
     district_routes = [core_routes]
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
@@ -45,14 +48,15 @@ def source():
                 offsets = (-sidewalk_centre, sidewalk_centre) if route in metadata['roads'] else (0,)
                 for offset in offsets:
                     y = a[1] + offset
-                    for start in range((left + 7) // 8 * 8, right - 62, 64):
+                    # Overlapping paces 48 pixels apart for busier pavements.
+                    for start in range((left + 7) // 8 * 8, right - 62, 48):
                         if all(free(x, y) for x in range(start, start + 64)):
                             routes.add((start, y))
         routes = sorted(routes, key=lambda p: (p[1], p[0]))
         assert len(routes) >= 24, f'{slug}: insufficient usable sidewalk routes'
         # Spread a bounded identity pool across the whole district, north to south.
-        if len(routes) > 128:
-            routes = [routes[i * len(routes) // 128] for i in range(128)]
+        if len(routes) > ROUTE_IDS:
+            routes = [routes[i * len(routes) // ROUTE_IDS] for i in range(ROUTE_IDS)]
         district_routes.append(routes)
     # Runtime refresh index: identities ordered by y, and for each 32-pixel band
     # the first ordered position at or below that band. A window scan then visits
@@ -68,12 +72,13 @@ def source():
     return ("/* Generated from native collision by create_world_routes.py. Original route placement. */\n"
             "#ifndef TD_WORLD_ROUTES_H\n#define TD_WORLD_ROUTES_H\n"
             f"#define TD_PEDESTRIAN_ROUTES {len(core_routes)}\n"
+            f"#define TD_ROUTE_IDS {ROUTE_IDS}\n"
             "#ifdef TD_WORLD_ROUTE_DATA\n"
             f"static const UBYTE td_route_counts[{len(district_routes)}]={{" + ','.join(str(len(r)) for r in district_routes) + "};\n"
-            f"static const UWORD td_district_routes[{len(district_routes)}][128][2]={{\n" +
+            f"static const UWORD td_district_routes[{len(district_routes)}][{ROUTE_IDS}][2]={{\n" +
             ''.join('  {\n' + ''.join(f'    {{{x},{y}}},\n' for x,y in routes) + '  },\n' for routes in district_routes) +
             "};\n"
-            f"static const UBYTE td_route_order[{len(district_routes)}][128]={{\n" +
+            f"static const UBYTE td_route_order[{len(district_routes)}][{ROUTE_IDS}]={{\n" +
             ''.join('  {' + ','.join(map(str, order)) + '},\n' for order in orders) +
             "};\n"
             f"static const UBYTE td_route_band[{len(district_routes)}][33]={{\n" +

@@ -77,7 +77,8 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
             /* The driver is jolted: throttle returns after a moment, so the
              * rebound is visible even with A held. */
             if(rel>=10)lf_stun=12;
-            if(i==TD_POLICE_SLOT)td_lf_crime(CR_COP);
+            /* Only a hard ram counts as an attack on the patrol car. */
+            if(LF_IS_PATROL(i)&&rel>=12)td_lf_crime(CR_COP);
         }
     }
 }
@@ -202,12 +203,12 @@ static UBYTE lf_carjack(void){
     td.park_u=td_traffic_u[best];td.park_v=td_traffic_v[best];td.park_district=td.district;
     td_lf_own_car(best,TR_GONE);actors[2+best].flags|=ACTOR_FLAG_HIDDEN;
     /* The driver bails out and runs off the far side. */
-    fx_look=best==TD_POLICE_SLOT?4:best&3;
+    fx_look=LF_IS_PATROL(best)?4:best&3;
     td_lf_fx(FX_RUNNER,td.park_u>>4,td.park_v>>4,54);
     fx_du=td.park_u>td.u?12:-12;fx_dv=0;
     td_entry_target=0;td_entry_timer=12;td.speed=0;td_vx=td_vy=0;
     td_audio_play(TD_AUDIO_IMPACT);
-    td_lf_crime(best==TD_POLICE_SLOT?CR_COP:CR_MINOR);
+    td_lf_crime(LF_IS_PATROL(best)?CR_COP:CR_MINOR);
     td_message(TD_MSG_CARJACK);
     return TRUE;
 }
@@ -217,7 +218,7 @@ static void lf_punch_now(void){
     if(lf_punch)return;
     lf_punch=16;
     fu=(WORD)(td.u>>4)+lf_face_u[d]*7;fv=(WORD)(td.v>>4)+lf_face_v[d]*7;
-    for(i=0,bit=1,a=&actors[9];i<6;i++,bit<<=1,a++){
+    for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
         if(a->flags&ACTOR_FLAG_HIDDEN)continue;
         if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN))continue;
         du=(WORD)(a->pos.x>>5)-fu;dv=(WORD)(a->pos.y>>5)-fv;

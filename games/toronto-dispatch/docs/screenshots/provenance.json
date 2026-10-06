@@ -71,26 +71,26 @@
   },
   {
     "file": "title-screen.png",
-    "frame": 286,
-    "rom_sha256": "a02419327e720df7b5e1ab14a3516cfef2a14fa4d572aa82d30dbbc3eb7bcd22",
-    "png_sha256": "1d19f9b5a9bb2bd2f894194456c8da753434d9d375b73b9fb78249b03664fb87",
+    "frame": 279,
+    "rom_sha256": "3207b1fa9f37e9f693b0045a7f1e327a38bb86555fd94fb2de8d3e060bba120f",
+    "png_sha256": "9baeb6030430316c4f0b2efd8bda133cc43d3e116790bf110acd0d3a587c01af",
     "inputs": "cold boot, no input",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
   },
   {
     "file": "driving-hud.png",
-    "frame": 422,
-    "rom_sha256": "a02419327e720df7b5e1ab14a3516cfef2a14fa4d572aa82d30dbbc3eb7bcd22",
-    "png_sha256": "cc4525e75b2d01e36bc9e212156abc66b172b6781fb91a9603c154e18a39751f",
-    "inputs": "A to enter, then A held for 60 frames",
+    "frame": 641,
+    "rom_sha256": "3207b1fa9f37e9f693b0045a7f1e327a38bb86555fd94fb2de8d3e060bba120f",
+    "png_sha256": "7277641cfb0de1b2fb8401041112bb4165ba21e5037ffb780b2c73dd917ebd50",
+    "inputs": "A for two frames, 300 frames, then A held for 60 frames",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
   },
   {
     "file": "pause-menu.png",
-    "frame": 457,
-    "rom_sha256": "a02419327e720df7b5e1ab14a3516cfef2a14fa4d572aa82d30dbbc3eb7bcd22",
-    "png_sha256": "a276a26f12c51eca02d050df173c8f8d8e45d25639e8637de3cc9e0b123e9597",
-    "inputs": "then Start",
+    "frame": 675,
+    "rom_sha256": "3207b1fa9f37e9f693b0045a7f1e327a38bb86555fd94fb2de8d3e060bba120f",
+    "png_sha256": "4393658595f554c34e2ef96905695b8558830478460684da955d4cb4a5e07515",
+    "inputs": "then Start for four frames and 30 frames",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
   }
 ]

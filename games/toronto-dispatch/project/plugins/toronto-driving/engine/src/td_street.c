@@ -1,7 +1,8 @@
 #pragma bank 255
-/* Curbside knock-over props and transit berths. The tables live in this
- * bank; the scene keeps four nearby props in a small WRAM cache. Props are
- * decoration only: they never change collision, traffic or saved state. */
+/* Sidewalk pickups and transit berths. The tables live in this bank; the
+ * scene keeps two nearby pickups in a small WRAM cache. Pickups never change
+ * collision, traffic or the saved state; a short ring of recently collected
+ * pickups keeps them from reappearing straight away. */
 #include <gbdk/platform.h>
 #include <string.h>
 #include "td_game.h"
@@ -9,21 +10,36 @@
 #define TD_STREET_DATA
 #include "td_street.h"
 
-/* Active slots: district-local prop index (255 free) and its cached data.
- * td_prop_sdown marks knocked slots; td_prop_dirty asks the scene to
- * re-present a slot's actor. Neither is saved: a prop that leaves the view
- * is tidied away and stands again next time. */
-UBYTE td_prop_slot[TD_PROP_SLOTS];
-UWORD td_prop_su[TD_PROP_SLOTS],td_prop_sv[TD_PROP_SLOTS];
-UBYTE td_prop_sk[TD_PROP_SLOTS],td_prop_su8[TD_PROP_SLOTS],td_prop_sv8[TD_PROP_SLOTS];
-UBYTE td_prop_sdown,td_prop_dirty;
+/* Active slots: district-local pickup index (255 free) and its cached
+ * data; td_pickup_dirty asks the scene to re-present a slot's actor. The
+ * taken ring holds global table indices of the last pickups collected. */
+UBYTE td_pickup_slot[TD_PICKUP_SLOTS];
+UWORD td_pickup_su[TD_PICKUP_SLOTS],td_pickup_sv[TD_PICKUP_SLOTS];
+UBYTE td_pickup_sk[TD_PICKUP_SLOTS],td_pickup_su8[TD_PICKUP_SLOTS],td_pickup_sv8[TD_PICKUP_SLOTS];
+UBYTE td_pickup_dirty,td_pickup_taken[TD_PICKUP_TAKEN],td_pickup_taken_at;
 extern UBYTE td_ss_i;
-/* Refreshes left during which props may appear in view (scene fade-in). */
-static UBYTE td_prop_warm;
+/* Refreshes left during which pickups may appear in view (scene fade-in). */
+static UBYTE td_pickup_warm;
+static UBYTE td_pickup_base;
+typedef char td_pickup_ring_is_power_of_two[((TD_PICKUP_TAKEN&(TD_PICKUP_TAKEN-1))==0)?1:-1];
 
-void td_street_reset(void) BANKED {
-    memset(td_prop_slot,255,sizeof(td_prop_slot));
-    td_prop_sdown=0;td_prop_dirty=(1<<TD_PROP_SLOTS)-1;td_ss_i=255;td_prop_warm=12;
+void td_street_reset(UBYTE cold) BANKED {
+    memset(td_pickup_slot,255,sizeof(td_pickup_slot));
+    if(cold){memset(td_pickup_taken,255,sizeof(td_pickup_taken));td_pickup_taken_at=0;}
+    td_pickup_dirty=(1<<TD_PICKUP_SLOTS)-1;td_ss_i=255;td_pickup_warm=12;
+}
+
+static UBYTE td_pickup_was_taken(UBYTE global){
+    UBYTE k;
+    for(k=0;k<TD_PICKUP_TAKEN;k++)if(td_pickup_taken[k]==global)return TRUE;
+    return FALSE;
+}
+
+void td_street_take(UBYTE slot) BANKED {
+    if(slot>=TD_PICKUP_SLOTS||td_pickup_slot[slot]==255)return;
+    td_pickup_taken[td_pickup_taken_at]=td_pickup_base+td_pickup_slot[slot];
+    td_pickup_taken_at=(td_pickup_taken_at+1)&(TD_PICKUP_TAKEN-1);
+    td_pickup_slot[slot]=255;td_pickup_dirty|=1<<slot;
 }
 
 /* Range scan over the interleaved coarse table: examines td_ss_budget
@@ -120,37 +136,38 @@ void td_street_scan(void) {
  * examined per frame. */
 void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED {
     UBYTE s,n,i,mask,free_slot,start,sl=(UBYTE)(scroll_x>>3),st=(UBYTE)(scroll_y>>3);
-    for(s=0,mask=1;s<TD_PROP_SLOTS;s++,mask<<=1){
-        if(td_prop_slot[s]==255)continue;
-        if((UBYTE)(td_prop_su8[s]-pu8+15)<30&&(UBYTE)(td_prop_sv8[s]-pv8+14)<28)continue;
-        td_prop_slot[s]=255;td_prop_sdown&=~mask;td_prop_dirty|=mask;
+    for(s=0,mask=1;s<TD_PICKUP_SLOTS;s++,mask<<=1){
+        if(td_pickup_slot[s]==255)continue;
+        if((UBYTE)(td_pickup_su8[s]-pu8+15)<30&&(UBYTE)(td_pickup_sv8[s]-pv8+14)<28)continue;
+        td_pickup_slot[s]=255;td_pickup_dirty|=mask;
     }
-    td_ss_count=td_prop_count[district];
+    td_ss_count=td_pickup_count[district];
     if(!td_ss_count)return;
-    start=td_prop_start[district];
+    start=td_pickup_base=td_pickup_start[district];
     /* A new district (or first call) restarts the sweep at its own table. */
-    if(td_ss_base!=td_prop_uv8+(UWORD)start*2||td_ss_i>=td_ss_count){
-        td_ss_base=td_prop_uv8+(UWORD)start*2;td_ss_i=0;td_ss_ptr=td_ss_base;
+    if(td_ss_base!=td_pickup_uv8+(UWORD)start*2||td_ss_i>=td_ss_count){
+        td_ss_base=td_pickup_uv8+(UWORD)start*2;td_ss_i=0;td_ss_ptr=td_ss_base;
     }
     td_ss_pu8=pu8;td_ss_pv8=pv8;
     td_street_scan();
-    if(td_prop_warm)td_prop_warm--;
+    if(td_pickup_warm)td_pickup_warm--;
     for(n=0;n<td_ss_found;n++){
         i=td_ss_hits[n];free_slot=255;
-        /* A prop already in view never pops in: it waits until it is outside
-         * the 20x18-tile screen plus one tile, except during scene fade-in. */
-        if(!td_prop_warm&&(UBYTE)(td_prop_uv8[(UWORD)(start+i)*2]-sl+1)<22&&
-           (UBYTE)(td_prop_uv8[(UWORD)(start+i)*2+1]-st+1)<20)continue;
-        for(s=0;s<TD_PROP_SLOTS;s++){
-            if(td_prop_slot[s]==i){free_slot=254;break;}
-            if(td_prop_slot[s]==255&&free_slot==255)free_slot=s;
+        /* A pickup already in view never pops in: it waits until it is
+         * outside the 20x18-tile screen plus one tile, except during the
+         * scene fade-in. Recently collected pickups stay away. */
+        if(!td_pickup_warm&&(UBYTE)(td_pickup_uv8[(UWORD)(start+i)*2]-sl+1)<22&&
+           (UBYTE)(td_pickup_uv8[(UWORD)(start+i)*2+1]-st+1)<20)continue;
+        for(s=0;s<TD_PICKUP_SLOTS;s++){
+            if(td_pickup_slot[s]==i){free_slot=254;break;}
+            if(td_pickup_slot[s]==255&&free_slot==255)free_slot=s;
         }
-        if(free_slot>=TD_PROP_SLOTS)continue;
-        td_prop_slot[free_slot]=i;
-        td_prop_su8[free_slot]=td_prop_uv8[(UWORD)(start+i)*2];td_prop_sv8[free_slot]=td_prop_uv8[(UWORD)(start+i)*2+1];
-        td_prop_su[free_slot]=td_prop_u[start+i];td_prop_sv[free_slot]=td_prop_v[start+i];
-        td_prop_sk[free_slot]=td_prop_kind[start+i];
-        td_prop_dirty|=1<<free_slot;
+        if(free_slot>=TD_PICKUP_SLOTS||td_pickup_was_taken(start+i))continue;
+        td_pickup_slot[free_slot]=i;
+        td_pickup_su8[free_slot]=td_pickup_uv8[(UWORD)(start+i)*2];td_pickup_sv8[free_slot]=td_pickup_uv8[(UWORD)(start+i)*2+1];
+        td_pickup_su[free_slot]=td_pickup_u[start+i];td_pickup_sv[free_slot]=td_pickup_v[start+i];
+        td_pickup_sk[free_slot]=td_pickup_kind[start+i];
+        td_pickup_dirty|=1<<free_slot;
     }
 }
 

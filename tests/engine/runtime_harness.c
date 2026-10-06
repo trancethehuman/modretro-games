@@ -157,11 +157,13 @@ static void reset_case(void) {
     sram_writes=sram_interrupt_after=0;sram_interrupt_enabled=0;
     geometry=CLEAR_GROUND;
     td_audio_init();audio_updates=audio_inits=0;
-    for(unsigned i=0;i<6;i++) { td_traffic_u[i]=30000;td_traffic_v[i]=30000;td_traffic_leg[i]=0;td_ped_route[i]=TD_NONE; }
+    for(unsigned i=0;i<6;i++) { td_traffic_u[i]=30000;td_traffic_v[i]=30000;td_traffic_leg[i]=0; }
+    for(unsigned i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
-    td.vitality=100;td.ammo=0;td.wanted=td.heat=0;scroll_x=scroll_y=0;td_life_reset(0);
+    td.vitality=100;td.ammo=0;td.wanted=td.heat=0;scroll_x=scroll_y=0;td_life_reset(0);lf_chaos=0;
 }
 
+static void native_case(void);
 static void driving_tick(UBYTE held) {
     joy_pressed=held & ~joy;joy=held;td_tick++;sys_time++;td_corner_used=0;td_drive();
 }
@@ -445,17 +447,70 @@ static void test_street_life(void) {
     expect((td_ped_ovr&4)&&pk_mode[2]==PK_FLY&&pk_vu[2]>0&&td.speed==15,"a car strike throws the walker forward and slows the car");
     expect(td.msg==TD_MSG_PED,"a car strike reports the pedestrian");
 
-    /* Officers seeing a crime raise attention; unseen chaos builds up. */
+    /* Officers seeing a crime raise attention; unseen chaos builds up slowly. */
     reset_case();td_lf_crime(CR_GUN);
     expect(td.wanted==0,"one unseen shot does not summon the police at once");
     for(unsigned i=0;i<10;i++)td_lf_crime(CR_GUN);
-    expect(td.wanted>=1&&td.heat==TD_HEAT_SECONDS,"repeated unseen chaos eventually draws a star");
+    expect(td.wanted==0,"eleven unseen shots are still not enough for a star");
+    for(unsigned i=0;i<5;i++)td_lf_crime(CR_GUN);
+    expect(td.wanted==1&&td.heat==TD_HEAT_SECONDS,"repeated unseen chaos eventually draws a star");
     reset_case();td_lf_crime(CR_COP);
-    expect(td.wanted==2,"assaulting an officer draws at least two stars");
+    expect(td.wanted==1,"assaulting an officer adds one star");
     td_lf_crime(CR_COP_KILL);
-    expect(td.wanted==5,"killing an officer raises attention by two more, and the chaos adds another");
+    expect(td.wanted==3,"killing an officer brings at least three stars");
+    reset_case();td.wanted=3;for(unsigned i=0;i<64;i++)td_lf_crime(CR_KILL);
+    expect(td.wanted==4,"unseen chaos alone never raises attention past four stars");
+    reset_case();td.wanted=1;actors[9].pos.x=(td.u>>4)*32;actors[9].pos.y=(td.v>>4)*32;actors[9].flags=0;td_ped_route[0]=5;
+    td_lf_crime(CR_KILL);td_lf_crime(CR_KILL);td_lf_crime(CR_KILL);
+    expect(td.wanted==3,"a witnessed killing raises attention one star at a time up to three");
 
-    /* Attention cools when no officer is near, one star per twenty seconds. */
+    /* Slot 4 is an ordinary car until a pursuit needs it, and only turns into
+     * the patrol car out of view; it arrives from beyond the screen edge. */
+    reset_case();native_case();td.mode=TD_ROAM;td.wanted=1;td.heat=TD_HEAT_SECONDS;
+    scroll_x=(td.u>>4)-80;scroll_y=(td.v>>4)-72;
+    td_traffic_u[TD_POLICE_SLOT]=td.u+320;td_traffic_v[TD_POLICE_SLOT]=td.v;
+    lf_recruit();
+    expect(!lf_patrol&&!(td_tr_ctrl&(1<<TD_POLICE_SLOT)),"a civilian car in view never turns into the patrol car");
+    td_traffic_u[TD_POLICE_SLOT]=td.u+300*16;lf_recruit();
+    expect(lf_patrol&&tr_mode[TD_POLICE_SLOT]==TR_CHASE&&tr_timer[TD_POLICE_SLOT]==60&&
+           !lf_on_screen(td_traffic_u[TD_POLICE_SLOT]>>4,td_traffic_v[TD_POLICE_SLOT]>>4),
+           "out of view, slot 4 becomes the patrol car, waits a second and starts outside the screen");
+    td_life_present();
+    expect(actors[2+TD_POLICE_SLOT].frame_start>=TD_FRAME_POLICE&&actors[2+TD_POLICE_SLOT].frame_start<TD_FRAME_POLICE+8,
+           "the pursuing car shows the patrol livery");
+    td.wanted=0;lf_cars_tick();
+    expect(tr_mode[TD_POLICE_SLOT]==TR_PARK&&lf_patrol,"a pursuit ending leaves the patrol car parked until it is out of view");
+    lf_cars_tick();
+    expect(!lf_patrol&&!(td_tr_ctrl&(1<<TD_POLICE_SLOT)),"out of view the patrol car rejoins traffic as an ordinary car");
+
+    /* The patrol car is slower than the courier's car at full speed. */
+    reset_case();td.wanted=5;td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;tr_timer[TD_POLICE_SLOT]=0;
+    td_traffic_u[TD_POLICE_SLOT]=td.u-200*16;td_traffic_v[TD_POLICE_SLOT]=td.v;lf_axis=0;
+    { UWORD u0=td_traffic_u[TD_POLICE_SLOT];for(unsigned i=0;i<60;i++){td_tick++;lf_cars_tick();}
+      expect(td_traffic_u[TD_POLICE_SLOT]-u0<=60*16,"at five stars the patrol car covers under a pixel per update"); }
+
+    /* Officers on foot are slower than a walking courier below four stars,
+     * and an arrest needs sustained contact. */
+    reset_case();td.onfoot=1;td.wanted=2;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=4;
+    pk_u[0]=td.u-60*16;pk_v[0]=td.v;
+    { UWORD u0=pk_u[0];for(unsigned i=0;i<60;i++){td_tick++;lf_peds_tick();}
+      expect(pk_u[0]-u0<60*8,"a two-star officer is slower than a walking courier"); }
+    reset_case();td.onfoot=1;td.wanted=1;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=4;
+    pk_u[0]=td.u;pk_v[0]=td.v;
+    for(unsigned i=0;i<20;i++){td_tick++;td_life_tick();}
+    expect(!lf_arrest&&td.mode==TD_ROAM,"brief contact with an officer is not an arrest");
+    for(unsigned i=0;i<100;i++){td_tick++;td_life_tick();}
+    expect(lf_arrest,"an officer holding the courier for about a second and a half makes an arrest");
+
+    /* Shooting starts at four stars. */
+    reset_case();td.onfoot=1;td.wanted=3;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=4;
+    pk_u[0]=td.u-40*16;pk_v[0]=td.v;geometry=CLEAR_GROUND;
+    for(unsigned i=0;i<300;i++)lf_police_fire();
+    expect(td.vitality==100,"three-star officers do not shoot");
+    td.wanted=4;for(unsigned i=0;i<300;i++)lf_police_fire();
+    expect(td.vitality<100&&td.vitality>=100-4*4,"four-star officers fire about every one and a half seconds for four damage");
+
+    /* Attention cools when no officer is near, one star per twelve seconds. */
     reset_case();td.wanted=1;td.heat=2;td_traffic_u[TD_POLICE_SLOT]=30000;
     td_life_second();td_life_second();
     expect(td.wanted==0&&td.heat==0,"unseen courier loses the last star");
@@ -463,13 +518,15 @@ static void test_street_life(void) {
     /* Arrest: fine scales with stars, attention clears, half the ammo goes. */
     reset_case();td.wanted=2;td.cash=500;td.ammo=10;td.job=0;
     td_life_busted();
-    expect(td.cash==400&&td.wanted==0&&td.ammo==5&&td.job==TD_NONE&&td_life_fine==100,"arrest charges $50 a star and clears attention");
+    expect(td.cash==450&&td.wanted==0&&td.ammo==5&&td.job==TD_NONE&&td_life_fine==50,"arrest charges $25 a star and clears attention");
     reset_case();td.wanted=3;td.cash=40;td_life_busted();
     expect(td.cash==0&&td_life_fine==40,"an arrest fine never takes cash below zero");
 
     /* Hospital: full vitality, bill capped at cash, core forecourt exit. */
     reset_case();td.vitality=0;td.cash=60;td.wanted=4;UWORD hu,hv;td_life_hospital(&hu,&hv);
     expect(td.vitality==100&&td.cash==0&&td.wanted==0&&td_life_fine==60,"hospital restores vitality and bills at most the cash held");
+    reset_case();td.cash=200;td_life_hospital(&hu,&hv);
+    expect(td.cash==140&&td_life_fine==60,"the hospital bill is at most sixty dollars");
     expect(lf_dist(hu>>4,TD_HOSPITAL_U)<=16&&lf_dist(hv>>4,TD_HOSPITAL_V)<=16,"recovery starts at the hospital forecourt");
 
     /* Supplies: twelve rounds and first aid for twenty dollars. */
@@ -1405,9 +1462,10 @@ static void test_first_frame_actors(void) {
         expect(actors[8].pos.x==(td.park_u>>4)*32&&actors[8].pos.y==(td.park_v>>4)*32&&!(actors[8].flags&ACTOR_FLAG_HIDDEN),
                "first scene frame shows the locally parked vehicle at its real saved position");
         int traffic=1;unsigned visible=0;
-        for(unsigned i=0;i<6;i++) {
+        for(unsigned i=0;i<6;i++)
             if(actors[i+2].pos.x!=(td_traffic_u[i]>>4)*32||actors[i+2].pos.y!=(td_traffic_v[i]>>4)*32||
                !lf_drive(td_traffic_u[i]>>4,td_traffic_v[i]>>4))traffic=0;
+        for(unsigned i=0;i<TD_PEDS;i++) {
             if(!(actors[i+9].flags&ACTOR_FLAG_HIDDEN)) {
                 visible++;
                 expect(td_ped_route[i]<td_route_counts[td.district]&&td_walkable(actors[i+9].pos.x/32,actors[i+9].pos.y/32),
@@ -1560,39 +1618,48 @@ static void test_atlas_driver_handoff_and_freeze(void) {
 }
 
 
-static void test_street_props(void) {
-    /* Props come from the generated district table; the scene keeps four slots. */
-    UBYTE start=td_prop_start[0],slot=255,mask;UWORD pu=td_prop_u[start],pv=td_prop_v[start];
-    native_case();td.mode=TD_ROAM;td.onfoot=0;td.district=0;td_street_reset();
-    td.u=(pu+20)*16;td.v=pv*16;
-    for(unsigned i=0;i<16;i++)td_props_present();
-    for(UBYTE s=0;s<TD_PROP_SLOTS;s++)if(td_prop_slot[s]==0)slot=s;
-    expect(slot!=255&&td_prop_su[slot]==pu&&td_prop_sv[slot]==pv,"a nearby curbside prop takes an actor slot");
-    mask=1<<slot;
-    expect(!(actors[TD_ACTOR_PROPS+slot].flags&ACTOR_FLAG_HIDDEN)&&
-           actors[TD_ACTOR_PROPS+slot].frame_start==TD_FRAME_CONE+(td_prop_kind[start]<<1)&&
-           actors[TD_ACTOR_PROPS+slot].pos.x==pu*32,
-           "a standing prop shows its upright frame at its curbside position");
-    td.speed=0;td.u=pu*16;td_props_present();
-    expect(!(td_prop_sdown&mask),"a stationary car does not knock a prop over");
-    td.speed=40;audio_cue=255;td_props_present();
-    expect((td_prop_sdown&mask)&&td.speed==30&&audio_cue==TD_AUDIO_IMPACT&&
-           actors[TD_ACTOR_PROPS+slot].frame_start==TD_FRAME_CONE+(td_prop_kind[start]<<1)+1,
-           "driving into a prop knocks it over with a quarter loss of speed");
-    td.speed=-40;td_props_present();
-    expect(td.speed==-40,"a knocked prop is not hit twice");
-    td.onfoot=1;td.speed=0;td_prop_sdown=0;td_props_present();
-    expect(!(td_prop_sdown&mask),"the courier on foot walks past props");
-    td.onfoot=0;td.speed=40;td_props_present();td.u=(pu+300)*16;td_props_present();
-    expect(td_prop_slot[slot]!=0&&!(td_prop_sdown&mask)&&
-           (td_prop_slot[slot]==255?(actors[TD_ACTOR_PROPS+slot].flags&ACTOR_FLAG_HIDDEN)!=0:
-            actors[TD_ACTOR_PROPS+slot].pos.x==td_prop_su[slot]*32),
-           "a prop that left the view is tidied up and its slot is reused or hidden");
-    expect(geometry==NATIVE_GRID&&td.mode==TD_ROAM,"props never change mode or collision");
-    /* Every table entry lies on a road tile of its district and away from stops. */
-    for(UBYTE d=0;d<TD_DISTRICT_COUNT;d++)for(UBYTE i=0;i<td_prop_count[d];i++){
-        UWORD u=td_prop_u[td_prop_start[d]+i],v=td_prop_v[td_prop_start[d]+i];
-        expect(td_prop_uv8[2*(td_prop_start[d]+i)]==(u>>3)&&td_prop_uv8[2*(td_prop_start[d]+i)+1]==(v>>3),"coarse prop coordinates match");
+static void test_sidewalk_pickups(void) {
+    /* Pickups come from the generated district table; the scene keeps two slots. */
+    UBYTE start=td_pickup_start[0],slot=255,kind=td_pickup_kind[start];UWORD pu=td_pickup_u[start],pv=td_pickup_v[start];
+    native_case();td.mode=TD_ROAM;td.onfoot=1;td.district=0;td_street_reset(1);
+    td.u=pu*16;td.v=(pv+40)*16;td.vitality=50;td.ammo=10;td.cash=30;
+    for(unsigned i=0;i<16;i++)td_pickups_present();
+    for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)if(td_pickup_slot[s]==0)slot=s;
+    expect(slot!=255&&td_pickup_su[slot]==pu&&td_pickup_sv[slot]==pv,"a nearby pickup takes an actor slot");
+    expect(!(actors[TD_ACTOR_PICKUPS+slot].flags&ACTOR_FLAG_HIDDEN)&&
+           (UBYTE)(actors[TD_ACTOR_PICKUPS+slot].frame_start-TD_FRAME_PICKUP_CASH-(kind<<1))<2&&
+           actors[TD_ACTOR_PICKUPS+slot].pos.x==pu*32,"a pickup shows its item frame at its pavement position");
+    audio_cue=255;td.u=pu*16;td.v=pv*16;td_pickups_present();
+    expect(td_pickup_slot[slot]==255&&audio_cue==TD_AUDIO_PICKUP&&
+           (kind==0?td.cash==30+TD_PICKUP_CASH:kind==1?td.vitality==50+TD_PICKUP_FIRST_AID:td.ammo==10+TD_PICKUP_AMMO),
+           "walking over a pickup collects it");
+    expect(td.msg==(kind==0?TD_MSG_CASH:kind==1?TD_MSG_FIRST_AID:TD_MSG_AMMO),"collection reports the item");
+    td_pickups_present();
+    expect(actors[TD_ACTOR_PICKUPS+slot].flags&ACTOR_FLAG_HIDDEN,"a collected pickup disappears");
+    td.u=(pu+300)*16;for(unsigned i=0;i<16;i++)td_pickups_present();
+    td.u=pu*16;td.v=(pv+40)*16;for(unsigned i=0;i<16;i++)td_pickups_present();
+    for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)expect(td_pickup_slot[s]!=0,"a recently collected pickup does not come back");
+    /* First aid is left for later at full vitality, ammunition when full. */
+    for(UBYTE i=0;i<td_pickup_count[0];i++){
+        UBYTE k=td_pickup_kind[start+i];if(k==0)continue;
+        native_case();td.mode=TD_ROAM;td.onfoot=0;td.district=0;td_street_reset(1);
+        td.u=td_pickup_u[start+i]*16;td.v=(td_pickup_v[start+i]+40)*16;td.vitality=100;td.ammo=TD_AMMO_MAX;
+        for(unsigned n=0;n<16;n++)td_pickups_present();
+        td.v=td_pickup_v[start+i]*16;td_pickups_present();
+        slot=255;for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)if(td_pickup_slot[s]==i)slot=s;
+        expect(slot!=255&&td.vitality==100&&td.ammo==TD_AMMO_MAX,"a full courier leaves first aid and ammunition in place");
+        td.vitality=60;td.ammo=0;td_pickups_present();
+        expect(k==1?td.vitality==100:td.ammo==TD_PICKUP_AMMO,"a car driving over a pickup collects it");
+    }
+    expect(geometry==NATIVE_GRID&&td.mode==TD_ROAM,"pickups never change mode or collision");
+    /* Every table entry lies on pavement and its coarse coordinates match. */
+    for(UBYTE d=0;d<TD_DISTRICT_COUNT;d++){
+        expect(td_pickup_count[d]>=12&&td_pickup_count[d]<=TD_PICKUPS_PER_DISTRICT,"each district has a modest number of pickups");
+        for(UBYTE i=0;i<td_pickup_count[d];i++){
+            UWORD u=td_pickup_u[td_pickup_start[d]+i],v=td_pickup_v[td_pickup_start[d]+i];
+            expect(td_pickup_uv8[2*(td_pickup_start[d]+i)]==(u>>3)&&td_pickup_uv8[2*(td_pickup_start[d]+i)+1]==(v>>3),"coarse pickup coordinates match");
+            expect(native_collision[d][(v>>3)*TD_DISTRICT_TILE_WIDTH+(u>>3)]==16,"pickups lie on pavement");
+        }
     }
 }
 
@@ -1635,18 +1702,37 @@ static void test_visible_transit(void) {
 }
 
 
-static void test_ambient_gull(void) {
-    actor_t *gull=&actors[TD_ACTOR_GULL];UWORD x0;
-    native_case();td.mode=TD_ROAM;td_gull_life=0;td_gull_wait=5;td_gull_present(1);
-    expect(gull->flags&ACTOR_FLAG_HIDDEN,"no gull before its wait elapses");
-    td_gull_present(10);
-    expect(td_gull_life&&!(gull->flags&ACTOR_FLAG_HIDDEN)&&(gull->frame_start==TD_FRAME_GULL_E||gull->frame_start==TD_FRAME_GULL_W),
-           "a gull appears with a flight frame");
-    x0=gull->pos.x;td_gull_present(4);
-    expect(gull->pos.x!=x0,"the gull glides across the view");
-    for(unsigned i=0;i<60;i++)td_gull_present(4);
-    expect(!td_gull_life&&(gull->flags&ACTOR_FLAG_HIDDEN),"the gull leaves after its flight");
-    expect(td.mode==TD_ROAM&&geometry==NATIVE_GRID,"gulls never change game state");
+static void test_ambient_traffic(void) {
+    /* A vehicle far out of view comes back onto its own loop just beyond the
+     * screen, heading toward the courier; one in view is left alone. */
+    for(UBYTE district=1;district<TD_DISTRICT_COUNT;district++){
+        UWORD u,v;UBYTE leg,moved=0;td_traffic_sample_t sample;
+        native_case();td.district=test_current_district=district;td.mode=TD_ROAM;
+        td_world_traffic_init(district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
+        for(UBYTE i=0;i<6;i++){
+            const UWORD (*path)[2]=td_west_traffic[district-1][i];
+            td.u=path[0][0]*16;td.v=path[0][1]*16;scroll_x=path[0][0]-80;scroll_y=path[0][1]-72;
+            if(!td_world_traffic_recycle(district,i,td.u>>4,td.v>>4,112,96,&u,&v,&leg,&sample))continue;
+            moved++;
+            expect((lf_dist(u>>4,td.u>>4)>=112||lf_dist(v>>4,td.v>>4)>=96)&&lf_dist(u>>4,td.u>>4)+lf_dist(v>>4,td.v>>4)<=280,
+                   "a recycled vehicle starts just outside the view");
+            expect(leg<td_west_traffic_counts[district-1][i]&&sample.u==path[leg][0]*16&&sample.v==path[leg][1]*16,
+                   "a recycled vehicle continues along its own loop");
+            expect(lf_drive(u>>4,v>>4),"a recycled vehicle starts on drivable ground");
+        }
+        expect(moved>=3,"most loops pass close enough to bring vehicles back");
+    }
+    native_case();td.district=0;td.mode=TD_ROAM;scroll_x=(td.u>>4)-80;scroll_y=(td.v>>4)-72;
+    for(UBYTE i=0;i<6;i++){td_traffic_u[i]=(td.u>>4)>500?40*16:1000*16;td_traffic_v[i]=td_core_lane_v[i&3];}
+    td_traffic_u[1]=td.u+20*16;td_traffic_v[1]=td.v;lf_amb=1;lf_ambient();
+    expect(td_traffic_u[1]==td.u+20*16,"a vehicle in view is never moved");
+    lf_amb=3;lf_ambient();
+    expect(lf_dist(td_traffic_v[3]>>4,640)<=8&&!lf_on_screen(td_traffic_u[3]>>4,td_traffic_v[3]>>4)&&
+           lf_dist(td_traffic_u[3]>>4,td.u>>4)<=280,"a far core car rejoins its avenue just outside the view");
+    td_traffic_u[0]=40*16;lf_amb=0;lf_ambient();
+    expect(td_traffic_u[0]==40*16,"an avenue far from the courier keeps its car where it is");
+    td_tr_ctrl=4;td_traffic_u[2]=1000*16;lf_amb=2;lf_ambient();
+    expect(td_traffic_u[2]==1000*16,"an owned vehicle is left to street life");
 }
 
 int main(void) {
@@ -1671,7 +1757,7 @@ int main(void) {
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
-    test_street_props();test_visible_transit();test_ambient_gull();
+    test_sidewalk_pickups();test_visible_transit();test_ambient_traffic();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

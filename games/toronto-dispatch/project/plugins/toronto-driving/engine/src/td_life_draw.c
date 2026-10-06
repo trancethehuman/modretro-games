@@ -16,7 +16,7 @@ void td_life_peds(UBYTE near) BANKED {
     a=td.speed<0?(UBYTE)-td.speed:(UBYTE)td.speed;
     /* A moving car throws struck walkers; one consequence per person. */
     if(near&&td.mode==TD_ROAM&&!td.onfoot&&a>=3){
-        for(i=0,bit=1;i<6;i++,bit<<=1){
+        for(i=0,bit=1;i<TD_PEDS;i++,bit<<=1){
             if(!(near&bit))continue;
             td_lf_knock(i,lf_div16(td_vx+(td_vx>>1)),lf_div16(td_vy+(td_vy>>1)),a>=16);
             td.speed-=lf_div4(td.speed);td_vx-=lf_div4(td_vx);td_vy-=lf_div4(td_vy);
@@ -26,12 +26,12 @@ void td_life_peds(UBYTE near) BANKED {
     }
     /* New route walkers stay hidden (native layout) until they are out of
      * view, so nobody appears in the middle of the screen. */
-    if(pk_fresh&&!(td_tick&7))for(i=0,bit=1,p=&actors[9];i<6;i++,bit<<=1,p++){
+    if(pk_fresh&&!(td_tick&7))for(i=0,bit=1,p=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,p++){
         if(!(pk_fresh&bit))continue;
         if(td_ped_route[i]==TD_NONE||!lf_on_screen(p->pos.x>>5,p->pos.y>>5))pk_fresh&=~bit;
     }
     if(!td_ped_ovr)return;
-    for(i=0,bit=1,p=&actors[9];i<6;i++,bit<<=1,p++){
+    for(i=0,bit=1,p=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,p++){
         if(!(td_ped_ovr&bit))continue;
         mode=pk_mode[i];hop=0;
         /* A body on the ground does not move: draw it once. */
@@ -80,10 +80,11 @@ void td_life_present(void) BANKED {
     if(td_tr_ctrl)for(i=0,bit=1,a=&actors[2];i<6;i++,bit<<=1,a++){
         if(!(td_tr_ctrl&bit))continue;
         if(tr_mode[i]==TR_GONE){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
-        lf_place_q4(a,td_traffic_u[i],td_traffic_v[i]);lf_frame(a,lf_traffic_base[i]+tr_head[i]);
+        lf_place_q4(a,td_traffic_u[i],td_traffic_v[i]);
+        lf_frame(a,(LF_IS_PATROL(i)?TD_FRAME_POLICE:lf_traffic_base[i])+tr_head[i]);
     }
     if(td_fx_kind){
-        a=&actors[TD_ACTOR_GULL];
+        a=&actors[TD_ACTOR_FX];
         lf_place_q4(a,fx_u,fx_v);
         lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:td_fx_kind==FX_BULLET?TD_FRAME_BULLET:
                    lf_look_walk[fx_look]+(fx_du>0?0:2)+((fx_timer>>2)&1));

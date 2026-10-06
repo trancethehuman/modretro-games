@@ -23,6 +23,39 @@
       "defaultValue": 8,
       "min": 8,
       "max": 8
+    },
+    {
+      "key": "MAX_TRIGGERS",
+      "label": "Trigger pool (no scene uses triggers; keep 1)",
+      "group": "Toronto memory",
+      "type": "number",
+      "cType": "define",
+      "file": "include/trigger.h",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 1
+    },
+    {
+      "key": "MAX_PROJECTILES",
+      "label": "Projectile pool (unused; keep 1)",
+      "group": "Toronto memory",
+      "type": "number",
+      "cType": "define",
+      "file": "include/projectiles.h",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 1
+    },
+    {
+      "key": "MAX_PROJECTILE_DEFS",
+      "label": "Projectile definitions (unused; keep 1)",
+      "group": "Toronto memory",
+      "type": "number",
+      "cType": "define",
+      "file": "include/projectiles.h",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 1
     }
   ],
   "sceneTypes": [

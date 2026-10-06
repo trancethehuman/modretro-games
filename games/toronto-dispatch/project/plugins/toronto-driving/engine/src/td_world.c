@@ -5,6 +5,9 @@
 #include "td_district_world.h"
 
 typedef char td_world_district_count_matches[(TD_WORLD_GENERATED_DISTRICTS==TD_DISTRICT_COUNT)?1:-1];
+#define TD_NONE_LEG 255
+/* Farthest Manhattan distance (px) at which a vehicle is brought back. */
+#define TD_RECYCLE_REACH 280
 
 static UWORD td_world_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
 /* Exact floor(a*b/c), with a,c<=16383 and b<=c. Keep remainder<c between
@@ -144,5 +147,38 @@ UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,td_traffic_sampl
     UBYTE i;
     if(!legs||!samples||!td_world_valid_traffic(district,legs))return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++)td_world_sample(district,i,legs[i],&samples[i]);
+    return TRUE;
+}
+
+/* Ambient traffic: put vehicle i on the point of its own loop nearest the
+ * courier (whole pixels pu,pv) that lies outside the box |du|<vx,|dv|<vy,
+ * preferring a point from which it drives toward the courier. Loops are
+ * cardinal, so each leg is checked once. FALSE (outputs unchanged) when no
+ * point lies within reach. */
+UBYTE td_world_traffic_recycle(UBYTE district,UBYTE i,UWORD pu,UWORD pv,UWORD vx,UWORD vy,
+                              UWORD *u,UWORD *v,UBYTE *leg,td_traffic_sample_t *sample) BANKED {
+    const UWORD (*path)[2];UBYTE k,count,best_leg=TD_NONE_LEG;
+    UWORD ax,ay,bx,by,lo,hi,x,y,d,best=TD_RECYCLE_REACH,best_x=0,best_y=0;
+    if(!u||!v||!leg||!sample||!td_world_valid_traffic(district,NULL)||i>=TD_TRAFFIC_COUNT)return FALSE;
+    path=td_west_traffic[district-1][i];count=td_west_traffic_counts[district-1][i];
+    for(k=0;k<count;k++){
+        ax=path[k?k-1:count-1][0];ay=path[k?k-1:count-1][1];bx=path[k][0];by=path[k][1];
+        if(ay==by){
+            lo=ax<bx?ax:bx;hi=ax<bx?bx:ax;y=ay;
+            if(td_world_distance(y,pv)>=vy)x=pu<lo?lo:pu>hi?hi:pu;
+            else{x=bx>ax?pu-vx:pu+vx;if(pu<vx&&bx>ax)continue;}
+            if(x<lo||x>hi)continue;
+        }else if(ax==bx){
+            lo=ay<by?ay:by;hi=ay<by?by:ay;x=ax;
+            if(td_world_distance(x,pu)>=vx)y=pv<lo?lo:pv>hi?hi:pv;
+            else{y=by>ay?pv-vy:pv+vy;if(pv<vy&&by>ay)continue;}
+            if(y<lo||y>hi)continue;
+        }else continue;
+        if(td_world_distance(x,pu)<vx&&td_world_distance(y,pv)<vy)continue;
+        d=td_world_distance(x,pu)+td_world_distance(y,pv);
+        if(d<best){best=d;best_leg=k;best_x=x;best_y=y;}
+    }
+    if(best_leg==TD_NONE_LEG)return FALSE;
+    *u=best_x*16;*v=best_y*16;*leg=best_leg;td_world_sample(district,i,best_leg,sample);
     return TRUE;
 }

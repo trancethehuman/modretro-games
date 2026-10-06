@@ -1055,8 +1055,8 @@
     },
     {
       "index": 117,
-      "name": "cone",
-      "palette": "courier_vehicle",
+      "name": "pickup_cash",
+      "palette": "signal_yellow",
       "size": [
         16,
         16
@@ -1064,8 +1064,8 @@
     },
     {
       "index": 118,
-      "name": "cone_down",
-      "palette": "courier_vehicle",
+      "name": "pickup_cash_glint",
+      "palette": "signal_yellow",
       "size": [
         16,
         16
@@ -1073,8 +1073,8 @@
     },
     {
       "index": 119,
-      "name": "bin",
-      "palette": "traffic_blue",
+      "name": "pickup_first_aid",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -1082,8 +1082,8 @@
     },
     {
       "index": 120,
-      "name": "bin_down",
-      "palette": "traffic_blue",
+      "name": "pickup_first_aid_glint",
+      "palette": "traffic_red",
       "size": [
         16,
         16
@@ -1091,8 +1091,8 @@
     },
     {
       "index": 121,
-      "name": "newsbox",
-      "palette": "traffic_red",
+      "name": "pickup_ammo",
+      "palette": "police",
       "size": [
         16,
         16
@@ -1100,8 +1100,8 @@
     },
     {
       "index": 122,
-      "name": "newsbox_down",
-      "palette": "traffic_red",
+      "name": "pickup_ammo_glint",
+      "palette": "police",
       "size": [
         16,
         16
@@ -1109,33 +1109,6 @@
     },
     {
       "index": 123,
-      "name": "barrel",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 124,
-      "name": "barrel_down",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 125,
-      "name": "debris",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 126,
       "name": "bus_e",
       "palette": "traffic_red",
       "size": [
@@ -1144,7 +1117,7 @@
       ]
     },
     {
-      "index": 127,
+      "index": 124,
       "name": "bus_w",
       "palette": "traffic_red",
       "size": [
@@ -1153,7 +1126,7 @@
       ]
     },
     {
-      "index": 128,
+      "index": 125,
       "name": "bus_s",
       "palette": "traffic_red",
       "size": [
@@ -1162,7 +1135,7 @@
       ]
     },
     {
-      "index": 129,
+      "index": 126,
       "name": "bus_n",
       "palette": "traffic_red",
       "size": [
@@ -1171,7 +1144,7 @@
       ]
     },
     {
-      "index": 130,
+      "index": 127,
       "name": "streetcar_e",
       "palette": "traffic_red",
       "size": [
@@ -1180,7 +1153,7 @@
       ]
     },
     {
-      "index": 131,
+      "index": 128,
       "name": "streetcar_w",
       "palette": "traffic_red",
       "size": [
@@ -1189,7 +1162,7 @@
       ]
     },
     {
-      "index": 132,
+      "index": 129,
       "name": "streetcar_s",
       "palette": "traffic_red",
       "size": [
@@ -1198,7 +1171,7 @@
       ]
     },
     {
-      "index": 133,
+      "index": 130,
       "name": "streetcar_n",
       "palette": "traffic_red",
       "size": [
@@ -1207,7 +1180,7 @@
       ]
     },
     {
-      "index": 134,
+      "index": 131,
       "name": "ferry_s",
       "palette": "traffic_blue",
       "size": [
@@ -1216,7 +1189,7 @@
       ]
     },
     {
-      "index": 135,
+      "index": 132,
       "name": "ferry_n",
       "palette": "traffic_blue",
       "size": [
@@ -1225,43 +1198,7 @@
       ]
     },
     {
-      "index": 136,
-      "name": "gull_e_0",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 137,
-      "name": "gull_e_1",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 138,
-      "name": "gull_w_0",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 139,
-      "name": "gull_w_1",
-      "palette": "courier_vehicle",
-      "size": [
-        16,
-        16
-      ]
-    },
-    {
-      "index": 140,
+      "index": 133,
       "name": "police_0",
       "palette": "traffic_blue",
       "size": [
@@ -1270,7 +1207,7 @@
       ]
     },
     {
-      "index": 141,
+      "index": 134,
       "name": "police_1",
       "palette": "traffic_blue",
       "size": [
@@ -1279,7 +1216,7 @@
       ]
     },
     {
-      "index": 142,
+      "index": 135,
       "name": "police_2",
       "palette": "traffic_blue",
       "size": [
@@ -1288,7 +1225,7 @@
       ]
     },
     {
-      "index": 143,
+      "index": 136,
       "name": "police_3",
       "palette": "traffic_blue",
       "size": [
@@ -1297,7 +1234,7 @@
       ]
     },
     {
-      "index": 144,
+      "index": 137,
       "name": "police_4",
       "palette": "traffic_blue",
       "size": [
@@ -1306,7 +1243,7 @@
       ]
     },
     {
-      "index": 145,
+      "index": 138,
       "name": "police_5",
       "palette": "traffic_blue",
       "size": [
@@ -1315,7 +1252,7 @@
       ]
     },
     {
-      "index": 146,
+      "index": 139,
       "name": "police_6",
       "palette": "traffic_blue",
       "size": [
@@ -1324,7 +1261,7 @@
       ]
     },
     {
-      "index": 147,
+      "index": 140,
       "name": "police_7",
       "palette": "traffic_blue",
       "size": [
@@ -1333,7 +1270,7 @@
       ]
     },
     {
-      "index": 148,
+      "index": 141,
       "name": "officer_0",
       "palette": "police",
       "size": [
@@ -1342,7 +1279,7 @@
       ]
     },
     {
-      "index": 149,
+      "index": 142,
       "name": "officer_1",
       "palette": "police",
       "size": [
@@ -1351,7 +1288,7 @@
       ]
     },
     {
-      "index": 150,
+      "index": 143,
       "name": "officer_2",
       "palette": "police",
       "size": [
@@ -1360,7 +1297,7 @@
       ]
     },
     {
-      "index": 151,
+      "index": 144,
       "name": "officer_3",
       "palette": "police",
       "size": [
@@ -1369,7 +1306,7 @@
       ]
     },
     {
-      "index": 152,
+      "index": 145,
       "name": "officer_4",
       "palette": "police",
       "size": [
@@ -1378,7 +1315,7 @@
       ]
     },
     {
-      "index": 153,
+      "index": 146,
       "name": "officer_5",
       "palette": "police",
       "size": [
@@ -1387,7 +1324,7 @@
       ]
     },
     {
-      "index": 154,
+      "index": 147,
       "name": "officer_6",
       "palette": "police",
       "size": [
@@ -1396,7 +1333,7 @@
       ]
     },
     {
-      "index": 155,
+      "index": 148,
       "name": "officer_7",
       "palette": "police",
       "size": [
@@ -1405,7 +1342,7 @@
       ]
     },
     {
-      "index": 156,
+      "index": 149,
       "name": "knock_walker_a_0",
       "palette": "walker_teal",
       "size": [
@@ -1414,7 +1351,7 @@
       ]
     },
     {
-      "index": 157,
+      "index": 150,
       "name": "knock_walker_a_1",
       "palette": "walker_teal",
       "size": [
@@ -1423,7 +1360,7 @@
       ]
     },
     {
-      "index": 158,
+      "index": 151,
       "name": "knock_walker_a_2",
       "palette": "walker_teal",
       "size": [
@@ -1432,7 +1369,7 @@
       ]
     },
     {
-      "index": 159,
+      "index": 152,
       "name": "knock_walker_a_3",
       "palette": "walker_teal",
       "size": [
@@ -1441,7 +1378,7 @@
       ]
     },
     {
-      "index": 160,
+      "index": 153,
       "name": "knock_walker_a_4",
       "palette": "walker_teal",
       "size": [
@@ -1450,7 +1387,7 @@
       ]
     },
     {
-      "index": 161,
+      "index": 154,
       "name": "knock_walker_a_5",
       "palette": "walker_teal",
       "size": [
@@ -1459,7 +1396,7 @@
       ]
     },
     {
-      "index": 162,
+      "index": 155,
       "name": "knock_walker_b_0",
       "palette": "walker_violet",
       "size": [
@@ -1468,7 +1405,7 @@
       ]
     },
     {
-      "index": 163,
+      "index": 156,
       "name": "knock_walker_b_1",
       "palette": "walker_violet",
       "size": [
@@ -1477,7 +1414,7 @@
       ]
     },
     {
-      "index": 164,
+      "index": 157,
       "name": "knock_walker_b_2",
       "palette": "walker_violet",
       "size": [
@@ -1486,7 +1423,7 @@
       ]
     },
     {
-      "index": 165,
+      "index": 158,
       "name": "knock_walker_b_3",
       "palette": "walker_violet",
       "size": [
@@ -1495,7 +1432,7 @@
       ]
     },
     {
-      "index": 166,
+      "index": 159,
       "name": "knock_walker_b_4",
       "palette": "walker_violet",
       "size": [
@@ -1504,7 +1441,7 @@
       ]
     },
     {
-      "index": 167,
+      "index": 160,
       "name": "knock_walker_b_5",
       "palette": "walker_violet",
       "size": [
@@ -1513,7 +1450,7 @@
       ]
     },
     {
-      "index": 168,
+      "index": 161,
       "name": "knock_walker_c_0",
       "palette": "walker_teal",
       "size": [
@@ -1522,7 +1459,7 @@
       ]
     },
     {
-      "index": 169,
+      "index": 162,
       "name": "knock_walker_c_1",
       "palette": "walker_teal",
       "size": [
@@ -1531,7 +1468,7 @@
       ]
     },
     {
-      "index": 170,
+      "index": 163,
       "name": "knock_walker_c_2",
       "palette": "walker_teal",
       "size": [
@@ -1540,7 +1477,7 @@
       ]
     },
     {
-      "index": 171,
+      "index": 164,
       "name": "knock_walker_c_3",
       "palette": "walker_teal",
       "size": [
@@ -1549,7 +1486,7 @@
       ]
     },
     {
-      "index": 172,
+      "index": 165,
       "name": "knock_walker_c_4",
       "palette": "walker_teal",
       "size": [
@@ -1558,7 +1495,7 @@
       ]
     },
     {
-      "index": 173,
+      "index": 166,
       "name": "knock_walker_c_5",
       "palette": "walker_teal",
       "size": [
@@ -1567,7 +1504,7 @@
       ]
     },
     {
-      "index": 174,
+      "index": 167,
       "name": "knock_walker_d_0",
       "palette": "walker_violet",
       "size": [
@@ -1576,7 +1513,7 @@
       ]
     },
     {
-      "index": 175,
+      "index": 168,
       "name": "knock_walker_d_1",
       "palette": "walker_violet",
       "size": [
@@ -1585,7 +1522,7 @@
       ]
     },
     {
-      "index": 176,
+      "index": 169,
       "name": "knock_walker_d_2",
       "palette": "walker_violet",
       "size": [
@@ -1594,7 +1531,7 @@
       ]
     },
     {
-      "index": 177,
+      "index": 170,
       "name": "knock_walker_d_3",
       "palette": "walker_violet",
       "size": [
@@ -1603,7 +1540,7 @@
       ]
     },
     {
-      "index": 178,
+      "index": 171,
       "name": "knock_walker_d_4",
       "palette": "walker_violet",
       "size": [
@@ -1612,7 +1549,7 @@
       ]
     },
     {
-      "index": 179,
+      "index": 172,
       "name": "knock_walker_d_5",
       "palette": "walker_violet",
       "size": [
@@ -1621,7 +1558,7 @@
       ]
     },
     {
-      "index": 180,
+      "index": 173,
       "name": "knock_officer_0",
       "palette": "police",
       "size": [
@@ -1630,7 +1567,7 @@
       ]
     },
     {
-      "index": 181,
+      "index": 174,
       "name": "knock_officer_1",
       "palette": "police",
       "size": [
@@ -1639,7 +1576,7 @@
       ]
     },
     {
-      "index": 182,
+      "index": 175,
       "name": "knock_officer_2",
       "palette": "police",
       "size": [
@@ -1648,7 +1585,7 @@
       ]
     },
     {
-      "index": 183,
+      "index": 176,
       "name": "knock_officer_3",
       "palette": "police",
       "size": [
@@ -1657,7 +1594,7 @@
       ]
     },
     {
-      "index": 184,
+      "index": 177,
       "name": "knock_officer_4",
       "palette": "police",
       "size": [
@@ -1666,7 +1603,7 @@
       ]
     },
     {
-      "index": 185,
+      "index": 178,
       "name": "knock_officer_5",
       "palette": "police",
       "size": [
@@ -1675,7 +1612,7 @@
       ]
     },
     {
-      "index": 186,
+      "index": 179,
       "name": "knock_courier_0",
       "palette": "courier_person",
       "size": [
@@ -1684,7 +1621,7 @@
       ]
     },
     {
-      "index": 187,
+      "index": 180,
       "name": "knock_courier_1",
       "palette": "courier_person",
       "size": [
@@ -1693,7 +1630,7 @@
       ]
     },
     {
-      "index": 188,
+      "index": 181,
       "name": "knock_courier_2",
       "palette": "courier_person",
       "size": [
@@ -1702,7 +1639,7 @@
       ]
     },
     {
-      "index": 189,
+      "index": 182,
       "name": "knock_courier_3",
       "palette": "courier_person",
       "size": [
@@ -1711,7 +1648,7 @@
       ]
     },
     {
-      "index": 190,
+      "index": 183,
       "name": "knock_courier_4",
       "palette": "courier_person",
       "size": [
@@ -1720,7 +1657,7 @@
       ]
     },
     {
-      "index": 191,
+      "index": 184,
       "name": "knock_courier_5",
       "palette": "courier_person",
       "size": [
@@ -1729,7 +1666,7 @@
       ]
     },
     {
-      "index": 192,
+      "index": 185,
       "name": "spark",
       "palette": "signal_yellow",
       "size": [
@@ -1738,7 +1675,7 @@
       ]
     },
     {
-      "index": 193,
+      "index": 186,
       "name": "bullet",
       "palette": "signal_yellow",
       "size": [
@@ -1747,7 +1684,7 @@
       ]
     },
     {
-      "index": 194,
+      "index": 187,
       "name": "arrow_0",
       "palette": "signal_yellow",
       "size": [
@@ -1756,7 +1693,7 @@
       ]
     },
     {
-      "index": 195,
+      "index": 188,
       "name": "arrow_1",
       "palette": "signal_yellow",
       "size": [
@@ -1765,7 +1702,7 @@
       ]
     },
     {
-      "index": 196,
+      "index": 189,
       "name": "arrow_2",
       "palette": "signal_yellow",
       "size": [
@@ -1774,7 +1711,7 @@
       ]
     },
     {
-      "index": 197,
+      "index": 190,
       "name": "arrow_3",
       "palette": "signal_yellow",
       "size": [
@@ -1783,7 +1720,7 @@
       ]
     },
     {
-      "index": 198,
+      "index": 191,
       "name": "arrow_4",
       "palette": "signal_yellow",
       "size": [
@@ -1792,7 +1729,7 @@
       ]
     },
     {
-      "index": 199,
+      "index": 192,
       "name": "arrow_5",
       "palette": "signal_yellow",
       "size": [
@@ -1801,7 +1738,7 @@
       ]
     },
     {
-      "index": 200,
+      "index": 193,
       "name": "arrow_6",
       "palette": "signal_yellow",
       "size": [
@@ -1810,7 +1747,7 @@
       ]
     },
     {
-      "index": 201,
+      "index": 194,
       "name": "arrow_7",
       "palette": "signal_yellow",
       "size": [

@@ -94,6 +94,8 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Resolve the plugin's unresolved browser recording-close acknowledgement, then show and test the current city preview.
 - [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. A bounded sample observed about 29.5 rendered updates per second; crowded-scene performance remains pending.
 - [ ] Listen to the original score/effects and tune their mix, event distinction and physical speaker/headphone behaviour.
+- [x] Street life revision (candidate, 2026-10-06): gentler police pursuit and fewer officers, sidewalk pickups replacing the curbside props and gulls, eight walkers over 620 routes, traffic that keeps returning near the courier, redrawn cars and a dusk title screen; CLI/emulator evidence in [TESTING.md](TESTING.md).
+- [ ] Playtest police difficulty, pickup economy and street density on the handheld; decide whether a few clearly readable knock-over props should return.
 - [ ] Expand pedestrian variety, street furniture, local activity and visible transit boarding/riding.
 - [ ] Author streetcar rails and moving streetcars on researched corridors; improve the current partial bus route geometry.
 - [ ] More distinctive Toronto landmark silhouettes, district character, industrial yards and additional navigable streets.

@@ -35,8 +35,8 @@ static const UWORD td_cols[]={80,208,336,480,560,640,720,816,944};
 UWORD td_traffic_u[6],td_traffic_v[6];
 td_traffic_sample_t td_traffic_samples[6];
 /* Global: read by the native presentation routine and emulator checks. */
-UWORD td_nearby_routes[6][2];
-UBYTE td_ped_route[6];
+UWORD td_nearby_routes[TD_PEDS][2];
+UBYTE td_ped_route[TD_PEDS];
 UBYTE td_traffic_leg[6];
 static UBYTE td_ped_refresh;
 static UWORD td_ped_anchor_u,td_ped_anchor_v;
@@ -299,60 +299,47 @@ static void td_transit_present(UBYTE frames){
     if(td.mode==TD_RIDE){PLAYER.flags|=ACTOR_FLAG_HIDDEN;td_ride_hidden=1;}
     else if(td_ride_hidden){td_ride_hidden=0;PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
 }
-/* Curbside props: four nearby slots from the district table. Driving into one
- * knocks it over with a small loss of speed; it stands again once it has left
- * the view. While a transit vehicle is shown the props are hidden so actors
- * never need more than 38 of the 40 hardware sprites. Actors are only
- * rewritten when a slot changes. */
-static UBYTE td_props_hidden;
-static void td_props_present(void){
+/* Sidewalk pickups: two nearby slots from the district table. Walking or
+ * driving over one collects it: cash, first aid (not at full vitality) or
+ * ammunition (not when full). While a transit vehicle is shown the pickups
+ * are hidden so actors never need more than 40 hardware sprites. Actors are
+ * only rewritten when a slot changes or its highlight blinks. */
+static UBYTE td_pickups_hidden;
+static void td_pickup_collect(UBYTE i){
+    UBYTE k=td_pickup_sk[i];
+    if(k==1){
+        if(td.vitality>=100)return;
+        td.vitality=td.vitality>100-TD_PICKUP_FIRST_AID?100:td.vitality+TD_PICKUP_FIRST_AID;td_message(TD_MSG_FIRST_AID);
+    }else if(k==2){
+        if(td.ammo>=TD_AMMO_MAX)return;
+        td.ammo=td.ammo>TD_AMMO_MAX-TD_PICKUP_AMMO?TD_AMMO_MAX:td.ammo+TD_PICKUP_AMMO;td_message(TD_MSG_AMMO);
+    }else{
+        td.cash=td.cash>60000-TD_PICKUP_CASH?60000:td.cash+TD_PICKUP_CASH;td_message(TD_MSG_CASH);
+    }
+    td_audio_play(TD_AUDIO_PICKUP);td_street_take(i);
+}
+static void td_pickups_present(void){
     UBYTE i,mask,pu8,pv8;actor_t *a;UWORD pu=td.u>>4,pv=td.v>>4;
     pu8=pu>>3;pv8=pv>>3;
     td_street_refresh(td.district,pu8,pv8);
-    if(td_tv_shown!=td_props_hidden){td_props_hidden=td_tv_shown;td_prop_dirty=(1<<TD_PROP_SLOTS)-1;}
-    if(td.mode==TD_ROAM&&!td.onfoot&&!td_entry_timer&&td.speed&&!td_props_hidden){
-        for(i=0,mask=1;i<TD_PROP_SLOTS;i++,mask<<=1){
-            if(td_prop_slot[i]==TD_NONE||(td_prop_sdown&mask)||(UBYTE)(td_prop_su8[i]-pu8+2)>4||(UBYTE)(td_prop_sv8[i]-pv8+2)>4)continue;
-            if(td_distance(td_prop_su[i],pu)<9&&td_distance(td_prop_sv[i],pv)<9){
-                td_prop_sdown|=mask;td_prop_dirty|=mask;
-                td.speed-=td.speed>>2;td_audio_play(TD_AUDIO_IMPACT);
-            }
+    if(td_tv_shown!=td_pickups_hidden){td_pickups_hidden=td_tv_shown;td_pickup_dirty=(1<<TD_PICKUP_SLOTS)-1;}
+    if(td.mode==TD_ROAM&&!td_entry_timer&&!td_pickups_hidden&&!td_life_locked()){
+        for(i=0;i<TD_PICKUP_SLOTS;i++){
+            if(td_pickup_slot[i]==TD_NONE||(UBYTE)(td_pickup_su8[i]-pu8+2)>4||(UBYTE)(td_pickup_sv8[i]-pv8+2)>4)continue;
+            if(td_distance(td_pickup_su[i],pu)<9&&td_distance(td_pickup_sv[i],pv)<10)td_pickup_collect(i);
         }
     }
-    if(!td_prop_dirty)return;
-    for(i=0,mask=1,a=&actors[TD_ACTOR_PROPS];i<TD_PROP_SLOTS;i++,a++,mask<<=1){
-        if(!(td_prop_dirty&mask))continue;
-        if(td_prop_slot[i]==TD_NONE||td_props_hidden){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
-        td_position(a,td_prop_su[i],td_prop_sv[i]);
-        td_frame(a,TD_FRAME_CONE+(td_prop_sk[i]<<1)+((td_prop_sdown&mask)?1:0));
+    /* A highlight blinks every half second. */
+    if(!(td_tick&31))td_pickup_dirty=(1<<TD_PICKUP_SLOTS)-1;
+    if(!td_pickup_dirty)return;
+    for(i=0,mask=1,a=&actors[TD_ACTOR_PICKUPS];i<TD_PICKUP_SLOTS;i++,a++,mask<<=1){
+        if(!(td_pickup_dirty&mask))continue;
+        if(td_pickup_slot[i]==TD_NONE||td_pickups_hidden){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
+        td_position(a,td_pickup_su[i],td_pickup_sv[i]);
+        td_frame(a,TD_FRAME_PICKUP_CASH+(td_pickup_sk[i]<<1)+((td_tick>>5)&1));
         a->flags&=~ACTOR_FLAG_HIDDEN;
     }
-    td_prop_dirty=0;
-}
-/* Ambient herring gull: every so often one glides across the view, wings
- * beating, purely decorative (no collision, no state saved). It uses the
- * last actor slot; with it the worst case is exactly 40 hardware sprites. */
-static UBYTE td_gull_life,td_gull_west;static UWORD td_gull_u,td_gull_v,td_gull_wait;
-static void td_gull_present(UBYTE frames){
-    actor_t *a=&actors[TD_ACTOR_GULL];
-    if(!td_gull_life){
-        /* Next gull 10..18 seconds after the last one left. */
-        if(td_gull_wait>frames){td_gull_wait-=frames;a->flags|=ACTOR_FLAG_HIDDEN;return;}
-        td_gull_wait=600+((sys_time>>1)&511);
-        td_gull_west=(sys_time>>3)&1;td_gull_life=210;
-        td_gull_u=(td.u>>4)+(td_gull_west?96:-96);td_gull_v=(td.v>>4)-60+((sys_time>>5)&31);
-    }
-    if(frames>td_gull_life)frames=td_gull_life;
-    td_gull_life-=frames;
-    /* 1.5 px per frame with a slow rise and fall. */
-    while(frames--){
-        if(td_gull_west)td_gull_u-=1+(td_tick&1);else td_gull_u+=1+(td_tick&1);
-        if(!(td_gull_life&15))td_gull_v+=(td_gull_life&16)?1:-1;
-    }
-    if(!td_gull_life||td_gull_u>4000||td_gull_v>4000){td_gull_life=0;a->flags|=ACTOR_FLAG_HIDDEN;return;}
-    td_position(a,td_gull_u,td_gull_v);
-    td_frame(a,(td_gull_west?TD_FRAME_GULL_W:TD_FRAME_GULL_E)+((td_tick>>3)&1));
-    a->flags&=~ACTOR_FLAG_HIDDEN;
+    td_pickup_dirty=0;
 }
 static UBYTE td_board_current_window(void){
     UBYTE fare;
@@ -1101,11 +1088,12 @@ collide:
 #define TD_Q4_TO_ACTOR(q) ((UWORD)(((q)&0xFFF0)<<1))
 /* Presentation only: each traffic slot keeps its heading (frame&7) and
  * draws a fixed livery; walkers take one of four looks from their route. */
-/* Slot 4 is the district's patrol car (td_life.c pursuit). */
+/* Slot 4 is an ordinary car; td_life.c turns it into the patrol car out of
+ * view when a pursuit starts and draws it while it is owned. */
 const UBYTE td_traffic_bases[6]={TD_FRAME_TRAFFIC_RED,TD_FRAME_TRAFFIC_VAN,TD_FRAME_TRAFFIC_TAXI,
-    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_POLICE,TD_FRAME_TRAFFIC_VAN};
+    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_TRAFFIC_BLUE,TD_FRAME_TRAFFIC_VAN};
 const UBYTE td_walker_bases[8]={TD_FRAME_WALKER_A,TD_FRAME_WALKER_B,TD_FRAME_WALKER_C,TD_FRAME_WALKER_D,
-    TD_FRAME_WALKER_B,TD_FRAME_OFFICER,TD_FRAME_WALKER_A,TD_FRAME_OFFICER};
+    TD_FRAME_WALKER_B,TD_FRAME_OFFICER,TD_FRAME_WALKER_A,TD_FRAME_WALKER_C};
 #ifdef __SDCC
 #include <stddef.h>
 /* The assembly below addresses actor_t fields directly. */
@@ -1117,15 +1105,17 @@ typedef char td_actor_layout_matches_asm[(sizeof(actor_t)==56&&offsetof(actor_t,
 UBYTE td_pl_base,td_pl_step,td_pl_phase,td_pl_close,td_pl_mask,td_pl_count,td_pl_near,td_pl_district;
 UWORD td_pl_pu,td_pl_pv,td_pl_u,td_pl_v;
 const UBYTE *td_pl_rp;const UWORD *td_pl_np;actor_t *td_pl_ap;
-/* Pedestrian slots 9..14: the C reference below (host builds) defines the
- * exact behaviour; this routine returns its `near` mask in A. */
+/* Pedestrian slots 9..16: the C reference below (host builds) defines the
+ * exact behaviour; this routine returns its `near` mask in A. The literal
+ * slot count and first actor match TD_PEDS and TD_ACTOR_PEDS. */
+typedef char td_ped_layout_literals_match[(TD_PEDS==8&&TD_ACTOR_PEDS==9)?1:-1];
 UBYTE td_ped_layout(void) NAKED {
     __asm
         xor a, a
         ld (_td_pl_near), a
         inc a
         ld (_td_pl_mask), a
-        ld a, #6
+        ld a, #8
         ld (_td_pl_count), a
         ld hl, #(_actors + 9*56)
         ld a, l
@@ -1388,12 +1378,12 @@ UBYTE td_ped_layout(void) NAKED {
     __endasm;
 }
 #else
-/* Reference semantics: position, frame and visibility for slots 9..14.
+/* Reference semantics: position, frame and visibility for slots 9..16.
  * Returns a mask of visible walkers within ten pixels of the player. */
 static UBYTE td_ped_layout_c(UBYTE base,UBYTE step,UWORD player_u,UWORD player_v){
-    UBYTE i,route,phase,near=0;UWORD u,v,gap;actor_t *a=&actors[9];
+    UBYTE i,route,phase,near=0;UWORD u,v,gap;actor_t *a=&actors[TD_ACTOR_PEDS];
     const UBYTE *routes=td_ped_route;const UWORD (*nearby)[2]=td_nearby_routes;
-    for(i=0;i<6;i++,a++,routes++,nearby++){
+    for(i=0;i<TD_PEDS;i++,a++,routes++,nearby++){
         if(td_ped_ovr&(1<<i))continue;
         route=*routes;if(route==TD_NONE){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
         phase=td_ped_phase(base,route);
@@ -1583,11 +1573,14 @@ static void td_traffic_present(void){
     if(td.onfoot&&td.park_district==td.district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
 }
 static void td_pedestrians(void){
-    UBYTE refresh,near;UWORD player_u=td.u>>4,player_v=td.v>>4;
+    UBYTE refresh,near,moved;UWORD player_u=td.u>>4,player_v=td.v>>4;
+    /* Empty slots look for a route again once the courier has moved. */
+    moved=td_distance(player_u,td_ped_anchor_u)>24||td_distance(player_v,td_ped_anchor_v)>24;
     refresh=!--td_ped_refresh||td_distance(player_u,td_ped_anchor_u)>64||td_distance(player_v,td_ped_anchor_v)>64;
     if(refresh){
         td_ped_refresh=16;td_ped_anchor_u=player_u;td_ped_anchor_v=player_v;
-        td_life_routes();
+        /* Slots still waiting for a route are picked over the next frames. */
+        if(td_life_routes(moved))td_ped_refresh=2;
     }
 #ifdef __SDCC
     td_pl_base=td_ped_base();td_pl_step=(td_tick>>3)&1;td_pl_pu=player_u;td_pl_pv=player_v;
@@ -1680,15 +1673,14 @@ void toronto_init(void) BANKED {
         activate_actor(&actors[i]);
     }
     if(td.district)td_world_traffic_init(td.district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
-    for(i=0;i<6;i++){
+    for(i=0;i<6;i++)
         if(!td.district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:144)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=i==5?1:0;}
-        td_ped_route[i]=TD_NONE;
-    }
+    for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_life_reset(cold);
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?32:(td.vehicle<<3)+(((td.heading+1)&15)>>1));td_traffic_present();td_pedestrians();
-    td_street_reset();td_transit_present(0);td_props_present();td_gull_life=0;td_gull_wait=300;td_gull_present(0);
+    td_street_reset(cold);td_transit_present(0);td_pickups_present();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=-16;camera_deadzone_x=8;camera_deadzone_y=8;
     if(cold)td_audio_init();td_ui_init();
 }
@@ -1726,8 +1718,7 @@ void toronto_update(void) BANKED {
     }
     if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
     if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){
-        td_traffic_present();td_pedestrians();td_transit_present(motion);td_props_present();
-        if(!td_fx_kind)td_gull_present(motion);
+        td_traffic_present();td_pedestrians();td_transit_present(motion);td_pickups_present();
         td_life_present();
     }
     if(!(td_tick&7))td_ui_compass();

@@ -9,15 +9,15 @@
 #include "scroll.h"
 #include "collision.h"
 
-/* Owned pedestrian slots (actors 9..14), positions in Q4. */
+/* Owned pedestrian slots (actors 9..16), positions in Q4. */
 #define PK_FLY 1    /* thrown through the air */
 #define PK_DOWN 2   /* on the ground, gets up later */
 #define PK_DEAD 3   /* stays down until out of view */
 #define PK_FLEE 4   /* running away from the courier */
 #define PK_CHASE 5  /* officer pursuing the courier */
-extern UBYTE pk_mode[6],pk_timer[6],pk_look[6],pk_dir[6],pk_span[6];
-extern UWORD pk_u[6],pk_v[6];
-extern BYTE pk_vu[6],pk_vv[6];
+extern UBYTE pk_mode[TD_PEDS],pk_timer[TD_PEDS],pk_look[TD_PEDS],pk_dir[TD_PEDS],pk_span[TD_PEDS];
+extern UWORD pk_u[TD_PEDS],pk_v[TD_PEDS];
+extern BYTE pk_vu[TD_PEDS],pk_vv[TD_PEDS];
 extern UBYTE pk_fresh,pk_lethal,pk_drawn;
 
 /* Owned road vehicles (actors 2..7), positions in td_traffic_u/v (Q4). */
@@ -40,15 +40,22 @@ extern UWORD fx_u,fx_v;
 extern BYTE fx_du,fx_dv;
 
 extern UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_exit_hold,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
+/* Slot 4 is an ordinary blue car until a pursuit needs it: it becomes the
+ * patrol car only while out of view and changes back the same way. */
+extern UBYTE lf_patrol,lf_lost;
+/* Ticks of firm contact before officers make an arrest. */
+#define LF_BUST_TICKS 90
 /* ROM tables are read from code in this file's own bank, so every module
  * keeps a private copy: a const table in another bank is not mapped.
  * Walker look per route&7 matches TORONTO.c td_walker_bases (0..3
- * civilians, 4 officer, 5 courier); road slot liveries match
- * td_traffic_bases (slot 4 is the patrol car). */
-static const UBYTE lf_route_look[8]={0,1,2,3,1,4,0,4};
+ * civilians, 4 officer, 5 courier): one route in eight is an officer.
+ * Road slot liveries match td_traffic_bases; slot 4 shows the patrol
+ * livery only while lf_patrol is set. */
+static const UBYTE lf_route_look[8]={0,1,2,3,1,4,0,2};
 static const UBYTE lf_look_walk[6]={TD_FRAME_WALKER_A,TD_FRAME_WALKER_B,TD_FRAME_WALKER_C,TD_FRAME_WALKER_D,TD_FRAME_OFFICER,TD_FRAME_COURIER_WALK};
 static const UBYTE lf_traffic_base[6]={TD_FRAME_TRAFFIC_RED,TD_FRAME_TRAFFIC_VAN,TD_FRAME_TRAFFIC_TAXI,
-    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_POLICE,TD_FRAME_TRAFFIC_VAN};
+    TD_FRAME_TRAFFIC_MOTORCYCLE,TD_FRAME_TRAFFIC_BLUE,TD_FRAME_TRAFFIC_VAN};
+#define LF_IS_PATROL(i) ((i)==TD_POLICE_SLOT&&lf_patrol)
 
 #define CR_MINOR 0
 #define CR_GUN 1

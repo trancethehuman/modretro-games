@@ -84,16 +84,17 @@ def build():
              '/* Character codes for art glyphs; concatenate with string literals. */']
     for k, (name, _, _, _) in enumerate(A.CODES):
         lines.append(f'#define TD_UI_{name} "\\x{FIRST_CODE + k:02x}"')
-    # Title illustration: rows 0..8, bank-1 tiles borrowed from 8 while shown.
+    # Title illustration: rows 0..TITLE_ROWS-1, bank-1 tiles borrowed from 8
+    # while shown. Each tile row uses its own title palette (index 0 = sky).
     grid = A.title_image()
-    order = [2, 7, 0, 5]
     title_tiles, title_map, title_attr, seen = [], [], [], {}
     for ty in range(A.TITLE_ROWS):
+        slot = A.TITLE_ROW_PALETTE[ty]
+        shades = A.TITLE_PALETTES[slot]
         for tx in range(20):
             cells = [[grid[ty * 8 + y][tx * 8 + x] for x in range(8)] for y in range(8)]
             used = {c for row in cells for c in row}
-            slot = next(s for s in order if used <= set(A.SLOT_COLOURS[s]))
-            shades = A.SLOT_COLOURS[slot]
+            assert used <= set(shades), (tx, ty, used - set(shades))
             rows = [''.join('.as#'[shades.index(c)] for c in row) for row in cells]
             data = tuple(tile_bytes(rows))
             if data not in seen:
@@ -102,6 +103,7 @@ def build():
             title_map.append(TITLE_FIRST + seen[data])
             title_attr.append(0x08 | slot)
     assert TITLE_FIRST + len(title_tiles) <= 188, 'title art must fit the atlas-owned bank-1 range'
+    assert A.TITLE_PALETTES[7] == list(A.UI_COLORS), 'title slot 7 is the UI palette'
     lines += [f'#define TD_TITLE_FIRST {TITLE_FIRST}', f'#define TD_TITLE_TILES {len(title_tiles)}',
               f'#define TD_TITLE_ROWS {A.TITLE_ROWS}']
     lines += ['#ifdef TD_UI_ART_DATA',
@@ -115,6 +117,8 @@ def build():
               '/* BG palette 7: menu colours, and the original colours the atlas map was drawn for. */',
               'static const UWORD td_ui_palette[4]={' + ','.join(str(rgb15(c)) for c in A.UI_COLORS) + '};',
               'static const UWORD td_map_palette[4]={' + ','.join(str(rgb15(c)) for c in A.MAP_COLORS) + '};',
+              '/* BG palettes 0..6 while the title is shown (the scene restores its own). */',
+              'static const UWORD td_title_palettes[28]={' + ','.join(str(rgb15(c)) for pal in A.TITLE_PALETTES[:7] for c in pal) + '};',
               '#endif', '#endif', '']
     files[ENGINE / 'include/td_ui_art.h'] = '\n'.join(lines)
     path = ROOT / 'project/project/palettes/default_ui.gbsres'

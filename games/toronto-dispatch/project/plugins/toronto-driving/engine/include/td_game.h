@@ -4,13 +4,18 @@
 #define TD_QUESTS 88
 #define TD_STOPS 51
 #define TD_COMPLETE_BYTES 16
-/* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-14 pedestrians,
- * 15 transit vehicle, 16-19 curbside props, 20 ambient gull. GBVM allows 21. */
+/* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-16 pedestrians,
+ * 17 transit vehicle, 18-19 sidewalk pickups, 20 street-life effects
+ * (sparks, bullets, a fleeing driver). GBVM allows 21. Pedestrians use one
+ * 8x16 OBJ each, so all 21 actors stay within 40 hardware sprites. */
 #define TD_ACTORS 21
-#define TD_ACTOR_GULL 20
-#define TD_ACTOR_TRANSIT 15
-#define TD_ACTOR_PROPS 16
-#define TD_PROP_SLOTS 4
+#define TD_PEDS 8
+#define TD_ACTOR_PEDS 9
+#define TD_ACTOR_FX 20
+#define TD_ACTOR_TRANSIT 17
+#define TD_ACTOR_PICKUPS 18
+#define TD_PICKUP_SLOTS 2
+#define TD_PICKUP_TAKEN 8
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0
@@ -50,7 +55,11 @@ void td_get_job(UBYTE index,td_job_t *dest) BANKED;
 void td_get_brief(UBYTE index,char *dest) BANKED;
 void td_get_street(UWORD u,UWORD v,char *dest) BANKED;
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *dest) BANKED;
-void td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2]) BANKED;
+/* Re-picks at most TD_ROUTE_PICKS out-of-range slots per call; TRUE when
+ * more slots still wait for a route (call again soon). Empty slots are only
+ * retried when retry_empty is set (the courier has moved since). */
+#define TD_ROUTE_PICKS 2
+UBYTE td_refresh_routes(UBYTE *identities,UWORD (*nearby)[2],UBYTE retry_empty) BANKED;
 void td_get_district_name(UBYTE index,char *dest) BANKED;
 extern UBYTE td_route_district; /* Rebuilt objective cue; not serialized. */
 extern UBYTE td_resume_mode;
@@ -70,12 +79,15 @@ void td_message(UBYTE m) BANKED;
 void td_finish(UBYTE success) BANKED;
 UBYTE td_service(UBYTE origin) BANKED;
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED;
-/* Curbside props and transit berths (td_street.c). Not serialized. */
-extern UBYTE td_prop_slot[TD_PROP_SLOTS],td_prop_sk[TD_PROP_SLOTS],td_prop_su8[TD_PROP_SLOTS],td_prop_sv8[TD_PROP_SLOTS];
-extern UWORD td_prop_su[TD_PROP_SLOTS],td_prop_sv[TD_PROP_SLOTS];
-extern UBYTE td_prop_sdown,td_prop_dirty;
-void td_street_reset(void) BANKED;
+/* Sidewalk pickups and transit berths (td_street.c). Not serialized. */
+extern UBYTE td_pickup_slot[TD_PICKUP_SLOTS],td_pickup_sk[TD_PICKUP_SLOTS],td_pickup_su8[TD_PICKUP_SLOTS],td_pickup_sv8[TD_PICKUP_SLOTS];
+extern UWORD td_pickup_su[TD_PICKUP_SLOTS],td_pickup_sv[TD_PICKUP_SLOTS];
+extern UBYTE td_pickup_dirty,td_pickup_taken[TD_PICKUP_TAKEN],td_pickup_taken_at;
+/* cold: also forget which pickups were collected (new session). */
+void td_street_reset(UBYTE cold) BANKED;
 /* Courier position in 8-pixel units. */
 void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED;
+/* Mark a slot's pickup collected and free the slot. */
+void td_street_take(UBYTE slot) BANKED;
 UBYTE td_street_berth(UBYTE stop,UBYTE district,UWORD *u,UWORD *v) BANKED;
 #endif

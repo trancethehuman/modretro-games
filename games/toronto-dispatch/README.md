@@ -6,7 +6,7 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 ![Title screen](docs/screenshots/title-screen.png) ![Driving HUD](docs/screenshots/driving-hud.png) ![Pause menu](docs/screenshots/pause-menu.png)
 
-Development build: original title, HUD and menu art; unmodified PyBoy frames ([provenance](docs/screenshots/provenance.json)).
+Development build: dusk title screen, redrawn cars and the HUD; unmodified PyBoy frames ([provenance](docs/screenshots/provenance.json)).
 
 ![Native city atlas](docs/screenshots/city-atlas.png)
 
@@ -27,8 +27,10 @@ Current source adds eight original curb signs and a scheduled [501 Queen game se
 | Brake / reverse | B; keep holding near rest to reverse |
 | Accept or deliver a package | Select opens dispatch, then A accepts; Select at a beacon while stopped collects/delivers |
 | Pause menu | Start; up/down and A choose |
-| Park and exit | Stop, then pause → Park / recover car |
+| Park and exit | Stop, then hold A+B, or pause → Park / recover car |
 | Walk | D-pad; A near the parked car animates entry |
+| On foot | A beside a road vehicle takes it, otherwise punches; B away from a stop fires the pistol |
+| Pickups | Walk or drive over cash, first aid or ammunition on the pavement |
 | Transit | On foot, B at a station/terminal/platform; left/right chooses destination, A waits/boards |
 | Change service | Up/down at Wellesley switches Line 1 / 94 bus |
 | Scrollable city map | Pause → map; D-pad pans, A centres job / booked transit stop / depot; Select changes focus, B returns |
@@ -41,7 +43,7 @@ Transit runs on a repeating **fictional game clock**, even without the player. F
 
 Driving retains momentum through steering and glancing curb contact. A bounded sideways adjustment helps clear narrow tile corners while accelerating; broad walls still stop the vehicle. Fragile crates take greater crash damage. Fast passenger turns reduce comfort, and base rewards scale with condition. Two alternating CRC-checked save records retain a previous checkpoint if a write is interrupted. Paid rides resume from their latest second after a reset. Physical power-off persistence still needs a cartridge test.
 
-Pedestrians follow 486 fixed sidewalk routes across the four areas with six nearby people rendered at a time. Traffic follows continuous loops and yields to the courier crossing on foot. The visible bus currently uses a truck-shaped placeholder and has a separate animation path from the boarding timetable. Dedicated TTC vehicle art and matching visible service schedules remain planned. Original city music, engine, braking and event effects have been verified through emulator PCM capture; physical speaker/headphone testing remains open. See [audio design and reproduction](docs/AUDIO.md).
+Pedestrians follow 620 fixed sidewalk routes across the four areas with eight nearby people rendered at a time. Traffic follows continuous loops, yields to the courier crossing on foot and keeps returning just beyond the screen edge so nearby streets stay busy. Crimes draw police attention in stars; the police chase without overwhelming speed, arrests need a firm hold and officers only shoot from four stars. Sidewalk pickups give cash, first aid or ammunition. The visible bus currently uses a truck-shaped placeholder and has a separate animation path from the boarding timetable. Dedicated TTC vehicle art and matching visible service schedules remain planned. Original city music, engine, braking and event effects have been verified through emulator PCM capture; physical speaker/headphone testing remains open. See [audio design and reproduction](docs/AUDIO.md).
 
 For installation, use the [loading instructions](docs/LOADING.md). ROM bundles require the [distribution notices](docs/DISTRIBUTION.md). This prototype has not been verified for two hours of gameplay.
 

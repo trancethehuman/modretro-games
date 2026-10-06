@@ -606,107 +606,152 @@ LOGO = {
     'H': ["XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXXXXXXXXXXX",
           "XXXXXXXXXXXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX"],
 }
-TITLE_ROWS = 9
-COLOURS = {
-    'paper': 'E7DECC', 'ink': '172B38', 'slate': '526879', 'blue': '8BBAD4', 'teal': '79AFAC',
-    'amber': 'E89A3C', 'red': 'C83C34', 'glass': '9FC9D0',
-}
-# Which named colours each background slot provides at indices 0..3.
-SLOT_COLOURS = {0: ['paper', 'teal', 'slate', 'ink'], 2: ['paper', 'blue', 'slate', 'ink'],
-                5: ['paper', 'glass', 'slate', 'ink'], 7: ['paper', 'amber', 'red', 'ink']}
+TITLE_ROWS = 11
+# Title palettes: slots 0..6 are swapped in while the title is shown (the
+# scene's own palettes come back afterwards); slot 7 is the UI palette, also
+# used by the lake, the shoreline and the controls card. Index 0 of each
+# palette is the sky colour of its band.
+INK, CREAM, GOLD, SUN = '172B38', 'FFF1D0', 'F9B544', 'FFE69A'
+SKY = ['1E2453', '2B2B67', '453279', '6C3A84', '9B4683', 'C95876', 'EB7A5F']
+TITLE_PALETTES = [
+    [SKY[0], CREAM, GOLD, INK],   # rows 0-1: night sky, stars, TORONTO
+    [SKY[1], CREAM, GOLD, INK],   # row 2
+    [SKY[2], CREAM, GOLD, INK],   # row 3: DISPATCH
+    [SKY[3], CREAM, GOLD, INK],   # row 4
+    [SKY[4], SUN, GOLD, INK],     # row 5: towers and the setting sun
+    [SKY[5], SUN, GOLD, INK],     # row 6
+    [SKY[6], SUN, GOLD, INK],     # row 7
+    list(UI_COLORS),              # rows 8-10: lake and shoreline (paper, amber, red, ink)
+]
+TITLE_ROW_PALETTE = [0, 0, 1, 2, 3, 4, 5, 6, 7, 7, 7]
+TITLE_SKY_ROW = [0, 0, 1, 2, 3, 4, 5, 6]
 
 
 def title_image():
-    """160x72 grid of colour names: dusk sky, CN Tower, logo, skyline, lake."""
-    W, H = 160, 72
-    g = [['blue'] * W for _ in range(H)]
+    """160x88 grid of RGB hex colours: Toronto skyline at dusk from the lake,
+    the CN Tower, a setting sun and the courier car on the shore road."""
+    W, H = 160, 88
+    PAPER, AMBER, RED = UI_COLORS[0], UI_COLORS[1], UI_COLORS[2]
+    g = [[SKY[TITLE_SKY_ROW[y // 8]] if y < 64 else INK for _ in range(W)] for y in range(H)]
 
     def put(x, y, c):
         if 0 <= x < W and 0 <= y < H:
             g[y][x] = c
-    # Sunset band below the blue sky: cream glow, amber, then red at the horizon.
-    for y in range(40, 64):
-        for x in range(W):
-            if y < 44:
-                c = 'paper' if (x + y) % 2 == 0 or y >= 42 else 'amber'
-            elif y < 46:
-                c = 'paper' if (x + y) % 2 else 'amber'
-            elif y < 56:
-                c = 'amber'
-            elif y < 60:
-                c = 'amber' if (x + y) % 2 else 'red'
-            else:
-                c = 'red'
-            g[y][x] = c
-    # A few stars high in the sky.
-    for x, y in ((50, 3), (118, 6), (150, 2), (88, 4), (138, 33), (60, 36)):
-        put(x, y, 'paper')
-    # Skyline silhouettes (x0, x1, top) with lit windows.
-    buildings = [(26, 41, 54), (42, 49, 47), (50, 57, 51), (58, 69, 44), (70, 75, 50), (76, 87, 41),
-                 (88, 93, 49), (94, 105, 45), (106, 111, 52), (112, 123, 43), (124, 129, 48),
-                 (130, 141, 46), (142, 149, 53), (150, 159, 49)]
-    for x0, x1, top in buildings:
-        for x in range(x0, x1 + 1):
-            for y in range(max(top, 40), 64):
-                g[y][x] = 'ink'
-        for y in range(max(top, 40) + 3, 62, 3):
-            for x in range(x0 + 2, x1 - 1, 3):
-                if (x * 7 + y * 3) % 5 < 3:
-                    put(x, y, 'amber')
-        put((x0 + x1) // 2, max(top, 40) - 1, 'red')
-    # Rogers Centre dome beside the tower.
-    for x in range(24, 42):
-        d = abs(x - 33)
-        for y in range(52 + d // 3, 64):
-            g[y][x] = 'ink'
-    # CN Tower: antenna, SkyPod, main pod, tapering shaft (x centre 15).
-    cx = 15
 
-    def tower_px(y):
-        if y < 2:
-            return []
+    def sky(y):
+        return SKY[TITLE_SKY_ROW[y // 8]]
+    # Stars in the upper sky.
+    for x, y in ((36, 2), (61, 1), (97, 3), (128, 1), (151, 4), (23, 9), (84, 18), (143, 19), (6, 33), (153, 36),
+                 (118, 17), (48, 19), (70, 37), (27, 27)):
+        put(x, y, CREAM)
+    put(152, 4, CREAM); put(151, 3, CREAM); put(150, 4, CREAM); put(151, 5, CREAM)   # one twinkling star
+    # Setting sun behind the skyline, cut by retro bands near the horizon.
+    cx, cy, r = 112, 60, 17
+    for y in range(40, 64):
+        for x in range(cx - r, cx + r + 1):
+            d2 = (x - cx) ** 2 + (y - cy) ** 2
+            if d2 <= r * r:
+                if y in (51, 55, 56, 59, 60, 61):
+                    continue
+                put(x, y, GOLD if d2 > (r - 2) ** 2 or y > 57 else SUN)
+    # Skyline silhouettes (x0, x1, top) with lit windows.
+    towers = [(42, 49, 50), (50, 57, 45), (58, 63, 52), (64, 73, 42), (74, 79, 49), (80, 86, 46),
+              (88, 92, 54), (93, 98, 57), (126, 131, 55), (132, 141, 44), (142, 147, 50), (148, 155, 41), (156, 159, 47)]
+    for x0, x1, top in towers:
+        for x in range(x0, x1 + 1):
+            for y in range(top, 64):
+                put(x, y, INK)
+        for y in range(top + 2, 62, 3):
+            for x in range(x0 + 1, x1, 2):
+                if (x * 5 + y * 3 + x0) % 7 < 3:
+                    put(x, y, GOLD if (x + y) % 3 else SUN)
+        if x1 - x0 >= 8:
+            put((x0 + x1) // 2, top - 1, INK); put((x0 + x1) // 2, top - 2, GOLD)   # rooftop beacon
+    # Waterfront lights along the foot of the skyline.
+    for x in range(20, W):
+        if g[62][x] == INK and x % 4 != 1:
+            put(x, 63, GOLD if x % 4 else SUN)
+    # Rogers Centre dome beside the tower.
+    for x in range(20, 42):
+        h = int(10 * (1 - ((x - 31) / 11.5) ** 2) ** 0.5)
+        for y in range(64 - 3 - h, 64):
+            put(x, y, INK)
+        if 2 < h:
+            put(x, 64 - 3 - h, GOLD if x % 3 else SUN)
+    # CN Tower (centre x 13): antenna, SkyPod, main pod with lit windows,
+    # tapering concrete shaft and a red-free night look.
+    tx = 13
+    for y in range(2, 64):
         if y < 14:
-            return [cx]                                    # antenna
-        if y < 17:
-            return list(range(cx - 2, cx + 3))             # SkyPod
-        if y < 22:
-            return list(range(cx - 1, cx + 2))
-        if y < 28:
-            return list(range(cx - 4, cx + 5))             # main pod
-        w = 1 + (y - 28) // 9
-        return list(range(cx - w, cx + w + 1))
-    for y in range(H):
-        for x in tower_px(y):
-            put(x, y, 'slate' if y < 40 else 'ink')
-        if 22 <= y < 28 and y in (24, 25):
-            for x in (cx - 3, cx - 1, cx + 1, cx + 3):
-                put(x, y, 'paper' if y < 40 else 'amber')
-        if y < 40 and tower_px(y):
-            put(tower_px(y)[0] - 1, y, 'ink')
-            put(tower_px(y)[-1] + 1, y, 'ink')
-    put(cx, 1, 'ink')
-    # Lake: teal with slate ripples and light reflections.
-    for y in range(64, 72):
-        for x in range(W):
-            c = 'teal'
-            if (x // 3 + y * 5) % 11 == 0:
-                c = 'slate'
-            if (x % 12 in (4, 5)) and y in (65, 67, 69) and x > 24:
-                c = 'paper'
-            g[y][x] = c
-    # Logo: "TORONTO" on rows 1-2, "DISPATCH" on rows 3-4.
+            xs = [tx]
+        elif y < 17:
+            xs = range(tx - 1, tx + 2)
+        elif y < 21:
+            xs = [tx]
+        elif y < 23:
+            xs = range(tx - 3, tx + 4)
+        elif y < 27:
+            xs = range(tx - 4, tx + 5)
+        elif y < 29:
+            xs = range(tx - 2, tx + 3)
+        else:
+            w = 1 + (y - 29) // 12
+            xs = range(tx - w, tx + w + 1)
+        for x in xs:
+            put(x, y, INK)
+    put(tx, 1, GOLD)                                           # beacon
+    put(tx, 15, CREAM)                                         # SkyPod window
+    for x in range(tx - 3, tx + 4, 2):
+        put(x, 24, GOLD if x != tx else SUN)                  # restaurant ring
+    for x in range(tx - 2, tx + 3, 2):
+        put(x, 25, CREAM)
+    # Logo: TORONTO over DISPATCH in cream and gold with an ink outline and
+    # drop shadow, clear of the tower.
     def letter(ch, X, Y):
         rows = LOGO[ch]
         fill = {(x, y) for y, r in enumerate(rows) for x, c in enumerate(r) if c == 'X'}
         out = {(x + dx, y + dy) for x, y in fill for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
         for x, y in out:
-            put(X + 1 + x + 1, Y + 1 + y + 1, 'slate')
-        for x, y in out:
-            put(X + 1 + x, Y + 1 + y, 'ink')
+            put(X + x + 1, Y + y + 1, INK)      # shadow
+            put(X + x, Y + y, INK)              # outline
         for x, y in fill:
-            put(X + 1 + x, Y + 1 + y, 'paper')
+            put(X + x, Y + y, CREAM if y < 6 else GOLD)
     for k, ch in enumerate("TORONTO"):
-        letter(ch, 32 + 16 * k, 8)
+        letter(ch, 38 + 16 * k, 3)
     for k, ch in enumerate("DISPATCH"):
-        letter(ch, 24 + 16 * k, 24)
+        letter(ch, 30 + 16 * k, 21)
+    # Lake: the sun's reflection breaks into amber and red dashes; city
+    # lights shimmer under the towers.
+    for k, y in enumerate(range(65, 80, 2)):
+        half = 15 - 2 * k
+        for x in range(cx - half, cx + half + 1):
+            if (x - cx + 64) % (6 + k) < 4 + k // 2:
+                put(x + (k % 2), y, AMBER if k < 4 else RED)
+    for x0, x1, top in towers:
+        for x in range(x0 + 1, x1, 3):
+            for y in range(65 + (x % 2), 78, 4):
+                if abs(x - cx) > 16 and (x * 7 + y) % 5 < 2:
+                    put(x, y, AMBER)
+    for x, y in ((8, 70), (30, 67), (57, 74), (150, 66), (139, 75), (20, 77), (86, 69)):
+        put(x, y, PAPER)
+    # Shore road: promenade kerb, lane marks and the courier's orange car.
+    for x in range(W):
+        put(x, 80, PAPER)
+        if (x // 4) % 3 == 0:
+            put(x, 84, PAPER)
+    car = ["..aaaaaa....",
+           ".aa..#a.aa..",
+           "aaaa.#aaaaar",
+           "aaaaaaaaaaar",
+           ".##.....##.."]
+    cmap = {'a': AMBER, 'r': RED, '.': None, '#': INK}
+    for y, row in enumerate(car):
+        for x, c in enumerate(row):
+            col = cmap[c]
+            if col:
+                put(46 + x, 82 + y, col)
+    for x, y in ((48, 83), (49, 83), (53, 83), (54, 83)):
+        put(x, y, PAPER)                                       # windows
+    for x, y in ((59, 84), (60, 84), (61, 84), (62, 85), (63, 85), (60, 85), (61, 85)):
+        put(x, y, PAPER)                                       # headlamp beam
     return g

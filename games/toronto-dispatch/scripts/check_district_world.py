@@ -194,9 +194,10 @@ def check():
     ped_header = create_world_routes.HEADER.read_text()
     assert ped_header == create_world_routes.source(), 'Compiled pedestrian routes differ from registered grids'
     counts = list(map(int, re.search(rf'td_route_counts\[{district_count}\]=\{{([\d,]+)\}}', ped_header).group(1).split(',')))
-    ped_table = re.search(rf'td_district_routes\[{district_count}\]\[128\]\[2\]=\{{(.*?)\n\}};', ped_header, re.S).group(1)
+    ids = create_world_routes.ROUTE_IDS
+    ped_table = re.search(rf'td_district_routes\[{district_count}\]\[{ids}\]\[2\]=\{{(.*?)\n\}};', ped_header, re.S).group(1)
     groups = re.findall(r'^  \{\n(.*?)^  \},', ped_table, re.S | re.M)
-    assert len(groups) == district_count and all(24 <= count <= 128 for count in counts)
+    assert len(groups) == district_count and all(24 <= count <= ids for count in counts)
     for district, (group, count) in enumerate(zip(groups, counts)):
         rows = [tuple(map(int, pair)) for pair in re.findall(r'\{(\d+),(\d+)\}', group)]
         assert len(rows) == count and len(set(rows)) == count

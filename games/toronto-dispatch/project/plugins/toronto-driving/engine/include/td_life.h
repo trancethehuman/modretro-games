@@ -2,6 +2,7 @@
 #define TD_LIFE_H
 #include <gbdk/platform.h>
 #include "td_world.h"
+#include "td_game.h"
 
 /* Street life: car handling and collisions, pedestrians knocked down,
  * punches and the courier's pistol, police attention, pursuit, arrest and
@@ -13,7 +14,7 @@
 #define TD_WANTED_MAX 5
 #define TD_AMMO_START 12
 #define TD_AMMO_MAX 99
-#define TD_HEAT_SECONDS 20
+#define TD_HEAT_SECONDS 12
 #define TD_SUPPLY_PRICE 20
 
 /* Fictional hospital forecourt in the core district (east of University,
@@ -41,7 +42,15 @@
 #define TD_MSG_PED 24
 #define TD_MSG_EXIT_HINT 25
 #define TD_MSG_HOSPITAL 26
-#define TD_MSG_COUNT 27
+#define TD_MSG_CASH 27
+#define TD_MSG_FIRST_AID 28
+#define TD_MSG_AMMO 29
+#define TD_MSG_COUNT 30
+
+/* Sidewalk pickups (td_street.c tables, collected in TORONTO.c). */
+#define TD_PICKUP_CASH 15
+#define TD_PICKUP_FIRST_AID 40
+#define TD_PICKUP_AMMO 6
 
 /* Driver state owned by TORONTO.c and shared with this module. */
 extern WORD td_vx,td_vy;
@@ -49,11 +58,11 @@ extern UBYTE td_tick,td_turn_tick,td_entry_timer,td_entry_target,td_walk_dir,td_
 extern UWORD td_traffic_u[6],td_traffic_v[6];
 extern UBYTE td_traffic_leg[6];
 extern td_traffic_sample_t td_traffic_samples[6];
-extern UBYTE td_ped_route[6];
-extern UWORD td_nearby_routes[6][2];
+extern UBYTE td_ped_route[TD_PEDS];
+extern UWORD td_nearby_routes[TD_PEDS][2];
 
 /* Slot masks read by the native kernels: bit i set means this module owns
- * pedestrian slot i (actors 9..14) or road vehicle i (actors 2..7). */
+ * pedestrian slot i (actors 9..16) or road vehicle i (actors 2..7). */
 extern UBYTE td_ped_ovr,td_tr_ctrl;
 /* Walker slots with a fresh route still in view: the native layout keeps
  * them hidden until td_life sees them outside the camera. */
@@ -80,7 +89,7 @@ void td_life_tick(void) BANKED;
 void td_life_second(void) BANKED;
 /* Pedestrian route refresh that keeps owned slots and hides fresh arrivals
  * until they are outside the camera view. */
-void td_life_routes(void) BANKED;
+UBYTE td_life_routes(UBYTE moved) BANKED;
 /* After the native walker layout: contacts and owned-slot presentation. */
 void td_life_peds(UBYTE near) BANKED;
 void td_life_present(void) BANKED;
