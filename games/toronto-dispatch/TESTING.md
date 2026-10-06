@@ -1,5 +1,30 @@
 # Testing record
 
+## Menu, HUD and title art, gulls — candidate, 2026-10-06
+
+Same Linux toolchain as the entry below (GB Studio CLI 4.3.2, GBDK 4.5.0, PyBoy 2.7.0); emulator evidence only, not plugin, device or cartridge evidence.
+
+- ROM SHA-256 `a02419327e720df7b5e1ab14a3516cfef2a14fa4d572aa82d30dbbc3eb7bcd22`, 524,288 bytes; memory guard passed with 1,078 bytes of stack reserve. Actor sprites use 104 tiles per VRAM bank, below the UI art at tile 128.
+- `make check` passed, including the new `create_ui_art.py --check`, 3,468 host engine checks (gull regressions added) and the atlas UI regressions, which now also check the map palette swap and that the map leaves the bank-0 UI art untouched.
+- Frame pacing as below: core 59.8, West 59.8, High Park 59.9, East 59.7 updates per second, with 3, 3, 1 and 5 late frames in 900. The HUD repaint costs about 18k cycles, down from about 31k before this round, because unchanged inputs skip formatting and the street lookup and rows convert in assembly.
+- Assembly checker on this ROM: 57,543 calls across all four districts, including the new row copy and conversion routines, 0 mismatches. Map open/close leaves every visible background cell identical to a run without the map in all four districts.
+- Title: while the title is shown, 69 of the core scene's 77 bank-1 tiles are borrowed; after pressing A all 77 match the scene's tileset again.
+- Screens captured in the emulator: title, driving HUD with compass, pause menu, dispatch board, job HUD, TTC timetable, waiting and riding HUD, result. A gull crossed the High Park view during a 1,500-frame sample.
+- Not verified: hardware or cartridge display (including how the first window row looks on hardware; PyBoy hides its top pixel row at WY 0), plugin build, human readability review of the new font and icons.
+
+## Performance, city art, props and visible transit — candidate, 2026-10-06
+
+Built in a Linux cloud session with GB Studio CLI 4.3.2 (`ccb891b2…`, built from source with Node.js 22.22.0), GBDK 4.5.0 (Linux), Python 3.11.15, Pillow 12.1.1 and PyBoy 2.7.0. The plugin was not available there, so this is CLI build and PyBoy emulator evidence only; it is not plugin, streamed-device or cartridge evidence.
+
+- ROM: `make:rom`, 524,288 bytes. Measurements below used SHA-256 `adca1fb6ca714fbc368ca14a29430a7ff18376805b94da878e37f34f2c0e0390`; a rebuild of the committed tree is `42805aceac553d247ed412ea5ec0158135c8c32463bca173a1e04bb5355962f1`. They differ only in GB Studio's per-build `_save_signature` (4 bytes at 0x4A5) and the header checksum; the source between them changed only a comment. `scripts/check_rom_memory.py --min-stack-reserve 1024` passed with 1,188 bytes of stack reserve.
+- `make check` passed, including the new `create_city_art.py`, `create_west_art.py`, `create_sprites.py` and `create_street_life.py` freshness checks and 3,463 host engine checks (new prop and visible-transit regressions included).
+- Frame pacing, PyBoy, 900 frames of randomized driving from a saved state in each district, counting completed `toronto_update` calls: core 59.7, West 59.7, High Park 59.9, East 59.7 updates per second, with 5, 4, 1 and 4 frames over budget. The same method measured about 29 per second on the ROM before this work. Most of the gain comes from a 60 Hz update loop: hot paths were moved into table lookups and nine small SM83 routines.
+- Gameplay equivalence of the optimization: a host differential fuzz ran the original and optimized engines in lockstep with identical results (before props and transit were added). On this ROM, an emulator checker compared every call of each assembly routine against a Python model of its C reference: 57,586 calls across all four districts, 0 mismatches.
+- City map: after opening and closing the map, the visible background cells decoded from VRAM match a run that never opened it, in all four districts. In the core sample, 18 visible cells used tiles that the map had overwritten.
+- Props: driving east into a cone cluster on Bloor at speed 18 knocked two cones over and reduced speed to 14. Props hide when a transit vehicle is on screen.
+- Transit, real menu inputs from a stop on foot: Queen Spadina to Queen Broadview (streetcar eastbound in the south lane, reaching the berth as the countdown ends, then leaving east; courier hidden while riding and set down at Queen Broadview beside the stopped streetcar); Castle Frank to Ossington (bus westbound); ferry terminal to Centre Island (ferry off the island dock on arrival).
+- Not verified: hardware or cartridge execution, plugin builds, human playtesting of feel and readability, audio listening, and OAM load in the most crowded scenes beyond the 38-sprite design budget.
+
 ## Pickup condition lifecycle correction — native candidate, 2026-10-02
 
 Accepting a contract now leaves cargo/comfort at 100 until the first actual pickup. The four traffic, wall, curb and passenger-steering damage paths require an active carrying stage; collision motion, cooldowns, fines and the acceptance-time deadline are unchanged. Empty vehicles show `CRASH: BRAKE EARLY`, and an unoccupied passenger approach no longer shows a rider warning. Cold startup restores valid older active-stage-0 saves to 100 only after CRC and semantic validation; actual carried damage and no-job failure condition remain unchanged. The 58-byte version-6 save format is retained.

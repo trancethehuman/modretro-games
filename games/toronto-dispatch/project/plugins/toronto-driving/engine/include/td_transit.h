@@ -31,6 +31,13 @@ UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED;
 /* Invalid queries return zero. A valid service fare does not require a target. */
 UBYTE td_transit_fare(UBYTE origin) BANKED;
 UBYTE td_transit_duration(UBYTE origin, UBYTE target) BANKED;
+/* Travel heading of a valid journey: 0 east, 1 west, 2 south, 3 north;
+ * NONE for an invalid pair. Street services run east-west in this map. */
+#define TD_HEADING_EAST 0
+#define TD_HEADING_WEST 1
+#define TD_HEADING_SOUTH 2
+#define TD_HEADING_NORTH 3
+UBYTE td_transit_heading(UBYTE origin, UBYTE target) BANKED;
 /* Caller supplies nineteen WRAM bytes. FALSE leaves the buffer unchanged. */
 UBYTE td_transit_label(UBYTE origin, char *dest19) BANKED;
 

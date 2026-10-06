@@ -48,7 +48,10 @@
         "include/td_atlas.h",
         "src/td_atlas.c",
         "include/td_transit.h",
-        "src/td_transit.c"
+        "src/td_transit.c",
+        "include/td_sprites.h",
+        "include/td_street.h",
+        "src/td_street.c"
       ]
     }
   ]

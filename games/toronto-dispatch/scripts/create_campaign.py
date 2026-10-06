@@ -372,14 +372,57 @@ def main():
     code += ['};','typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;',
              f'static const td_street_t td_west_streets[{len(street_segments)}]={{']
     code += ['  {' + ','.join(map(str, segment)) + '},' for segment in street_segments]
+    # Segments are appended district by district; index each district's run so
+    # the HUD lookup visits only its own streets in the same order.
+    districts = len(world['districts'])
+    assert [segment[4] for segment in street_segments] == sorted(segment[4] for segment in street_segments)
+    starts = [next((i for i, segment in enumerate(street_segments) if segment[4] >= district), len(street_segments))
+              for district in range(districts + 1)]
+    starts[0] = starts[1]
+    assert len(street_segments) < 256
     code += ['};',
+             f'static const UBYTE td_west_street_start[{districts + 1}]={{' + ','.join(map(str, starts)) + '};']
+    # Exact candidate lists per 64-pixel region: a segment is kept only if
+    # its least distance to the region does not exceed the best worst-case
+    # distance of any segment there, so every possible first minimum stays
+    # in the list, in its original order.
+    def box_score(seg, u, v):
+        x1, y1, x2, y2 = seg[:4]
+        return (x1 - u if u < x1 else u - x2 if u > x2 else 0) + (y1 - v if v < y1 else v - y2 if v > y2 else 0)
+    region_start, region_list = [], []
+    for district in range(1, districts):
+        segs = list(enumerate(street_segments))[starts[district]:starts[district + 1]]
+        for ry in range(16):
+            for rx in range(16):
+                X1, X2, Y1, Y2 = rx * 64, min(rx * 64 + 63, 1023), ry * 64, min(ry * 64 + 63, 975)
+                region_start.append(len(region_list))
+                if X1 > X2 or Y1 > Y2 or not segs:
+                    continue
+                lows = [max(0, seg[0] - X2, X1 - seg[2]) + max(0, seg[1] - Y2, Y1 - seg[3]) for _, seg in segs]
+                worst = min(max(box_score(seg, u, v) for u in (X1, X2) for v in (Y1, Y2)) for _, seg in segs)
+                region_list += [index for (index, _), low in zip(segs, lows) if low <= worst]
+    region_start.append(len(region_list))
+    assert len(region_start) == (districts - 1) * 256 + 1 and len(region_list) < 65536
+    code += [f'static const UWORD td_west_region_start[{len(region_start)}]={{' + ','.join(map(str, region_start)) + '};',
+             f'static const UBYTE td_west_region_list[{len(region_list)}]={{' + ','.join(map(str, region_list)) + '};',
+             '/* First segment with the least Manhattan distance from (u,v) to its box.',
+             '   On the map, only the 64-pixel region\'s exact candidate list is scanned;',
+             '   a segment whose x distance alone reaches the best cannot win, and nothing',
+             '   beats zero. Positions off the map scan the whole district. */',
              'void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {',
-             ' UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;',
-             f' for(i=0;i<{len(street_segments)};i++){{s=&td_west_streets[i];if(s->district!=district)continue;',
-             ' score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);',
-             ' if(score<best){best=score;name=s->name;}',
+             ' UBYTE name=0;UWORD k=0,stop=0,dx,dy,lo,hi,best=65535;const td_street_t *s;const UBYTE *list=0;',
+             f' if(district&&district<{districts}&&u<1024&&v<976){{',
+             '  k=(UWORD)(district-1)*256+((v>>6)<<4)+(u>>6);stop=td_west_region_start[k+1];k=td_west_region_start[k];list=td_west_region_list;',
+             f' }}else if(district<{districts}){{k=td_west_street_start[district];stop=td_west_street_start[district+1];}}',
+             ' for(;k<stop;k++){',
+             '  s=list?&td_west_streets[list[k]]:&td_west_streets[k];',
+             '  lo=s->x1;hi=s->x2;dx=u<lo?lo-u:u>hi?u-hi:0;if(dx>=best)continue;',
+             '  lo=s->y1;hi=s->y2;dy=v<lo?lo-v:v>hi?v-hi:0;dx+=dy;',
+             '  if(dx<best){best=dx;name=s->name;if(!best)break;}',
              ' }memcpy(d,td_west_street_names[name],19);',
              '}',
+             ]
+    code += [
              'void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }',
              'void td_get_job(UBYTE i,td_job_t *d) BANKED { if(i<TD_QUESTS) memcpy(d,&td_jobs[i],sizeof(td_job_t)); }',
              'void td_get_brief(UBYTE i,char *d) BANKED { if(i<TD_QUESTS) memcpy(d,td_briefs[i],37); else d[0]=0; }',
@@ -396,9 +439,9 @@ def main():
              '  else if(v>144) name="WELLESLEY / HARBORD";',
              '  else name=u>912?"DANFORTH AVENUE":"BLOOR STREET";',
              '  if(v>256&&v<320&&u>=816)name="GERRARD ST EAST";',
-             '  { const UWORD columns[]={80,208,336,480,560,640,720,816,944};',
-             '    const char *roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};',
-             '    const UWORD rows[]={64,176,288,400,528,640,720,784};',
+             '  { static const UWORD columns[]={80,208,336,480,560,640,720,816,944};',
+             '    static const char * const roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};',
+             '    static const UWORD rows[]={64,176,288,400,528,640,720,784};',
              '    UWORD nearest_x=65535,nearest_y=65535,delta; UBYTE i,best=0;',
              '    for(i=0;i<9;i++){delta=u>columns[i]?u-columns[i]:columns[i]-u;if(delta<nearest_x){nearest_x=delta;best=i;}}',
              '    for(i=0;i<8;i++){delta=v>rows[i]?v-rows[i]:rows[i]-v;if(delta<nearest_y)nearest_y=delta;}',
@@ -406,19 +449,7 @@ def main():
              '  } strcpy(d,name);', '}']
     (ENGINE / 'src').mkdir(parents=True, exist_ok=True)
     (ENGINE / 'src/td_content.c').write_text('\n'.join(code) + '\n')
-    #Fixed-size UI cells reuse the MIT starter font, retaining its asset licence.
-    font = json.loads((ROOT / 'project/original-art/native-cells.json').read_text())['font']['cells']
-    chars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:/.-+?<>$%#='
-    glyphs = {cell['character']: cell['rows'] for cell in font}
-    data = []
-    for char in chars:
-        for row in glyphs[char]:
-            bits = sum(1 << (7 - i) for i, pixel in enumerate(row) if pixel == '0')
-            data.extend((bits, bits))
-    (ENGINE / 'include/td_font.h').write_text(
-        '// Derived from MIT Bench Mono glyphs; see project/ASSET_LICENSE.\n'
-        'static const char td_chars[]="' + chars + '";\n'
-        'static const UBYTE td_font[]={' + ','.join(map(str, data)) + '};\n')
+    # The UI font is original and generated by create_ui_art.py.
     print(f'Compiled {len(quests)} unique authored contracts, {len(content["stops"])} stops, native briefs, and train/bus/ferry services. Duration remains unverified.')
 
 

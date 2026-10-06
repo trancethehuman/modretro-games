@@ -12,6 +12,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 from east_layout import EAST, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 from streetcar_art import paint_streetcar_stops
+import city_kit
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "project/original-art"
@@ -82,12 +83,19 @@ def render():
             i=ty*TW+tx;x=tx*8;y=ty*8
             if walk.getpixel((x+4,y+4)):box(x,y,8,8,3);collisions[i]=16;attrs[i]=0
             if road.getpixel((x+4,y+4)):box(x,y,8,8,1);collisions[i]=0;attrs[i]=0
+    # Lane dashes stop short of junctions, which carry zebra crossings.
+    centres=city_kit.intersections_from_routes([extended_points(r) for r in EAST["roads"]])
     for route in EAST["roads"]:
         for (x1,y1),(x2,y2) in zip(route["points"],route["points"][1:]):
             if y1==y2:
-                for px in range((min(x1,x2)//32+1)*32,max(x1,x2),32):box(px,y1,8,1,3)
+                for px in range((min(x1,x2)//32+1)*32,max(x1,x2),32):
+                    if not city_kit.near_crossing(px+4,y1,centres):box(px,y1,8,1,3)
             else:
-                for py in range((min(y1,y2)//32+1)*32,max(y1,y2),32):box(x1,py,1,8,3)
+                for py in range((min(y1,y2)//32+1)*32,max(y1,y2),32):
+                    if not city_kit.near_crossing(x1,py+4,centres):box(x1,py,1,8,3)
+    def on_road(x,y):return 0<=x<WIDTH and 0<=y<HEIGHT and road.getpixel((x,y))
+    def on_walk(x,y):return 0<=x<WIDTH and 0<=y<HEIGHT and walk.getpixel((x,y)) and not road.getpixel((x,y))
+    city_kit.paint_crosswalks(box,on_road,on_walk,centres)
     # The conditional Gerrard connector remains visibly closed at the viewport edge.
     for port in EAST["conditional_ports"]:
         x,y,w,h=0,port["y"]-WALK_HALF,16,WALK_HALF*2
@@ -143,7 +151,9 @@ def render():
         elif kind=="factory":
             for wx in range(x+8,x+w-8,16):box(wx,y+24,8,8,1)
             box(x+w-16,y-8,8,16,0)
-        solid(x,y,w,h);attr(x,y-8,w+8,h+16,style+1,True)
+        city_kit.roof_details(d,box,x,y,w,h,roof,city_kit.seed_of("east",x,y),COLORS)
+        # Slot 6 is the vegetation palette; wide work sheds use brick terracotta.
+        solid(x,y,w,h);attr(x,y-8,w+8,h+16,1 if style==5 else style+1,True)
         blocks.append({"x":x,"y":y,"width":w,"depth":h,"height":roof,"style":style,"landmark":name,"kind":kind})
 
     for landmark in EAST["landmarks"]:
@@ -227,14 +237,25 @@ def render():
     if len(peds)>128:peds=[peds[i*len(peds)//128] for i in range(128)]
     for x,y in peds:sweep([[x,y],[x+63,y]],half=2,car=False)
 
+    # Lawns, canopy trees, parking and plazas on untouched walkable ground.
+    ground=bytes.fromhex(COLORS[2][1:])*64
+    reserved_lots=[(l["x"]-8,l["y"]-16,l["width"]+24,l["depth"]+32) for l in EAST["landmarks"]]
+    def lot(tx,ty):
+        i=ty*TW+tx;x=tx*8;y=ty*8
+        if collisions[i]!=16 or attrs[i]!=6 or walk.getpixel((x+4,y+4)):return False
+        if any(rx<=x+4<rx+rw and ry<=y+4<ry+rh for rx,ry,rw,rh in reserved_lots):return False
+        return img.crop((x,y,x+8,y+8)).tobytes()==ground
+    def set_attr(tx,ty,value):attrs[ty*TW+tx]=value
+    before=list(collisions)
+    canopies+=city_kit.dress_lots(d,box,TW,TH,lot,set_attr,COLORS,"east",[tuple(p["rect"]) for p in EAST["parks"]])
+    assert collisions==before,"lot decoration must not change collision"
     paint_streetcar_stops(d,EAST['id'],COLORS)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
         for tx in range(TW):
             tile=img.crop((tx*8,ty*8,tx*8+8,ty*8+8));raw_patterns.add(tile.tobytes())
             patterns.add(min(t.tobytes() for t in [tile,tile.transpose(Image.Transpose.FLIP_LEFT_RIGHT),tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM),tile.transpose(Image.Transpose.ROTATE_180)]))
-    assert len(raw_patterns)<=320,("eastern raw tile budget",len(raw_patterns))
-    assert len(patterns)<=320
+    assert len(patterns)<=320,("128 bank-0 + 192 bank-1 background tiles",len(patterns))
     assert set(img.get_flattened_data())<=set(tuple(bytes.fromhex(c[1:])) for c in COLORS)
     assert len(collisions)==15616 and set(collisions)<={0,16,15}
     for block in blocks:

@@ -1,0 +1,18 @@
+{
+  "_resourceType": "palette",
+  "id": "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+  "name": "Sprite Traffic red",
+  "colors": [
+    "D0E8F8",
+    "C83028",
+    "C83028",
+    "101018"
+  ],
+  "defaultName": "Sprite Traffic red",
+  "defaultColors": [
+    "D0E8F8",
+    "C83028",
+    "C83028",
+    "101018"
+  ]
+}

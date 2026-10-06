@@ -4,7 +4,13 @@
 #define TD_QUESTS 88
 #define TD_STOPS 51
 #define TD_COMPLETE_BYTES 16
-#define TD_ACTORS 15
+/* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-14 pedestrians,
+ * 15 transit vehicle, 16-19 curbside props, 20 ambient gull. GBVM allows 21. */
+#define TD_ACTORS 21
+#define TD_ACTOR_GULL 20
+#define TD_ACTOR_TRANSIT 15
+#define TD_ACTOR_PROPS 16
+#define TD_PROP_SLOTS 4
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0
@@ -45,6 +51,9 @@ extern UBYTE td_route_district; /* Rebuilt objective cue; not serialized. */
 extern UBYTE td_resume_mode;
 void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
+/* Menu cursor/prompt animation and the HUD compass; cheap when unchanged. */
+void td_ui_tick(void) BANKED;
+void td_ui_compass(void) BANKED;
 void td_map_open(void) BANKED;
 void td_map_update(UBYTE buttons,UBYTE pressed) BANKED;
 void td_map_close(void) BANKED;
@@ -53,4 +62,12 @@ UBYTE td_restore(void) BANKED;
 void td_set_target(void) BANKED;
 UBYTE td_service(UBYTE origin) BANKED;
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) BANKED;
+/* Curbside props and transit berths (td_street.c). Not serialized. */
+extern UBYTE td_prop_slot[TD_PROP_SLOTS],td_prop_sk[TD_PROP_SLOTS],td_prop_su8[TD_PROP_SLOTS],td_prop_sv8[TD_PROP_SLOTS];
+extern UWORD td_prop_su[TD_PROP_SLOTS],td_prop_sv[TD_PROP_SLOTS];
+extern UBYTE td_prop_sdown,td_prop_dirty;
+void td_street_reset(void) BANKED;
+/* Courier position in 8-pixel units. */
+void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED;
+UBYTE td_street_berth(UBYTE stop,UBYTE district,UWORD *u,UWORD *v) BANKED;
 #endif

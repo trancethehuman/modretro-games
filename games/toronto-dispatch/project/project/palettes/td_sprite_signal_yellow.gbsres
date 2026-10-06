@@ -1,0 +1,18 @@
+{
+  "_resourceType": "palette",
+  "id": "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+  "name": "Sprite Taxi and beacon yellow",
+  "colors": [
+    "F8F8E0",
+    "F0C020",
+    "F0C020",
+    "282010"
+  ],
+  "defaultName": "Sprite Taxi and beacon yellow",
+  "defaultColors": [
+    "F8F8E0",
+    "F0C020",
+    "F0C020",
+    "282010"
+  ]
+}

@@ -101,6 +101,32 @@ Moving streetcar artwork, human feedback on strategic transit, remaining platfor
 - Cold startup normalizes valid older active-stage-0 saves to 100 after CRC/semantic validation. It preserves carried damage, retired failure state, earnings, deadlines and district-qualified positions; invalid active condition remains rejected. This changes no save bytes or version.
 - The native candidate and retained predecessor failure are scoped in [TESTING.md](TESTING.md). The published Prototype 6 bundle does not contain this later correction. Further quest/transit route-choice and hardware acceptance remain open.
 
+## Performance and city presentation pass, 2026-10-06
+
+User direction: make the game run smoothly without reducing fidelity, gameplay or richness, and improve crosswalk placement, building variety, actor/vehicle/boat design and transit presentation.
+
+- Implemented: the native update loop now completes every frame (about 59-60 updates per second in all four districts, previously about 29). Hot paths were rewritten as table lookups and small hand-written SM83 routines with C references kept for host tests. Gameplay is unchanged: a differential host fuzz compares the new and original engines step for step, and an emulator checker compares every assembly routine call against a model of its C reference.
+- Implemented: a new original actor sheet (136 frames) with eight CGB sprite palettes: orange courier car and uniform, red/blue traffic, yellow taxi and job pin, teal/violet pedestrians and red-and-white TTC vehicles. Transit frames are drawn at scale: bus 40 px, streetcar 64 px (limited by ten sprites per scanline) and ferry 16 x 40 px.
+- Implemented: crosswalks are derived from road geometry. Every junction square is rebuilt from the drivable shape so sidewalks turn the corner instead of running across the crossing road, and zebra bars are painted only on arms that link two sidewalks. Lane dashes stop short of junctions.
+- Implemented: buildings gain seeded rooftop equipment (water tanks, HVAC, skylights, solar, bulkheads, gravel, antennas); empty walkable lots get lawns, canopy trees, plazas or striped parking. Background palette slot 6 becomes parks and trees (`E7DECC/8FB56A/4D7A52/172B38`, previously a tan ground tone); the wide-warehouse style uses the terracotta slot instead. No collision value changed in any district.
+- Implemented: closing the city map restores the scene's CGB bank-1 background tiles that the atlas borrows.
+- Implemented (user direction: many destructible things, few obstacles): curbside knock-over props: traffic cones, garbage/recycling bins, newspaper boxes and construction barrels. `create_street_life.py` places 96 per district in the gutter of straight blocks, clear of stops, parking anchors and district seams; four nearby props are shown at once. Driving into one knocks it over, costs a quarter of the current speed and plays the impact cue. There is no cargo damage, fine or collision change, and props are not saved: a knocked prop stands again once it has left the view.
+- Implemented (user direction: visible, scheduled transit that holds the courier): the bus, the Queen streetcar and the Island ferry now appear at their stops. While the courier waits, the scheduled vehicle decelerates into its berth so it stops exactly as the existing two-second boarding window opens. The courier boards (hidden while aboard), the vehicle pulls away, and at the destination a vehicle sets the courier down, waits 1.5 s and leaves. Streetcars and buses use the lane for their travel direction; the ferry berths in open water beside its dock. Timetables, fares, journey durations and the save format are unchanged; vehicle positions are derived from the timetable clock. Line 1 stays underground, so no subway train is drawn on the street. Vehicles are drawn at scale (bus 40 px, about 12 m; streetcar 64 px, limited by ten sprites per scanline; ferry 16 x 40 px). Props hide while a vehicle is on screen so actors never need more than 38 of the 40 hardware sprites.
+- Implemented: the HUD repaint after the once-per-second clock tick happens on the next frame (16 ms later), so the save and the repaint never share one frame; the western street-name lookup scans exact per-region candidate lists. Both keep the same state and text.
+- Proposals, not adopted: riding along with the camera following the vehicle between stops, pedestrians visibly boarding, and a visible GO/Line 1 train at surface rail corridors.
+
+## Menu, HUD and title art, 2026-10-06
+
+User direction: dress up the plain menus with good Game Boy menu art, improve the art overall, keep performance and a lively city.
+
+- Implemented: an original bold UI font (2-pixel stems) replaces the starter glyphs in the HUD and menus. Original 8x8 art tiles (frame, separators, animated cursor, menu and HUD icons, A/B/SELECT/START button glyphs, compass arrows, CN Tower emblem) live in otherwise unused bank-0 tiles 128..191; text rows can mix glyphs and art through character codes 0x80 and up.
+- Implemented: pause menu, dispatch board, TTC timetable, result and title screens use framed cards with icons; the menu cursor and title prompt animate. The UI palette (BG slot 7) becomes paper, amber, red and ink; the city map keeps its original colours by swapping them in while it is open.
+- Implemented: the title screen shows an original dusk skyline with the CN Tower, Rogers Centre dome and a 16x16-letter logo. It borrows the atlas-owned bank-1 tiles while the full-screen title hides the city and restores the scene tiles on entry.
+- Implemented: the HUD shows icons for money, vehicle, progress, deadline and condition, button glyphs for its hints, and a compass arrow in the street row that points to the job beacon (a ring when close). Only the compass cell repaints between HUD updates.
+- Implemented: during a job's last ten seconds the HUD clock flashes red each second.
+- Implemented (user direction: keep the city lively): an ambient herring gull glides across the view every 10 to 18 seconds using the last free actor slot. It is decorative only; with it the worst case is exactly 40 hardware sprites.
+- Unchanged: controls, menu order and actions, text meaning, timers, saves and the map's behaviour.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

@@ -14,6 +14,8 @@ Updated 2026-10-02. The published Queen streetcar milestone (`23b2a7a2…`, Prot
 | Pillow | 12.3.0 (plugin emulator); 12.1.1 (repository art/content scripts and CI) |
 | Node.js | 26.6.0 |
 
+A Linux cloud session (2026-10-06) also built the ROM without the plugin: GB Studio CLI 4.3.2 built from source at the same commit with Node.js 22.22.0 (`node out/cli/gb-studio-cli.js make:rom <project.gbsproj> <out.gbc>`), GBDK 4.5.0 for Linux, Python 3.11.15 and PyBoy 2.7.0 for emulator measurements. That path is CLI and emulator evidence only.
+
 The plugin manages dependencies outside the repo. Start with its setup skill and `toolchain_doctor` for authoring, projectBuild and play. Prepare missing build/emulator components using `toolchain_prepare`; do not modify the installed plugin cache.
 
 ## Plugin operations
@@ -38,6 +40,10 @@ python3 games/toronto-dispatch/scripts/create_city_art.py
 python3 games/toronto-dispatch/scripts/sync_city_resources.py
 python3 games/toronto-dispatch/scripts/create_west_art.py
 python3 games/toronto-dispatch/scripts/create_east_art.py
+python3 games/toronto-dispatch/scripts/sync_city_resources.py
+python3 games/toronto-dispatch/scripts/create_sprites.py
+python3 games/toronto-dispatch/scripts/create_street_life.py
+python3 games/toronto-dispatch/scripts/create_ui_art.py
 ```
 
 These commands generate original artwork/metadata and synchronize existing core resources. They do not register new scenes or apply changed west/east collision and attribute resources. Use the plugin's revision-aware native workflow to register/update those assets and scenes, preserve bindings, and apply the intended reciprocal core seams before continuing. Regenerating content against stale native geometry is not a valid build procedure. The current candidate already has all four native scenes registered.
@@ -55,9 +61,9 @@ python3 games/toronto-dispatch/scripts/create_atlas.py
 make check
 ```
 
-`create_city_art.py` draws original indexed-colour background and sprite source cells; the background is already registered as a native asset. The sprite generator produces an editable source/metadata pair in `original-art` / `dispatch_topdown.metadata.json`. Existing sprite PNG changes must be applied to the registered `assets/sprites/dispatch_topdown.png` as part of a deliberate sprite edit. New sprite registration uses the plugin's validated `native_metadata` import; keep the existing root and bindings when editing an established asset.
+`create_city_art.py` draws the original indexed-colour core background; the background is already registered as a native asset. Actor sprites come from `create_sprites.py`, which builds the registered `assets/sprites/dispatch_topdown.png`, its editable copy in `original-art`, eight CGB sprite palettes, each scene's sprite palette binding and the engine frame map `td_sprites.h` from the designs in `sprite_art.py`. Shared street furniture, crosswalk and rooftop painters live in `city_kit.py`. `create_ui_art.py` turns the original font, menu/HUD art and title illustration in `ui_art.py` into `td_font.h` and `td_ui_art.h` and sets the UI palette. `create_street_life.py` reads the registered collisions, stops and seams and writes `td_street.h`: curbside prop placements and the berth where each bus, streetcar or ferry stops. `sync_city_resources.py` also copies the west, High Park and east attribute files into their registered background `tileColors`; it does not touch district collisions.
 
-`create_west_art.py` draws the original west/High Park backgrounds; `create_east_art.py` draws the original eastern background. Both write placement, collision and priority metadata. They do not register or update native scene resources. After geometry changes, apply collision and attributes through the plugin before regenerating routes/contracts; the checked-in registered scenes are the input to those checks. `create_district_world.py` generates 14 reciprocal seam pairs and 18 non-core traffic loops. `create_district_jobs.py` authors eight western package contracts from actual scene collision paths; `create_east_jobs.py` appends eight eastern contracts and eight service points while pinning the earlier 80-contract/35-stop prefix. `create_campaign.py` compiles 88 contracts and 51 stops while retaining the original IDs; supplemental Queen platforms use `content/streetcar.json`. Both art generators and the eastern job generator support `--check` for read-only freshness checks; `make check` includes the generated-source checks.
+`create_west_art.py` draws the original west/High Park backgrounds; `create_east_art.py` draws the original eastern background. Both write placement, collision and priority metadata. They do not register or update native scene resources. After geometry changes, apply collision and attributes through the plugin before regenerating routes/contracts; the checked-in registered scenes are the input to those checks. `create_district_world.py` generates 14 reciprocal seam pairs and 18 non-core traffic loops. `create_district_jobs.py` authors eight western package contracts from actual scene collision paths; `create_east_jobs.py` appends eight eastern contracts and eight service points while pinning the earlier 80-contract/35-stop prefix. `create_campaign.py` compiles 88 contracts and 51 stops while retaining the original IDs; supplemental Queen platforms use `content/streetcar.json`. All four art/sprite generators and the eastern job generator support `--check` for read-only freshness checks; `make check` includes the generated-source checks.
 
 `sync_city_resources.py` uses GB Studio's native byte-array RLE to write palette/background-priority attributes and the core scene collision map. Native CGB attribute bit 7 marks raised roof lips/canopies. The scene extension interprets collision values 0 as road, 16 as walk-only pavement/Island ground and 15 as solid; the normal engine ladder meaning of bit 4 does not apply to this custom scene. Each district has 15,616 tiles, so each tile/attribute/collision array fits one 16 KiB bank. `check_campaign.py` and `check_district_world.py` inspect registered resources for stop connectivity, compatible road routes, ferry links, reciprocal seams, traffic clearance and contract consistency.
 

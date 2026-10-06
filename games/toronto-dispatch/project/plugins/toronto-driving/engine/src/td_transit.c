@@ -146,6 +146,18 @@ UBYTE td_transit_duration(UBYTE origin, UBYTE target) BANKED {
     return distance * TD_TRANSIT_QUEEN_HOP_SECONDS;
 }
 
+UBYTE td_transit_heading(UBYTE origin, UBYTE target) BANKED {
+    UBYTE service = td_transit_service_local(origin);
+    if (target == (origin & 63) || !td_transit_route_target_local(origin, target, service)) return TD_TRANSIT_NONE;
+    if (service == TD_TRANSIT_FERRY) return target == 10 ? TD_HEADING_NORTH : TD_HEADING_SOUTH;
+    /* Route tables run west to east; Line 1 runs north-south underground. */
+    if (service == TD_TRANSIT_TRAIN)
+        return td_transit_index_local(service, target) > td_transit_index_local(service, origin & 63) ?
+            TD_HEADING_NORTH : TD_HEADING_SOUTH;
+    return td_transit_index_local(service, target) > td_transit_index_local(service, origin & 63) ?
+        TD_HEADING_EAST : TD_HEADING_WEST;
+}
+
 UBYTE td_transit_label(UBYTE origin, char *dest19) BANKED {
     UBYTE service = td_transit_service_local(origin);
     if (!dest19 || !service) return FALSE;
