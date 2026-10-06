@@ -1552,6 +1552,21 @@ static void test_visible_transit(void) {
            "journey headings follow route order and ferry direction");
 }
 
+
+static void test_ambient_gull(void) {
+    actor_t *gull=&actors[TD_ACTOR_GULL];UWORD x0;
+    native_case();td.mode=TD_ROAM;td_gull_life=0;td_gull_wait=5;td_gull_present(1);
+    expect(gull->flags&ACTOR_FLAG_HIDDEN,"no gull before its wait elapses");
+    td_gull_present(10);
+    expect(td_gull_life&&!(gull->flags&ACTOR_FLAG_HIDDEN)&&(gull->frame_start==TD_FRAME_GULL_E||gull->frame_start==TD_FRAME_GULL_W),
+           "a gull appears with a flight frame");
+    x0=gull->pos.x;td_gull_present(4);
+    expect(gull->pos.x!=x0,"the gull glides across the view");
+    for(unsigned i=0;i<60;i++)td_gull_present(4);
+    expect(!td_gull_life&&(gull->flags&ACTOR_FLAG_HIDDEN),"the gull leaves after its flight");
+    expect(td.mode==TD_ROAM&&geometry==NATIVE_GRID,"gulls never change game state");
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -1574,7 +1589,7 @@ int main(void) {
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
-    test_street_props();test_visible_transit();
+    test_street_props();test_visible_transit();test_ambient_gull();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

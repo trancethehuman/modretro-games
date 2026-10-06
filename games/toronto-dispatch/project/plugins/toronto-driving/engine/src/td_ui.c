@@ -406,7 +406,9 @@ static void td_hud(UBYTE changed){
     if(!changed&&!memcmp(key,td_hud_key,sizeof(key)))return;
     memcpy(td_hud_key,key,sizeof(key));
     if(td.job!=TD_NONE){
-        td_format(td_line,TD_UI_BOX "%u/%u " TD_UI_CLOCK "%uS " TD_UI_HEART "%u",td.stage+1,td_job.count,td.left,td.health);td_row(1,td_line);
+        /* The last ten seconds flash a red clock. */
+        td_format(td_line,TD_UI_BOX "%u/%u %s%uS " TD_UI_HEART "%u",td.stage+1,td_job.count,
+                  td.left<=10&&(td.left&1)?TD_UI_CLOCK_ALERT:TD_UI_CLOCK,td.left,td.health);td_row(1,td_line);
         td_line[0]=TD_UI_PIN[0];
         if(td_target.district!=td.district){
             if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line+1);

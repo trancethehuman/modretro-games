@@ -91,6 +91,9 @@ def frames():
     add('streetcar_s', car_s, 'transit', (16, 64)); add('streetcar_n', A.flip_v(car_s), 'transit', (16, 64))
     ferry_s = A.big_frame(A.ferry_zone(), 90, (16, 40))
     add('ferry_s', ferry_s, 'traffic_blue', (16, 40)); add('ferry_n', A.flip_v(ferry_s), 'traffic_blue', (16, 40))
+    for name, design in (('gull_e_0', A.grid(A.GULL_UP)), ('gull_e_1', A.grid(A.GULL_LEVEL)),
+                         ('gull_w_0', A.flip_h(A.grid(A.GULL_UP))), ('gull_w_1', A.flip_h(A.grid(A.GULL_LEVEL)))):
+        add(name, design, 'courier_vehicle')
     return out
 
 
@@ -215,7 +218,7 @@ def outputs():
                  'walker_a_0', 'walker_b_0', 'walker_c_0', 'walker_d_0',
                  'cone', 'cone_down', 'bin', 'bin_down', 'newsbox', 'newsbox_down', 'barrel', 'barrel_down', 'debris',
                  'bus_e', 'bus_w', 'bus_s', 'bus_n', 'streetcar_e', 'streetcar_w', 'streetcar_s', 'streetcar_n',
-                 'ferry_s', 'ferry_n'):
+                 'ferry_s', 'ferry_n', 'gull_e_0', 'gull_w_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
         lines.append(f'#define {macro} {index[name]}')
     for name, (dx, dy) in sorted(anchors.items()):

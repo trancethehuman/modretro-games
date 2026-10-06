@@ -5,8 +5,9 @@
 #define TD_STOPS 51
 #define TD_COMPLETE_BYTES 16
 /* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-14 pedestrians,
- * 15 transit vehicle, 16-19 curbside props. GBVM allows 21. */
-#define TD_ACTORS 20
+ * 15 transit vehicle, 16-19 curbside props, 20 ambient gull. GBVM allows 21. */
+#define TD_ACTORS 21
+#define TD_ACTOR_GULL 20
 #define TD_ACTOR_TRANSIT 15
 #define TD_ACTOR_PROPS 16
 #define TD_PROP_SLOTS 4

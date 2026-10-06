@@ -1223,6 +1223,42 @@
         16,
         40
       ]
+    },
+    {
+      "index": 136,
+      "name": "gull_e_0",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 137,
+      "name": "gull_e_1",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 138,
+      "name": "gull_w_0",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 139,
+      "name": "gull_w_1",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
     }
   ],
   "palettes": [
@@ -1351,7 +1387,7 @@
   },
   "sheet": [
     256,
-    256
+    272
   ],
   "note": "Original pixel art from scripts/sprite_art.py; colour 0 transparent."
 }

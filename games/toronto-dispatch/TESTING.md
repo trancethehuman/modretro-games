@@ -1,5 +1,17 @@
 # Testing record
 
+## Menu, HUD and title art, gulls — candidate, 2026-10-06
+
+Same Linux toolchain as the entry below (GB Studio CLI 4.3.2, GBDK 4.5.0, PyBoy 2.7.0); emulator evidence only, not plugin, device or cartridge evidence.
+
+- ROM SHA-256 `a02419327e720df7b5e1ab14a3516cfef2a14fa4d572aa82d30dbbc3eb7bcd22`, 524,288 bytes; memory guard passed with 1,078 bytes of stack reserve. Actor sprites use 104 tiles per VRAM bank, below the UI art at tile 128.
+- `make check` passed, including the new `create_ui_art.py --check`, 3,468 host engine checks (gull regressions added) and the atlas UI regressions, which now also check the map palette swap and that the map leaves the bank-0 UI art untouched.
+- Frame pacing as below: core 59.8, West 59.8, High Park 59.9, East 59.7 updates per second, with 3, 3, 1 and 5 late frames in 900. The HUD repaint costs about 18k cycles, down from about 31k before this round, because unchanged inputs skip formatting and the street lookup and rows convert in assembly.
+- Assembly checker on this ROM: 57,543 calls across all four districts, including the new row copy and conversion routines, 0 mismatches. Map open/close leaves every visible background cell identical to a run without the map in all four districts.
+- Title: while the title is shown, 69 of the core scene's 77 bank-1 tiles are borrowed; after pressing A all 77 match the scene's tileset again.
+- Screens captured in the emulator: title, driving HUD with compass, pause menu, dispatch board, job HUD, TTC timetable, waiting and riding HUD, result. A gull crossed the High Park view during a 1,500-frame sample.
+- Not verified: hardware or cartridge display (including how the first window row looks on hardware; PyBoy hides its top pixel row at WY 0), plugin build, human readability review of the new font and icons.
+
 ## Performance, city art, props and visible transit — candidate, 2026-10-06
 
 Built in a Linux cloud session with GB Studio CLI 4.3.2 (`ccb891b2…`, built from source with Node.js 22.22.0), GBDK 4.5.0 (Linux), Python 3.11.15, Pillow 12.1.1 and PyBoy 2.7.0. The plugin was not available there, so this is CLI build and PyBoy emulator evidence only; it is not plugin, streamed-device or cartridge evidence.

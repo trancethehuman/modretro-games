@@ -4,6 +4,10 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 **Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, 211 buildings, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
 
+![Title screen](docs/screenshots/title-screen.png) ![Driving HUD](docs/screenshots/driving-hud.png) ![Pause menu](docs/screenshots/pause-menu.png)
+
+Development build: original title, HUD and menu art; unmodified PyBoy frames ([provenance](docs/screenshots/provenance.json)).
+
 ![Native city atlas](docs/screenshots/city-atlas.png)
 
 Unmodified Prototype5 native emulator frame; [provenance](docs/screenshots/provenance.json).

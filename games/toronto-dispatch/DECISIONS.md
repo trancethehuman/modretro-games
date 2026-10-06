@@ -123,6 +123,8 @@ User direction: dress up the plain menus with good Game Boy menu art, improve th
 - Implemented: pause menu, dispatch board, TTC timetable, result and title screens use framed cards with icons; the menu cursor and title prompt animate. The UI palette (BG slot 7) becomes paper, amber, red and ink; the city map keeps its original colours by swapping them in while it is open.
 - Implemented: the title screen shows an original dusk skyline with the CN Tower, Rogers Centre dome and a 16x16-letter logo. It borrows the atlas-owned bank-1 tiles while the full-screen title hides the city and restores the scene tiles on entry.
 - Implemented: the HUD shows icons for money, vehicle, progress, deadline and condition, button glyphs for its hints, and a compass arrow in the street row that points to the job beacon (a ring when close). Only the compass cell repaints between HUD updates.
+- Implemented: during a job's last ten seconds the HUD clock flashes red each second.
+- Implemented (user direction: keep the city lively): an ambient herring gull glides across the view every 10 to 18 seconds using the last free actor slot. It is decorative only; with it the worst case is exactly 40 hardware sprites.
 - Unchanged: controls, menu order and actions, text meaning, timers, saves and the map's behaviour.
 
 ## Working defaults and pending proposals

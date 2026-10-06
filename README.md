@@ -28,6 +28,12 @@ Current source adds a [501 Queen game service](games/toronto-dispatch/docs/STREE
 
 Remaining seam lanes and western/eastern jobs, crowded-scene performance, full former-Toronto coverage, measured two-hour gameplay and physical cartridge checks remain pending. The Queen service is a representative normal-corridor game abstraction; current diversions, the full 501 route, King 504 and the wider TTC network are not implemented. Preview/browser state also needs confirmation. See [build instructions](games/toronto-dispatch/docs/BUILD.md), [build-specific evidence](games/toronto-dispatch/TESTING.md), [western geography](games/toronto-dispatch/docs/WEST_DISTRICT.md), [eastern geography](games/toronto-dispatch/docs/EAST_DISTRICT.md) and the broader [Old Toronto expansion proposal](games/toronto-dispatch/docs/OLD_TORONTO_EXPANSION.md). The proposed 2026 map era has not been adopted.
 
+The current development branch adds a 60-update-per-second engine, an original menu/HUD art set and title screen, curbside knock-over props, ambient gulls and visible scheduled buses, streetcars and ferries; see the [testing record](games/toronto-dispatch/TESTING.md) for its emulator-only evidence.
+
+![Title screen](games/toronto-dispatch/docs/screenshots/title-screen.png) ![Driving HUD](games/toronto-dispatch/docs/screenshots/driving-hud.png) ![Pause menu](games/toronto-dispatch/docs/screenshots/pause-menu.png)
+
+Unmodified PyBoy frames of the development build; [provenance](games/toronto-dispatch/docs/screenshots/provenance.json).
+
 ![Native city atlas](games/toronto-dispatch/docs/screenshots/city-atlas.png)
 
 Unmodified Prototype5 emulator frame; [provenance](games/toronto-dispatch/docs/screenshots/provenance.json).

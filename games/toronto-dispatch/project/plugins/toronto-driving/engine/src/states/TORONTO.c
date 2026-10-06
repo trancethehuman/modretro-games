@@ -341,6 +341,31 @@ static void td_props_present(void){
     }
     td_prop_dirty=0;
 }
+/* Ambient herring gull: every so often one glides across the view, wings
+ * beating, purely decorative (no collision, no state saved). It uses the
+ * last actor slot; with it the worst case is exactly 40 hardware sprites. */
+static UBYTE td_gull_life,td_gull_west;static UWORD td_gull_u,td_gull_v,td_gull_wait;
+static void td_gull_present(UBYTE frames){
+    actor_t *a=&actors[TD_ACTOR_GULL];
+    if(!td_gull_life){
+        /* Next gull 10..18 seconds after the last one left. */
+        if(td_gull_wait>frames){td_gull_wait-=frames;a->flags|=ACTOR_FLAG_HIDDEN;return;}
+        td_gull_wait=600+((sys_time>>1)&511);
+        td_gull_west=(sys_time>>3)&1;td_gull_life=210;
+        td_gull_u=(td.u>>4)+(td_gull_west?96:-96);td_gull_v=(td.v>>4)-60+((sys_time>>5)&31);
+    }
+    if(frames>td_gull_life)frames=td_gull_life;
+    td_gull_life-=frames;
+    /* 1.5 px per frame with a slow rise and fall. */
+    while(frames--){
+        if(td_gull_west)td_gull_u-=1+(td_tick&1);else td_gull_u+=1+(td_tick&1);
+        if(!(td_gull_life&15))td_gull_v+=(td_gull_life&16)?1:-1;
+    }
+    if(!td_gull_life||td_gull_u>4000||td_gull_v>4000){td_gull_life=0;a->flags|=ACTOR_FLAG_HIDDEN;return;}
+    td_position(a,td_gull_u,td_gull_v);
+    td_frame(a,(td_gull_west?TD_FRAME_GULL_W:TD_FRAME_GULL_E)+((td_tick>>3)&1));
+    a->flags&=~ACTOR_FLAG_HIDDEN;
+}
 static UBYTE td_board_current_window(void){
     UBYTE fare;
     if(!td_transit_valid(td.transit_origin,td.transit_target)||td_transit_departure(td.transit_origin,td.transit_target,td.seconds))return FALSE;
@@ -1607,7 +1632,7 @@ void toronto_init(void) BANKED {
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?32:(td.vehicle<<3)+(((td.heading+1)&15)>>1));td_traffic_present();td_pedestrians();
-    td_street_reset();td_transit_present(0);td_props_present();
+    td_street_reset();td_transit_present(0);td_props_present();td_gull_life=0;td_gull_wait=300;td_gull_present(0);
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=-16;camera_deadzone_x=8;camera_deadzone_y=8;
     if(cold)td_audio_init();td_ui_init();
 }
@@ -1639,7 +1664,7 @@ void toronto_update(void) BANKED {
         td_traffic_step();
     }
     if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
-    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_traffic_present();td_pedestrians();td_transit_present(motion);td_props_present();}
+    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_traffic_present();td_pedestrians();td_transit_present(motion);td_props_present();td_gull_present(motion);}
     if(!(td_tick&7))td_ui_compass();
     td_position(&PLAYER,td.u>>4,td.v>>4);
     td_sound_update();
