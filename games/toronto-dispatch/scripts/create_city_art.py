@@ -90,9 +90,8 @@ def main(check=False):
         elif style==1: # brick apartment courtyard
             box(x+8,y+8,max(8,w-16),8,1)
             for wx in range(x+8,x+w-8,8):box(wx,y+12,4,2,3)
-        elif style==2: # pitched roof row house
-            d.line((x+w//2,y+4,x+w//2,y+h-roof-4),fill=COLORS[0],width=2)
-            box(x+4,y+8,4,4,1)
+        elif style==2: # detached gable-roofed house
+            city_kit.gable_house(d,box,x,y,w,h,roof,COLORS)
         elif style==3: # stepped Art Deco / civic terraces
             d.rectangle((x+8,y+8,x+w-9,y+h-roof-7),outline=COLORS[3])
             box(x+w//2-4,y+8,8,8,1)
@@ -105,14 +104,23 @@ def main(check=False):
         # Slot 6 is the vegetation palette; wide warehouses use brick terracotta.
         slot=1 if style==5 else 1+style
         attr(x,y,w+8,h+8,slot,True,avoid_road=True)
-        # Raised north roof lip over an 8-pixel footpath; correct CGB occlusion.
-        box(x,y-8,w,8,2);d.line((x,y-8,x+w-1,y-8),fill=COLORS[0]);attr(x,y-8,w,8,slot,True,avoid_road=True)
-        blocks.append({'x':x,'y':y,'width':w,'depth':h,'height':roof,'style':style,'landmark':label})
+        # Raised north roof lip over the footpath; correct CGB occlusion. Towers
+        # rise further: their upper floors overhang the near half of the street,
+        # so walkers and cars on that side pass behind them. The lightest shade
+        # is BG colour 0, which never covers sprites, so the overhang avoids it.
+        lip=24 if tall and style in (3,4) and h>=40 else 8
+        box(x,y-lip,w,lip,2);d.line((x,y-lip,x+w-1,y-lip),fill=COLORS[0])
+        if lip>8:city_kit.tower_crown(d,box,x,y,w,lip,style,COLORS)
+        attr(x,y-lip,w,lip,slot,True,avoid_road=lip==8)
+        blocks.append({'x':x,'y':y,'width':w,'depth':h,'height':roof,'style':style,'landmark':label,'overhang':lip})
     for ci in range(len(COLS)-1):
         for ri in range(len(ROWS)-1):
             left,right=COLS[ci]+32,COLS[ci+1]-32;top,bottom=ROWS[ri]+32,ROWS[ri+1]-32
             if right-left<16 or bottom-top<16 or (left<912 and right>872):continue
             style=(ci*3+ri)%6
+            # The northern blocks are a residential street of detached houses;
+            # towers and civic blocks keep to the rows further south.
+            if ri==0:style=2
             if right-left<16 or bottom-top<16:continue
             width=32 if right-left>=80 else 24 if right-left>=56 else (right-left)//8*8
             width=min(width,48)

@@ -26,7 +26,7 @@
       "collision_encoding_sha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92",
       "collision_bytes_sha256": "081c14a28c866c8d7285f1697ac3ecff3d5429f18a2c6e321e351be0ffaec5d8",
       "art_metadata": "content/city_art.json",
-      "art_metadata_sha256": "9442d753efed978c92ff0d824381aa74875f25ecfa3e3e59e504da7645a0a840"
+      "art_metadata_sha256": "0ef4bc456a3d319c0631786dfc28614c5c93a691e2229713756b8ab2fd1d1961"
     },
     {
       "district": 1,
@@ -35,7 +35,7 @@
       "collision_encoding_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e",
       "collision_bytes_sha256": "ab4d0215477aa433df3824a4b3131b193bea42ba3ea8c837f10f69e936a56891",
       "art_metadata": "content/districts/west_art.json",
-      "art_metadata_sha256": "1062d638c7966d8ae90ecbfb4cc97011ff54f38899169312d3f5e7a9d3262aea"
+      "art_metadata_sha256": "ced45cb5b98a533e9428a7da425898b139efc2b81b655d57292503538f80c157"
     },
     {
       "district": 2,
@@ -44,7 +44,7 @@
       "collision_encoding_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c",
       "collision_bytes_sha256": "4c89e9ff15874e740988156e2f0f0786ec98ccefce83437963718055115b4de4",
       "art_metadata": "content/districts/high_park_art.json",
-      "art_metadata_sha256": "eb35dc3a67a4f0fc8632db8c07c5eabdd49a15177684ce16f84dc615816347a5"
+      "art_metadata_sha256": "73f11a6aa06d298e2d3917416bf242d18c95e1fb4d78e2cd84bc4e771d282472"
     },
     {
       "district": 3,
@@ -53,7 +53,7 @@
       "collision_encoding_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71",
       "collision_bytes_sha256": "82e17ec7bd893e6e503103e80e1f8eb77e26e3e104a8f823a1100226ffe1af48",
       "art_metadata": "content/districts/east_art.json",
-      "art_metadata_sha256": "a1d1f70717c7e3ee3909cb752025d26dcb8df9fc722ce466192c334f361ee3fe"
+      "art_metadata_sha256": "1bbc66a72d11bdfe6e3022b40448beb5bd4e12ca21e1270790786c044fa13215"
     }
   ],
   "districts": [

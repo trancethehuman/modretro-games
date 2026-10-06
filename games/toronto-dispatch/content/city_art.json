@@ -71,8 +71,9 @@
       "width": 24,
       "depth": 40,
       "height": 8,
-      "style": 0,
-      "landmark": null
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -80,8 +81,9 @@
       "width": 24,
       "depth": 40,
       "height": 8,
-      "style": 0,
-      "landmark": null
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -90,7 +92,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -99,7 +102,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -108,7 +112,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -117,7 +122,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -126,7 +132,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -135,7 +142,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -144,7 +152,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -153,7 +162,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -162,7 +172,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 144,
@@ -171,7 +182,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 112,
@@ -180,7 +192,8 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -189,25 +202,28 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 240,
       "y": 96,
       "width": 24,
       "depth": 40,
-      "height": 16,
-      "style": 3,
-      "landmark": null
+      "height": 8,
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 272,
       "y": 96,
       "width": 24,
       "depth": 40,
-      "height": 16,
-      "style": 3,
-      "landmark": null
+      "height": 8,
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -216,7 +232,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 272,
@@ -225,7 +242,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 240,
@@ -234,7 +252,8 @@
       "depth": 40,
       "height": 8,
       "style": 5,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -243,7 +262,8 @@
       "depth": 40,
       "height": 8,
       "style": 5,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -252,7 +272,8 @@
       "depth": 24,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -261,7 +282,8 @@
       "depth": 24,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -270,7 +292,8 @@
       "depth": 24,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -279,7 +302,8 @@
       "depth": 24,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -288,7 +312,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -297,7 +322,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -306,7 +332,8 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -315,7 +342,8 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -323,8 +351,9 @@
       "width": 32,
       "depth": 40,
       "height": 8,
-      "style": 0,
-      "landmark": null
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 408,
@@ -332,8 +361,9 @@
       "width": 32,
       "depth": 40,
       "height": 8,
-      "style": 0,
-      "landmark": null
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -342,7 +372,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 408,
@@ -351,7 +382,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -360,7 +392,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 408,
@@ -369,7 +402,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -378,7 +412,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 408,
@@ -387,7 +422,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -396,7 +432,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 408,
@@ -405,7 +442,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -414,7 +452,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 408,
@@ -423,7 +462,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 368,
@@ -432,7 +472,8 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 408,
@@ -441,16 +482,18 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
       "y": 96,
       "width": 16,
       "depth": 40,
-      "height": 16,
+      "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
@@ -459,7 +502,8 @@
       "depth": 40,
       "height": 16,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
@@ -468,7 +512,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
@@ -477,7 +522,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
@@ -486,7 +532,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
@@ -495,7 +542,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 512,
@@ -504,7 +552,8 @@
       "depth": 16,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -513,7 +562,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -522,7 +572,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -531,7 +582,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -540,7 +592,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -549,7 +602,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -558,7 +612,8 @@
       "depth": 40,
       "height": 16,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -567,16 +622,18 @@
       "depth": 16,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
       "y": 96,
       "width": 16,
       "depth": 40,
-      "height": 16,
+      "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -585,7 +642,8 @@
       "depth": 40,
       "height": 16,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -594,7 +652,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -603,7 +662,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -612,7 +672,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -621,7 +682,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -630,7 +692,8 @@
       "depth": 16,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -638,8 +701,9 @@
       "width": 32,
       "depth": 40,
       "height": 8,
-      "style": 0,
-      "landmark": null
+      "style": 2,
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -648,7 +712,8 @@
       "depth": 40,
       "height": 8,
       "style": 1,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -657,7 +722,8 @@
       "depth": 40,
       "height": 8,
       "style": 2,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -666,7 +732,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -675,7 +742,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -684,7 +752,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": null
+      "landmark": null,
+      "overhang": 24
     },
     {
       "x": 752,
@@ -693,7 +762,8 @@
       "depth": 16,
       "height": 8,
       "style": 0,
-      "landmark": null
+      "landmark": null,
+      "overhang": 8
     },
     {
       "x": 368,
@@ -702,7 +772,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": "Union Station colonnade"
+      "landmark": "Union Station colonnade",
+      "overhang": 8
     },
     {
       "x": 752,
@@ -711,7 +782,8 @@
       "depth": 24,
       "height": 8,
       "style": 1,
-      "landmark": "St Lawrence Market"
+      "landmark": "St Lawrence Market",
+      "overhang": 8
     },
     {
       "x": 848,
@@ -720,7 +792,8 @@
       "depth": 24,
       "height": 8,
       "style": 5,
-      "landmark": "Distillery warehouses"
+      "landmark": "Distillery warehouses",
+      "overhang": 8
     },
     {
       "x": 512,
@@ -729,7 +802,8 @@
       "depth": 40,
       "height": 16,
       "style": 3,
-      "landmark": "City Hall civic block"
+      "landmark": "City Hall civic block",
+      "overhang": 24
     },
     {
       "x": 400,
@@ -738,7 +812,8 @@
       "depth": 40,
       "height": 16,
       "style": 4,
-      "landmark": "Royal Ontario Museum"
+      "landmark": "Royal Ontario Museum",
+      "overhang": 24
     },
     {
       "x": 368,
@@ -747,7 +822,8 @@
       "depth": 56,
       "height": 16,
       "style": 3,
-      "landmark": "Art Gallery of Ontario"
+      "landmark": "Art Gallery of Ontario",
+      "overhang": 24
     },
     {
       "x": 744,
@@ -756,7 +832,8 @@
       "depth": 24,
       "height": 8,
       "style": 1,
-      "landmark": "Gooderham Flatiron"
+      "landmark": "Gooderham Flatiron",
+      "overhang": 8
     },
     {
       "x": 480,
@@ -765,7 +842,8 @@
       "depth": 24,
       "height": 8,
       "style": 3,
-      "landmark": "Hanlans service pavilion"
+      "landmark": "Hanlans service pavilion",
+      "overhang": 8
     },
     {
       "x": 664,
@@ -774,7 +852,8 @@
       "depth": 24,
       "height": 8,
       "style": 0,
-      "landmark": "Centre Island pavilion"
+      "landmark": "Centre Island pavilion",
+      "overhang": 8
     },
     {
       "x": 872,
@@ -783,7 +862,8 @@
       "depth": 24,
       "height": 8,
       "style": 2,
-      "landmark": "Wards Island cottages"
+      "landmark": "Wards Island cottages",
+      "overhang": 8
     }
   ],
   "canopies": [

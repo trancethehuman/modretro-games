@@ -115,6 +115,15 @@ def render():
         if not landmark and any(overlap(footprint,r) for r in reserved):return False
         return all(not walk.getpixel((tx*8+4,ty*8+4)) and collisions[i]!=15 for tx,ty,i in cells(*footprint))
 
+    def crown(x,y,w,h,style):
+        # Towers rise over open street to their north: the upper floors take
+        # priority over the road too, so traffic and walkers pass behind them.
+        if style not in (3,4) or h<32 or y<40:return 8
+        if any(collisions[i]==15 for _,_,i in cells(x,y-24,w,16)):return 8
+        city_kit.tower_crown(d,box,x,y,w,24,style,COLORS)
+        for _,_,i in cells(x,y-24,w,16):attrs[i]=(1 if style==5 else style+1)|128
+        return 24
+
     def building(x,y,w,h,style,kind=None,name=None):
         assert may_build(x,y,w,h,landmark=bool(name)),(name,x,y,w,h)
         roof=16 if style in (3,4) and h>=40 else 8
@@ -131,8 +140,7 @@ def render():
         elif style==1:
             box(x+8,y+8,max(8,w-16),8,1)
             for wx in range(x+8,x+w-8,8):box(wx,y+12,4,2,3)
-        elif style==2:
-            d.line((x+w//2,y+4,x+w//2,y+h-roof-4),fill=COLORS[0],width=2);box(x+4,y+8,4,4,1)
+        elif style==2:city_kit.gable_house(d,box,x,y,w,h,roof,COLORS)
         elif style==3:d.rectangle((x+8,y+8,x+w-9,y+h-roof-7),outline=COLORS[3])
         elif style==4:
             for wx in range(x+8,x+w-8,8):d.line((wx,y+4,wx,y+h-roof-4),fill=COLORS[3])
@@ -154,7 +162,8 @@ def render():
         city_kit.roof_details(d,box,x,y,w,h,roof,city_kit.seed_of("east",x,y),COLORS)
         # Slot 6 is the vegetation palette; wide work sheds use brick terracotta.
         solid(x,y,w,h);attr(x,y-8,w+8,h+16,1 if style==5 else style+1,True)
-        blocks.append({"x":x,"y":y,"width":w,"depth":h,"height":roof,"style":style,"landmark":name,"kind":kind})
+        lip=crown(x,y,w,h,style)
+        blocks.append({"x":x,"y":y,"width":w,"depth":h,"height":roof,"style":style,"landmark":name,"kind":kind,"overhang":lip})
 
     for landmark in EAST["landmarks"]:
         building(landmark["x"],landmark["y"],landmark["width"],landmark["depth"],landmark["style"],landmark["kind"],landmark["name"])

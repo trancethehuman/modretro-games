@@ -127,6 +127,55 @@ User direction: dress up the plain menus with good Game Boy menu art, improve th
 - Implemented (user direction: keep the city lively): an ambient herring gull glides across the view every 10 to 18 seconds using the last free actor slot. It is decorative only; with it the worst case is exactly 40 hardware sprites.
 - Unchanged: controls, menu order and actions, text meaning, timers, saves and the map's behaviour.
 
+## Accepted GTA-style street life and stash migration — 2026-10-06
+
+The user found the main-branch build's driving poor (the car could spin while
+stopped), collisions ineffective, pop-in of street objects, and no weapons. They
+asked for a GTA-like city at 50–60 FPS: punches and better use of A/B, officers
+walking the streets, varied houses and taller buildings to pass behind, a
+quest indicator, hospital recovery, arrests with fines and police that escalate
+from arrest to armed response as chaos grows. The stashed
+`codex/visible-queen-streetcar` work (its 23-point feedback list and the
+hospital/arrest/weapons decisions) is the requirement source; its art is not
+used and its gameplay was re-implemented on main's 60 Hz engine.
+
+- Driving: no yaw at rest; steering rate grows with speed and reverses when
+  backing up; throttle tapers near top speed; B stops the car before reverse
+  engages; A+B is a handbrake and, held at rest, leaves the vehicle. Cars may
+  use sidewalks and open lots (collision 16); buildings, water and rails (15)
+  stay solid. This supersedes "sidewalks are not free shortcuts".
+- Collisions: courier–vehicle impacts use mass and closing speed with
+  restitution 3/4. The struck car slides, may spin and eases back into its lane;
+  the courier keeps or loses speed accordingly and rebounds from head-on hits.
+  Traffic never drives into the courier's car. Struck pedestrians tumble through
+  the air, bounce off walls and lie down (fatal at speed); the car loses a
+  quarter of its speed per person.
+- On foot: A enters the own car, otherwise steals a nearby road vehicle (the
+  driver runs off) or punches; B uses TTC at a station, otherwise fires the
+  pistol (12 rounds to start). Pause "Supplies $20" refills 12 rounds and heals;
+  progress keeps auto-saving.
+- Police: a quarter of walkers are capped officers and one road slot is a patrol
+  car. Witnessed crimes raise stars up to a ceiling by severity (scuffle 1,
+  gunfire 2, killings and attacks on officers more); unseen chaos still adds
+  stars. One star cools per 20 s out of sight. Up to two stars officers and the
+  patrol car arrest on contact: $50 per star (cash floor zero), half the ammo
+  confiscated, any job lost. From three stars the patrol car holds off and armed
+  officers shoot; zero vitality shows WASTED and recovery at the core hospital
+  forecourt (504,344) for up to $100.
+- Presentation: on-screen objective pointer at the view edge, bobbing beacon
+  when in view; HUD stars, vitality and ammo; new walkers and curb props only
+  appear outside the camera. Ten core, six West, nine High Park and five East
+  towers have 24-px upper floors overhanging the street with BG priority;
+  the northern core row is detached gable-roofed houses. Footprints and
+  collisions are unchanged.
+- Save v7 keeps the 58-byte layout: vitality, ammo, stars and heat replace the
+  unused v6 atlas-cursor words; v4–v6 records migrate with full vitality, 12
+  rounds and no stars.
+- Not migrated from the stash yet: controllable boats, shop interiors, fire and
+  ambulance traffic, parked-car lots, social pedestrian pairs, police
+  helicopter, story chapters and the extra districts. The actor sprite sheet
+  uses 122 of its 128 VRAM tiles.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.
@@ -134,7 +183,7 @@ User direction: dress up the plain menus with good Game Boy menu art, improve th
 - Fictional dispatch company, fictional pickup businesses, and original landmark artwork.
 - One car and three package jobs for the first playable milestone, followed by the other vehicles and passenger jobs.
 - Straight north-up pixel artwork and matching native collision grid, with CGB background priority for roofs and canopies.
-- Implemented controls: left/right steer the vehicle; A accelerates; B brakes and reverses near rest; Select interacts at pickup/drop-off; Start pauses. On foot, the D-pad walks, A enters the nearby parked car and B opens transit. Handheld comfort still needs human playtesting.
+- Implemented controls: left/right steer the moving vehicle; A accelerates; B brakes, then reverses after a short hold at rest; A+B is a handbrake and, held at rest, leaves the vehicle; Select interacts at pickup/drop-off; Start pauses. On foot, the D-pad walks; A enters the parked car, steals a nearby road vehicle or punches; B opens transit at a station or fires the pistol. Handheld comfort still needs human playtesting.
 - A documented baseline transit map rather than changing live detours. The map era is not yet selected.
 - The [researched expansion plan](docs/OLD_TORONTO_EXPANSION.md) proposes 17 linked native districts and a 2026 map baseline. That full layout remains a proposal; the historical three-scene prototype and four-scene milestone use their own compressed layouts. The user has not adopted the proposed era; full Old Toronto, its waterfront and Islands are the accepted scope.
 

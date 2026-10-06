@@ -750,7 +750,8 @@
       "height": 8,
       "style": 5,
       "landmark": "Roncesvalles Carhouse",
-      "kind": "carhouse"
+      "kind": "carhouse",
+      "overhang": 8
     },
     {
       "x": 432,
@@ -760,7 +761,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 48,
@@ -770,7 +772,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 96,
@@ -780,7 +783,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 192,
@@ -790,7 +794,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 288,
@@ -800,7 +805,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 624,
@@ -810,7 +816,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -820,7 +827,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 720,
@@ -830,7 +838,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 960,
@@ -840,7 +849,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 624,
@@ -850,7 +860,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 672,
@@ -860,7 +871,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -870,7 +882,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -880,7 +893,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -890,7 +904,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -900,7 +915,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 96,
@@ -910,7 +926,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 192,
@@ -920,7 +937,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 288,
@@ -930,7 +948,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -940,7 +959,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 96,
@@ -950,7 +970,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 144,
@@ -960,7 +981,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 192,
@@ -970,7 +992,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 240,
@@ -980,7 +1003,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 288,
@@ -990,7 +1014,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 336,
@@ -1000,7 +1025,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -1010,7 +1036,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 96,
@@ -1020,7 +1047,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 192,
@@ -1030,7 +1058,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 288,
@@ -1040,7 +1069,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 384,
@@ -1050,7 +1080,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -1060,7 +1091,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 144,
@@ -1070,7 +1102,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 240,
@@ -1080,7 +1113,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 336,
@@ -1090,7 +1124,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 864,
@@ -1100,7 +1135,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 912,
@@ -1110,7 +1146,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     }
   ],
   "canopies": [
@@ -1259,24 +1296,6 @@
       16
     ],
     [
-      408,
-      16,
-      16,
-      16
-    ],
-    [
-      440,
-      16,
-      16,
-      16
-    ],
-    [
-      472,
-      16,
-      16,
-      16
-    ],
-    [
       536,
       16,
       16,
@@ -1367,19 +1386,25 @@
       16
     ],
     [
+      408,
+      32,
+      16,
+      16
+    ],
+    [
+      472,
+      24,
+      16,
+      16
+    ],
+    [
       736,
       48,
       16,
       16
     ],
     [
-      408,
-      40,
-      16,
-      16
-    ],
-    [
-      472,
+      480,
       48,
       16,
       16
@@ -1487,26 +1512,38 @@
       16
     ],
     [
+      592,
+      144,
+      16,
+      16
+    ],
+    [
       624,
-      152,
+      144,
+      16,
+      16
+    ],
+    [
+      656,
+      144,
       16,
       16
     ],
     [
       688,
-      152,
+      144,
       16,
       16
     ],
     [
       720,
-      152,
+      144,
       16,
       16
     ],
     [
       752,
-      152,
+      144,
       16,
       16
     ],
@@ -1519,6 +1556,60 @@
     [
       832,
       184,
+      16,
+      16
+    ],
+    [
+      592,
+      168,
+      16,
+      16
+    ],
+    [
+      616,
+      168,
+      16,
+      16
+    ],
+    [
+      640,
+      168,
+      16,
+      16
+    ],
+    [
+      712,
+      168,
+      16,
+      16
+    ],
+    [
+      736,
+      168,
+      16,
+      16
+    ],
+    [
+      944,
+      176,
+      16,
+      16
+    ],
+    [
+      944,
+      200,
+      16,
+      16
+    ],
+    [
+      944,
+      224,
+      16,
+      16
+    ],
+    [
+      992,
+      168,
       16,
       16
     ],
@@ -1573,24 +1664,6 @@
     [
       592,
       224,
-      16,
-      16
-    ],
-    [
-      944,
-      192,
-      16,
-      16
-    ],
-    [
-      944,
-      216,
-      16,
-      16
-    ],
-    [
-      944,
-      240,
       16,
       16
     ],
@@ -18545,11 +18618,11 @@
     "solid": 15
   },
   "background_filename": "toronto_west.png",
-  "background_sha256": "d5f12b307a1c5fc8aea80e397e5772ffcae70f411f2f28e96a5596a2200480f8",
+  "background_sha256": "180ad1d9d069fabee486c09a0f78e36ab0f7536618e35afd307909d296818c78",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 241,
-    "flip_canonical_unique_tiles": 210,
+    "raw_unique_tiles": 256,
+    "flip_canonical_unique_tiles": 223,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
     "traffic_swept_all_overlapped_tiles_clear": true,

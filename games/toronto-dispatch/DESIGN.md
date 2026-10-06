@@ -14,6 +14,12 @@ Prototype fixed-point values and a stable simulation tick after checking the eng
 
 Collision slows or stops the vehicle, applies a bounded time/cargo penalty, and offers recovery if stuck. Avoid rewarding repeated collisions or leaving the player trapped. Mission timeout must return the player to free roaming with a retry option.
 
+## Street life
+
+The city plays as a GTA-style sandbox around the courier work (accepted 2026-10-06; see [DECISIONS.md](DECISIONS.md)). Vehicles collide with momentum transfer and visible push, spin and rebound; struck pedestrians are thrown and fall without graphic detail. On foot the courier can punch, fire a pistol and steal road vehicles. Police attention is shown as stars and grows with witnessed crimes and accumulated chaos: low levels bring arrests and fines, higher levels armed officers; running out of vitality ends at the hospital. An edge-of-screen pointer leads to the active objective. Tall downtown buildings overhang the street so walkers and cars pass behind them; footprints and collisions stay matched to the ground floor.
+
+Engine split: `td_life.c` (pedestrians, police, arrest/hospital), `td_drive.c` (vehicle handling, impacts, on-foot actions) and `td_life_draw.c` (presentation). Native SM83 kernels in `TORONTO.c` skip slots those modules own; street life runs once per rendered update so catch-up steps never cascade.
+
 ## Traffic and environment
 
 Traffic follows authored lanes and respects signals. Intersections have a readable signal phase. The prototype has continuous road loops and a bus proxy; moving streetcars and full researched transit geometry remain planned. Streetcars should become larger obstacles on their own corridors, with a stopped boarding phase teaching the player to wait. Other planned obstacles include construction, parked vehicles, narrow passages, and crossings.

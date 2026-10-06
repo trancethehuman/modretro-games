@@ -124,6 +124,58 @@ def roof_details(d, box, x, y, w, h, roof, seed, colors):
         d.point((left + 1, bottom - 5), fill=colors[3])
 
 
+def gable_house(d, box, x, y, w, h, roof, colors):
+    """Detached house seen from above: lit and shaded roof slopes with a dark
+    ridge along the longer side, shingle courses, a chimney, and a front wall
+    (the bottom `roof` pixels) with a porch door and windows."""
+    bottom = y + h - roof
+    if w <= h - roof:  # ridge runs north-south along the deep side
+        mid = x + w // 2
+        box(x + 1, y + 1, mid - x - 1, bottom - y - 1, 3)
+        box(mid, y + 1, x + w - 1 - mid, bottom - y - 1, 2)
+        for yy in range(y + 4, bottom - 1, 4):
+            d.line((x + 2, yy, mid - 2, yy), fill=colors[2])
+            d.line((mid + 1, yy, x + w - 3, yy), fill=colors[1])
+        d.line((mid, y + 1, mid, bottom - 1), fill=colors[0])
+    else:  # ridge runs east-west: north slope lit, south slope shaded
+        mid = y + (bottom - y) // 2
+        box(x + 1, y + 1, w - 2, mid - y - 1, 3)
+        box(x + 1, mid, w - 2, bottom - mid, 2)
+        for xx in range(x + 4, x + w - 2, 4):
+            d.line((xx, y + 2, xx, mid - 2), fill=colors[2])
+            d.line((xx, mid + 1, xx, bottom - 2), fill=colors[1])
+        d.line((x + 1, mid, x + w - 2, mid), fill=colors[0])
+    box(x + w - 7, y + 3, 3, 4, 0)
+    box(x, bottom, w, roof, 1)
+    d.line((x, bottom, x + w - 1, bottom), fill=colors[0])
+    box(x + w // 2 - 2, y + h - 6, 4, 6, 0)
+    box(x + w // 2 - 3, y + h - 1, 6, 1, 3)
+    if w >= 16:
+        box(x + 2, bottom + 2, 3, 3, 3)
+        box(x + w - 5, bottom + 2, 3, 3, 3)
+
+
+def tower_crown(d, box, x, y, w, lip, style, colors):
+    """Upper floors of a tall building drawn `lip` pixels north of its
+    footprint at y. They overhang the street and carry BG priority, so
+    walkers and cars on that side pass behind the building. The lightest
+    shade is BG colour 0, which never covers sprites, so it is avoided."""
+    box(x, y - lip, w, lip, 2)
+    d.line((x, y - lip, x + w - 1, y - lip), fill=colors[0])
+    d.line((x, y - lip, x, y - 1), fill=colors[0])
+    d.line((x + w - 1, y - lip, x + w - 1, y - 1), fill=colors[0])
+    if style == 4:  # glass curtain wall: floor lines and mullions
+        for yy in range(y - lip + 4, y, 4):
+            d.line((x + 1, yy, x + w - 2, yy), fill=colors[1])
+        for xx in range(x + 4, x + w - 1, 4):
+            d.line((xx, y - lip + 1, xx, y - 1), fill=colors[1])
+    else:  # Art Deco setback crown and piers
+        box(x + 4, y - lip + 1, w - 8, 5, 1)
+        d.line((x + 6, y - lip + 3, x + w - 7, y - lip + 3), fill=colors[0])
+        for xx in range(x + 3, x + w - 2, 6):
+            d.line((xx, y - lip + 7, xx, y - 1), fill=colors[1])
+
+
 def tree(d, x, y, colors, variant=0):
     """16x16 canopy seen from above; tile-aligned so trees share patterns."""
     d.ellipse((x, y, x + 15, y + 15), fill=colors[1], outline=colors[0])

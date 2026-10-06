@@ -684,7 +684,8 @@
       "height": 8,
       "style": 1,
       "landmark": "Danforth Music Hall",
-      "kind": "music_hall"
+      "kind": "music_hall",
+      "overhang": 8
     },
     {
       "x": 64,
@@ -694,7 +695,8 @@
       "height": 8,
       "style": 1,
       "landmark": "Opera House",
-      "kind": "theatre"
+      "kind": "theatre",
+      "overhang": 8
     },
     {
       "x": 856,
@@ -704,7 +706,8 @@
       "height": 8,
       "style": 2,
       "landmark": "Ashbridge Estate house",
-      "kind": "heritage_house"
+      "kind": "heritage_house",
+      "overhang": 8
     },
     {
       "x": 424,
@@ -714,7 +717,8 @@
       "height": 8,
       "style": 5,
       "landmark": "Carlaw Works",
-      "kind": "factory"
+      "kind": "factory",
+      "overhang": 8
     },
     {
       "x": 48,
@@ -724,7 +728,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 432,
@@ -734,7 +739,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -744,7 +750,8 @@
       "height": 16,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 752,
@@ -754,7 +761,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 816,
@@ -764,7 +772,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -774,7 +783,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 432,
@@ -784,7 +794,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 816,
@@ -794,7 +805,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -804,7 +816,8 @@
       "height": 16,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 112,
@@ -814,7 +827,8 @@
       "height": 16,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 48,
@@ -824,7 +838,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -834,7 +849,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 432,
@@ -844,7 +860,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -854,7 +871,8 @@
       "height": 8,
       "style": 4,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -864,7 +882,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 432,
@@ -874,7 +893,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -884,7 +904,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 720,
@@ -894,7 +915,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 880,
@@ -904,7 +926,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 944,
@@ -914,7 +937,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -924,7 +948,8 @@
       "height": 16,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 112,
@@ -934,7 +959,8 @@
       "height": 16,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 24
     },
     {
       "x": 272,
@@ -944,7 +970,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -954,7 +981,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 656,
@@ -964,7 +992,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 720,
@@ -974,7 +1003,8 @@
       "height": 8,
       "style": 0,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 880,
@@ -984,7 +1014,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 944,
@@ -994,7 +1025,8 @@
       "height": 8,
       "style": 3,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 272,
@@ -1004,7 +1036,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 592,
@@ -1014,7 +1047,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 48,
@@ -1024,7 +1058,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 112,
@@ -1034,7 +1069,8 @@
       "height": 8,
       "style": 5,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 752,
@@ -1044,7 +1080,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 816,
@@ -1054,7 +1091,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 880,
@@ -1064,7 +1102,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 944,
@@ -1074,7 +1113,8 @@
       "height": 8,
       "style": 1,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 432,
@@ -1084,7 +1124,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 496,
@@ -1094,7 +1135,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 560,
@@ -1104,7 +1146,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 624,
@@ -1114,7 +1157,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     },
     {
       "x": 688,
@@ -1124,7 +1168,8 @@
       "height": 8,
       "style": 2,
       "landmark": null,
-      "kind": null
+      "kind": null,
+      "overhang": 8
     }
   ],
   "canopies": [
@@ -1333,6 +1378,18 @@
       16
     ],
     [
+      576,
+      104,
+      16,
+      16
+    ],
+    [
+      576,
+      136,
+      16,
+      16
+    ],
+    [
       984,
       96,
       16,
@@ -1401,18 +1458,6 @@
     [
       480,
       160,
-      16,
-      16
-    ],
-    [
-      576,
-      112,
-      16,
-      16
-    ],
-    [
-      576,
-      144,
       16,
       16
     ],
@@ -1543,20 +1588,8 @@
       16
     ],
     [
-      104,
-      176,
-      16,
-      16
-    ],
-    [
-      136,
-      176,
-      16,
-      16
-    ],
-    [
-      168,
-      176,
+      576,
+      184,
       16,
       16
     ],
@@ -1568,37 +1601,19 @@
     ],
     [
       24,
-      184,
-      16,
-      16
-    ],
-    [
-      48,
-      184,
-      16,
-      16
-    ],
-    [
-      72,
-      184,
-      16,
-      16
-    ],
-    [
-      576,
-      184,
-      16,
-      16
-    ],
-    [
-      24,
       208,
       16,
       16
     ],
     [
-      24,
-      240,
+      88,
+      184,
+      16,
+      16
+    ],
+    [
+      160,
+      184,
       16,
       16
     ],
@@ -2005,24 +2020,6 @@
       16
     ],
     [
-      24,
-      560,
-      16,
-      16
-    ],
-    [
-      56,
-      560,
-      16,
-      16
-    ],
-    [
-      88,
-      560,
-      16,
-      16
-    ],
-    [
       264,
       560,
       16,
@@ -2071,20 +2068,26 @@
       16
     ],
     [
-      120,
-      568,
+      24,
+      576,
       16,
       16
     ],
     [
       24,
-      592,
+      600,
       16,
       16
     ],
     [
       24,
       624,
+      16,
+      16
+    ],
+    [
+      88,
+      568,
       16,
       16
     ],
@@ -2174,7 +2177,13 @@
     ],
     [
       24,
-      696,
+      656,
+      16,
+      16
+    ],
+    [
+      24,
+      688,
       16,
       16
     ],
@@ -2396,7 +2405,19 @@
     ],
     [
       24,
-      768,
+      736,
+      16,
+      16
+    ],
+    [
+      24,
+      760,
+      16,
+      16
+    ],
+    [
+      24,
+      784,
       16,
       16
     ],
@@ -18254,7 +18275,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "3cbc5eb73d91a21eac444743b43b00b2c6ad44c47ce57ea5ab6e51858d180bd2",
+  "background_sha256": "119167c5043059728c2021cd8e71d69e7711a159803b888974a2e98552fb31bf",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -19471,8 +19492,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 183,
-    "flip_canonical_unique_tiles": 152,
+    "raw_unique_tiles": 219,
+    "flip_canonical_unique_tiles": 185,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,
