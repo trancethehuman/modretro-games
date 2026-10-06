@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-06",
+  "sourceCommit": "e99bb9f",
+  "rom": {
+    "path": "project/build/toronto-dispatch-street-life-e99bb9f.gbc",
+    "sizeBytes": 524288,
+    "sha256": "b53504d318dee723d58024ac99541a39fea1a0b9f83878b0cf9bef96abadd877"
+  },
+  "build": {
+    "tool": "GB Studio CLI 4.3.2 make:rom (plugin-managed toolchain)",
+    "success": true,
+    "stackReserveBytes": 911
+  },
+  "checks": {
+    "makeCheck": "passed",
+    "emulator": "PyBoy 2.7.0 scenario and pacing samples; see TESTING.md"
+  },
+  "write": {
+    "status": "vendor-reported-success",
+    "tool": "ModRetro Chromatic plugin flash",
+    "vendorVersion": "1.2.1",
+    "elapsedMs": 47349,
+    "finishedAt": "2026-10-06T14:47:30.311Z",
+    "device": "Chromatic - Player 01",
+    "automaticRetry": false,
+    "vendorRomSha256": "b53504d318dee723d58024ac99541a39fea1a0b9f83878b0cf9bef96abadd877"
+  },
+  "physical": {
+    "coldBoot": "pending",
+    "gameplay": "pending",
+    "audio": "pending",
+    "savePersistence": "pending"
+  }
+}

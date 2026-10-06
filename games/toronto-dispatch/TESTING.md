@@ -1,5 +1,35 @@
 # Testing record
 
+## GTA-style street life and towers — installed candidate, 2026-10-06
+
+Source `e99bb9f` (street life `f881ba6` plus overhanging towers and houses).
+GB Studio CLI 4.3.2 / GBDK 4.5.0 built `project/build/toronto-dispatch-street-life-e99bb9f.gbc`:
+524,288 bytes, SHA-256 `b53504d318dee723d58024ac99541a39fea1a0b9f83878b0cf9bef96abadd877`.
+`rom_inspect` validates the header; the memory guard passes with 911 bytes of
+stack reserve. Actor sprites use 122 of 128 VRAM tiles; background patterns are
+242 (core), 210 (West), 184 (High Park) and 185 (East) of 320.
+
+- `make check` passes, including 3,493 host engine checks (20 new street-life
+  checks: car theft, punches, pistol and ammo, car strikes on walkers, crime
+  escalation, cooling, arrest fines, hospital recovery, supplies, no yaw at rest,
+  reverse steering, handbrake exit, rear-end momentum transfer and wall rebound).
+- PyBoy 2.7.0, counting completed `toronto_update` calls over 240 frames from a
+  fresh start: cruise 58.8, crash-heavy driving 55.5, walking 59.0, walking at
+  two stars 56.0, driving at two stars 55.2 and at four stars 53.0 updates per
+  second. Main `d6cbcc4` measured 59.8–60.0 on the same recipes.
+- Scripted emulator scenarios: a struck walker tumbles and lies down and the
+  car loses speed; a head-on hit pushes the other car back and rolls the
+  courier's car back; A beside a road vehicle drags its driver out and drives
+  off with it; gunfire near officers raises attention; one star ends in a $50
+  arrest with half the ammo kept; five stars bring capped officers who shoot
+  until WASTED, then recovery at the hospital forecourt for $100; a car on the
+  street north of a tower passes behind its overhang.
+- Cartridge: fresh supported discovery found one Chromatic (Player 01, no
+  diagnostics, conflicts or unmatched functions). The plugin's vendor CLI 1.2.1
+  wrote the exact ROM in 47,349 ms and reported success with the matching
+  digest. The earlier `f881ba6` ROM was written the same way first. Physical
+  cold boot, gameplay, audio and save persistence are not yet observed.
+
 ## Latest main cartridge installation, 2026-10-06
 
 Remote `main` was pulled to `d6cbcc4`; unfinished local work was preserved in a
