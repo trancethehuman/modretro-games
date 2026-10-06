@@ -4,12 +4,14 @@ No map imagery, photos, official logos or downloaded geometry are used as pixels
 The parent native workflow registers these source assets and performs ROM tests.
 """
 import hashlib
+import sys
 import json
 from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 from west_layout import DISTRICTS, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
 from streetcar_art import paint_streetcar_stops
+import city_kit
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / "project"
@@ -24,7 +26,7 @@ def paint_path(draw, points, half, fill):
         draw.rectangle((min(x1,x2)-half,min(y1,y2)-half,max(x1,x2)+half-1,max(y1,y2)+half-1), fill=fill)
 
 
-def generate(spec):
+def generate(spec,check=False):
     img = Image.new("RGB", (WIDTH,HEIGHT), COLORS[2])
     d = ImageDraw.Draw(img)
     road_mask = Image.new("1", (WIDTH,HEIGHT), 0)
@@ -97,13 +99,20 @@ def generate(spec):
                 box(x,y,8,8,3);collisions[i]=16;attrs[i]=0
             if road_mask.getpixel((x+4,y+4)):
                 box(x,y,8,8,1);collisions[i]=0;attrs[i]=0
-    # Repeated lane dashes do not introduce per-road pattern variants.
+    # Repeated lane dashes do not introduce per-road pattern variants; they
+    # stop short of junctions, which carry zebra crossings on every arm.
+    centres=city_kit.intersections_from_routes([extended_points(r,spec) for r in spec["roads"]])
     for route in spec["roads"]:
         for (x1,y1),(x2,y2) in zip(route["points"],route["points"][1:]):
             if y1==y2:
-                for px in range((min(x1,x2)//32+1)*32,max(x1,x2),32):box(px,y1,8,1,3)
+                for px in range((min(x1,x2)//32+1)*32,max(x1,x2),32):
+                    if not city_kit.near_crossing(px+4,y1,centres):box(px,y1,8,1,3)
             else:
-                for py in range((min(y1,y2)//32+1)*32,max(y1,y2),32):box(x1,py,1,8,3)
+                for py in range((min(y1,y2)//32+1)*32,max(y1,y2),32):
+                    if not city_kit.near_crossing(x1,py+4,centres):box(x1,py,1,8,3)
+    def on_road(x,y):return 0<=x<WIDTH and 0<=y<HEIGHT and road_mask.getpixel((x,y))
+    def on_walk(x,y):return 0<=x<WIDTH and 0<=y<HEIGHT and walk_mask.getpixel((x,y)) and not road_mask.getpixel((x,y))
+    city_kit.paint_crosswalks(box,on_road,on_walk,centres)
 
     reserved=[]
     for landmark in spec["landmarks"]:
@@ -152,6 +161,7 @@ def generate(spec):
             box(x+8,y+8,8,8,1)
         else:
             for wx in range(x+8,x+w-8,16):box(wx,y+8,8,8,3);box(wx,y+h-6,8,4,0)
+        city_kit.roof_details(d,box,x,y,w,h,roof,city_kit.seed_of(spec["slug"],x,y),COLORS)
         if kind=="carhouse":
             for wx in range(x+8,x+w-8,24):box(wx,y+h-16,16,12,0);box(wx+4,y+h-14,8,8,2)
         elif kind=="regency":
@@ -164,7 +174,8 @@ def generate(spec):
         elif kind=="junction":
             for wx in range(x+8,x+w-8,16):box(wx,y+2,8,3,3)
         solid(x,y,w,h)
-        attr(x,y-8,w+8,h+16,style+1,True)
+        # Slot 6 is the vegetation palette; wide work sheds use brick terracotta.
+        attr(x,y-8,w+8,h+16,1 if style==5 else style+1,True)
         blocks.append({"x":x,"y":y,"width":w,"depth":h,"height":roof,"style":style,"landmark":name,"kind":kind})
 
     for landmark in spec["landmarks"]:
@@ -224,6 +235,18 @@ def generate(spec):
     for point in spec["ports"]+spec["stop_candidates"]:
         assert (point["x"]//8,point["y"]//8) in visited,(spec["slug"],"foot unreachable",point)
 
+    # Lawns, canopy trees, parking and plazas on untouched walkable ground.
+    ground=bytes.fromhex(COLORS[2][1:])*64
+    reserved_lots=[(l["x"]-8,l["y"]-16,l["width"]+24,l["depth"]+32) for l in spec["landmarks"]]
+    def lot(tx,ty):
+        i=ty*TW+tx;x=tx*8;y=ty*8
+        if collisions[i]!=16 or attrs[i]!=6 or walk_mask.getpixel((x+4,y+4)):return False
+        if any(rx<=x+4<rx+rw and ry<=y+4<ry+rh for rx,ry,rw,rh in reserved_lots):return False
+        return img.crop((x,y,x+8,y+8)).tobytes()==ground
+    def set_attr(tx,ty,value):attrs[ty*TW+tx]=value
+    before=list(collisions)
+    canopies+=city_kit.dress_lots(d,box,TW,TH,lot,set_attr,COLORS,spec["slug"],[tuple(p["rect"]) for p in spec["parks"]])
+    assert collisions==before,"lot decoration must not change collision"
     paint_streetcar_stops(d,spec['id'],COLORS)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
@@ -232,23 +255,35 @@ def generate(spec):
             raw_patterns.add(tile.tobytes())
             variants=[tile,tile.transpose(Image.Transpose.FLIP_LEFT_RIGHT),tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM),tile.transpose(Image.Transpose.ROTATE_180)]
             patterns.add(min(v.tobytes() for v in variants))
-    assert len(patterns)<384,(spec["slug"],len(patterns))
+    assert len(patterns)<=320,(spec["slug"],"128 bank-0 + 192 bank-1 background tiles",len(patterns))
     assert set(img.get_flattened_data())<=set(tuple(bytes.fromhex(c[1:])) for c in COLORS)
     assert len(collisions)==15616 and set(collisions)<={0,16,15}
     assert all((a&7)<=6 and not(a&128) for a,c in zip(attrs,collisions) if c==0)
 
     filename=f"toronto_{spec['slug']}.png"
     out=PROJECT/"assets/backgrounds"/filename
-    img.save(out)
+    if check:
+        # PNG encoders differ between platforms: compare decoded pixels and
+        # keep the committed file's bytes as the hashed identity.
+        with Image.open(out) as current:
+            assert current.convert("RGB").tobytes()==img.convert("RGB").tobytes(),(spec["slug"],"background pixels are stale")
+    else:
+        img.save(out)
     metadata={**spec,"projection":"original compressed orthogonal north-up; not GIS coordinates","dimensions":[WIDTH,HEIGHT],"tile_dimensions":[TW,TH],"road_half_width":ROAD_HALF,"walk_half_width":WALK_HALF,"blocks":blocks,"canopies":canopies,"collisions":collisions,"collision_rules":{"road":0,"foot_only":16,"solid":15},"background_filename":filename,"background_sha256":hashlib.sha256(out.read_bytes()).hexdigest(),"source_research":"content/districts/west-research.json","validation":{"raw_unique_tiles":len(raw_patterns),"flip_canonical_unique_tiles":len(patterns),"traffic_loops":len(spec["traffic_loops"]),"traffic_footprint_half_pixels":8,"traffic_swept_all_overlapped_tiles_clear":True,"portal_car_offsets_verified":[-12,0,12],"all_foot_clients_and_ports_connected":True,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
     # Canonical stable candidate keys consumed by campaign tooling.
     keys=["dufferin_college","lansdowne_bloor","parkdale_queen","roncy_howard_park","sorauren"] if spec["id"]==1 else ["bloor_park_gate","parkside_south","colborne_service"]
     metadata["stop_candidates"]=[{"key":key,**stop} for key,stop in zip(keys,spec["stop_candidates"])]
-    (ROOT/"content/districts"/f"{spec['slug']}_art.json").write_text(json.dumps(metadata,indent=2)+"\n")
-    (PROJECT/"original-art"/f"{spec['slug']}_attributes.json").write_text(json.dumps(attrs)+"\n")
+    texts={ROOT/"content/districts"/f"{spec['slug']}_art.json":json.dumps(metadata,indent=2)+"\n",
+           PROJECT/"original-art"/f"{spec['slug']}_attributes.json":json.dumps(attrs)+"\n"}
+    for path,text in texts.items():
+        if check:assert path.read_text()==text,(spec["slug"],"stale output",str(path.relative_to(ROOT)))
+        else:path.write_text(text)
+    if check:
+        print(f"{filename}: matches its generator ({len(patterns)} flip-canonical tiles)")
+        return
     print(f"{filename}: {len(blocks)} buildings, {len(patterns)} flip-canonical tiles ({len(raw_patterns)} raw), 6 swept-clear traffic loops")
 
 
 if __name__=="__main__":
     (ROOT/"content/districts").mkdir(parents=True,exist_ok=True)
-    for district in DISTRICTS:generate(district)
+    for district in DISTRICTS:generate(district,check="--check" in sys.argv)

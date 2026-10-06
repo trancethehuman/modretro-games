@@ -238,9 +238,24 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
     if(changed){td_map_begin();td_map_headers();}
     if(td_map_row<12)td_map_paint_row();
 }
+#ifdef __SDCC
+void load_bkg_tileset(const tileset_t *tiles,UBYTE bank) BANKED;
+/* The atlas borrows CGB bank-1 background tiles 8..187. Scenes whose own
+ * background spills into bank 1 (the core uses IDs 0..9) must get those
+ * patterns back before the city is visible again. */
+static void td_map_restore_tiles(void){
+    scene_t scene;background_t bkg;
+    MemcpyBanked(&scene,current_scene.ptr,sizeof(scene),current_scene.bank);
+    MemcpyBanked(&bkg,scene.background.ptr,sizeof(bkg),scene.background.bank);
+    if(bkg.cgb_tileset.ptr){VBK_REG=1;load_bkg_tileset(bkg.cgb_tileset.ptr,bkg.cgb_tileset.bank);VBK_REG=0;}
+}
+#else
+static void td_map_restore_tiles(void){}
+#endif
 void td_map_close(void) BANKED {
     UBYTE i;
     if(!td_map_active)return;
+    td_map_restore_tiles();
     for(i=0;i<td_map_actor_count;i++)actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|td_map_hidden[i];
     camera_x=td_map_camera_x;camera_y=td_map_camera_y;camera_settings=td_map_camera_settings;
     td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;

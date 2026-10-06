@@ -101,6 +101,16 @@ Moving streetcar artwork, human feedback on strategic transit, remaining platfor
 - Cold startup normalizes valid older active-stage-0 saves to 100 after CRC/semantic validation. It preserves carried damage, retired failure state, earnings, deadlines and district-qualified positions; invalid active condition remains rejected. This changes no save bytes or version.
 - The native candidate and retained predecessor failure are scoped in [TESTING.md](TESTING.md). The published Prototype 6 bundle does not contain this later correction. Further quest/transit route-choice and hardware acceptance remain open.
 
+## Performance and city presentation pass, 2026-10-06
+
+User direction: make the game run smoothly without reducing fidelity, gameplay or richness, and improve crosswalk placement, building variety, actor/vehicle/boat design and transit presentation.
+
+- Implemented: the native update loop now completes every frame (about 59-60 updates per second in all four districts, previously about 29). Hot paths were rewritten as table lookups and small hand-written SM83 routines with C references kept for host tests. Gameplay is unchanged: a differential host fuzz compares the new and original engines step for step, and an emulator checker compares every assembly routine call against a model of its C reference.
+- Implemented: a new original actor sheet (136 frames) with eight CGB sprite palettes: orange courier car and uniform, red/blue traffic, yellow taxi and job pin, teal/violet pedestrians and red-and-white TTC vehicles. Transit frames are drawn at scale: bus 40 px, streetcar 64 px (limited by ten sprites per scanline) and ferry 16 x 40 px.
+- Implemented: crosswalks are derived from road geometry. Every junction square is rebuilt from the drivable shape so sidewalks turn the corner instead of running across the crossing road, and zebra bars are painted only on arms that link two sidewalks. Lane dashes stop short of junctions.
+- Implemented: buildings gain seeded rooftop equipment (water tanks, HVAC, skylights, solar, bulkheads, gravel, antennas); empty walkable lots get lawns, canopy trees, plazas or striped parking. Background palette slot 6 becomes parks and trees (`E7DECC/8FB56A/4D7A52/172B38`, previously a tan ground tone); the wide-warehouse style uses the terracotta slot instead. No collision value changed in any district.
+- Implemented: closing the city map restores the scene's CGB bank-1 background tiles that the atlas borrows.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.
