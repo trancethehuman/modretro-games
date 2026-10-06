@@ -29,7 +29,7 @@ Reviewed 2026-10-02 using the installed official plugin toolchain, the project's
 | Original Toronto Dispatch code/art/content | Root MIT, copyright 2026 Hai Nghiem | Include the root notice; keep upstream portions under their own terms |
 | GB Studio generated project/build code | CLI 4.3.2, commit `ccb891b2670134ba8237416772eea4ed09d34e1e`; MIT copyright 2019–2026 Chris Maltby | Full notice retained in `project/LICENSE` and `ROM_NOTICES.txt` |
 | GBVM engine | Commit `bd6f41cc5e05cbe6601dcc7f8e2db89bed527fe3`, compatibility `4.3.0-e1`; MIT copyright 2020 Toxa | Full [GBVM notice](licenses/GBVM-MIT.txt) included in `ROM_NOTICES.txt` |
-| ModRetro starter / Bench Mono-derived glyphs | Plugin 1.0.33; MIT copyright 2026 Eric Provencher | Full notice retained in `project/ASSET_LICENSE` and `ROM_NOTICES.txt` |
+| ModRetro starter art and the project's Bench Mono font asset (the in-game HUD/menu font is original since 2026-10-06) | Plugin 1.0.33; MIT copyright 2026 Eric Provencher | Full notice retained in `project/ASSET_LICENSE` and `ROM_NOTICES.txt` |
 | hUGEDriver | GBVM-pinned `third-party/HUGE_TRACKER/hUGEDriver.asm` / `lib/hUGEDriver.lib`; linked `_hUGE_init`, `_hUGE_dosound`, `_hUGE_mute_channel` symbols | Upstream [public-domain dedication](https://github.com/SuperDisk/hUGEDriver#license); credit retained in `ROM_NOTICES.txt` |
 | GBDK / SDCC runtime libraries | GBDK 4.5.0; GPLv2 with linking exception | The [upstream ROM-distribution guidance](https://github.com/gbdk-2020/gbdk-2020/blob/4.5.0/LICENSE) permits game ROM distribution without GBDK attribution; credit is included. Linking these libraries does not by itself put the game under GPL. The unmodified [linking exception and GPL text](licenses/GBDK-GPLV2-LE.txt) are retained for reference |
 

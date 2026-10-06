@@ -50,6 +50,9 @@ extern UBYTE td_route_district; /* Rebuilt objective cue; not serialized. */
 extern UBYTE td_resume_mode;
 void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
+/* Menu cursor/prompt animation and the HUD compass; cheap when unchanged. */
+void td_ui_tick(void) BANKED;
+void td_ui_compass(void) BANKED;
 void td_map_open(void) BANKED;
 void td_map_update(UBYTE buttons,UBYTE pressed) BANKED;
 void td_map_close(void) BANKED;

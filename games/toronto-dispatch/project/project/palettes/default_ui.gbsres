@@ -1,18 +1,18 @@
 {
   "_resourceType": "palette",
   "id": "default-ui",
-  "name": "Default UI",
+  "name": "Toronto Dispatch UI",
   "colors": [
-    "F8F8B8",
-    "90C8C8",
-    "486878",
-    "082048"
+    "E7DECC",
+    "E89A3C",
+    "C83C34",
+    "172B38"
   ],
-  "defaultName": "Default UI",
+  "defaultName": "Toronto Dispatch UI",
   "defaultColors": [
-    "F8F8B8",
-    "90C8C8",
-    "486878",
-    "082048"
+    "E7DECC",
+    "E89A3C",
+    "C83C34",
+    "172B38"
   ]
 }

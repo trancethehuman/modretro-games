@@ -31,6 +31,7 @@ def main():
 extern UBYTE VBK_REG,text_drawn;
 void set_win_tiles(UBYTE x,UBYTE y,UBYTE width,UBYTE height,const UBYTE *tiles);
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles);
+void set_bkg_palette(UBYTE first,UBYTE count,const UWORD *rgb);
 void ui_set_pos(UBYTE x,UBYTE y);
 #endif
 """)

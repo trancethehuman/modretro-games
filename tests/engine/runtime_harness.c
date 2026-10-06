@@ -79,6 +79,8 @@ void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end) {
 void activate_actor(actor_t *actor) { (void)actor; }
 void td_ui_init(void) { ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
+void td_ui_tick(void) {}
+void td_ui_compass(void) {}
 void td_map_open(void) {
     test_map_opens++;test_map_active=1;
     test_map_camera_x=camera_x;test_map_camera_y=camera_y;test_map_camera_settings=camera_settings;

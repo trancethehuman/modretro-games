@@ -17,7 +17,7 @@ UBYTE td_route_district;
 UBYTE td_resume_mode;
 actor_t actors[21];
 UBYTE actors_len;
-UWORD camera_x,camera_y;
+UWORD camera_x,camera_y,sys_time;
 UBYTE camera_settings,VBK_REG,text_drawn;
 
 /* One window tilemap and two pattern banks, indexed through the public tile
@@ -26,7 +26,8 @@ static UBYTE window_tiles[2][18][20],vram[2][256][16];
 static UBYTE window_x,window_y;
 static unsigned checks,failures,window_writes,tile_uploads,ground_uploads;
 static unsigned content_reads;
-static UBYTE initial_font[49][16];
+static UBYTE initial_font[TD_FONT_GLYPHS][16],initial_bank0[256][16];
+static unsigned palette_writes;static UWORD palette7[4];
 
 static void expect(int condition,const char *name) {
     checks++;
@@ -44,18 +45,23 @@ void set_win_tiles(UBYTE x,UBYTE y,UBYTE width,UBYTE height,const UBYTE *tiles) 
 
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
     tile_uploads++;
-    expect(VBK_REG==1&&tiles&&count&&(unsigned)first+count<=256,
-           "all UI and atlas pattern uploads use bounded CGB bank1 tile indices");
-    int marker=first>=8&&(unsigned)first+count<=15;
-    int ground=first>=16&&(unsigned)first+count<=188;
-    int font=first>=192&&(unsigned)first+count<=241;
-    expect(marker||ground||font,"uploads stay within marker8..14, ground16..187 or font192..240 reservations");
-    if(VBK_REG!=1||!tiles||!count||(unsigned)first+count>256)return;
+    expect(VBK_REG<2&&tiles&&count&&(unsigned)first+count<=256,
+           "all UI and atlas pattern uploads use bounded CGB tile indices");
+    int marker=VBK_REG==1&&first>=8&&(unsigned)first+count<=15;
+    int ground=VBK_REG==1&&first>=16&&(unsigned)first+count<=188;
+    int font=VBK_REG==1&&first>=TD_FONT_FIRST&&(unsigned)first+count<=TD_FONT_FIRST+TD_FONT_GLYPHS;
+    int art=VBK_REG==0&&first>=TD_UI_ART_FIRST&&(unsigned)first+count<=192;
+    expect(marker||ground||font||art,"uploads stay within marker8..14, ground16..187, font or bank-0 art128..191 reservations");
+    if(VBK_REG>=2||!tiles||!count||(unsigned)first+count>256)return;
     if(ground)ground_uploads+=count;
     memcpy(vram[VBK_REG][first],tiles,(size_t)count*16);
 }
 
 void ui_set_pos(UBYTE x,UBYTE y) {window_x=x;window_y=y;}
+void set_bkg_palette(UBYTE first,UBYTE count,const UWORD *rgb) {
+    palette_writes++;expect(first==7&&count==1&&rgb,"only the UI palette slot is swapped");
+    if(first==7&&count==1&&rgb)memcpy(palette7,rgb,sizeof(palette7));
+}
 UBYTE td_audio_get_mode(void) {return TD_AUDIO_FULL;}
 UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
@@ -97,7 +103,7 @@ static void reset_case(void) {
     for(unsigned i=0;i<21;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
     window_x=window_y=0;window_writes=tile_uploads=ground_uploads=content_reads=0;
-    td_ui_init();memcpy(initial_font,vram[1]+192,sizeof(initial_font));
+    td_ui_init();memcpy(initial_font,vram[1]+TD_FONT_FIRST,sizeof(initial_font));memcpy(initial_bank0,vram[0],sizeof(initial_bank0));
 }
 
 static void open_case(void) {
@@ -156,11 +162,12 @@ static void verify_viewport(void) {
         }
     }
     for(unsigned y=0;y<18;y++)if(y<2||y>=14)for(unsigned x=0;x<20;x++)
-        expect(window_tiles[0][y][x]>=192&&window_tiles[0][y][x]<=240,
+        expect(window_tiles[0][y][x]>=TD_FONT_FIRST&&window_tiles[0][y][x]<TD_FONT_FIRST+TD_FONT_GLYPHS,
                "map titles, legend and controls use only reserved native font tiles");
-    expect(!memcmp(initial_font,vram[1]+192,sizeof(initial_font)),"all viewport uploads preserve the original font patterns");
-    for(unsigned tile=0;tile<256;tile++)for(unsigned byte=0;byte<16;byte++)
+    expect(!memcmp(initial_font,vram[1]+TD_FONT_FIRST,sizeof(initial_font)),"all viewport uploads preserve the original font patterns");
+    for(unsigned tile=0;tile<128;tile++)for(unsigned byte=0;byte<16;byte++)
         expect(vram[0][tile][byte]==0xEE,"real map leaves the gameplay background pattern bank untouched");
+    expect(!memcmp(initial_bank0,vram[0],sizeof(initial_bank0)),"real map leaves the bank-0 UI art untouched");
 }
 
 static void verify_marker_patterns(void) {
@@ -179,7 +186,7 @@ static void verify_marker_patterns(void) {
 static void read_window_text(unsigned y,char out[21]) {
     for(unsigned x=0;x<20;x++) {
         UBYTE tile=window_tiles[0][y][x];
-        out[x]=tile>=192&&tile<=240?td_chars[tile-192]:'?';
+        out[x]=tile>=TD_FONT_FIRST&&tile<TD_FONT_FIRST+TD_FONT_GLYPHS?td_chars[tile-TD_FONT_FIRST]:'?';
     }
     out[20]=0;
 }
@@ -206,7 +213,9 @@ static void test_every_viewport(void) {
         verify_viewport();viewports++;
     }
     expect(viewports==225,"fixture renders every actual legal twenty-by-twelve atlas viewport");
+    expect(!memcmp(palette7,td_map_palette,sizeof(palette7)),"the open map shows its original colours in UI palette 7");
     expect_game_unchanged(&before);td_map_close();
+    expect(!memcmp(palette7,td_ui_palette,sizeof(palette7)),"closing the map restores the menu colours");
     for(unsigned i=0;i<sizeof(td_ui_cache);i++)
         expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the360-byte text/pattern union cache");
     td.mode=TD_PAUSE;unsigned writes=window_writes;td_ui_draw();

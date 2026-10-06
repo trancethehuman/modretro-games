@@ -115,6 +115,16 @@ User direction: make the game run smoothly without reducing fidelity, gameplay o
 - Implemented: the HUD repaint after the once-per-second clock tick happens on the next frame (16 ms later), so the save and the repaint never share one frame; the western street-name lookup scans exact per-region candidate lists. Both keep the same state and text.
 - Proposals, not adopted: riding along with the camera following the vehicle between stops, pedestrians visibly boarding, and a visible GO/Line 1 train at surface rail corridors.
 
+## Menu, HUD and title art, 2026-10-06
+
+User direction: dress up the plain menus with good Game Boy menu art, improve the art overall, keep performance and a lively city.
+
+- Implemented: an original bold UI font (2-pixel stems) replaces the starter glyphs in the HUD and menus. Original 8x8 art tiles (frame, separators, animated cursor, menu and HUD icons, A/B/SELECT/START button glyphs, compass arrows, CN Tower emblem) live in otherwise unused bank-0 tiles 128..191; text rows can mix glyphs and art through character codes 0x80 and up.
+- Implemented: pause menu, dispatch board, TTC timetable, result and title screens use framed cards with icons; the menu cursor and title prompt animate. The UI palette (BG slot 7) becomes paper, amber, red and ink; the city map keeps its original colours by swapping them in while it is open.
+- Implemented: the title screen shows an original dusk skyline with the CN Tower, Rogers Centre dome and a 16x16-letter logo. It borrows the atlas-owned bank-1 tiles while the full-screen title hides the city and restores the scene tiles on entry.
+- Implemented: the HUD shows icons for money, vehicle, progress, deadline and condition, button glyphs for its hints, and a compass arrow in the street row that points to the job beacon (a ring when close). Only the compass cell repaints between HUD updates.
+- Unchanged: controls, menu order and actions, text meaning, timers, saves and the map's behaviour.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

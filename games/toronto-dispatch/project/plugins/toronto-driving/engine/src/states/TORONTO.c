@@ -384,6 +384,7 @@ static void td_pause_choose(void){
     td_ui_draw();
 }
 static void td_menu_update(void){
+    td_ui_tick();
     if(td.mode==TD_HELP){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=td_resume_mode;td_ui_draw();}return;}
     if(td.mode==TD_MAP){
         if(INPUT_B_PRESSED||INPUT_START_PRESSED){td_map_close();td.mode=TD_PAUSE;td.menu=1;td_ui_draw();}
@@ -1639,6 +1640,7 @@ void toronto_update(void) BANKED {
     }
     if(td.mode==TD_ROAM&&!consumed&&INPUT_SELECT_PRESSED)td_interact();
     if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_traffic_present();td_pedestrians();td_transit_present(motion);td_props_present();}
+    if(!(td_tick&7))td_ui_compass();
     td_position(&PLAYER,td.u>>4,td.v>>4);
     td_sound_update();
 }
