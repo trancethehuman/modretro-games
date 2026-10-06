@@ -467,6 +467,15 @@ def police_frames():
     return [east, east, south, south, west, west, north, north]
 
 
+# Pursuit: the light bar flashes white over its front half [E, S, W, N]; the
+# engine alternates these with the plain patrol car.
+def police_flash_frames():
+    spec = _sedan_spec(body=1, lightbar=True, shine=False) + [('flash', 5, 6, 8, 7, 1), ('blue', 6, 8, 7, 9, 2)]
+    east = _outline(_layers(spec), CAR_LAMPS)
+    south = transpose(east)
+    return [east, south, flip_h(east), flip_v(south)]
+
+
 # Officer: the ordinary walker body under a navy peaked cap (2 = uniform).
 CAP = {
     'down': ["................", "......2222......", ".....222222.....", "....33333333....",
@@ -572,3 +581,96 @@ def arrow_frames():
 def flip_h_col(g):
     """Mirror a left-column drawing about that 8-pixel column."""
     return [row[:8][::-1] + row[8:] for row in g]
+
+
+# ---------------------------------------------------------------- animation
+# Courier action poses [right, left, down, up]: a punch (fist out) and the
+# pistol held out. Each stays inside columns 4..11 (one 8x16 OBJ).
+_PUNCH = {
+    'right': {7: ".....3222221....", 8: ".....322223.....", 11: "......3...3.....",
+              12: ".....33...33....", 13: ".....3.....3...."},
+    'down': {8: "....12222222....", 9: "....32222232....", 10: ".....3333332....",
+             11: ".....33..331...."},
+    'up': {3: ".....3333331....", 4: ".....3333332....", 5: "......3113.2....",
+           6: ".....3222232....", 8: "....12222223...."},
+}
+_SHOOT = {
+    'right': {6: "......3223.3....", 7: ".....3222213....", 8: ".....322223....."},
+    'down': {8: "....12222222....", 9: "....32222232....", 10: ".....3333331....",
+             11: ".....33..333...."},
+    'up': {2: ".....3333333....", 3: ".....3333331....", 4: ".....3333332....",
+           5: "......3113.2....", 6: ".....3222232....", 8: "....12222223...."},
+}
+
+
+def _pose(changes, d):
+    rows = list(PERSON[d][0])
+    for r, row in changes.items():
+        assert len(row) == 16, (d, r, row)
+        rows[r] = row
+    return grid(rows)
+
+
+def action_frames(kind):
+    """[right, left, down, up] punch ('punch') or pistol ('shoot') pose."""
+    table = _PUNCH if kind == 'punch' else _SHOOT
+    r = _pose(table['right'], 'right')
+    return [r, flip_h(r), _pose(table['down'], 'down'), _pose(table['up'], 'up')]
+
+
+def _centre8(rows8, top=4):
+    """An 8-wide drawing in columns 4..11 starting at row `top`."""
+    blank = "." * 16
+    out = [blank] * top + ["...." + r + "...." for r in rows8]
+    return grid(out + [blank] * (16 - len(out)))
+
+
+# Tyre smoke and dust (traffic palette: 1 pale grey-blue, 3 near black): a
+# dense fresh puff, a dithered cloud, then a thinning haze.
+SMOKE = [
+    _centre8(["........", "...33...", "..3113..", ".311113.", ".311113.", "..3113..", "...33...", "........"]),
+    _centre8(["..1.1...", ".1.1.1.1", "1.1.1.1.", ".1.1.1.1", "1.1.1.1.", ".1.1.1..", "..1.1...", "........"]),
+    _centre8(["...1....", ".1...1..", "....1..1", "1.1.....", "...1..1.", ".1...1..", "....1...", "........"]),
+]
+# A courier parcel that pops up when it is collected (courier palette).
+PARCEL = _centre8([".333333.", "32221223", "32221223", "31111113", "32221223", "32221223", ".333333."], 5)
+# Delivery sparkle (beacon yellow): a four-point star, then a burst.
+SPARKLE = [
+    _centre8(["...1....", "...1....", "..212...", "1122211.", "..212...", "...1....", "...1....", "........"]),
+    _centre8(["1..1..1.", ".2.1.2..", "..2.2...", "111.111.", "..2.2...", ".2.1.2..", "1..1..1.", "........"]),
+]
+
+
+def _beam(angle_deg):
+    """Night headlamp light ahead of the vehicle, dithered so the road shows
+    through: a bright spot at each lamp, then two soft cones that thin out.
+    The frame centre sits 14 px ahead of the vehicle centre; the lamps are
+    2.5 px either side of its axis."""
+    a = math.radians(angle_deg)
+    ca, sa = math.cos(a), math.sin(a)
+    g = [[0] * 16 for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            # Pixel centre relative to the vehicle centre, in its own frame.
+            px, py = x + 0.5 - 8 + 14 * ca, y + 0.5 - 8 + 14 * sa
+            f, s = px * ca + py * sa, -px * sa + py * ca
+            if f < 7.5 or f > 20.5:
+                continue
+            near = min(abs(s - lamp) for lamp in (-2.5, 2.5))
+            if near > 0.7 + (f - 7.5) * 0.3:
+                continue
+            if f < 11 and near < 1.0:
+                lit = (x + y) % 2 == 0
+            elif f < 15.5:
+                lit = (x + y) % 2 == 0 and near < 0.6 + (f - 7.5) * 0.18
+            else:
+                lit = (x + 2 * y) % 4 == 0
+            if lit:
+                g[y][x] = 1
+    return g
+
+
+def beam_frames():
+    """Engine heading order E, SE, S, SW, W, NW, N, NE (south is +y)."""
+    e, se, s = _beam(0), _beam(45), _beam(90)
+    return [e, se, s, flip_h(se), flip_h(e), flip_v(flip_h(se)), flip_v(s), flip_v(se)]

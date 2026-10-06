@@ -81,7 +81,9 @@ void td_life_present(void) BANKED {
         if(!(td_tr_ctrl&bit))continue;
         if(tr_mode[i]==TR_GONE){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
         lf_place_q4(a,td_traffic_u[i],td_traffic_v[i]);
-        lf_frame(a,(LF_IS_PATROL(i)?TD_FRAME_POLICE:lf_traffic_base[i])+tr_head[i]);
+        /* A pursuing patrol car flashes its light bar. */
+        if(LF_IS_PATROL(i))lf_frame(a,td.wanted&&(td_tick&8)?TD_FRAME_POLICE_FLASH+(tr_head[i]>>1):TD_FRAME_POLICE+tr_head[i]);
+        else lf_frame(a,lf_traffic_base[i]+tr_head[i]);
     }
     if(td_fx_kind){
         a=&actors[TD_ACTOR_FX];
@@ -94,7 +96,7 @@ void td_life_present(void) BANKED {
     if(lf_down&&td.onfoot)lf_frame(&PLAYER,TD_FRAME_KNOCK_WALKER_A+5*TD_KNOCK_FRAMES+4);
     if(lf_hurt&&!lf_down){if(lf_hurt&4)PLAYER.flags|=ACTOR_FLAG_HIDDEN;else PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
     else if(lf_flash){lf_flash=0;PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
-    if(lf_shake){lf_shake--;camera_offset_x=lf_shake?((lf_shake&2)?2:-2):0;}
+    /* The impact shake is applied with the camera look-ahead (td_anim.c). */
     lf_beacon();
 }
 

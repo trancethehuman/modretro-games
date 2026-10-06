@@ -6,9 +6,13 @@
 #define TD_COMPLETE_BYTES 16
 /* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-16 pedestrians,
  * 17 transit vehicle, 18-19 sidewalk pickups, 20 street-life effects
- * (sparks, bullets, a fleeing driver). GBVM allows 21. Pedestrians use one
- * 8x16 OBJ each, so all 21 actors stay within 40 hardware sprites. */
-#define TD_ACTORS 21
+ * (sparks, bullets, a fleeing driver) and 21-22 animation particles (smoke,
+ * pops, sparkles). The engine field MAX_ACTORS raises GBVM's pool to 23.
+ * Pedestrians, pickups and particles use one 8x16 OBJ each, so all actors
+ * stay within 40 hardware sprites; the particles render last, so the
+ * 10-per-line limit drops them first. Night headlamps are part of the
+ * courier vehicle's own frames. */
+#define TD_ACTORS 23
 #define TD_PEDS 8
 #define TD_ACTOR_PEDS 9
 #define TD_ACTOR_FX 20
@@ -16,6 +20,8 @@
 #define TD_ACTOR_PICKUPS 18
 #define TD_PICKUP_SLOTS 2
 #define TD_PICKUP_TAKEN 8
+#define TD_ACTOR_PARTS 21
+#define TD_PARTS 2
 #define TD_STOP_FOOT 1
 #define TD_NONE 255
 #define TD_ROAM 0

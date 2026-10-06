@@ -133,9 +133,14 @@ void td_street_scan(void) {
 
 /* A slot is released beyond 120x112 px and filled within 104x96 px of the
  * courier, so it never flickers at the edge; sixteen table entries are
- * examined per frame. */
+ * examined per sweep. */
+static UBYTE td_street_skip;
 void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED {
-    UBYTE s,n,i,mask,free_slot,start,sl=(UBYTE)(scroll_x>>3),st=(UBYTE)(scroll_y>>3);
+    UBYTE s,n,i,mask,free_slot,start,sl,st;
+    /* Pickups only change off screen, so the sweep runs every fourth
+     * update (every update during the scene fade-in). */
+    if(!td_pickup_warm&&(++td_street_skip&3))return;
+    sl=(UBYTE)(scroll_x>>3);st=(UBYTE)(scroll_y>>3);
     for(s=0,mask=1;s<TD_PICKUP_SLOTS;s++,mask<<=1){
         if(td_pickup_slot[s]==255)continue;
         if((UBYTE)(td_pickup_su8[s]-pu8+15)<30&&(UBYTE)(td_pickup_sv8[s]-pv8+14)<28)continue;

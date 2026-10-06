@@ -44,6 +44,7 @@ python3 games/toronto-dispatch/scripts/sync_city_resources.py
 python3 games/toronto-dispatch/scripts/create_sprites.py
 python3 games/toronto-dispatch/scripts/create_street_life.py
 python3 games/toronto-dispatch/scripts/create_ui_art.py
+python3 games/toronto-dispatch/scripts/create_daynight.py
 ```
 
 These commands generate original artwork/metadata and synchronize existing core resources. They do not register new scenes or apply changed west/east collision and attribute resources. Use the plugin's revision-aware native workflow to register/update those assets and scenes, preserve bindings, and apply the intended reciprocal core seams before continuing. Regenerating content against stale native geometry is not a valid build procedure. The current candidate already has all four native scenes registered.
@@ -96,6 +97,10 @@ The source fixes `VM_MAX_CONTEXTS` at 8 through a project-local `cType: define` 
 ## Native memory guard
 
 The project lowers three stock GB Studio pools that this game never uses, through the same file-backed engine-field mechanism as `VM_MAX_CONTEXTS`: `MAX_TRIGGERS` (`include/trigger.h`), `MAX_PROJECTILES` and `MAX_PROJECTILE_DEFS` (`include/projectiles.h`) are each 1. No scene has triggers or projectiles. On the 2026-10-06 street-life candidate this returns about 500 bytes of WRAM: the guard reports 1,350 bytes of reserve, while the previous `main` source built with the same toolchain reports 911 and fails the 1,024-byte minimum. Raise these values before adding triggers or projectiles to any scene.
+
+The same mechanism raises `MAX_ACTORS` (`include/actor.h`) from GBVM's 21 to the 23 actors `TD_ACTORS` uses (two animation particles were added on 2026-10-06; `TORONTO.c` asserts the pool fits). The 2026-10-06 day/night candidate reports 1,208 bytes of reserve.
+
+`create_daynight.py` reads the Toronto scenes' background and sprite palettes and writes `engine/include/td_daynight_data.h`: 64 time-of-day steps mapped to 18 unique RGB555 palette sets (BG 0-6 and the eight sprite palettes; the UI palette 7 is untouched). The day set must equal the registered palettes, so edit the scene palettes or the night colours in the script, never the header. `create_sprites.py` lifts every sprite tile 16 px and sets the sheet's canvas origin to -8 so compiled offsets stay the same while lit vehicle frames can place headlamp tiles below a south-facing car; GB Studio masks frames to the canvas, whose bottom row is tile y 0.
 
 After each plugin build, run from the repository root:
 

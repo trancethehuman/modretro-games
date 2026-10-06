@@ -15,6 +15,7 @@ This repository contains original homebrew games for ModRetro Chromatic / Game B
 - Never commit activation codes, credentials, machine configuration, cartridge backups, saves, or private information. Device writing must target the user's identified writable development cartridge using the official supported path. Never infer permission to alter unrelated console firmware or another cartridge.
 - Inspect Git status before committing. This folder has its own Git repository; do not stage its parent directory. Use `codex/` for new feature branches. The user authorised a public GitHub repository and MIT licence.
 - Run `make check` for repository/content edits and the plugin's build/playtests for game edits. Keep a concise account of what is actually verified and what remains pending.
+- When a game task is done, send the human several screenshots of the result (for example title, gameplay, the changed feature and a before/after), not just one. Take them from the built ROM in the emulator and say which build they show.
 - Use plain, concise communication without exclamation marks. Ask gameplay questions as useful choices while continuing work that does not depend on the answers.
 
 ## Workflow skills

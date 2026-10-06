@@ -1754,6 +1754,528 @@
         16,
         16
       ]
+    },
+    {
+      "index": 195,
+      "name": "courier_punch_0",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 196,
+      "name": "courier_punch_1",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 197,
+      "name": "courier_punch_2",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 198,
+      "name": "courier_punch_3",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 199,
+      "name": "courier_shoot_0",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 200,
+      "name": "courier_shoot_1",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 201,
+      "name": "courier_shoot_2",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 202,
+      "name": "courier_shoot_3",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 203,
+      "name": "smoke_0",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 204,
+      "name": "smoke_1",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 205,
+      "name": "smoke_2",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 206,
+      "name": "parcel",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 207,
+      "name": "sparkle_0",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 208,
+      "name": "sparkle_1",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 209,
+      "name": "beam_0",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 210,
+      "name": "beam_1",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 211,
+      "name": "beam_2",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 212,
+      "name": "beam_3",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 213,
+      "name": "beam_4",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 214,
+      "name": "beam_5",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 215,
+      "name": "beam_6",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 216,
+      "name": "beam_7",
+      "palette": "signal_yellow",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 217,
+      "name": "police_flash_0",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 218,
+      "name": "police_flash_1",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 219,
+      "name": "police_flash_2",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 220,
+      "name": "police_flash_3",
+      "palette": "traffic_blue",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 221,
+      "name": "player_car_lit_0",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 222,
+      "name": "player_car_lit_1",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 223,
+      "name": "player_car_lit_2",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 224,
+      "name": "player_car_lit_3",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 225,
+      "name": "player_car_lit_4",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 226,
+      "name": "player_car_lit_5",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 227,
+      "name": "player_car_lit_6",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 228,
+      "name": "player_car_lit_7",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 229,
+      "name": "player_van_lit_0",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 230,
+      "name": "player_van_lit_1",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 231,
+      "name": "player_van_lit_2",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 232,
+      "name": "player_van_lit_3",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 233,
+      "name": "player_van_lit_4",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 234,
+      "name": "player_van_lit_5",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 235,
+      "name": "player_van_lit_6",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 236,
+      "name": "player_van_lit_7",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 237,
+      "name": "player_motorcycle_lit_0",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 238,
+      "name": "player_motorcycle_lit_1",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 239,
+      "name": "player_motorcycle_lit_2",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 240,
+      "name": "player_motorcycle_lit_3",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 241,
+      "name": "player_motorcycle_lit_4",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 242,
+      "name": "player_motorcycle_lit_5",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 243,
+      "name": "player_motorcycle_lit_6",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 244,
+      "name": "player_motorcycle_lit_7",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 245,
+      "name": "player_scooter_lit_0",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 246,
+      "name": "player_scooter_lit_1",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 247,
+      "name": "player_scooter_lit_2",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 248,
+      "name": "player_scooter_lit_3",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 249,
+      "name": "player_scooter_lit_4",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 250,
+      "name": "player_scooter_lit_5",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 251,
+      "name": "player_scooter_lit_6",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 252,
+      "name": "player_scooter_lit_7",
+      "palette": "courier_vehicle",
+      "size": [
+        16,
+        16
+      ]
     }
   ],
   "palettes": [
@@ -1882,7 +2404,7 @@
   },
   "sheet": [
     256,
-    320
+    352
   ],
   "note": "Original pixel art from scripts/sprite_art.py; colour 0 transparent."
 }

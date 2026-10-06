@@ -14,6 +14,17 @@
       "runtimeOnly": false
     },
     {
+      "key": "MAX_ACTORS",
+      "label": "Actor pool (Toronto uses 23; keep 23)",
+      "group": "Toronto memory",
+      "type": "number",
+      "cType": "define",
+      "file": "include/actor.h",
+      "defaultValue": 23,
+      "min": 23,
+      "max": 23
+    },
+    {
       "key": "VM_MAX_CONTEXTS",
       "label": "Native script contexts (keep8)",
       "group": "Toronto memory",
@@ -89,7 +100,12 @@
         "include/td_life_int.h",
         "src/td_life.c",
         "src/td_drive.c",
-        "src/td_life_draw.c"
+        "src/td_life_draw.c",
+        "include/td_daynight.h",
+        "include/td_daynight_data.h",
+        "src/td_daynight.c",
+        "include/td_anim.h",
+        "src/td_anim.c"
       ]
     }
   ]

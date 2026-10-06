@@ -20,7 +20,8 @@
 #undef td_get_west_street
 #include "native_collision_fixture.h"
 
-actor_t actors[21];
+actor_t actors[23];
+typedef char host_actor_pool_matches[(sizeof(actors)/sizeof(actors[0])==TD_ACTORS)?1:-1];
 actor_t *actors_inactive_head;
 UBYTE actors_len;
 UWORD camera_x,camera_y,image_width=1024,image_height=976,sys_time;
@@ -78,7 +79,8 @@ UBYTE tile_at(UBYTE x,UBYTE y) {return district_tile(test_current_district,x,y);
 void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end) {
     actor->frame=actor->frame_start=first; actor->frame_end=end;
 }
-void activate_actor(actor_t *actor) { (void)actor; }
+void activate_actor(actor_t *actor) { actor->flags|=ACTOR_FLAG_ACTIVE; }
+void deactivate_actor(actor_t *actor) { actor->flags&=~ACTOR_FLAG_ACTIVE; }
 void td_ui_init(void) { ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
 void td_ui_tick(void) {}
@@ -475,9 +477,12 @@ static void test_street_life(void) {
     expect(lf_patrol&&tr_mode[TD_POLICE_SLOT]==TR_CHASE&&tr_timer[TD_POLICE_SLOT]==60&&
            !lf_on_screen(td_traffic_u[TD_POLICE_SLOT]>>4,td_traffic_v[TD_POLICE_SLOT]>>4),
            "out of view, slot 4 becomes the patrol car, waits a second and starts outside the screen");
-    td_life_present();
+    td_tick=0;td_life_present();
     expect(actors[2+TD_POLICE_SLOT].frame_start>=TD_FRAME_POLICE&&actors[2+TD_POLICE_SLOT].frame_start<TD_FRAME_POLICE+8,
            "the pursuing car shows the patrol livery");
+    td_tick=8;td_life_present();
+    expect(actors[2+TD_POLICE_SLOT].frame_start>=TD_FRAME_POLICE_FLASH&&actors[2+TD_POLICE_SLOT].frame_start<TD_FRAME_POLICE_FLASH+4,
+           "a pursuing patrol car flashes its light bar");
     td.wanted=0;lf_cars_tick();
     expect(tr_mode[TD_POLICE_SLOT]==TR_PARK&&lf_patrol,"a pursuit ending leaves the patrol car parked until it is out of view");
     lf_cars_tick();
@@ -1329,7 +1334,7 @@ static void test_cross_district_streetcar(void) {
         td_state_t retry=td;memset(&td,0,sizeof(td));
         expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
                "failed Queen arrival commits a recoverable origin ride rather than an invalid remote paid state");
-        actor_t old_actors[21];UWORD old_traffic_u[6],old_traffic_v[6];
+        actor_t old_actors[TD_ACTORS];UWORD old_traffic_u[6],old_traffic_v[6];
         memcpy(old_actors,actors,sizeof(actors));memcpy(old_traffic_u,td_traffic_u,sizeof(td_traffic_u));
         memcpy(old_traffic_v,td_traffic_v,sizeof(td_traffic_v));
         UBYTE old_tick=td_tick;UWORD old_second=td.seconds;
@@ -1574,7 +1579,7 @@ static void test_atlas_driver_handoff_and_freeze(void) {
                "atlas browsing does not reuse serialized courier fields");
         td_state_t frozen=td;td_job_t frozen_job=td_job;
         td_stop_t frozen_target=td_target,frozen_cursor=td_cursor;
-        actor_t frozen_actors[21];memcpy(frozen_actors,actors,sizeof(actors));
+        actor_t frozen_actors[TD_ACTORS];memcpy(frozen_actors,actors,sizeof(actors));
         UWORD frozen_traffic_u[6],frozen_traffic_v[6];UBYTE frozen_traffic_leg[6],frozen_ped_route[6];
         memcpy(frozen_traffic_u,td_traffic_u,sizeof(frozen_traffic_u));
         memcpy(frozen_traffic_v,td_traffic_v,sizeof(frozen_traffic_v));
@@ -1735,6 +1740,89 @@ static void test_ambient_traffic(void) {
     expect(td_traffic_u[2]==1000*16,"an owned vehicle is left to street life");
 }
 
+static unsigned hour_seconds(unsigned minutes) {
+    /* Play seconds (mod one game day) that show the given time of day. */
+    unsigned phase=(minutes*32+44)/45;return (phase+TD_DN_DAY_SECONDS-TD_DN_START)%TD_DN_DAY_SECONDS;
+}
+static void test_day_night(void) {
+    reset_case();td.seconds=0;
+    expect(td_daynight_apply(TD_DN_FORCE)&&td_daynight_set==TD_DN_DAY_SET&&!td_daynight_lights,"a new game starts in daylight");
+    expect(td_daynight_minutes()==8*60,"play second 0 reads 08:00");
+    expect(!td_daynight_apply(0),"an unchanged step leaves the palettes alone");
+    expect(td_daynight_apply(TD_DN_FORCE),"a forced apply always copies (scene init and title exit)");
+    td.seconds=(UWORD)hour_seconds(22*60);td_daynight_apply(0);
+    expect(td_daynight_set==TD_DN_NIGHT_SET&&td_daynight_lights,"22:00 is night with headlamps on");
+    td.seconds=(UWORD)hour_seconds(3*60);td_daynight_apply(0);
+    expect(td_daynight_set==TD_DN_NIGHT_SET,"night lasts past midnight");
+    td.seconds=(UWORD)hour_seconds(13*60);td_daynight_apply(0);
+    expect(td_daynight_set==TD_DN_DAY_SET&&!td_daynight_lights,"midday uses the registered scene palettes");
+    unsigned changes=0;UBYTE last=255,distinct[TD_DN_SETS]={0};
+    for(unsigned s=0;s<TD_DN_DAY_SECONDS;s++){
+        td.seconds=(UWORD)s;td_daynight_apply(0);
+        if(td_daynight_set!=last){changes++;last=td_daynight_set;}
+        distinct[td_daynight_set]=1;
+        expect(td_daynight_minutes()<24*60,"the clock stays within one day");
+    }
+    unsigned used=0;for(unsigned i=0;i<TD_DN_SETS;i++)used+=distinct[i];
+    expect(used==TD_DN_SETS&&changes<=TD_DN_STEPS,"every palette set is reached and steps change at most every 16 seconds");
+    td.seconds=TD_DN_DAY_SECONDS-1;td_daynight_apply(0);last=td_daynight_set;td.seconds=TD_DN_DAY_SECONDS;td_daynight_apply(0);
+    expect(td_daynight_minutes()==8*60,"the day repeats every 1024 play seconds");
+    /* Scene init forces the time of day; a second tick re-applies it. */
+    native_case();td.seconds=(UWORD)hour_seconds(22*60);td_session_live=1;toronto_init();
+    expect(td_daynight_set==TD_DN_NIGHT_SET,"a scene opens in the current time of day");
+}
+static void anim_present_ticks(unsigned n) {for(unsigned i=0;i<n;i++){td_tick++;td_anim_update();}}
+static void test_animation(void) {
+    native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;
+    actor_t *p0=&actors[TD_ACTOR_PARTS],*p1=&actors[TD_ACTOR_PARTS+1];
+    expect(!(p0->flags&ACTOR_FLAG_ACTIVE)&&!(p1->flags&ACTOR_FLAG_ACTIVE),"idle effect actors stay out of the active actor list");
+    /* A collection pop rises 16 px and blinks out, then frees its actor. */
+    td_anim_spawn(TD_PART_POP,TD_FRAME_PARCEL,500,600);
+    anim_present_ticks(1);
+    expect((p0->flags&ACTOR_FLAG_ACTIVE)&&!(p0->flags&ACTOR_FLAG_HIDDEN)&&p0->frame_start==TD_FRAME_PARCEL,"a pop shows its icon");
+    td_anim_spawn(TD_PART_SMOKE,0,510,600);td_anim_spawn(TD_PART_SMOKE,0,520,600);
+    expect(td_anim_parts[0].kind==TD_PART_POP,"smoke never replaces a collection pop");
+    anim_present_ticks(TD_PART_POP_TICKS);
+    expect(td_anim_parts[0].y==(600-16)*32,"a pop rises 16 px");
+    expect(!(p0->flags&ACTOR_FLAG_ACTIVE)&&!(p1->flags&ACTOR_FLAG_ACTIVE),"expired particles leave the active list");
+    /* Braking hard at speed leaves tyre smoke behind the car. */
+    native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;td.onfoot=0;geometry=CLEAR_GROUND;
+    td.u=400*16;td.v=450*16;
+    for(unsigned i=0;i<120;i++){driving_tick(J_A);td_anim_update();}
+    expect(td.speed>10,"the car reaches speed");
+    memset(td_anim_parts,0,sizeof(td_anim_parts));
+    for(unsigned i=0;i<2;i++){driving_tick(J_B);td_anim_update();}
+    expect(td_anim_parts[0].time&&td_anim_parts[0].kind==TD_PART_SMOKE&&td_anim_parts[0].x<(td.u>>4)*32,"hard braking leaves smoke behind an eastbound car");
+    /* A launch from rest puffs exhaust; walking makes no smoke. */
+    native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;td.onfoot=0;geometry=CLEAR_GROUND;
+    td.u=400*16;td.v=450*16;memset(td_anim_parts,0,sizeof(td_anim_parts));
+    for(unsigned i=0;i<8;i++){driving_tick(J_A);td_anim_update();}
+    expect(td_anim_parts[0].kind==TD_PART_PUFF||td_anim_parts[1].kind==TD_PART_PUFF,"a launch from rest puffs exhaust");
+    td.onfoot=1;td.speed=0;memset(td_anim_parts,0,sizeof(td_anim_parts));
+    for(unsigned i=0;i<40;i++){driving_tick(J_RIGHT);td_anim_update();}
+    expect(!td_anim_parts[0].time&&!td_anim_parts[1].time,"walking makes no smoke");
+    /* Action poses replace the walking frame for a few ticks. */
+    td_anim_pose(TD_FRAME_COURIER_PUNCH,10);td_walk_dir=2;driving_tick(J_DOWN);
+    expect(PLAYER.frame_start==TD_FRAME_COURIER_PUNCH+2,"a punch shows the courier's punch pose");
+    for(unsigned i=0;i<12;i++)driving_tick(0);
+    expect(PLAYER.frame_start==TD_FRAME_COURIER_WALK+4,"the courier returns to the walking frames");
+    /* Headlamps only at night in a vehicle; the camera looks ahead. */
+    native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;td.onfoot=0;geometry=CLEAR_GROUND;
+    td.u=400*16;td.v=450*16;
+    for(unsigned i=0;i<150;i++){driving_tick(J_A);td_anim_update();}
+    expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR,"no headlamps by day");
+    expect(camera_offset_x<=-20&&camera_offset_y==-16,"the camera looks ahead of an eastbound car");
+    td.seconds=(UWORD)hour_seconds(22*60);td_daynight_apply(0);driving_tick(J_A);
+    expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR_LIT,"night headlamps light the road ahead of the car");
+    expect(actors[8].frame_start<TD_FRAME_PLAYER_CAR_LIT,"a parked car keeps its lamps off");
+    td.vehicle=1;td.heading=4;driving_tick(J_A);
+    expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR_LIT+8+2,"lit frames follow the vehicle and heading");
+    td.vehicle=0;td.onfoot=1;td.speed=0;driving_tick(0);
+    expect(PLAYER.frame_start>=TD_FRAME_COURIER_WALK&&PLAYER.frame_start<TD_FRAME_COURIER_WALK+8,"headlamps go out on foot");
+    for(unsigned i=0;i<80;i++){td_tick++;td_anim_update();}
+    expect(camera_offset_x==0&&camera_offset_y==-16,"the camera recentres on foot");
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -1758,6 +1846,7 @@ int main(void) {
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
     test_sidewalk_pickups();test_visible_transit();test_ambient_traffic();
+    test_day_night();test_animation();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

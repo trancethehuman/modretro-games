@@ -18,6 +18,7 @@ check:
 	python3 games/toronto-dispatch/scripts/create_sprites.py --check
 	python3 games/toronto-dispatch/scripts/create_street_life.py --check
 	python3 games/toronto-dispatch/scripts/create_ui_art.py --check
+	python3 games/toronto-dispatch/scripts/create_daynight.py --check
 	python3 games/toronto-dispatch/scripts/create_world_routes.py --check
 	python3 games/toronto-dispatch/scripts/create_audio.py --check
 	python3 scripts/test_engine.py

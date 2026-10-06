@@ -25,6 +25,12 @@ ENGINE = PROJECT / 'plugins/toronto-driving/engine'
 SPRITE_ID = '95080aab-0201-545e-be5a-f5e79b9a693e'  # existing registered sprite
 SHADES = [(0x65, 0xFF, 0x00), (0xE0, 0xF8, 0xCF), (0x86, 0xC0, 0x6C), (0x07, 0x18, 0x21)]
 CANVAS = 64
+# GB Studio masks every frame inside a canvas whose bottom row is tile y 0,
+# so nothing can sit below a frame's baseline. All tiles are raised by LIFT
+# pixels and the origin lowered to match: compiled offsets are unchanged and
+# the night headlamps of a south-facing vehicle fit below it.
+LIFT = 16
+CANVAS_HEIGHT = 96
 
 # CGB OBJ palettes. GB Studio sprite palettes compile resource colours
 # [0, 1, 3] to sprite indices 1 (light), 2 (mid) and 3 (dark); colour [2] is
@@ -105,7 +111,27 @@ def frames():
     add('bullet', A.grid(A.BULLET), 'signal_yellow')
     for i, g in enumerate(A.arrow_frames()):
         add(f'arrow_{i}', g, 'signal_yellow')
+    # Animation: courier punch and pistol poses, tyre smoke, collection pops
+    # and night headlamps.
+    for kind in ('punch', 'shoot'):
+        for i, g in enumerate(A.action_frames(kind)):
+            add(f'courier_{kind}_{i}', g, 'courier_person')
+    for i, g in enumerate(A.SMOKE):
+        add(f'smoke_{i}', g, 'traffic_blue')
+    add('parcel', A.PARCEL, 'courier_vehicle')
+    for i, g in enumerate(A.SPARKLE):
+        add(f'sparkle_{i}', g, 'signal_yellow')
+    for i, g in enumerate(A.beam_frames()):
+        add(f'beam_{i}', g, 'signal_yellow')
+    for i, g in enumerate(A.police_flash_frames()):
+        add(f'police_flash_{i}', g, 'traffic_blue')
     return out
+
+
+# The courier's vehicles in engine order, and the headlamp beam frame centre
+# relative to the vehicle in the eight headings (E, SE, S, SW, W, NW, N, NE).
+PLAYER_VEHICLES = ('car', 'van', 'motorcycle', 'scooter')
+BEAM_OFFSETS = ((14, 0), (10, 10), (0, 14), (-10, 10), (-14, 0), (-10, -10), (0, -14), (10, -10))
 
 
 # Knock-down looks in engine order: four civilian walkers, officer, courier.
@@ -203,11 +229,31 @@ def build():
             if all(sheet.getpixel((sx + a, sy + b)) == SHADES[0] for a in range(8) for b in range(16)
                    if 0 <= sy + b < height):
                 continue
-            tiles.append({'id': ident(f'{name}-tile-{n}'), 'x': cx, 'y': cy, 'sliceX': sx, 'sliceY': sy,
+            tiles.append({'id': ident(f'{name}-tile-{n}'), 'x': cx, 'y': cy + LIFT, 'sliceX': sx, 'sliceY': sy,
                           'flipX': False, 'flipY': False, 'palette': 0, 'paletteIndex': pal,
                           'objPalette': 'OBP0', 'priority': False})
         assert tiles, name
         frame_defs.append({'id': ident(f'{name}-frame'), 'tiles': tiles})
+    # Night variants of the courier's vehicles: the vehicle's own tiles plus
+    # the headlamp beam's, placed ahead in the same metasprite. They reuse
+    # existing tiles, so they cost no VRAM and no extra actor.
+    index = {f[0]: i for i, f in enumerate(fr)}
+    for vehicle in PLAYER_VEHICLES:
+        for d, (dx, dy) in enumerate(BEAM_OFFSETS):
+            body, beam = frame_defs[index[f'player_{vehicle}_{d}']], frame_defs[index[f'beam_{d}']]
+            name = f'player_{vehicle}_lit_{d}'
+            # GB Studio's compiler hides pixels that overlap in one frame,
+            # which would create new tiles: the light never touches the body.
+            car, light = fr[index[f'player_{vehicle}_{d}']][1], fr[index[f'beam_{d}']][1]
+            assert not any(light[y][x] and 0 <= x + dx < 16 and 0 <= y + dy < 16 and car[y + dy][x + dx]
+                           for y in range(16) for x in range(16)), name
+            # GB Studio tile y grows upward; screen dy grows downward.
+            tiles = [dict(t, id=ident(f'{name}-body-{n}')) for n, t in enumerate(body['tiles'])]
+            tiles += [dict(t, id=ident(f'{name}-beam-{n}'), x=t['x'] + dx, y=t['y'] - dy)
+                      for n, t in enumerate(beam['tiles'])]
+            frame_defs.append({'id': ident(f'{name}-frame'), 'tiles': tiles})
+            fr.append((name, None, P['courier_vehicle'], (16, 16)))
+    assert len(fr) <= 256, 'actor frame indices are one byte'
     # Colour-only scenes split OBJ tiles evenly over both VRAM banks below the
     # UI art at tile 128: at most 64 8x16 tiles (128 8x8 tiles) per bank.
     unique = slice_count(fr, sheet, places, frame_defs)
@@ -231,7 +277,7 @@ def outputs():
                 'symbol': 'sprite_top_down_vehicles_and_courier', 'states': [state],
                 'filename': 'dispatch_topdown.png', 'width': sheet.width, 'height': sheet.height,
                 'checksum': hashlib.sha1(png).hexdigest(), 'numTiles': 0,
-                'canvasOriginX': 8, 'canvasOriginY': 8, 'canvasWidth': CANVAS, 'canvasHeight': CANVAS,
+                'canvasOriginX': 8, 'canvasOriginY': 8 - LIFT, 'canvasWidth': CANVAS, 'canvasHeight': CANVAS_HEIGHT,
                 'boundsX': 2, 'boundsY': 2, 'boundsWidth': 12, 'boundsHeight': 12, 'animSpeed': 255}
     files = {
         PROJECT / 'assets/sprites/dispatch_topdown.png': png,
@@ -268,10 +314,13 @@ def outputs():
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
                  'bus_e', 'bus_w', 'bus_s', 'bus_n', 'streetcar_e', 'streetcar_w', 'streetcar_s', 'streetcar_n',
                  'ferry_s', 'ferry_n',
-                 'police_0', 'officer_0', 'knock_walker_a_0', 'spark', 'bullet', 'arrow_0'):
+                 'police_0', 'officer_0', 'knock_walker_a_0', 'spark', 'bullet', 'arrow_0',
+                 'courier_punch_0', 'courier_shoot_0', 'smoke_0', 'parcel', 'sparkle_0', 'beam_0',
+                 'police_flash_0', 'player_car_lit_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
         lines.append(f'#define {macro} {index[name]}')
     lines.append(f'#define TD_KNOCK_FRAMES {len(A.knockdown_frames())}')
+    lines.append(f'#define TD_SMOKE_FRAMES {len(A.SMOKE)}')
     for name, (dx, dy) in sorted(anchors.items()):
         if dy:
             lines.append(f'#define TD_ANCHOR_{name.upper()}_DY ({dy})')

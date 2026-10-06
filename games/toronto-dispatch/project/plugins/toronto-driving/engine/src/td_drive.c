@@ -5,6 +5,7 @@
 #include "td_life_int.h"
 #include "td_audio.h"
 #include "td_district.h"
+#include "td_anim.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -15,7 +16,9 @@ static const BYTE lf_face_u[4]={1,-1,0,0},lf_face_v[4]={0,0,1,-1};
 static const UBYTE lf_mass_player[4]={4,7,2,2},lf_mass_slot[6]={4,7,4,2,5,7};
 static WORD lf_div2(WORD x){return x<0?-(WORD)((UWORD)-x>>1):(WORD)((UWORD)x>>1);}
 /* Heading x speed, cached while both are unchanged (the common cruise). */
-static UBYTE lf_scale_key_h=255;static WORD lf_scale_key_s,lf_scale_x,lf_scale_y;
+static UBYTE lf_scale_key_h=255;static WORD lf_scale_key_s;
+/* Target velocity for the current heading and speed (td_anim reads the slide). */
+WORD lf_scale_x,lf_scale_y;
 static WORD lf_scale(BYTE d,WORD s){
     UBYTE m=d<0?(UBYTE)-d:(UBYTE)d;WORD r=0;
     while(m){if(m&1)r+=s;s+=s;m>>=1;}
@@ -71,6 +74,7 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
         /* A hard side impact spins the other car. */
         if(!v2&&n2>=14)tr_spin|=1<<i;
         if(rel>=6){
+            td_anim_spawn(TD_PART_FLASH,0,(UWORD)((WORD)(td.u>>4)+(lf_div16(du)>>1)),(UWORD)((WORD)(td.v>>4)+(lf_div16(dv)>>1)));
             if(td.job!=TD_NONE&&td.stage){UBYTE damage=rel>=12?12:4;td.health=td.health>damage?td.health-damage:0;}
             td_audio_play(TD_AUDIO_IMPACT);td.cooldown=30;td_message(5);
             if(rel>=14)lf_shake=10;
@@ -104,6 +108,12 @@ static UBYTE lf_corner_slide(WORD nu,WORD nv){
         }
     }
     return FALSE;
+}
+
+/* Dust off the bumper after a hard wall or kerb strike. */
+static void lf_dust(UBYTE kind){
+    UBYTE h=td.heading&15;
+    td_anim_spawn(kind,0,(UWORD)((WORD)(td.u>>4)+((lf_dx[h]*7)>>4)),(UWORD)((WORD)(td.v>>4)+((lf_dy[h]*7)>>4)));
 }
 
 UBYTE td_life_drive(void) BANKED {
@@ -173,9 +183,9 @@ UBYTE td_life_drive(void) BANKED {
         if(nu!=(WORD)td.u&&lf_drive(nu>>4,td.v>>4)){td.u=nu;td_vy=0;slide=1;}
         if(nv!=(WORD)td.v&&lf_drive(td.u>>4,nv>>4)){td.v=nv;td_vx=0;slide=1;}
         if(!slide)slide=lf_corner_slide(nu,nv);
-        if(slide){if(a>8&&!td.cooldown){td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
+        if(slide){if(a>8&&!td.cooldown){lf_dust(TD_PART_PUFF);td.cooldown=30;if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?4:1;td.health=td.health>damage?td.health-damage:0;}td_message(5);}}
         else{
-            if(a>8&&!td.cooldown){if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);if(a>14)lf_shake=8;}
+            if(a>8&&!td.cooldown){lf_dust(TD_PART_SMOKE);if(td.job!=TD_NONE&&td.stage){UBYTE damage=td_job.kind==1?20:8;td.health=td.health>damage?td.health-damage:0;}td.cooldown=45;td_message(5);if(a>14)lf_shake=8;}
             /* A solid wall throws a fast car back a little before it settles. */
             if(a>10){td.speed=-lf_div4(td.speed);td_vx=-lf_div4(td_vx);td_vy=-lf_div4(td_vy);}
             else{td.speed=0;td_vx=td_vy=0;}
@@ -216,7 +226,7 @@ static UBYTE lf_carjack(void){
 static void lf_punch_now(void){
     UBYTE i,best=TD_NONE,d=td_walk_dir&3,bit;WORD fu,fv,du,dv;actor_t *a;
     if(lf_punch)return;
-    lf_punch=16;
+    lf_punch=16;td_anim_pose(TD_FRAME_COURIER_PUNCH,10);
     fu=(WORD)(td.u>>4)+lf_face_u[d]*7;fv=(WORD)(td.v>>4)+lf_face_v[d]*7;
     for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
         if(a->flags&ACTOR_FLAG_HIDDEN)continue;
@@ -238,7 +248,8 @@ void td_life_foot_b(void) BANKED {
     UBYTE d=td_walk_dir&3;
     if(td_life_locked()||td_entry_timer||lf_punch)return;
     if(!td.ammo){td_message(TD_MSG_NO_AMMO);return;}
-    td.ammo--;lf_punch=14;
+    td.ammo--;lf_punch=14;td_anim_pose(TD_FRAME_COURIER_SHOOT,12);
+    td_anim_spawn(TD_PART_FLASH,0,(td.u>>4)+lf_face_u[d]*9,(td.v>>4)+lf_face_v[d]*9);
     td_lf_fx(FX_BULLET,(td.u>>4)+lf_face_u[d]*6,(td.v>>4)+lf_face_v[d]*6,22);
     fx_du=lf_face_u[d]*64;fx_dv=lf_face_v[d]*64;
     td_audio_play(TD_AUDIO_IMPACT);

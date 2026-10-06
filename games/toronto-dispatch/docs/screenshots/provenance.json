@@ -71,26 +71,90 @@
   },
   {
     "file": "title-screen.png",
-    "frame": 279,
-    "rom_sha256": "836c3af3efb0ec914a05ba725996836265d8c8b8ad4e0589b88193372518fc30",
+    "frame": 280,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
     "png_sha256": "9baeb6030430316c4f0b2efd8bda133cc43d3e116790bf110acd0d3a587c01af",
     "inputs": "cold boot, no input",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
   },
   {
     "file": "driving-hud.png",
-    "frame": 641,
-    "rom_sha256": "836c3af3efb0ec914a05ba725996836265d8c8b8ad4e0589b88193372518fc30",
-    "png_sha256": "9f07babe45a418778ed78f06fba04ebb6233ea956d749473756343888d06512b",
-    "inputs": "A for two frames, 300 frames, then A held for 60 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
+    "frame": 642,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "f6eb48e2b85d1f63f732bab219117d44d919cb294f39fe3978aa1344b9fa673b",
+    "inputs": "A for two frames, 300 frames, then A held for 60 frames (08:00)",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
   },
   {
     "file": "pause-menu.png",
-    "frame": 675,
-    "rom_sha256": "836c3af3efb0ec914a05ba725996836265d8c8b8ad4e0589b88193372518fc30",
-    "png_sha256": "4393658595f554c34e2ef96905695b8558830478460684da955d4cb4a5e07515",
-    "inputs": "then Start for four frames and 30 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs listed here"
+    "frame": 646,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "1be7b491f815c2c3702bbb6b50bef446ea9e4c31cae24ae67509da90956bebb0",
+    "inputs": "boot, play clock written for 22:00, 130 frames, Start 4 frames, 30 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "golden-hour.png",
+    "frame": 648,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "7244396ea58bfe5d87d568f9ecb7c3cb822f7e866eb9981afec633970deea8be",
+    "inputs": "boot, play clock written to 446 s (18.5h) in emulator memory, 130 frames, A held 36 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "dusk-headlamps.png",
+    "frame": 648,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "afd4bcb37695f7f9795e2c8afe5dcc6ec3305651b1626686cdb1bbc6230d7a1b",
+    "inputs": "boot, play clock written to 500 s (19.75h) in emulator memory, 130 frames, A held 36 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "night-headlamps.png",
+    "frame": 648,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "66fab36df9815603c8aadb89ebed07c04b11ba2c1da5c7d30535aaaefb216929",
+    "inputs": "boot, play clock written to 596 s (22h) in emulator memory, 130 frames, A held 36 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "dawn.png",
+    "frame": 648,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "2688fdec3429a5408a75edb570f8f4c742c90df0216dd12b8bc2935b70faae63",
+    "inputs": "boot, play clock written to 937 s (6h) in emulator memory, 130 frames, A held 36 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "brake-smoke.png",
+    "frame": 586,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "ad871ffdfbd9a8c7d5d3eb8da0570d68c378d463b547c4b5d487e836a82e344b",
+    "inputs": "boot, A held 90 frames, B held 14 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "pickup-pop.png",
+    "frame": 779,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "a85caeab9edeb0fa725d5fb6cadad5103132479f6eae58dddd6e7099d4bc119b",
+    "inputs": "boot, A+B held 70 frames (leave car), courier moved to (508,212) with vitality 50 by emulator memory writes, 40 frames, Up held 150 frames until the pickup is collected, 7 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "parcel-pop.png",
+    "frame": 584,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "bfbe9766273aac4f99431f04489d4e15b290f22cd1fa44ea5a58722a42ed0f6a",
+    "inputs": "boot, Select, A (first job), car moved to the pickup by emulator memory write, Select, 6 frames",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "police-lightbar.png",
+    "frame": 1189,
+    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+    "png_sha256": "9ee34ed6ce3b55600ce337768b5041915705acf58cb9424ddd6f66229433d920",
+    "inputs": "boot (180 frames, A for two frames, 300 frames); then wanted level 3 and heat 20 written to emulator memory every frame while A is held two seconds in every three; a flashing frame of the pursuing patrol car",
+    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
   }
 ]

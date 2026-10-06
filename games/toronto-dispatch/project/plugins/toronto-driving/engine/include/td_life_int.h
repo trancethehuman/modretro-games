@@ -43,6 +43,7 @@ extern UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_
 /* Slot 4 is an ordinary blue car until a pursuit needs it: it becomes the
  * patrol car only while out of view and changes back the same way. */
 extern UBYTE lf_patrol,lf_lost;
+extern WORD lf_scale_x,lf_scale_y;
 /* Ticks of firm contact before officers make an arrest. */
 #define LF_BUST_TICKS 90
 /* ROM tables are read from code in this file's own bank, so every module

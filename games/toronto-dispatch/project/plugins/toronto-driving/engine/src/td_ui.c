@@ -9,6 +9,7 @@
 #include "td_audio.h"
 #include "td_atlas.h"
 #include "td_life.h"
+#include "td_daynight.h"
 #include "actor.h"
 #include "data_manager.h"
 #include "ui.h"
@@ -280,7 +281,6 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
 #ifdef __SDCC
 #include "palette.h"
 void load_bkg_tileset(const tileset_t *tiles,UBYTE bank) BANKED;
-UBYTE do_load_palette(palette_entry_t *dest,const palette_t *palette,UBYTE bank) BANKED;
 /* The atlas borrows CGB bank-1 background tiles 8..187. Scenes whose own
  * background spills into bank 1 (the core uses IDs 0..9) must get those
  * patterns back before the city is visible again. */
@@ -290,19 +290,15 @@ static void td_restore_scene_tiles(void){
     MemcpyBanked(&bkg,scene.background.ptr,sizeof(bkg),scene.background.bank);
     if(bkg.cgb_tileset.ptr){VBK_REG=1;load_bkg_tileset(bkg.cgb_tileset.ptr,bkg.cgb_tileset.bank);VBK_REG=0;}
 }
-/* The title swaps in its own BG palettes 0..6; the scene's come back from
- * its ROM data. The title only appears while a scene initializes, before
- * its fade-in, which applies BkgPalette: writing the hardware palettes here
- * would flash full colour for a frame. Leaving the title sets them. */
+/* The title swaps in its own BG palettes 0..6; the scene's come back as
+ * the current time of day's set. The title only appears while a scene
+ * initializes, before its fade-in, which applies BkgPalette: writing the
+ * hardware palettes here would flash full colour for a frame. Leaving the
+ * title sets them. */
 static void td_title_palettes_on(void){
     memcpy(BkgPalette,td_title_palettes,sizeof(td_title_palettes));
 }
-static void td_restore_scene_palettes(void){
-    scene_t scene;
-    MemcpyBanked(&scene,current_scene.ptr,sizeof(scene),current_scene.bank);
-    if(scene.palette.ptr)do_load_palette(BkgPalette,scene.palette.ptr,scene.palette.bank);
-    set_bkg_palette(0,7,(const palette_color_t *)BkgPalette);
-}
+static void td_restore_scene_palettes(void){td_daynight_apply(TD_DN_FORCE|TD_DN_HW);}
 typedef char td_title_palettes_fill_seven_slots[(sizeof(td_title_palettes)==7*sizeof(palette_entry_t))?1:-1];
 #else
 static void td_restore_scene_tiles(void){}
@@ -487,8 +483,10 @@ void td_ui_draw(void) BANKED {
     if(td.mode==TD_PAUSE){
         td_page(td_title_1,td_title_2);
         td_format(td_line,TD_UI_COIN "%u  " TD_UI_BOX "%u/%u DONE",td.cash,td.done,TD_QUESTS);td_framed(4,td_line);
-        minutes=td.seconds/60;
-        td_format(td_line,"%s%s " TD_UI_CLOCK "%uH%02uM",td.onfoot?TD_UI_WALK:td_vehicle_icon[td.vehicle],td.onfoot?"WALK":td_vehicle_short[td.vehicle],minutes/60,minutes%60);td_framed(5,td_line);
+        /* Time of day: the sun from 07:00, the moon from 19:00. */
+        minutes=td_daynight_minutes();
+        td_format(td_line,"%s%s %s%02u:%02u",td.onfoot?TD_UI_WALK:td_vehicle_icon[td.vehicle],td.onfoot?"WALK":td_vehicle_short[td.vehicle],
+                  minutes>=7*60&&minutes<19*60?TD_UI_SUN:TD_UI_MOON,minutes/60,minutes%60);td_framed(5,td_line);
         td_row(6,td_frame_join);
         for(i=0;i<9;i++){
             td_line[0]=td.menu==i?(td_ui_blink?TD_UI_CURSOR_ALT[0]:TD_UI_CURSOR[0]):' ';

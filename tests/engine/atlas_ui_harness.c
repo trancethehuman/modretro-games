@@ -18,7 +18,10 @@ UBYTE td_resume_mode;
 /* Objective pointer and arrest/hospital receipt owned by td_life.c. */
 UWORD td_beacon_u,td_beacon_v;
 UBYTE td_beacon_shown,td_life_fine;
-actor_t actors[21];
+actor_t actors[TD_ACTORS];
+/* Day/night palettes (td_daynight.c) are not part of this fixture. */
+UBYTE td_daynight_apply(UBYTE flags) {(void)flags;return 0;}
+UWORD td_daynight_minutes(void) {return 8*60;}
 UBYTE actors_len;
 UWORD camera_x,camera_y,sys_time;
 UBYTE camera_settings,VBK_REG,text_drawn;
@@ -103,7 +106,7 @@ static void reset_case(void) {
     td_target.district=3;td_target.u=320;td_target.v=144;td_target.reserved=TD_STOP_FOOT;strcpy(td_target.name,"WITHROW PARK");
     td_job.count=5;td_job.route[3]=36;td_job.seconds=199;td_job.reward=130;
     td_route_district=0;td_resume_mode=TD_ROAM;actors_len=TD_ACTORS;
-    for(unsigned i=0;i<21;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
+    for(unsigned i=0;i<TD_ACTORS;i++){actors[i].flags=0x80|(i&1?ACTOR_FLAG_HIDDEN:0);actors[i].pos.x=1000+i;actors[i].pos.y=2000+i;}
     camera_x=0x3210;camera_y=0x4560;camera_settings=0x2D;VBK_REG=0;text_drawn=0;
     window_x=window_y=0;window_writes=tile_uploads=ground_uploads=content_reads=0;
     td_ui_init();memcpy(initial_font,vram[1]+TD_FONT_FIRST,sizeof(initial_font));memcpy(initial_bank0,vram[0],sizeof(initial_bank0));
@@ -320,8 +323,8 @@ static void test_paid_transit_objective_context(void) {
 static void test_interrupt_restore_and_idempotence(void) {
     const UBYTE lengths[]={0,1,TD_ACTORS,21};
     for(unsigned hidden=0;hidden<3;hidden++)for(unsigned scenario=0;scenario<sizeof(lengths);scenario++) {
-        reset_case();actors_len=lengths[scenario];actor_t original[21];memcpy(original,actors,sizeof(actors));
-        for(unsigned i=0;i<21;i++) {
+        reset_case();actors_len=lengths[scenario];actor_t original[TD_ACTORS];memcpy(original,actors,sizeof(actors));
+        for(unsigned i=0;i<TD_ACTORS;i++) {
             actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|
                 (hidden==1||(hidden==2&&(i&1))?ACTOR_FLAG_HIDDEN:0);
         }
@@ -329,7 +332,7 @@ static void test_interrupt_restore_and_idempotence(void) {
         UWORD saved_x=camera_x,saved_y=camera_y;UBYTE saved_settings=camera_settings;
         open_case();game_snapshot_t before=snapshot_game();
         unsigned count=actors_len<TD_ACTORS?actors_len:TD_ACTORS;
-        for(unsigned i=0;i<21;i++)expect(actors[i].flags==(i<count?original[i].flags|ACTOR_FLAG_HIDDEN:original[i].flags),
+        for(unsigned i=0;i<TD_ACTORS;i++)expect(actors[i].flags==(i<count?original[i].flags|ACTOR_FLAG_HIDDEN:original[i].flags),
                                         "map open hides only the bounded actual actor list");
         td_map_update(0,0);td_map_update(0,0);
         UBYTE before_row=td_map_row,before_count=td_map_count;unsigned uploads=tile_uploads;
@@ -337,14 +340,14 @@ static void test_interrupt_restore_and_idempotence(void) {
         td_map_open();
         expect(td_map_row==before_row&&td_map_count==before_count&&tile_uploads==uploads,
                "repeated map open preserves partial paint and does not reload marker or ground tiles");
-        for(unsigned i=0;i<21;i++)actors[i].flags^=0x20;
-        UBYTE flags_before_close[21];for(unsigned i=0;i<21;i++)flags_before_close[i]=actors[i].flags;
+        for(unsigned i=0;i<TD_ACTORS;i++)actors[i].flags^=0x20;
+        UBYTE flags_before_close[TD_ACTORS];for(unsigned i=0;i<TD_ACTORS;i++)flags_before_close[i]=actors[i].flags;
         /* Driver handles B/Start by invoking this production close before
          * changing modes. The driver path itself is tested in test_engine.py. */
         td_map_close();
         expect(camera_x==saved_x&&camera_y==saved_y&&camera_settings==saved_settings&&VBK_REG==0,
                "partial-paint close restores exact camera words/settings and neutral VRAM bank");
-        for(unsigned i=0;i<21;i++) {
+        for(unsigned i=0;i<TD_ACTORS;i++) {
             UBYTE expected=i<count?(flags_before_close[i]&~ACTOR_FLAG_HIDDEN)|(original[i].flags&ACTOR_FLAG_HIDDEN):flags_before_close[i];
             expect(actors[i].flags==expected,"map close restores only the prior hidden bit and retains other actor flag changes");
             expect(actors[i].pos.x==original[i].pos.x&&actors[i].pos.y==original[i].pos.y,

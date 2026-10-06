@@ -304,6 +304,27 @@ TILES = {
         "..####..",
     ]),
     # Pistol rounds: an amber cartridge.
+    # Time of day in the pause menu: the sun (07:00-18:59) and the moon.
+    'icon_sun': ('ui', [
+        "...#....",
+        "#.#a#.#.",
+        ".#aaa#..",
+        "#aaaaa#.",
+        ".#aaa#..",
+        "#.#a#.#.",
+        "...#....",
+        "........",
+    ]),
+    'icon_moon': ('ui', [
+        "..####..",
+        ".#aa#...",
+        "#aa#....",
+        "#aa#....",
+        "#aa#....",
+        "#aaa#..#",
+        ".#aaa##.",
+        "..####..",
+    ]),
     'icon_ammo': ('ui', [
         "........",
         "...##...",
@@ -510,6 +531,7 @@ CODES = [
     ('EMBLEM_TL', 'emblem_tl', 0, 0), ('EMBLEM_TR', 'emblem_tr', 0, 0),
     ('EMBLEM_BL', 'emblem_bl', 0, 0), ('EMBLEM_BR', 'emblem_br', 0, 0),
     ('MEDIC', 'icon_medic', 0, 0), ('AMMO', 'icon_ammo', 0, 0),
+    ('SUN', 'icon_sun', 0, 0), ('MOON', 'icon_moon', 0, 0),
 ]
 
 

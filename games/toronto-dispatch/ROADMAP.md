@@ -95,6 +95,8 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Tune steering, traffic spacing and frame pacing from handheld/human feedback. A bounded sample observed about 29.5 rendered updates per second; crowded-scene performance remains pending.
 - [ ] Listen to the original score/effects and tune their mix, event distinction and physical speaker/headphone behaviour.
 - [x] Street life revision (candidate, 2026-10-06): gentler police pursuit and fewer officers, sidewalk pickups replacing the curbside props and gulls, eight walkers over 620 routes, traffic that keeps returning near the courier, redrawn cars and a dusk title screen; CLI/emulator evidence in [TESTING.md](TESTING.md).
+- [x] Day/night cycle and animation (candidate, 2026-10-06): a 17-minute day with golden hour, dusk, night and dawn palettes, headlamps, tyre smoke, exhaust and impact effects, a look-ahead driving camera, punch/pistol poses, collection pops and a flashing patrol light bar, at unchanged frame rate; CLI/emulator evidence in [TESTING.md](TESTING.md).
+- [ ] Handheld review of the day length, night readability, smoke frequency and camera look-ahead.
 - [ ] Playtest police difficulty, pickup economy and street density on the handheld; decide whether a few clearly readable knock-over props should return.
 - [ ] Expand pedestrian variety, street furniture, local activity and visible transit boarding/riding.
 - [ ] Author streetcar rails and moving streetcars on researched corridors; improve the current partial bus route geometry.

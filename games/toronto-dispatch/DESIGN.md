@@ -32,6 +32,12 @@ Cargo condition is part of the native contract rules. Damage starts after the fi
 
 The courier can punch, shoot a pistol and take a road vehicle; struck pedestrians are thrown and fall without gore. Crimes raise police attention in stars. Police are a pressure, not an instant end: the patrol car is slower than the courier's car at full speed and arrives from beyond the screen edge, officers on foot are slower than a walking courier below four stars, an arrest needs sustained contact, and shooting only starts at four stars with about one shot every 1.5 seconds. Attention cools a star every 12 seconds out of sight of police. One walker in eight is an officer, and the only patrol car is an ordinary blue car until a pursuit starts. An arrest costs $25 a star, half the ammunition and any active job; collapsing sends the courier to the core hospital for at most $60. Sidewalk pickups give cash, first aid or ammunition when walked or driven over; first aid and ammunition stay put when the courier is already full. The exact parameters are recorded in [DECISIONS.md](DECISIONS.md); difficulty and pickup economy still need human playtests.
 
+## Time of day and animation
+
+The city runs a day/night cycle on the play clock: a game day lasts about 17 minutes and a new game starts at 08:00. Golden hour, a violet dusk, a navy night with sodium-lit sidewalks and a lilac dawn are palette sets derived from the daytime scene palettes, so collision art and occlusion never change; the HUD keeps its own colours and the pause menu shows the time with a sun or moon. From dusk to dawn the courier's vehicle lights the road ahead.
+
+Animation marks what the player does: tyre smoke on hard braking, handbrake slides and sliding tails, exhaust on a launch, dust and sparks on impacts, a camera that looks ahead of a moving vehicle, punch and pistol poses, icons that rise from collected pickups, a parcel at each job pickup and a coin after a delivery, and a flashing light bar on the pursuing patrol car. Effects use two short-lived particle actors and the vehicle's own frames, and must not cost frame rate; see [DECISIONS.md](DECISIONS.md) and [TESTING.md](TESTING.md).
+
 ## Missions
 
 Release target: at least two hours of varied gameplay. Build distinct job rules, route decisions and progression; do not pad the duration with mandatory idle waiting. Measure representative quest times and a campaign playthrough before claiming the target is met.
