@@ -434,9 +434,11 @@ static const td_street_t td_west_streets[135]={
   {816,312,944,312,3,45},
   {176,32,176,64,3,46},
 };
+static const UBYTE td_west_street_start[5]={0,0,51,108,135};
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {
- UBYTE name=0;UWORD i,score,best=65535;const td_street_t *s;
- for(i=0;i<135;i++){s=&td_west_streets[i];if(s->district!=district)continue;
+ UBYTE name=0,i=0,end=0;UWORD score,best=65535;const td_street_t *s;
+ if(district<4){i=td_west_street_start[district];end=td_west_street_start[district+1];}
+ for(s=&td_west_streets[i];i<end;i++,s++){
  score=(u<s->x1?s->x1-u:u>s->x2?u-s->x2:0)+(v<s->y1?s->y1-v:v>s->y2?v-s->y2:0);
  if(score<best){best=score;name=s->name;}
  }memcpy(d,td_west_street_names[name],19);
@@ -457,9 +459,9 @@ void td_get_street(UWORD u,UWORD v,char *d) BANKED {
   else if(v>144) name="WELLESLEY / HARBORD";
   else name=u>912?"DANFORTH AVENUE":"BLOOR STREET";
   if(v>256&&v<320&&u>=816)name="GERRARD ST EAST";
-  { const UWORD columns[]={80,208,336,480,560,640,720,816,944};
-    const char *roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};
-    const UWORD rows[]={64,176,288,400,528,640,720,784};
+  { static const UWORD columns[]={80,208,336,480,560,640,720,816,944};
+    static const char * const roads[]={"DUFFERIN STREET","BATHURST STREET","SPADINA AVENUE","UNIVERSITY AVENUE","BAY STREET","YONGE STREET","JARVIS STREET","PARLIAMENT STREET","BROADVIEW AVENUE"};
+    static const UWORD rows[]={64,176,288,400,528,640,720,784};
     UWORD nearest_x=65535,nearest_y=65535,delta; UBYTE i,best=0;
     for(i=0;i<9;i++){delta=u>columns[i]?u-columns[i]:columns[i]-u;if(delta<nearest_x){nearest_x=delta;best=i;}}
     for(i=0;i<8;i++){delta=v>rows[i]?v-rows[i]:rows[i]-v;if(delta<nearest_y)nearest_y=delta;}

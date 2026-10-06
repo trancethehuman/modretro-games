@@ -54,6 +54,16 @@ def source():
         if len(routes) > 128:
             routes = [routes[i * len(routes) // 128] for i in range(128)]
         district_routes.append(routes)
+    # Runtime refresh index: identities ordered by y, and for each 32-pixel band
+    # the first ordered position at or below that band. A window scan then visits
+    # only nearby rows; identities themselves keep their authored order.
+    orders, bands = [], []
+    for routes in district_routes:
+        assert all(y < 1024 for _, y in routes)
+        order = sorted(range(len(routes)), key=lambda i: (routes[i][1], i))
+        orders.append(order)
+        bands.append([next((k for k, i in enumerate(order) if routes[i][1] >= band * 32), len(order))
+                      for band in range(33)])
     # Each route is63 pixels long; per-district identities fit a byte.
     return ("/* Generated from native collision by create_world_routes.py. Original route placement. */\n"
             "#ifndef TD_WORLD_ROUTES_H\n#define TD_WORLD_ROUTES_H\n"
@@ -62,6 +72,12 @@ def source():
             f"static const UBYTE td_route_counts[{len(district_routes)}]={{" + ','.join(str(len(r)) for r in district_routes) + "};\n"
             f"static const UWORD td_district_routes[{len(district_routes)}][128][2]={{\n" +
             ''.join('  {\n' + ''.join(f'    {{{x},{y}}},\n' for x,y in routes) + '  },\n' for routes in district_routes) +
+            "};\n"
+            f"static const UBYTE td_route_order[{len(district_routes)}][128]={{\n" +
+            ''.join('  {' + ','.join(map(str, order)) + '},\n' for order in orders) +
+            "};\n"
+            f"static const UBYTE td_route_band[{len(district_routes)}][33]={{\n" +
+            ''.join('  {' + ','.join(map(str, band)) + '},\n' for band in bands) +
             "};\n#endif\n#endif\n")
 
 

@@ -31,8 +31,10 @@ static const UWORD td_rows[]={64,176,288,400,528,640,720,784};
 static const UWORD td_cols[]={80,208,336,480,560,640,720,816,944};
 static UWORD td_traffic_u[6],td_traffic_v[6];
 static td_traffic_sample_t td_traffic_samples[6];
-static UWORD td_nearby_routes[6][2];
-static UBYTE td_traffic_leg[6],td_ped_route[6],td_ped_refresh;
+/* Global: read by the native presentation routine and emulator checks. */
+UWORD td_nearby_routes[6][2];
+UBYTE td_ped_route[6];
+static UBYTE td_traffic_leg[6],td_ped_refresh;
 static UWORD td_ped_anchor_u,td_ped_anchor_v;
 static UBYTE td_tick,td_notice_timer,td_red_cooldown,td_turn_tick,td_entry_timer,td_entry_target,td_walk_dir;
 UBYTE td_resume_mode;
@@ -43,6 +45,35 @@ static UBYTE td_input_edge;
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v);
 
 static UWORD td_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
+/* SDCC has no hardware multiply/divide: its runtime helpers cost thousands of
+ * cycles per call. Hot paths below use exact shift/add equivalents instead. */
+static WORD td_div2(WORD x){return x<0?-(WORD)((UWORD)-x>>1):(WORD)((UWORD)x>>1);}
+static WORD td_div4(WORD x){return x<0?-(WORD)((UWORD)-x>>2):(WORD)((UWORD)x>>2);}
+static WORD td_div16(WORD x){return x<0?-(WORD)((UWORD)-x>>4):(WORD)((UWORD)x>>4);}
+/* Exact d*s for the bounded heading component |d|<=16. */
+static WORD td_scale(BYTE d,WORD s){
+    UBYTE m=d<0?(UBYTE)-d:(UBYTE)d;WORD r=0;
+    while(m){if(m&1)r+=s;s+=s;m>>=1;}
+    return d<0?-r:r;
+}
+/* The signal phase changes once per game second; cache td.seconds%12. */
+static UWORD td_phase_seconds;
+static UBYTE td_phase_value;
+static UBYTE td_signal_phase(void){
+    if(td.seconds!=td_phase_seconds){td_phase_seconds=td.seconds;td_phase_value=td.seconds%12;}
+    return td_phase_value;
+}
+/* Pedestrian phases use seven bits of seconds*12+subsecond/5+route*37, so
+ * eight-bit wraparound is exact and avoids runtime multiply/divide calls. */
+static const UBYTE td_fifth[60]={0,0,0,0,0,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5,
+    6,6,6,6,6,7,7,7,7,7,8,8,8,8,8,9,9,9,9,9,10,10,10,10,10,11,11,11,11,11};
+static UBYTE td_ped_base(void){
+    UBYTE s=(UBYTE)td.seconds;
+    return (UBYTE)((UBYTE)(s<<3)+(UBYTE)(s<<2)+(td.subsecond<60?td_fifth[td.subsecond]:td.subsecond/5));
+}
+static UBYTE td_ped_phase(UBYTE base,UBYTE route){
+    return (UBYTE)(base+(UBYTE)(route<<5)+(UBYTE)(route<<2)+route)&127;
+}
 static void td_position(actor_t *a,UWORD u,UWORD v){
     // GBVM actors use five fractional bits; driving state uses four.
     a->pos.x=u*32; a->pos.y=v*32;
@@ -51,13 +82,76 @@ static void td_frame(actor_t *a,UBYTE f){if(a->frame_start!=f||a->frame_end!=f+1
 static void td_message(UBYTE m){td.msg=m;td_notice_timer=90;if(m==5||m==13)td_audio_play(TD_AUDIO_IMPACT);td_ui_draw();}
 static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!INPUT_B,td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
 static UBYTE td_near(td_stop_t *s){return s->district==td.district&&td_distance(td.u>>4,s->u)<15&&td_distance(td.v>>4,s->v)<15;}
-static UBYTE td_drivable(UWORD u,UWORD v){
-    UBYTE x,y,left,right,top,bottom;
-    if(u<8||v<8||u>1016||v>968)return FALSE;
-    left=(u-5)>>3;right=(u+5)>>3;top=(v-5)>>3;bottom=(v+5)>>3;
-    /* Eleven pixels can overlap three tile rows/columns: corners alone miss rails. */
+#ifdef __SDCC
+/* tile_at() multiplies and switches banks for every byte. This HOME routine
+ * scans td_scan_rows x td_scan_cols collision bytes with one switch, keeping
+ * the fixed bank small; it returns TRUE only if every byte is zero. */
+/* Global so native emulator checks can inspect the scan request. */
+const UBYTE *td_scan_row;
+UBYTE td_scan_cols,td_scan_rows;
+UBYTE td_scan_clear(void) NONBANKED NAKED {
+    __asm
+        ldh a, (__current_bank)
+        push af
+        ld a, (_collision_bank)
+        ldh (__current_bank), a
+        ld (_rROMB0), a
+        ld hl, #_td_scan_row
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        ld a, (_td_scan_rows)
+        ld b, a
+    1$:
+        push hl
+        ld a, (_td_scan_cols)
+        ld c, a
+    2$:
+        ld a, (hl+)
+        or a, a
+        jr nz, 3$
+        dec c
+        jr nz, 2$
+        pop hl
+        ld a, (_image_tile_width)
+        add a, l
+        ld l, a
+        adc a, h
+        sub a, l
+        ld h, a
+        dec b
+        jr nz, 1$
+        ld e, #1
+        jr 4$
+    3$:
+        pop hl
+        ld e, #0
+    4$:
+        pop af
+        ldh (__current_bank), a
+        ld (_rROMB0), a
+        ld a, e
+        ret
+    __endasm;
+}
+/* Out-of-scene tiles block, exactly as tile_at's COLLISION_ALL result does. */
+static UBYTE td_area_clear(UBYTE left,UBYTE right,UBYTE top,UBYTE bottom){
+    if(right>=image_tile_width||bottom>=image_tile_height)return FALSE;
+    td_scan_row=collision_ptr+(image_tile_width==128?((UWORD)top<<7):(UWORD)top*image_tile_width)+left;
+    td_scan_cols=right-left+1;td_scan_rows=bottom-top+1;
+    return td_scan_clear();
+}
+#else
+static UBYTE td_area_clear(UBYTE left,UBYTE right,UBYTE top,UBYTE bottom){
+    UBYTE x,y;
     for(y=top;y<=bottom;y++)for(x=left;x<=right;x++)if(tile_at(x,y))return FALSE;
     return TRUE;
+}
+#endif
+static UBYTE td_drivable(UWORD u,UWORD v){
+    if(u<8||v<8||u>1016||v>968)return FALSE;
+    /* Eleven pixels can overlap three tile rows/columns: corners alone miss rails. */
+    return td_area_clear((u-5)>>3,(u+5)>>3,(v-5)>>3,(v+5)>>3);
 }
 static UBYTE td_walkable(UWORD u,UWORD v){
     if(u>=1024||v>=976)return FALSE;
@@ -302,80 +396,980 @@ static void td_second(void){
     }
     td_save();td_ui_draw();
 }
+/* Q4 stop lines: td_rows/td_cols*16 -/+ 384 for forward/reverse approaches. */
+#define TD_STOP_LINES(a,b,c,d,e,f,g,h,o) {a*16+o,b*16+o,c*16+o,d*16+o,e*16+o,f*16+o,g*16+o,h*16+o}
+static const UWORD td_stop_rows[2][8]={TD_STOP_LINES(64,176,288,400,528,640,720,784,-384),TD_STOP_LINES(64,176,288,400,528,640,720,784,384)};
+static const UWORD td_stop_cols[2][9]={{80*16-384,208*16-384,336*16-384,480*16-384,560*16-384,640*16-384,720*16-384,816*16-384,944*16-384},
+    {80*16+384,208*16+384,336*16+384,480*16+384,560*16+384,640*16+384,720*16+384,816*16+384,944*16+384}};
 static UBYTE td_signal_stop(UWORD pos,UBYTE vertical,UBYTE reverse){
-    UBYTE i,count=vertical?8:9;UWORD line;
-    for(i=0;i<count;i++){
-        line=(vertical?td_rows[i]:td_cols[i])*16+(reverse?384:-384);
-        if(pos>=line&&pos<line+8)return TRUE;
-    }
+    UBYTE count=vertical?8:9;const UWORD *line=vertical?td_stop_rows[reverse?1:0]:td_stop_cols[reverse?1:0];
+    do{if(pos>=*line&&pos<*line+8)return TRUE;line++;}while(--count);
     return FALSE;
 }
+/* Core loops in Q4: east/westbound lanes on td_rows[2..5] sit 8px either side
+ * of the centreline; the bus loop visits its six fixed junctions. */
+static const UWORD td_core_lane_v[4]={288*16,400*16,528*16,640*16};
+static const UWORD td_bus_u[6]={144*16,208*16,208*16,640*16,816*16,816*16};
+static const UWORD td_bus_v[6]={64*16,64*16,176*16,176*16,176*16,64*16};
+#ifdef __SDCC
+/* Traffic stepping kernel. Inputs: td_tk_i (first vehicle), td_tk_phase,
+ * td_tk_district, td_tk_yield, td_tk_hit, td_tk_pu/pv (player Q4). It moves
+ * vehicles td_tk_i..5 exactly as the C reference below and returns the index
+ * of the first vehicle that strikes the car (C applies the effects and
+ * resumes after it), or 6 when done. td_tk_dirty records district arrivals. */
+UBYTE td_tk_i,td_tk_phase,td_tk_district,td_tk_yield,td_tk_hit,td_tk_dirty,td_tk_leg;
+UWORD td_tk_pu,td_tk_pv,td_tk_u,td_tk_v,td_tk_tu,td_tk_tv;
+UBYTE td_traffic_kernel(void) NAKED {
+    __asm
+    60$:
+        ld a, (_td_tk_i)
+        cp a, #6
+        jr c, 61$
+        ld a, #6
+        ret
+    61$:
+        ld c, a
+        ld b, #0
+        ld hl, #_td_traffic_u
+        add hl, bc
+        add hl, bc
+        ld a, (hl+)
+        ld (_td_tk_u), a
+        ld a, (hl)
+        ld (_td_tk_u+1), a
+        ld hl, #_td_traffic_v
+        add hl, bc
+        add hl, bc
+        ld a, (hl+)
+        ld (_td_tk_v), a
+        ld a, (hl)
+        ld (_td_tk_v+1), a
+        ld hl, #_td_traffic_leg
+        add hl, bc
+        ld a, (hl)
+        ld (_td_tk_leg), a
+        ld a, (_td_tk_district)
+        or a, a
+        jr z, 62$
+        ld hl, #_td_traffic_samples
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        ld de, #_td_tk_tu
+        ld a, (hl+)
+        ld (de), a
+        inc de
+        ld a, (hl+)
+        ld (de), a
+        inc de
+        ld a, (hl+)
+        ld (de), a
+        inc de
+        ld a, (hl)
+        ld (de), a
+        jp 70$
+    62$:
+        ld a, c
+        cp a, #4
+        jp nc, 66$
+        ld de, #0x3480
+        ld a, (_td_tk_leg)
+        cp a, #2
+        jr c, 63$
+        ld de, #0x0300
+    63$:
+        ld a, e
+        ld (_td_tk_tu), a
+        ld a, d
+        ld (_td_tk_tu+1), a
+        ld hl, #_td_core_lane_v
+        add hl, bc
+        add hl, bc
+        ld a, (hl+)
+        ld e, a
+        ld d, (hl)
+        ld hl, #0x0080
+        ld a, (_td_tk_leg)
+        or a, a
+        jr z, 64$
+        cp a, #3
+        jr nz, 65$
+    64$:
+        ld hl, #0xff80
+    65$:
+        add hl, de
+        ld a, l
+        ld (_td_tk_tv), a
+        ld a, h
+        ld (_td_tk_tv+1), a
+        ld a, (_td_tk_leg)
+        or a, a
+        jr z, 165$
+        cp a, #2
+        jp nz, 70$
+    165$:
+        ld a, (_td_tk_phase)
+        cp a, #7
+        jp c, 70$
+        ld hl, #_td_stop_cols
+        ld a, (_td_tk_leg)
+        or a, a
+        jr z, 166$
+        ld de, #18
+        add hl, de
+    166$:
+        ld b, #9
+        ld a, (_td_tk_u)
+        ld e, a
+        ld a, (_td_tk_u+1)
+        ld d, a
+        call 90$
+        jp nz, 80$
+        jp 70$
+    66$:
+        jr nz, 68$
+        ld de, #0x3380
+        ld a, (_td_tk_leg)
+        or a, a
+        jr z, 67$
+        cp a, #3
+        jr z, 67$
+        ld de, #0x3280
+    67$:
+        ld a, e
+        ld (_td_tk_tu), a
+        ld a, d
+        ld (_td_tk_tu+1), a
+        ld de, #0x3180
+        ld a, (_td_tk_leg)
+        cp a, #2
+        jr c, 167$
+        ld de, #0x0300
+    167$:
+        ld a, e
+        ld (_td_tk_tv), a
+        ld a, d
+        ld (_td_tk_tv+1), a
+        ld a, (_td_tk_leg)
+        or a, a
+        jr z, 168$
+        cp a, #2
+        jr nz, 70$
+    168$:
+        ld a, (_td_tk_phase)
+        cp a, #7
+        jr nc, 70$
+        ld hl, #_td_stop_rows
+        ld a, (_td_tk_leg)
+        or a, a
+        jr z, 169$
+        ld de, #16
+        add hl, de
+    169$:
+        ld b, #8
+        ld a, (_td_tk_v)
+        ld e, a
+        ld a, (_td_tk_v+1)
+        ld d, a
+        call 90$
+        jp nz, 80$
+        jr 70$
+    68$:
+        ld a, (_td_tk_leg)
+        ld c, a
+        ld b, #0
+        ld hl, #_td_bus_u
+        add hl, bc
+        add hl, bc
+        ld a, (hl+)
+        ld (_td_tk_tu), a
+        ld a, (hl)
+        ld (_td_tk_tu+1), a
+        ld hl, #_td_bus_v
+        add hl, bc
+        add hl, bc
+        ld a, (hl+)
+        ld (_td_tk_tv), a
+        ld a, (hl)
+        ld (_td_tk_tv+1), a
+    70$:
+        ld hl, #_td_tk_u
+        ld de, #_td_tk_tu
+        call 95$
+        jr z, 72$
+        call 97$
+        ld hl, #_td_tk_u
+        jr c, 71$
+        call 98$
+        jr 74$
+    71$:
+        call 99$
+        jr 74$
+    72$:
+        ld hl, #_td_tk_v
+        ld de, #_td_tk_tv
+        call 95$
+        jr z, 74$
+        call 97$
+        ld hl, #_td_tk_v
+        jr c, 73$
+        call 98$
+        jr 74$
+    73$:
+        call 99$
+    74$:
+        ld a, (_td_tk_yield)
+        or a, a
+        jr z, 75$
+        ld hl, #_td_tk_pu
+        ld de, #_td_tk_u
+        call 92$
+        ld a, d
+        or a, a
+        jr nz, 75$
+        ld a, e
+        cp a, #208
+        jr nc, 75$
+        ld hl, #_td_tk_pv
+        ld de, #_td_tk_v
+        call 92$
+        ld a, d
+        or a, a
+        jr nz, 75$
+        ld a, e
+        cp a, #208
+        jp c, 85$
+    75$:
+        ld a, (_td_tk_i)
+        ld c, a
+        ld b, #0
+        ld hl, #_td_traffic_u
+        add hl, bc
+        add hl, bc
+        ld a, (_td_tk_u)
+        ld (hl+), a
+        ld a, (_td_tk_u+1)
+        ld (hl), a
+        ld hl, #_td_traffic_v
+        add hl, bc
+        add hl, bc
+        ld a, (_td_tk_v)
+        ld (hl+), a
+        ld a, (_td_tk_v+1)
+        ld (hl), a
+        ld hl, #_td_tk_u
+        ld de, #_td_tk_tu
+        call 95$
+        jr nz, 80$
+        ld hl, #_td_tk_v
+        ld de, #_td_tk_tv
+        call 95$
+        jr nz, 80$
+        ld a, (_td_tk_i)
+        ld c, a
+        ld b, #0
+        ld a, (_td_tk_district)
+        or a, a
+        jr z, 76$
+        ld hl, #(_td_traffic_samples + 4)
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        ld e, (hl)
+        ld a, #1
+        ld (_td_tk_dirty), a
+        jr 77$
+    76$:
+        ld e, #4
+        ld a, c
+        cp a, #5
+        jr nz, 77$
+        ld e, #6
+    77$:
+        ld a, e
+        or a, a
+        jr z, 80$
+        ld a, (_td_tk_leg)
+        inc a
+        jr nz, 78$
+        ld a, #255
+        sub a, e
+        inc a
+    78$:
+        cp a, e
+        jr c, 79$
+        sub a, e
+        jr 78$
+    79$:
+        ld hl, #_td_traffic_leg
+        add hl, bc
+        ld (hl), a
+    80$:
+        ld a, (_td_tk_hit)
+        or a, a
+        jr z, 85$
+        ld hl, #_td_tk_pu
+        ld de, #_td_tk_u
+        call 92$
+        ld a, d
+        or a, a
+        jr nz, 85$
+        ld a, e
+        cp a, #180
+        jr nc, 85$
+        ld hl, #_td_tk_pv
+        ld de, #_td_tk_v
+        call 92$
+        ld a, d
+        or a, a
+        jr nz, 85$
+        ld a, e
+        cp a, #180
+        jr nc, 85$
+        ld a, (_td_tk_i)
+        ret
+    85$:
+        ld hl, #_td_tk_i
+        inc (hl)
+        jp 60$
+    ; A=1/NZ if DE (pos) lies in [line, line+8) for one of B UWORD lines at HL.
+    90$:
+        ld a, (hl+)
+        ld c, a
+        ld a, e
+        sub a, c
+        ld c, a
+        ld a, (hl+)
+        push hl
+        ld h, a
+        ld a, d
+        sbc a, h
+        pop hl
+        jr nz, 91$
+        ld a, c
+        cp a, #8
+        jr c, 191$
+    91$:
+        dec b
+        jr nz, 90$
+        xor a, a
+        ret
+    191$:
+        ld a, #1
+        or a, a
+        ret
+    ; DE = |(HL) - (DE)| for UWORD variables.
+    92$:
+        ld a, (de)
+        ld c, a
+        inc de
+        ld a, (de)
+        ld b, a
+        ld a, (hl+)
+        sub a, c
+        ld e, a
+        ld a, (hl)
+        sbc a, b
+        ld d, a
+        ret nc
+        xor a, a
+        sub a, e
+        ld e, a
+        ld a, #0
+        sbc a, d
+        ld d, a
+        ret
+    ; Z if UWORD (HL) == (DE); preserves HL and DE.
+    95$:
+        ld a, (de)
+        cp a, (hl)
+        ret nz
+        inc de
+        inc hl
+        ld a, (de)
+        cp a, (hl)
+        dec de
+        dec hl
+        ret
+    ; DE = (DE) - (HL) as UWORD; carry set if (DE) < (HL).
+    97$:
+        ld a, (hl+)
+        ld c, a
+        ld b, (hl)
+        ld a, (de)
+        ld l, a
+        inc de
+        ld a, (de)
+        ld h, a
+        ld a, l
+        sub a, c
+        ld e, a
+        ld a, h
+        sbc a, b
+        ld d, a
+        ret
+    ; (HL) += min(DE, 8)
+    98$:
+        ld a, d
+        or a, a
+        jr nz, 198$
+        ld a, e
+        cp a, #8
+        jr c, 199$
+    198$:
+        ld e, #8
+    199$:
+        ld a, (hl)
+        add a, e
+        ld (hl+), a
+        ld a, (hl)
+        adc a, #0
+        ld (hl), a
+        ret
+    ; (HL) -= min(-DE, 8)
+    99$:
+        xor a, a
+        sub a, e
+        ld e, a
+        ld a, #0
+        sbc a, d
+        ld d, a
+        jr nz, 196$
+        ld a, e
+        cp a, #8
+        jr c, 197$
+    196$:
+        ld e, #8
+    197$:
+        ld a, (hl)
+        sub a, e
+        ld (hl+), a
+        ld a, (hl)
+        sbc a, #0
+        ld (hl), a
+        ret
+    __endasm;
+}
 static void td_traffic_step(void){
-    static const UWORD bus_u[]={144,208,208,640,816,816};
-    static const UWORD bus_v[]={64,64,176,176,176,64};
-    UBYTE i,leg,phase=td.seconds%12,blocked,dirty=0;UWORD u,v,target_u,target_v;
-    for(i=0;i<6;i++){
-        u=td_traffic_u[i];v=td_traffic_v[i];leg=td_traffic_leg[i];blocked=0;
-        if(td.district){
-            target_u=td_traffic_samples[i].u;target_v=td_traffic_samples[i].v;
-        }else if(i<4){
-            target_u=(leg<2?840:48)*16;target_v=(td_rows[2+i]+(leg==0||leg==3?-8:8))*16;
-            if((leg==0||leg==2)&&phase>=7)blocked=td_signal_stop(u,0,leg==2);
+    UBYTE i;
+    td_tk_phase=td_signal_phase();td_tk_district=td.district;td_tk_dirty=0;
+    /* Road users yield to a courier crossing on foot, including between catch-up steps. */
+    td_tk_yield=(td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot;
+    td_tk_pu=td.u;td_tk_pv=td.v;td_tk_i=0;
+    for(;;){
+        td_tk_hit=td.mode==TD_ROAM&&!td.onfoot&&!td.cooldown;
+        i=td_traffic_kernel();
+        if(i>=6)break;
+        td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=60;
+        if(td.job!=TD_NONE&&td.stage){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);break;}}td_message(5);
+        td_tk_i=i+1;
+    }
+    if(td_tk_dirty)td_world_traffic_samples(td.district,td_traffic_leg,td_traffic_samples);
+}
+#else
+static void td_traffic_step(void){
+    UBYTE i,leg,phase=td_signal_phase(),dirty=0,yield,hit,district=td.district;
+    UWORD u,v,target_u,target_v,gap,pu=td.u,pv=td.v;
+    UWORD *traffic_u=td_traffic_u,*traffic_v=td_traffic_v;UBYTE *legs=td_traffic_leg;
+    const td_traffic_sample_t *sample=td_traffic_samples;
+    /* Road users yield to a courier crossing on foot, including between catch-up steps. */
+    yield=(td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot;
+    hit=td.mode==TD_ROAM&&!td.onfoot;
+    for(i=0;i<6;i++,traffic_u++,traffic_v++,legs++,sample++){
+        u=*traffic_u;v=*traffic_v;leg=*legs;
+        if(district){target_u=sample->u;target_v=sample->v;}
+        else if(i<4){
+            target_u=leg<2?840*16:48*16;target_v=td_core_lane_v[i];
+            if(leg==0||leg==3)target_v-=128;else target_v+=128;
+            if((leg==0||leg==2)&&phase>=7&&td_signal_stop(u,0,leg==2))goto collide;
         }else if(i==4){
-            target_u=(leg==0||leg==3?824:808)*16;target_v=(leg<2?792:48)*16;
-            if((leg==0||leg==2)&&phase<7)blocked=td_signal_stop(v,1,leg==2);
-        }else {target_u=bus_u[leg]*16;target_v=bus_v[leg]*16;}
-        if(!blocked){
-            if(u<target_u)u+=td_distance(u,target_u)<8?td_distance(u,target_u):8;
-            else if(u>target_u)u-=td_distance(u,target_u)<8?td_distance(u,target_u):8;
-            else if(v<target_v)v+=td_distance(v,target_v)<8?td_distance(v,target_v):8;
-            else if(v>target_v)v-=td_distance(v,target_v)<8?td_distance(v,target_v):8;
-            // Road users yield to a courier crossing on foot, including between catch-up steps.
-            if((td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot&&td_distance(td.u,u)<208&&td_distance(td.v,v)<208)continue;
-            td_traffic_u[i]=u;td_traffic_v[i]=v;
-            if(u==target_u&&v==target_v){
-                td_traffic_leg[i]=(leg+1)%(td.district?td_traffic_samples[i].count:i==5?6:4);
-                /* Banked targets and frames are cached between junctions. */
-                if(td.district)dirty=1;
-            }
+            target_u=leg==0||leg==3?824*16:808*16;target_v=leg<2?792*16:48*16;
+            if((leg==0||leg==2)&&phase<7&&td_signal_stop(v,1,leg==2))goto collide;
+        }else{target_u=td_bus_u[leg];target_v=td_bus_v[leg];}
+        if(u<target_u){gap=target_u-u;u+=gap<8?gap:8;}
+        else if(u>target_u){gap=u-target_u;u-=gap<8?gap:8;}
+        else if(v<target_v){gap=target_v-v;v+=gap<8?gap:8;}
+        else if(v>target_v){gap=v-target_v;v-=gap<8?gap:8;}
+        if(yield){
+            gap=pu>u?pu-u:u-pu;
+            if(gap<208){gap=pv>v?pv-v:v-pv;if(gap<208)continue;}
         }
-        if(td.mode==TD_ROAM&&!td.onfoot&&td_distance(td.u,u)<180&&td_distance(td.v,v)<180&&!td.cooldown){
-            td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=60;
-            if(td.job!=TD_NONE&&td.stage){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);break;}}td_message(5);
+        *traffic_u=u;*traffic_v=v;
+        if(u==target_u&&v==target_v){
+            *legs=(leg+1)%(district?sample->count:i==5?6:4);
+            /* Banked targets and frames are cached between junctions. */
+            if(district)dirty=1;
+        }
+collide:
+        if(hit&&!td.cooldown){
+            gap=pu>u?pu-u:u-pu;
+            if(gap<180){
+                gap=pv>v?pv-v:v-pv;
+                if(gap<180){
+                    td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=60;
+                    if(td.job!=TD_NONE&&td.stage){td.health=td.health>12?td.health-12:0;if(!td.health){td_finish(FALSE);break;}}td_message(5);
+                }
+            }
         }
     }
     if(dirty)td_world_traffic_samples(td.district,td_traffic_leg,td_traffic_samples);
 }
-static void td_traffic_present(void){
-    UBYTE i,leg,frame;
-    for(i=0;i<6;i++){
-        leg=td_traffic_leg[i];
-        if(td.district)frame=td_traffic_samples[i].frame;
-        else frame=i<4?leg*2:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
-        td_position(&actors[i+2],td_traffic_u[i]>>4,td_traffic_v[i]>>4);td_frame(&actors[i+2],frame);
+#endif
+/* td_frame() without a call: unchanged frames only refresh the paused tick. */
+#define TD_FRAME(a,f) do{UBYTE td_f=(f);if((a)->frame_start!=td_f||(a)->frame_end!=td_f+1)actor_set_frames((a),td_f,td_f+1);(a)->anim_tick=255;}while(0)
+/* Whole-pixel world position to GBVM Q5: (u>>4)*32 == (u&0xFFF0)<<1. */
+#define TD_Q4_TO_ACTOR(q) ((UWORD)(((q)&0xFFF0)<<1))
+#ifdef __SDCC
+#include <stddef.h>
+/* The assembly below addresses actor_t fields directly. */
+typedef char td_actor_layout_matches_asm[(sizeof(actor_t)==56&&offsetof(actor_t,pos)==1&&
+    offsetof(actor_t,frame)==15&&offsetof(actor_t,frame_start)==16&&offsetof(actor_t,frame_end)==17&&
+    offsetof(actor_t,anim_tick)==18&&sizeof(td_traffic_sample_t)==6&&offsetof(td_traffic_sample_t,frame)==5&&
+    ACTOR_FLAG_HIDDEN==2)?1:-1];
+/* Scratch shared with the presentation routines (WRAM, main loop only). */
+UBYTE td_pl_base,td_pl_step,td_pl_phase,td_pl_close,td_pl_mask,td_pl_count,td_pl_near,td_pl_district;
+UWORD td_pl_pu,td_pl_pv,td_pl_u,td_pl_v;
+const UBYTE *td_pl_rp;const UWORD *td_pl_np;actor_t *td_pl_ap;
+/* Pedestrian slots 9..14: the C reference below (host builds) defines the
+ * exact behaviour; this routine returns its `near` mask in A. */
+UBYTE td_ped_layout(void) NAKED {
+    __asm
+        xor a, a
+        ld (_td_pl_near), a
+        inc a
+        ld (_td_pl_mask), a
+        ld a, #6
+        ld (_td_pl_count), a
+        ld hl, #(_actors + 9*56)
+        ld a, l
+        ld (_td_pl_ap), a
+        ld a, h
+        ld (_td_pl_ap+1), a
+        ld hl, #_td_ped_route
+        ld a, l
+        ld (_td_pl_rp), a
+        ld a, h
+        ld (_td_pl_rp+1), a
+        ld hl, #_td_nearby_routes
+        ld a, l
+        ld (_td_pl_np), a
+        ld a, h
+        ld (_td_pl_np+1), a
+    10$:
+        ld hl, #_td_pl_rp
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        ld b, (hl)
+        ld hl, #_td_pl_ap
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        ld a, b
+        inc a
+        jr nz, 11$
+        set 1, (hl)
+        jp 30$
+    11$:
+        ld a, b
+        add a, a
+        add a, a
+        ld c, a
+        add a, a
+        add a, a
+        add a, a
+        add a, c
+        add a, b
+        ld c, a
+        ld a, (_td_pl_base)
+        add a, c
+        and a, #0x7f
+        ld (_td_pl_phase), a
+        cp a, #64
+        jr c, 12$
+        cpl
+        sub a, #128
+    12$:
+        ld c, a
+        push hl
+        ld hl, #_td_pl_np
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        ld a, (hl+)
+        add a, c
+        ld (_td_pl_u), a
+        ld e, a
+        ld a, (hl+)
+        adc a, #0
+        ld (_td_pl_u+1), a
+        ld d, a
+        ld a, (hl+)
+        ld (_td_pl_v), a
+        ld c, a
+        ld a, (hl+)
+        ld (_td_pl_v+1), a
+        ld b, a
+        pop hl
+        inc hl
+        sla e
+        rl d
+        sla e
+        rl d
+        sla e
+        rl d
+        sla e
+        rl d
+        sla e
+        rl d
+        ld a, e
+        ld (hl+), a
+        ld a, d
+        ld (hl+), a
+        sla c
+        rl b
+        sla c
+        rl b
+        sla c
+        rl b
+        sla c
+        rl b
+        sla c
+        rl b
+        ld a, c
+        ld (hl+), a
+        ld a, b
+        ld (hl), a
+        ld de, #12
+        add hl, de
+        ld a, (_td_pl_phase)
+        cp a, #64
+        ld b, #32
+        jr c, 13$
+        ld b, #34
+    13$:
+        ld a, (_td_pl_step)
+        add a, b
+        ld b, a
+        ld a, (hl+)
+        cp a, b
+        jr nz, 14$
+        ld a, b
+        inc a
+        cp a, (hl)
+        jr z, 15$
+    14$:
+        ld a, b
+        inc a
+        ld (hl-), a
+        ld a, b
+        ld (hl-), a
+        ld (hl+), a
+        inc hl
+    15$:
+        inc hl
+        ld (hl), #0xff
+        ld hl, #_td_pl_u
+        ld a, (_td_pl_pu)
+        sub a, (hl)
+        ld e, a
+        inc hl
+        ld a, (_td_pl_pu+1)
+        sbc a, (hl)
+        ld d, a
+        jr nc, 16$
+        xor a, a
+        sub a, e
+        ld e, a
+        ld a, #0
+        sbc a, d
+        ld d, a
+    16$:
+        ld a, d
+        or a, a
+        jr nz, 20$
+        ld a, e
+        cp a, #112
+        jr nc, 20$
+        cp a, #10
+        ld a, #0
+        rla
+        ld (_td_pl_close), a
+        ld hl, #_td_pl_v
+        ld a, (_td_pl_pv)
+        sub a, (hl)
+        ld e, a
+        inc hl
+        ld a, (_td_pl_pv+1)
+        sbc a, (hl)
+        ld d, a
+        jr nc, 17$
+        xor a, a
+        sub a, e
+        ld e, a
+        ld a, #0
+        sbc a, d
+        ld d, a
+    17$:
+        ld a, d
+        or a, a
+        jr nz, 20$
+        ld a, e
+        cp a, #96
+        jr nc, 20$
+        ld hl, #_td_pl_ap
+        ld c, a
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        res 1, (hl)
+        ld a, c
+        cp a, #10
+        jr nc, 30$
+        ld a, (_td_pl_close)
+        or a, a
+        jr z, 30$
+        ld a, (_td_pl_mask)
+        ld hl, #_td_pl_near
+        or a, (hl)
+        ld (hl), a
+        jr 30$
+    20$:
+        ld hl, #_td_pl_ap
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        set 1, (hl)
+    30$:
+        ld hl, #_td_pl_ap
+        ld a, (hl)
+        add a, #56
+        ld (hl+), a
+        ld a, (hl)
+        adc a, #0
+        ld (hl), a
+        ld hl, #_td_pl_rp
+        inc (hl)
+        jr nz, 31$
+        inc hl
+        inc (hl)
+    31$:
+        ld hl, #_td_pl_np
+        ld a, (hl)
+        add a, #4
+        ld (hl+), a
+        ld a, (hl)
+        adc a, #0
+        ld (hl), a
+        ld hl, #_td_pl_mask
+        sla (hl)
+        ld hl, #_td_pl_count
+        dec (hl)
+        jp nz, 10$
+        ld a, (_td_pl_near)
+        ret
+    __endasm;
+}
+#else
+/* Reference semantics: position, frame and visibility for slots 9..14.
+ * Returns a mask of visible walkers within ten pixels of the player. */
+static UBYTE td_ped_layout_c(UBYTE base,UBYTE step,UWORD player_u,UWORD player_v){
+    UBYTE i,route,phase,near=0;UWORD u,v,gap;actor_t *a=&actors[9];
+    const UBYTE *routes=td_ped_route;const UWORD (*nearby)[2]=td_nearby_routes;
+    for(i=0;i<6;i++,a++,routes++,nearby++){
+        route=*routes;if(route==TD_NONE){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
+        phase=td_ped_phase(base,route);
+        u=(*nearby)[0];v=(*nearby)[1];
+        u+=phase<64?phase:127-phase;
+        a->pos.x=u<<5;a->pos.y=v<<5;TD_FRAME(a,32+(phase<64?0:2)+step);
+        gap=player_u>u?player_u-u:u-player_u;
+        if(gap<112&&(player_v>v?player_v-v:v-player_v)<96){
+            a->flags&=~ACTOR_FLAG_HIDDEN;
+            if(gap<10&&(player_v>v?player_v-v:v-player_v)<10)near|=1<<i;
+        }else a->flags|=ACTOR_FLAG_HIDDEN;
     }
-    td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:td.vehicle*8+((td.heading+1)&15)/2);
+    return near;
+}
+#endif
+#ifdef __SDCC
+/* Traffic slots 2..7: same positions/frames as the C reference below. */
+void td_traffic_layout(void) NAKED {
+    __asm
+        ld hl, #(_actors + 2*56)
+        ld a, l
+        ld (_td_pl_ap), a
+        ld a, h
+        ld (_td_pl_ap+1), a
+        xor a, a
+        ld (_td_pl_count), a
+    40$:
+        ld a, (_td_pl_count)
+        ld c, a
+        ld b, #0
+        ld a, (_td_pl_district)
+        or a, a
+        jr z, 41$
+        ld hl, #(_td_traffic_samples + 5)
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        add hl, bc
+        ld e, (hl)
+        jr 49$
+    41$:
+        ld hl, #_td_traffic_leg
+        add hl, bc
+        ld b, (hl)
+        ld a, c
+        cp a, #4
+        jr nc, 42$
+        ld a, b
+        add a, a
+        ld e, a
+        jr 49$
+    42$:
+        jr nz, 45$
+        ld e, #2
+        ld a, b
+        or a, a
+        jr z, 49$
+        ld e, #4
+        dec a
+        jr z, 49$
+        ld e, #6
+        dec a
+        jr z, 49$
+        ld e, #0
+        jr 49$
+    45$:
+        ld e, #10
+        ld a, b
+        cp a, #2
+        jr z, 49$
+        ld e, #12
+        or a, a
+        jr z, 49$
+        ld e, #14
+        cp a, #5
+        jr z, 49$
+        ld e, #8
+    49$:
+        ld a, e
+        ld (_td_pl_phase), a
+        ld a, (_td_pl_count)
+        add a, a
+        ld c, a
+        ld b, #0
+        ld hl, #_td_traffic_u
+        add hl, bc
+        ld a, (hl+)
+        and a, #0xf0
+        ld e, a
+        ld d, (hl)
+        sla e
+        rl d
+        ld hl, #_td_traffic_v
+        add hl, bc
+        ld a, (hl+)
+        and a, #0xf0
+        ld c, a
+        ld b, (hl)
+        sla c
+        rl b
+        ld hl, #_td_pl_ap
+        ld a, (hl+)
+        ld h, (hl)
+        ld l, a
+        inc hl
+        ld a, e
+        ld (hl+), a
+        ld a, d
+        ld (hl+), a
+        ld a, c
+        ld (hl+), a
+        ld a, b
+        ld (hl), a
+        ld de, #12
+        add hl, de
+        ld a, (_td_pl_phase)
+        ld b, a
+        ld a, (hl+)
+        cp a, b
+        jr nz, 50$
+        ld a, b
+        inc a
+        cp a, (hl)
+        jr z, 51$
+    50$:
+        ld a, b
+        inc a
+        ld (hl-), a
+        ld a, b
+        ld (hl-), a
+        ld (hl+), a
+        inc hl
+    51$:
+        inc hl
+        ld (hl), #0xff
+        ld hl, #_td_pl_ap
+        ld a, (hl)
+        add a, #56
+        ld (hl+), a
+        ld a, (hl)
+        adc a, #0
+        ld (hl), a
+        ld hl, #_td_pl_count
+        inc (hl)
+        ld a, (hl)
+        cp a, #6
+        jp nz, 40$
+        ret
+    __endasm;
+}
+#endif
+static void td_traffic_present(void){
+#ifdef __SDCC
+    td_pl_district=td.district;td_traffic_layout();
+#else
+    UBYTE i,leg,frame,district=td.district;actor_t *a=&actors[2];
+    const UWORD *traffic_u=td_traffic_u,*traffic_v=td_traffic_v;const UBYTE *legs=td_traffic_leg;
+    const td_traffic_sample_t *sample=td_traffic_samples;
+    for(i=0;i<6;i++,a++,traffic_u++,traffic_v++,legs++,sample++){
+        if(district)frame=sample->frame;
+        else{
+            leg=*legs;
+            frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
+        }
+        a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,frame);
+    }
+#endif
+    td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?44:(td.vehicle<<3)+(((td.heading+1)&15)>>1));
     if(td.onfoot&&td.park_district==td.district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
 }
-static UWORD td_pedestrian_u(UBYTE slot){
-    UBYTE phase=(td.seconds*12+td.subsecond/5+td_ped_route[slot]*37)&127;
-    return td_nearby_routes[slot][0]+(phase<64?phase:127-phase);
-}
 static void td_pedestrians(void){
-    UBYTE i,route,phase,refresh;UWORD u,v,player_u=td.u>>4,player_v=td.v>>4;
+    UBYTE refresh,near;UWORD player_u=td.u>>4,player_v=td.v>>4;
     refresh=!--td_ped_refresh||td_distance(player_u,td_ped_anchor_u)>64||td_distance(player_v,td_ped_anchor_v)>64;
     if(refresh){
         td_ped_refresh=16;td_ped_anchor_u=player_u;td_ped_anchor_v=player_v;
         td_refresh_routes(td_ped_route,td_nearby_routes);
     }
-    for(i=0;i<6;i++){
-        route=td_ped_route[i];if(route==TD_NONE){actors[9+i].flags|=ACTOR_FLAG_HIDDEN;continue;}
-        phase=(td.seconds*12+td.subsecond/5+route*37)&127;u=td_pedestrian_u(i);v=td_nearby_routes[i][1];
-        td_position(&actors[9+i],u,v);td_frame(&actors[9+i],32+(phase<64?0:2)+((td_tick>>3)&1));
-        if(td_distance(player_u,u)<112&&td_distance(player_v,v)<96)actors[9+i].flags&=~ACTOR_FLAG_HIDDEN;
-        else actors[9+i].flags|=ACTOR_FLAG_HIDDEN;
-        if(td.mode==TD_ROAM&&!(actors[9+i].flags&ACTOR_FLAG_HIDDEN)&&!td.onfoot&&!td.cooldown&&td_distance(td.u>>4,u)<10&&td_distance(td.v>>4,v)<10){td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=45;td_message(13);}
-    }
+#ifdef __SDCC
+    td_pl_base=td_ped_base();td_pl_step=(td_tick>>3)&1;td_pl_pu=player_u;td_pl_pv=player_v;
+    near=td_ped_layout();
+#else
+    near=td_ped_layout_c(td_ped_base(),(td_tick>>3)&1,player_u,player_v);
+#endif
+    /* Mode, foot state and cooldown only change on a strike, so the first
+     * near walker in slot order is the only one that can slow the car. */
+    if(near&&td.mode==TD_ROAM&&!td.onfoot&&!td.cooldown){td.speed/=2;td_vx/=2;td_vy/=2;td.cooldown=45;td_message(13);}
 }
 static UBYTE td_corner_slide(WORD nu,WORD nv){
     UBYTE i,j,side,clear;WORD shift,shifted;UWORD ax=td_vx<0?-td_vx:td_vx,ay=td_vy<0?-td_vy:td_vy;
@@ -405,7 +1399,7 @@ static void td_drive(void){
     if(td_entry_timer){
         if(!td_entry_target){td.u=(td.u*3+td.park_u)/4;td.v=(td.v*3+td.park_v)/4;}
         if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();}
-        td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);return;
+        td_frame(&PLAYER,td.onfoot?32:(td.vehicle<<3)+(((td.heading+1)&15)>>1));return;
     }
     if(td.onfoot){
         nu=td.u;nv=td.v;
@@ -429,20 +1423,20 @@ static void td_drive(void){
         if(td.job!=TD_NONE&&td.stage&&td_job.kind==5&&speed>18){if(td.health)td.health--;td_message(14);}
     }}
     else td_turn_tick=0;
-    if(INPUT_B){if(td_tick%2==0&&td.speed>-6)td.speed--;}
-    else if(INPUT_A){if(td_tick%4==0&&td.speed<limit)td.speed++;}
-    else if(td_tick%8==0){if(td.speed>0)td.speed--;else if(td.speed<0)td.speed++;}
+    if(INPUT_B){if(!(td_tick&1)&&td.speed>-6)td.speed--;}
+    else if(INPUT_A){if(!(td_tick&3)&&td.speed<limit)td.speed++;}
+    else if(!(td_tick&7)){if(td.speed>0)td.speed--;else if(td.speed<0)td.speed++;}
     // Traction eases velocity toward heading instead of instantly rotating momentum.
-    target_x=td_dx[td.heading]*td.speed;target_y=td_dy[td.heading]*td.speed;
-    td_vx+=(target_x-td_vx)/4;td_vy+=(target_y-td_vy)/4;
-    if(!td.speed){td_vx/=2;td_vy/=2;}
-    nu=td.u+td_vx/16;nv=td.v+td_vy/16;u=nu>>4;v=nv>>4;
+    target_x=td_scale(td_dx[td.heading],td.speed);target_y=td_scale(td_dy[td.heading],td.speed);
+    td_vx+=td_div4(target_x-td_vx);td_vy+=td_div4(target_y-td_vy);
+    if(!td.speed){td_vx=td_div2(td_vx);td_vy=td_div2(td_vy);}
+    nu=td.u+td_div16(td_vx);nv=td.v+td_div16(td_vy);u=nu>>4;v=nv>>4;
     if(td_drivable(u,v)){
         if(td.district==0&&!td_red_cooldown&&td.speed>6&&td_distance(u,640)<14&&td_distance(v,528)<14&&
           (td_distance(td.u>>4,640)>=14||td_distance(td.v>>4,528)>=14)){
             UBYTE ax=td_dx[td.heading]<0?-td_dx[td.heading]:td_dx[td.heading];
             UBYTE ay=td_dy[td.heading]<0?-td_dy[td.heading]:td_dy[td.heading];
-            if((ax>ay&&td.seconds%12>=7)||(ax<=ay&&td.seconds%12<7)){if(td.cash>=5)td.cash-=5;td_red_cooldown=120;td_message(7);}
+            if((ax>ay&&td_signal_phase()>=7)||(ax<=ay&&td_signal_phase()<7)){if(td.cash>=5)td.cash-=5;td_red_cooldown=120;td_message(7);}
         }
         td.u=nu;td.v=nv;
     }else{
@@ -458,7 +1452,7 @@ static void td_drive(void){
         }
     }
     td.safe_u=td.u;td.safe_v=td.v;
-    td_frame(&PLAYER,td.vehicle*8+((td.heading+1)&15)/2);
+    td_frame(&PLAYER,(td.vehicle<<3)+(((td.heading+1)&15)>>1));
     if(td.job!=TD_NONE&&!td.health)td_finish(FALSE);
 }
 void toronto_init(void) BANKED {
@@ -498,7 +1492,7 @@ void toronto_init(void) BANKED {
     }
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_frame(&actors[1],40);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
-    td_frame(&PLAYER,td.onfoot?32:td.vehicle*8+((td.heading+1)&15)/2);td_traffic_present();td_pedestrians();
+    td_frame(&PLAYER,td.onfoot?32:(td.vehicle<<3)+(((td.heading+1)&15)>>1));td_traffic_present();td_pedestrians();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=-16;camera_deadzone_x=8;camera_deadzone_y=8;
     if(cold)td_audio_init();td_ui_init();
 }
@@ -514,7 +1508,8 @@ void toronto_update(void) BANKED {
     if(td.mode==TD_WAIT&&INPUT_B_PRESSED){td.mode=TD_ROAM;consumed=1;td_save();td_ui_draw();}
     if(td_notice_timer){if(!--td_notice_timer){td.msg=0;td_ui_draw();}}
     /* Keep deadlines and transit tied to every VBlank, even when rendering falls behind. */
-    seconds=elapsed/60;elapsed%=60;elapsed+=td.subsecond;
+    seconds=0;if(elapsed>=60){seconds=elapsed/60;elapsed%=60;}
+    elapsed+=td.subsecond;
     if(elapsed>=60){elapsed-=60;seconds++;}td.subsecond=elapsed;
     while(seconds--&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)){
         td_second();if(td_transition_pending)return;
