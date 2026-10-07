@@ -780,5 +780,133 @@
     "png_sha256": "9a1310cea6e5ca237a44bffa5a5c882ec5804a74b26d0201aeda52dcc7f4dce4",
     "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
     "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+  },
+  {
+    "file": "district-financial.png",
+    "frame": 1493,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "7224f446b6f163ac2c4044cafba10aefa2eea2d04b1dceb779b3c11f52654e79",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-discovery.png",
+    "frame": 1755,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "4f97b52ea825b019216df85b61422ede3e6de989ced4f4ab58a696a01a4731ea",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-museums.png",
+    "frame": 2017,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "30ec04dcd16f3829bb1a1fd28518f2a9696801f888acbc1ab47794089b5a3106",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-convocation-hall.png",
+    "frame": 2279,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "022c78110bd72b7928151acde9f8d486fe465a41f697c617bd8065f53b033c27",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-entertainment.png",
+    "frame": 2541,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "678fd1adc9494a355132089e4b11b1d0afd2cc2feb848630a12231d00d9f6b8e",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-kensington-chinatown.png",
+    "frame": 2803,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "6009d9a31bbb83ce6cb5b4402c86888f0553f4287fbd10f1da5b813b0482f055",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-st-james.png",
+    "frame": 3065,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "2fde32ece6b7ed4d1a719360d57d3285daf0c2a56cc3d7aa1c9744c7a6f22406",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-little-italy-portugal.png",
+    "frame": 3327,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "eaf57f3d7698eae95e5a2be2c51b37c381e7e4c70758013c7964bec913ed8b0e",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East; then car written at (160,356) facing north, 260 frames: Little Portugal (blue houses) and Little Italy (green and red awnings) on Ossington",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-cityplace-waterfront.png",
+    "frame": 3589,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "df863bd1d0f36b3d535cd0c1511b363f177a3d678e36329dc250d5bfd5e264db",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East; then car written at (160,356) facing north, 260 frames: Little Portugal (blue houses) and Little Italy (green and red awnings) on Ossington; then car written at (336,816) facing north, 260 frames: CityPlace towers and the Queens Quay boardwalk",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "district-greektown.png",
+    "frame": 1823,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "98a5bb597ba1ae54beaad83213fa1a02f9a28769c7be65844956aa705e04d080",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 70 frames: crossing Spadina; then A held 66 more frames: past the AGO; then car written at (136,76) facing north, 260 frames: Greektown on the Danforth (East scene, entered from the core's east edge at (970,528), A held 120 frames)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "nav-junction.png",
+    "frame": 1317,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "c4a74e23380646de278e459e46956a72e2dbd3c9a7f4a3c1b660f637905381b0",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 80 frames: crossing Spadina",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "nav-landmark.png",
+    "frame": 1383,
+    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+    "png_sha256": "91a5c7a1080a7e802c92f81863243636c72b5d91f4a6bca6bbde028b771ce761",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 80 frames: crossing Spadina; then A held 64 more frames: past the AGO",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+  },
+  {
+    "file": "before-district-financial.png",
+    "frame": 1491,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "3af12fd33e9117171a6f1e1c4b428c3d9802977ee7572d393f93335d732f2381",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-district-discovery.png",
+    "frame": 1753,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "af7438adf5c7a503722b8dd9f4e895d53206716587a8f99a24bae3cb2494dbde",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-district-museums.png",
+    "frame": 2015,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "649db79098ca3704094bdefd3baf14439d61c5dcc9b39949fce2d9bbfc6d43dc",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-district-entertainment.png",
+    "frame": 2539,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "553b272b3dcd52fce83d4c2d2183914963923ad991ad2339feb4b5085e83d93e",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
   }
 ]

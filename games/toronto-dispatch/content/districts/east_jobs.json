@@ -36,7 +36,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "48d94625edd2ef3dd478b5ed261e17964ca06f0f3cb421c9ae62f8fd20259c90"
+      "collision_sha256": "296a880d116cbc19a2428a40cc9624f3f267c010228608ac768327dc72ba6f93"
     },
     {
       "district": 1,
@@ -57,7 +57,7 @@
   "geography_metadata": [
     {
       "path": "content/districts/east_art.json",
-      "sha256": "1b001a5d3491118f203b0edf18287ee888d9ce45799ff68148c3dd1c59538789",
+      "sha256": "1d392945717aab589af0e158c08710b5387b33aa49012ca75586e201b1e03bd4",
       "notice": "Source-derived geography and original compressed artwork; retain City attribution in metadata and distribution notices"
     }
   ],

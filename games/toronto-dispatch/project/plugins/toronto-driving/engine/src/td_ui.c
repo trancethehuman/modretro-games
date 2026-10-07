@@ -11,6 +11,7 @@
 #include "td_life.h"
 #include "td_daynight.h"
 #include "td_hud.h"
+#include "td_places.h"
 #include "td_radio_data.h"
 #include "actor.h"
 #include "data_manager.h"
@@ -405,12 +406,15 @@ typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_M
  * Nothing covers the city by default. Up to two rows rise from the bottom
  * edge when there is something to say and sink again afterwards:
  *   row A, one item by priority: a notice, the station within reach, the
- *     next stop after a job starts or advances, a new street name, wanted
+ *     next stop after a job starts or advances, a place name (a new
+ *     neighbourhood, landmark, junction or street: td_hud.c), wanted
  *     stars;
  *   row B, what changed or matters now: the job (time, distance, cargo)
  *     when time is short, the stop has just changed or the courier stands
  *     still; cash, vitality, ammunition and car condition for a few seconds
- *     after they change (ammunition after every shot), vitality while low.
+ *     after they change (ammunition after every shot), vitality while low;
+ *     with none of that, a neighbourhood just entered (or in row A when row
+ *     B is busy and row A free).
  * Standing still for a moment shows the whole status line. Timers count
  * calls of td_ui_hud_tick (every eighth update, about 7 a second). */
 static char *td_cat(char *d,const char *s){while(*s)*d++=*s++;*d=0;return d;}
@@ -452,6 +456,7 @@ static UBYTE td_hud_row_b(void){
     if(td_pop_ammo||(all&&td.onfoot)){if(d!=td_line)*d++=' ';d=td_cat(d,TD_UI_AMMO);d=td_digits(d,td.ammo,0);}
     if(!td.onfoot&&(td_pop_car||(all&&td_car_damage))){if(d!=td_line)*d++=' ';d=td_cat(d,TD_UI_CAR);d=td_digits(d,TD_DAMAGE_WRECK-td_car_damage,0);}
     *d=0;td_line[20]=0;
+    if(d==td_line&&td_pop_area){td_get_place_name(TD_PLACE_AREA,td_place_ids[0],td_line);return 2;}
     return d!=td_line;
 }
 static void td_radio_paint(void);
@@ -477,6 +482,8 @@ static void td_hud(UBYTE changed){
     }
     a=td_hud_row_a();if(a){memcpy(row_a,td_line,20);row_a[20]=0;}
     b=td_hud_row_b();
+    if(!a&&b==1&&td_pop_area){td_get_place_name(TD_PLACE_AREA,td_place_ids[0],row_a);a=1;}
+    if(b)b=1;
     rows=a+b;
     if(changed||rows!=td_hud_rows){
         td_hud_rows=rows;

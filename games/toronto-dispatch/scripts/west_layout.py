@@ -126,6 +126,23 @@ HIGH_PARK = {
     ],
 }
 DISTRICTS = [WEST, HIGH_PARK]
+# Neighbourhoods (name, (x0, y0, x1, y1)), first match wins: the HUD names
+# them (create_places.py) and the art builds them in their own way
+# (city_kit.AREA_LOOKS). Rectangles are design over the compressed roads.
+WEST_AREAS = [('SUNNYSIDE', (0, 760, 1024, 976)),
+              ('BLOORDALE', (800, 0, 1024, 288)),
+              ('BROCKTON VILLAGE', (800, 288, 1024, 528)),
+              ('PARKDALE', (640, 528, 1024, 760)),
+              ('JUNCTION TRIANGLE', (416, 0, 800, 112)),
+              ('HIGH PARK NORTH', (0, 0, 416, 240)),
+              ('RONCESVALLES', (0, 0, 1024, 976))]
+HIGH_PARK_AREAS = [('HIGH PARK', (608, 312, 960, 632)),
+                   ('SUNNYSIDE', (0, 760, 1024, 976)),
+                   ('THE JUNCTION', (432, 0, 1024, 192)),
+                   ('HIGH PARK NORTH', (432, 192, 1024, 312)),
+                   ('RONCESVALLES', (944, 312, 1024, 760)),
+                   ('BLOOR WEST VILLAGE', (0, 0, 432, 384)),
+                   ('SWANSEA', (0, 0, 1024, 976))]
 
 
 def extended_points(route, district, foot=False):

@@ -328,7 +328,19 @@ def main():
     aliases = {'Colborne Lodge Drive south approach':'COLBORNE LODGE DR',
                'Martin Goodman waterfront path':'MARTIN GOODMAN TRL',
                'High Park formal spine':'HIGH PARK WALK',
-               'Colborne fictional service entrance':'COLBORNE WALK'}
+               'Colborne fictional service entrance':'COLBORNE WALK',
+               'Beaty pedestrian bridge':'BEATY FOOTBRIDGE',
+               'Sorauren park path':'SORAUREN PARK',
+               'High Park Boulevard park walk':'HIGH PARK BLVD',
+               'Spring Road park walk':'SPRING RD',
+               'High Park Loop platform':'HIGH PARK LOOP',
+               'Pape Avenue north fragment':'PAPE AVE',
+               'Pape Avenue south fragment':'PAPE AVE',
+               'Pape pedestrian rail crossing':'PAPE RAIL CROSSING',
+               'Withrow park walk':'WITHROW PARK',
+               'Greenwood park walk':'GREENWOOD PARK',
+               'Chester station approach':'CHESTER STATION',
+               'Sunnyside pavilion approach':'SUNNYSIDE PAVILION'}
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
     # Core streets (district 0) come from the Centreline-derived layout.
     for x1, y1, x2, y2, label in street_spans():
@@ -340,12 +352,14 @@ def main():
         slug = entry['scene'].removeprefix('toronto_')
         metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
         for road in metadata['roads'] + metadata['footpaths']:
-            name = aliases.get(road['name'], road['name'].upper().replace(' STREET WEST',' ST W').replace(' STREET',' ST').replace(' AVENUE',' AVE').replace(' BOULEVARD WEST',' BLVD W').replace(' BOULEVARD',' BLVD').replace(' ROAD',' RD').replace(' DRIVE',' DR'))[:18]
+            name = aliases.get(road['name'], road['name'].upper().replace(' STREET WEST',' ST W').replace(' STREET EAST',' ST E').replace(' STREET',' ST').replace(' AVENUE',' AVE').replace(' BOULEVARD WEST',' BLVD W').replace(' BOULEVARD',' BLVD').replace(' ROAD',' RD').replace(' DRIVE',' DR'))[:18]
+            assert len(name) <= 18, ('HUD street name', name)
             if name not in street_names:
                 street_names.append(name)
             index = street_names.index(name)
             for a, b in zip(road['points'], road['points'][1:]):
                 street_segments.append((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]), district, index))
+    street_names.append('TORONTO ISLANDS')
     streets += [f'static const char td_west_street_names[{len(street_names)}][19]={{']
     streets += [f'  "{name}",' for name in street_names]
     streets += ['};','typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;',
@@ -387,7 +401,7 @@ def main():
              '   On the map, only the 64-pixel region\'s exact candidate list is scanned;',
              '   a segment whose x distance alone reaches the best cannot win, and nothing',
              '   beats zero. Positions off the map scan the whole district. */',
-             'void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *d) BANKED {',
+             'static UBYTE td_get_west_street(UBYTE district,UWORD u,UWORD v) {',
              ' UBYTE name=0;UWORD k=0,stop=0,dx,dy,lo,hi,best=65535;const td_street_t *s;const UBYTE *list=0;',
              f' if(district<{districts}&&u<1024&&v<976){{',
              '  k=(UWORD)district*256+((v>>6)<<4)+(u>>6);stop=td_west_region_start[k+1];k=td_west_region_start[k];list=td_west_region_list;',
@@ -397,7 +411,7 @@ def main():
              '  lo=s->x1;hi=s->x2;dx=u<lo?lo-u:u>hi?u-hi:0;if(dx>=best)continue;',
              '  lo=s->y1;hi=s->y2;dy=v<lo?lo-v:v>hi?v-hi:0;dx+=dy;',
              '  if(dx<best){best=dx;name=s->name;if(!best)break;}',
-             ' }memcpy(d,td_west_street_names[name],19);',
+             ' }return name;',
              '}',
              ]
     code += [
@@ -405,10 +419,13 @@ def main():
              'void td_get_job(UBYTE i,td_job_t *d) BANKED { if(i<TD_QUESTS) memcpy(d,&td_jobs[i],sizeof(td_job_t)); }',
              'void td_get_brief(UBYTE i,char *d) BANKED { if(i<TD_QUESTS) memcpy(d,td_briefs[i],37); else d[0]=0; }']
     streets += [
-             'void td_get_street(UWORD u,UWORD v,char *d) BANKED {',
-             '  if(!td.district&&v>=%d){strcpy(d,"TORONTO ISLANDS");return;}' % L_MAINLAND_BOTTOM,
-             '  td_get_west_street(td.district,u,v,d);',
-             '}']
+             '/* Name id of the street nearest (u,v) in the current district (the',
+             '   Islands below the core\'s shore); td_get_street_name spells it. */',
+             'UBYTE td_get_street(UWORD u,UWORD v) BANKED {',
+             '  if(!td.district&&v>=%d)return %d;' % (L_MAINLAND_BOTTOM, len(street_names) - 1),
+             '  return td_get_west_street(td.district,u,v);',
+             '}',
+             'void td_get_street_name(UBYTE id,char *d) BANKED {memcpy(d,td_west_street_names[id],19);}']
     (ENGINE / 'src').mkdir(parents=True, exist_ok=True)
     (ENGINE / 'src/td_content.c').write_text('\n'.join(code) + '\n')
     (ENGINE / 'src/td_street_names.c').write_text('\n'.join(streets) + '\n')

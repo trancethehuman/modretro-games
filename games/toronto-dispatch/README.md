@@ -4,6 +4,16 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 **Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, the downtown street plan from the City of Toronto Centreline, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
 
+![Financial District](docs/screenshots/district-financial.png) ![MaRS and Hospital Row](docs/screenshots/district-discovery.png) ![The ROM and the Gardiner Museum](docs/screenshots/district-museums.png) ![Convocation Hall](docs/screenshots/district-convocation-hall.png)
+
+![King St theatres and Roy Thomson Hall](docs/screenshots/district-entertainment.png) ![Kensington and Chinatown](docs/screenshots/district-kensington-chinatown.png) ![St James Cathedral and St James Park](docs/screenshots/district-st-james.png) ![Little Portugal and Little Italy](docs/screenshots/district-little-italy-portugal.png)
+
+![CityPlace and the Queens Quay boardwalk](docs/screenshots/district-cityplace-waterfront.png) ![Greektown on the Danforth](docs/screenshots/district-greektown.png) ![A junction and the neighbourhood](docs/screenshots/nav-junction.png) ![A landmark](docs/screenshots/nav-landmark.png)
+
+![Before: Financial District](docs/screenshots/before-district-financial.png) ![After](docs/screenshots/district-financial.png) ![Before: University Ave at College](docs/screenshots/before-district-discovery.png) ![After](docs/screenshots/district-discovery.png)
+
+Districts and navigation, 2026-10-07: the Financial District's black, gold and red granite towers; MaRS on College with Toronto General's helipad and Hospital Row; the ROM's Crystal and the Gardiner Museum across Queen's Park; Convocation Hall's dome at U of T; the King St theatres and Roy Thomson Hall; Chinatown's signboards beside Kensington's painted houses; St James Cathedral and its park; Little Portugal's blue houses and Little Italy's awnings; CityPlace and the Queens Quay boardwalk; Greektown on the Danforth. Sidewalks now have curbs, joints, lamps, street trees, benches and bike rings. Driving names each junction, landmark and neighbourhood ("SPADINA & DUNDAS", "ALEXANDRA PARK"). The last row compares the previous build. Unmodified PyBoy frames, staged by writing the car's position in emulator memory; [provenance](docs/screenshots/provenance.json).
+
 ![Queen's Park from College St](docs/screenshots/qp-legislature.png) ![Inside Queen's Park](docs/screenshots/qp-park.png) ![The crescent's north end and the ROM](docs/screenshots/qp-north.png) ![Driving onto the park](docs/screenshots/qp-drive-onto-lawn.png)
 
 ![Trinity Bellwoods](docs/screenshots/trinity-bellwoods.png) ![Allan Gardens](docs/screenshots/allan-gardens.png) ![Grange Park](docs/screenshots/grange-park.png) ![Sorauren Park](docs/screenshots/sorauren-park.png)

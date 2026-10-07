@@ -85,25 +85,18 @@ def roof_details(d, box, x, y, w, h, roof, seed, colors, aligned=False):
     """Varied rooftop equipment inside the existing roof outline. Picks one or
     two features from the seed: water tank, HVAC units, skylight strip, solar
     grid or a stair bulkhead. Never draws outside (x+5..x+w-6, y+5..).
-    aligned: one of four features in a fixed 8x5 spot measured from the
+    aligned: a water tank or HVAC units inside one tile measured from the
     roof's top-right corner, so buildings of a style share tiles (the core
     scene, where the tile budget is tight)."""
     if aligned:
         if w < 32 or h - roof < 14:
             return
-        l, t = x + w - 15, y + 6
-        kind = seed % 4
-        if kind == 0:      # water tank
+        l, t = x + w - 16, y + 8          # inside one tile of the roof
+        if seed % 2 == 0:  # Toronto rooftop water tank
             d.ellipse((l + 1, t, l + 6, t + 4), fill=colors[3], outline=colors[0])
-        elif kind == 1:    # two HVAC units
-            box(l, t, 3, 4, 3); box(l + 4, t, 3, 4, 3)
-            d.rectangle((l, t, l + 2, t + 3), outline=colors[0]); d.rectangle((l + 4, t, l + 6, t + 3), outline=colors[0])
-        elif kind == 2:    # skylight strip
-            d.rectangle((l, t, l + 7, t + 4), outline=colors[0], fill=colors[3])
-            for sx in (l + 2, l + 4, l + 6):
-                d.line((sx, t + 1, sx, t + 3), fill=colors[0])
-        else:              # stair bulkhead
-            box(l + 1, t, 6, 5, 1); d.rectangle((l + 1, t, l + 6, t + 4), outline=colors[0]); box(l + 3, t + 4, 2, 1, 3)
+        else:              # two HVAC units
+            box(l + 1, t, 3, 4, 3); box(l + 4, t, 3, 4, 3)
+            d.rectangle((l + 1, t, l + 3, t + 3), outline=colors[0]); d.rectangle((l + 4, t, l + 6, t + 3), outline=colors[0])
         return
         l, t = x + w - 15, y + 6
         kind = seed % 6
@@ -328,6 +321,164 @@ def dress_lots(d, box, tw, th, lot, set_attr, colors, salt, parks=()):
                                 set_attr(xx, yy, 6 | 128)
                         canopies.append([cx8, cy8, 16, 16])
     return canopies
+
+
+# Sidewalks: a dark gutter line along the curb and concrete joints across
+# the slabs (in SIDEWALK_SLOT, whose colour makes the joints warm grey), then
+# street furniture on some slabs: lamps, street trees, benches and Toronto's
+# post-and-ring bike stands. Every slab is one tile, so a whole city of
+# sidewalk costs a handful of tiles.
+SIDEWALK_SLOT = 4
+FURNITURE = ('lamp', 'tree', 'bench', 'ring')
+
+
+def detail_sidewalks(img, d, tw, th, collisions, attrs, colors, wanted=lambda tx, ty: True):
+    """Curb and joint on every plain sidewalk tile (all cream, walkable,
+    beside a road on one axis). Returns {(tx, ty): (axis, side)}."""
+    cream = tuple(bytes.fromhex(colors[3][1:]))
+    plain = cream * 64
+    out = {}
+
+    def road(tx, ty):
+        return 0 <= tx < tw and 0 <= ty < th and collisions[ty * tw + tx] == 0
+    for ty in range(th):
+        for tx in range(tw):
+            i = ty * tw + tx
+            if collisions[i] != 16 or not wanted(tx, ty):
+                continue
+            x, y = tx * 8, ty * 8
+            if img.crop((x, y, x + 8, y + 8)).tobytes() != bytes(plain):
+                continue
+            l, r, u, b = road(tx - 1, ty), road(tx + 1, ty), road(tx, ty - 1), road(tx, ty + 1)
+            if (l or r) and not (u or b) and not (l and r):
+                cx = x if l else x + 7
+                d.line((cx, y, cx, y + 7), fill=colors[0])
+                d.line((x + 1 if l else x, y, x + 7 if l else x + 6, y), fill=colors[2])
+                out[(tx, ty)] = ('v', 'l' if l else 'r')
+            elif (u or b) and not (l or r) and not (u and b):
+                cy = y if u else y + 7
+                d.line((x, cy, x + 7, cy), fill=colors[0])
+                d.line((x, y + 1 if u else y, x, y + 7 if u else y + 6), fill=colors[2])
+                out[(tx, ty)] = ('h', 'u' if u else 'd')
+            else:
+                continue
+            attrs[i] = SIDEWALK_SLOT
+    return out
+
+
+def paint_furniture(d, box, x, y, axis, side, kind, colors):
+    """One piece of street furniture on a detailed slab (see detail_sidewalks)."""
+    # Coordinates along (a) and across (c) the slab, c measured from the curb.
+    def at(a, c):
+        if axis == 'v':
+            return (x + c if side == 'l' else x + 7 - c, y + a)
+        return (x + a, y + c if side == 'u' else y + 7 - c)
+
+    def dot(a, c, colour):
+        d.point(at(a, c), fill=colors[colour])
+    if kind == 'tree':                  # a street tree in its pit
+        for a in range(8):
+            for c in range(1, 8):
+                da, dc = a - 3.5, c - 4
+                r = (da * da + dc * dc) ** 0.5
+                if r < 3.6:
+                    dot(a, c, 0 if r >= 2.8 else 2 if (da < -0.5 and dc < 0.5) else 1)
+    elif kind == 'lamp':                # pole and lamp head over the curb
+        for a in (3, 4):
+            for c in (2, 3):
+                dot(a, c, 0)
+        dot(3, 2, 3)
+    elif kind == 'bench':               # facing the street, back to the shops
+        for a in range(1, 7):
+            dot(a, 5, 1); dot(a, 6, 0)
+        dot(1, 4, 0); dot(6, 4, 0)
+    else:                               # post-and-ring bike stand
+        for a, c in ((3, 2), (4, 2), (2, 3), (5, 3), (2, 4), (5, 4), (3, 5), (4, 5)):
+            dot(a, c, 0)
+        dot(3, 3, 1); dot(4, 4, 1)
+
+
+def place_furniture(img, d, box, slabs, slab_tile, attrs, tw, canopies, busy_at, colors):
+    """Furniture on slabs that are still plain (nothing drawn on them since
+    detail_sidewalks) and two slabs from either end of their run: a lamp and
+    a street tree every eight slabs, and where busy_at(x, y), a bench and a
+    bike ring between them."""
+    def run_ok(tx, ty, axis, side):
+        step = (0, 1) if axis == 'v' else (1, 0)
+        return all(slabs.get((tx + k * step[0], ty + k * step[1])) == (axis, side) for k in (-2, -1, 1, 2))
+    for (tx, ty), (axis, side) in sorted(slabs.items()):
+        x, y = tx * 8, ty * 8
+        if img.crop((x, y, x + 8, y + 8)).tobytes() != slab_tile[(tx, ty)] or not run_ok(tx, ty, axis, side):
+            continue
+        p = (ty if axis == 'v' else tx) % 8
+        busy = busy_at(x, y)
+        kind = {1: 'lamp', 5: 'tree', 3: 'bench' if busy else None, 7: 'ring' if busy else None}.get(p)
+        if not kind:
+            continue
+        paint_furniture(d, box, x, y, axis, side, kind, colors)
+        if kind == 'tree':
+            attrs[ty * tw + tx] = 6 | 128
+            canopies.append([x, y, 8, 8])
+
+
+def paint_awnings(d, box, x, y, w, h, colors, signs=False):
+    """Striped awnings over a shopfront, one per 16 pixels of frontage (the
+    palette gives their colour), and optionally vertical signboards."""
+    for sx in range(x, x + w - 15, 16):
+        box(sx + 1, y + h - 7, 14, 3, 2)
+        for ax in range(sx + 2, sx + 15, 4):
+            d.line((ax, y + h - 7, ax + 1, y + h - 7), fill=colors[3])
+            d.line((ax, y + h - 5, ax + 1, y + h - 5), fill=colors[3])
+        if signs:
+            box(sx + 12, y + h - 17, 3, 9, 2); d.rectangle((sx + 12, y + h - 17, sx + 14, y + h - 9), outline=colors[0])
+            d.point((sx + 13, y + h - 15), fill=colors[0]); d.point((sx + 13, y + h - 12), fill=colors[0])
+
+
+def area_at(areas, x, y):
+    """Name of the first (name, (x0, y0, x1, y1)) area containing (x, y)."""
+    return next((n for n, (x0, y0, x1, y1) in areas if x0 <= x < x1 and y0 <= y < y1), None)
+
+
+# How each outer neighbourhood builds (styles drawn on the scene's fixed
+# footprints, palette slots, shop awnings and signboards). Footprints never
+# change, so collision and every route stay as they were.
+AREA_LOOKS = {
+    # West: Parkdale's Victorian brick and its apartment towers; Roncesvalles
+    # and Bloordale main streets; Brockton's painted houses; Junction
+    # Triangle rail-side factories and lofts; High Park North's apartments.
+    'PARKDALE': {'styles': [2, 4, 2], 'slots': [1, 5, 3]},
+    'RONCESVALLES': {'styles': [0, 2, 0, 2], 'slots': [4, 3, 1, 3], 'awnings': True},
+    'BROCKTON VILLAGE': {'styles': [2], 'slots': [2, 3]},
+    'BLOORDALE': {'styles': [0, 1], 'slots': [1, 4], 'awnings': True},
+    'JUNCTION TRIANGLE': {'styles': [5, 5, 1], 'slots': [1, 1, 2]},
+    'HIGH PARK NORTH': {'styles': [4, 3], 'slots': [5, 4]},
+    'SUNNYSIDE': {'styles': [0], 'slots': [5]},
+    # High Park scene: the Junction's brick main street, Bloor West Village
+    # shops, Swansea houses.
+    'THE JUNCTION': {'styles': [1, 0, 5], 'slots': [1, 1, 4], 'awnings': True},
+    'BLOOR WEST VILLAGE': {'styles': [0, 1], 'slots': [4, 1, 5], 'awnings': True},
+    'SWANSEA': {'styles': [2], 'slots': [3, 1]},
+    # East: Greektown's blue-and-white shopfronts on the Danforth, Chinatown
+    # East at Gerrard, Riverdale's brick houses, Riverside and Leslieville
+    # on Queen East with their converted factories.
+    'GREEKTOWN': {'styles': [0, 1], 'slots': [2, 5], 'awnings': True},
+    'THE DANFORTH': {'styles': [0, 1], 'slots': [4, 1], 'awnings': True},
+    'CHINATOWN EAST': {'styles': [0, 1], 'slots': [1, 4], 'awnings': True, 'signs': True},
+    'RIVERDALE': {'styles': [2], 'slots': [1, 3]},
+    'RIVERSIDE': {'styles': [0, 1, 5], 'slots': [1, 4, 1], 'awnings': True},
+    'LESLIEVILLE': {'styles': [2, 5, 0], 'slots': [3, 1, 4], 'awnings': True},
+    'SOUTH RIVERDALE': {'styles': [2, 5], 'slots': [3, 1]},
+}
+
+
+def area_look(areas, x, y, k):
+    """(style, slot, awnings, signs) for the k-th grid building at (x, y),
+    or None where the scene keeps its default mix."""
+    look = AREA_LOOKS.get(area_at(areas, x, y))
+    if not look:
+        return None
+    return (look['styles'][k % len(look['styles'])], look['slots'][k % len(look['slots'])],
+            look.get('awnings', False), look.get('signs', False))
 
 
 # Open water: a 32 x 32 px ripple texture (16 tiles) repeated on a global grid

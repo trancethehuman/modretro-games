@@ -40,17 +40,17 @@ REGIONS = [
     ('BLOOR-YONGE', -592, 1247, 1800, 2400, 'towers'),
     ('QUEENS PARK', -592, 0, 1040, 1800, 'queens_park'),
     ('UNIVERSITY OF TORONTO', -1438, -592, 1040, 2400, 'campus'),
-    ('THE ANNEX', -2075, -1438, 1040, 2400, 'houses'),
-    ('DISCOVERY DISTRICT', -592, 0, 460, 1040, 'civic'),
+    ('HARBORD VILLAGE', -2075, -1438, 1040, 2400, 'houses'),
+    ('DISCOVERY DISTRICT', -592, 0, 460, 1040, 'discovery'),
     ('CITY HALL', -592, 0, 0, 460, 'city_hall'),
-    ('FINANCIAL DISTRICT', -592, 0, -688, 0, 'towers'),
+    ('FINANCIAL DISTRICT', -592, 0, -688, 0, 'financial'),
     ('UNION STATION', -592, 0, -1000, -688, 'union'),
-    ('ENTERTAINMENT DISTRICT', -1438, -592, -688, 0, 'towers_civic'),
+    ('ENTERTAINMENT DISTRICT', -1438, -592, -688, 0, 'entertainment'),
     ('CN TOWER / ROGERS CENTRE', -1438, -592, -1000, -688, 'cn_rogers'),
-    ('CITYPLACE', -2075, -1438, -1000, -688, 'towers'),
+    ('CITYPLACE', -2075, -1438, -1000, -688, 'cityplace'),
     ('KING WEST', -2075, -1438, -688, 0, 'warehouse'),
     ('GRANGE PARK', -1438, -592, 0, 460, 'ago'),
-    ('CHINATOWN', -1438, -592, 460, 1040, 'shops'),
+    ('CHINATOWN', -1438, -592, 460, 1040, 'chinatown'),
     ('KENSINGTON MARKET', -2075, -1438, 460, 1040, 'market'),
     ('ALEXANDRA PARK', -2075, -1438, 0, 460, 'apartments'),
     ('LIBERTY VILLAGE / FORT YORK', -4300, -2075, -1000, -382, 'liberty'),
@@ -59,8 +59,14 @@ REGIONS = [
     ('LITTLE PORTUGAL', -4300, -3297, 0, 1040, 'houses'),
     ('LITTLE ITALY', -3297, -2075, 460, 1040, 'shops'),
     ('DUFFERIN GROVE', -4300, -3297, 1040, 2400, 'dufferin_grove'),
-    ('SEATON VILLAGE', -3297, -2075, 1040, 2400, 'houses'),
+    ('PALMERSTON', -3297, -2075, 1040, 2400, 'houses'),
 ]
+
+
+# Colour identities by neighbourhood (palette slots; no tiles of their own):
+# houses, and shop rows whose awnings carry the colours.
+HOUSE_SLOT = {'LITTLE PORTUGAL': 2, 'PALMERSTON': 1, 'RIVERDALE': 1}
+SHOP_SLOTS = {'LITTLE ITALY': [6, 1], 'WEST QUEEN WEST': [5, 3, 4, 1, 2]}
 
 
 def inverse(anchors, px):
@@ -233,18 +239,32 @@ def main(check=False):
                 return False
         return not any(rx < x + w and x < rx + rw and ry < y + h and y < ry + rh for rx, ry, rw, rh in reserved)
 
+    green_px = bytes.fromhex(COLORS[2][1:]) * 64
+
+    def cast_shadow(x, y, w, h):
+        """Shadow onto open ground only, and only on tiles that are still
+        plain ground, so shadow tiles repeat."""
+        plain = {}
+        for py in range(y + 4, y + h + 4):
+            for px in range(x + 4, x + w + 4):
+                i = (py // 8) * TW + px // 8
+                if not (0 <= px < WIDTH and 0 <= py < HEIGHT) or (x <= px < x + w and y <= py < y + h):
+                    continue
+                if i not in plain:
+                    tx, ty = px // 8 * 8, py // 8 * 8
+                    plain[i] = collisions[i] == 16 and attrs[i] == 6 and img.crop((tx, ty, tx + 8, ty + 8)).tobytes() == green_px
+                if plain[i]:
+                    d.point((px, py), fill=COLORS[0])
+
+    def lip_free(x, y, w, n):
+        return y - n >= my0 and all(collisions[i] != 15 for _, _, i in cells(x, y - n, w, n))
+
     def building(x, y, w, h, style, kind=None, name=None, lip=True):
         tall = style in (3, 4) and h >= 40
         roof = 16 if tall else 8
         if h < 24:
             style = 0
-        # Shadow onto open ground only.
-        for py in range(y + 4, y + h + 4):
-            for px in range(x + 4, x + w + 4):
-                i = (py // 8) * TW + px // 8
-                if 0 <= px < WIDTH and 0 <= py < HEIGHT and collisions[i] == 16 and attrs[i] == 6 and \
-                   not (x <= px < x + w and y <= py < y + h):
-                    d.point((px, py), fill=COLORS[0])
+        cast_shadow(x, y, w, h)
         box(x, y, w, h, 1); d.rectangle((x, y, x + w - 1, y + h - 1), outline=COLORS[0])
         box(x + 2, y + 2, w - 4, max(4, h - roof - 2), 2)
         d.rectangle((x + 4, y + 4, x + w - 5, y + h - roof - 3), outline=COLORS[0])
@@ -296,10 +316,10 @@ def main(check=False):
 
     def landmark_detail(kind, x, y, w, h):
         if kind == 'colonnade':      # Union Station: long stone front, column rhythm
-            box(x + 2, y + h - 10, w - 4, 8, 3)
+            box(x + 2, y + h - 8, w - 4, 7, 3)
             for cx in range(x + 4, x + w - 3, 4):
-                box(cx, y + h - 10, 2, 8, 0)
-            box(x + w // 2 - 6, y + 4, 12, 6, 3)
+                box(cx, y + h - 8, 2, 7, 0)
+            box(x + w // 2 - 8, y + 8, 16, 8, 3); d.rectangle((x + w // 2 - 8, y + 8, x + w // 2 + 7, y + 15), outline=COLORS[0])
         elif kind == 'market':       # St Lawrence Market: long hall, clerestory
             box(x + 4, y + 4, w - 8, 4, 3)
             for cx in range(x + 6, x + w - 6, 6):
@@ -322,8 +342,14 @@ def main(check=False):
         elif kind == 'bowed_glass':  # AGO: long bowed glass front
             d.arc((x + 2, y + h - 14, x + w - 3, y + h + 6), 180, 360, fill=COLORS[3], width=2)
             box(x + w - 12, y + 4, 8, 8, 3)
-        elif kind == 'crystal':      # ROM crystal on heritage stone
-            d.polygon([(x + 4, y + h - 6), (x + 10, y + 4), (x + 20, y + 8), (x + 16, y + h - 8)], fill=COLORS[3], outline=COLORS[0])
+        elif kind == 'crystal':      # ROM: the Crystal's prism on the Bloor St front of the stone wings
+            ccx, ccy = x + 24, y + 8    # a tile corner, so the prism's quarters share tiles
+            for py in range(ccy - 12, ccy + 12):
+                for px in range(ccx - 12, ccx + 12):
+                    a, b = abs(px + 0.5 - ccx), abs(py + 0.5 - ccy)
+                    if a + b < 12:
+                        c = 0 if a + b >= 11 else 1 if (a < 1 or b < 1 or abs(a - b) < 1) else 3
+                        d.point((px, py), fill=COLORS[c])
         elif kind == 'warehouse_chimney':  # Distillery brick works
             box(x + w - 8, y + 2, 4, 12, 0); box(x + w - 7, y + 1, 2, 2, 3)
             for cx in range(x + 4, x + w - 12, 8):
@@ -333,6 +359,20 @@ def main(check=False):
                 box(cx, y + 2, 3, 3, 0)
         elif kind == 'hall':
             box(x + 4, y + 4, w - 8, 6, 3); box(x + w // 2 - 2, y + 4, 4, 6, 0)
+        elif kind == 'marquee':      # King St theatres: fly tower, lit marquee over the doors
+            box(x + 8, y + 8, w - 16, 8, 1); d.rectangle((x + 8, y + 8, x + w - 9, y + 15), outline=COLORS[0])
+            box(x + 1, y + h - 7, w - 2, 4, 0)
+            for bx in range(x + 1, x + w - 1, 2):
+                d.point((bx, y + h - 7), fill=COLORS[3]); d.point((bx, y + h - 4), fill=COLORS[3])
+        elif kind == 'mars':         # MaRS: the 1913 hospital wing on College, its portico in the middle
+            box(x + 1, y + 1, w - 2, 6, 2); d.line((x + 1, y + 4, x + w - 2, y + 4), fill=COLORS[1])
+            box(x + 1, y + 8, w - 2, h - 9, 2)
+            for wx in range(x + 3, x + w - 3, 4):
+                box(wx, y + 10, 2, 3, 3)
+            box(x + w // 2 - 8, y + 8, 16, h - 9, 3)
+            for cx in range(x + w // 2 - 7, x + w // 2 + 8, 2):
+                d.line((cx, y + 9, cx, y + h - 3), fill=COLORS[1])
+            d.line((x + w // 2 - 8, y + 8, x + w // 2 + 7, y + 8), fill=COLORS[0])
 
     def park(x, y, w, h, name, paths=True):
         reserved.append((x, y, w, h))
@@ -379,6 +419,26 @@ def main(check=False):
             for tx in range(x0 // 8, x1 // 8):
                 if all(img.getpixel((tx * 8 + a, ty * 8 + b)) == green_rgb for a in range(8) for b in range(8)):
                     d.point((tx * 8 + 2, ty * 8 + 3), fill=COLORS[1]); d.point((tx * 8 + 3, ty * 8 + 2), fill=COLORS[1])
+
+    def flower_beds(x0, y0, x1, y1, every=1):
+        """Whole lawn tiles in a rectangle become flower beds: one bed tile,
+        coloured by palette (pink, gold and red beds side by side)."""
+        n = 0
+        for ty in range(y0 // 8, y1 // 8):
+            for tx in range(x0 // 8, x1 // 8):
+                X, Y = tx * 8, ty * 8
+                if (tx + ty) % every or img.crop((X, Y, X + 8, Y + 8)).tobytes() != green_px:
+                    continue
+                box(X, Y, 8, 8, 2); d.rectangle((X, Y, X + 7, Y + 7), outline=COLORS[1])
+                for py in range(Y + 1, Y + 7):
+                    for px in range(X + 1, X + 7):
+                        a, b = px % 8, py % 8
+                        if (a + 2 * b) % 5 == 0:
+                            d.point((px, py), fill=COLORS[3])
+                        elif (2 * a + b) % 7 == 3:
+                            d.point((px, py), fill=COLORS[1])
+                attrs[ty * TW + tx] = (3, 4, 1)[n % 3]; n += 1
+        return n
 
     def trinity_bellwoods(x0, y0, x1, y1):
         """The whole block from Queen to Dundas: the stone gates on Queen St,
@@ -428,6 +488,7 @@ def main(check=False):
             for px in range(x0, x1):
                 if ok(px, py) and (abs(px - cx + 0.5) < 2 or abs(abs(px - cx + 0.5) - (py - hy1 + 0.5)) < 1.5):
                     d.point((px, py), fill=COLORS[3])
+        flower_beds(x0, hy1, x1, hy1 + 8, 2)
         plant_trees(x0, y0, x1, y1, ok)
         tufts(x0, y0, x1, y1)
         districts.append({'name': 'ALLAN GARDENS', 'kind': 'park', 'rect': [x0, y0, x1 - x0, y1 - y0]})
@@ -437,7 +498,7 @@ def main(check=False):
         grew from, facing its park, with the walk to Queen St and trees."""
         reserved.append((x0, y0, x1 - x0, y1 - y0))
         cx = (x0 + x1) // 2
-        lm(cx - 12, y0, 24, 16, 0, None, 'The Grange', lip=False)
+        lm(cx - 16, y0, 32, 16, 0, None, 'The Grange', lip=False)
         ok = lawn_only(x0, y0, x1, y1)
         for py in range(y0 + 20, y1):
             for px in range(cx - 2, cx + 2):
@@ -517,10 +578,48 @@ def main(check=False):
                     d.point((px, py), fill=COLORS[3])
         for fx in (sx - 12, sx + 11):
             box(fx, ly + lh + 3, 1, 6, 0); d.point((fx, ly + lh + 2), fill=COLORS[3])
-        # The ROM at Bloor; the campus lawns of Victoria College and
-        # University College and the grounds beside the Whitney Block are
-        # left as lawn and trees around the crescent.
-        lm(416, 100, 40, 32, 3, 'crystal', 'Royal Ontario Museum')
+        # Museums at Bloor and Queen's Park: the ROM on the west side and the
+        # Gardiner Museum across the road; Victoria College south of the
+        # Gardiner and Convocation Hall's dome south of Hoskin, for the
+        # University of Toronto. The other campus lawns are lawn and trees.
+        lm(416, 104, 40, 32, 3, 'crystal', 'Royal Ontario Museum')
+        solid(416, 96, 40, 8)    # under its roof lip, as before the lip moved onto the tile grid
+
+        def clear_of_crescent(x, y, w, h):
+            return not any(L.crescent(px + 0.5, py + 0.5, walk=True) or L.road(px, py, L.WALK_HALF)
+                           for py in range(y, y + h) for px in range(x, x + w))
+        # The Gardiner: a pale limestone box, its glass top floor and terrace
+        # looking west over Queen's Park.
+        gx, gy, gw, gh = 552, 96, 32, 24
+        assert clear_of_crescent(gx, gy, gw, gh)
+        reserved.append((gx, gy, gw, gh)); cast_shadow(gx, gy, gw, gh)
+        box(gx, gy, gw, gh, 3); d.rectangle((gx, gy, gx + gw - 1, gy + gh - 1), outline=COLORS[0])
+        box(gx + 1, gy + 1, 8, gh - 10, 2)
+        for py in range(gy + 3, gy + gh - 9, 4):
+            d.line((gx + 2, py, gx + 7, py), fill=COLORS[1])
+        d.line((gx, gy + gh - 8, gx + gw - 1, gy + gh - 8), fill=COLORS[0])
+        box(gx + 2, gy + gh - 6, gw - 4, 3, 1)
+        solid(gx, gy, gw, gh); attr(gx, gy, gw, gh, 0, True)
+        blocks.append({'x': gx, 'y': gy, 'width': gw, 'depth': gh, 'height': 8, 'style': 3,
+                       'landmark': 'Gardiner Museum', 'kind': 'museum', 'overhang': 0})
+        districts.append({'name': 'Gardiner Museum', 'kind': 'landmark', 'rect': [gx, gy, gw, gh]})
+        # Victoria College: red sandstone, its tower over the doors.
+        assert clear_of_crescent(584, 128, 24, 24)
+        lm(584, 128, 24, 24, 0, 'clocktower', 'Victoria College')
+        # Convocation Hall: the domed rotunda, its copper dome ribbed round
+        # the oculus; centred on a tile corner (vertically) and a tile's middle.
+        ccx, ccy, cr = 428, 224, 11.5
+        assert clear_of_crescent(416, 212, 24, 24)
+        for py in range(212, 236):
+            for px in range(416, 440):
+                dx, dy = abs(px + 0.5 - ccx), abs(py + 0.5 - ccy)
+                r = (dx * dx + dy * dy) ** 0.5
+                if r >= cr:
+                    continue
+                c = 0 if r >= cr - 1 else 3 if (r >= cr - 2.5 or r < 2) else 0 if (dx < 0.6 or dy < 0.6 or abs(dx - dy) < 0.8) else 1
+                d.point((px, py), fill=COLORS[c])
+        reserved.append((416, 212, 24, 24)); solid(420, 216, 16, 16, 'Convocation Hall')
+        districts.append({'name': 'Convocation Hall', 'kind': 'landmark', 'rect': [416, 212, 24, 24]})
         # Old trees on plain lawn, tile-aligned so every one reuses the same
         # tiles (a canopy over a path edge would make one-off tiles).
         taken = []
@@ -548,6 +647,178 @@ def main(check=False):
         city_kit.plaza(d, box, x, y, w, h, COLORS)
         for _, _, i in cells(x, y, w, h):
             attrs[i] = 0
+
+    # ------------------------------------------------- district building kits
+    TOWER_SLOT = {'black': 2, 'gold': 4, 'granite': 1, 'glass': 5, 'condo': 2}
+
+    def tower(x, y, w, h, look, name=None):
+        """High-rises with a recognisable top: 'black' steel and bronze glass
+        (the Financial District's Mies towers), 'gold' glass with faceted
+        walls, red 'granite' with a notched crown, 'glass' curtain walls and
+        slim 'condo' towers. Each draws its upper floors over the street to
+        the north like other tall buildings."""
+        slot = TOWER_SLOT[look]
+        body = 0 if look == 'black' else 2
+        cast_shadow(x, y, w, h)
+        box(x, y, w, h, body); d.rectangle((x, y, x + w - 1, y + h - 1), outline=COLORS[0])
+        fy = y + h - 8                      # the south face below the roof
+        d.line((x, fy, x + w - 1, fy), fill=COLORS[0])
+        for xx in range(x + 2, x + w - 1, 2):
+            d.line((xx, fy + 1, xx, y + h - 2), fill=COLORS[1])
+        box(x + w // 2 - 2, y + h - 4, 4, 3, 0)
+        cx = x + w // 2
+        if look == 'black':                 # black steel: the same mullion grid all over
+            for xx in range(x + 2, x + w - 1, 4):
+                d.line((xx, y + 1, xx, fy - 1), fill=COLORS[1])
+        elif look == 'gold':                # faceted glass: diagonal folds
+            for py in range(y + 1, fy):
+                for px in range(x + 1, x + w - 1):
+                    if (px - py) % 8 == 0:
+                        d.point((px, py), fill=COLORS[1])
+        elif look == 'granite':             # piers (the notch is in the crown)
+            for xx in range(x + 4, x + w - 1, 4):
+                d.line((xx, y + 1, xx, fy - 1), fill=COLORS[1])
+        else:                               # glass grid
+            for py in range(y + 4, fy, 4):
+                d.line((x + 1, py, x + w - 2, py), fill=COLORS[1])
+            for xx in range(x + 4, x + w - 1, 4):
+                d.line((xx, y + 1, xx, fy - 1), fill=COLORS[1])
+        solid(x, y, w, h); attr(x, y, w, h, slot, True)
+        lip = 24 if lip_free(x, y, w, 24) else 8 if lip_free(x, y, w, 8) else 0
+        if lip:
+            top = y - lip
+            box(x, top, w, lip, body)
+            d.line((x, top, x + w - 1, top), fill=COLORS[0])
+            d.line((x, top, x, y - 1), fill=COLORS[0]); d.line((x + w - 1, top, x + w - 1, y - 1), fill=COLORS[0])
+            for xx in range(x + 2 if look == 'black' else x + 4, x + w - 1, 4):
+                d.line((xx, top + 1, xx, y - 1), fill=COLORS[1])
+            if look in ('glass', 'condo'):
+                for yy in range(top + 4, y, 4):
+                    d.line((x + 1, yy, x + w - 2, yy), fill=COLORS[1])
+            if look == 'granite':
+                for k in range(6):
+                    d.line((cx - 6 + k, top + k, cx + 5 - k, top + k), fill=COLORS[0])
+            attr(x, top, w, lip, slot, True)
+        blocks.append({'x': x, 'y': y, 'width': w, 'depth': h, 'height': 16, 'style': 4 if look in ('glass', 'condo') else 3,
+                       'landmark': name, 'kind': look, 'overhang': lip})
+        if name:
+            districts.append({'name': name, 'kind': 'landmark', 'rect': [x, y, w, h]})
+
+    def pavilion(x, y, w, h):
+        """A one-storey black steel and glass pavilion between towers."""
+        cast_shadow(x, y, w, h)
+        box(x, y, w, h, 0); d.rectangle((x, y, x + w - 1, y + h - 1), outline=COLORS[0])
+        for xx in range(x + 2, x + w - 1, 4):
+            d.line((xx, y + 1, xx, y + h - 2), fill=COLORS[1])
+        solid(x, y, w, h); attr(x, y, w, h, 2, True)
+        blocks.append({'x': x, 'y': y, 'width': w, 'depth': h, 'height': 8, 'style': 1,
+                       'landmark': None, 'kind': 'pavilion', 'overhang': 0})
+
+    def round_hall(x, y, w, h, name):
+        """Roy Thomson Hall: a round glass hall under its diamond-paned
+        canopy, on a paved forecourt; centred on a tile corner so its four
+        quarters share tiles."""
+        reserved.append((x, y, w, h))
+        box(x, y, w, h, 3)
+        cx, cy = x + w // 2, y + 16
+        for py in range(cy - 16, cy + 16):
+            for px in range(cx - 16, cx + 16):
+                dx, dy = abs(px + 0.5 - cx), abs(py + 0.5 - cy)
+                r = (dx * dx + dy * dy) ** 0.5
+                if r >= 15.5:
+                    continue
+                if r >= 14.3:
+                    c = 0
+                elif 10 <= r < 11:
+                    c = 1
+                elif (dx + dy) % 4 == 1 or abs(dx - dy) % 4 == 0:
+                    c = 1
+                else:
+                    c = 2
+                d.point((px, py), fill=COLORS[c])
+        solid(x, y, w, h); attr(x, y, w, h, 2)
+        districts.append({'name': name, 'kind': 'landmark', 'rect': [x, y, w, h]})
+        blocks.append({'x': x, 'y': y, 'width': w, 'depth': h, 'height': 8, 'style': 3,
+                       'landmark': name, 'kind': 'round_hall', 'overhang': 0})
+
+    def hospital(x, y, w, h, name, pad):
+        """A hospital on University Avenue: pale stone, rows of windows on
+        the south face and a rooftop helipad (centred on a tile corner, so
+        it is one tile four ways)."""
+        cast_shadow(x, y, w, h)
+        box(x, y, w, h, 3); d.rectangle((x, y, x + w - 1, y + h - 1), outline=COLORS[0])
+        fy = y + h - 8
+        d.line((x, fy, x + w - 1, fy), fill=COLORS[0])
+        for wx in range(x + 2, x + w - 2, 4):
+            box(wx, fy + 2, 2, 3, 1)
+        box(x + w // 2 - 2, y + h - 4, 4, 3, 0)
+        px0, py0 = pad
+        for py in range(py0 - 8, py0 + 8):
+            for px in range(px0 - 8, px0 + 8):
+                dx, dy = abs(px + 0.5 - px0), abs(py + 0.5 - py0)
+                r = (dx * dx + dy * dy) ** 0.5
+                if r < 7.5:
+                    h_mark = dy < 4 and (2 <= dx < 4 or (dx < 2 and dy < 1))
+                    d.point((px, py), fill=COLORS[3 if h_mark or 6 <= r else 1])
+        solid(x, y, w, h); attr(x, y, w, h, 0, True)
+        if lip_free(x, y, w, 8):
+            box(x, y - 8, w, 8, 1); d.line((x, y - 8, x + w - 1, y - 8), fill=COLORS[0])
+            for wx in range(x + 2, x + w - 2, 4):
+                d.line((wx, y - 6, wx, y - 2), fill=COLORS[0])
+            attr(x, y - 8, w, 8, 0, True)
+        blocks.append({'x': x, 'y': y, 'width': w, 'depth': h, 'height': 8, 'style': 3, 'landmark': name,
+                       'kind': 'hospital', 'overhang': 8})
+        districts.append({'name': name, 'kind': 'landmark', 'rect': [x, y, w, h]})
+
+    def shopfronts(x0, x1, y, depth, slots, signs=False, lip=True):
+        """Narrow shops and houses, each in its own colour, with striped
+        awnings over the doors (and Chinatown's vertical signboards)."""
+        x, k = x0, 0
+        while x + 16 <= x1:
+            w = x1 - x if x1 - x < 32 else 16
+            if free(x, y, w, depth):
+                building(x, y, w, depth, 0, lip=lip)
+                slot = slots[k % len(slots)]
+                attr(x, y - 8 if blocks[-1]['overhang'] else y, w, depth + (8 if blocks[-1]['overhang'] else 0), slot, True)
+                city_kit.paint_awnings(d, box, x, y, w, depth, COLORS, signs)
+            x += w; k += 1
+
+    def st_james(x0, y0, x1, y1):
+        """St James Cathedral at King and Church: a cross-shaped slate roof,
+        the spire over the King St doors, and St James Park beside it."""
+        cx = 704
+        reserved.append((x0, y0, x1 - x0, y1 - y0))
+        nave = (cx - 8, y0, 16, y1 - y0); tr = (cx - 16, y0 + 8, 32, 8)
+        cast_shadow(*nave); cast_shadow(*tr)
+        for bx, by, bw, bh in (nave, tr):
+            box(bx, by, bw, bh, 1); d.rectangle((bx, by, bx + bw - 1, by + bh - 1), outline=COLORS[0])
+        box(cx - 7, y0 + 9, 14, 6, 1)
+        d.line((cx - 1, y0 + 1, cx - 1, y1 - 10), fill=COLORS[0]); d.line((cx, y0 + 1, cx, y1 - 10), fill=COLORS[0])
+        d.line((cx - 15, y0 + 11, cx + 14, y0 + 11), fill=COLORS[0]); d.line((cx - 15, y0 + 12, cx + 14, y0 + 12), fill=COLORS[0])
+        # Tower and spire: a pyramid seen from above, over the King St doors.
+        sy = y1 - 8
+        box(cx - 4, sy, 8, 8, 2); d.rectangle((cx - 4, sy, cx + 3, sy + 7), outline=COLORS[0])
+        d.line((cx - 3, sy + 1, cx + 2, sy + 6), fill=COLORS[0]); d.line((cx + 2, sy + 1, cx - 3, sy + 6), fill=COLORS[0])
+        for bx, by, bw, bh in (nave, tr):
+            solid(bx, by, bw, bh); attr(bx, by, bw, bh, 4, True)
+        blocks.append({'x': nave[0], 'y': nave[1], 'width': nave[2], 'depth': nave[3], 'height': 8, 'style': 1,
+                       'landmark': 'St James Cathedral', 'kind': 'cathedral', 'overhang': 0})
+        districts.append({'name': 'St James Cathedral', 'kind': 'landmark', 'rect': [cx - 16, y0, 32, y1 - y0]})
+        # St James Park: the Victorian garden east of the cathedral, a
+        # fountain in its round bed and paths to King St.
+        gx0 = cx + 24
+        ok = lawn_only(gx0, y0, x1, y1)
+        gcx, gcy = (gx0 + x1) // 2, (y0 + y1) // 2
+        for py in range(y0, y1):
+            for px in range(gx0, x1):
+                if ok(px, py) and (abs(px - gcx + 0.5) < 2 or abs(py - gcy + 0.5) < 2):
+                    d.point((px, py), fill=COLORS[3])
+        d.ellipse((gcx - 6, gcy - 6, gcx + 5, gcy + 5), fill=COLORS[3], outline=COLORS[1])
+        d.ellipse((gcx - 3, gcy - 3, gcx + 2, gcy + 2), fill=COLORS[2], outline=COLORS[0])
+        solid(gcx - 4, gcy - 4, 8, 8)
+        flower_beds(gx0, y0, x1, y1, 2)
+        tufts(gx0, y0, x1, y1)
+        districts.append({'name': 'St James Park', 'kind': 'park', 'rect': [gx0, y0, x1 - gx0, y1 - y0]})
 
     def row(x0, x1, y, depth, widths, styles, gap=0, lip=True):
         """Buildings left to right along a frontage; returns the count."""
@@ -583,7 +854,15 @@ def main(check=False):
                 trinity_bellwoods(x0, y0, x1, y1); return
             park(x0, y0, W, H, region_of(x0, y0)[0]); return
         if kind == 'houses':
-            stacked(x0, x1, y0, H, [24, 16, 24][s:] + [24], [2]); return
+            first = len(blocks)
+            stacked(x0, x1, y0, H, [24, 16, 24][s:] + [24], [2])
+            # Each neighbourhood's houses in its own colour: Little Portugal's
+            # azulejo blue, red brick in Palmerston and Riverdale.
+            slot = HOUSE_SLOT.get(region_of(x0 + W // 2, y0 + H // 2)[0])
+            if slot is not None:
+                for b in blocks[first:]:
+                    attr(b['x'], b['y'] - b['overhang'], b['width'], b['depth'] + b['overhang'], slot, True)
+            return
         if kind == 'cabbagetown':
             if H > 100:   # Riverdale Farm on the valley edge
                 park(x0, y0 + 64, W, 56, 'RIVERDALE FARM', paths=False)
@@ -592,9 +871,49 @@ def main(check=False):
                 stacked(x0, x1, y0, H, [24, 16], [2])
             return
         if kind == 'shops':
+            name = region_of(x0 + W // 2, y0 + H // 2)[0]
+            if name in SHOP_SLOTS:    # main streets of small shops under awnings
+                shopfronts(x0, x1, y0, 24, SHOP_SLOTS[name]); shopfronts(x0, x1, y0 + 24, H - 24, SHOP_SLOTS[name][::-1], lip=False)
+                return
             stacked(x0, x1, y0, H, [24, 32, 24][s:] + [24], [0, 1]); return
-        if kind == 'market':      # Kensington: small stalls and shopfronts
-            stacked(x0, x1, y0, H, [16, 24, 16], [0, 1, 0]); return
+        if kind == 'market':      # Kensington: narrow houses painted every colour, awnings
+            shopfronts(x0, x1, y0, 24, [1, 4, 5, 3, 2]); shopfronts(x0, x1, y0 + 24, H - 24, [3, 2, 1, 5, 4], lip=False); return
+        if kind == 'chinatown':   # Spadina's shops, red and gold, signboards; a hospital on University
+            shopfronts(x0, x0 + 32, y0, 24, [1, 4], True); shopfronts(x0, x0 + 32, y0 + 24, H - 24, [4, 1], True, lip=False)
+            hospital(x0 + 32, y0, W - 32, H, 'Mount Sinai Hospital', (x0 + 48, y0 + 16)); return
+        if kind == 'financial':
+            if H >= 48:           # Queen to King: red granite tower beside a glass one
+                tower(x0, y0, 32, H, 'granite'); tower(x0 + 32, y0, W - 32, H, 'glass')
+            else:                 # King to Front: black towers and their low glass pavilion, gold towers by Union
+                tower(x0, y0, 24, H, 'black'); pavilion(x0 + 24, y0, 16, H); tower(x0 + 40, y0, W - 40, H, 'gold')
+            return
+        if kind == 'entertainment':
+            if H >= 48:           # north side of King: the two theatres and their marquees
+                lm(x0, y0, 32, 40, 0, 'marquee', 'Princess of Wales Theatre')
+                lm(x0 + 32, y0, 32, 40, 0, 'marquee', 'Royal Alexandra Theatre')
+                attr(x0, y0 - 8, 32, 48, 2, True)
+            else:                 # south side: a glass tower and Roy Thomson Hall at Simcoe
+                tower(x0, y0, 32, H, 'glass'); round_hall(x0 + 32, y0, W - 32, H, 'Roy Thomson Hall')
+            return
+        if kind == 'discovery':   # MaRS on College; its atrium tower and the hospital behind
+            lm(x0, y0, W, 16, 0, 'mars', 'MaRS Centre')
+            tower(x0, y0 + 16, 32, 24, 'glass')
+            hospital(x0 + 32, y0 + 16, W - 32, 24, 'Toronto General Hospital', (x0 + 48, y0 + 24)); return
+        if kind == 'cityplace':   # slim glass condo towers on the old railway lands
+            x = x0
+            while x + 16 <= x1:
+                tower(x, y0, 16, H, 'condo')
+                if x + 24 <= x1:      # the podium between towers, its green roof
+                    box(x + 16, y0, 8, H, 1); d.rectangle((x + 16, y0, x + 23, y0 + H - 1), outline=COLORS[0])
+                    for py in range(y0 + 3, y0 + H - 2, 4):
+                        d.point((x + 19, py), fill=COLORS[2]); d.point((x + 20, py + 1), fill=COLORS[2])
+                    solid(x + 16, y0, 8, H); attr(x + 16, y0, 8, H, 6, True)
+                x += 24
+            return
+        if kind == 'old_town' and H >= 48:   # shops on Queen; St James and its park on King
+            row(x0, x1, y0, 16, [24, 16], [1, 0])
+            st_james(x0 + 16, y0 + 16, x1, y1)
+            row(x0, x0 + 16, y0 + 16, H - 16, [16], [1], lip=False); return
         if kind in ('apartments', 'regent'):
             if kind == 'regent' and H >= 64:
                 park(x0, y1 - 24, W, 24, 'REGENT PARK', paths=False)
@@ -636,10 +955,23 @@ def main(check=False):
     # Union Station (Front St W between York and Bay), CN Tower and Rogers Centre.
     lm(552, 760, 48, 32, 3, 'colonnade', 'Union Station')
     reserved.append((416, 760, 64, 32))
-    d.ellipse((418, 761, 449, 791), fill=COLORS[3], outline=COLORS[0])
-    for k in range(3):
-        d.arc((422 + k * 4, 765 + k * 4, 445 - k * 4, 787 - k * 4), 180, 360, fill=COLORS[1])
-    solid(424, 768, 16, 16, 'Rogers Centre'); attr(416, 760, 32, 32, 2, True)
+    # The Rogers Centre's roof from above: a white dome, its ring and the
+    # seams of the sliding panels, centred on a tile corner so its four
+    # quarters share tiles.
+    rcx, rcy = 432, 776
+    for py in range(rcy - 16, rcy + 16):
+        for px in range(rcx - 16, rcx + 16):
+            dx, dy = px + 0.5 - rcx, py + 0.5 - rcy
+            r = (dx * dx + dy * dy) ** 0.5
+            if r >= 15.5:
+                continue
+            c = 3
+            if r >= 14.3:
+                c = 0
+            elif 10 <= r < 11 or (r < 10 and 5 <= abs(dy) < 6):
+                c = 1
+            d.point((px, py), fill=COLORS[c])
+    solid(424, 768, 16, 16, 'Rogers Centre'); attr(416, 760, 32, 32, 6, True)
     d.ellipse((456, 768, 471, 783), fill=COLORS[1], outline=COLORS[0])
     box(462, 752, 4, 22, 0); box(460, 772, 8, 6, 3)
     solid(456, 768, 16, 16, 'CN Tower'); attr(456, 752, 16, 32, 4, True)
@@ -666,12 +998,25 @@ def main(check=False):
     lm(672, 464, 32, 32, 3, 'hall', 'Massey Hall')
     # Distillery District south of Mill St.
     lm(816, 760, 32, 32, 5, 'warehouse_chimney', 'Distillery District')
-    # Fort York beside the rail corridor.
+    # Fort York beside the rail corridor: grassy ramparts with cut corners
+    # (bastions at 45 degrees, so each corner repeats one tile) round the
+    # parade ground, and two brick barracks inside.
     reserved.append((176, 736, 48, 56))
-    d.polygon([(184, 744), (216, 744), (222, 764), (200, 788), (178, 764)], fill=COLORS[3], outline=COLORS[0])
-    box(192, 756, 16, 12, 1); d.rectangle((192, 756, 207, 767), outline=COLORS[0])
+    fx0, fy0, fx1, fy1, cut = 176, 744, 224, 792, 8
+    for py in range(fy0, fy1):
+        for px in range(fx0, fx1):
+            a, b = min(px - fx0, fx1 - 1 - px), min(py - fy0, fy1 - 1 - py)
+            if a + b < cut:
+                continue
+            edge = min(a, b, a + b - cut)
+            d.point((px, py), fill=COLORS[0 if edge < 1 else 1 if edge < 4 else 2])
+    for bx0 in (184, 200):
+        box(bx0, 752, 16, 8, 2); d.rectangle((bx0, 752, bx0 + 15, 759), outline=COLORS[0])
+        d.line((bx0 + 2, 755, bx0 + 13, 755), fill=COLORS[1])
+    box(192, 772, 16, 8, 2); d.rectangle((192, 772, 207, 779), outline=COLORS[0]); d.line((194, 775, 205, 775), fill=COLORS[1])
     solid(176, 736, 48, 56, 'Fort York')
     attr(176, 736, 48, 56, 6)
+    attr(184, 752, 32, 8, 1); attr(192, 772, 16, 8, 1)
     districts.append({'name': 'Fort York', 'kind': 'landmark', 'rect': [176, 736, 48, 56]})
     # Islands: Hanlan's, Centre Island and Ward's buildings.
     building(480, 928, 32, 16, 3, 'hall', 'Hanlans service pavilion')
@@ -725,6 +1070,34 @@ def main(check=False):
             d.rectangle((sx - 4, sy - 4, sx + 3, sy + 3), fill=COLORS[3], outline=COLORS[0])
             d.line((sx - 2, sy - 2, sx + 1, sy - 2), fill=COLORS[0]); d.line((sx - 1, sy - 2, sx - 1, sy + 1), fill=COLORS[0])
     paint_streetcar_stops(d, 0, COLORS)
+    # The Water's Edge Promenade: Queens Quay's south sidewalk is a wooden
+    # boardwalk along the harbour (planks across the walk, bollards kept).
+    qq = next(st for st in L.STREETS if st['name'] == 'QUEENS QUAY')
+    wy = qq['at'] + qq['half']
+    for x in range(qq['a'], qq['b'], 8):
+        tile = img.crop((x, wy, x + 8, wy + 8)).tobytes()
+        if collisions[(wy // 8) * TW + x // 8] != 16:
+            continue
+        for px in range(x, x + 8):
+            for py in range(wy, wy + 8):
+                if img.getpixel((px, py)) == tuple(bytes.fromhex(COLORS[3][1:])):
+                    d.point((px, py), fill=COLORS[1 if px % 4 == 3 else 2])
+        attrs[(wy // 8) * TW + x // 8] = 1
+    # Sidewalk slabs, last so only plain sidewalk is touched: the curb's
+    # gutter line and concrete joints (not round Queen's Park's crescent or
+    # under the rail bridges).
+    zx0, zy0, zx1, zy1 = L.QP_ZONE
+
+    def slab_wanted(tx, ty):
+        x, y = tx * 8, ty * 8
+        return not (zx0 - 32 <= x < zx1 + 32 and zy0 - 32 <= y < zy1 + 32) and not (L.RAIL[1] - 16 <= y < L.RAIL[3] + 16)
+    slabs = city_kit.detail_sidewalks(img, d, TW, TH, collisions, attrs, COLORS, slab_wanted)
+    slab_tile = {k: img.crop((k[0] * 8, k[1] * 8, k[0] * 8 + 8, k[1] * 8 + 8)).tobytes() for k in slabs}
+    # Street furniture on sidewalk slabs away from the corners: lamps and
+    # street trees everywhere, benches and bike rings where there are shops.
+    quiet = ('houses', 'cabbagetown', 'apartments', 'regent', 'dufferin_grove', 'park', 'brick', 'liberty', 'warehouse')
+    city_kit.place_furniture(img, d, box, slabs, slab_tile, attrs, TW, canopies,
+                             lambda x, y: region_of(x, y)[1] not in quiet, COLORS)
 
     # Everything flat stays open (user direction, 2026-10-07): lawns, lots,
     # plazas and yards take cars and walkers alike, and both pass under tree
@@ -732,9 +1105,9 @@ def main(check=False):
     # The spray bay (gameplay: TORONTO.c td_spray_check): hazard-striped bay in
     # the north lane of King St West between Ossington and Bathurst, with the
     # body shop's roll-up door on the house behind it.
-    bay = (192, L.ROWS[5] - 22, 32, 16)
+    bay = (192, L.ROWS[5] - 24, 32, 16)          # on the tile grid, so its stripes repeat
     bx, by, bw, bh = bay
-    city_kit.paint_spray_bay(d, box, COLORS, bx, by, by - 10)
+    city_kit.paint_spray_bay(d, box, COLORS, bx, by, by - 8, door_h=16)
     engine = (PROJECT / 'plugins/toronto-driving/engine/src/states/TORONTO.c').read_text()
     assert city_kit.spray_bay_registered(engine, 0, bx, by), 'spray bay moved: update td_spray_at in TORONTO.c'
     districts.append({'name': 'SPRAY BAY', 'rect': list(bay), 'kind': 'gameplay'})
@@ -760,6 +1133,7 @@ def main(check=False):
     # for tile-budget work.
     if os.environ.get('TD_ART_PREVIEW'):
         img.save(os.environ['TD_ART_PREVIEW'])
+        Path(os.environ['TD_ART_PREVIEW'] + '.attrs.json').write_text(json.dumps(attrs))
     assert len(patterns) <= 384, ('core background patterns', len(patterns))
     bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
     assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])

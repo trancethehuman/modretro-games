@@ -767,7 +767,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -778,7 +778,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -788,11 +788,11 @@
       "y": 112,
       "width": 40,
       "depth": 40,
-      "height": 16,
-      "style": 3,
+      "height": 8,
+      "style": 2,
       "landmark": null,
       "kind": null,
-      "overhang": 24
+      "overhang": 8
     },
     {
       "x": 752,
@@ -800,7 +800,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -811,7 +811,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -822,7 +822,7 @@
       "width": 32,
       "depth": 32,
       "height": 8,
-      "style": 1,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -833,7 +833,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 1,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -854,22 +854,22 @@
       "y": 208,
       "width": 40,
       "depth": 40,
-      "height": 16,
-      "style": 3,
+      "height": 8,
+      "style": 2,
       "landmark": null,
       "kind": null,
-      "overhang": 24
+      "overhang": 8
     },
     {
       "x": 112,
       "y": 208,
       "width": 40,
       "depth": 40,
-      "height": 16,
-      "style": 3,
+      "height": 8,
+      "style": 2,
       "landmark": null,
       "kind": null,
-      "overhang": 24
+      "overhang": 8
     },
     {
       "x": 48,
@@ -877,7 +877,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 1,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -888,7 +888,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 1,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -899,7 +899,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 1,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -910,7 +910,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 4,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -921,7 +921,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 1,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -932,7 +932,7 @@
       "width": 48,
       "depth": 24,
       "height": 8,
-      "style": 5,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -943,7 +943,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 0,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -954,7 +954,7 @@
       "width": 48,
       "depth": 24,
       "height": 8,
-      "style": 5,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -965,7 +965,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 0,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -976,7 +976,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -986,22 +986,22 @@
       "y": 592,
       "width": 40,
       "depth": 40,
-      "height": 16,
-      "style": 3,
+      "height": 8,
+      "style": 1,
       "landmark": null,
       "kind": null,
-      "overhang": 24
+      "overhang": 8
     },
     {
       "x": 112,
       "y": 592,
       "width": 40,
       "depth": 40,
-      "height": 16,
-      "style": 3,
+      "height": 8,
+      "style": 0,
       "landmark": null,
       "kind": null,
-      "overhang": 24
+      "overhang": 8
     },
     {
       "x": 272,
@@ -1009,7 +1009,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1020,7 +1020,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1042,7 +1042,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 0,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1053,7 +1053,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 3,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1064,7 +1064,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 3,
+      "style": 0,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1075,7 +1075,7 @@
       "width": 32,
       "depth": 32,
       "height": 8,
-      "style": 1,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1086,7 +1086,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 1,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1119,7 +1119,7 @@
       "width": 32,
       "depth": 32,
       "height": 8,
-      "style": 1,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1130,7 +1130,7 @@
       "width": 32,
       "depth": 32,
       "height": 8,
-      "style": 1,
+      "style": 0,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1141,7 +1141,7 @@
       "width": 32,
       "depth": 32,
       "height": 8,
-      "style": 1,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1152,7 +1152,7 @@
       "width": 32,
       "depth": 32,
       "height": 8,
-      "style": 1,
+      "style": 2,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1174,7 +1174,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 0,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1185,7 +1185,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 5,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1207,7 +1207,7 @@
       "width": 32,
       "depth": 24,
       "height": 8,
-      "style": 2,
+      "style": 0,
       "landmark": null,
       "kind": null,
       "overhang": 8
@@ -1407,18 +1407,6 @@
       16
     ],
     [
-      576,
-      104,
-      16,
-      16
-    ],
-    [
-      576,
-      136,
-      16,
-      16
-    ],
-    [
       984,
       96,
       16,
@@ -1481,6 +1469,18 @@
     [
       480,
       160,
+      16,
+      16
+    ],
+    [
+      576,
+      112,
+      16,
+      16
+    ],
+    [
+      576,
+      144,
       16,
       16
     ],
@@ -1599,8 +1599,20 @@
       16
     ],
     [
-      576,
-      184,
+      104,
+      176,
+      16,
+      16
+    ],
+    [
+      136,
+      176,
+      16,
+      16
+    ],
+    [
+      168,
+      176,
       16,
       16
     ],
@@ -1612,19 +1624,37 @@
     ],
     [
       24,
+      184,
+      16,
+      16
+    ],
+    [
+      48,
+      184,
+      16,
+      16
+    ],
+    [
+      72,
+      184,
+      16,
+      16
+    ],
+    [
+      576,
+      184,
+      16,
+      16
+    ],
+    [
+      24,
       208,
       16,
       16
     ],
     [
-      88,
-      184,
-      16,
-      16
-    ],
-    [
-      160,
-      184,
+      24,
+      240,
       16,
       16
     ],
@@ -2025,6 +2055,24 @@
       16
     ],
     [
+      24,
+      560,
+      16,
+      16
+    ],
+    [
+      56,
+      560,
+      16,
+      16
+    ],
+    [
+      88,
+      560,
+      16,
+      16
+    ],
+    [
       264,
       560,
       16,
@@ -2073,26 +2121,20 @@
       16
     ],
     [
-      24,
-      576,
+      120,
+      568,
       16,
       16
     ],
     [
       24,
-      600,
+      592,
       16,
       16
     ],
     [
       24,
       624,
-      16,
-      16
-    ],
-    [
-      88,
-      568,
       16,
       16
     ],
@@ -2182,13 +2224,7 @@
     ],
     [
       24,
-      656,
-      16,
-      16
-    ],
-    [
-      24,
-      688,
+      696,
       16,
       16
     ],
@@ -2410,19 +2446,7 @@
     ],
     [
       24,
-      736,
-      16,
-      16
-    ],
-    [
-      24,
-      760,
-      16,
-      16
-    ],
-    [
-      24,
-      784,
+      768,
       16,
       16
     ],
@@ -2653,6 +2677,684 @@
       792,
       16,
       16
+    ],
+    [
+      40,
+      32,
+      8,
+      8
+    ],
+    [
+      40,
+      88,
+      8,
+      8
+    ],
+    [
+      40,
+      256,
+      8,
+      8
+    ],
+    [
+      40,
+      312,
+      8,
+      8
+    ],
+    [
+      40,
+      368,
+      8,
+      8
+    ],
+    [
+      40,
+      424,
+      8,
+      8
+    ],
+    [
+      40,
+      496,
+      8,
+      8
+    ],
+    [
+      40,
+      552,
+      8,
+      8
+    ],
+    [
+      104,
+      32,
+      8,
+      8
+    ],
+    [
+      104,
+      88,
+      8,
+      8
+    ],
+    [
+      104,
+      256,
+      8,
+      8
+    ],
+    [
+      104,
+      312,
+      8,
+      8
+    ],
+    [
+      104,
+      368,
+      8,
+      8
+    ],
+    [
+      104,
+      424,
+      8,
+      8
+    ],
+    [
+      104,
+      496,
+      8,
+      8
+    ],
+    [
+      104,
+      688,
+      8,
+      8
+    ],
+    [
+      104,
+      744,
+      8,
+      8
+    ],
+    [
+      168,
+      32,
+      8,
+      8
+    ],
+    [
+      168,
+      88,
+      8,
+      8
+    ],
+    [
+      168,
+      256,
+      8,
+      8
+    ],
+    [
+      168,
+      312,
+      8,
+      8
+    ],
+    [
+      168,
+      368,
+      8,
+      8
+    ],
+    [
+      168,
+      424,
+      8,
+      8
+    ],
+    [
+      168,
+      496,
+      8,
+      8
+    ],
+    [
+      168,
+      552,
+      8,
+      8
+    ],
+    [
+      168,
+      688,
+      8,
+      8
+    ],
+    [
+      168,
+      744,
+      8,
+      8
+    ],
+    [
+      192,
+      168,
+      8,
+      8
+    ],
+    [
+      192,
+      232,
+      8,
+      8
+    ],
+    [
+      192,
+      616,
+      8,
+      8
+    ],
+    [
+      232,
+      32,
+      8,
+      8
+    ],
+    [
+      232,
+      744,
+      8,
+      8
+    ],
+    [
+      248,
+      616,
+      8,
+      8
+    ],
+    [
+      296,
+      32,
+      8,
+      8
+    ],
+    [
+      296,
+      88,
+      8,
+      8
+    ],
+    [
+      296,
+      176,
+      8,
+      8
+    ],
+    [
+      296,
+      232,
+      8,
+      8
+    ],
+    [
+      296,
+      256,
+      8,
+      8
+    ],
+    [
+      296,
+      312,
+      8,
+      8
+    ],
+    [
+      296,
+      368,
+      8,
+      8
+    ],
+    [
+      296,
+      424,
+      8,
+      8
+    ],
+    [
+      296,
+      496,
+      8,
+      8
+    ],
+    [
+      296,
+      552,
+      8,
+      8
+    ],
+    [
+      296,
+      688,
+      8,
+      8
+    ],
+    [
+      296,
+      744,
+      8,
+      8
+    ],
+    [
+      352,
+      616,
+      8,
+      8
+    ],
+    [
+      360,
+      32,
+      8,
+      8
+    ],
+    [
+      360,
+      744,
+      8,
+      8
+    ],
+    [
+      408,
+      616,
+      8,
+      8
+    ],
+    [
+      424,
+      32,
+      8,
+      8
+    ],
+    [
+      488,
+      32,
+      8,
+      8
+    ],
+    [
+      488,
+      88,
+      8,
+      8
+    ],
+    [
+      488,
+      176,
+      8,
+      8
+    ],
+    [
+      488,
+      232,
+      8,
+      8
+    ],
+    [
+      488,
+      256,
+      8,
+      8
+    ],
+    [
+      488,
+      312,
+      8,
+      8
+    ],
+    [
+      488,
+      368,
+      8,
+      8
+    ],
+    [
+      488,
+      424,
+      8,
+      8
+    ],
+    [
+      488,
+      496,
+      8,
+      8
+    ],
+    [
+      488,
+      552,
+      8,
+      8
+    ],
+    [
+      488,
+      656,
+      8,
+      8
+    ],
+    [
+      488,
+      712,
+      8,
+      8
+    ],
+    [
+      512,
+      616,
+      8,
+      8
+    ],
+    [
+      552,
+      32,
+      8,
+      8
+    ],
+    [
+      552,
+      256,
+      8,
+      8
+    ],
+    [
+      552,
+      712,
+      8,
+      8
+    ],
+    [
+      568,
+      168,
+      8,
+      8
+    ],
+    [
+      568,
+      616,
+      8,
+      8
+    ],
+    [
+      616,
+      32,
+      8,
+      8
+    ],
+    [
+      616,
+      88,
+      8,
+      8
+    ],
+    [
+      616,
+      256,
+      8,
+      8
+    ],
+    [
+      616,
+      312,
+      8,
+      8
+    ],
+    [
+      616,
+      368,
+      8,
+      8
+    ],
+    [
+      616,
+      424,
+      8,
+      8
+    ],
+    [
+      616,
+      496,
+      8,
+      8
+    ],
+    [
+      616,
+      552,
+      8,
+      8
+    ],
+    [
+      616,
+      656,
+      8,
+      8
+    ],
+    [
+      616,
+      712,
+      8,
+      8
+    ],
+    [
+      672,
+      168,
+      8,
+      8
+    ],
+    [
+      680,
+      32,
+      8,
+      8
+    ],
+    [
+      680,
+      712,
+      8,
+      8
+    ],
+    [
+      728,
+      168,
+      8,
+      8
+    ],
+    [
+      728,
+      424,
+      8,
+      8
+    ],
+    [
+      744,
+      32,
+      8,
+      8
+    ],
+    [
+      744,
+      520,
+      8,
+      8
+    ],
+    [
+      744,
+      624,
+      8,
+      8
+    ],
+    [
+      784,
+      424,
+      8,
+      8
+    ],
+    [
+      784,
+      552,
+      8,
+      8
+    ],
+    [
+      808,
+      32,
+      8,
+      8
+    ],
+    [
+      808,
+      88,
+      8,
+      8
+    ],
+    [
+      808,
+      224,
+      8,
+      8
+    ],
+    [
+      808,
+      680,
+      8,
+      8
+    ],
+    [
+      840,
+      424,
+      8,
+      8
+    ],
+    [
+      840,
+      552,
+      8,
+      8
+    ],
+    [
+      872,
+      32,
+      8,
+      8
+    ],
+    [
+      872,
+      88,
+      8,
+      8
+    ],
+    [
+      872,
+      224,
+      8,
+      8
+    ],
+    [
+      872,
+      280,
+      8,
+      8
+    ],
+    [
+      872,
+      336,
+      8,
+      8
+    ],
+    [
+      872,
+      392,
+      8,
+      8
+    ],
+    [
+      872,
+      464,
+      8,
+      8
+    ],
+    [
+      872,
+      624,
+      8,
+      8
+    ],
+    [
+      872,
+      680,
+      8,
+      8
+    ],
+    [
+      912,
+      168,
+      8,
+      8
+    ],
+    [
+      912,
+      424,
+      8,
+      8
+    ],
+    [
+      936,
+      32,
+      8,
+      8
+    ],
+    [
+      936,
+      520,
+      8,
+      8
+    ],
+    [
+      936,
+      624,
+      8,
+      8
+    ],
+    [
+      936,
+      680,
+      8,
+      8
+    ],
+    [
+      968,
+      168,
+      8,
+      8
+    ],
+    [
+      968,
+      424,
+      8,
+      8
+    ],
+    [
+      1000,
+      360,
+      8,
+      8
+    ],
+    [
+      1000,
+      488,
+      8,
+      8
     ]
   ],
   "collisions": [
@@ -18280,7 +18982,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "d5ceecdbf09e6bada730458b57789768479bcf8cb29c7324284dafb45a9ab51e",
+  "background_sha256": "51da57ffacad6bb9c5013548f8cbfe01536983819798b9cbe1e3196203c7d5f4",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -19518,8 +20220,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 273,
-    "flip_canonical_unique_tiles": 230,
+    "raw_unique_tiles": 295,
+    "flip_canonical_unique_tiles": 246,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

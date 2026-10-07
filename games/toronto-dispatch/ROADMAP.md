@@ -102,6 +102,12 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Human read-through on the Chromatic: dialogue length, typing speed and the pacing of chapter calls.
 - Next: a story recap in the pause menu and individual portraits if UI tiles can be freed.
 
+## Distinct districts and navigation names — implemented 2026-10-07, human review pending
+
+- Done: neighbourhood, landmark and junction names on the HUD in all four scenes; downtown district building kits (Financial District, MaRS and Hospital Row, the museums and U of T, the Entertainment District, Chinatown, Kensington, St James, CityPlace) and neighbourhood colours; outer-scene looks on unchanged footprints; sidewalk curbs, joints and furniture; the Queens Quay boardwalk; flower beds.
+- Next: area names under the city map's cursor, junction signs in the art, park benches and lamps, University College and King's College Circle if a wider U of T block becomes possible, and a denser outer-scene grid with re-verified routes.
+- Pending: human review on the Chromatic (district legibility, pop-up frequency, sidewalk detail at 1x).
+
 ## Parks and drivable ground — implemented 2026-10-07, human review pending
 
 - [x] Flat ground drivable downtown (lawns, lots, plazas, yards), as in the other scenes.

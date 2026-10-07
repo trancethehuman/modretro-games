@@ -83,8 +83,8 @@ UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED;
 void td_get_job(UBYTE index,td_job_t *dest) BANKED;
 /* Two 18-character lines followed by a terminator; caller provides 37 bytes. */
 void td_get_brief(UBYTE index,char *dest) BANKED;
-void td_get_street(UWORD u,UWORD v,char *dest) BANKED;
-void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *dest) BANKED;
+UBYTE td_get_street(UWORD u,UWORD v) BANKED;
+void td_get_street_name(UBYTE id,char *dest) BANKED;
 extern UBYTE td_station_near;
 /* Re-picks at most TD_ROUTE_PICKS out-of-range slots per call; TRUE when
  * more slots still wait for a route (call again soon). Empty slots are only
@@ -99,6 +99,7 @@ void td_ui_draw(void) BANKED;
 /* Menu cursor/prompt animation and the HUD compass; cheap when unchanged. */
 void td_ui_tick(void) BANKED;
 void td_ui_hud_tick(void) BANKED;
+void td_hud_places(void) BANKED;
 /* Dispatcher radio calls (td_ui.c): queue a script from td_radio_data.h;
  * the tick types, holds and closes calls and raises the story beats that
  * come from the city's state (stars, nightfall, quiet stretches). */

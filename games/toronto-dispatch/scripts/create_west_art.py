@@ -9,7 +9,7 @@ import json
 from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
-from west_layout import DISTRICTS, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
+from west_layout import DISTRICTS, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points, WEST_AREAS, HIGH_PARK_AREAS
 from streetcar_art import paint_streetcar_stops
 import city_kit
 
@@ -184,6 +184,18 @@ def generate(spec,check=False):
         lip=crown(x,y,w,h,style)
         blocks.append({"x":x,"y":y,"width":w,"depth":h,"height":roof,"style":style,"landmark":name,"kind":kind,"overhang":lip})
 
+    def dress_building(x,y,w,h,style,areas,k):
+        look=city_kit.area_look(areas,x+w//2,y+h//2,k)
+        if not look:
+            building(x,y,w,h,style);return
+        style,slot,awnings,signs=look
+        building(x,y,w,h,style)
+        lip=blocks[-1]["overhang"]
+        attr(x,y-8,w+8,h+16,slot,True)
+        if lip>8:
+            for _,_,i in cells(x,y-lip,w,lip-8):attrs[i]=slot|128
+        if awnings and style in (0,1):city_kit.paint_awnings(d,box,x,y,w,h,COLORS,signs)
+
     for landmark in spec["landmarks"]:
         building(landmark["x"],landmark["y"],landmark["width"],landmark["depth"],landmark["style"],landmark["kind"],landmark["name"])
     # Park features from the layout (pitch, fieldhouse, paddocks, open lawn),
@@ -200,12 +212,15 @@ def generate(spec,check=False):
             for rect,slot in slots:attr(*rect,slot)
             reserved.append((fx-8,fy-8,fw+16,fh+16));no_trees.append((fx,fy,fw,fh))
     # Six repeating designs, different dimensions; no copied facades or signage.
+    # Footprints keep the scene's fixed grid; each neighbourhood builds on
+    # them in its own way (city_kit.AREA_LOOKS).
+    areas=WEST_AREAS if spec["id"]==1 else HIGH_PARK_AREAS
     for yy in range(48,728,48):
         for xx in range(48,976,48):
             style=((xx//48)*3+yy//48)%6
             w=32 if style not in (3,5) else 48
             h=24 if style not in (1,4) else 32
-            if may_build(xx,yy,w,h):building(xx,yy,w,h,style)
+            if may_build(xx,yy,w,h):dress_building(xx,yy,w,h,style,areas,xx//48+yy//48)
     # Broad harbour buildings and beach kiosks stop clear of the walkway.
     for xx in range(64,944,96):
         if may_build(xx,856,48,24):building(xx,856,48,24,0)
@@ -275,6 +290,12 @@ def generate(spec,check=False):
     canopies+=city_kit.dress_lots(d,box,TW,TH,lot,set_attr,COLORS,spec["slug"],[tuple(p["rect"]) for p in spec["parks"]])
     assert collisions==before,"lot decoration must not change collision"
     paint_streetcar_stops(d,spec['id'],COLORS)
+    # Sidewalk slabs (curb, joints) and street furniture, last so only plain
+    # sidewalk is touched.
+    slabs=city_kit.detail_sidewalks(img,d,TW,TH,collisions,attrs,COLORS,lambda tx,ty:not any(ry-16<=ty*8<ry+rh+16 for ry,rh in [(spec["gardiner"][1],spec["gardiner"][3]),(752,0)]))
+    slab_tile={k:img.crop((k[0]*8,k[1]*8,k[0]*8+8,k[1]*8+8)).tobytes() for k in slabs}
+    busy=lambda x,y:city_kit.AREA_LOOKS.get(city_kit.area_at(areas,x,y),{}).get("awnings",False)
+    city_kit.place_furniture(img,d,box,slabs,slab_tile,attrs,TW,canopies,busy,COLORS)
     # Open water takes the shared animated texture, with foam along the shore.
     pond=None
     if "pond" in spec:

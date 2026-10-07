@@ -14,6 +14,7 @@
 #define td_get_west_street td_authored_get_west_street
 #include "content_under_test.c"
 #include "street_names_under_test.c"
+#include "places_under_test.c"
 #undef td_get_stop
 #undef td_get_job
 #undef td_get_brief
@@ -87,6 +88,7 @@ void td_ui_init(void) { ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
 void td_ui_tick(void) {}
 void td_ui_hud_tick(void) {}
+void td_hud_places(void) {}
 /* Radio calls are drawn by td_ui.c (atlas_ui_harness); here the runtime
  * only records which script it queued last. */
 UBYTE radio_said=255,td_radio_script=255,td_radio_wanted;UWORD td_last_pay;
@@ -123,7 +125,7 @@ void td_audio_update(WORD speed,UBYTE vehicle,UBYTE onfoot,UBYTE braking,UBYTE a
 void td_audio_play(UBYTE cue) {if(audio_mode!=TD_AUDIO_SILENT)audio_cue=cue;}
 void td_audio_set_mode(UBYTE mode) {audio_mode=mode;}
 UBYTE td_audio_get_mode(void) {return audio_mode;}
-void td_get_street(UWORD u,UWORD v,char *out) { (void)u;(void)v;strcpy(out,"TEST ROAD"); }
+UBYTE td_get_street(UWORD u,UWORD v) { (void)u;(void)v;return 0; }
 void td_get_stop(UBYTE index,td_stop_t *out) {
     if(authored_content){stop_reads++;td_authored_get_stop(index,out);return;}
     stop_reads++;memset(out,0,sizeof(*out));out->u=900;out->v=900;
@@ -2094,6 +2096,31 @@ static void test_car_damage(void) {
     expect(td_car_damage==0&&td_car_colour==TD_PAL_TEAL,"a stolen car is undamaged and keeps its colour");
 }
 
+/* Navigation names from the generated tables (scripts/create_places.py). */
+static void place_names(UBYTE district,UWORD u,UWORD v,UBYTE area,char *a,char *m,char *j) {
+    UBYTE ids[3]={area,255,255};td.district=district;td_get_places(u,v,ids);
+    a[0]=m[0]=j[0]=0;
+    if(ids[0]!=TD_PLACE_NONE)td_get_place_name(TD_PLACE_AREA,ids[0],a);
+    if(ids[1]!=TD_PLACE_NONE)td_get_place_name(TD_PLACE_MARK,ids[1],m);
+    if(ids[2]!=TD_PLACE_NONE)td_get_place_name(TD_PLACE_JUNCTION,ids[2],j);
+}
+static void test_places(void) {
+    char a[21],m[21],j[21],s[19];UBYTE ids[3]={255,255,255},kensington;
+    place_names(0,384,400,255,a,m,j);
+    expect(!strcmp(j,"SPADINA & DUNDAS"),"Spadina and Dundas is named as Torontonians say it");
+    place_names(0,370,350,255,a,m,j);expect(!strcmp(a,"KENSINGTON MARKET"),"Kensington Market lies west of Spadina above Dundas");
+    td.district=0;td_get_places(370,350,ids);kensington=ids[0];ids[1]=ids[2]=255;
+    td_get_places(392,350,ids);expect(ids[0]==kensington,"crossing Spadina's centre line keeps the neighbourhood for a moment");
+    td_get_places(420,350,ids);td_get_place_name(TD_PLACE_AREA,ids[0],a);expect(!strcmp(a,"CHINATOWN"),"then Chinatown");
+    place_names(0,712,800,255,a,m,j);expect(!strcmp(m,"ST LAWRENCE MARKET"),"St Lawrence Market is announced from Front St");
+    place_names(0,512,224,255,a,m,j);expect(!strcmp(a,"QUEENS PARK")&&!strcmp(m,"ONTARIO LEGISLATURE"),"Queen's Park and the Legislature");
+    place_names(0,700,920,255,a,m,j);expect(!strcmp(a,"CENTRE ISLAND"),"the Islands are named one by one");
+    place_names(3,544,64,255,a,m,j);expect(!strcmp(a,"GREEKTOWN")&&!strcmp(j,"PAPE & DANFORTH"),"Pape and Danforth in Greektown");
+    place_names(1,864,600,255,a,m,j);expect(!strcmp(a,"PARKDALE"),"Parkdale lies south of Queen");
+    place_names(2,700,450,255,a,m,j);expect(!strcmp(a,"HIGH PARK"),"High Park");
+    td.district=0;td_get_street_name(td_authored_get_street(600,900),s);expect(!strcmp(s,"TORONTO ISLANDS"),"the Islands have no street");
+    td_get_street_name(td_authored_get_street(384,600),s);expect(!strcmp(s,"SPADINA AVE"),"the nearest street is still named");
+}
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -2117,7 +2144,7 @@ int main(void) {
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
     test_sidewalk_pickups();test_parcels_spray_panic();test_visible_transit();test_ambient_traffic();
-    test_day_night();test_animation();test_car_damage();test_scenery();
+    test_day_night();test_animation();test_car_damage();test_scenery();test_places();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

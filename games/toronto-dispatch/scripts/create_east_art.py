@@ -10,7 +10,7 @@ import json
 from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
-from east_layout import EAST, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points
+from east_layout import EAST, RESEARCH, WIDTH, HEIGHT, ROAD_HALF, WALK_HALF, extended_points, EAST_AREAS
 from streetcar_art import paint_streetcar_stops
 import city_kit
 
@@ -165,17 +165,31 @@ def render():
         lip=crown(x,y,w,h,style)
         blocks.append({"x":x,"y":y,"width":w,"depth":h,"height":roof,"style":style,"landmark":name,"kind":kind,"overhang":lip})
 
+    def dress_building(x,y,w,h,style,areas,k):
+        look=city_kit.area_look(areas,x+w//2,y+h//2,k)
+        if not look:
+            building(x,y,w,h,style);return
+        style,slot,awnings,signs=look
+        building(x,y,w,h,style)
+        lip=blocks[-1]["overhang"]
+        attr(x,y-8,w+8,h+16,slot,True)
+        if lip>8:
+            for _,_,i in cells(x,y-lip,w,lip-8):attrs[i]=slot|128
+        if awnings and style in (0,1):city_kit.paint_awnings(d,box,x,y,w,h,COLORS,signs)
+
     for landmark in EAST["landmarks"]:
         building(landmark["x"],landmark["y"],landmark["width"],landmark["depth"],landmark["style"],landmark["kind"],landmark["name"])
-    # Low brick terraces, pitched homes, tall glass blocks and wide work sheds.
+    # Low brick terraces, pitched homes, tall glass blocks and wide work sheds
+    # on a fixed grid; each neighbourhood builds on it in its own way
+    # (city_kit.AREA_LOOKS).
     for yy in range(48,800,32):
         for xx in range(48,976,32):
             style=((xx//32)*3+yy//32)%6
             w=40 if style==3 else 48 if style==5 else 32
             h=48 if style==4 else 40 if style==3 else 32 if style==1 else 24
-            if may_build(xx,yy,w,h):building(xx,yy,w,h,style)
+            if may_build(xx,yy,w,h):dress_building(xx,yy,w,h,style,EAST_AREAS,xx//32+yy//32)
             elif (w,h)!=(32,24) and may_build(xx,yy,32,24):
-                building(xx,yy,32,24,style)
+                dress_building(xx,yy,32,24,style,EAST_AREAS,xx//32+yy//32)
     # The scene's body shop: a spray bay in the road lane, its door on the
     # building behind (gameplay: TORONTO.c td_spray_at).
     bay=EAST["spray_bay"]
@@ -277,6 +291,12 @@ def render():
     canopies+=city_kit.dress_lots(d,box,TW,TH,lot,set_attr,COLORS,"east",[tuple(p["rect"]) for p in EAST["parks"]])
     assert collisions==before,"lot decoration must not change collision"
     paint_streetcar_stops(d,EAST['id'],COLORS)
+    # Sidewalk slabs (curb, joints) and street furniture, last so only plain
+    # sidewalk is touched.
+    slabs=city_kit.detail_sidewalks(img,d,TW,TH,collisions,attrs,COLORS)
+    slab_tile={k:img.crop((k[0]*8,k[1]*8,k[0]*8+8,k[1]*8+8)).tobytes() for k in slabs}
+    busy=lambda x,y:city_kit.AREA_LOOKS.get(city_kit.area_at(EAST_AREAS,x,y),{}).get("awnings",False)
+    city_kit.place_furniture(img,d,box,slabs,slab_tile,attrs,TW,canopies,busy,COLORS)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
         for tx in range(TW):

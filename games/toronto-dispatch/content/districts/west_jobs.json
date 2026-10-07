@@ -27,7 +27,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "48d94625edd2ef3dd478b5ed261e17964ca06f0f3cb421c9ae62f8fd20259c90"
+      "collision_sha256": "296a880d116cbc19a2428a40cc9624f3f267c010228608ac768327dc72ba6f93"
     },
     {
       "district": 1,
@@ -48,12 +48,12 @@
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "c6125f05b489ddb300824a02099f359d5fd5947a003844d943ee864460973488",
+      "sha256": "bab943516512027447a4c4ba2c75bb7b3b496ef2dfdd8e460661c6ffe02116dc",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {
       "path": "content/districts/high_park_art.json",
-      "sha256": "8f209db907c6497124b3e21c2d9e03b9bd146099f53f0faa063eef2c6adb25d8",
+      "sha256": "ecb7eee521fd5406c42104e9f5c6f2af27f2bc17bf1eaac8dfdadb4d902377d9",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     }
   ],

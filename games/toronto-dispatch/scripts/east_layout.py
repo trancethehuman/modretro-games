@@ -162,6 +162,18 @@ EAST = {
 }
 
 
+# Neighbourhoods (name, (x0, y0, x1, y1)), first match wins: the HUD names
+# them (create_places.py) and the art builds them in their own way
+# (city_kit.AREA_LOOKS). Rectangles are design over the compressed roads.
+EAST_AREAS = [('GREEKTOWN', (0, 0, 704, 112)),
+              ('THE DANFORTH', (704, 0, 1024, 112)),
+              ('CHINATOWN EAST', (0, 248, 384, 344)),
+              ('RIVERDALE', (0, 112, 1024, 264)),
+              ('RIVERSIDE', (0, 456, 320, 640)),
+              ('LESLIEVILLE', (384, 440, 1024, 976)),
+              ('SOUTH RIVERDALE', (0, 0, 1024, 976))]
+
+
 def extended_points(route):
     """Only the three unconditioned source approaches continue to the border."""
     points = [p[:] for p in route["points"]]

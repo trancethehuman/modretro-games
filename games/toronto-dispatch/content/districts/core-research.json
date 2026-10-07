@@ -283,5 +283,77 @@
       "allan_gardens": "Fills the block between Yonge and Parliament, College/Carlton and Dundas: the Palm House dome and two greenhouse wings on a paved forecourt at the north, paths to Dundas and the south corners, trees.",
       "grange_park": "South of the AGO: The Grange as a small brick house at the north of the park, the walk to Queen and trees."
     }
+  },
+  "navigation": {
+    "reviewed_on": "2026-10-07",
+    "note": "Names the HUD announces (content/places.json, scripts/create_places.py) and the district art they label. Source facts are listed per source; rectangles, building sizes and positions are compressed game design over the Centreline-derived street plan.",
+    "sources": [
+      {
+        "id": "harbord_village_hcd",
+        "url": "https://www.toronto.ca/wp-content/uploads/2018/01/9635-CityPlanning_Harbord-Village-P1-HCD.pdf",
+        "supports": "Harbord Village: bounded by Bloor St W, Spadina Ave, College St and Bathurst St. The art region formerly labelled The Annex (which lies north of Bloor, off this map) is renamed Harbord Village."
+      },
+      {
+        "id": "palmerston_profile",
+        "url": "https://www.toronto.ca/ext/sdfa/Neighbourhood%20Profiles/pdf/2006/pdf2/cpa80.pdf",
+        "supports": "City neighbourhood Palmerston-Little Italy: Bloor St W, Bathurst St, College St and Dovercourt Rd. The art region formerly labelled Seaton Village (north of Bloor, off this map) is renamed Palmerston; Little Italy keeps College St."
+      },
+      {
+        "id": "bia_list",
+        "url": "https://www.toronto.ca/business-economy/business-operation-growth/business-improvement-areas/bia-list/",
+        "supports": "Business improvement area names used for commercial districts: Financial District, Entertainment District, Discovery District, Chinatown, Kensington Market, Little Italy, West Queen West, Garden District, Downtown Yonge, Roncesvalles Village, Bloordale Village, The Junction, Bloor West Village, Broadview Danforth / Greektown on the Danforth, Riverside, Leslieville. BIA areas are not residential neighbourhood boundaries."
+      },
+      {
+        "id": "path_city",
+        "url": "https://www.toronto.ca/explore-enjoy/visitor-services/path-torontos-downtown-pedestrian-walkway/",
+        "supports": "The Financial District's towers at King and Bay over the PATH network; Union Station reached through the PATH."
+      },
+      {
+        "id": "mars_story",
+        "url": "https://www.marsdd.com/our-story/mars-opens-its-doors/",
+        "supports": "MaRS at 101 College St, the south-east corner of College St and University Ave: the 1913 Toronto General Hospital College Wing restored with a glass atrium and new tower."
+      },
+      {
+        "id": "ttc_hospitals",
+        "url": "https://pw.ttc.ca/riding-the-ttc/Explore-Toronto/Hospitals",
+        "supports": "The hospitals on University Ave north of Dundas (Toronto General, Mount Sinai, Princess Margaret, SickKids), known as Hospital Row."
+      },
+      {
+        "id": "gardiner_visit",
+        "url": "https://www.gardinermuseum.on.ca/visit/",
+        "supports": "Gardiner Museum, 111 Queen's Park, across Queen's Park from the Royal Ontario Museum, south of Bloor St, on Victoria University's grounds."
+      },
+      {
+        "id": "uoft_convocation_hall",
+        "url": "https://lsm.utoronto.ca/conhall/history.html",
+        "supports": "Convocation Hall (1907), the domed rotunda at 31 King's College Circle, south of Hoskin Ave and west of Queen's Park Crescent."
+      },
+      {
+        "id": "oht_roy_thomson_hall",
+        "url": "https://heritagetrust.on.ca/oha/details/file?id=2524",
+        "supports": "Roy Thomson Hall, 60 Simcoe St, the round glass concert hall on the south side of King St W at Simcoe St."
+      },
+      {
+        "id": "mirvish_theatres",
+        "url": "https://www.mirvish.com/visit/theatres",
+        "supports": "Royal Alexandra Theatre (260 King St W) and Princess of Wales Theatre (300 King St W), a block apart on the north side of King St W."
+      },
+      {
+        "id": "st_james_tour",
+        "url": "https://stjamescathedral.ca/wp-content/uploads/2023/09/CATH_SelfGuidedTour_fv.pdf",
+        "supports": "St James Cathedral at King St E and Church St, its tower and spire over the King St entrance; St James Park beside it."
+      },
+      {
+        "id": "sankofa_square",
+        "url": "https://www.cbc.ca/1.7060097",
+        "supports": "City Council voted in December 2023 to rename Yonge-Dundas Square as Sankofa Square; the new name was unveiled in 2025."
+      }
+    ],
+    "compressed_design": [
+      "Neighbourhood rectangles follow the art regions (real metres on the downtown grid, compressed with the street plan) or, outside downtown, the compressed road graphs. The HUD keeps a neighbourhood until the courier is 16 px outside it, so a boundary street does not flicker.",
+      "Junction names put the north-south street first and drop the suffix (SPADINA & DUNDAS); a pair longer than one HUD row uses PK or a slash; Parliament St at Queens Quay is too long and is not announced.",
+      "Landmarks are announced within 24 px of their footprint. Bay St, Simcoe St, Church St and Elizabeth St are not on this compressed map, so the Financial District towers, Roy Thomson Hall, St James Cathedral and the hospitals stand on the nearest drawn block.",
+      "The Financial District's towers are generic: black steel and glass towers with a low pavilion, gold glass towers by Union Station and a red granite tower with a notched crown. They are not labelled with company names."
+    ]
   }
 }

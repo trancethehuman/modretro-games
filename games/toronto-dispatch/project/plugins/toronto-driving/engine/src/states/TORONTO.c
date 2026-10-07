@@ -1686,7 +1686,7 @@ static UBYTE td_ped_flip;
  * (td_life_spray). With stars on, coming near one says so once. The art
  * scripts check these against the bays they draw. */
 #define TD_SPRAY_BAYS 4
-static const UWORD td_spray_at[TD_SPRAY_BAYS][2]={{208,626},{264,626},{360,338},{456,514}};
+static const UWORD td_spray_at[TD_SPRAY_BAYS][2]={{208,624},{264,626},{360,338},{456,514}};
 static UBYTE td_spray_state;
 static void td_spray_check(void){
     UWORD du,dv;
@@ -1883,6 +1883,7 @@ void toronto_update(void) BANKED {
         td_life_present();td_anim_update();if(TD_RADIO_DUE())td_radio_tick();
     }
     if(!(td_tick&7))td_ui_hud_tick();
+    else if((td_tick&15)==4)td_hud_places();
     TD_PALETTE(&PLAYER)=td.onfoot?TD_PAL_COURIER:td_car_colour;
     td_position(&PLAYER,td.u>>4,td.v>>4);
     td_sound_update();

@@ -23,6 +23,7 @@ check:
 	python3 games/toronto-dispatch/scripts/create_radio.py --check
 	python3 games/toronto-dispatch/scripts/check_story.py
 	python3 games/toronto-dispatch/scripts/create_world_routes.py --check
+	python3 games/toronto-dispatch/scripts/create_places.py --check
 	python3 games/toronto-dispatch/scripts/create_audio.py --check
 	python3 scripts/test_engine.py
 	python3 scripts/test_district_bridge.py

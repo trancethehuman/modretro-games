@@ -355,9 +355,9 @@
    "overhang": 8
   },
   {
-   "x": 436,
+   "x": 432,
    "y": 464,
-   "width": 24,
+   "width": 32,
    "depth": 16,
    "height": 8,
    "style": 0,
@@ -378,14 +378,36 @@
   },
   {
    "x": 416,
-   "y": 100,
+   "y": 104,
    "width": 40,
    "depth": 32,
    "height": 8,
    "style": 3,
    "landmark": "Royal Ontario Museum",
    "kind": "crystal",
+   "overhang": 8
+  },
+  {
+   "x": 552,
+   "y": 96,
+   "width": 32,
+   "depth": 24,
+   "height": 8,
+   "style": 3,
+   "landmark": "Gardiner Museum",
+   "kind": "museum",
    "overhang": 0
+  },
+  {
+   "x": 584,
+   "y": 128,
+   "width": 24,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
+   "landmark": "Victoria College",
+   "kind": "clocktower",
+   "overhang": 8
   },
   {
    "x": 696,
@@ -1083,7 +1105,7 @@
   {
    "x": 184,
    "y": 320,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1092,12 +1114,12 @@
    "overhang": 8
   },
   {
-   "x": 208,
+   "x": 200,
    "y": 320,
-   "width": 16,
+   "width": 24,
    "depth": 24,
    "height": 8,
-   "style": 2,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 8
@@ -1105,7 +1127,7 @@
   {
    "x": 184,
    "y": 344,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1114,12 +1136,12 @@
    "overhang": 0
   },
   {
-   "x": 208,
+   "x": 200,
    "y": 344,
-   "width": 16,
+   "width": 24,
    "depth": 24,
    "height": 8,
-   "style": 2,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 0
@@ -1138,18 +1160,29 @@
   {
    "x": 304,
    "y": 320,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
-   "style": 1,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 8
   },
   {
-   "x": 328,
+   "x": 320,
    "y": 320,
-   "width": 24,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 8
+  },
+  {
+   "x": 336,
+   "y": 320,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1171,18 +1204,29 @@
   {
    "x": 304,
    "y": 344,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
-   "style": 1,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 0
   },
   {
-   "x": 328,
+   "x": 320,
    "y": 344,
-   "width": 24,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 0
+  },
+  {
+   "x": 336,
+   "y": 344,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1193,7 +1237,7 @@
   {
    "x": 416,
    "y": 320,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1202,18 +1246,7 @@
    "overhang": 8
   },
   {
-   "x": 440,
-   "y": 320,
-   "width": 24,
-   "depth": 24,
-   "height": 8,
-   "style": 1,
-   "landmark": null,
-   "kind": null,
-   "overhang": 8
-  },
-  {
-   "x": 464,
+   "x": 432,
    "y": 320,
    "width": 16,
    "depth": 24,
@@ -1226,7 +1259,7 @@
   {
    "x": 416,
    "y": 344,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1235,18 +1268,7 @@
    "overhang": 0
   },
   {
-   "x": 440,
-   "y": 344,
-   "width": 24,
-   "depth": 24,
-   "height": 8,
-   "style": 1,
-   "landmark": null,
-   "kind": null,
-   "overhang": 0
-  },
-  {
-   "x": 464,
+   "x": 432,
    "y": 344,
    "width": 16,
    "depth": 24,
@@ -1255,28 +1277,50 @@
    "landmark": null,
    "kind": null,
    "overhang": 0
+  },
+  {
+   "x": 448,
+   "y": 320,
+   "width": 32,
+   "depth": 48,
+   "height": 8,
+   "style": 3,
+   "landmark": "Mount Sinai Hospital",
+   "kind": "hospital",
+   "overhang": 8
   },
   {
    "x": 544,
    "y": 320,
+   "width": 64,
+   "depth": 16,
+   "height": 8,
+   "style": 0,
+   "landmark": "MaRS Centre",
+   "kind": "mars",
+   "overhang": 8
+  },
+  {
+   "x": 544,
+   "y": 336,
    "width": 32,
-   "depth": 40,
+   "depth": 24,
    "height": 16,
-   "style": 3,
+   "style": 4,
    "landmark": null,
-   "kind": null,
-   "overhang": 24
+   "kind": "glass",
+   "overhang": 0
   },
   {
    "x": 576,
-   "y": 320,
+   "y": 336,
    "width": 32,
-   "depth": 40,
-   "height": 16,
+   "depth": 24,
+   "height": 8,
    "style": 3,
-   "landmark": null,
-   "kind": null,
-   "overhang": 24
+   "landmark": "Toronto General Hospital",
+   "kind": "hospital",
+   "overhang": 8
   },
   {
    "x": 816,
@@ -1501,7 +1545,7 @@
   {
    "x": 96,
    "y": 560,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1510,12 +1554,23 @@
    "overhang": 8
   },
   {
-   "x": 120,
+   "x": 112,
    "y": 560,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
-   "style": 1,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 8
+  },
+  {
+   "x": 128,
+   "y": 560,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 8
@@ -1523,7 +1578,7 @@
   {
    "x": 144,
    "y": 560,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1532,12 +1587,23 @@
    "overhang": 8
   },
   {
-   "x": 168,
+   "x": 160,
    "y": 560,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
-   "style": 1,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 8
+  },
+  {
+   "x": 176,
+   "y": 560,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 8
@@ -1545,7 +1611,18 @@
   {
    "x": 192,
    "y": 560,
-   "width": 32,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 8
+  },
+  {
+   "x": 208,
+   "y": 560,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1556,7 +1633,7 @@
   {
    "x": 96,
    "y": 584,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1565,12 +1642,23 @@
    "overhang": 0
   },
   {
-   "x": 120,
+   "x": 112,
    "y": 584,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
-   "style": 1,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 0
+  },
+  {
+   "x": 128,
+   "y": 584,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 0
@@ -1578,7 +1666,7 @@
   {
    "x": 144,
    "y": 584,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1587,12 +1675,23 @@
    "overhang": 0
   },
   {
-   "x": 168,
+   "x": 160,
    "y": 584,
-   "width": 24,
+   "width": 16,
    "depth": 24,
    "height": 8,
-   "style": 1,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 0
+  },
+  {
+   "x": 176,
+   "y": 584,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 0
@@ -1600,7 +1699,18 @@
   {
    "x": 192,
    "y": 584,
-   "width": 32,
+   "width": 16,
+   "depth": 24,
+   "height": 8,
+   "style": 0,
+   "landmark": null,
+   "kind": null,
+   "overhang": 0
+  },
+  {
+   "x": 208,
+   "y": 584,
+   "width": 16,
    "depth": 24,
    "height": 8,
    "style": 0,
@@ -1635,22 +1745,22 @@
    "y": 560,
    "width": 32,
    "depth": 40,
-   "height": 16,
-   "style": 3,
-   "landmark": null,
-   "kind": null,
-   "overhang": 24
+   "height": 8,
+   "style": 0,
+   "landmark": "Princess of Wales Theatre",
+   "kind": "marquee",
+   "overhang": 8
   },
   {
    "x": 448,
    "y": 560,
    "width": 32,
    "depth": 40,
-   "height": 16,
-   "style": 4,
-   "landmark": null,
-   "kind": null,
-   "overhang": 24
+   "height": 8,
+   "style": 0,
+   "landmark": "Royal Alexandra Theatre",
+   "kind": "marquee",
+   "overhang": 8
   },
   {
    "x": 544,
@@ -1658,9 +1768,9 @@
    "width": 32,
    "depth": 48,
    "height": 16,
-   "style": 4,
+   "style": 3,
    "landmark": null,
-   "kind": null,
+   "kind": "granite",
    "overhang": 24
   },
   {
@@ -1669,18 +1779,18 @@
    "width": 32,
    "depth": 48,
    "height": 16,
-   "style": 3,
+   "style": 4,
    "landmark": null,
-   "kind": null,
+   "kind": "glass",
    "overhang": 24
   },
   {
    "x": 672,
    "y": 560,
    "width": 24,
-   "depth": 24,
+   "depth": 16,
    "height": 8,
-   "style": 1,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 8
@@ -1689,7 +1799,7 @@
    "x": 696,
    "y": 560,
    "width": 16,
-   "depth": 24,
+   "depth": 16,
    "height": 8,
    "style": 0,
    "landmark": null,
@@ -1700,9 +1810,9 @@
    "x": 712,
    "y": 560,
    "width": 24,
-   "depth": 24,
+   "depth": 16,
    "height": 8,
-   "style": 1,
+   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 8
@@ -1711,7 +1821,7 @@
    "x": 736,
    "y": 560,
    "width": 16,
-   "depth": 24,
+   "depth": 16,
    "height": 8,
    "style": 0,
    "landmark": null,
@@ -1719,45 +1829,23 @@
    "overhang": 8
   },
   {
+   "x": 696,
+   "y": 576,
+   "width": 16,
+   "depth": 32,
+   "height": 8,
+   "style": 1,
+   "landmark": "St James Cathedral",
+   "kind": "cathedral",
+   "overhang": 0
+  },
+  {
    "x": 672,
-   "y": 584,
+   "y": 576,
    "width": 16,
-   "depth": 24,
+   "depth": 32,
    "height": 8,
    "style": 2,
-   "landmark": null,
-   "kind": null,
-   "overhang": 0
-  },
-  {
-   "x": 688,
-   "y": 584,
-   "width": 24,
-   "depth": 24,
-   "height": 8,
-   "style": 0,
-   "landmark": null,
-   "kind": null,
-   "overhang": 0
-  },
-  {
-   "x": 712,
-   "y": 584,
-   "width": 16,
-   "depth": 24,
-   "height": 8,
-   "style": 2,
-   "landmark": null,
-   "kind": null,
-   "overhang": 0
-  },
-  {
-   "x": 728,
-   "y": 584,
-   "width": 24,
-   "depth": 24,
-   "height": 8,
-   "style": 0,
    "landmark": null,
    "kind": null,
    "overhang": 0
@@ -1944,9 +2032,9 @@
    "width": 32,
    "depth": 40,
    "height": 16,
-   "style": 3,
+   "style": 4,
    "landmark": null,
-   "kind": null,
+   "kind": "glass",
    "overhang": 24
   },
   {
@@ -1954,32 +2042,43 @@
    "y": 672,
    "width": 32,
    "depth": 40,
-   "height": 16,
-   "style": 4,
-   "landmark": null,
-   "kind": null,
-   "overhang": 24
+   "height": 8,
+   "style": 3,
+   "landmark": "Roy Thomson Hall",
+   "kind": "round_hall",
+   "overhang": 0
   },
   {
    "x": 544,
    "y": 672,
-   "width": 32,
+   "width": 24,
    "depth": 40,
    "height": 16,
-   "style": 4,
+   "style": 3,
    "landmark": null,
-   "kind": null,
+   "kind": "black",
    "overhang": 24
   },
   {
-   "x": 576,
+   "x": 568,
    "y": 672,
-   "width": 32,
+   "width": 16,
+   "depth": 40,
+   "height": 8,
+   "style": 1,
+   "landmark": null,
+   "kind": "pavilion",
+   "overhang": 0
+  },
+  {
+   "x": 584,
+   "y": 672,
+   "width": 24,
    "depth": 40,
    "height": 16,
-   "style": 4,
+   "style": 3,
    "landmark": null,
-   "kind": null,
+   "kind": "gold",
    "overhang": 24
   },
   {
@@ -2040,24 +2139,35 @@
   {
    "x": 288,
    "y": 760,
-   "width": 32,
+   "width": 16,
    "depth": 32,
-   "height": 8,
+   "height": 16,
    "style": 4,
    "landmark": null,
-   "kind": null,
-   "overhang": 8
+   "kind": "condo",
+   "overhang": 24
   },
   {
-   "x": 320,
+   "x": 312,
    "y": 760,
-   "width": 32,
+   "width": 16,
    "depth": 32,
-   "height": 8,
-   "style": 3,
+   "height": 16,
+   "style": 4,
    "landmark": null,
-   "kind": null,
-   "overhang": 8
+   "kind": "condo",
+   "overhang": 24
+  },
+  {
+   "x": 336,
+   "y": 760,
+   "width": 16,
+   "depth": 32,
+   "height": 16,
+   "style": 4,
+   "landmark": null,
+   "kind": "condo",
+   "overhang": 24
   },
   {
    "x": 504,
@@ -2101,12 +2211,6 @@
    16
   ],
   [
-   464,
-   464,
-   16,
-   16
-  ],
-  [
    416,
    480,
    16,
@@ -2114,30 +2218,6 @@
   ],
   [
    464,
-   480,
-   16,
-   16
-  ],
-  [
-   464,
-   96,
-   16,
-   16
-  ],
-  [
-   544,
-   96,
-   16,
-   16
-  ],
-  [
-   560,
-   96,
-   16,
-   16
-  ],
-  [
-   576,
    96,
    16,
    16
@@ -2145,42 +2225,6 @@
   [
    592,
    96,
-   16,
-   16
-  ],
-  [
-   560,
-   112,
-   16,
-   16
-  ],
-  [
-   576,
-   112,
-   16,
-   16
-  ],
-  [
-   592,
-   112,
-   16,
-   16
-  ],
-  [
-   576,
-   128,
-   16,
-   16
-  ],
-  [
-   592,
-   128,
-   16,
-   16
-  ],
-  [
-   416,
-   136,
    16,
    16
   ],
@@ -2197,32 +2241,14 @@
    16
   ],
   [
-   416,
-   200,
-   16,
-   16
-  ],
-  [
    584,
    200,
    16,
    16
   ],
   [
-   416,
-   216,
-   16,
-   16
-  ],
-  [
    584,
    216,
-   16,
-   16
-  ],
-  [
-   416,
-   232,
    16,
    16
   ],
@@ -2233,6 +2259,12 @@
    16
   ],
   [
+   416,
+   240,
+   16,
+   16
+  ],
+  [
    672,
    320,
    16,
@@ -2241,18 +2273,6 @@
   [
    736,
    320,
-   16,
-   16
-  ],
-  [
-   672,
-   336,
-   16,
-   16
-  ],
-  [
-   736,
-   336,
    16,
    16
   ],
@@ -2429,6 +2449,156 @@
    768,
    16,
    16
+  ],
+  [
+   32,
+   168,
+   8,
+   8
+  ],
+  [
+   32,
+   232,
+   8,
+   8
+  ],
+  [
+   32,
+   744,
+   8,
+   8
+  ],
+  [
+   88,
+   168,
+   8,
+   8
+  ],
+  [
+   88,
+   232,
+   8,
+   8
+  ],
+  [
+   88,
+   744,
+   8,
+   8
+  ],
+  [
+   136,
+   168,
+   8,
+   8
+  ],
+  [
+   136,
+   232,
+   8,
+   8
+  ],
+  [
+   168,
+   608,
+   8,
+   8
+  ],
+  [
+   176,
+   232,
+   8,
+   8
+  ],
+  [
+   224,
+   232,
+   8,
+   8
+  ],
+  [
+   224,
+   744,
+   8,
+   8
+  ],
+  [
+   280,
+   232,
+   8,
+   8
+  ],
+  [
+   352,
+   232,
+   8,
+   8
+  ],
+  [
+   664,
+   232,
+   8,
+   8
+  ],
+  [
+   752,
+   232,
+   8,
+   8
+  ],
+  [
+   808,
+   168,
+   8,
+   8
+  ],
+  [
+   808,
+   232,
+   8,
+   8
+  ],
+  [
+   904,
+   168,
+   8,
+   8
+  ],
+  [
+   904,
+   232,
+   8,
+   8
+  ],
+  [
+   944,
+   168,
+   8,
+   8
+  ],
+  [
+   944,
+   232,
+   8,
+   8
+  ],
+  [
+   1000,
+   32,
+   8,
+   8
+  ],
+  [
+   1000,
+   368,
+   8,
+   8
+  ],
+  [
+   1000,
+   496,
+   8,
+   8
   ]
  ],
  "solids": [
@@ -2466,6 +2636,15 @@
     172,
     16,
     8
+   ]
+  },
+  {
+   "name": "Convocation Hall",
+   "rect": [
+    420,
+    216,
+    16,
+    16
    ]
   },
   {
@@ -2553,9 +2732,9 @@
    "name": "The Grange",
    "kind": "landmark",
    "rect": [
-    436,
+    432,
     464,
-    24,
+    32,
     16
    ]
   },
@@ -2584,9 +2763,39 @@
    "kind": "landmark",
    "rect": [
     416,
-    100,
+    104,
     40,
     32
+   ]
+  },
+  {
+   "name": "Gardiner Museum",
+   "kind": "landmark",
+   "rect": [
+    552,
+    96,
+    32,
+    24
+   ]
+  },
+  {
+   "name": "Victoria College",
+   "kind": "landmark",
+   "rect": [
+    584,
+    128,
+    24,
+    24
+   ]
+  },
+  {
+   "name": "Convocation Hall",
+   "kind": "landmark",
+   "rect": [
+    416,
+    212,
+    24,
+    24
    ]
   },
   {
@@ -2710,7 +2919,7 @@
    ]
   },
   {
-   "name": "SEATON VILLAGE",
+   "name": "PALMERSTON",
    "kind": "houses",
    "rect": [
     184,
@@ -2720,7 +2929,7 @@
    ]
   },
   {
-   "name": "THE ANNEX",
+   "name": "HARBORD VILLAGE",
    "kind": "houses",
    "rect": [
     288,
@@ -2770,7 +2979,7 @@
    ]
   },
   {
-   "name": "SEATON VILLAGE",
+   "name": "PALMERSTON",
    "kind": "houses",
    "rect": [
     184,
@@ -2780,7 +2989,7 @@
    ]
   },
   {
-   "name": "THE ANNEX",
+   "name": "HARBORD VILLAGE",
    "kind": "houses",
    "rect": [
     288,
@@ -2831,7 +3040,7 @@
   },
   {
    "name": "CHINATOWN",
-   "kind": "shops",
+   "kind": "chinatown",
    "rect": [
     416,
     320,
@@ -2840,13 +3049,43 @@
    ]
   },
   {
+   "name": "Mount Sinai Hospital",
+   "kind": "landmark",
+   "rect": [
+    448,
+    320,
+    32,
+    48
+   ]
+  },
+  {
    "name": "DISCOVERY DISTRICT",
-   "kind": "civic",
+   "kind": "discovery",
    "rect": [
     544,
     320,
     64,
     48
+   ]
+  },
+  {
+   "name": "MaRS Centre",
+   "kind": "landmark",
+   "rect": [
+    544,
+    320,
+    64,
+    16
+   ]
+  },
+  {
+   "name": "Toronto General Hospital",
+   "kind": "landmark",
+   "rect": [
+    576,
+    336,
+    32,
+    24
    ]
   },
   {
@@ -2874,9 +3113,9 @@
    "kind": "allan_gardens",
    "rect": [
     672,
-    344,
+    336,
     80,
-    24
+    32
    ]
   },
   {
@@ -2926,7 +3165,7 @@
     416,
     432,
     64,
-    32
+    64
    ]
   },
   {
@@ -3001,7 +3240,7 @@
   },
   {
    "name": "ENTERTAINMENT DISTRICT",
-   "kind": "towers_civic",
+   "kind": "entertainment",
    "rect": [
     416,
     560,
@@ -3010,8 +3249,28 @@
    ]
   },
   {
+   "name": "Princess of Wales Theatre",
+   "kind": "landmark",
+   "rect": [
+    416,
+    560,
+    32,
+    40
+   ]
+  },
+  {
+   "name": "Royal Alexandra Theatre",
+   "kind": "landmark",
+   "rect": [
+    448,
+    560,
+    32,
+    40
+   ]
+  },
+  {
    "name": "FINANCIAL DISTRICT",
-   "kind": "towers",
+   "kind": "financial",
    "rect": [
     544,
     560,
@@ -3027,6 +3286,26 @@
     560,
     80,
     48
+   ]
+  },
+  {
+   "name": "St James Cathedral",
+   "kind": "landmark",
+   "rect": [
+    688,
+    576,
+    32,
+    32
+   ]
+  },
+  {
+   "name": "St James Park",
+   "kind": "park",
+   "rect": [
+    728,
+    576,
+    24,
+    32
    ]
   },
   {
@@ -3071,7 +3350,7 @@
   },
   {
    "name": "ENTERTAINMENT DISTRICT",
-   "kind": "towers_civic",
+   "kind": "entertainment",
    "rect": [
     416,
     672,
@@ -3080,8 +3359,18 @@
    ]
   },
   {
+   "name": "Roy Thomson Hall",
+   "kind": "landmark",
+   "rect": [
+    448,
+    672,
+    32,
+    40
+   ]
+  },
+  {
    "name": "FINANCIAL DISTRICT",
-   "kind": "towers",
+   "kind": "financial",
    "rect": [
     544,
     672,
@@ -3111,7 +3400,7 @@
   },
   {
    "name": "CITYPLACE",
-   "kind": "towers",
+   "kind": "cityplace",
    "rect": [
     288,
     760,
@@ -3143,7 +3432,7 @@
    "name": "SPRAY BAY",
    "rect": [
     192,
-    618,
+    616,
     32,
     16
    ],
@@ -4766,10 +5055,10 @@
   0,
   16,
   16,
-  16,
-  16,
-  16,
-  16,
+  15,
+  15,
+  15,
+  15,
   16,
   16,
   16,
@@ -4892,12 +5181,12 @@
   0,
   0,
   0,
-  16,
-  16,
-  16,
   16,
   16,
-  16,
+  15,
+  15,
+  15,
+  15,
   16,
   16,
   16,
@@ -5020,12 +5309,12 @@
   0,
   0,
   0,
-  16,
   16,
   16,
-  16,
-  16,
-  16,
+  15,
+  15,
+  15,
+  15,
   16,
   16,
   16,
@@ -5277,14 +5566,14 @@
   0,
   0,
   0,
-  16,
-  16,
   16,
   16,
   16,
   16,
   16,
-  16,
+  15,
+  15,
+  15,
   16,
   0,
   0,
@@ -5406,13 +5695,13 @@
   0,
   0,
   0,
-  16,
-  16,
   16,
   16,
   16,
   16,
-  16,
+  15,
+  15,
+  15,
   16,
   0,
   0,
@@ -5535,12 +5824,12 @@
   0,
   0,
   0,
-  16,
-  16,
   16,
   16,
   16,
-  16,
+  15,
+  15,
+  15,
   16,
   0,
   0,
@@ -6668,10 +6957,10 @@
   0,
   0,
   0,
-  16,
-  16,
   16,
-  16,
+  15,
+  15,
+  15,
   16,
   0,
   0,
@@ -6796,10 +7085,10 @@
   0,
   0,
   0,
-  16,
   16,
-  16,
-  16,
+  15,
+  15,
+  15,
   16,
   0,
   0,
@@ -12461,17 +12750,17 @@
   0,
   0,
   16,
-  15,
-  15,
-  15,
-  15,
   15,
   15,
-  15,
-  15,
+  16,
   15,
   15,
+  16,
+  16,
+  16,
   16,
+  16,
+  16,
   0,
   0,
   0,
@@ -12589,17 +12878,17 @@
   0,
   0,
   16,
-  15,
   15,
   15,
   15,
   15,
   15,
   15,
-  15,
-  15,
+  16,
+  16,
   15,
   16,
+  16,
   0,
   0,
   0,
@@ -12717,16 +13006,16 @@
   0,
   0,
   16,
-  15,
-  15,
-  15,
-  15,
   15,
   15,
-  15,
+  16,
   15,
   15,
+  16,
+  16,
+  16,
   15,
+  16,
   16,
   0,
   0,
@@ -12847,14 +13136,14 @@
   16,
   15,
   15,
-  15,
-  15,
-  15,
-  15,
-  15,
-  15,
+  16,
   15,
   15,
+  16,
+  16,
+  16,
+  16,
+  16,
   16,
   0,
   0,
@@ -18784,8 +19073,8 @@
   "solid": 15
  },
  "validation": {
-  "raw_unique_tiles": 513,
-  "flip_canonical_unique_tiles": 382,
+  "raw_unique_tiles": 571,
+  "flip_canonical_unique_tiles": 379,
   "animated_water_tiles": 1856
  },
  "scope": "Compressed central Toronto (Dufferin to Broadview, Bloor to the harbour) and the Islands"

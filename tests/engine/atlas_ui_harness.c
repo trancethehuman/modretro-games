@@ -79,7 +79,13 @@ UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
 /* Lost parcels found (td_street.c). */
 UBYTE td_parcels_found(void) {return 3;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
-void td_get_street(UWORD u,UWORD v,char *dest) {(void)u;(void)v;content_reads++;strcpy(dest,"TEST ROAD");}
+/* Streets and places (td_street_names.c, td_places.c): the tests set what
+ * the courier is in; names spell the kind and id. */
+static UBYTE stub_street,stub_place[3]={255,255,255};
+UBYTE td_get_street(UWORD u,UWORD v) {(void)u;(void)v;content_reads++;return stub_street;}
+void td_get_street_name(UBYTE id,char *dest) {sprintf(dest,"TEST ROAD %u",id);}
+void td_get_places(UWORD u,UWORD v,UBYTE *ids) {(void)u;(void)v;memcpy(ids,stub_place,3);}
+void td_get_place_name(UBYTE kind,UBYTE id,char *dest) {sprintf(dest,"%s %u",kind==0?"AREA":kind==1?"MARK":"JUNC",id);}
 void td_get_district_name(UBYTE district,char *dest) {(void)district;content_reads++;strcpy(dest,"TEST DISTRICT");}
 void td_get_brief(UBYTE index,char *dest) {(void)index;content_reads++;memset(dest,' ',36);dest[36]=0;}
 void td_get_stop(UBYTE index,td_stop_t *dest) {
@@ -466,8 +472,10 @@ static UBYTE radio_after(UBYTE script) {
     return td_radio_playing();
 }
 
+/* One place lookup (update phase 4) then one HUD tick (phase 0). */
+static void hud_step(void) {td_hud_places();td_ui_hud_tick();}
 static void test_menus_and_radio(void) {
-    char text[21];
+    char text[21],text2[21];
     /* The pause menu is a twelve-row sheet over the city: status, the lost
      * parcels found, four actions at a time, scroll marks and a hint for the
      * highlighted action. */
@@ -644,6 +652,42 @@ static void test_menus_and_radio(void) {
     expect(strstr(text,"LOST PARCEL 3/20")!=NULL,"a found parcel pops up the count");
     td.msg=9;td_ui_draw();read_window_text(0,text);
     expect(window_y==144-8&&strstr(text,"VEHICLE IS PARKED"),"a notice pops up on its own");
+
+    /* Places: a neighbourhood names itself on entry (also the first look in
+     * a scene) in the status row; a junction on its edge shows above it;
+     * a landmark reached while a junction is named waits a moment, and is
+     * named if the courier is still near; a junction takes over from a
+     * landmark; a new street names itself. */
+    reset_case();td.mode=TD_ROAM;td.job=TD_NONE;td_beacon_shown=0;stub_street=4;stub_place[0]=7;stub_place[1]=stub_place[2]=255;
+    td_ui_init();td_ui_draw();td_tick=0;hud_step();
+    read_window_text(0,text);expect(window_y==144-8&&!strncmp(text,"AREA 7",6),"a scene opens with its neighbourhood's name");
+    stub_place[2]=3;td.u+=16;hud_step();read_window_text(0,text);read_window_text(1,text2);
+    expect(window_y==144-16&&!strncmp(text,"JUNC 3",6)&&!strncmp(text2,"AREA 7",6),
+           "a junction on a neighbourhood's edge shows above the neighbourhood's name");
+    for(unsigned i=0;i<30;i++){td_tick+=8;td.u+=16;hud_step();}
+    expect(window_y==144,"both names sink after a few seconds");
+    stub_place[2]=5;td.u+=16;hud_step();read_window_text(0,text);
+    expect(window_y==144-8&&!strncmp(text,"JUNC 5",6),"crossing a junction names its two streets");
+    stub_place[1]=2;td.u+=16;hud_step();read_window_text(0,text);
+    expect(!strncmp(text,"JUNC 5",6),"a landmark waits while a junction is named");
+    for(unsigned i=0;i<8;i++){td_tick+=8;td.u+=16;hud_step();}
+    read_window_text(0,text);expect(!strncmp(text,"MARK 2",6),"then names itself while the courier is still near it");
+    stub_place[0]=9;td.u+=16;hud_step();read_window_text(0,text);read_window_text(1,text2);
+    expect(!strncmp(text,"MARK 2",6)&&!strncmp(text2,"AREA 9",6),"a new neighbourhood shows under the landmark");
+    stub_place[2]=4;td.u+=16;hud_step();read_window_text(0,text);
+    expect(!strncmp(text,"JUNC 4",6),"a junction takes over from a landmark");
+    stub_place[1]=255;td.u+=16;hud_step();stub_place[1]=6;stub_place[2]=255;td.u+=16;hud_step();
+    for(unsigned i=0;i<30;i++){td_tick+=8;td.u+=16;hud_step();if(i==1)stub_place[1]=255;}
+    expect(window_y==144,"a landmark left behind before it could be named stays quiet");
+    td_tick=0;stub_street=6;td.u+=16;hud_step();read_window_text(0,text);
+    expect(window_y==144-8&&!strncmp(text,"TEST ROAD 6",11),"a new street names itself");
+    for(unsigned i=0;i<30;i++){td_tick+=8;td.u+=16;hud_step();}
+    stub_place[1]=2;td.u+=16;hud_step();read_window_text(0,text);
+    expect(!strncmp(text,"MARK 2",6),"coming back to a landmark names it again");
+    for(unsigned i=0;i<30;i++){td_tick+=8;td.u+=16;hud_step();}
+    td.vitality=20;stub_place[0]=11;td.u+=16;hud_step();read_window_text(0,text);read_window_text(1,text2);
+    expect(!strncmp(text,"AREA 11",7)&&strstr(text2,"20"),"with the status row busy the neighbourhood takes the top row");
+    stub_place[0]=255;stub_street=0;td.vitality=90;
 }
 
 int main(void) {
