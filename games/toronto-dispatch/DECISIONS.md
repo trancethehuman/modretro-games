@@ -283,8 +283,18 @@ Accepted (implemented):
 - Story: lost parcels carry a small thread about Ernie, Margo's first courier, with calls at 5, 10, 15 and 20 parcels. Ambient chatter now follows the campaign: eight mid-campaign lines once chapter 4 has opened and eight festival-week lines once chapter 7 has opened, besides the 16 general lines. Each line mentions only facts already heard by then, which `check_story.py` checks. Deliveries sometimes draw a reaction: the client noticing dents when the car is badly damaged, or praise for arriving with at least a third of the time left. The police call has a variant for when a job is active. 75 radio scripts in total (47 before).
 - Bug fixed: since the realistic-downtown build, the core scene's tileset spilled into VRAM tiles that the UI art then overwrote, so UI glyphs showed on the lake and on some roofs. The UI art now sits at bank-0 tiles 192-255, which no scene's background uses, giving scenes 384 tiles. The core uses 372.
 - Performance: walkers are laid out on alternate updates (they step a pixel only every few updates). Their profiled cost falls by about a third. Animated tiles are copied by a vertical-blank interrupt handler, eight tiles a time, in lines 146-151 of the 144-153 blank; GBDK's ordinary tile copy waits for the LCD on every byte and cost whole frames while driving. Measured: driving 55.29 -> 55.94 updates per second over the usual ten routes, 56.03 -> 57.50 over ten more and 55.03 -> 56.90 after the welcome call; walking 58.58 -> 58.88; see `TESTING.md`.
-- Proposals (not adopted): more spray bays in the other scenes, a parcel counter on the pause menu, a radio replay of Ernie's thread, ripple animation in the ferry lanes, and more rooftop screens or signs.
+- Proposals (not adopted): a radio replay of Ernie's thread, ripple animation in the ferry lanes, and more rooftop screens or signs. Spray bays in the other scenes and a parcel count on the pause menu were adopted the same day (next section).
 - Pending human checks: whether the water and screen animation read well on the Chromatic's display, whether parcels are too easy or too hard to spot, the spray bay price, and the three-second status line in a vehicle. Hardware VRAM timing of the vertical-blank copy is computed from the code and measured in the emulator only.
+
+## Spray bays in every scene and the parcel count, 2026-10-07
+
+User direction: "Sure stop asking", in answer to whether to add spray bays to the other scenes and a lost-parcel count to the pause menu. Both are adopted. The user also asked not to be asked gameplay or design questions; `AGENTS.md` now says to choose, record the choice here and report it.
+
+Accepted (implemented; the details are working choices made without asking):
+- Each scene has one spray bay at the same $25: King St West between Ossington and Bathurst (core, unchanged), The Queensway near Roncesvalles (West), Bloor St West in Bloor West Village between Jane and Runnymede (High Park) and Queen St East between Carlaw and Pape (East, in front of a brick work shed). Each is in the lane in front of an ordinary building, away from junctions and client stops; heritage landmarks such as the Junction block are not used. The body shops are fictional.
+- The bays share one drawing (`city_kit.paint_spray_bay`), and each art script checks its bay against the engine's table (`td_spray_at` in `TORONTO.c`). Collision is unchanged.
+- Rosa's police call no longer names King West: "OR HIT A SPRAY BAY. EVERY AREA HAS ONE.", and with a job on board "LOSE THEM, OR PULL INTO A SPRAY BAY."
+- The pause menu has a second status row, "LOST PARCELS n/20", so the sheet is one row taller (12 rows).
 
 ## Working defaults and pending proposals
 
@@ -305,4 +315,4 @@ Accepted (implemented):
 - Exact hardware/cartridge edition and Developer Mode readiness.
 - Island delivery transport: ferry/on-foot or specifically authorised service-vehicle jobs, consistent with researched access rules.
 
-Material changes to accepted presentation, driving feel, or hardware target require a design discussion. Routine tuning and reversible implementation choices can proceed autonomously.
+The user asked not to be asked gameplay or design questions (2026-10-07). Choose sensible options, record material changes to presentation, driving feel or gameplay here with the reason, and report them. Hardware target and device-writing rules in `AGENTS.md` are unchanged.

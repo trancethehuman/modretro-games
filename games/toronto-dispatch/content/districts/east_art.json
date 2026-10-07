@@ -413,6 +413,13 @@
       "note": "Game map cutline, not a municipal border or real-world closure."
     }
   ],
+  "spray_bay": {
+    "street": "Queen Street East",
+    "x": 440,
+    "y": 506,
+    "door_bottom": 488,
+    "note": "Fictional body shop between Carlaw and Pape; gameplay position, not a surveyed business."
+  },
   "landmarks": [
     {
       "name": "Danforth Music Hall",
@@ -18275,7 +18282,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "119167c5043059728c2021cd8e71d69e7711a159803b888974a2e98552fb31bf",
+  "background_sha256": "848ed053cfad47571b24f6455bdc612722d4425650f92b2573232dd8a0e51f57",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -19492,8 +19499,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 219,
-    "flip_canonical_unique_tiles": 185,
+    "raw_unique_tiles": 237,
+    "flip_canonical_unique_tiles": 202,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

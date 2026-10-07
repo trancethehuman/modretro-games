@@ -48,12 +48,12 @@
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "36561bbcf2d38a1414019154b91795a0094bf1a4a9a7c29150bb659c856c3920",
+      "sha256": "e0409ed93a945d04b0aa591baafc23b74e5bf0ef25cc09bc9e49ede0b80544fb",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {
       "path": "content/districts/high_park_art.json",
-      "sha256": "0e1b3608655daf0ce746f41de386b6b66d89402e3c0a9ea10ea7022707577656",
+      "sha256": "fdb02125b18ebf91e39b5b89a7593b4c36031f418f5434ea2f7b17286b025c6f",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     }
   ],

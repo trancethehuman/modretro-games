@@ -8,9 +8,11 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 ![Spray bay nearby](docs/screenshots/spray-near.png) ![Resprayed](docs/screenshots/spray-done.png) ![A lost parcel on the lawn](docs/screenshots/parcel-seen.png) ![Lost parcel found](docs/screenshots/parcel-found.png)
 
+![Spray bay on The Queensway](docs/screenshots/spray-done-queensway.png) ![Bloor West Village bay and Rosa's hint](docs/screenshots/spray-near-bloor-west.png) ![Spray bay on Queen St East](docs/screenshots/spray-done-queen-east.png) ![Lost parcels on the pause menu](docs/screenshots/pause-parcels.png)
+
 ![Before: UI glyphs on the harbour](docs/screenshots/before-water-islands.png) ![After](docs/screenshots/water-islands.png) ![Before: glyphs on Front St roofs](docs/screenshots/before-roofs-front-st.png) ![After](docs/screenshots/roofs-front-st.png)
 
-Gameplay and scenery, 2026-10-07: animated ripple water in every scene, with foam and sand at the shore; the video screen at Yonge and Dundas; the spray bay on King St West, which clears the stars for $25; and one of the 20 lost parcels. The last row compares the previous build with this one. The previous build showed UI glyphs on the water and on some roofs, because the UI art overwrote part of the core tileset; that is fixed. Unmodified PyBoy frames, some staged by writing position, cash or stars in emulator memory; [provenance](docs/screenshots/provenance.json).
+Gameplay and scenery, 2026-10-07: animated ripple water in every scene, with foam and sand at the shore; the video screen at Yonge and Dundas; a spray bay (one in each area), which clears the stars for $25; one of the 20 lost parcels; the bays on The Queensway, Bloor St West and Queen St East, with Rosa's hint; and the lost-parcel count on the pause menu. The last row compares the previous build with this one. The previous build showed UI glyphs on the water and on some roofs, because the UI art overwrote part of the core tileset; that is fixed. Unmodified PyBoy frames, some staged by writing position, cash or stars in emulator memory; [provenance](docs/screenshots/provenance.json).
 
 ![Contract briefing](docs/screenshots/story-briefing.png) ![Sal answers on delivery](docs/screenshots/story-client.png) ![A contract waits for the story](docs/screenshots/story-locked.png) ![A chapter opens](docs/screenshots/story-chapter.png)
 

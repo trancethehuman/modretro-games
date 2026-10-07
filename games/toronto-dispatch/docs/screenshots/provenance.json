@@ -604,5 +604,45 @@
     "png_sha256": "38f2f527b378d99db51ffdad10e8095af9cfddbc15fe77265de13779c6590324",
     "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then written by the lake (500,904), 300 frames",
     "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "spray-done-queensway.png",
+    "frame": 1639,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "f91f03d1520332666d42a9419a8a969485cde8897bc73afa02c62bbb216d2c62",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then cash 120 and two stars written, car written at (354, 626): the West (The Queensway) bay announces itself; then the car written into the bay (264, 626), stopped",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "spray-near-bloor-west.png",
+    "frame": 2014,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "98221abbc41da01b53291405fe19ea8a1516483c4feab09d1df4c32995eaaa96",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then cash 120 and two stars written, car written at (354, 626): the West (The Queensway) bay announces itself; then the car written into the bay (264, 626), stopped; then the car written at the West scene's west edge (60,640) heading west, A held 120 frames into High Park, then cash 120 and two stars written, car written at (300, 338): the High Park (Bloor St West) bay announces itself",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "spray-done-bloor-west.png",
+    "frame": 2049,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "a4e38028e84b501b6033f6403e7294d18362bf47d9a16c9dec6d9b20ad4c8e9a",
+    "inputs": "then (after spray-near-bloor-west.png) the car written into the bay (360, 338), stopped",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "spray-done-queen-east.png",
+    "frame": 1639,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "cc0194fa53be67b7a27351a7724c170a0cdb8b10ff6db9fdcd8e07715c85c1e6",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at the east edge of the core (970,528) heading east, A held 120 frames into the East scene, then cash 120 and two stars written, car written at (540, 514): the East (Queen St East) bay announces itself; then the car written into the bay (456, 514), stopped",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "pause-parcels.png",
+    "frame": 2058,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "5c382923a0478fa365a27ce39b6d2abb80e4a9a608ea7eef565e33edc986ed3b",
+    "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (540,280), walked north beside Queens Park and east onto the lost parcel, then Start",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
   }
 ]

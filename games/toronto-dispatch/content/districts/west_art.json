@@ -537,6 +537,13 @@
       "kind": "carhouse"
     }
   ],
+  "spray_bay": {
+    "street": "The Queensway",
+    "x": 248,
+    "y": 618,
+    "door_bottom": 600,
+    "note": "Fictional body shop; gameplay position, not a surveyed business."
+  },
   "stop_candidates": [
     {
       "key": "dufferin_college",
@@ -18618,11 +18625,11 @@
     "solid": 15
   },
   "background_filename": "toronto_west.png",
-  "background_sha256": "6af9cfbcca542b6297a7feda7c306127e11a6164ba734ac9af5dcc71355dab5b",
+  "background_sha256": "a752e0f30ba4c63bb575be3c45ad7fabbc013470fb057da85ac6c8a77988f27d",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 273,
-    "flip_canonical_unique_tiles": 240,
+    "raw_unique_tiles": 291,
+    "flip_canonical_unique_tiles": 256,
     "animated_water_tiles": 768,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

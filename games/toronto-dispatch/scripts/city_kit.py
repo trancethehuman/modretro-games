@@ -6,6 +6,7 @@ indices into the native 4-shade source palette used by every generator:
 0 dark, 1 asphalt / deep tone, 2 ground / body, 3 light.
 """
 import hashlib
+import re
 
 ROAD_HALF, WALK_HALF = 24, 32
 
@@ -452,3 +453,28 @@ def paint_screen(img, x0, y0, colors):
     for y in range(SCREEN_H):
         for x in range(SCREEN_W):
             px[x0 + x, y0 + y] = rgb[g[y][x]]
+
+
+# Spray bays: one body shop per scene. The bay is painted in a road lane and
+# the shop's roll-up door on the building behind it. The engine keeps their
+# centres in TORONTO.c (td_spray_at, by scene); each art script checks it.
+SPRAY_BAY_W, SPRAY_BAY_H = 32, 16
+
+
+def paint_spray_bay(d, box, colors, bx, by, door_bottom, door_h=20):
+    """Hazard-striped bay at (bx, by) and a roll-up door ending at door_bottom."""
+    box(bx, by, SPRAY_BAY_W, SPRAY_BAY_H, 0)
+    for x in range(bx + 2, bx + SPRAY_BAY_W - 2, 4):
+        box(x, by + 2, 2, SPRAY_BAY_H - 4, 3)
+    d.rectangle((bx, by, bx + SPRAY_BAY_W - 1, by + SPRAY_BAY_H - 1), outline=colors[3])
+    box(bx + 2, door_bottom - door_h, SPRAY_BAY_W - 4, door_h, 0)
+    for y in range(door_bottom - door_h + 2, door_bottom, 3):
+        d.line((bx + 4, y, bx + SPRAY_BAY_W - 5, y), fill=colors[1])
+    box(bx + 10, door_bottom - door_h - 4, 12, 3, 3)
+
+
+def spray_bay_registered(engine_text, scene, bx, by):
+    """True when TORONTO.c's td_spray_at row for this scene is the bay's centre."""
+    table = re.search(r'td_spray_at\[TD_SPRAY_BAYS\]\[2\]=\{(.*?)\};', engine_text)
+    rows = re.findall(r'\{(\d+),(\d+)\}', table.group(1)) if table else []
+    return scene < len(rows) and (int(rows[scene][0]), int(rows[scene][1])) == (bx + SPRAY_BAY_W // 2, by + SPRAY_BAY_H // 2)

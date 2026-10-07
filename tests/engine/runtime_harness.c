@@ -1829,6 +1829,8 @@ static void test_parcels_spray_panic(void) {
      td.complete[11]=0;td.complete[14]|=0x10;expect(!td_valid_state(&td),"bits past the last parcel make a save invalid");
      td.complete[14]&=0x0F;expect(td_valid_state(&td),"parcel bits alone keep a save valid");}
     /* The spray bay on King St West. */
+#define TD_SPRAY_U td_spray_at[0][0]
+#define TD_SPRAY_V td_spray_at[0][1]
     native_case();td.mode=TD_ROAM;td.district=0;td.onfoot=0;td.speed=0;td.cash=100;td.wanted=3;td.heat=20;td_car_damage=70;
     td.u=TD_SPRAY_U*16;td.v=TD_SPRAY_V*16;td_spray_state=0;radio_said=255;td_spray_check();
     expect(!td.wanted&&!td.heat&&td.cash==100-TD_SPRAY_PRICE&&!td_car_damage&&td.msg==TD_MSG_SPRAY&&radio_said==TD_RADIO_SPRAY,
@@ -1843,7 +1845,17 @@ static void test_parcels_spray_panic(void) {
     td.speed=0;td.u=(TD_SPRAY_U+300)*16;td_spray_check();td.msg=0;td.u=(TD_SPRAY_U+80)*16;td_spray_check();
     expect(td.msg==TD_MSG_SPRAY_NEAR,"with stars on, the bay announces itself nearby");
     td.msg=0;td_spray_check();expect(!td.msg,"once");
-    td.district=1;td.u=TD_SPRAY_U*16;td_spray_check();expect(td.wanted==2,"other districts have no bay there");
+    td.district=1;td.u=TD_SPRAY_U*16;td_spray_check();expect(td.wanted==2,"other scenes have no bay there");
+    /* Every scene has its own bay. */
+    for(UBYTE scene=1;scene<TD_SPRAY_BAYS;scene++){
+        td.district=scene;td.cash=100;td.wanted=2;td.speed=0;td_spray_state=0;
+        td.u=(td_spray_at[scene][0]+300)*16;td.v=td_spray_at[scene][1]*16;td_spray_check();
+        td.u=td_spray_at[scene][0]*16;td_spray_check();
+        expect(!td.wanted&&td.cash==100-TD_SPRAY_PRICE,"each scene's spray bay works");
+    }
+    td.district=TD_SPRAY_BAYS;td.wanted=2;td_spray_check();expect(td.wanted==2,"no bay outside the four scenes");
+#undef TD_SPRAY_U
+#undef TD_SPRAY_V
     /* Crowd panic: walkers in view near trouble run, officers stand. */
     native_case();td.mode=TD_ROAM;td.district=0;
     for(i=0;i<TD_PEDS;i++){td_ped_route[i]=i==2?5:8+i;actors[TD_ACTOR_PEDS+i].flags=0;actors[TD_ACTOR_PEDS+i].pos.x=(400+i*8)*32;actors[TD_ACTOR_PEDS+i].pos.y=400*32;}

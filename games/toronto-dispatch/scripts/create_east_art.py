@@ -176,6 +176,13 @@ def render():
             if may_build(xx,yy,w,h):building(xx,yy,w,h,style)
             elif (w,h)!=(32,24) and may_build(xx,yy,32,24):
                 building(xx,yy,32,24,style)
+    # The scene's body shop: a spray bay in the road lane, its door on the
+    # building behind (gameplay: TORONTO.c td_spray_at).
+    bay=EAST["spray_bay"]
+    assert all(road.getpixel((x,y)) for x in (bay["x"],bay["x"]+city_kit.SPRAY_BAY_W-1) for y in (bay["y"],bay["y"]+city_kit.SPRAY_BAY_H-1)),"spray bay off the asphalt"
+    assert any(b["x"]<=bay["x"] and bay["x"]+city_kit.SPRAY_BAY_W<=b["x"]+b["width"] and b["y"]+b["depth"]==bay["door_bottom"] for b in blocks),"spray bay door has no building"
+    city_kit.paint_spray_bay(d,box,COLORS,bay["x"],bay["y"],bay["door_bottom"],14)
+    assert city_kit.spray_bay_registered((ROOT/"project/plugins/toronto-driving/engine/src/states/TORONTO.c").read_text(),EAST["id"],bay["x"],bay["y"]),"spray bay moved: update td_spray_at in TORONTO.c"
     for park in EAST["parks"]:
         x,y,w,h=park["rect"]
         for yy in range((y+7)//8*8,y+h-23,32):

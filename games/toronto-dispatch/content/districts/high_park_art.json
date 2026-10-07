@@ -564,6 +564,13 @@
     1024,
     16
   ],
+  "spray_bay": {
+    "street": "Bloor Street West",
+    "x": 344,
+    "y": 330,
+    "door_bottom": 312,
+    "note": "Fictional body shop in Bloor West Village; gameplay position, not a surveyed business."
+  },
   "landmarks": [
     {
       "name": "Colborne Lodge",
@@ -19133,11 +19140,11 @@
     "solid": 15
   },
   "background_filename": "toronto_high_park.png",
-  "background_sha256": "31128aab75e026d61b8f90f69770e0a3b842dc9482fbb562b52da6196c3376da",
+  "background_sha256": "78c803240258bff21abc5f11888e4749629a32600a50b41e2b0d416dfeb4429e",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 231,
-    "flip_canonical_unique_tiles": 208,
+    "raw_unique_tiles": 249,
+    "flip_canonical_unique_tiles": 225,
     "animated_water_tiles": 379,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

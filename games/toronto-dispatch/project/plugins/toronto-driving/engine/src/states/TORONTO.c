@@ -1676,16 +1676,19 @@ static void td_walker_colours(void){
     }
 }
 static UBYTE td_ped_flip;
-/* The spray bay in the north lane of King St West (core): a car stopped in
- * it loses the police and is repaired and repainted (td_life_spray). With
- * stars on, coming near it says so once. */
-#define TD_SPRAY_U 208
-#define TD_SPRAY_V 626
+/* Spray bays, one in a road lane in each scene (centre, pixels): King St
+ * West (core), The Queensway (West), Bloor St West in Bloor West Village
+ * (High Park) and Queen St East between Carlaw and Pape (East). A car
+ * stopped in one loses the police and is repaired and repainted
+ * (td_life_spray). With stars on, coming near one says so once. The art
+ * scripts check these against the bays they draw. */
+#define TD_SPRAY_BAYS 4
+static const UWORD td_spray_at[TD_SPRAY_BAYS][2]={{208,626},{264,626},{360,338},{456,514}};
 static UBYTE td_spray_state;
 static void td_spray_check(void){
     UWORD du,dv;
-    if(td.district||td.onfoot){td_spray_state=0;return;}
-    du=td_distance(td.u>>4,TD_SPRAY_U);dv=td_distance(td.v>>4,TD_SPRAY_V);
+    if(td.onfoot||td.district>=TD_SPRAY_BAYS){td_spray_state=0;return;}
+    du=td_distance(td.u>>4,td_spray_at[td.district][0]);dv=td_distance(td.v>>4,td_spray_at[td.district][1]);
     if(du<14&&dv<8){
         if(td_spray_state<2&&td.speed<=2&&td.speed>=-2){td_spray_state=2;td_life_spray();}
         return;

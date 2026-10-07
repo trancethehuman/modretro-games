@@ -505,12 +505,15 @@ static void td_pad(UBYTE n){
 }
 static void td_pause_sheet(UBYTE changed){
     UBYTE i,n;UWORD minutes;const char *hint;
-    td_sheet(11);
-    /* Status: cash, unique deliveries and the clock with a sun or moon. */
+    td_sheet(12);
+    /* Status: cash, unique deliveries and the clock with a sun or moon,
+     * then the lost parcels found. */
     minutes=td_daynight_minutes();
     td_format(td_line,TD_UI_COIN "%u " TD_UI_BOX "%u %s%02u:%02u",td.cash,td.done,
               minutes>=7*60&&minutes<19*60?TD_UI_SUN:TD_UI_MOON,minutes/60,minutes%60);
-    td_framed(1,td_line);td_row(2,td_frame_join);
+    td_framed(1,td_line);
+    td_format(td_line,"LOST PARCELS %u/%u",td_parcels_found(),TD_PARCELS);td_framed(2,td_line);
+    td_row(3,td_frame_join);
     /* Four actions at a time; the window follows the cursor. */
     if(changed)td_menu_top=td.menu>=TD_MENU_ROWS?td.menu-(TD_MENU_ROWS-1):0;
     if(td.menu<td_menu_top)td_menu_top=td.menu;
@@ -522,16 +525,16 @@ static void td_pause_sheet(UBYTE changed){
         if(n==8){strcat(td_line," ");strcat(td_line,td_audio_names[td_audio_get_mode()]);}
         td_pad(17);
         td_line[17]=i==0&&td_menu_top?TD_UI_ARROW_N[0]:i==TD_MENU_ROWS-1&&td_menu_top+TD_MENU_ROWS<TD_MENU_ITEMS?TD_UI_ARROW_S[0]:' ';
-        td_line[18]=0;td_framed(3+i,td_line);
+        td_line[18]=0;td_framed(4+i,td_line);
     }
-    td_row(7,td_frame_join);
+    td_row(8,td_frame_join);
     hint=td_menu_hints[td.menu];
     if(td.menu==2&&td.job!=TD_NONE)hint="VIEW YOUR JOB";
     else if(td.menu==3&&td.onfoot)hint="STAND BESIDE IT";
     else if(td.menu==7&&td.job==TD_NONE)hint="NO JOB ACTIVE";
-    if(td.menu==4){td_format(td_line,"NOW: %s",td.onfoot?"ON FOOT":td_vehicles[td.vehicle]);td_framed(8,td_line);}
-    else td_framed(8,hint);
-    td_format(td_line,TD_UI_BTN_A "CHOOSE " TD_UI_BTN_B "BACK  %u/%u",td.menu+1,TD_MENU_ITEMS);td_framed(9,td_line);
+    if(td.menu==4){td_format(td_line,"NOW: %s",td.onfoot?"ON FOOT":td_vehicles[td.vehicle]);td_framed(9,td_line);}
+    else td_framed(9,hint);
+    td_format(td_line,TD_UI_BTN_A "CHOOSE " TD_UI_BTN_B "BACK  %u/%u",td.menu+1,TD_MENU_ITEMS);td_framed(10,td_line);
 }
 static void td_board_sheet(void){
     td_sheet(13);

@@ -44,6 +44,7 @@ WEST = {
     "rails": [path("West Toronto rail corridor", [[512,24],[576,112],[560,320],[960,480],[1024,488]]), path("Lakeshore rail corridor", [[0,752],[1024,752]])],
     "gardiner": [0,784,1024,16],
     "landmarks": [{"name":"Roncesvalles Carhouse", "x":432,"y":680,"width":112,"depth":40,"style":5,"kind":"carhouse"}],
+    "spray_bay": {"street":"The Queensway", "x":248,"y":618,"door_bottom":600, "note":"Fictional body shop; gameplay position, not a surveyed business."},
     "stop_candidates": [
         {"name":"Dufferin-side College", "x":976,"y":288,"foot_only":False,"fictional_service_point":True,"source_relation":"College west of retained core Dufferin; not a relocated Dufferin Grove park."},
         {"name":"Lansdowne / Bloor", "x":800,"y":64,"foot_only":False,"fictional_service_point":True},
@@ -97,6 +98,7 @@ HIGH_PARK = {
     "pond": [[608,480],[672,480],[704,600],[640,624],[608,576]],
     "rails": [path("Junction railway barrier", [[432,32],[1024,32]]),path("Lakeshore rail corridor", [[0,752],[1024,752]])],
     "gardiner": [0,784,1024,16],
+    "spray_bay": {"street":"Bloor Street West", "x":344,"y":330,"door_bottom":312, "note":"Fictional body shop in Bloor West Village; gameplay position, not a surveyed business."},
     "landmarks": [
         {"name":"Colborne Lodge", "x":792,"y":544,"width":48,"depth":40,"style":2,"kind":"regency"},
         {"name":"Sunnyside Bathing Pavilion", "x":784,"y":912,"width":128,"depth":24,"style":3,"kind":"pavilion"},

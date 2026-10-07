@@ -16,7 +16,7 @@ This repository contains original homebrew games for ModRetro Chromatic / Game B
 - Inspect Git status before committing. This folder has its own Git repository; do not stage its parent directory. Use `codex/` for new feature branches. The user authorised a public GitHub repository and MIT licence.
 - Run `make check` for repository/content edits and the plugin's build/playtests for game edits. Keep a concise account of what is actually verified and what remains pending.
 - When a game task is done, send the human several screenshots of the result (for example title, gameplay, the changed feature and a before/after), not just one. Take them from the built ROM in the emulator and say which build they show.
-- Use plain, concise communication without exclamation marks. Ask gameplay questions as useful choices while continuing work that does not depend on the answers.
+- Use plain, concise communication without exclamation marks. Do not ask the user gameplay or design questions (user direction, 2026-10-07): choose sensible options, record them in the game's `DECISIONS.md` and report what was chosen. Safety and device rules below still apply.
 
 ## Workflow skills
 

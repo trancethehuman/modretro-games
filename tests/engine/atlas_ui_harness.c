@@ -468,22 +468,24 @@ static UBYTE radio_after(UBYTE script) {
 
 static void test_menus_and_radio(void) {
     char text[21];
-    /* The pause menu is an eleven-row sheet over the city: four actions at a
-     * time, scroll marks and a hint for the highlighted action. */
+    /* The pause menu is a twelve-row sheet over the city: status, the lost
+     * parcels found, four actions at a time, scroll marks and a hint for the
+     * highlighted action. */
     reset_case();td.mode=TD_PAUSE;td.menu=0;td_ui_init();td_ui_draw();
-    expect(window_y==144-11*8,"the pause menu is a bottom sheet that leaves the city visible");
-    read_window_text(3,text);expect(strstr(text,"RESUME")!=NULL,"the first visible action is resume");
-    read_window_text(6,text);expect(strstr(text,"GET IN CAR")!=NULL,"four actions are listed; on foot the fourth gets back in the car");
-    expect(window_tiles[0][6][18]==glyph_tile(TD_UI_ARROW_S)&&window_tiles[0][3][18]!=glyph_tile(TD_UI_ARROW_N),
+    expect(window_y==144-12*8,"the pause menu is a bottom sheet that leaves the city visible");
+    read_window_text(2,text);expect(strstr(text,"LOST PARCELS 3/20")!=NULL,"the pause menu counts the lost parcels found");
+    read_window_text(4,text);expect(strstr(text,"RESUME")!=NULL,"the first visible action is resume");
+    read_window_text(7,text);expect(strstr(text,"GET IN CAR")!=NULL,"four actions are listed; on foot the fourth gets back in the car");
+    expect(window_tiles[0][7][18]==glyph_tile(TD_UI_ARROW_S)&&window_tiles[0][4][18]!=glyph_tile(TD_UI_ARROW_N),
            "a down mark shows more actions below, none above");
-    read_window_text(8,text);expect(strstr(text,"BACK TO THE CITY")!=NULL,"the hint describes the highlighted action");
-    read_window_text(9,text);expect(strstr(text,"1/9")!=NULL,"the footer counts the position in the list");
+    read_window_text(9,text);expect(strstr(text,"BACK TO THE CITY")!=NULL,"the hint describes the highlighted action");
+    read_window_text(10,text);expect(strstr(text,"1/9")!=NULL,"the footer counts the position in the list");
     td.menu=8;td_ui_draw();
-    read_window_text(6,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving to the last action scrolls it into view");
-    read_window_text(3,text);expect(strstr(text,"TTC")!=NULL,"the window keeps four actions, ending on the cursor");
-    expect(window_tiles[0][3][18]==glyph_tile(TD_UI_ARROW_N)&&window_tiles[0][6][18]!=glyph_tile(TD_UI_ARROW_S),
+    read_window_text(7,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving to the last action scrolls it into view");
+    read_window_text(4,text);expect(strstr(text,"TTC")!=NULL,"the window keeps four actions, ending on the cursor");
+    expect(window_tiles[0][4][18]==glyph_tile(TD_UI_ARROW_N)&&window_tiles[0][7][18]!=glyph_tile(TD_UI_ARROW_S),
            "an up mark shows more actions above at the end of the list");
-    td.menu=0;td_ui_draw();read_window_text(3,text);
+    td.menu=0;td_ui_draw();read_window_text(4,text);
     expect(strstr(text,"RESUME")!=NULL,"wrapping to the first action scrolls back to the top");
     td.menu=6;td.mode=TD_BOARD;td_ui_draw();
     expect(window_y==144-13*8,"the dispatch board is a thirteen-row card");

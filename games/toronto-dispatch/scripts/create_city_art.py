@@ -529,16 +529,9 @@ def main(check=False):
     # body shop's roll-up door on the house behind it.
     bay = (192, L.ROWS[5] - 22, 32, 16)
     bx, by, bw, bh = bay
-    box(bx, by, bw, bh, 0)
-    for x in range(bx + 2, bx + bw - 2, 4):
-        box(x, by + 2, 2, bh - 4, 3)
-    d.rectangle((bx, by, bx + bw - 1, by + bh - 1), outline=COLORS[3])
-    box(bx + 2, by - 30, bw - 4, 20, 0)
-    for y in range(by - 28, by - 10, 3):
-        d.line((bx + 4, y, bx + bw - 5, y), fill=COLORS[1])
-    box(bx + 10, by - 34, 12, 3, 3)
+    city_kit.paint_spray_bay(d, box, COLORS, bx, by, by - 10)
     engine = (PROJECT / 'plugins/toronto-driving/engine/src/states/TORONTO.c').read_text()
-    assert f'#define TD_SPRAY_U {bx + bw // 2}' in engine and f'#define TD_SPRAY_V {by + bh // 2}' in engine, 'spray bay moved: update TORONTO.c'
+    assert city_kit.spray_bay_registered(engine, 0, bx, by), 'spray bay moved: update td_spray_at in TORONTO.c'
     districts.append({'name': 'SPRAY BAY', 'rect': list(bay), 'kind': 'gameplay'})
     # The video screen on the roof at the south-east corner of Yonge and
     # Dundas (the square), animated by the engine like the water.

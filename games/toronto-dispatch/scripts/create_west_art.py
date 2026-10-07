@@ -196,6 +196,13 @@ def generate(spec,check=False):
     # Broad harbour buildings and beach kiosks stop clear of the walkway.
     for xx in range(64,944,96):
         if may_build(xx,856,48,24):building(xx,856,48,24,0)
+    # The scene's body shop: a spray bay in the road lane, its door on the
+    # building behind (gameplay: TORONTO.c td_spray_at).
+    bay=spec["spray_bay"]
+    assert all(road_mask.getpixel((x,y)) for x in (bay["x"],bay["x"]+city_kit.SPRAY_BAY_W-1) for y in (bay["y"],bay["y"]+city_kit.SPRAY_BAY_H-1)),(spec["slug"],"spray bay off the asphalt")
+    assert any(b["x"]<=bay["x"] and bay["x"]+city_kit.SPRAY_BAY_W<=b["x"]+b["width"] and b["y"]+b["depth"]==bay["door_bottom"] for b in blocks),(spec["slug"],"spray bay door has no building")
+    city_kit.paint_spray_bay(d,box,COLORS,bay["x"],bay["y"],bay["door_bottom"],14)
+    assert city_kit.spray_bay_registered((PROJECT/"plugins/toronto-driving/engine/src/states/TORONTO.c").read_text(),spec["id"],bay["x"],bay["y"]),(spec["slug"],"spray bay moved: update td_spray_at in TORONTO.c")
     # Trees reuse exactly aligned patterns and never cover asphalt or formal paths.
     for yy in range(336,624,32):
         for xx in range(624 if spec["id"]==2 else 592,944 if spec["id"]==2 else 704,32):

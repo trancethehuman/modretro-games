@@ -104,13 +104,13 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 
 ## Gameplay, scenery and performance — implemented 2026-10-07, human review pending
 
-- [x] Spray bay on King St West, 20 lost parcels with a $500 bonus, and walkers who run from gunfire.
+- [x] Spray bays in all four scenes, 20 lost parcels with a $500 bonus and a count on the pause menu, and walkers who run from gunfire.
 - [x] Animated ripple water with foam and sand shores in all four scenes; the Yonge-Dundas rooftop screen.
 - [x] Story: staged mid-campaign and festival-week chatter, delivery reactions, the police call's spray-bay hint, and Ernie's lost-parcel thread.
 - [x] Fixed UI glyphs on the core scene's water and roofs (UI art moved clear of scene tiles).
 - [x] Faster frames: walkers laid out on alternate updates; animated tiles copied inside vertical blank by an interrupt handler.
 - [ ] Handheld review: animation on the Chromatic's screen, parcel visibility, spray bay price, the three-second status line in a vehicle, and VRAM timing on hardware.
-- Next: spray bays in the other scenes, a parcel count on the pause menu, ferry-lane ripples, and more rooftop signs.
+- Next: ferry-lane ripples and more rooftop signs.
 
 ## Next playable polish
 

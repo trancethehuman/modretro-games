@@ -35,7 +35,7 @@
       "collision_encoding_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e",
       "collision_bytes_sha256": "ab4d0215477aa433df3824a4b3131b193bea42ba3ea8c837f10f69e936a56891",
       "art_metadata": "content/districts/west_art.json",
-      "art_metadata_sha256": "45eb1af2f67511b9f7f7068e452a7768b8b2bdc3ebd3160bbe2af2eaf51d76cb"
+      "art_metadata_sha256": "2c1ce163cb97a78330cf0021c9eef4c9d91f4ef61aeffd89c4f194b1f49720b6"
     },
     {
       "district": 2,
@@ -44,7 +44,7 @@
       "collision_encoding_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c",
       "collision_bytes_sha256": "4c89e9ff15874e740988156e2f0f0786ec98ccefce83437963718055115b4de4",
       "art_metadata": "content/districts/high_park_art.json",
-      "art_metadata_sha256": "15409342dd537af165f558decd5481772ee0b20317fac65e1c9cb83e0a68c292"
+      "art_metadata_sha256": "888b33419277c8f707ad866d697d5054c28697f33c4f1c1158039d156f5cc22d"
     },
     {
       "district": 3,
@@ -53,7 +53,7 @@
       "collision_encoding_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71",
       "collision_bytes_sha256": "82e17ec7bd893e6e503103e80e1f8eb77e26e3e104a8f823a1100226ffe1af48",
       "art_metadata": "content/districts/east_art.json",
-      "art_metadata_sha256": "1bbc66a72d11bdfe6e3022b40448beb5bd4e12ca21e1270790786c044fa13215"
+      "art_metadata_sha256": "c026c6eed3589a48516045db6403810547c273d2a84e870365d484964eabae19"
     }
   ],
   "districts": [

@@ -123,6 +123,7 @@ EAST = {
     "water": [],
     "rails": [path("Lakeshore East railway barrier", [[80,800],[160,688],[176,528],[208,400],[352,304],[400,288],[544,232],[704,176],[1008,128]], note="Original compressed curve from City major-rail features, not a trace. Roads reopen only represented real crossing corridors; Pape remains foot-only.")],
     "closed_frontiers": [{"rect":[16,816,992,144],"name":"Unexpanded southern viewport","source_fact":False,"note":"Game map cutline, not a municipal border or real-world closure."}],
+    "spray_bay": {"street":"Queen Street East", "x":440,"y":506,"door_bottom":488, "note":"Fictional body shop between Carlaw and Pape; gameplay position, not a surveyed business."},
     "landmarks": [
         {"name":"Danforth Music Hall","x":104,"y":112,"width":80,"depth":48,"style":1,"kind":"music_hall","source_ids":["east_music_hall"]},
         {"name":"Opera House","x":64,"y":448,"width":80,"depth":32,"style":1,"kind":"theatre","source_ids":["east_opera_house"]},
