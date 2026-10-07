@@ -10,7 +10,7 @@
   "result_stop_count": 43,
   "result_quest_count": 88,
   "preserved_base_stops_sha256": "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380",
-  "preserved_base_quests_sha256": "30cc65f0d9226a944dbedd421a7338dad4e9c9b58326c390d52526e1a1121d2a",
+  "preserved_base_quests_sha256": "a7c7e8dd86ec3bd0b1db984e7f1788d26a4468ab0df793e59a83f7274788edb7",
   "preserved_base_stop_fields": [
     "id",
     "u",

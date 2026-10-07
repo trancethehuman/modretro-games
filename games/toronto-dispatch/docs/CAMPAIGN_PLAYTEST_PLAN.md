@@ -2,6 +2,8 @@
 
 Reviewed 2026-10-02 against the published `v0.2.0-prototype.2` baseline, ROM SHA-256 `a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59`, source commit `0cf7ee2f5f8da63edea5911c150a27dd54032cd0`. This document is a source/content audit and a proposed testing plan. No new game execution, duration measurement or player enjoyment result was produced in this pass. The full campaign remains incomplete as an acceptance gate.
 
+Update 2026-10-07: the story overhaul rewrote most contract titles, briefs and routes and added story order (each chapter also waits for the previous chapter's spine contract; see [decisions](../DECISIONS.md)). The contract names, progression table and sample path below describe the 2026-10-02 baseline; [campaign.json](../content/campaign.json) holds the current ones.
+
 Sources inspected: [campaign content](../content/campaign.json), [campaign generator](../scripts/create_campaign.py), [native state/gameplay](../project/plugins/toronto-driving/engine/src/states/TORONTO.c), [native UI](../project/plugins/toronto-driving/engine/src/td_ui.c), [campaign validator](../scripts/check_campaign.py), [design](../DESIGN.md), [decisions](../DECISIONS.md), [testing evidence](../TESTING.md) and [Old Toronto expansion proposal](OLD_TORONTO_EXPANSION.md). Geography proposals below reuse that researched plan; no new street geometry, map-era decision or district layout is adopted here.
 
 ## What the current campaign actually contains

@@ -246,6 +246,29 @@ User direction: keep performance good, and do not keep three lines of informatio
 - Measured: driving 56.3 updates per second over ten routes (previous build 55.4), walking 58.9 (58.7); see `TESTING.md`.
 - Pending human checks: whether the pop-up timings feel right on the Chromatic and whether the idle status line appears too often while waiting at lights.
 
+## Story overhaul, 2026-10-07
+
+User direction: audit the storyline and improve it in many ways: dialogue, drama, coherence of where the missions are, everything.
+
+Audit of the previous story (radio round, 2026-10-06):
+- One voice. Rosa was the only speaker in 38 short scripts: eight briefings by job type, one pickup line and three interchangeable delivery lines. No client spoke, and a briefing never said who, why or where.
+- No plot. Chapter calls announced job categories ("waterfront jobs are on the board") with no stakes, rival or ending; the finale was one line.
+- Places. Briefs named stops in an order the route did not follow, and drop-off orders sent the courier back and forth across the city (for example Kensington, then Dufferin, then back east to Queen West).
+- Timing. Chapter calls played at delivery counts. Chapters unlock every six deliveries but hold eight contracts, so in ordinary play the news ran up to two chapters ahead of the contracts actually done.
+
+Accepted (implemented):
+- Premise (original fiction, `content/story.json`): Margo's independent courier depot by Union Station, open since 1979, is losing the city's offices to Rushly, an app courier. Winning the city's Lakelight lantern festival contract would save it. Rosa runs dispatch; Dev, a Rushly rider, changes sides; Vance, Rushly's city manager, offers to buy the depot and leans on its bank; the depot's leaked bid is traced to a Rushly account; council awards the festival to Margo on its last night.
+- The rival is Rushly, a fictional name; an earlier draft name was dropped because a real Toronto app courier has a similar one.
+- Voices: 27 speakers, each with a 17-character name card. Rosa keeps her portrait; Margo, clients and rivals speak through a caller silhouette under their own card. Each authored line fits one card of three 17-column rows.
+- Every contract has three calls: a briefing on accepting it (who, what and why), a line at the first pickup and the client on delivery. A client who speaks at the pickup is at that stop; a client who speaks on delivery is on the route or called the job in.
+- Places: multi-drop routes visit their drop-offs in the shortest driving order over the collision grid unless the story fixes it (transit relays and Island rounds keep their authored order). Lines that name stops list them in route order.
+- Story order (gameplay change): each of the first eight chapters has a spine contract that ends its story (7, 15, 23, 30, 39, 43, 55, 63); the next chapter's contracts open only once it is done, as well as after the existing delivery counts. A few contracts wait for one in their own chapter: the sign-off sheets for the bid, the storm jobs for the storm warning, the ledger for Margo's answer to Vance, and the festival-night contracts in order. THE CONTRACT now waits for MARGO'S BIG NIGHT instead of 64 deliveries. The dispatch board reads "AFTER JOB n" for a contract the story has not reached. Western and eastern district contracts keep their delivery-count gates only.
+- Story calls follow play: a chapter's opening plays when the chapter opens (the delivery that completes its spine or reaches its count); a plot beat plays right after the contract it follows; only the west/east opening (3 deliveries) and the 72nd delivery stay count calls. Story calls wait in a four-call queue behind the call on air. A replay moves nothing on; the finale plays after the last contract.
+- `scripts/check_story.py` (in `make check`) checks the calls, speakers, places and route order, and that every fact a line mentions (Dev, Dev at the depot, Vance, Lakelight, the barge, the storm, the leaked bid, Margo's van, the vote) is certain to have been heard first.
+- Rewritten to follow the story: 62 of the 72 core titles, 66 briefs and 60 routes (who needs what, from where, to whom). Time limits and rewards were recomputed from the new routes with the existing formulas. Unchanged: controls, save format, each contract's kind and vehicle rule, the chapter delivery counts and the 16 western and eastern contracts' routes. Old saves keep their completions; contracts past an unfinished spine wait for it.
+- Proposals (not adopted): a story recap in the pause menu, replaying a missed chapter call from the board, a longer epilogue scene, individual portraits (the UI art budget is full at 64 tiles), and remembering a call cut short by a reset.
+- Pending human checks: whether the dialogue reads well on the Chromatic at typing speed, whether chapter calls arrive at good moments, and whether the story order feels restrictive.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

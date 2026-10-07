@@ -458,6 +458,12 @@ static void test_sparse_table_full_and_single_holes(void) {
 
 
 static UBYTE glyph_tile(const char *code) {return td_glyph_tile[(UBYTE)code[0]-32];}
+/* Runs the radio until it plays something other than script; returns that. */
+static UBYTE radio_after(UBYTE script) {
+    for(unsigned i=0;i<40000&&td_radio_playing()==script;i++){td_tick++;td_radio_tick();}
+    return td_radio_playing();
+}
+
 static void test_menus_and_radio(void) {
     char text[21];
     /* The pause menu is an eleven-row sheet over the city: four actions at a
@@ -481,6 +487,12 @@ static void test_menus_and_radio(void) {
     expect(window_y==144-13*8,"the dispatch board is a thirteen-row card");
     read_window_text(1,text);expect(strstr(text,"FIRST SHIFT")!=NULL,"the board names the contract's chapter");
     td.menu=12;td_ui_draw();read_window_text(1,text);expect(strstr(text,"NEIGHBOURHOODS")!=NULL,"the next eight contracts are chapter two");
+    td_offer.min_done=6;td_offer.after=6;td.done=6;memset(td.complete,0,sizeof(td.complete));td.complete[0]=0x3F;td.menu=8;td_ui_draw();
+    read_window_text(10,text);expect(strstr(text,"AFTER JOB 7")!=NULL,"a contract the story has not reached names the job it waits for");
+    td.complete[0]|=0x40;td.done=7;td_ui_draw();
+    read_window_text(10,text);expect(strstr(text,"READY TO TAKE")!=NULL,"and is ready once that job is done");
+    td.done=5;td_ui_draw();read_window_text(10,text);expect(strstr(text,"NEEDS 6 DONE")!=NULL,"too few deliveries still reads as such");
+    memset(td.complete,0,sizeof(td.complete));td.done=0;td.menu=12;
     td.mode=TD_RESULT;td.health=100;td.left=9;td_last_pay=86;td_ui_draw();
     read_window_text(3,text);expect(strstr(text,"+$86 PAID")!=NULL,"the result card shows the fee paid");
 
@@ -493,27 +505,74 @@ static void test_menus_and_radio(void) {
     read_window_text(1,text);expect(strstr(text,"199S")!=NULL&&strstr(text,"4/5")!=NULL,"the second shows the stop count and time left");
     unsigned plays=audio_plays;
     td_radio_say(TD_RADIO_INTRO);td_tick=1;td_radio_tick();
-    expect(window_y==144-40&&audio_plays==plays+1,"a call chirps and raises its card above the pop-up rows");
+    expect(window_y==144-48&&audio_plays==plays+1,"a call chirps and raises its card above the pop-up rows");
     read_window_text(0,text);expect(!strncmp(text+3,"ROSA - DISPATCH",15),"the card names the speaker beside the portrait");
     expect(window_tiles[0][0][0]==glyph_tile(TD_UI_PORTRAIT_0)&&window_tiles[0][2][2]==glyph_tile(TD_UI_PORTRAIT_8),
            "the card shows the portrait's nine tiles");
-    read_window_text(4,text);expect(strstr(text,"199S")!=NULL,"the job row sits below the card");
+    read_window_text(5,text);expect(strstr(text,"199S")!=NULL,"the job row sits below the card");
     read_window_text(1,text);expect(text[3]==' ',"text starts blank");
     for(unsigned i=0;i<40;i++){td_tick++;td_radio_tick();}
     read_window_text(1,text);expect(!strncmp(text+3,"MORNING, ROOKIE.",16),"the first line types out");
     read_window_text(2,text);expect(!strncmp(text+3,"ROSA ON DISPATCH.",17),"then the second");
-    td_radio_say(TD_RADIO_JOB);
-    for(unsigned i=0;i<4*(34+TD_RADIO_HOLD)&&window_y==144-40;i++){td_tick++;td_radio_tick();}
-    read_window_text(1,text);expect(!strcmp(text+3,"PARCEL ROUND.    "),"a queued call follows the current one on a clean card");
-    read_window_text(2,text);expect(!strcmp(text+3,"STOP AT EACH PIN."),"with its own second line");
-    for(unsigned i=0;i<2*(34+TD_RADIO_HOLD);i++){td_tick++;td_radio_tick();}
+    /* A contract briefing queues behind the welcome and plays in turn. */
+    td_radio_contract(0,0);
+    for(unsigned i=0;i<40000&&!(td_radio_playing()==TD_RADIO_CONTRACT&&td_radio_pos>=TD_RADIO_PAGE);i++){td_tick++;td_radio_tick();}
+    read_window_text(1,text);expect(!strcmp(text+3,"FIRST JOB. SAL   "),"a queued contract briefing follows the welcome on a clean card");
+    read_window_text(2,text);expect(!strcmp(text+3,"AT ST LAWRENCE.  "),"with its own second line");
+    for(unsigned i=0;i<40000&&td_radio_playing()!=TD_NONE;i++){td_tick++;td_radio_tick();}
     expect(window_y==144-16&&td_radio_playing()==TD_NONE,"the card drops away once the calls end");
     read_window_text(1,text);expect(strstr(text,"199S")!=NULL,"the pop-up rows repaint in their own rows");
+    /* Clients speak through the caller portrait under their own name. */
+    td_radio_contract(0,2);td_tick=1;td_radio_tick();
+    read_window_text(0,text);expect(!strncmp(text+3,"SAL - THE MARKET",16),"a client's line names the client");
+    expect(window_tiles[0][0][1]==glyph_tile(TD_UI_CALLER_T)&&window_tiles[0][1][0]==glyph_tile(TD_UI_CALLER_FL)&&
+           window_tiles[0][2][2]==glyph_tile(TD_UI_CALLER_BR),"and shows the caller portrait instead of Rosa's");
+    /* A pickup waits for its briefing; a delivery cuts both short. */
+    td_radio_script=td_radio_next=TD_NONE;
+    td_radio_contract(5,0);td_radio_contract(5,1);
+    expect(td_radio_playing()==TD_RADIO_CONTRACT&&td_radio_next==TD_RADIO_CONTRACT,"a pickup call waits for the briefing");
+    td_radio_contract(5,2);{char who[20];td_radio_speaker(who);
+    expect(td_radio_next==TD_NONE&&!strcmp(who,"DR HALE - MUSEUM"),"a delivery replaces older talk about its contract at once");}
+    /* A first delivery moves the story on after its delivery call: the
+     * beat that follows the contract, a count beat, the chapters it opens
+     * and the finale. A replay adds nothing. */
+    td_radio_script=td_radio_next=TD_NONE;memset(td.complete,0,sizeof(td.complete));
+    td.done=6;td.complete[0]=0x5F;
+    {UWORD open=td_radio_open();expect(open==3,"six deliveries and contract 7 open the second chapter");
+    td.complete[1]|=1;td.done=7;td_radio_done(8,6,open);}
+    expect(td_radio_playing()==TD_RADIO_CONTRACT,"the delivery call comes first");
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_RADIO_BEAT_RIVAL,"then the rival, who follows contract 9");
+    expect(radio_after(TD_RADIO_BEAT_RIVAL)==TD_NONE,"and nothing else");
+    td.done=4;td.complete[0]=0x0F;td.complete[1]=0;
+    {UWORD open=td_radio_open();td.complete[0]|=0x40;td.done=5;td_radio_done(6,4,open);
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_NONE,"contract 7 at five deliveries does not open a chapter yet");
+    open=td_radio_open();td.complete[0]|=0x10;td.done=6;td_radio_done(4,5,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_RADIO_CHAPTER_1,"the sixth delivery opens the second chapter with its call");
+    radio_after(TD_RADIO_CHAPTER_1);
+    td.done=6;td.complete[0]=0x3F;
+    {UWORD open=td_radio_open();expect(open==1,"six deliveries without contract 7 keep the second chapter shut");
+    td.complete[0]|=0x40;td.done=7;td_radio_done(6,6,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_RADIO_CHAPTER_1,"finishing contract 7 then opens it with its call");
+    radio_after(TD_RADIO_CHAPTER_1);
+    {UWORD open=td_radio_open();td_radio_done(8,7,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_NONE,"a replay moves no story on");
+    td.done=2;td.complete[0]=0x03;td.complete[1]=0;
+    {UWORD open=td_radio_open();td.complete[1]|=1;td.done=3;td_radio_done(8,2,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_RADIO_BEAT_RIVAL&&radio_after(TD_RADIO_BEAT_RIVAL)==TD_RADIO_OPEN_ENDS,
+           "story calls wait their turn: the contract's beat, then the count's");
+    radio_after(TD_RADIO_OPEN_ENDS);
+    memset(td.complete,0xFF,TD_QUESTS/8);td.complete[TD_QUESTS/8-1]&=0x7F;td.done=TD_QUESTS-1;
+    {UWORD open=td_radio_open();expect(open==(1u<<TD_STORY_CHAPTERS)-1,"every chapter is open near the end");
+    td.complete[TD_QUESTS/8-1]|=0x80;td.done=TD_QUESTS;td_radio_done(TD_QUESTS-1,TD_QUESTS-1,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_RADIO_MASTER,"the last delivery brings the finale");
+    radio_after(TD_RADIO_MASTER);memset(td.complete,0,sizeof(td.complete));td.done=0;
+    td_radio_say(TD_RADIO_CHATTER);td_radio_say(TD_RADIO_WANTED);
+    expect(td_radio_playing()==TD_RADIO_WANTED,"chatter gives way to a story call at once");
     /* A call that starts while an old card is still up gets a clean card. */
     td_radio_say(TD_RADIO_INTRO);for(unsigned i=0;i<20;i++){td_tick++;td_radio_tick();}
     td_radio_script=TD_NONE;td_radio_say(TD_RADIO_NIGHT);
     for(unsigned i=0;i<60;i++){td_tick=(UBYTE)(td_tick+1)|1;td_radio_tick();}
-    read_window_text(1,text);expect(!strcmp(text+3,"NIGHT SHIFT NOW. "),"a new call never types over an old card");
+    read_window_text(1,text);expect(!strcmp(text+3,"NIGHT SHIFT.     "),"a new call never types over an old card");
     td_radio_script=td_radio_next=TD_NONE;td.mode=TD_PAUSE;td_ui_draw();td.mode=TD_ROAM;td_ui_draw();
     /* Stars bring a call; the arrest clears them without "lost them". */
     td.wanted=1;td_tick=1;td_radio_tick();expect(td_radio_playing()==TD_RADIO_WANTED,"a first star brings a police call");

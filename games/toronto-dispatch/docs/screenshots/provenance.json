@@ -404,5 +404,69 @@
     "png_sha256": "ac251b78ff686fd0dae94ea37aa2a2c73fe7b223b91eef58fc42e41d0936d0b4",
     "inputs": "then walking right until clear (1 frames), B 4 frames, 6 frames: the shot pops up the ammunition count",
     "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-briefing.png",
+    "frame": 1319,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "1f124e8b08cd95416f62de03241289b8e24545357e98e51a67c16e78f63b311e",
+    "inputs": "then A (accept contract 1), 28 frames: Rosa briefs the first job",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-client.png",
+    "frame": 1883,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "dc81f777d71bc3b480815315f5589f30f1fb464c642a78d2a571b96795523adf",
+    "inputs": "then the car written to St Lawrence (712,740), Select (deliver), B, 29 frames: Sal answers through the caller card",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-locked.png",
+    "frame": 1284,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "3caa4235ea0440f8a2d7dc462b72d3bed6e92dbdc2d64db36d1d36a9d8b1b3c5",
+    "inputs": "boot, deliveries 6 and contracts 1-6 written as done, Select, right twice: contract 9 waits for job 7",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-chapter.png",
+    "frame": 1684,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "1ac024ac778fefe70bf31f2f73dc6084a197604b79c2703ba21e5ab185ac96a9",
+    "inputs": "then left twice, A (contract 7), Select at the depot, car written to City Hall, Select, car written to the depot, Select, B, 180 frames: contract 7 opens the second chapter",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-rival.png",
+    "frame": 1723,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "6f66a2560579b4458988a0ff727a00696af2c9cfa5e3b9b3ac393f5c931312a8",
+    "inputs": "boot, deliveries 8 and contracts 1-8 written as done, Select, A (contract 9), Select at the depot, car written to Kensington, Queen West and Dufferin with Select at each, B, 187 frames: Dev of Swiftline",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-torn.png",
+    "frame": 2027,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "7562bd0168f437a63febcdebf8b20ef9910592ddb9e32d9704b8b5165527a9b4",
+    "inputs": "boot, deliveries 54 and contracts 1-54 written as done, Select, A (contract 55), Select at the depot, car written to Kensington, Dufferin, Queen West, Queen East and the depot with Select at each, B, 327 frames: what Margo did with the offer",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-dev-quits.png",
+    "frame": 2483,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "c0a8469c899c8dc72f344cd1d070ecfa373b848a554f89d3dd359548f4459630",
+    "inputs": "then 454 frames: the festival-week chapter opens; Dev quits Swiftline",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "story-dev-joins.png",
+    "frame": 2769,
+    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+    "png_sha256": "0b0351ee9c26f32936138dcecee44d3f58be5fdcecd87018a5c76d0659d8c4fa",
+    "inputs": "then 284 frames: Dev, now at the depot",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
   }
 ]

@@ -91,6 +91,13 @@ void td_ui_hud_tick(void) {}
  * only records which script it queued last. */
 UBYTE radio_said=255,td_radio_script=255,td_radio_wanted;UWORD td_last_pay;
 void td_radio_say(UBYTE script) { radio_said=script; }
+static unsigned radio_contract=65535,radio_done=65535,radio_done_before=65535;
+static UWORD radio_open_now,radio_open_before;
+void td_radio_contract(UBYTE job,UBYTE part) { radio_contract=job*3u+part; }
+void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) {
+    radio_contract=job*3u+2;radio_done=job;radio_done_before=done_before;radio_open_before=open_before;
+}
+UWORD td_radio_open(void) { return radio_open_now; }
 void td_radio_tick(void) {}
 UBYTE td_radio_playing(void) { return radio_said; }
 void td_map_open(void) {
@@ -123,7 +130,7 @@ void td_get_stop(UBYTE index,td_stop_t *out) {
 void td_get_job(UBYTE index,td_job_t *out) {
     if(authored_content){td_authored_get_job(index,out);return;}
     (void)index;memset(out,0,sizeof(*out));out->count=2;
-    out->vehicle=TD_NONE;out->seconds=120;out->reward=150;out->route[1]=1;
+    out->vehicle=TD_NONE;out->after=TD_NONE;out->seconds=120;out->reward=150;out->route[1]=1;
 }
 UBYTE td_district_current(void) {return test_current_district;}
 void td_district_reset(void) {test_reset_calls++;test_queued_district=TD_DISTRICT_NONE;}
@@ -400,21 +407,25 @@ static void test_audio_event_integration(void) {
     td_interact();expect(audio_cue==TD_AUDIO_PICKUP,"pickup queues its distinct audio cue");
     td.left=100;td_target.u=td.u>>4;td_target.v=td.v>>4;td_interact();expect(audio_cue==TD_AUDIO_COMPLETE&&td.mode==TD_RESULT,"final handoff queues completion audio for the result screen");
     reset_case();td.job=0;td_finish(FALSE);expect(audio_cue==TD_AUDIO_FAIL,"failed contracts queue failure audio");
-    expect(radio_said==TD_RADIO_FAIL,"Rosa reports a failed contract");
-    /* Story beats: the first pickup, chapters at every sixth new delivery,
-     * the west/east routes at three, a word on other deliveries. */
-    reset_case();td.job=0;td_job.count=3;td_target.u=td.u>>4;td_target.v=td.v>>4;radio_said=255;
-    td_interact();expect(radio_said==TD_RADIO_PICKUP,"the first pickup brings a radio line");
-    reset_case();td.job=9;td.done=5;td.health=100;td.left=50;td_job.reward=100;td_finish(TRUE);
-    expect(td.done==6&&radio_said==TD_RADIO_CHAPTER&&td_last_pay==110,"the sixth delivery opens chapter two on the radio and records the fee");
-    reset_case();td.job=9;td.done=6;td.complete[1]=2;td_finish(TRUE);
-    expect(radio_said==TD_RADIO_DONE+0,"a replay at a chapter boundary is an ordinary delivery");
-    reset_case();td.job=1;td.done=2;td_finish(TRUE);expect(radio_said==TD_RADIO_OPEN_ENDS,"the third delivery opens the west and east routes");
-    reset_case();td.job=4;td.done=TD_QUESTS-1;td_finish(TRUE);expect(radio_said==TD_RADIO_MASTER,"the last contract brings the master line");
-    /* Taking a job briefs its kind; dismissing the title of a fresh game welcomes the courier. */
-    reset_case();td.job=TD_NONE;td.mode=TD_BOARD;td.menu=0;td_get_job(0,&td_offer);td.onfoot=0;radio_said=255;
+    expect(radio_said>=TD_RADIO_FAIL&&radio_said<TD_RADIO_FAIL+TD_RADIO_FAIL_COUNT,"the radio reports a failed contract");
+    /* Contract calls: the client at the first pickup and on the delivery;
+     * the radio learns what the delivery changed (count and open chapters
+     * before it) to tell the story it moves on. */
+    reset_case();td.job=7;td_job.count=3;td_target.u=td.u>>4;td_target.v=td.v>>4;radio_contract=65535;
+    td_interact();expect(radio_contract==7*3+1,"the first pickup plays that contract's pickup call");
+    reset_case();td.job=9;td.done=5;td.health=100;td.left=50;td_job.reward=100;radio_open_now=0x0F;radio_done=65535;td_finish(TRUE);
+    expect(td.done==6&&radio_done==9&&radio_done_before==5&&radio_open_before==0x0F&&td_last_pay==110,
+           "a new delivery hands the radio its contract, the count before it and the chapters open before it");
+    reset_case();td.job=9;td.done=6;td.complete[1]=2;radio_done=65535;td_finish(TRUE);
+    expect(radio_done==9&&radio_done_before==6&&td.done==6,"a replay leaves the count unchanged for the radio");
+    reset_case();td.job=4;td.done=TD_QUESTS-1;radio_done=65535;td_finish(TRUE);
+    expect(radio_done==4&&radio_done_before==TD_QUESTS-1&&td.done==TD_QUESTS,"the last contract reaches the radio with the full count");
+    reset_case();td.job=4;radio_done=65535;radio_said=255;td_finish(FALSE);
+    expect(radio_done==65535&&radio_said>=TD_RADIO_FAIL,"a failure is not a delivery");
+    /* Taking a job plays its briefing; dismissing the title of a fresh game welcomes the courier. */
+    reset_case();td.job=TD_NONE;td.mode=TD_BOARD;td.menu=0;td_get_job(0,&td_offer);td.onfoot=0;radio_contract=65535;
     joy=joy_pressed=J_A;sys_time+=2;toronto_update();
-    expect(td.job==0&&radio_said==TD_RADIO_JOB+td_offer.kind,"accepting a contract plays its kind's briefing");
+    expect(td.job==0&&radio_contract==0,"accepting a contract plays its briefing call");
     reset_case();td.job=TD_NONE;td.done=0;td.mode=TD_HELP;td_resume_mode=TD_ROAM;radio_said=255;
     joy=joy_pressed=J_A;sys_time+=2;toronto_update();
     expect(td.mode==TD_ROAM&&radio_said==TD_RADIO_INTRO,"leaving the title on a fresh shift starts the welcome call");
@@ -847,9 +858,12 @@ static void test_pickup_damage_lifecycle(void) {
         expect(td.mode==TD_ROAM&&td.job==jobs[kind]&&td.stage==0&&td.health==100,
                "actual authored offer acceptance begins an empty approach at stage0 with fresh cargo condition");
         if(lifecycle) {
+            /* Drive to the contract's own pickup (Union, or the museum for the passenger). */
+            td_stop_t pickup;td_get_stop(td_job.route[0],&pickup);
+            td.u=td.safe_u=td.park_u=pickup.u*16;td.v=td.safe_v=td.park_v=pickup.v*16;
             world_tick(0,0);world_tick(J_SELECT,1);
             expect(td.mode==TD_ROAM&&td.job==jobs[kind]&&td.stage==1&&td.health==100,
-                   "an actual stopped Union pickup advances the accepted authored job into carrying");
+                   "an actual stopped pickup at the contract's first stop advances the accepted authored job into carrying");
         }
         if(lifecycle==2){td.job=TD_NONE;td.stage=9;td.health=37;}
         td.cooldown=td_turn_tick=td_tick=0;td.speed=24;td.heading=0;
@@ -1157,7 +1171,7 @@ static void test_v5_migration_and_interrupted_upgrade(void) {
     expect(td_restore(),"interruption fixture starts from a genuine decoded v5 snapshot");
     UBYTE stable_image[sizeof(td_test_sram)];memcpy(stable_image,td_test_sram,sizeof(stable_image));
     td_state_t candidate=stable;candidate.cash+=111;candidate.complete[9]=1;candidate.done++;
-    candidate.stage=4;candidate.left=119;candidate.ride_left=2;td=candidate;sram_writes=0;td_save();
+    candidate.stage=2;candidate.left=119;candidate.ride_left=2;td=candidate;sram_writes=0;td_save();
     unsigned count=sram_writes;
     expect(count==sizeof(td)+9,"upgrade trace counts every real v6 payload and metadata store");
     for(volatile unsigned cut=1;cut<=count;cut++) {
@@ -1586,6 +1600,15 @@ static void test_walk_pace_dispatch_and_foot_delivery(void) {
         diagonal_u=td.u-start_u;diagonal_v=td.v-start_v;
         expect(diagonal_u*diagonal_u+diagonal_v*diagonal_v<=8*8,"each alternating diagonal step stays below cardinal pace");
     }
+    /* Story order: contract 9 (the neighbourhoods) waits for contract 7 to end
+     * the first chapter's story, however many deliveries are in. */
+    native_case();td_get_job(8,&td_offer);
+    expect(td_offer.min_done==6&&td_offer.after==6,"the second chapter opens after six deliveries and contract 7");
+    td.done=6;td.complete[0]=0x3F;td_ready_offer();expect(td.menu!=8,"dispatch does not offer a chapter its story has not reached");
+    td.mode=TD_BOARD;td.menu=8;td_get_job(8,&td_offer);td.msg=0;joy=0;world_tick(J_A,2);
+    expect(td.job==TD_NONE&&td.msg==3,"a contract the story has not reached is locked");
+    native_case();td.done=6;td.complete[0]=0x7F;td.complete[0]&=~0x20;td.mode=TD_BOARD;td.menu=8;td_get_job(8,&td_offer);joy=0;world_tick(J_A,2);
+    expect(td.job==8,"finishing contract 7 opens the next chapter");
     native_case();td.done=3;td.complete[0]=7;td_ready_offer();
     expect(td.menu==4&&td_offer.vehicle==TD_NONE,"dispatch after three car completions skips truck-only job04 for compatible relay05");
     td.vehicle=1;td_ready_offer();expect(td.menu==3&&td_offer.vehicle==1,"truck dispatch still offers the first unlocked truck contract");

@@ -535,6 +535,24 @@ for _ty in range(3):
     for _tx in range(3):
         TILES[f'portrait_{_ty * 3 + _tx}'] = ('ui', [row[_tx * 8:_tx * 8 + 8] for row in PORTRAIT[_ty * 8:_ty * 8 + 8]])
 
+
+# Callers patched through the radio (Margo and the clients): a dark-haired
+# silhouette in a jacket, left half drawn and mirrored. The top corners are
+# blank, so the 3x3 card needs five tiles (the right column flips the left).
+_CALLER_LEFT = [
+    "............", "..........##", "........####", "........####",
+    "........##aa", "........#aaa", "........#a#a", "........#aaa",
+    ".......##aaa", "........#aaa", "........#a##", ".........#aa",
+    "..........#a", "......###.aa", "....####..#a", "...#####...#",
+    "..######....", ".#######....", ".#######..#.", ".#####s#....",
+    ".#######....", ".########...", ".#########..", ".##########.",
+]
+CALLER = [row + row[::-1] for row in _CALLER_LEFT]
+assert all(c == '.' for row in CALLER[:8] for c in row[:8] + row[16:]), 'caller corners must be blank'
+for _name, (_ty, _tx) in (('caller_top', (0, 1)), ('caller_face_l', (1, 0)), ('caller_face_m', (1, 1)),
+                          ('caller_body_l', (2, 0)), ('caller_body_m', (2, 1))):
+    TILES[_name] = ('ui', [row[_tx * 8:_tx * 8 + 8] for row in CALLER[_ty * 8:_ty * 8 + 8]])
+
 # Glyph codes 0x80.. in this order; (tile, xflip, yflip).
 CODES = [
     ('FRAME_TL', 'frame_tl', 0, 0), ('FRAME_TR', 'frame_tl', 1, 0),
@@ -564,7 +582,10 @@ CODES = [
     ('EMBLEM_BL', 'emblem_bl', 0, 0), ('EMBLEM_BR', 'emblem_br', 0, 0),
     ('MEDIC', 'icon_medic', 0, 0), ('AMMO', 'icon_ammo', 0, 0),
     ('SUN', 'icon_sun', 0, 0), ('MOON', 'icon_moon', 0, 0),
-] + [(f'PORTRAIT_{_k}', f'portrait_{_k}', 0, 0) for _k in range(9)]
+] + [(f'PORTRAIT_{_k}', f'portrait_{_k}', 0, 0) for _k in range(9)] + [
+    ('CALLER_T', 'caller_top', 0, 0), ('CALLER_FL', 'caller_face_l', 0, 0), ('CALLER_FM', 'caller_face_m', 0, 0),
+    ('CALLER_FR', 'caller_face_l', 1, 0), ('CALLER_BL', 'caller_body_l', 0, 0), ('CALLER_BM', 'caller_body_m', 0, 0),
+    ('CALLER_BR', 'caller_body_l', 1, 0)]
 
 
 # Original bold UI font: 2-pixel stems, 6 pixels wide (M and W use 7), seven

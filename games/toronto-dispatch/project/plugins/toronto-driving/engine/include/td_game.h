@@ -53,7 +53,10 @@ extern UBYTE td_traffic_bases[6];
 #define TD_BUSTED 9
 #define TD_WASTED 10
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
-typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
+/* A contract: it opens after min_done deliveries and once the contract
+ * before it in the story (after, TD_NONE for none) is done. */
+typedef struct { char title[19]; UBYTE kind,count,vehicle,min_done,after; UWORD seconds,reward; UBYTE route[12]; } td_job_t;
+#define TD_DONE(job) (td.complete[(job)>>3]&(1<<((job)&7)))
 typedef struct {
     UWORD u,v,park_u,park_v,cash,seconds,left;
     WORD speed;
@@ -96,19 +99,30 @@ void td_ui_hud_tick(void) BANKED;
  * the tick types, holds and closes calls and raises the story beats that
  * come from the city's state (stars, nightfall, quiet stretches). */
 void td_radio_say(UBYTE script) BANKED;
+/* A contract's briefing (0), first pickup (1) or delivery (2) call. */
+void td_radio_contract(UBYTE job,UBYTE part) BANKED;
+/* The delivery call and what a first delivery brings: the beat that follows
+ * the contract, a delivery-count beat, the openings of chapters it unlocks
+ * (td_radio_open() taken before the delivery counted) and the finale. */
+void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) BANKED;
+/* The story chapters open now, one bit each. */
+UWORD td_radio_open(void) BANKED;
+/* The current page's speaker card into dest; TRUE when it is Rosa. */
+UBYTE td_radio_speaker(char *dest) BANKED;
 void td_radio_tick(void) BANKED;
 UBYTE td_radio_playing(void) BANKED;
 /* Playing script (TD_NONE when idle), its page, characters typed, frames
  * the finished page has been up and the one queued script (td_radio.c). */
-extern UBYTE td_radio_script,td_radio_next,td_radio_page,td_radio_pos,td_radio_hold;
+extern UBYTE td_radio_script,td_radio_next,td_radio_pos,td_radio_hold;
+extern UWORD td_radio_page;
 /* Stars when the radio last looked: a change brings a police call. */
 extern UBYTE td_radio_wanted;
 /* The tick only has work during a call, on a change of stars or once a
  * second for the clock and chatter. */
 #define TD_RADIO_DUE() (td_radio_script!=TD_NONE||td.wanted!=td_radio_wanted||!(td_tick&63))
-/* Updates a finished page stays up (about two and a half seconds). */
-#define TD_RADIO_HOLD 150
-/* Typed part of the current page's line 0 or 1, padded to 17 characters. */
+/* Updates a finished page stays up (about two seconds). */
+#define TD_RADIO_HOLD 120
+/* Typed part of the current page's line 0, 1 or 2, padded to 17 characters. */
 void td_radio_line(UBYTE line,char *dest) BANKED;
 void td_chapter_name(UBYTE chapter,char *dest) BANKED;
 /* td_ui.c side of a call: TRUE once the card is up (opens it when the HUD

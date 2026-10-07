@@ -15,105 +15,44 @@ ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
 KINDS = ['PARCEL ROUND', 'FRAGILE ART', 'EXPRESS FILES', 'HEAVY FREIGHT',
          'TRANSIT RELAY', 'PASSENGER RUN', 'RETURN PAPERS', 'ISLAND POST']
-CHAPTERS = ['First shift', 'Neighbourhood connections', 'City events',
-            'Crossing the city', 'Waterfront work', 'Arts and audiences',
-            'Evening dispatch', 'Across the network', 'Master courier']
+STORY = json.loads((ROOT / 'content/story.json').read_text())
+CHAPTERS = [c['name'] for c in STORY['chapters']]
 
-# Titles and brief lines fit the native handheld UI. Every route is authored,
-# rather than rotating an unrelated pool of landmarks to inflate the job count.
-# Each row is one chapter, with the eight native rule types in KINDS order.
-CONTRACTS = [
-    [
-        ('MARKET START', ('MARKET PARCEL', 'UNION TO MARKET'), [0, 1]),
-        ('FIRST ART CRATE', ('ART CRATE FOR AGO', 'BRAKE BEFORE TURNS'), [0, 5]),
-        ('DISTILLERY FILES', ('SEALED OFFICE FILE', 'BEAT THE DEADLINE'), [0, 2]),
-        ('SHORE SUPPLIES', ('TRUCK LOADS ONLY', 'MARKET TO HARBOUR'), [0, 1, 2, 11]),
-        ('FIRST CONNECTION', ('POCKET MAIL RELAY', 'TRY TRAIN AND BUS'), [0, 17, 16, 18, 16, 19, 16, 0]),
-        ('STATION PICKUPS', ('PASSENGERS BY CAR', 'SMOOTH CITY RIDES'), [0, 1, 2, 9, 17, 6, 23, 0]),
-        ('SIGNED AND SEALED', ('COLLECT SIGNATURES', 'RETURN TO UNION'), [0, 3, 1, 0]),
-        ('CENTRE LETTERS', ('PARK THEN FERRY', 'WALK THE LAST LEG'), [10, 21, 25, 21, 10]),
-    ],
-    [
-        ('SHOPFRONT ROUND', ('SMALL SHOP PARCELS', 'LINK LOCAL STOPS'), [0, 1, 2, 11, 4, 7, 8, 0]),
-        ('GALLERY LOAN', ('FRAMED PRINTS', 'DELIVER INTACT'), [5, 6, 3, 4, 7, 5]),
-        ('CROSSING DEADLINE', ('CIVIC FILE RUN', 'CHOOSE YOUR BRIDGE'), [0, 3, 12, 2, 9, 19, 17, 0]),
-        ('STOCK THE STALLS', ('MARKET STOCK TRUCK', 'WEST TO OLD TOWN'), [11, 2, 1, 0, 23, 8, 4, 0]),
-        ('BUS CONNECTIONS', ('STATION LETTERS', 'BUS AT WELLESLEY'), [17, 15, 0, 16, 19, 16, 18, 16, 17]),
-        ('MUSEUM OUTING', ('MUSEUM VISIT RIDES', 'KEEP THE CAR CALM'), [0, 6, 17, 3, 1, 11, 23, 0]),
-        ('HARBOUR RECEIPTS', ('SIGNED CARGO SLIPS', 'BACK TO THE DEPOT'), [0, 11, 2, 1, 3, 0]),
-        ('HANLAN POST', ('HANLAN LETTERS', 'FERRY THEN FOOT'), [10, 20, 24, 20, 10]),
-    ],
-    [
-        ('MARKET TO MARKET', ('NEIGHBOURHOOD MAIL', 'WEST TO EAST ROUND'), [8, 7, 5, 4, 3, 1, 2, 11, 0]),
-        ('OPENING NIGHT ART', ('EXHIBITION CRATES', 'NO HARD IMPACTS'), [6, 5, 7, 4, 3, 1, 23, 6]),
-        ('BRIDGE DOCUMENTS', ('URGENT CITY MAIL', 'BRIDGE TO BRIDGE'), [7, 3, 14, 16, 19, 9, 2, 0]),
-        ('EVENT EQUIPMENT', ('TRUCK EVENT LOADS', 'RETURN EMPTY CASES'), [2, 11, 23, 8, 7, 4, 1, 0]),
-        ('CAMPUS ENVELOPES', ('LIGHT CAMPUS MAIL', 'COMPARE THE ROUTES'), [18, 16, 0, 12, 15, 17, 16, 19, 16, 0]),
-        ('AUDIENCE ARRIVALS', ('EVENT PASSENGERS', 'CAR TO EACH DOOR'), [17, 6, 5, 4, 23, 11, 2, 1, 0]),
-        ('PERMIT LOOP', ('SIGNED EVENT FORMS', 'RETURN TO START'), [0, 3, 5, 6, 17, 19, 9, 2, 0]),
-        ('WARD COTTAGE MAIL', ('WARD LETTER ROUND', 'LEAVE CAR MAINLAND'), [10, 22, 26, 22, 10]),
-    ],
-    [
-        ('WEST END THREAD', ('SHOP REPAIR KITS', 'STOPS IN ORDER'), [0, 23, 4, 8, 7, 5, 6, 3, 1, 0]),
-        ('GLASS ACROSS TOWN', ('GLASS NEEDS CARE', 'PLAN WIDE TURNS'), [1, 2, 9, 19, 17, 6, 5, 4, 23, 1]),
-        ('NORTH SOUTH FILES', ('OFFICE CUTOFF RUN', 'STOP AT THE BEACON'), [0, 17, 19, 9, 2, 11, 23, 3, 0]),
-        ('CITY WORK CREW', ('WORK CREW TOOLS', 'TRUCK EACH STOP'), [8, 7, 4, 23, 0, 1, 2, 11, 9, 8]),
-        ('YONGE CONNECTION', ('STATION MAIL', 'KEEP FARE MONEY'), [0, 14, 17, 15, 12, 16, 18, 16, 19, 16, 0]),
-        ('CITY TOUR RIDES', ('VISITOR RIDES', 'SMOOTH CITY TOUR'), [0, 23, 5, 6, 17, 19, 9, 2, 1, 0]),
-        ('CROSS CITY INK', ('SIGN AT EACH STOP', 'UNION GETS COPIES'), [0, 8, 7, 5, 6, 17, 19, 9, 2, 1, 0]),
-        ('WEST CENTRE POST', ('TWO ISLAND ROUNDS', 'TRANSFER MAINLAND'), [10, 20, 24, 20, 10, 21, 25, 21, 10]),
-    ],
-    [
-        ('HARBOUR SHOP MAIL', ('WATERFRONT PARCELS', 'SHORE TO CITY'), [11, 2, 1, 0, 23, 4, 7, 8, 3, 11]),
-        ('SHORE DISPLAY', ('FRAGILE DISPLAY', 'TAKE CARE AT CURBS'), [5, 4, 23, 0, 11, 2, 1, 3, 6, 5]),
-        ('DOCK OFFICE DASH', ('URGENT SHORE FILES', 'BEAT THE CLOCK'), [0, 11, 2, 9, 19, 17, 15, 3, 23, 0]),
-        ('HARBOUR LOADS', ('BULKY SHORE CARGO', 'WIDE TRUCK TURNS'), [0, 23, 11, 2, 1, 9, 8, 4, 3, 0]),
-        ('SHORE CONNECTION', ('SMALL SHORE KIT', 'TRAIN THEN WALK'), [11, 0, 17, 16, 19, 16, 18, 16, 12, 10]),
-        ('FERRY CONNECTIONS', ('RIDES TO THE SHORE', 'PARK AT DROP OFFS'), [0, 6, 17, 19, 9, 2, 11, 10, 23, 0]),
-        ('CARGO SIGNOFF', ('SIGNED DOCK PAPERS', 'BRING COPIES HOME'), [0, 11, 2, 9, 19, 17, 6, 3, 1, 0]),
-        ('CENTRE WARD POST', ('TWO ISLAND PARCELS', 'FOOTPATHS TO DOORS'), [10, 21, 25, 21, 10, 22, 26, 22, 10]),
-    ],
-    [
-        ('CULTURE PARCELS', ('BOOKS AND PROGRAMS', 'MUSEUM TO MARKET'), [6, 17, 3, 1, 2, 11, 23, 4, 7, 5, 6]),
-        ('ART EXCHANGE', ('FRAMED ART LOANS', 'KEEP CRATES WHOLE'), [5, 7, 8, 4, 23, 0, 1, 2, 3, 6, 5]),
-        ('PRINT SHOP CUTOFF', ('PRINT SHOP FILES', 'TIME THE CROSSINGS'), [7, 5, 6, 17, 19, 9, 2, 11, 3, 0]),
-        ('STAGE CASES', ('HEAVY EVENT CASES', 'TRUCK LOADING RUN'), [23, 0, 1, 2, 11, 9, 19, 6, 5, 4, 23]),
-        ('ART VIA TRANSIT', ('GALLERY MAIL', 'SMART TRANSFERS'), [5, 14, 17, 16, 18, 16, 19, 16, 12, 0, 5]),
-        ('GALLERY NIGHT', ('GALLERY CAR RIDES', 'PROTECT PASSENGERS'), [0, 5, 7, 8, 4, 23, 11, 2, 9, 6, 0]),
-        ('PROGRAM APPROVAL', ('COLLECT APPROVALS', 'RETURN ORIGINAL'), [0, 5, 7, 8, 4, 23, 11, 2, 9, 3, 0]),
-        ('WARD HANLAN POST', ('EAST AND WEST POST', 'FERRY FOOT FERRY'), [10, 22, 26, 22, 10, 20, 24, 20, 10]),
-    ],
-    [
-        ('LATE SHOP ROUND', ('LAST SHOP PARCELS', 'CITY STILL MOVES'), [0, 1, 2, 9, 19, 17, 6, 5, 7, 8, 4, 0]),
-        ('EVENING EXHIBIT', ('FINAL EXHIBIT LOAD', 'SLOW IN TURNS'), [6, 3, 1, 2, 11, 23, 4, 8, 7, 5, 6]),
-        ('LAST FILE RUN', ('URGENT FINAL FILES', 'PLAN THEN DRIVE'), [0, 8, 7, 5, 6, 17, 19, 9, 2, 3, 0]),
-        ('CLOSING STOCK', ('SHOP STOCK RETURNS', 'WIDE TURNS LOADED'), [1, 2, 11, 23, 4, 8, 7, 5, 3, 0, 1]),
-        ('NIGHT NETWORK', ('DISPATCH LETTERS', 'CATCH DEPARTURE'), [19, 16, 12, 0, 17, 15, 16, 18, 16, 14, 0]),
-        ('EVENING RIDES', ('LATE CITY RIDES', 'SAFE CAR JOURNEYS'), [0, 1, 2, 11, 23, 4, 8, 7, 5, 6, 17, 0]),
-        ('CLOSING LEDGER', ('SIGNED SHOP LEDGER', 'RETURN IT TO DEPOT'), [0, 23, 4, 8, 7, 5, 6, 17, 19, 9, 1, 0]),
-        ('THREE ISLAND POST', ('ALL THREE ISLANDS', 'WALK EACH DELIVERY'), [10, 20, 24, 20, 10, 21, 25, 21, 10, 22, 26]),
-    ],
-    [
-        ('CITY LINK PARCELS', ('CITY PARCEL ROUND', 'MANY ROUTE CHOICES'), [8, 4, 23, 11, 2, 9, 19, 17, 6, 5, 7, 0]),
-        ('FRAGILE CITY LINK', ('CITY ART HANDOFFS', 'CONDITION MATTERS'), [5, 6, 17, 19, 9, 2, 1, 11, 23, 4, 8, 5]),
-        ('NETWORK DEADLINE', ('EXPRESS FILE LINK', 'SAVE TIME LEGALLY'), [0, 23, 8, 7, 6, 17, 19, 9, 2, 11, 3, 0]),
-        ('NETWORK FREIGHT', ('LARGE CITY LOADS', 'TRUCK STOP CONTROL'), [11, 2, 1, 0, 23, 4, 8, 7, 6, 19, 9, 11]),
-        ('CITY TRANSFERS', ('POCKET CITY PAPERS', 'BUS TRAIN AND FOOT'), [18, 16, 19, 16, 17, 15, 0, 12, 14, 5, 1, 0]),
-        ('NEIGHBOUR RIDES', ('CITY RIDES', 'SMOOTH DRIVING'), [8, 7, 5, 6, 17, 19, 9, 2, 11, 1, 23, 0]),
-        ('SIGNATURE CHAIN', ('SIGNATURE CHAIN', 'FINAL STOP UNION'), [0, 1, 11, 2, 9, 19, 17, 6, 5, 7, 8, 0]),
-        ('ISLAND HANDOFFS', ('CENTRE WARD HANLAN', 'MAINLAND TRANSFERS'), [10, 21, 25, 21, 10, 22, 26, 22, 10, 20, 24]),
-    ],
-    [
-        ('MASTER PARCELS', ('FULL CITY PARCELS', 'EVERY STOP COUNTS'), [0, 8, 7, 5, 6, 17, 19, 9, 2, 11, 1, 23]),
-        ('MASTER ART ROUND', ('ART CARE ROUND', 'ARRIVE WITH CARE'), [6, 5, 8, 7, 4, 23, 0, 11, 2, 9, 19, 6]),
-        ('MASTER DEADLINE', ('FINAL EXPRESS RUN', 'CONTROL BEATS RUSH'), [0, 1, 2, 9, 19, 17, 6, 5, 8, 4, 23, 0]),
-        ('MASTER FREIGHT', ('FULL TRUCK CIRCUIT', 'BRAKE EARLY LOADED'), [0, 8, 7, 4, 23, 11, 2, 9, 19, 6, 3, 0]),
-        ('MASTER TRANSIT', ('NETWORK MAIL RELAY', 'TIME EACH TRANSFER'), [0, 17, 15, 16, 18, 16, 19, 16, 14, 5, 1, 0]),
-        ('MASTER RIDES', ('FULL CITY SHIFT', 'SMOOTH TO THE END'), [0, 23, 11, 2, 9, 19, 17, 6, 5, 7, 8, 1]),
-        ('MASTER RETURNS', ('FULL SIGNOFF RUN', 'ORIGINAL TO UNION'), [0, 8, 4, 23, 11, 2, 9, 19, 17, 6, 3, 0]),
-        ('MASTER ISLAND POST', ('WARD HANLAN CENTRE', 'FINAL FOOT ROUND'), [10, 22, 26, 22, 10, 20, 24, 20, 10, 21, 25]),
-    ],
-]
+
+def order_drops(pickup, drops, back, distances):
+    """Shortest visiting order for a contract's drop-offs (exact, Held-Karp),
+    from the pickup and, for returns, back to it: deliveries follow the
+    streets instead of zigzagging across the city."""
+    def cost(a, b):
+        d = distances.get((True, a, b))
+        return d if d is not None else distances[False, a, b]
+    n = len(drops)
+    best = {(1 << k, k): (cost(pickup, drops[k]), [drops[k]]) for k in range(n)}
+    for mask in range(1, 1 << n):
+        for last in range(n):
+            if (mask, last) not in best:
+                continue
+            c, path = best[mask, last]
+            for nxt in range(n):
+                if mask & (1 << nxt):
+                    continue
+                key = (mask | 1 << nxt, nxt)
+                cand = (c + cost(drops[last], drops[nxt]), path + [drops[nxt]])
+                if key not in best or cand[0] < best[key][0]:
+                    best[key] = cand
+    full = (1 << n) - 1
+    total, path = min(((c + (cost(path[-1], pickup) if back else 0), path)
+                       for (mask, _), (c, path) in best.items() if mask == full), key=lambda t: (t[0], t[1]))
+    return path
+
+
+def contract_route(contract, kind, distances):
+    pickup, drops = contract['pickup'], list(contract['drops'])
+    back = contract.get('return', False)
+    if contract.get('order') != 'fixed' and len(drops) > 1:
+        assert kind not in (4, 7), 'transit relays and Island post keep their authored order'
+        drops = order_drops(pickup, drops, back, distances)
+    return [pickup] + drops + ([pickup] if back else [])
 
 
 def parking_rows(stops):
@@ -242,6 +181,48 @@ def route_estimate(route, kind, distances):
     }, math.ceil(budget / 5) * 5
 
 
+def story_order(quests):
+    """The story's order: a contract waits for the one before it in the plot
+    (`after`). Chapter k opens with the previous chapter's spine contract
+    done, so its opening call always plays before its contracts; a contract
+    may also wait for one in its own chapter."""
+    spines = [None] + [c['spine'] - 1 for c in STORY['chapters'][:-1]]
+    for index, (quest, contract) in enumerate(zip(quests, STORY['contracts'])):
+        chapter = index // 8
+        if 'after' in contract:
+            after = contract['after'] - 1
+            assert after // 8 == chapter and after != index, (quest['id'], 'waits within its chapter')
+        else:
+            after = spines[chapter]
+        quest['after'] = None if after is None else quests[after]['id']
+    ids = [q['id'] for q in quests]
+
+    def closure(index):
+        seen = []
+        while quests[index]['after'] is not None:
+            index = ids.index(quests[index]['after'])
+            assert index not in seen, 'story order loops'
+            seen.append(index)
+        return seen
+    for chapter in range(1, len(STORY['chapters'])):
+        first = quests[chapter * 8]
+        spine = spines[chapter]
+        assert spine // 8 == chapter - 1, f'chapter {chapter} spine is in the previous chapter'
+        # A chapter opens when its first contract can be taken; every other
+        # contract of the chapter needs at least as much.
+        assert first['after'] == ids[spine] and first['min_completed'] == chapter * 6, first['id']
+        for index in range(chapter * 8, chapter * 8 + 8):
+            assert quests[index]['min_completed'] >= first['min_completed'] and spine in closure(index), ids[index]
+        assert quests[spine]['required_vehicle'] in (255, 0), f'chapter {chapter} spine needs a special vehicle'
+    #Check that the story can always be finished by distinct completions.
+    done = set()
+    while len(done) < len(quests):
+        open_now = {i for i, q in enumerate(quests) if q['min_completed'] <= len(done) and
+                    (q['after'] is None or ids.index(q['after']) in done)} - done
+        assert open_now, f'Unlock deadlock after {len(done)} completions'
+        done.add(min(open_now))
+
+
 def main():
     stops = [(u, v, name, transit) for u, v, name, transit, _ in CORE_STOPS]
     #Fictional service entrances on existing Island walkable land, not claims
@@ -252,35 +233,33 @@ def main():
     for i in range(len(stops)):
         assert distances.get((False, i, i)) == 0, f'Blocked stop: {stops[i][2]}'
     quests = []
-    for chapter, rows in enumerate(CONTRACTS):
-        assert len(rows) == len(KINDS)
-        for kind, (title, brief, route) in enumerate(rows):
-            index = len(quests)
-            assert len(title) <= 18 and all(len(line) <= 18 for line in brief), title
-            assert 2 <= len(route) <= 12 and all(a != b for a, b in zip(route, route[1:]))
-            estimate, seconds = route_estimate(route, kind, distances)
-            if index < 3:
-                seconds = 120  #Tutorials preserve time to learn the controls.
-            base_unlock = 3 if kind in (3, 4) else 8 if kind == 5 else 12 if kind == 7 else 0
-            reward = (70 + math.ceil(estimate['vehicle_route_pixels'] / 40)
-                      + (len(route) - 1) * 10 + estimate['fictional_ferry_fares']
-                      + (25 if kind in (1, 3, 5) else 15 if kind == 2 else 0)
-                      + chapter * 12)
-            quests.append({
-                'id': f'contract-{index + 1:02d}', 'title': title, 'brief': list(brief),
-                'chapter': CHAPTERS[chapter], 'kind': KINDS[kind], 'kind_id': kind,
-                'required_vehicle': 1 if kind == 3 else 0 if kind == 5 else 255,
-                'min_completed': max(base_unlock, chapter * 6), 'route': route,
-                'time_limit_seconds': seconds, 'reward': reward, 'timing_design': estimate,
-            })
+    contracts = STORY['contracts']
+    assert len(contracts) == 72 and len(CHAPTERS) == 9
+    for index, contract in enumerate(contracts):
+        chapter, kind = divmod(index, 8)
+        title, brief = contract['title'], contract['brief']
+        route = contract_route(contract, kind, distances)
+        assert len(title) <= 18 and len(brief) == 2 and all(len(line) <= 18 for line in brief), title
+        assert 2 <= len(route) <= 12 and all(a != b for a, b in zip(route, route[1:])), (title, route)
+        assert all(0 <= i < 27 for i in route), title
+        estimate, seconds = route_estimate(route, kind, distances)
+        if index < 3:
+            seconds = 120  #Tutorials preserve time to learn the controls.
+        base_unlock = 3 if kind in (3, 4) else 8 if kind == 5 else 12 if kind == 7 else 0
+        reward = (70 + math.ceil(estimate['vehicle_route_pixels'] / 40)
+                  + (len(route) - 1) * 10 + estimate['fictional_ferry_fares']
+                  + (25 if kind in (1, 3, 5) else 15 if kind == 2 else 0)
+                  + chapter * 12)
+        quests.append({
+            'id': f'contract-{index + 1:02d}', 'title': title, 'brief': list(brief),
+            'chapter': CHAPTERS[chapter], 'kind': KINDS[kind], 'kind_id': kind,
+            'required_vehicle': 1 if kind == 3 else 0 if kind == 5 else 255,
+            'min_completed': max(base_unlock, chapter * 6, contract.get('unlock', 0)), 'route': route,
+            'time_limit_seconds': seconds, 'reward': reward, 'timing_design': estimate,
+        })
     assert len(quests) == 72 and len({tuple(q['route']) for q in quests}) == 72
     assert len({q['title'] for q in quests}) == 72
-    #Check that gated chapters can always be reached by distinct completions.
-    completed = 0
-    while completed < len(quests):
-        available = sum(q['min_completed'] <= completed for q in quests)
-        assert available > completed, f'Unlock deadlock after {completed} completions'
-        completed = available
+    story_order(quests)
     content = {
         'status': 'engine-integrated',
         'scope': 'Compressed central Toronto prototype; broad Old Toronto map accuracy and full campaign duration remain release checks',
@@ -331,9 +310,11 @@ def main():
     code += ['};', 'static const td_job_t td_jobs[TD_QUESTS] = {']
     for quest in quests:
         route = quest['route'] + [255] * (12 - len(quest['route']))
-        code.append('  {"%s",%d,%d,%d,%d,%d,%d,{%s}},' % (
+        after = quest.get('after')
+        after = 255 if after is None else [q['id'] for q in quests].index(after)
+        code.append('  {"%s",%d,%d,%d,%d,%d,%d,%d,{%s}},' % (
             quest['title'], quest['kind_id'], len(quest['route']), quest['required_vehicle'],
-            quest['min_completed'], quest['time_limit_seconds'], quest['reward'], ','.join(map(str, route))))
+            quest['min_completed'], after, quest['time_limit_seconds'], quest['reward'], ','.join(map(str, route))))
     code += ['};', 'static const char td_briefs[TD_QUESTS][37] = {']
     for quest in quests:
         brief = ''.join(line.ljust(18) for line in quest['brief'])

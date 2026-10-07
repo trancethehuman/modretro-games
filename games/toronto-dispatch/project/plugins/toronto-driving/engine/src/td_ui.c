@@ -456,7 +456,7 @@ static void td_hud(UBYTE changed){
     UBYTE rows,a,b,top;
     char row_a[21];
     /* A radio call puts its three-row card above the pop-up rows. */
-    if(td_radio_script!=TD_NONE){if(!td_hud_y||changed){td_hud_y=3;td_radio_paint();changed=1;}}
+    if(td_radio_script!=TD_NONE){if(!td_hud_y||changed){td_hud_y=TD_RADIO_ROWS;td_radio_paint();changed=1;}}
     else if(td_hud_y){td_hud_y=0;changed=1;}
     if(td.mode==TD_WAIT||td.mode==TD_RIDE){
         rows=3;if(changed||td_hud_rows!=rows){td_hud_rows=rows;ui_set_pos(0,(UBYTE)(144-((td_hud_y+rows)<<3)));}
@@ -542,6 +542,7 @@ static void td_board_sheet(void){
     td_row(9,td_frame_join);
     if(td.complete[td.menu>>3]&(1<<(td.menu&7)))strcpy(td_line,TD_UI_CHECK "DONE: REPLAY PAYS");
     else if(td.done<td_offer.min_done)td_format(td_line,TD_UI_CANCEL "NEEDS %u DONE",td_offer.min_done);
+    else if(td_offer.after!=TD_NONE&&!TD_DONE(td_offer.after))td_format(td_line,TD_UI_CANCEL "AFTER JOB %u",td_offer.after+1);
     else strcpy(td_line,TD_UI_STAR "READY TO TAKE");
     td_framed(10,td_line);
     td_format(td_line,TD_UI_BTN_A "TAKE " TD_UI_BTN_B "BACK " TD_UI_DPAD "%u/%u",td.menu+1,TD_QUESTS);td_framed(11,td_line);
@@ -618,11 +619,16 @@ void td_ui_draw(void) BANKED {
 /* ------------------------------------------------------------ radio calls */
 /* The card above the HUD for td_radio.c: Rosa's portrait and name, then
  * the typed part of the current page. */
+/* Callers' portrait: blank top corners, the right column mirrors the left. */
+static const char td_caller_art[]=" " TD_UI_CALLER_T " " TD_UI_CALLER_FL TD_UI_CALLER_FM TD_UI_CALLER_FR
+    TD_UI_CALLER_BL TD_UI_CALLER_BM TD_UI_CALLER_BR;
 static void td_radio_paint(void){
-    UBYTE r;
-    for(r=0;r<3;r++){
-        td_line[0]=(char)(TD_UI_PORTRAIT_0[0]+r*3);td_line[1]=td_line[0]+1;td_line[2]=td_line[0]+2;
-        if(!r)strcpy(td_line+3,TD_RADIO_SPEAKER);else td_radio_line(r-1,td_line+3);
+    UBYTE r,rosa=td_radio_speaker(td_line+3);
+    for(r=0;r<TD_RADIO_ROWS;r++){
+        if(r>2)td_line[0]=td_line[1]=td_line[2]=' ';
+        else if(rosa){td_line[0]=(char)(TD_UI_PORTRAIT_0[0]+r*3);td_line[1]=td_line[0]+1;td_line[2]=td_line[0]+2;}
+        else{td_line[0]=td_caller_art[r*3];td_line[1]=td_caller_art[r*3+1];td_line[2]=td_caller_art[r*3+2];}
+        if(r)td_radio_line(r-1,td_line+3);
         td_row(r,td_line);
     }
 }

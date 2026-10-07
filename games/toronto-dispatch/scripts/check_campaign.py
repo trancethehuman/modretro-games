@@ -14,6 +14,12 @@ CORE_STOPS, CORE_QUESTS = 27, 72
 TOTAL_STOPS, TOTAL_QUESTS = 51, 88
 
 
+
+def after_index(quests, quest):
+    """The native index of the contract this one waits for (255 for none)."""
+    after = quest.get('after')
+    return 255 if after is None else [q['id'] for q in quests].index(after)
+
 def decode(text):
     result, pos = [], 0
     while pos < len(text):
@@ -175,7 +181,7 @@ def check():
     assert len({tuple(q['route']) for q in quests}) == TOTAL_QUESTS, 'Repeated contract routes'
     completed = set()
     while True:
-        available = {q['id'] for q in quests if q['min_completed'] <= len(completed)}
+        available = {q['id'] for q in quests if q['min_completed'] <= len(completed) and q.get('after') in completed | {None}}
         if available <= completed:
             break
         completed |= available
@@ -189,11 +195,11 @@ def check():
         u, v, name, transit, district, reserved = row
         expected = (stop['u'], stop['v'], stop['name'], stop['transit'], stop.get('district', 0), stop.get('reserved', 0))
         assert (int(u), int(v), name, int(transit), int(district or 0), int(reserved or 0)) == expected, f"Stale native stop: {stop['id']}"
-    native_jobs = re.findall(r'\{"([^"]+)",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),\{([\d,]+)\}\}', table(code, 'td_jobs'))
+    native_jobs = re.findall(r'\{"([^"]+)",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),\{([\d,]+)\}\}', table(code, 'td_jobs'))
     assert len(native_jobs) == TOTAL_QUESTS, 'Native contract row count disagrees'
     for quest, row in zip(quests, native_jobs):
         title, *numbers, route = row
-        expected_numbers = [quest['kind_id'], len(quest['route']), quest['required_vehicle'], quest['min_completed'], quest['time_limit_seconds'], quest['reward']]
+        expected_numbers = [quest['kind_id'], len(quest['route']), quest['required_vehicle'], quest['min_completed'], after_index(quests, quest), quest['time_limit_seconds'], quest['reward']]
         assert title == quest['title'][:18].upper() and list(map(int, numbers)) == expected_numbers, f"Stale native contract: {quest['id']}"
         assert list(map(int, route.split(','))) == quest['route'] + [255] * (12 - len(quest['route']))
     native_briefs = re.findall(r'"([^"]*)"', table(code, 'td_briefs'))

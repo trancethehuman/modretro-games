@@ -94,6 +94,14 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - Larger cars, a sticky and wider pistol lock, and transit prompts, fare checks and a more frequent 501.
 - Next: station markers on the city map, laneways in the largest blocks, larger diagonal car frames if sprite tiles allow, and applying the same method to the West and East scenes.
 
+## Story overhaul — implemented 2026-10-07, human review pending
+
+- [x] Original premise and nine-chapter arc (Margo's depot, Rushly, the Lakelight contract) with 27 speaker cards; clients speak on delivery.
+- [x] Briefing, pickup and delivery calls for all 88 contracts; routes and stop lists in story order and shortest driving order.
+- [x] Chapters open after the previous chapter's spine contract; plot beats follow their contracts; `check_story.py` proves every fact is heard before it is mentioned.
+- [ ] Human read-through on the Chromatic: dialogue length, typing speed and the pacing of chapter calls.
+- Next: a story recap in the pause menu and individual portraits if UI tiles can be freed.
+
 ## Next playable polish
 
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.

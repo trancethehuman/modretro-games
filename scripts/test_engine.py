@@ -131,9 +131,10 @@ def native_fixture(game, include):
                 type(job["reward"]) is int and 0 < job["reward"] <= 65535 and
                 isinstance(job["title"], str) and job["title"].isascii() and len(job["title"]) <= 18,
                 f"Contract cannot be represented by the native fixture: {job['id']}.")
-        content.append("{%s,%d,%d,%d,%d,%d,%d,{%s}}," % (
+        after = 255 if job.get("after") is None else [row["id"] for row in job_rows].index(job["after"])
+        content.append("{%s,%d,%d,%d,%d,%d,%d,%d,{%s}}," % (
             json.dumps(job["title"]), job["kind_id"], len(route), job["required_vehicle"],
-            job["min_completed"], job["time_limit_seconds"], job["reward"],
+            job["min_completed"], after, job["time_limit_seconds"], job["reward"],
             ",".join(map(str, route + [255] * (12 - len(route))))))
     content += ["};", ""]
     return ("static const unsigned native_widths[TD_DISTRICT_COUNT]={" + ",".join(map(str, widths)) + "};\n"

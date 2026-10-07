@@ -224,7 +224,7 @@ static UBYTE td_cross_portal(UWORD old_u,UWORD old_v){
     return td_change_district(crossing.district,crossing.u,crossing.v);
 }
 void td_finish(UBYTE success) BANKED {
-    UBYTE done_before=td.done;
+    UBYTE done_before=td.done;UWORD open_before=td_radio_open();
     td_audio_play(success?TD_AUDIO_COMPLETE:TD_AUDIO_FAIL);
     if(success){
         if(!(td.complete[td.job>>3]&(1<<(td.job&7)))){td.complete[td.job>>3]|=1<<(td.job&7);td.done++;}
@@ -234,20 +234,22 @@ void td_finish(UBYTE success) BANKED {
         td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_CASH,td.u>>4,(td.v>>4)-10);
         td_anim_spawn(TD_PART_FLASH,0,td.u>>4,(td.v>>4)-12);
     }
-    /* Rosa calls once the result card closes: a new chapter, the west/east
-     * routes opening, the last contract, or a word on the delivery. */
-    if(!success)td_radio_say(TD_RADIO_FAIL);
-    else if(td.done==TD_QUESTS)td_radio_say(TD_RADIO_MASTER);
-    else if(td.done!=done_before&&td.done%6==0&&td.done<=6*TD_RADIO_CHAPTER_COUNT)td_radio_say(TD_RADIO_CHAPTER+td.done/6-1);
-    else if(td.done!=done_before&&td.done==3)td_radio_say(TD_RADIO_OPEN_ENDS);
-    else td_radio_say(TD_RADIO_DONE+td.done%TD_RADIO_DONE_COUNT);
+    /* The radio picks up once the result card closes: the client on the
+     * delivery, then whatever story a first delivery moves on (a plot turn,
+     * a chapter it unlocks, or the finale after the last contract). */
+    if(!success)td_radio_say(TD_RADIO_FAIL+td.seconds%TD_RADIO_FAIL_COUNT);
+    else td_radio_done(td.job,done_before,open_before);
     td.job=TD_NONE;td.speed=0;td_vx=td_vy=0;td.mode=TD_RESULT;td_set_target();td_save();td_ui_draw();
+}
+/* Enough deliveries in, and the story has reached it. */
+static UBYTE td_offer_open(void){
+    return td.done>=td_offer.min_done&&(td_offer.after==TD_NONE||TD_DONE(td_offer.after));
 }
 static void td_ready_offer(void){
     UBYTE i;
     for(i=0;i<TD_QUESTS;i++){
         td_get_job(i,&td_offer);
-        if(td.done>=td_offer.min_done&&!(td.complete[i>>3]&(1<<(i&7)))&&(td_offer.vehicle==TD_NONE||(!td.onfoot&&td.vehicle==td_offer.vehicle))){td.menu=i;return;}
+        if(td_offer_open()&&!TD_DONE(i)&&(td_offer.vehicle==TD_NONE||(!td.onfoot&&td.vehicle==td_offer.vehicle))){td.menu=i;return;}
     }
     td.menu=0;td_get_job(0,&td_offer);
 }
@@ -260,7 +262,7 @@ static void td_interact(void){
     td.stage++;
     if(td.stage==td_job.count){td_finish(TRUE);return;}
     td_audio_play(TD_AUDIO_PICKUP);td_anim_spawn(TD_PART_POP,TD_FRAME_PARCEL,td.u>>4,(td.v>>4)-10);
-    if(td.stage==1)td_radio_say(TD_RADIO_PICKUP);
+    if(td.stage==1)td_radio_contract(td.job,1);
     td_set_target();td_save();td_ui_draw();
 }
 /* Stations reach the sign on the sidewalk beside the curb-lane stop. The
@@ -470,10 +472,10 @@ static void td_menu_update(void){
         if(INPUT_LEFT_PRESSED){td.menu=(td.menu+TD_QUESTS-1)%TD_QUESTS;td_get_job(td.menu,&td_offer);}
         if(INPUT_A_PRESSED){
             if(td.job!=TD_NONE){td_message(2);return;}
-            if(td.done<td_offer.min_done){td_message(3);return;}
+            if(!td_offer_open()){td_message(3);return;}
             if(td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)){td_message(2);return;}
             td.job=td.menu;td_job=td_offer;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);
-            td_radio_say(TD_RADIO_JOB+td_job.kind);td_set_target();td_save();td_ui_draw();return;
+            td_radio_contract(td.job,0);td_set_target();td_save();td_ui_draw();return;
         }
     }else if(td.mode==TD_TRANSIT){
         if((INPUT_UP_PRESSED||INPUT_DOWN_PRESSED)&&(td.transit_origin&63)==16){

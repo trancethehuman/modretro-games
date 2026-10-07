@@ -1,5 +1,16 @@
 # Testing record
 
+## Story overhaul — candidate, 2026-10-07
+
+Same toolchain as below; CLI build and PyBoy evidence only. "Previous" is the pop-up HUD candidate `6af837c1…`.
+
+- ROM: `make:rom` of this source, 524,288 bytes, SHA-256 `bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb`. Memory guard passes: heap `DAFE`, stack `DF00`, 1,026 bytes of reserve (guard 1,024; previous 1,040). The story queue first left exactly 1,024; removing write-only radio state recovered two bytes. Radio text: 47 scripts and 264 contract calls in 521 one-card pages across two ROM banks.
+- `make check` passes: 4,422 host engine checks (new: contract 9 waits for contract 7 at six deliveries, dispatch skips it and a take is refused as locked, finishing contract 7 opens it; a delivery hands the radio its contract, the count and the chapters open before it; a failure is not a delivery), 7,410,743 atlas UI checks (new: the board's "AFTER JOB 7", "READY TO TAKE" and "NEEDS 6 DONE" rows; the delivery call first, then the rival who follows contract 9; contract 7 at five deliveries opening nothing until the sixth; contract 7 opening the chapter at six; a replay moving nothing on; the contract's beat before the count's; the finale after the last delivery), the story checker (88 contracts with briefing, pickup and delivery calls; speakers, places, route order and story order), campaign checks with story-order deadlock closure, and radio freshness (every line fits one card).
+- Emulator scenarios (PyBoy; inputs and memory writes in `docs/screenshots/provenance.json`): the welcome and the first job's briefing, pickup and Sal's answer under her own card; with six deliveries but contract 7 open, the board shows contract 9 as "AFTER JOB 7"; delivering contract 7 plays Margo's answer and then the second chapter's opening; delivering contract 9's three drops plays Marco's thanks and then Dev's first appearance and Rosa's reply; delivering the ledger (contract 55) plays Margo tearing up Vance's offer, then the festival-week chapter with Dev quitting under "DEV - RUSHLY" and thanking Margo under "DEV - THE DEPOT".
+- Pacing, PyBoy, 3,600 frames per route with attention held at zero, previous -> this build. Driving from boot: 56.29 -> 55.29 updates per second over the usual ten routes and 56.54 -> 56.03 over ten more; driving after the welcome call ends: 55.26 -> 55.03 over ten; walking 58.85 -> 58.58 over four. Seeded inputs give different paths once any timing changes (one route ran 43.7 with heavy traffic on this build; another ran 50.9), so single routes move by several updates per second between builds. Parked from boot with no input, where paths cannot differ: 59.43 -> 59.20 while a call types (the welcome call is longer now) and 59.91 -> 59.87 otherwise, with the same median idle time at the vertical blank (45/46 and 48/48 scanlines). Story calls add only a queue check at the end of a call and a few table reads per delivery.
+- OAM: no sprite changes; not remeasured.
+- Not verified: hardware or cartridge display and timing, plugin build, a full campaign playthrough in the emulator, and human reading of the dialogue, call pacing and the story-order gates.
+
 ## Pop-up HUD — candidate, 2026-10-07
 
 Same toolchain as below; CLI build and PyBoy evidence only.

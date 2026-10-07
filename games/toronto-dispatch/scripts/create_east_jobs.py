@@ -22,7 +22,7 @@ OUTPUT = ROOT / "content/districts/east_jobs.json"
 PREFIX_STOPS, PREFIX_QUESTS = 35, 80
 PREFIX_STOP_FIELDS = ("id", "u", "v", "name", "transit", "district", "reserved")
 PREFIX_STOPS_SHA256 = "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380"
-PREFIX_QUESTS_SHA256 = "30cc65f0d9226a944dbedd421a7338dad4e9c9b58326c390d52526e1a1121d2a"
+PREFIX_QUESTS_SHA256 = "a7c7e8dd86ec3bd0b1db984e7f1788d26a4468ab0df793e59a83f7274788edb7"
 STOP_KEYS = ("danforth_hall", "withrow_walk", "riverside_queen", "gerrard_pape",
              "carlaw_works", "leslie_queen", "greenwood_walk", "ashbridge_queen")
 STOP_NAMES = ("DANFORTH HALL", "WITHROW POST", "RIVERSIDE QUEEN", "GERRARD / PAPE",
@@ -63,6 +63,12 @@ CONTRACTS = (
 )
 
 
+
+def after_index(quests, quest):
+    """The native index of the contract this one waits for (255 for none)."""
+    after = quest.get('after')
+    return 255 if after is None else [q['id'] for q in quests].index(after)
+
 def native_table(code, name):
     found = re.search(r"\b" + re.escape(name) + r"\s*\[[^;=]+\]\s*=\s*\{(.*?)\n\};", code, re.S)
     assert found, f"Missing native prefix table: {name}"
@@ -85,11 +91,11 @@ def preserved_prefix(campaign):
         u, v, name, transit, district, flags = row
         assert (int(u), int(v), name, int(transit), int(district), int(flags)) == (
             stop["u"], stop["v"], stop["name"], stop["transit"], stop.get("district", 0), stop.get("reserved", 0)), f"Native stop prefix differs: {stop['id']}"
-    rows = re.findall(r'\{"([^"]+)",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),\{([\d,]+)\}\}', native_table(code, "td_jobs"))
+    rows = re.findall(r'\{"([^"]+)",(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),\{([\d,]+)\}\}', native_table(code, "td_jobs"))
     assert len(rows) >= PREFIX_QUESTS, "Native contract prefix is unavailable"
     for job, row in zip(jobs, rows[:PREFIX_QUESTS]):
         title, *numbers, route = row
-        expected = [job["kind_id"], len(job["route"]), job["required_vehicle"], job["min_completed"], job["time_limit_seconds"], job["reward"]]
+        expected = [job["kind_id"], len(job["route"]), job["required_vehicle"], job["min_completed"], after_index(jobs, job), job["time_limit_seconds"], job["reward"]]
         assert title == job["title"] and list(map(int, numbers)) == expected, f"Native contract prefix differs: {job['id']}"
         assert list(map(int, route.split(","))) == job["route"] + [255] * (12 - len(job["route"])), f"Native contract route differs: {job['id']}"
     briefs = re.findall(r'"([^"]*)"', native_table(code, "td_briefs"))

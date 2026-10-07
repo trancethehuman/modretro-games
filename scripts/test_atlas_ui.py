@@ -26,6 +26,9 @@ def main():
         shutil.copyfile(ENGINE / "src/td_transit.c", work / "transit_under_test.c")
         shutil.copyfile(ENGINE / "src/td_radio.c", work / "radio_under_test.c")
         shutil.copyfile(ENGINE / "src/td_hud.c", work / "hud_under_test.c")
+        texts = sorted(ENGINE.glob("src/td_radio_text*.c"))
+        for k, path in enumerate(texts):
+            shutil.copyfile(path, work / f"radio_text{k}_under_test.c")
         shutil.copyfile(FIXTURES / "gbvm_stubs.h", work / "gbvm_stubs.h")
         (work / "ui_host.h").write_text("""#ifndef TD_ATLAS_UI_HOST_H
 #define TD_ATLAS_UI_HOST_H
@@ -46,7 +49,8 @@ void ui_set_pos(UBYTE x,UBYTE y);
                         "-Wno-unknown-pragmas", "-Wno-deprecated-declarations", "-fsanitize=address,undefined",
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(FIXTURES / "atlas_ui_harness.c"), str(work / "transit_under_test.c"),
-                        str(work / "radio_under_test.c"), str(work / "hud_under_test.c"), "-o", str(binary)], check=True)
+                        str(work / "radio_under_test.c"), str(work / "hud_under_test.c"),
+                        *[str(work / f"radio_text{k}_under_test.c") for k in range(len(texts))], "-o", str(binary)], check=True)
         raise SystemExit(subprocess.run([str(binary)], check=False).returncode)
 
 

@@ -108,6 +108,8 @@
         "src/td_anim.c",
         "include/td_radio_data.h",
         "src/td_radio.c",
+        "src/td_radio_text0.c",
+        "src/td_radio_text1.c",
         "src/td_street_names.c",
         "include/td_hud.h",
         "src/td_hud.c"

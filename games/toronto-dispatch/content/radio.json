@@ -1,139 +1,277 @@
 {
   "status": "engine-integrated",
-  "notice": "Original fictional dialogue. Rosa and the depot are invented; street and landmark names are flavour only and make no claims about real services or events.",
-  "speaker": "ROSA",
-  "role": "DISPATCH",
+  "notice": "Original fictional dialogue. Rosa, Margo, the depot, Rushly, the Lakelight Festival and every caller are invented; street and landmark names are settings only and make no claims about real services or events. Contract calls live in content/story.json.",
+  "default_speaker": "ROSA",
   "chapter_short_names": [
     "FIRST SHIFT",
     "NEIGHBOURHOODS",
-    "CITY EVENTS",
+    "THE FESTIVAL BID",
     "CROSS THE CITY",
     "WATERFRONT",
     "ARTS + AUDIENCES",
     "EVENING DISPATCH",
-    "THE NETWORK",
-    "MASTER COURIER",
+    "FESTIVAL WEEK",
+    "LAKELIGHT",
     "WEST END ROUTES",
     "EAST END ROUTES"
+  ],
+  "beats": [
+    {
+      "at": 3,
+      "script": "OPEN_ENDS"
+    },
+    {
+      "after": 9,
+      "script": "BEAT_RIVAL"
+    },
+    {
+      "after": 23,
+      "script": "BEAT_COPY"
+    },
+    {
+      "after": 27,
+      "script": "BEAT_PUSH"
+    },
+    {
+      "after": 35,
+      "script": "BEAT_STORM"
+    },
+    {
+      "after": 43,
+      "script": "BEAT_VANCE"
+    },
+    {
+      "after": 55,
+      "script": "BEAT_TORN"
+    },
+    {
+      "after": 63,
+      "script": "BEAT_LEAK"
+    },
+    {
+      "after": 67,
+      "script": "BEAT_CROWDS"
+    },
+    {
+      "after": 70,
+      "script": "BEAT_AWARD"
+    },
+    {
+      "after": 71,
+      "script": "BEAT_HUB"
+    },
+    {
+      "at": 72,
+      "script": "BEAT_SEASON"
+    }
   ],
   "scripts": {
     "INTRO": [
       "MORNING, ROOKIE.|ROSA ON DISPATCH.",
-      "YOUR CAR IS OUT|FRONT OF UNION.",
-      "PRESS SELECT FOR|THE JOB BOARD.",
-      "FOLLOW THE BEACON|AND DRIVE NICE."
-    ],
-    "JOB_PARCEL": [
-      "PARCEL ROUND.|STOP AT EACH PIN."
-    ],
-    "JOB_FRAGILE": [
-      "FRAGILE ART.|GO EASY ON CURBS."
-    ],
-    "JOB_EXPRESS": [
-      "EXPRESS FILES.|CLOCK IS TIGHT."
-    ],
-    "JOB_FREIGHT": [
-      "HEAVY FREIGHT.|BRAKE EARLY, OK?"
-    ],
-    "JOB_RELAY": [
-      "TRANSIT RELAY.|TRY THE TTC."
-    ],
-    "JOB_PASSENGER": [
-      "PASSENGER RUN.|SMOOTH TURNS."
-    ],
-    "JOB_RETURN": [
-      "SIGNED RETURNS.|BRING THEM BACK."
-    ],
-    "JOB_ISLAND": [
-      "ISLAND POST.|FERRY, THEN WALK."
-    ],
-    "PICKUP": [
-      "GOT IT? GOOD.|NOW THE DROP-OFF."
-    ],
-    "DONE_0": [
-      "NICE WORK. CLIENT|IS HAPPY. PAID."
-    ],
-    "DONE_1": [
-      "DELIVERED. THAT'S|HOW WE DO IT."
-    ],
-    "DONE_2": [
-      "GOOD RUN. MORE ON|THE BOARD."
-    ],
-    "FAIL": [
-      "CLIENT CALLED.|WE LOST THAT ONE."
+      "WELCOME TO MARGO'S|DEPOT. SINCE 1979.",
+      "RUSHLY VANS ARE|ALL OVER TOWN NOW.",
+      "WE'RE THE LAST|INDEPENDENT ONE.",
+      "MARGO: SO NO|PRESSURE, KID.",
+      "ROSA: SELECT OPENS|THE JOB BOARD.",
+      "SAL'S FIRST. FOLLOW|THE BEACON."
     ],
     "MASTER": [
-      "EVERY CONTRACT|DONE. A LEGEND."
+      "EVERY CONTRACT.|EVERY STREET.",
+      "MARGO: VANCE SOLD|RUSHLY'S CITY|ROUTES. TO US.",
+      "DEVD: THE RIDERS|STAY. THEY ASKED|FOR YOU.",
+      "MARGO: THE DEPOT IS|YOURS TOO NOW, KID.",
+      "ROSA: MASTER|COURIER. SEE YOU|TOMORROW."
     ],
     "OPEN_ENDS": [
-      "WEST AND EAST END|ROUTES ARE OPEN."
+      "MARGO: A CAFE IN|PARKDALE CALLED.",
+      "MARGO: AND A SHOP|OUT IN LESLIEVILLE.",
+      "ROSA: WEST AND EAST|END ROUTES ARE|OPEN."
     ],
     "CHAPTER_1": [
-      "NEW WORK: THE|NEIGHBOURHOODS.",
-      "LEARN THE SIDE|STREETS, ROOKIE."
+      "MARGO: RUSHLY TOOK|THE BAY ST|OFFICES TODAY.",
+      "MARGO: TWENTY YEARS|OF CLIENTS. GONE|BY LUNCH.",
+      "ROSA: SO WE GO|WHERE THEY WON'T.",
+      "ROSA: THE NEIGHBOUR-|HOODS. NEW JOBS ON|THE BOARD."
+    ],
+    "BEAT_RIVAL": [
+      "DEV: NICE RIDE,|ROOKIE. ENJOY IT|WHILE IT LASTS.",
+      "ROSA: THAT'S DEV.|HE RIDES FOR|RUSHLY.",
+      "ROSA: DON'T RACE|HIM. BEAT HIM ON|TIME."
     ],
     "CHAPTER_2": [
-      "CITY EVENTS ARE|BOOKING US NOW."
+      "MARGO: THE CITY|WANTS A COURIER FOR|LAKELIGHT.",
+      "ROSA: THE LANTERN|FESTIVAL. A WEEK|BY THE LAKE.",
+      "MARGO: THREE YEARS|OF WORK. WIN IT AND|WE'RE SAFE.",
+      "MARGO: LOSE IT... AND|I SELL IN THE FALL.",
+      "ROSA: FESTIVAL JOBS|ON THE BOARD. NO|PRESSURE."
+    ],
+    "BEAT_COPY": [
+      "PRIYA: A SECOND BID|CAME IN. FROM|RUSHLY.",
+      "PRIYA: IT READS LIKE|MARGO'S. WORD FOR|WORD.",
+      "ROSA: SOMEONE LEAKED|OUR BID.",
+      "MARGO: FIND OUT WHO.|QUIETLY."
     ],
     "CHAPTER_3": [
-      "LONG HAULS NOW.|CROSS THE CITY."
+      "MARGO: THE BANK|CALLED. THE LOAN IS|DUE.",
+      "MARGO: AND THE VAN|IS HELD TOGETHER|WITH TAPE.",
+      "ROSA: LONG HAULS NOW.|ACROSS THE DON AND|BACK.",
+      "ROSA: EVERY DOLLAR|COUNTS, ROOKIE."
+    ],
+    "BEAT_PUSH": [
+      "ROSA: DEV PUSHED|MARGO'S VAN OFF|THE VIADUCT?",
+      "DEV: SHE WAS STUCK.|DON'T MAKE IT A|THING.",
+      "ROSA: ...HUH."
     ],
     "CHAPTER_4": [
-      "WATERFRONT JOBS|ARE ON THE BOARD."
+      "NADIA: THE FESTIVAL|BARGE DOCKS AT|BAYFRONT SOON.",
+      "NADIA: LANTERNS AND|A STAGE. A WHOLE|FLOATING SHOW.",
+      "ROSA: WATERFRONT|JOBS. WATCH THE|SKY."
+    ],
+    "BEAT_STORM": [
+      "OTIS: STORM ON THE|LAKE. FERRIES RUN|LATE.",
+      "JOY: MY ROOF LEAKS|AND MY MAIL IS|LATE!",
+      "ROSA: AUNTIE JOY.|WE'RE ON IT."
     ],
     "CHAPTER_5": [
-      "GALLERIES AND|THEATRES CALLING."
+      "INES: THE FESTIVAL|ART IS READY TO|MOVE.",
+      "DEV: ROSA. OFF THE|RECORD.",
+      "DEV: VANCE, MY BOSS,|TOLD US TO LOSE|YOUR CRATES.",
+      "DEV: I WON'T.",
+      "DEV: IF ONE VANISHES,|CHECK OUR YARD ON|DUFFERIN.",
+      "ROSA: ...THANKS,|DEV."
+    ],
+    "BEAT_VANCE": [
+      "VANCE: NICE TRICK|WITH THE CRATE.",
+      "VANCE: SEE YOU AT|THE COUNCIL VOTE.",
+      "ROSA: CHARMING MAN."
     ],
     "CHAPTER_6": [
-      "EVENING DISPATCH|IS YOURS NOW."
+      "MARGO: VANCE CAME|BY. HE OFFERED TO|BUY US.",
+      "ROSA: MARGO, NO.",
+      "MARGO: IT'S A LOT OF|MONEY, ROSA.",
+      "ROSA: NIGHT SHIFTS.|LET'S PROVE HIM|WRONG."
+    ],
+    "BEAT_TORN": [
+      "ROSA: MARGO TORE UP|VANCE'S OFFER.",
+      "ROSA: THEN SHE|MAILED HIM THE|PIECES.",
+      "MARGO: AT COURIER|RATES."
     ],
     "CHAPTER_7": [
-      "TTC RELAYS ACROSS|THE NETWORK."
+      "ROSA: ONE WEEK TO|LAKELIGHT. EVERY|STREET IS JAMMED.",
+      "DEV: ROSA... I QUIT.|RUSHLY FIRED|THREE RIDERS.",
+      "MARGO: THEN RIDE FOR|US. WELCOME, DEV.",
+      "DEVD: ...THANKS,|MARGO.",
+      "ROSA: DEV'S ON OUR|RADIO NOW. AND|TAKE THE TTC."
     ],
     "CHAPTER_8": [
-      "MASTER CONTRACTS.|ONLY THE BEST."
+      "ROSA: LAKELIGHT|OPENS TONIGHT.",
+      "PRIYA: COUNCIL VOTES|ON THE LAST NIGHT.|NINE PM.",
+      "DEVD: VANCE IS|CALLING EVERY|COUNCILLOR.",
+      "MARGO: LET HIM. WE|DELIVER. HE TALKS.",
+      "ROSA: THE BIG RUNS|ARE YOURS, ROOKIE."
+    ],
+    "BEAT_LEAK": [
+      "PRIYA: ONE MORE|THING. WE TRACED|THE LEAKED BID.",
+      "PRIYA: IT CAME FROM A|RUSHLY ACCOUNT.",
+      "VANCE: PROVE IT.",
+      "PRIYA: I JUST DID.|COUNCIL HAS IT."
+    ],
+    "BEAT_AWARD": [
+      "PRIYA: COUNCIL|VOTED. LAKELIGHT|GOES TO MARGO.",
+      "MARGO: ROSA? I THINK|I'M CRYING.",
+      "ROSA: THE DEPOT|STAYS. SO DO WE."
+    ],
+    "BEAT_SEASON": [
+      "ROSA: SEVENTY-TWO|RUNS. YOU KNOW|EVERY STREET.",
+      "MARGO: I'M FRAMING|YOUR FIRST INVOICE."
+    ],
+    "BEAT_HUB": [
+      "DEVD: RUSHLY SHUT|ITS LAST HUB.",
+      "DEVD: THEIR RIDERS|ARE CALLING US FOR|WORK.",
+      "MARGO: TELL THEM|MONDAY. SEVEN SHARP."
+    ],
+    "FAIL_0": [
+      "ROSA: THAT CLIENT|CALLED RUSHLY|INSTEAD.",
+      "ROSA: WE'LL WIN THEM|BACK. NEXT TIME."
+    ],
+    "FAIL_1": [
+      "MARGO: LATE IS LATE,|KID. THEY WON'T|WAIT."
+    ],
+    "FAIL_2": [
+      "ROSA: WE LOST THAT|ONE. SHAKE IT OFF."
     ],
     "WANTED": [
-      "COPS ARE ON YOU.|LOSE THEM, FAST."
+      "ROSA: COPS ARE ON|YOU. LOSE THEM,|FAST.",
+      "MARGO: I CAN'T|AFFORD BAIL TWICE!"
     ],
     "LOST": [
-      "YOU SHOOK THEM.|BACK TO WORK."
+      "ROSA: YOU SHOOK|THEM. BACK TO|WORK."
     ],
     "BUSTED": [
-      "BAIL IS PAID.|KEEP IT CLEAN."
+      "ROSA: BAIL IS PAID.",
+      "MARGO: IT CAME OUT|OF THE VAN FUND."
     ],
     "WASTED": [
-      "HOSPITAL CALLED.|TAKE IT EASY."
+      "ROSA: HOSPITAL|CALLED. TAKE IT|EASY.",
+      "MARGO: COME BACK IN|ONE PIECE, KID."
     ],
     "NIGHT": [
-      "NIGHT SHIFT NOW.|LIGHTS ARE ON."
+      "ROSA: NIGHT SHIFT.|LIGHTS ON."
     ],
     "MORNING": [
-      "SUN'S UP. COFFEE|AND BACK TO IT."
+      "ROSA: SUN'S UP.|COFFEE AND BACK|TO IT."
     ],
     "CHATTER_0": [
-      "STREETCARS ARE|BUNCHED ON QUEEN."
+      "ROSA: STREETCARS ARE|BUNCHED ON QUEEN."
     ],
     "CHATTER_1": [
-      "BALL GAME LATER.|FRONT WILL JAM."
+      "ROSA: BALL GAME|LATER. FRONT WILL|JAM."
     ],
     "CHATTER_2": [
-      "THE GARDINER IS|A PARKING LOT."
+      "ROSA: THE GARDINER|IS A PARKING LOT."
     ],
     "CHATTER_3": [
-      "RACCOONS GOT INTO|THE PARCEL BINS."
+      "ROSA: RACCOONS GOT|INTO THE PARCEL|BINS. AGAIN."
     ],
     "CHATTER_4": [
-      "FERRY'S RUNNING|LATE. AS USUAL."
+      "OTIS: FERRY'S|RUNNING LATE. AS|USUAL."
     ],
     "CHATTER_5": [
-      "PIGEONS ON THE|DEPOT ROOF AGAIN."
+      "ROSA: PIGEONS ON|THE DEPOT ROOF.|MARGO NAMED THEM."
     ],
     "CHATTER_6": [
-      "CONSTRUCTION ON|KING. GO AROUND."
+      "ROSA: CONSTRUCTION|ON KING. GO|AROUND."
     ],
     "CHATTER_7": [
-      "NEW JOBS POSTED.|PRESS SELECT."
+      "ROSA: NEW JOBS ON|THE BOARD. PRESS|SELECT."
+    ],
+    "CHATTER_8": [
+      "SAL: TELL MARGO I|SAVED HER THE|GOOD CHEDDAR."
+    ],
+    "CHATTER_9": [
+      "WEN: FLAT TYRE?|BRING IT BY. FREE|FOR YOU."
+    ],
+    "CHATTER_10": [
+      "ROSA: A RUSHLY|VAN JUST GOT A|TICKET. HEH."
+    ],
+    "CHATTER_11": [
+      "MARGO: DID SOMEONE|EAT MY LUNCH? IT|HAD MY NAME ON IT."
+    ],
+    "CHATTER_12": [
+      "JUNO: NEW RECORDS|IN. COME LISTEN|SOMETIME."
+    ],
+    "CHATTER_13": [
+      "BEA: THE TULIPS ARE|UP ALONG THE DON."
+    ],
+    "CHATTER_14": [
+      "ROSA: FUN FACT: THE|DEPOT KETTLE IS|OLDER THAN ME."
+    ],
+    "CHATTER_15": [
+      "TOMAS: KILN'S HOT.|COME WATCH IF YOU|LIKE FIRE."
+    ],
+    "BEAT_CROWDS": [
+      "KAI: BIGGEST CROWD|LAKELIGHT EVER HAD.",
+      "ROSA: AND EVERY|LANTERN CAME|THROUGH OUR DEPOT."
     ]
   }
 }
