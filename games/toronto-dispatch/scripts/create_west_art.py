@@ -186,6 +186,19 @@ def generate(spec,check=False):
 
     for landmark in spec["landmarks"]:
         building(landmark["x"],landmark["y"],landmark["width"],landmark["depth"],landmark["style"],landmark["kind"],landmark["name"])
+    # Park features from the layout (pitch, fieldhouse, paddocks, open lawn),
+    # drawn before the generic buildings and trees so neither covers them.
+    no_trees=[]
+    for park in spec["parks"]:
+        if park.get("fieldhouse"):
+            fx,fy,fw,fh=park["fieldhouse"];building(fx,fy,fw,fh,5,None,park["name"]+" fieldhouse")
+        for feature in park.get("features",[]):
+            fx,fy,fw,fh=feature["rect"]
+            assert not any(walk_mask.getpixel((px,py)) for px in range(fx,fx+fw) for py in range(fy,fy+fh)),(spec["slug"],feature,"park feature on a road or path")
+            solid_rects,slots=city_kit.paint_park_feature(d,box,COLORS,feature["kind"],fx,fy,fw,fh)
+            for rect in solid_rects:solid(*rect)
+            for rect,slot in slots:attr(*rect,slot)
+            reserved.append((fx-8,fy-8,fw+16,fh+16));no_trees.append((fx,fy,fw,fh))
     # Six repeating designs, different dimensions; no copied facades or signage.
     for yy in range(48,728,48):
         for xx in range(48,976,48):
@@ -208,6 +221,7 @@ def generate(spec,check=False):
         for xx in range(624 if spec["id"]==2 else 592,944 if spec["id"]==2 else 704,32):
             if any(walk_mask.getpixel((px,py)) for py in range(yy,yy+24) for px in range(xx,xx+16)):continue
             if any(collisions[i]==15 for _,_,i in cells(xx,yy,16,24)):continue
+            if any(overlap((xx,yy,16,24),r) for r in no_trees):continue
             box(xx+6,yy+16,3,8,0);d.ellipse((xx,yy,xx+15,yy+15),fill=COLORS[1],outline=COLORS[0]);box(xx+4,yy+4,8,8,2)
             solid(xx,yy+16,16,8);attr(xx,yy,16,16,6,True);canopies.append([xx,yy,16,16])
 
@@ -250,7 +264,7 @@ def generate(spec,check=False):
 
     # Lawns, canopy trees, parking and plazas on untouched walkable ground.
     ground=bytes.fromhex(COLORS[2][1:])*64
-    reserved_lots=[(l["x"]-8,l["y"]-16,l["width"]+24,l["depth"]+32) for l in spec["landmarks"]]
+    reserved_lots=[(l["x"]-8,l["y"]-16,l["width"]+24,l["depth"]+32) for l in spec["landmarks"]]+no_trees
     def lot(tx,ty):
         i=ty*TW+tx;x=tx*8;y=ty*8
         if collisions[i]!=16 or attrs[i]!=6 or walk_mask.getpixel((x+4,y+4)):return False

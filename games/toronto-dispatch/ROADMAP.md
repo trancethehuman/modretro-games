@@ -102,6 +102,14 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Human read-through on the Chromatic: dialogue length, typing speed and the pacing of chapter calls.
 - Next: a story recap in the pause menu and individual portraits if UI tiles can be freed.
 
+## Parks and drivable ground — implemented 2026-10-07, human review pending
+
+- [x] Flat ground drivable downtown (lawns, lots, plazas, yards), as in the other scenes.
+- [x] Queen's Park from the Centreline: the crescent, the Legislative Building, the King Edward VII statue, paths and trees; the 94 bus round the north end.
+- [x] Trinity Bellwoods, Allan Gardens and Grange Park fill their blocks with their landmarks; Sorauren, High Park, Withrow and Greenwood parks gain their real amenities.
+- [ ] Handheld review: do the parks read as themselves, and is cutting across open ground too easy.
+- Next: Toronto Islands park shapes, Riverdale Park, waterfront parks south of Queens Quay; these need tile budget (downtown is at 382 of 384).
+
 ## Gameplay, scenery and performance — implemented 2026-10-07, human review pending
 
 - [x] Spray bays in all four scenes, 20 lost parcels with a $500 bonus and a count on the pause menu, and walkers who run from gunfire.

@@ -1,5 +1,17 @@
 # Testing record
 
+## Parks and drivable ground — candidate, 2026-10-07
+
+Same toolchain as below; CLI build and PyBoy evidence only. "Previous" is the spray-bay candidate `53602650…`.
+
+- ROM: `make:rom` of this source, 524,288 bytes, SHA-256 `787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6`. Memory guard passes: heap `DAFC`, stack `DF00`, 1,028 bytes of reserve (unchanged). Scene tiles (flip-canonical): core 382 of 384 (was 372), West 276 (256), High Park 238 (225), East 230 (202). City atlas: every 20x12 view at most 171 of 172 tiles (was 164).
+- `make check` passes: 4,508 host engine checks (new: the bus keeps to asphalt for 12,000 updates, round Queen's Park Crescent too; bus steps may move both axes), 8,064,549 atlas UI checks, the campaign, district-world, story and radio checks, and the art generators' checks: park features lie on park ground, never on a road or path; the core stays within 384 tiles; district scene collisions equal the art metadata.
+- Collision: downtown solid tiles fell from 5,705 to 4,750 (yards, lots, lawns and plazas opened); road tiles 7,294 -> 7,259 (University Ave north of College replaced by the crescent).
+- Content: eight contracts' road routes changed with the crescent (three time limits +5 s, rewards +$1 to +$3); story, stops and the save format unchanged. Lost parcels moved with the opened ground: downtown to the Queen's Park lawn, a Cabbagetown yard, a plaza by the Port Lands, Fort York's grounds and Hanlan's Point, and one West parcel onto Sorauren Park's field. Parcels keep their numbers, so ones already found stay found.
+- Emulator scenarios (PyBoy; inputs and memory writes in `docs/screenshots/provenance.json`): the Legislature seen from College at University; inside Queen's Park; the crescent's north end with the ROM; a car driven east along Hoskin Ave crosses the crescent onto the park lawn at speed 16 and keeps going; Trinity Bellwoods, Allan Gardens and Grange Park from their sidewalks; Sorauren Park, Grenadier Pond and the zoo paddocks after driving into the West and High Park scenes; Withrow and Greenwood parks after driving into the East scene. The same inputs on the previous build show the old parks for comparison. The HUD names Queens Park Cres and Hoskin Ave on the new streets.
+- Pacing, PyBoy, 3,600 frames per route with attention held at zero, previous -> this build: driving 56.04 -> 56.42 updates per second over the usual ten routes, walking 58.88 -> 59.08 over four; ten more driving routes 57.76 and after the welcome call 56.80 (57.50 and 56.90 on the gameplay-and-scenery build); parked 59.44 and 59.98, unchanged.
+- Not verified: hardware or cartridge display and timing, plugin build, and human judgement of whether the parks read as themselves and of driving across open ground.
+
 ## Spray bays in every scene and the parcel count — candidate, 2026-10-07
 
 Same toolchain as below; CLI build and PyBoy evidence only. "Previous" is the gameplay and scenery candidate `2d2246d2…`.

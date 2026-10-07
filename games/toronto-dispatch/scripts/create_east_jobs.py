@@ -22,7 +22,7 @@ OUTPUT = ROOT / "content/districts/east_jobs.json"
 PREFIX_STOPS, PREFIX_QUESTS = 35, 80
 PREFIX_STOP_FIELDS = ("id", "u", "v", "name", "transit", "district", "reserved")
 PREFIX_STOPS_SHA256 = "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380"
-PREFIX_QUESTS_SHA256 = "a7c7e8dd86ec3bd0b1db984e7f1788d26a4468ab0df793e59a83f7274788edb7"
+PREFIX_QUESTS_SHA256 = "20f3f966dac28d476d744a8e7749941b68bc5efc88254bcae59fd030cbebb108"
 STOP_KEYS = ("danforth_hall", "withrow_walk", "riverside_queen", "gerrard_pape",
              "carlaw_works", "leslie_queen", "greenwood_walk", "ashbridge_queen")
 STOP_NAMES = ("DANFORTH HALL", "WITHROW POST", "RIVERSIDE QUEEN", "GERRARD / PAPE",

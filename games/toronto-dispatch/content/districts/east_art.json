@@ -339,7 +339,29 @@
       ],
       "source_ids": [
         "east_withrow",
-        "east_withrow_context"
+        "east_withrow_context",
+        "east_withrow_diamond",
+        "east_withrow_rink"
+      ],
+      "features": [
+        {
+          "kind": "diamond",
+          "rect": [
+            262,
+            104,
+            32,
+            32
+          ]
+        },
+        {
+          "kind": "rink",
+          "rect": [
+            304,
+            156,
+            40,
+            18
+          ]
+        }
       ]
     },
     {
@@ -351,7 +373,19 @@
         48
       ],
       "source_ids": [
-        "east_greenwood"
+        "east_greenwood",
+        "east_greenwood_pool"
+      ],
+      "features": [
+        {
+          "kind": "pool",
+          "rect": [
+            872,
+            320,
+            32,
+            16
+          ]
+        }
       ]
     }
   ],
@@ -1181,18 +1215,6 @@
   ],
   "canopies": [
     [
-      256,
-      104,
-      16,
-      16
-    ],
-    [
-      288,
-      104,
-      16,
-      16
-    ],
-    [
       320,
       104,
       16,
@@ -1415,13 +1437,7 @@
       16
     ],
     [
-      272,
-      112,
-      16,
-      16
-    ],
-    [
-      304,
+      296,
       112,
       16,
       16
@@ -1536,18 +1552,6 @@
     ],
     [
       264,
-      152,
-      16,
-      16
-    ],
-    [
-      296,
-      152,
-      16,
-      16
-    ],
-    [
-      328,
       152,
       16,
       16
@@ -1739,13 +1743,7 @@
       16
     ],
     [
-      856,
-      320,
-      16,
-      16
-    ],
-    [
-      888,
+      848,
       320,
       16,
       16
@@ -4610,14 +4608,14 @@
     0,
     0,
     16,
-    15,
-    15,
     16,
     16,
-    15,
-    15,
+    16,
+    16,
     16,
     16,
+    16,
+    16,
     15,
     15,
     16,
@@ -7883,14 +7881,14 @@
     0,
     0,
     0,
-    16,
-    16,
-    16,
-    16,
     16,
     16,
     16,
     16,
+    15,
+    15,
+    15,
+    15,
     16,
     16,
     0,
@@ -8011,14 +8009,14 @@
     0,
     0,
     0,
-    16,
-    16,
     16,
     16,
     16,
     16,
-    16,
-    16,
+    15,
+    15,
+    15,
+    15,
     16,
     16,
     0,
@@ -18282,7 +18280,7 @@
   },
   "background_filename": "toronto_east.png",
   "source_png": "project/original-art/toronto_east.png",
-  "background_sha256": "848ed053cfad47571b24f6455bdc612722d4425650f92b2573232dd8a0e51f57",
+  "background_sha256": "d5ceecdbf09e6bada730458b57789768479bcf8cb29c7324284dafb45a9ab51e",
   "source_research": "docs/EAST_DISTRICT.md",
   "source_research_details": "Reviewed facts, query hashes and licence in the research object of this metadata",
   "research": {
@@ -18438,6 +18436,27 @@
         "supports": "506 Carlton serves Gerrard East at Broadview; route name does not imply Carlton crosses the Don.",
         "rights": "Reference only; no live timetable copied",
         "reviewed_on": "2026-10-02"
+      },
+      {
+        "id": "east_withrow_rink",
+        "url": "https://www.toronto.ca/news/withrow-park-outdoor-skating-rink-reopening/",
+        "supports": "Withrow Park's outdoor skating rink.",
+        "rights": "Reference only",
+        "reviewed_on": "2026-10-07"
+      },
+      {
+        "id": "east_withrow_diamond",
+        "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/parks-and-recreation-facilities/baseball-and-softball-diamond-listings/",
+        "supports": "Withrow Park's baseball diamond in the City's diamond listings.",
+        "rights": "Reference only",
+        "reviewed_on": "2026-10-07"
+      },
+      {
+        "id": "east_greenwood_pool",
+        "url": "https://www.toronto.ca/city-government/accessibility-human-rights/accessibility-at-the-city-of-toronto/city-services-for-people-with-disabilities/accessible-recreation-facilities-equipment/",
+        "supports": "Greenwood Park outdoor pool at 150 Greenwood Avenue.",
+        "rights": "Reference only",
+        "reviewed_on": "2026-10-07"
       }
     ],
     "live_query_evidence": {
@@ -19499,8 +19518,8 @@
     }
   ],
   "validation": {
-    "raw_unique_tiles": 237,
-    "flip_canonical_unique_tiles": 202,
+    "raw_unique_tiles": 273,
+    "flip_canonical_unique_tiles": 230,
     "tile_budget": 320,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

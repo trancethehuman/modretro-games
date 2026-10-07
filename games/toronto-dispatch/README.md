@@ -4,6 +4,16 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 **Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, the downtown street plan from the City of Toronto Centreline, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
 
+![Queen's Park from College St](docs/screenshots/qp-legislature.png) ![Inside Queen's Park](docs/screenshots/qp-park.png) ![The crescent's north end and the ROM](docs/screenshots/qp-north.png) ![Driving onto the park](docs/screenshots/qp-drive-onto-lawn.png)
+
+![Trinity Bellwoods](docs/screenshots/trinity-bellwoods.png) ![Allan Gardens](docs/screenshots/allan-gardens.png) ![Grange Park](docs/screenshots/grange-park.png) ![Sorauren Park](docs/screenshots/sorauren-park.png)
+
+![Grenadier Pond](docs/screenshots/high-park-pond.png) ![High Park zoo](docs/screenshots/high-park-zoo.png) ![Withrow Park](docs/screenshots/withrow-park.png) ![Greenwood Park](docs/screenshots/greenwood-park.png)
+
+![Before: Queen's Park](docs/screenshots/before-qp-legislature.png) ![After](docs/screenshots/qp-legislature.png) ![Before: Allan Gardens](docs/screenshots/before-allan-gardens.png) ![After](docs/screenshots/allan-gardens.png)
+
+Parks, 2026-10-07: Queen's Park as the ring of Queen's Park Crescent round the Legislative Building and the park with the King Edward VII statue (from the City Centreline, drawn about three times wider than true scale), a car crossing the crescent onto the lawn (flat ground is drivable everywhere), Trinity Bellwoods' gates and dog bowl, the Allan Gardens Palm House, The Grange, Sorauren Park's pitch and fieldhouse, Grenadier Pond, the High Park zoo's bison paddocks, Withrow Park's diamond and rink and Greenwood Park's pool. The last row compares the previous build. Unmodified PyBoy frames, staged by writing the car's position in emulator memory; [provenance](docs/screenshots/provenance.json).
+
 ![Animated harbour by Centre Island](docs/screenshots/water-islands.png) ![The Don](docs/screenshots/water-don.png) ![Lake Ontario in the West scene](docs/screenshots/water-west.png) ![Yonge-Dundas screen](docs/screenshots/screen-yonge-dundas.png)
 
 ![Spray bay nearby](docs/screenshots/spray-near.png) ![Resprayed](docs/screenshots/spray-done.png) ![A lost parcel on the lawn](docs/screenshots/parcel-seen.png) ![Lost parcel found](docs/screenshots/parcel-found.png)

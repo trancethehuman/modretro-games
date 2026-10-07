@@ -88,6 +88,12 @@ RESEARCH = {
 }
 for source in RESEARCH["sources"]:
     source["reviewed_on"] = RESEARCH["reviewed_on"]
+# Park amenities drawn in the parks round, reviewed separately.
+RESEARCH["sources"] += [
+    {"id": "east_withrow_rink", "url": "https://www.toronto.ca/news/withrow-park-outdoor-skating-rink-reopening/", "supports": "Withrow Park's outdoor skating rink.", "rights": "Reference only", "reviewed_on": "2026-10-07"},
+    {"id": "east_withrow_diamond", "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/parks-and-recreation-facilities/baseball-and-softball-diamond-listings/", "supports": "Withrow Park's baseball diamond in the City's diamond listings.", "rights": "Reference only", "reviewed_on": "2026-10-07"},
+    {"id": "east_greenwood_pool", "url": "https://www.toronto.ca/city-government/accessibility-human-rights/accessibility-at-the-city-of-toronto/city-services-for-people-with-disabilities/accessible-recreation-facilities-equipment/", "supports": "Greenwood Park outdoor pool at 150 Greenwood Avenue.", "rights": "Reference only", "reviewed_on": "2026-10-07"},
+]
 
 
 EAST = {
@@ -119,7 +125,11 @@ EAST = {
         for name,y in [("Danforth",64),("Dundas",400),("Queen",528)]
     ],
     "conditional_ports": [{"edge":"west","name":"Gerrard","x":24,"y":288,"target":0,"target_x":1000,"target_y":288,"foot_only":False,"condition":"Correct core College/Carlton label/topology east of Parliament first; closed border and no registered transition in this asset."}],
-    "parks": [{"name":"Withrow Park","rect":[256,104,96,72],"source_ids":["east_withrow","east_withrow_context"]},{"name":"Greenwood Park","rect":[848,288,64,48],"source_ids":["east_greenwood"]}],
+    # Withrow Park's ball diamond and rink; Greenwood Park's outdoor pool.
+    "parks": [{"name":"Withrow Park","rect":[256,104,96,72],"source_ids":["east_withrow","east_withrow_context","east_withrow_diamond","east_withrow_rink"],
+               "features":[{"kind":"diamond","rect":[262,104,32,32]},{"kind":"rink","rect":[304,156,40,18]}]},
+              {"name":"Greenwood Park","rect":[848,288,64,48],"source_ids":["east_greenwood","east_greenwood_pool"],
+               "features":[{"kind":"pool","rect":[872,320,32,16]}]}],
     "water": [],
     "rails": [path("Lakeshore East railway barrier", [[80,800],[160,688],[176,528],[208,400],[352,304],[400,288],[544,232],[704,176],[1008,128]], note="Original compressed curve from City major-rail features, not a trace. Roads reopen only represented real crossing corridors; Pape remains foot-only.")],
     "closed_frontiers": [{"rect":[16,816,992,144],"name":"Unexpanded southern viewport","source_fact":False,"note":"Game map cutline, not a municipal border or real-world closure."}],

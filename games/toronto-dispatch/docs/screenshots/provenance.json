@@ -644,5 +644,141 @@
     "png_sha256": "5c382923a0478fa365a27ce39b6d2abb80e4a9a608ea7eef565e33edc986ed3b",
     "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (540,280), walked north beside Queens Park and east onto the lost parcel, then Start",
     "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "qp-legislature.png",
+    "frame": 1471,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "799ba98f2521aac3f89046f2c690a65fcfb7ce71ca14d7e0b9c9214117a4cab2",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "qp-park.png",
+    "frame": 1713,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "4a3d5bc7437ffe078a694337243e67074975979b678952563b8e694ff7456f7f",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "qp-north.png",
+    "frame": 1955,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "23bf9a5cb5b6a76af41e1a3faa41bb280c383dce9491004c7f8ff0d20060368f",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "qp-drive-onto-lawn.png",
+    "frame": 1335,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "f9a8e8b5a8b6e04dea632008b46eb2a7a4b712d4558d1f10575238c7c2fd946a",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "trinity-bellwoods.png",
+    "frame": 2197,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "e4c696465f1b1dd7e66d6986dec10d998dba9b62c14a8afeab57bd1588aafdc7",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "allan-gardens.png",
+    "frame": 2439,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "f10361fd6d5b3d063ed2f75acc3b4355af100e02a533f85b4677baa0280a22a3",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "grange-park.png",
+    "frame": 2681,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "9175a0ba018d852b0f1e08cbfb794f374c7bcab13860bf3fa8bcf5d145c69eae",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "sorauren-park.png",
+    "frame": 1801,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "4b75a66e992c784714e57cbe95fc63de94718cbd4b4d6790abae0014f95f9fa8",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "high-park-pond.png",
+    "frame": 2373,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "4f266f7ecb3630759e1ef9fa23c703526fbf739de0b305b8be03da822eef578b",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "high-park-zoo.png",
+    "frame": 2615,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "e5a295cd65e8a862c19319bee800b75aee59209380b7bb136eb036375a8f318e",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "withrow-park.png",
+    "frame": 1801,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "de2f3b8797d1fb3b79e4376b9cef5035253d7aa68085b155ab3be1810b250012",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow; then car written at (304,144) facing north, 240 frames: Withrow Park (East scene, entered from the core's east edge at (970,528), A held 120 frames)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "greenwood-park.png",
+    "frame": 2043,
+    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+    "png_sha256": "f6144153f60de1a1fe044c5dec66a2608085c72b55b47f79ed1bc393b619f07c",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow; then car written at (304,144) facing north, 240 frames: Withrow Park (East scene, entered from the core's east edge at (970,528), A held 120 frames); then car written at (880,312) facing north, 240 frames: Greenwood Park",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "before-qp-legislature.png",
+    "frame": 1471,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "b6767f840282b00c842ffa03bc336353b290d819aa44fc3e0c78ab08bb20f1a3",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-qp-park.png",
+    "frame": 1713,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "c562455b6c6ba4711eda90fc7af39069c51bea6a2f59bb952a42772f4814c47c",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-trinity-bellwoods.png",
+    "frame": 2197,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "9d27e11639dea65c0207c5e123587bc439e7db5f73172f0911afcb812e78e780",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-allan-gardens.png",
+    "frame": 2439,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "50bfd0d571d480f8f458eb4a41347aa1e9cca34195e07e55cd69c42f6444a98b",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+  },
+  {
+    "file": "before-high-park-pond.png",
+    "frame": 2373,
+    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+    "png_sha256": "9a1310cea6e5ca237a44bffa5a5c882ec5804a74b26d0201aeda52dcc7f4dce4",
+    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
   }
 ]

@@ -183,12 +183,23 @@ def render():
     assert any(b["x"]<=bay["x"] and bay["x"]+city_kit.SPRAY_BAY_W<=b["x"]+b["width"] and b["y"]+b["depth"]==bay["door_bottom"] for b in blocks),"spray bay door has no building"
     city_kit.paint_spray_bay(d,box,COLORS,bay["x"],bay["y"],bay["door_bottom"],14)
     assert city_kit.spray_bay_registered((ROOT/"project/plugins/toronto-driving/engine/src/states/TORONTO.c").read_text(),EAST["id"],bay["x"],bay["y"]),"spray bay moved: update td_spray_at in TORONTO.c"
+    # Park features from the layout (ball diamond, rink, pool).
+    no_trees=[]
+    for park in EAST["parks"]:
+        for feature in park.get("features",[]):
+            fx,fy,fw,fh=feature["rect"]
+            assert not any(walk.getpixel((px,py)) for px in range(fx,fx+fw) for py in range(fy,fy+fh)),(feature,"park feature on a road or path")
+            solid_rects,slots=city_kit.paint_park_feature(d,box,COLORS,feature["kind"],fx,fy,fw,fh)
+            for rect in solid_rects:solid(*rect)
+            for rect,slot in slots:attr(*rect,slot)
+            no_trees.append((fx,fy,fw,fh))
     for park in EAST["parks"]:
         x,y,w,h=park["rect"]
         for yy in range((y+7)//8*8,y+h-23,32):
             for xx in range((x+7)//8*8,x+w-15,32):
                 if any(walk.getpixel((px,py)) for py in range(yy,yy+24) for px in range(xx,xx+16)):continue
                 if any(collisions[i]==15 for _,_,i in cells(xx,yy,16,24)):continue
+                if any(overlap((xx,yy,16,24),r) for r in no_trees):continue
                 box(xx+6,yy+16,3,8,0);d.ellipse((xx,yy,xx+15,yy+15),fill=COLORS[1],outline=COLORS[0]);box(xx+4,yy+4,8,8,2)
                 solid(xx,yy+16,16,8);attr(xx,yy,16,16,6,True);canopies.append([xx,yy,16,16])
 
@@ -255,7 +266,7 @@ def render():
 
     # Lawns, canopy trees, parking and plazas on untouched walkable ground.
     ground=bytes.fromhex(COLORS[2][1:])*64
-    reserved_lots=[(l["x"]-8,l["y"]-16,l["width"]+24,l["depth"]+32) for l in EAST["landmarks"]]
+    reserved_lots=[(l["x"]-8,l["y"]-16,l["width"]+24,l["depth"]+32) for l in EAST["landmarks"]]+no_trees
     def lot(tx,ty):
         i=ty*TW+tx;x=tx*8;y=ty*8
         if collisions[i]!=16 or attrs[i]!=6 or walk.getpixel((x+4,y+4)):return False

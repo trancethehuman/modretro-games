@@ -39,7 +39,10 @@ WEST = {
         *[{"edge":"west", "name":name,"x":24,"y":y,"target":2,"target_x":1000,"target_y":y,"foot_only":False} for name,y in zip(["Dundas","Bloor","Howard Park","The Queensway","Lake Shore"],WEST_ROWS)],
         {"edge":"west","name":"Martin Goodman","x":24,"y":896,"target":2,"target_x":1000,"target_y":896,"foot_only":True},
     ],
-    "parks": [{"name":"Sorauren Park", "rect":[576,384,128,96]}],
+    # Sorauren Park: its sports field, and the fieldhouse on the south edge.
+    "parks": [{"name":"Sorauren Park", "rect":[576,384,128,96],
+               "features":[{"kind":"pitch","rect":[608,392,64,36]}],
+               "fieldhouse":[680,408,24,16]}],
     "water": [[0,928,1024,48]],
     "rails": [path("West Toronto rail corridor", [[512,24],[576,112],[560,320],[960,480],[1024,488]]), path("Lakeshore rail corridor", [[0,752],[1024,752]])],
     "gardiner": [0,784,1024,16],
@@ -93,9 +96,13 @@ HIGH_PARK = {
         *[{"edge":"east","name":name,"x":1000,"y":y,"target":1,"target_x":24,"target_y":y,"foot_only":False} for name,y in zip(["Dundas","Bloor","Howard Park","The Queensway","Lake Shore"],WEST_ROWS)],
         {"edge":"east","name":"Martin Goodman","x":1000,"y":896,"target":1,"target_x":24,"target_y":896,"foot_only":True},
     ],
-    "parks": [{"name":"High Park", "rect":[608,312,352,320]}],
+    "parks": [{"name":"High Park", "rect":[608,312,352,320],
+               # The zoo's paddocks on Deer Pen Road and the open lawns of the
+               # park's middle; Grenadier Pond runs most of the west side.
+               "features":[{"kind":"paddock","rect":[752,496,40,32]},{"kind":"paddock","rect":[800,496,40,32]},
+                           {"kind":"meadow","rect":[752,424,128,48]}]}],
     "water": [[0,960,1024,16]],
-    "pond": [[608,480],[672,480],[704,600],[640,624],[608,576]],
+    "pond": [[608,392],[632,392],[652,432],[660,472],[684,512],[704,592],[680,624],[632,624],[608,584]],
     "rails": [path("Junction railway barrier", [[432,32],[1024,32]]),path("Lakeshore rail corridor", [[0,752],[1024,752]])],
     "gardiner": [0,784,1024,16],
     "spray_bay": {"street":"Bloor Street West", "x":344,"y":330,"door_bottom":312, "note":"Fictional body shop in Bloor West Village; gameplay position, not a surveyed business."},

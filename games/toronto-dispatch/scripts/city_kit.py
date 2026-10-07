@@ -81,10 +81,52 @@ def seed_of(*values):
     return int(hashlib.sha256(repr(values).encode()).hexdigest()[:8], 16)
 
 
-def roof_details(d, box, x, y, w, h, roof, seed, colors):
+def roof_details(d, box, x, y, w, h, roof, seed, colors, aligned=False):
     """Varied rooftop equipment inside the existing roof outline. Picks one or
     two features from the seed: water tank, HVAC units, skylight strip, solar
-    grid or a stair bulkhead. Never draws outside (x+5..x+w-6, y+5..)."""
+    grid or a stair bulkhead. Never draws outside (x+5..x+w-6, y+5..).
+    aligned: one of four features in a fixed 8x5 spot measured from the
+    roof's top-right corner, so buildings of a style share tiles (the core
+    scene, where the tile budget is tight)."""
+    if aligned:
+        if w < 32 or h - roof < 14:
+            return
+        l, t = x + w - 15, y + 6
+        kind = seed % 4
+        if kind == 0:      # water tank
+            d.ellipse((l + 1, t, l + 6, t + 4), fill=colors[3], outline=colors[0])
+        elif kind == 1:    # two HVAC units
+            box(l, t, 3, 4, 3); box(l + 4, t, 3, 4, 3)
+            d.rectangle((l, t, l + 2, t + 3), outline=colors[0]); d.rectangle((l + 4, t, l + 6, t + 3), outline=colors[0])
+        elif kind == 2:    # skylight strip
+            d.rectangle((l, t, l + 7, t + 4), outline=colors[0], fill=colors[3])
+            for sx in (l + 2, l + 4, l + 6):
+                d.line((sx, t + 1, sx, t + 3), fill=colors[0])
+        else:              # stair bulkhead
+            box(l + 1, t, 6, 5, 1); d.rectangle((l + 1, t, l + 6, t + 4), outline=colors[0]); box(l + 3, t + 4, 2, 1, 3)
+        return
+        l, t = x + w - 15, y + 6
+        kind = seed % 6
+        if kind == 0:      # water tank
+            d.ellipse((l + 1, t, l + 6, t + 4), fill=colors[3], outline=colors[0])
+        elif kind == 1:    # two HVAC units
+            box(l, t, 3, 4, 3); box(l + 4, t, 3, 4, 3)
+            d.rectangle((l, t, l + 2, t + 3), outline=colors[0]); d.rectangle((l + 4, t, l + 6, t + 3), outline=colors[0])
+        elif kind == 2:    # skylight strip
+            d.rectangle((l, t, l + 7, t + 4), outline=colors[0], fill=colors[3])
+            for sx in (l + 2, l + 4, l + 6):
+                d.line((sx, t + 1, sx, t + 3), fill=colors[0])
+        elif kind == 3:    # solar panels
+            d.rectangle((l, t, l + 7, t + 4), fill=colors[0])
+            for sx in (l + 1, l + 3, l + 5):
+                d.line((sx, t + 1, sx, t + 3), fill=colors[1])
+        elif kind == 4:    # stair bulkhead
+            box(l + 1, t, 6, 5, 1); d.rectangle((l + 1, t, l + 6, t + 4), outline=colors[0]); box(l + 3, t + 4, 2, 1, 3)
+        else:              # gravel ballast
+            for py in (t, t + 2, t + 4):
+                for px in range(l + (py - t) // 2 % 2, l + 8, 3):
+                    d.point((px, py), fill=colors[0])
+        return
     # Right half only: the base styles already place their own roof unit left.
     left, top = x + w // 2 + 1, y + 6
     right, bottom = x + w - 7, y + h - roof - 4
@@ -478,3 +520,51 @@ def spray_bay_registered(engine_text, scene, bx, by):
     table = re.search(r'td_spray_at\[TD_SPRAY_BAYS\]\[2\]=\{(.*?)\};', engine_text)
     rows = re.findall(r'\{(\d+),(\d+)\}', table.group(1)) if table else []
     return scene < len(rows) and (int(rows[scene][0]), int(rows[scene][1])) == (bx + SPRAY_BAY_W // 2, by + SPRAY_BAY_H // 2)
+
+
+# Park features drawn from the layouts' park entries (West and East scenes):
+# each returns the rectangles to make solid and (rect, palette slot) pairs.
+# Lines and surfaces use the park palette unless noted, so a feature never
+# shares a tile with another palette.
+def paint_park_feature(d, box, colors, kind, x, y, w, h):
+    solid, slots = [], []
+    if kind == 'pitch':        # soccer pitch, long axis east-west
+        cx, cy = x + w // 2, y + h // 2
+        d.rectangle((x, y, x + w - 1, y + h - 1), outline=colors[3])
+        d.line((cx, y, cx, y + h - 1), fill=colors[3])
+        d.ellipse((cx - 6, cy - 6, cx + 6, cy + 6), outline=colors[3])
+        for gx, sgn in ((x, 1), (x + w - 1, -1)):
+            d.rectangle((min(gx, gx + sgn * 11), cy - 10, max(gx, gx + sgn * 11), cy + 10), outline=colors[3])
+            box(gx - (2 if sgn > 0 else -1), cy - 4, 2, 8, 0)
+    elif kind == 'diamond':    # baseball diamond, home plate to the south
+        cx, cy, r = x + w // 2, y + h // 2, min(w, h) // 2 - 4
+        for k in range(3):
+            d.polygon([(cx, cy + r - k), (cx + r - k, cy), (cx, cy - r + k), (cx - r + k, cy)], outline=colors[3])
+        d.line((cx, cy + r, x, cy + r - (cx - x)), fill=colors[3]); d.line((cx, cy + r, x + w - 1, cy + r - (x + w - 1 - cx)), fill=colors[3])
+        for bx, by in ((cx, cy + r), (cx + r, cy), (cx, cy - r), (cx - r, cy)):
+            box(bx - 1, by - 1, 3, 3, 3)
+        box(cx - 1, cy - 1, 3, 3, 3)
+        d.arc((cx - 6, cy + r - 2, cx + 6, cy + r + 6), 0, 180, fill=colors[0])
+    elif kind == 'rink':       # outdoor rink: ice, boards and lines
+        box(x, y, w, h, 3); d.rectangle((x, y, x + w - 1, y + h - 1), outline=colors[0])
+        for px, py in ((x, y), (x + w - 1, y), (x, y + h - 1), (x + w - 1, y + h - 1)):
+            d.point((px, py), fill=colors[2])
+        d.line((x + w // 2, y + 1, x + w // 2, y + h - 2), fill=colors[1])
+        for lx in (x + w // 3, x + w - 1 - w // 3):
+            d.line((lx, y + 1, lx, y + h - 2), fill=colors[0])
+    elif kind == 'pool':       # outdoor pool: deck, lanes (stone and water palette)
+        box(x, y, w, h, 3); box(x + 3, y + 3, w - 6, h - 6, 2)
+        d.rectangle((x + 3, y + 3, x + w - 4, y + h - 4), outline=colors[0])
+        for ly in range(y + 7, y + h - 4, 4):
+            d.line((x + 4, ly, x + w - 5, ly), fill=colors[1])
+        solid.append((x + 3, y + 3, w - 6, h - 6)); slots.append(((x, y, w, h), 0))
+    elif kind == 'paddock':    # zoo paddock: post-and-rail fence and a bison
+        d.rectangle((x, y, x + w - 1, y + h - 1), outline=colors[0])
+        for px in range(x, x + w, 4):
+            d.point((px, y + 1), fill=colors[0]); d.point((px, y + h - 2), fill=colors[0])
+        bx, by = x + w // 3, y + h // 2 - 2
+        box(bx, by, 6, 4, 0); box(bx + 6, by + 1, 2, 2, 0); box(bx + 1, by + 4, 1, 1, 0); box(bx + 4, by + 4, 1, 1, 0)
+        solid.append((x, y, w, h))
+    elif kind != 'meadow':
+        raise ValueError(kind)
+    return solid, slots

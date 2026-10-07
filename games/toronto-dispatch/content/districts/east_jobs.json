@@ -10,7 +10,7 @@
   "result_stop_count": 43,
   "result_quest_count": 88,
   "preserved_base_stops_sha256": "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380",
-  "preserved_base_quests_sha256": "a7c7e8dd86ec3bd0b1db984e7f1788d26a4468ab0df793e59a83f7274788edb7",
+  "preserved_base_quests_sha256": "20f3f966dac28d476d744a8e7749941b68bc5efc88254bcae59fd030cbebb108",
   "preserved_base_stop_fields": [
     "id",
     "u",
@@ -36,28 +36,28 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "30aeacd69971f3e5aeaff3112835ca72d76c6012d95263036fc1795d70d9e980"
+      "collision_sha256": "48d94625edd2ef3dd478b5ed261e17964ca06f0f3cb421c9ae62f8fd20259c90"
     },
     {
       "district": 1,
       "scene": "project/project/scenes/toronto_west/scene.gbsres",
-      "collision_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e"
+      "collision_sha256": "e92e53b44b87a00789ac9ef86c72afe721589bc625d3af47f68c235dc5ec813a"
     },
     {
       "district": 2,
       "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
-      "collision_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c"
+      "collision_sha256": "69162311f0187ae8fb3244e32c7b51b103be3a8df186a0164fbe32dc97eca364"
     },
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "collision_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71"
+      "collision_sha256": "bf44fb1510d194d2756c50c9d0bb5bd7fa79ab205cd2c27bf9d9dcdd08898185"
     }
   ],
   "geography_metadata": [
     {
       "path": "content/districts/east_art.json",
-      "sha256": "6b160fc46166f4d65988145a7fcef6680469da905c8f5d873690de31937c259a",
+      "sha256": "1b001a5d3491118f203b0edf18287ee888d9ce45799ff68148c3dd1c59538789",
       "notice": "Source-derived geography and original compressed artwork; retain City attribution in metadata and distribution notices"
     }
   ],

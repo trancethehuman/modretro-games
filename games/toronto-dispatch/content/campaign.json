@@ -907,13 +907,13 @@
         18
       ],
       "time_limit_seconds": 150,
-      "reward": 130,
+      "reward": 132,
       "timing_design": {
-        "vehicle_route_pixels": 1192,
+        "vehicle_route_pixels": 1256,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 17.7,
+        "modeled_road_and_foot_seconds": 18.6,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -936,13 +936,13 @@
         3
       ],
       "time_limit_seconds": 120,
-      "reward": 119,
+      "reward": 122,
       "timing_design": {
-        "vehicle_route_pixels": 552,
+        "vehicle_route_pixels": 648,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 8.2,
+        "modeled_road_and_foot_seconds": 9.6,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1426,14 +1426,14 @@
         5,
         3
       ],
-      "time_limit_seconds": 130,
-      "reward": 156,
+      "time_limit_seconds": 135,
+      "reward": 157,
       "timing_design": {
-        "vehicle_route_pixels": 648,
+        "vehicle_route_pixels": 696,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.6,
+        "modeled_road_and_foot_seconds": 10.3,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2202,13 +2202,13 @@
         5
       ],
       "time_limit_seconds": 185,
-      "reward": 214,
+      "reward": 215,
       "timing_design": {
-        "vehicle_route_pixels": 2128,
+        "vehicle_route_pixels": 2176,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 31.5,
+        "modeled_road_and_foot_seconds": 32.2,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2556,13 +2556,13 @@
         6
       ],
       "time_limit_seconds": 145,
-      "reward": 227,
+      "reward": 228,
       "timing_design": {
-        "vehicle_route_pixels": 1112,
+        "vehicle_route_pixels": 1160,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 16.5,
+        "modeled_road_and_foot_seconds": 17.2,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2616,14 +2616,14 @@
         3,
         6
       ],
-      "time_limit_seconds": 155,
-      "reward": 240,
+      "time_limit_seconds": 160,
+      "reward": 243,
       "timing_design": {
-        "vehicle_route_pixels": 1232,
+        "vehicle_route_pixels": 1328,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 16.4,
+        "modeled_road_and_foot_seconds": 17.7,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2651,13 +2651,13 @@
         18
       ],
       "time_limit_seconds": 175,
-      "reward": 244,
+      "reward": 246,
       "timing_design": {
-        "vehicle_route_pixels": 1192,
+        "vehicle_route_pixels": 1256,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 17.7,
+        "modeled_road_and_foot_seconds": 18.6,
         "modeled_control_allowance_seconds": 30,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2681,14 +2681,14 @@
         3,
         6
       ],
-      "time_limit_seconds": 155,
-      "reward": 238,
+      "time_limit_seconds": 160,
+      "reward": 240,
       "timing_design": {
-        "vehicle_route_pixels": 1128,
+        "vehicle_route_pixels": 1224,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 16.7,
+        "modeled_road_and_foot_seconds": 18.1,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },

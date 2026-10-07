@@ -8,7 +8,7 @@ are in Toronto. Writes the background, attributes, collision grid and
 content/city_art.json. Requires Pillow; no downloaded art or map imagery.
 """
 from pathlib import Path
-import json, sys
+import json, os, sys
 from PIL import Image, ImageDraw
 import city_layout as L
 from streetcar_art import paint_streetcar_stops
@@ -83,7 +83,7 @@ def main(check=False):
     img = Image.new('RGB', (WIDTH, HEIGHT), COLORS[2]); d = ImageDraw.Draw(img)
     attrs = [6] * (TW * TH)
     collisions = [16] * (TW * TH)
-    blocks, canopies, solids, reserved, districts, open_ground = [], [], [], [], [], []
+    blocks, canopies, solids, reserved, districts = [], [], [], [], []
 
     def box(x, y, w, h, c):
         d.rectangle((x, y, x + w - 1, y + h - 1), fill=COLORS[c])
@@ -200,6 +200,30 @@ def main(check=False):
         if h['half'] == 24 and v['half'] == 24:
             box(cx - 30, cy - 30, 3, 3, 0); box(cx + 27, cy + 27, 3, 3, 0)
 
+    # Queen's Park Crescent's 45-degree parts, drawn to the pixel so the ring
+    # reads as a curve; tiles keep one palette each (sidewalk separates
+    # asphalt from lawn by more than a tile's diagonal).
+    qx0 = min(min(seg[0], seg[2]) for seg in L.QP_DIAGONALS) - 32
+    qx1 = max(max(seg[0], seg[2]) for seg in L.QP_DIAGONALS) + 32
+    qy0 = min(min(seg[1], seg[3]) for seg in L.QP_DIAGONALS) - 32
+    qy1 = max(max(seg[1], seg[3]) for seg in L.QP_DIAGONALS) + 32
+    for py in range(qy0, qy1):
+        for px in range(qx0, qx1):
+            if L.crescent(px + 0.5, py + 0.5):
+                d.point((px, py), fill=COLORS[1])
+            elif L.crescent(px + 0.5, py + 0.5, walk=True) and not L.road(px, py):
+                d.point((px, py), fill=COLORS[3])
+    for ty in range(qy0 // 8, qy1 // 8):
+        for tx in range(qx0 // 8, qx1 // 8):
+            x, y, i = tx * 8, ty * 8, ty * TW + tx
+            if L.road(x + 4, y + 4, L.WALK_HALF):
+                continue
+            if L.crescent(x + 4, y + 4):
+                collisions[i] = 0; attrs[i] = 0
+            elif any(L.crescent(x + a + 0.5, y + b + 0.5, walk=True) for a in range(8) for b in range(8)):
+                ground_left = any(img.getpixel((x + a, y + b)) == tuple(bytes.fromhex(COLORS[2][1:])) for a in range(8) for b in range(8))
+                attrs[i] = 6 if ground_left else 0
+
     # ------------------------------------------------------------- buildings
     def free(x, y, w, h, gap=0):
         if x < mx0 or y < my0 + 8 or x + w > mx1 or y + h > my1:
@@ -252,7 +276,7 @@ def main(check=False):
         if kind:
             landmark_detail(kind, x, y, w, h)
         else:
-            city_kit.roof_details(d, box, x, y, w, h, roof, city_kit.seed_of('core', x, y), COLORS)
+            city_kit.roof_details(d, box, x, y, w, h, roof, city_kit.seed_of('core', x, y), COLORS, aligned=True)
         solid(x, y, w, h)
         slot = 1 if style == 5 else style + 1
         attr(x, y, w, h, slot, True)
@@ -300,11 +324,6 @@ def main(check=False):
             box(x + w - 12, y + 4, 8, 8, 3)
         elif kind == 'crystal':      # ROM crystal on heritage stone
             d.polygon([(x + 4, y + h - 6), (x + 10, y + 4), (x + 20, y + 8), (x + 16, y + h - 8)], fill=COLORS[3], outline=COLORS[0])
-        elif kind == 'legislature':  # Queen's Park: Romanesque front and towers
-            box(x + 2, y + 2, 6, 6, 3); box(x + w - 8, y + 2, 6, 6, 3); box(x + w // 2 - 4, y + 2, 8, 8, 3)
-        elif kind == 'palm_house':   # Allan Gardens glass dome
-            d.ellipse((x + w // 2 - 8, y + 2, x + w // 2 + 7, y + 17), fill=COLORS[3], outline=COLORS[0])
-            d.line((x + w // 2, y + 3, x + w // 2, y + 16), fill=COLORS[0])
         elif kind == 'warehouse_chimney':  # Distillery brick works
             box(x + w - 8, y + 2, 4, 12, 0); box(x + w - 7, y + 1, 2, 2, 3)
             for cx in range(x + 4, x + w - 12, 8):
@@ -332,10 +351,200 @@ def main(check=False):
                     attrs[i] = 6 | 128
                 canopies.append([tx8, ty8, 16, 16])
         districts.append({'name': name, 'kind': 'park', 'rect': [x, y, w, h]})
-        open_ground.append((x, y, w, h))
+
+    green_rgb = tuple(bytes.fromhex(COLORS[2][1:]))
+
+    def lawn_only(x0, y0, x1, y1):
+        """Pixels of untouched lawn in a rectangle (designed parks)."""
+        return lambda px, py: x0 <= px < x1 and y0 <= py < y1 and img.getpixel((px, py)) == green_rgb
+
+    def plant_trees(x0, y0, x1, y1, ok, keep_out=()):
+        """Tile-aligned trees wherever a 16x16 square is plain lawn."""
+        taken = []
+        for ty in range(y0 // 8 * 8, y1 - 15, 8):
+            for tx in range(x0 // 8 * 8, x1 - 15, 8):
+                if any(abs(tx - ox) < 16 and abs(ty - oy) < 16 for ox, oy in taken):
+                    continue
+                if any(kx - 16 < tx < kx + kw and ky - 16 < ty < ky + kh for kx, ky, kw, kh in keep_out):
+                    continue
+                if all(ok(tx + a, ty + b) for a in range(16) for b in range(16)):
+                    city_kit.tree(d, tx, ty, COLORS, (tx // 8 + ty // 8) & 1)
+                    for _, _, i in cells(tx, ty, 16, 16):
+                        attrs[i] = 6 | 128
+                    canopies.append([tx, ty, 16, 16]); taken.append((tx, ty))
+
+    def tufts(x0, y0, x1, y1):
+        """Grass tufts only on whole lawn tiles, so mixed tiles stay shared."""
+        for ty in range(y0 // 8, y1 // 8):
+            for tx in range(x0 // 8, x1 // 8):
+                if all(img.getpixel((tx * 8 + a, ty * 8 + b)) == green_rgb for a in range(8) for b in range(8)):
+                    d.point((tx * 8 + 2, ty * 8 + 3), fill=COLORS[1]); d.point((tx * 8 + 3, ty * 8 + 2), fill=COLORS[1])
+
+    def trinity_bellwoods(x0, y0, x1, y1):
+        """The whole block from Queen to Dundas: the stone gates on Queen St,
+        the sunken dog bowl, the walk between them and old trees."""
+        reserved.append((x0, y0, x1 - x0, y1 - y0))
+        cx = (x0 + x1) // 2
+        ok = lawn_only(x0, y0, x1, y1)
+        # The walk from the gates up through the park to Dundas.
+        box(cx - 2, y0, 4, y1 - y0, 3)
+        # The dog bowl: a hollow in the centre of the park, its north slope
+        # in shade.
+        cy = (y0 + y1) // 2
+        bx0, by0, bx1, by1 = x0 + 6, cy - 10, x1 - 7, cy + 9
+        d.ellipse((bx0, by0, bx1, by1), fill=COLORS[2], outline=COLORS[1])
+        d.arc((bx0 + 1, by0 + 1, bx1 - 1, by1 - 1), 200, 340, fill=COLORS[1], width=2)
+        # The gates: two stone piers and the iron arch over the walk.
+        for px0 in (cx - 9, cx + 5):
+            box(px0, y1 - 8, 4, 7, 3); d.rectangle((px0, y1 - 8, px0 + 3, y1 - 2), outline=COLORS[0])
+        d.line((cx - 5, y1 - 7, cx + 4, y1 - 7), fill=COLORS[0]); d.point((cx - 1, y1 - 8), fill=COLORS[0])
+        solid(cx - 9, y1 - 8, 4, 7); solid(cx + 5, y1 - 8, 4, 7)
+        plant_trees(x0, y0, x1, y1, ok, keep_out=[(bx0, by0, bx1 - bx0, by1 - by0)])
+        tufts(x0, y0, x1, y1)
+        districts.append({'name': 'TRINITY BELLWOODS', 'kind': 'park', 'rect': [x0, y0, x1 - x0, y1 - y0]})
+
+    def allan_gardens(x0, y0, x1, y1):
+        """The whole block: the Palm House's glass dome and its greenhouse
+        wings on their paved forecourt at the north, paths from Dundas and
+        the corners, and trees."""
+        reserved.append((x0, y0, x1 - x0, y1 - y0))
+        cx = (x0 + x1) // 2
+        hx0, hy0, hx1, hy1 = cx - 24, y0, cx + 24, y0 + 24
+        box(hx0, hy0, hx1 - hx0, hy1 - hy0, 3)
+        for wx0 in (hx0 + 2, cx + 9):
+            box(wx0, hy0 + 6, 13, 12, 2); d.rectangle((wx0, hy0 + 6, wx0 + 12, hy0 + 17), outline=COLORS[0])
+            for mx in range(wx0 + 3, wx0 + 12, 3):
+                d.line((mx, hy0 + 7, mx, hy0 + 16), fill=COLORS[3])
+        d.ellipse((cx - 10, hy0 + 2, cx + 9, hy0 + 21), fill=COLORS[2], outline=COLORS[0])
+        d.line((cx - 1, hy0 + 3, cx - 1, hy0 + 20), fill=COLORS[3]); d.line((cx - 9, hy0 + 11, cx + 8, hy0 + 11), fill=COLORS[3])
+        d.ellipse((cx - 5, hy0 + 7, cx + 4, hy0 + 16), outline=COLORS[3])
+        solid(hx0 + 2, hy0 + 6, hx1 - hx0 - 4, 12)
+        attr(hx0, hy0, hx1 - hx0, hy1 - hy0, 2)
+        districts.append({'name': 'Allan Gardens Palm House', 'kind': 'landmark', 'rect': [hx0, hy0, hx1 - hx0, hy1 - hy0]})
+        # Paths: south from the Palm House doors to Dundas, and diagonals
+        # from the south corners.
+        ok = lawn_only(x0, y0, x1, y1)
+        for py in range(hy1, y1):
+            for px in range(x0, x1):
+                if ok(px, py) and (abs(px - cx + 0.5) < 2 or abs(abs(px - cx + 0.5) - (py - hy1 + 0.5)) < 1.5):
+                    d.point((px, py), fill=COLORS[3])
+        plant_trees(x0, y0, x1, y1, ok)
+        tufts(x0, y0, x1, y1)
+        districts.append({'name': 'ALLAN GARDENS', 'kind': 'park', 'rect': [x0, y0, x1 - x0, y1 - y0]})
+
+    def grange_park(x0, y0, x1, y1):
+        """South of the AGO: The Grange, the 1817 brick house the gallery
+        grew from, facing its park, with the walk to Queen St and trees."""
+        reserved.append((x0, y0, x1 - x0, y1 - y0))
+        cx = (x0 + x1) // 2
+        lm(cx - 12, y0, 24, 16, 0, None, 'The Grange', lip=False)
+        ok = lawn_only(x0, y0, x1, y1)
+        for py in range(y0 + 20, y1):
+            for px in range(cx - 2, cx + 2):
+                if ok(px, py):
+                    d.point((px, py), fill=COLORS[3])
+        plant_trees(x0, y0, x1, y1, ok)
+        tufts(x0, y0, x1, y1)
+        districts.append({'name': 'GRANGE PARK', 'kind': 'park', 'rect': [x0, y0, x1 - x0, y1 - y0]})
+
+    def queens_park():
+        """Queen's Park inside the crescent: the Legislative Building across
+        the south end facing University Ave and College, its front lawn and
+        flagpoles, and the park to the north with paths radiating from the
+        King Edward VII statue under old trees. Around the crescent: the ROM
+        and Victoria College at Bloor, University College and the Whitney
+        Block on either side."""
+        zx0, zy0, zx1, zy1 = L.QP_ZONE
+        ix0, iy0, ix1, iy1 = L.QP_INTERIOR
+        lx, ly, lw, lh = L.QP_LEGISLATURE
+        sx, sy = L.QP_STATUE
+        green = tuple(bytes.fromhex(COLORS[2][1:])); cream = tuple(bytes.fromhex(COLORS[3][1:]))
+        reserved.append((zx0, zy0, zx1 - zx0, zy1 - zy0))
+
+        def ground(px, py, paths=False):
+            """Untouched ground (or, with paths, park paths) in the zone."""
+            return zx0 <= px < zx1 and zy0 <= py < zy1 and not L.crescent(px + 0.5, py + 0.5, walk=True) and \
+                not L.road(px, py, L.WALK_HALF) and img.getpixel((px, py)) in ((green, cream) if paths else (green,))
+
+        def park_px(px, py):
+            return ix0 <= px < ix1 and iy0 <= py < iy1 and ground(px, py)
+        # Paths radiating from the statue as on the real trail network: north
+        # to the crescent's tip, across between Hoskin and Wellesley, south to
+        # the Legislature and on the two northern diagonals (the southern
+        # lawns keep their trees).
+        for py in range(iy0, ly):
+            for px in range(ix0, ix1):
+                ax, ay = px - sx + 0.5, py - sy + 0.5
+                if park_px(px, py) and (abs(ax) < 2 or abs(ay) < 2 or (ay < 0 and abs(abs(ax) - abs(ay)) < 1.5)):
+                    d.point((px, py), fill=COLORS[3])
+        d.ellipse((sx - 8, sy - 8, sx + 7, sy + 7), fill=COLORS[3], outline=COLORS[0])
+        # King Edward VII on horseback, on a stone plinth.
+        d.rectangle((sx - 4, sy - 3, sx + 3, sy + 3), fill=COLORS[1], outline=COLORS[0])
+        box(sx - 3, sy - 1, 6, 2, 0); box(sx + 1, sy - 3, 2, 2, 0)
+        solid(sx - 8, sy - 4, 16, 8, 'King Edward VII statue')
+        # The Legislative Building: pink sandstone, slate roofs, end pavilions
+        # and the central block with its tower over the porte-cochere.
+        for py in range(ly + 4, ly + lh + 4):
+            for px in range(lx + 4, lx + lw + 4):
+                if not (lx <= px < lx + lw and ly <= py < ly + lh) and ground(px, py):
+                    d.point((px, py), fill=COLORS[0])
+        box(lx, ly + 6, lw, lh - 14, 1); d.rectangle((lx, ly + 6, lx + lw - 1, ly + lh - 9), outline=COLORS[0])
+        d.line((lx + 12, ly + 14, lx + lw - 13, ly + 14), fill=COLORS[0])
+        for px0 in (lx, lx + lw - 12):
+            box(px0, ly + 2, 12, lh - 10, 2); d.rectangle((px0, ly + 2, px0 + 11, ly + lh - 9), outline=COLORS[0])
+            d.line((px0, ly + 2, px0 + 5, ly + 8), fill=COLORS[0]); d.line((px0 + 11, ly + 2, px0 + 6, ly + 8), fill=COLORS[0])
+        cx0 = lx + lw // 2 - 12
+        box(cx0, ly, 24, lh - 6, 2); d.rectangle((cx0, ly, cx0 + 23, ly + lh - 7), outline=COLORS[0])
+        d.line((cx0, ly, cx0 + 7, ly + 7), fill=COLORS[0]); d.line((cx0 + 23, ly, cx0 + 16, ly + 7), fill=COLORS[0])
+        box(cx0 + 7, ly + 5, 10, 10, 1); d.rectangle((cx0 + 7, ly + 5, cx0 + 16, ly + 14), outline=COLORS[0])
+        box(cx0 + 11, ly + 9, 2, 2, 3)
+        box(lx, ly + lh - 8, lw, 8, 2); d.line((lx, ly + lh - 8, lx + lw - 1, ly + lh - 8), fill=COLORS[0])
+        d.rectangle((lx, ly, lx + lw - 1, ly + lh - 1), outline=COLORS[0])
+        for wx in range(lx + 3, lx + lw - 3, 4):
+            if not cx0 <= wx < cx0 + 24:
+                box(wx, ly + lh - 6, 2, 3, 3)
+        for ax in range(cx0 + 3, cx0 + 21, 7):
+            box(ax, ly + lh - 6, 5, 6, 3); d.line((ax, ly + lh - 6, ax + 4, ly + lh - 6), fill=COLORS[0])
+        solid(lx, ly, lw, lh)
+        attr(lx, ly, lw, lh, 3, True)
+        blocks.append({'x': lx, 'y': ly, 'width': lw, 'depth': lh, 'height': 8, 'style': 2,
+                       'landmark': 'Ontario Legislative Building', 'kind': 'legislature', 'overhang': 0})
+        districts.append({'name': 'Ontario Legislative Building', 'kind': 'landmark', 'rect': [lx, ly, lw, lh]})
+        # Front lawn: the walk from College to the doors and two flagpoles.
+        for py in range(ly + lh, iy1):
+            for px in range(sx - 4, sx + 4):
+                if ground(px, py):
+                    d.point((px, py), fill=COLORS[3])
+        for fx in (sx - 12, sx + 11):
+            box(fx, ly + lh + 3, 1, 6, 0); d.point((fx, ly + lh + 2), fill=COLORS[3])
+        # The ROM at Bloor; the campus lawns of Victoria College and
+        # University College and the grounds beside the Whitney Block are
+        # left as lawn and trees around the crescent.
+        lm(416, 100, 40, 32, 3, 'crystal', 'Royal Ontario Museum')
+        # Old trees on plain lawn, tile-aligned so every one reuses the same
+        # tiles (a canopy over a path edge would make one-off tiles).
+        taken = []
+        for ty in range(zy0, zy1 - 15, 8):
+            for tx in range(zx0, zx1 - 15, 8):
+                if any(abs(tx - ox) < 16 and abs(ty - oy) < 16 for ox, oy in taken):
+                    continue
+                if (tx - sx + 8) ** 2 + (ty - sy + 8) ** 2 < 24 ** 2:
+                    continue
+                if all(ground(tx + a, ty + b) for a in range(16) for b in range(16)):
+                    city_kit.tree(d, tx, ty, COLORS, (tx // 8 + ty // 8) & 1)
+                    for _, _, i in cells(tx, ty, 16, 16):
+                        attrs[i] = 6 | 128
+                    canopies.append([tx, ty, 16, 16]); taken.append((tx, ty))
+        # Grass tufts only on whole lawn tiles (a tuft beside a path or kerb
+        # would make a one-off tile).
+        for ty in range(zy0 // 8, zy1 // 8):
+            for tx in range(zx0 // 8, zx1 // 8):
+                if all(img.getpixel((tx * 8 + a, ty * 8 + b)) == green for a in range(8) for b in range(8)):
+                    d.point((tx * 8 + 2, ty * 8 + 3), fill=COLORS[1]); d.point((tx * 8 + 3, ty * 8 + 2), fill=COLORS[1])
+        districts.append({'name': 'QUEENS PARK', 'kind': 'park', 'rect': [ix0, iy0, ix1 - ix0, iy1 - iy0]})
 
     def plaza(x, y, w, h):
-        reserved.append((x, y, w, h)); open_ground.append((x, y, w, h))
+        reserved.append((x, y, w, h))
         city_kit.plaza(d, box, x, y, w, h, COLORS)
         for _, _, i in cells(x, y, w, h):
             attrs[i] = 0
@@ -370,6 +579,8 @@ def main(check=False):
         x0, y0, x1, y1 = b; W, H = x1 - x0, y1 - y0
         s = seed % 3
         if kind in ('park',):
+            if region_of(x0, y0)[0] == 'TRINITY BELLWOODS':
+                trinity_bellwoods(x0, y0, x1, y1); return
             park(x0, y0, W, H, region_of(x0, y0)[0]); return
         if kind == 'houses':
             stacked(x0, x1, y0, H, [24, 16, 24][s:] + [24], [2]); return
@@ -441,19 +652,15 @@ def main(check=False):
     lm(576, 464, 32, 32, 3, 'clocktower', 'Old City Hall')
     # AGO and Grange Park on Dundas St W at McCaul.
     lm(424, 432, 48, 24, 3, 'bowed_glass', 'Art Gallery of Ontario')
-    park(416, 464, 64, 32, 'GRANGE PARK', paths=False)
-    # Royal Ontario Museum at Bloor and Queen's Park; the Legislature in Queen's Park.
-    lm(448, 96, 32, 40, 3, 'crystal', 'Royal Ontario Museum')
-    lm(552, 224, 48, 32, 3, 'legislature', 'Ontario Legislative Building')
-    park(544, 200, 64, 16, 'QUEENS PARK', paths=False)
-    park(544, 96, 64, 56, 'QUEENS PARK NORTH', paths=True)
+    grange_park(416, 464, 480, 496)
+    # Royal Ontario Museum at the north-west corner of Bloor and Queen's Park,
+    # Victoria College across the street.
+    queens_park()
     # St Lawrence Market and the Gooderham Flatiron on Front St E.
     lm(696, 760, 48, 32, 1, 'market', 'St Lawrence Market')
     lm(672, 680, 32, 32, 1, 'flatiron', 'Gooderham Flatiron')
     # Allan Gardens palm house, Moss Park and its armoury, Massey Hall.
-    park(704, 320, 48, 48, 'ALLAN GARDENS', paths=False)
-    reserved.pop()
-    lm(716, 328, 24, 24, 3, 'palm_house', 'Allan Gardens Palm House')
+    allan_gardens(672, 320, 752, 368)
     park(704, 464, 48, 32, 'MOSS PARK', paths=False)
     lm(704, 432, 48, 24, 5, 'armoury', 'Moss Park Armoury')
     lm(672, 464, 32, 32, 3, 'hall', 'Massey Hall')
@@ -486,10 +693,13 @@ def main(check=False):
                             seen.add((c, e)); stack.append((c, e))
                 xs = [g[0] for g in group]; ys = [g[1] for g in group]
                 found.append((min(xs) * 8, min(ys) * 8, (max(xs) + 1) * 8, (max(ys) + 1) * 8))
+    zx0, zy0, zx1, zy1 = L.QP_ZONE
     for b in sorted(found, key=lambda r: (r[1], r[0])):
         x0, y0, x1, y1 = b
         if y1 - y0 < 24 or x1 - x0 < 24:
             continue
+        if x0 < zx1 and zx0 < x1 and y0 < zy1 and zy0 < y1:
+            continue   # Queen's Park and its neighbours are drawn by queens_park()
         name, kind = region_of((x0 + x1) // 2, (y0 + y1) // 2)
         districts.append({'name': name, 'kind': kind, 'rect': [x0, y0, x1 - x0, y1 - y0]})
         fill(b, kind, city_kit.seed_of('core-block', x0, y0))
@@ -516,14 +726,9 @@ def main(check=False):
             d.line((sx - 2, sy - 2, sx + 1, sy - 2), fill=COLORS[0]); d.line((sx - 1, sy - 2, sx - 1, sy + 1), fill=COLORS[0])
     paint_streetcar_stops(d, 0, COLORS)
 
-    # Private lots and yards inside blocks are closed; sidewalks, parks and
-    # squares stay open to walkers (cars keep to the asphalt).
-    for ty in range(my0 // 8, my1 // 8):
-        for tx in range(mx0 // 8, mx1 // 8):
-            i = ty * TW + tx; x, y = tx * 8 + 4, ty * 8 + 4
-            if collisions[i] == 16 and not L.road(x, y, L.WALK_HALF) and \
-               not any(rx <= x < rx + rw and ry <= y < ry + rh for rx, ry, rw, rh in open_ground):
-                collisions[i] = 15
+    # Everything flat stays open (user direction, 2026-10-07): lawns, lots,
+    # plazas and yards take cars and walkers alike, and both pass under tree
+    # canopies. Buildings, monuments, water, rails and walls block.
     # The spray bay (gameplay: TORONTO.c td_spray_check): hazard-striped bay in
     # the north lane of King St West between Ossington and Bathurst, with the
     # body shop's roll-up door on the house behind it.
@@ -551,8 +756,13 @@ def main(check=False):
             raw.add(tile.tobytes())
             variants = [tile, tile.transpose(Image.Transpose.FLIP_LEFT_RIGHT), tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM), tile.transpose(Image.Transpose.ROTATE_180)]
             patterns.add(min(v.tobytes() for v in variants))
+    # TD_ART_PREVIEW=path saves the art even when it is over the tile budget,
+    # for tile-budget work.
+    if os.environ.get('TD_ART_PREVIEW'):
+        img.save(os.environ['TD_ART_PREVIEW'])
     assert len(patterns) <= 384, ('core background patterns', len(patterns))
-    assert all((a & 7) <= 6 and not (a & 128) for a, c in zip(attrs, collisions) if c == 0)
+    bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
+    assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])
     content = {'projection': 'compressed north-up; street order and spacing from the City of Toronto Centreline (see content/districts/core-research.json)',
                'dimensions': [WIDTH, HEIGHT], 'rows': L.ROWS, 'columns': L.COLS,
                'streets': L.STREETS, 'river': L.RIVER, 'bridges': L.BRIDGES, 'rail': L.RAIL,

@@ -19,7 +19,7 @@ OUTPUT = ROOT / "content/districts/west_jobs.json"
 SPEEDS = {0: 86.25, 1: 71.25, 2: 101.25, 3: 63.75}
 FOOT_SPEED = 30.0
 BASE_STOPS_SHA256 = "26c2e8bee34a7a0bd54ffa520e770b03dc41a26f91943c081d3fed517ebba69b"
-BASE_QUESTS_SHA256 = "29845bd1486a8420a6d60171f044790543e08548da23f6723d223fccc1084b8a"
+BASE_QUESTS_SHA256 = "d75f7f54f19c27d7c6fd7b89e693edb7b7e121e226ba78c11c6c57336ce483b1"
 BASE_QUEST_FIELDS = ("id", "title", "brief", "kind_id", "required_vehicle",
                      "min_completed", "route", "time_limit_seconds", "reward")
 STOP_NAMES = [

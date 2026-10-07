@@ -10,7 +10,7 @@
   "result_stop_count": 35,
   "result_quest_count": 80,
   "preserved_base_stops_sha256": "26c2e8bee34a7a0bd54ffa520e770b03dc41a26f91943c081d3fed517ebba69b",
-  "preserved_base_quests_sha256": "29845bd1486a8420a6d60171f044790543e08548da23f6723d223fccc1084b8a",
+  "preserved_base_quests_sha256": "d75f7f54f19c27d7c6fd7b89e693edb7b7e121e226ba78c11c6c57336ce483b1",
   "preserved_base_quest_fields": [
     "id",
     "title",
@@ -27,33 +27,33 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "30aeacd69971f3e5aeaff3112835ca72d76c6012d95263036fc1795d70d9e980"
+      "collision_sha256": "48d94625edd2ef3dd478b5ed261e17964ca06f0f3cb421c9ae62f8fd20259c90"
     },
     {
       "district": 1,
       "scene": "project/project/scenes/toronto_west/scene.gbsres",
-      "collision_sha256": "faa4aaa5f943036bdfe342c9185ac1de9c8ba404f62489887680cf9803bc951e"
+      "collision_sha256": "e92e53b44b87a00789ac9ef86c72afe721589bc625d3af47f68c235dc5ec813a"
     },
     {
       "district": 2,
       "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
-      "collision_sha256": "fc3b34d9d25c47f64123d27b0112632b261046443a5a08ef6ad56d9f37122f1c"
+      "collision_sha256": "69162311f0187ae8fb3244e32c7b51b103be3a8df186a0164fbe32dc97eca364"
     },
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "collision_sha256": "4527460fa77c782a4833c20b20d839b9d2256b81145129c332e4778caa636f71"
+      "collision_sha256": "bf44fb1510d194d2756c50c9d0bb5bd7fa79ab205cd2c27bf9d9dcdd08898185"
     }
   ],
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "e0409ed93a945d04b0aa591baafc23b74e5bf0ef25cc09bc9e49ede0b80544fb",
+      "sha256": "c6125f05b489ddb300824a02099f359d5fd5947a003844d943ee864460973488",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {
       "path": "content/districts/high_park_art.json",
-      "sha256": "fdb02125b18ebf91e39b5b89a7593b4c36031f418f5434ea2f7b17286b025c6f",
+      "sha256": "8f209db907c6497124b3e21c2d9e03b9bd146099f53f0faa063eef2c6adb25d8",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     }
   ],

@@ -348,14 +348,17 @@ static void test_city_routes_and_walking(void) {
 
     reset_case();geometry=NATIVE_GRID;toronto_init();td.mode=TD_ROAM;
     td.u=576*16;td.v=740*16;td.onfoot=0;
-    int usable=1,continuous=1;
+    int usable=1,continuous=1,on_asphalt=1;
     for(unsigned step=0;step<12000;step++) {
         UWORD old_u=td_traffic_u[5],old_v=td_traffic_v[5];
         td.seconds=step/60;td.subsecond=step%60;td_traffic_step();
-        if(td_distance(old_u,td_traffic_u[5])+td_distance(old_v,td_traffic_v[5])>8)continuous=0;
+        /* At most 8 per axis: diagonal legs round Queen's Park Crescent move both. */
+        if(td_distance(old_u,td_traffic_u[5])>8||td_distance(old_v,td_traffic_v[5])>8)continuous=0;
         for(unsigned i=0;i<6;i++)if(!lf_drive(td_traffic_u[i]>>4,td_traffic_v[i]>>4))usable=0;
+        if(tile_at(td_traffic_u[5]>>7,td_traffic_v[5]>>7))on_asphalt=0;
     }
     expect(continuous,"autonomous bus has continuous movement through clock changes and route loops");
+    expect(on_asphalt,"the bus keeps to the asphalt, round Queen's Park Crescent too");
     expect(usable,"all six vehicles follow usable native road footprints through a long route run");
 
     reset_case();geometry=NATIVE_GRID;int sidewalk=1;

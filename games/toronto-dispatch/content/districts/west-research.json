@@ -154,6 +154,20 @@
       "reviewed_on": "2026-10-02",
       "supports": "High Park Loop west of Parkside; Howard Park track corridor to Dundas.",
       "rights": "Reference only"
+    },
+    {
+      "id": "sorauren_park",
+      "url": "https://www.toronto.ca/city-government/planning-development/construction-new-facilities/new-parks-facilities/wabash-community-centre/",
+      "reviewed_on": "2026-10-07",
+      "supports": "Sorauren Avenue Park has a sports field, a dog park and a seasonal market; the Sorauren Park Fieldhouse is on its southern edge at 50 Wabash Ave.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "high_park_animal_display",
+      "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/zoos-farms/high-park-animal-display/",
+      "reviewed_on": "2026-10-07",
+      "supports": "High Park Animal Display (the zoo) on Deer Pen Road with bison, llamas and other animals; Grenadier Pond on the park's west side.",
+      "rights": "Reference only"
     }
   ],
   "live_query_evidence": {
@@ -1900,5 +1914,16 @@
     "Remaining OldToronto north/east/PortLands/fullIslands coverage",
     "At least2hours measured enjoyable gameplay",
     "Physical writable-cartridge boot, persistence and audio"
-  ]
+  ],
+  "park_features": {
+    "reviewed_on": "2026-10-07",
+    "source_facts": [
+      "Sorauren Avenue Park: sports field; fieldhouse on the southern edge (sorauren_park).",
+      "High Park: the animal display's paddocks on Deer Pen Road; Grenadier Pond along the west side (high_park, high_park_animal_display)."
+    ],
+    "compressed_design": [
+      "Sorauren: a 64x36 px soccer pitch and a 24x16 fieldhouse at the park's south-east corner, beside Sorauren Ave (which stands in for Wabash Ave in the compressed layout).",
+      "High Park: Grenadier Pond extended north to run most of the park's west side; two fenced paddocks with bison south of the High Park Boulevard walk; an open meadow left without trees."
+    ]
+  }
 }

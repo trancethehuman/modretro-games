@@ -14,6 +14,7 @@ lane 8/0. Everything below is original compressed game geometry.
 """
 WIDTH, HEIGHT = 1024, 976
 ARTERIAL, LOCAL, LANE = (24, 8), (16, 8), (8, 0)
+CRESCENT = (12, 8)                     # Queen's Park Crescent: one lane each way
 ROAD_HALF, WALK_HALF = 24, 32          # arterial values, kept for callers
 WEST_PORTS = [64, 288, 400, 528, 640]  # Bloor, College, Dundas, Queen, King
 EAST_PORTS = [64, 400, 528]            # Bloor/Danforth, Dundas and Queen
@@ -56,7 +57,10 @@ def street(name, axis, at, cls, a, b, names=None):
 STREETS = [
     # East-west
     street('BLOOR ST', 'h', 64, ARTERIAL, 0, 1024, [(888, 1024, 'DANFORTH AVE')]),
-    street('HARBORD ST', 'h', 176, LOCAL, 160, 784, [(512, 784, 'WELLESLEY ST')]),
+    # Harbord (Hoskin Ave east of Spadina) and Wellesley end at Queen's Park
+    # Crescent, as on the Centreline; the park lies between them.
+    street('HARBORD ST', 'h', 176, LOCAL, 160, 460, [(384, 460, 'HOSKIN AVE')]),
+    street('WELLESLEY ST', 'h', 176, LOCAL, 564, 784),
     street('COLLEGE ST', 'h', 288, ARTERIAL, 0, 992, [(640, 784, 'CARLTON ST'), (784, 992, 'GERRARD ST E')]),
     street('DUNDAS ST', 'h', 400, ARTERIAL, 0, 1024),
     street('QUEEN ST', 'h', 528, ARTERIAL, 0, 1024),
@@ -68,16 +72,37 @@ STREETS = [
     street('OSSINGTON AVE', 'v', 160, LOCAL, 24, 528),
     street('BATHURST ST', 'v', 256, ARTERIAL, 24, 840),
     street('SPADINA AVE', 'v', 384, ARTERIAL, 24, 840),
-    street('UNIVERSITY AVE', 'v', 512, ARTERIAL, 24, 736, [(24, 288, 'QUEENS PARK')]),
+    street('UNIVERSITY AVE', 'v', 512, ARTERIAL, 288, 736),
+    street('QUEENS PARK', 'v', 512, ARTERIAL, 24, 128),
+    # Straight arms of Queen's Park Crescent; QP_DIAGONALS join them to
+    # University Ave at College and to Queen's Park at the north end.
+    street('QUEENS PARK CRES', 'v', 460, CRESCENT, 168, 248),
+    street('QUEENS PARK CRES', 'v', 564, CRESCENT, 168, 248),
     street('YONGE ST', 'v', 640, ARTERIAL, 24, 840),
     street('PARLIAMENT ST', 'v', 784, ARTERIAL, 24, 840),
     street('BROADVIEW AVE', 'v', 928, LOCAL, 24, 528),
 ]
+# Queen's Park Crescent around the Legislature and the park (Centreline:
+# the crescents leave University Ave just north of College, Hoskin meets the
+# west arm and Wellesley the east arm, and they rejoin as Queen's Park, which
+# runs on to Bloor). The real oval is about 36 px wide at this compression;
+# the game widens it to about 104 px so the park reads at street level.
+# 45-degree centreline segments (x0, y0, x1, y1); asphalt and sidewalk keep
+# CRESCENT widths measured square to the road.
+QP_DIAGONALS = [(476, 264, 460, 248), (548, 264, 564, 248),   # from College
+                (460, 168, 500, 128), (564, 168, 524, 128)]   # to Queen's Park
+# The park inside the crescent: Legislature, lawns and the statue.
+QP_INTERIOR = (480, 144, 544, 256)
+QP_ZONE = (416, 96, 608, 256)          # the crescent's blocks, drawn as one design
+QP_LEGISLATURE = (480, 208, 64, 32)   # spans the park between the arms, as it does
+QP_STATUE = (512, 176)      # on a tile corner: the plaza and paths are flips of one design
+
 # Don crossings: Bloor (Prince Edward Viaduct), Gerrard, Dundas, Queen and the
 # waterfront (Lake Shore at the Keating Channel, folded into Queens Quay).
 BRIDGES = [64, 288, 400, 528, 824]
 ROWS = sorted({s['at'] for s in STREETS if s['axis'] == 'h'})
-COLS = sorted({s['at'] for s in STREETS if s['axis'] == 'v'})
+# Grid columns; the crescent's arms are not part of the street grid.
+COLS = sorted({s['at'] for s in STREETS if s['axis'] == 'v' and (s['half'], s['walk']) != CRESCENT})
 
 
 def _rects(walk):
@@ -123,9 +148,23 @@ def walkable(u, v):
     return road(u, v, WALK_HALF) or any(x <= u <= r and y <= v <= b for x, y, r, b in ISLANDS)
 
 
+def diagonal_band(u, v, x0, y0, x1, y1):
+    """Distance to a 45-degree centreline segment (round ends join the arms)."""
+    sx, sy = (1 if x1 > x0 else -1), (1 if y1 > y0 else -1)
+    t = min(max(((u - x0) * sx + (v - y0) * sy) / 2, 0), abs(x1 - x0))
+    return ((u - x0 - sx * t) ** 2 + (v - y0 - sy * t) ** 2) ** 0.5
+
+
+def crescent(u, v, walk=False):
+    """On Queen's Park Crescent's 45-degree parts (asphalt, or with walk the
+    sidewalk too)."""
+    half = CRESCENT[0] + (CRESCENT[1] * 1.42 if walk else 0)
+    return any(diagonal_band(u, v, *seg) <= half for seg in QP_DIAGONALS)
+
+
 def street_spans():
     """(x0, y0, x1, y1, label) centre-line segments for the HUD street name."""
-    out = []
+    out = [(min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1), 'QUEENS PARK CRES') for x0, y0, x1, y1 in QP_DIAGONALS]
     for s in STREETS:
         cuts = sorted({s['a'], s['b']} | {p for f, t, _ in s['names'] for p in (f, t)})
         for lo, hi in zip(cuts, cuts[1:]):

@@ -585,10 +585,16 @@ static UBYTE td_signal_stop(UWORD pos,UBYTE vertical,UBYTE reverse){
 /* Core loops in Q4: east/westbound lanes on td_rows[2..5] sit 8px either side
  * of the centreline; the bus loop visits its six fixed junctions. */
 static const UWORD td_core_lane_v[4]={288*16,400*16,528*16,640*16};
-/* 94 Wellesley: Ossington station, Ossington, Harbord/Wellesley, Parliament,
- * Castle Frank on Bloor, then back west along Bloor. */
-static const UWORD td_bus_u[6]={160*16,160*16,784*16,784*16,836*16,512*16};
-static const UWORD td_bus_v[6]={64*16,176*16,176*16,64*16,64*16,64*16};
+/* 94 Wellesley: Ossington station, Ossington, Harbord and Hoskin to Queen's
+ * Park Crescent, round the crescent's north end (two legs follow its
+ * 45-degree corners), Wellesley to Parliament, Castle Frank on Bloor, then
+ * back west along Bloor. */
+#define TD_BUS_LEGS 9
+static const UWORD td_bus_u[TD_BUS_LEGS]={160*16,160*16,460*16,504*16,520*16,564*16,784*16,784*16,836*16};
+static const UWORD td_bus_v[TD_BUS_LEGS]={64*16,176*16,176*16,132*16,132*16,176*16,176*16,64*16,64*16};
+/* The bus's frame on each leg: E 0, SE 1, S 2, W 4, N 6, NE 7. */
+static const UBYTE td_bus_frame[TD_BUS_LEGS]={4,2,0,7,0,1,0,6,0};
+typedef char td_bus_legs_in_kernel[(TD_BUS_LEGS==9)?1:-1];
 /* A road vehicle never drives into the courier's car: a step that would end
  * overlapping it is undone, so traffic queues behind or stops in front.
  * Vehicles already overlapping (an impact in progress) may move apart. */
@@ -854,10 +860,9 @@ UBYTE td_traffic_kernel(void) NAKED {
         ld hl, #_td_tk_u
         jr c, 71$
         call 98$
-        jr 74$
+        jr 72$
     71$:
         call 99$
-        jr 74$
     72$:
         ld hl, #_td_tk_v
         ld de, #_td_tk_tv
@@ -940,7 +945,7 @@ UBYTE td_traffic_kernel(void) NAKED {
         ld a, c
         cp a, #5
         jr nz, 77$
-        ld e, #6
+        ld e, #9
     77$:
         ld a, e
         or a, a
@@ -1143,9 +1148,11 @@ static void td_traffic_step(void){
             target_u=leg==0||leg==3?792*16:776*16;target_v=leg<2?792*16:48*16;
             if((leg==0||leg==2)&&phase<7&&td_signal_stop(v,1,leg==2))goto collide;
         }else{target_u=td_bus_u[leg];target_v=td_bus_v[leg];}
+        /* Both axes step together: square legs are unchanged, 45-degree
+         * legs (the bus round Queen's Park Crescent) run diagonally. */
         if(u<target_u){gap=target_u-u;u+=gap<8?gap:8;}
         else if(u>target_u){gap=u-target_u;u-=gap<8?gap:8;}
-        else if(v<target_v){gap=target_v-v;v+=gap<8?gap:8;}
+        if(v<target_v){gap=target_v-v;v+=gap<8?gap:8;}
         else if(v>target_v){gap=v-target_v;v-=gap<8?gap:8;}
         if(yield){
             gap=pu>u?pu-u:u-pu;
@@ -1153,7 +1160,7 @@ static void td_traffic_step(void){
         }
         *traffic_u=u;*traffic_v=v;
         if(u==target_u&&v==target_v){
-            *legs=(leg+1)%(district?sample->count:i==5?6:4);
+            *legs=(leg+1)%(district?sample->count:i==5?TD_BUS_LEGS:4);
             /* Banked targets and frames are cached between junctions. */
             if(district)dirty=1;
         }
@@ -1550,17 +1557,13 @@ void td_traffic_layout(void) NAKED {
         ld e, #0
         jr 49$
     45$:
-        ld e, #10
         ld a, b
-        cp a, #2
-        jr z, 49$
-        ld e, #12
-        or a, a
-        jr z, 49$
-        ld e, #14
-        cp a, #5
-        jr z, 49$
-        ld e, #8
+        add a, #<(_td_bus_frame)
+        ld l, a
+        ld a, #0
+        adc a, #>(_td_bus_frame)
+        ld h, a
+        ld e, (hl)
     49$:
         ld a, (_td_pl_count)
         add a, #<(_td_traffic_bases)
@@ -1656,7 +1659,7 @@ static void td_traffic_present(void){
         if(district)frame=sample->frame;
         else{
             leg=*legs;
-            frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==1?2:leg==0||leg==5?4:leg==3?6:0);
+            frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):td_bus_frame[leg];
         }
         a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(frame&7));
     }

@@ -213,5 +213,75 @@
     "Fort York",
     "Riverdale Park and Farm"
   ],
-  "landmark_art": "Original pixel art placed at the landmark's compressed position; no photographs, logos or map imagery."
+  "landmark_art": "Original pixel art placed at the landmark's compressed position; no photographs, logos or map imagery.",
+  "parks": {
+    "reviewed_on": "2026-10-07",
+    "note": "Source facts below are what the art follows; sizes and positions are compressed game design, recorded separately.",
+    "sources": [
+      {
+        "id": "centreline",
+        "url": "https://open.toronto.ca/dataset/toronto-centreline-tcl/",
+        "supports": "Queen's Park Cres E/W, Queen's Park, Hoskin Ave and Wellesley St W geometry and the Queen's Park Trl network (same downloaded file as above)."
+      },
+      {
+        "id": "ola_explore_queens_park",
+        "url": "https://ola.org/en/visit-learn/parliament-government/queens-park/explore-queens-park",
+        "supports": "The Legislative Building and the monuments in Queen's Park, including the King Edward VII equestrian statue in the park north of the building."
+      },
+      {
+        "id": "tb_access_study",
+        "url": "https://www.toronto.ca/city-government/planning-development/construction-new-facilities/park-facility-projects/trinity-bellwoods-park-access-circulation-study/",
+        "supports": "The historic gates at Trinity Bellwoods' main south entrance on Queen St W; the dog bowl."
+      },
+      {
+        "id": "tb_off_leash_map",
+        "url": "https://www.toronto.ca/wp-content/uploads/2017/10/979a-trinitybellwoodsolamap.pdf",
+        "supports": "The off-leash dog bowl in the centre of the park, at the bottom of a slope, south of Dundas St W."
+      },
+      {
+        "id": "allan_gardens_conservatory",
+        "url": "https://www.toronto.ca/explore-enjoy/parks-recreation/places-spaces/beaches-gardens-attractions/gardens-and-horticulture/conservatories/allan-gardens-conservatory/",
+        "supports": "Allan Gardens Conservatory: the glass-domed Palm House and its greenhouses."
+      },
+      {
+        "id": "grange_heritage",
+        "url": "https://www.toronto.ca/legdocs/mmis/2015/pb/bgrd/backgroundfile-78872.pdf",
+        "supports": "The Grange (1817) at the south end of the AGO complex; the south half of the estate opened as Grange Park."
+      }
+    ],
+    "source_facts": {
+      "queens_park_m": {
+        "frame": "Rotated grid metres as above (u east of Yonge, w north of Queen).",
+        "crescents_leave_university_w": 1141,
+        "crescents_rejoin_as_queens_park_w": 1746,
+        "crescent_w_u": [
+          -742,
+          -661
+        ],
+        "crescent_e_u": [
+          -610,
+          -524
+        ],
+        "hoskin_meets_west_crescent": [
+          -734,
+          1676
+        ],
+        "wellesley_meets_east_crescent": [
+          -526,
+          1448
+        ],
+        "queens_park_meets_bloor": [
+          -636,
+          2075
+        ],
+        "trails": "Queen's Park Trl segments radiate from a circle near w 1590 in the northern section, with a ring path near the edge; the middle of the oval has no trails (the Legislative Building) and the south end has the front-lawn paths."
+      }
+    },
+    "compressed_design": {
+      "queens_park": "The crescent is about 36 px wide at the core's compression; the game draws its arms 104 px apart (centrelines at x 460 and 564) so the park reads at street level. Harbord/Hoskin and Wellesley both meet it at the y=176 row; the arms leave College either side of the front lawn and rejoin at y=128 as Queen's Park, which runs to Bloor. 45-degree corners stand in for the curves. The Legislative Building spans the oval at y 208-240 with its front lawn and flagpoles to College; the statue is at (512,176) with six of the real spokes and old trees on the lawns. The ROM stays at Bloor and Queen's Park; Victoria College, University College and the Whitney Block are left as lawns and trees (tile budget).",
+      "trinity_bellwoods": "Fills the block from Queen to Dundas between Ossington and Bathurst: gates at the south edge, the walk north, the dog bowl in the centre, trees. Wider than the real park relative to the compressed block.",
+      "allan_gardens": "Fills the block between Yonge and Parliament, College/Carlton and Dundas: the Palm House dome and two greenhouse wings on a paved forecourt at the north, paths to Dundas and the south corners, trees.",
+      "grange_park": "South of the AGO: The Grange as a small brick house at the north of the park, the walk to Queen and trees."
+    }
+  }
 }

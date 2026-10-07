@@ -469,6 +469,23 @@
         384,
         128,
         96
+      ],
+      "features": [
+        {
+          "kind": "pitch",
+          "rect": [
+            608,
+            392,
+            64,
+            36
+          ]
+        }
+      ],
+      "fieldhouse": [
+        680,
+        408,
+        24,
+        16
       ]
     }
   ],
@@ -758,6 +775,17 @@
       "style": 5,
       "landmark": "Roncesvalles Carhouse",
       "kind": "carhouse",
+      "overhang": 8
+    },
+    {
+      "x": 680,
+      "y": 408,
+      "width": 24,
+      "depth": 16,
+      "height": 8,
+      "style": 5,
+      "landmark": "Sorauren Park fieldhouse",
+      "kind": null,
       "overhang": 8
     },
     {
@@ -1161,24 +1189,6 @@
     [
       592,
       368,
-      16,
-      16
-    ],
-    [
-      624,
-      400,
-      16,
-      16
-    ],
-    [
-      656,
-      400,
-      16,
-      16
-    ],
-    [
-      688,
-      400,
       16,
       16
     ],
@@ -1815,48 +1825,6 @@
     [
       336,
       392,
-      16,
-      16
-    ],
-    [
-      616,
-      384,
-      16,
-      16
-    ],
-    [
-      648,
-      384,
-      16,
-      16
-    ],
-    [
-      680,
-      384,
-      16,
-      16
-    ],
-    [
-      592,
-      392,
-      16,
-      16
-    ],
-    [
-      608,
-      408,
-      16,
-      16
-    ],
-    [
-      640,
-      408,
-      16,
-      16
-    ],
-    [
-      672,
-      408,
       16,
       16
     ],
@@ -9615,9 +9583,9 @@
     16,
     16,
     16,
-    16,
-    16,
-    16,
+    15,
+    15,
+    15,
     16,
     16,
     16,
@@ -9736,14 +9704,14 @@
     16,
     16,
     16,
-    15,
-    15,
     16,
     16,
-    15,
-    15,
     16,
     16,
+    16,
+    16,
+    16,
+    15,
     15,
     15,
     16,
@@ -18625,11 +18593,11 @@
     "solid": 15
   },
   "background_filename": "toronto_west.png",
-  "background_sha256": "a752e0f30ba4c63bb575be3c45ad7fabbc013470fb057da85ac6c8a77988f27d",
+  "background_sha256": "c2198b4894507a87cf060a89c243425c120652d3d969922283ece586218f5901",
   "source_research": "content/districts/west-research.json",
   "validation": {
-    "raw_unique_tiles": 291,
-    "flip_canonical_unique_tiles": 256,
+    "raw_unique_tiles": 321,
+    "flip_canonical_unique_tiles": 276,
     "animated_water_tiles": 768,
     "traffic_loops": 6,
     "traffic_footprint_half_pixels": 8,

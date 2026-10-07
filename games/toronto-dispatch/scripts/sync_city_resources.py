@@ -22,11 +22,15 @@ def main():
     assert len(collisions)==WIDTH//8*(HEIGHT//8)
     scene=project/'project/scenes/toronto_city/scene.gbsres';data=json.loads(scene.read_text());data.update(width=WIDTH//8,height=HEIGHT//8,collisions=compress(collisions));scene.write_text(json.dumps(data,indent=2)+'\n')
     # District backgrounds: palette/priority bytes come from each generator's
-    # attributes file; their collisions are authored by the generators.
+    # attributes file and collisions from its art metadata.
     for slug in ('west','high_park','east'):
         path=project/f'assets/backgrounds/toronto_{slug}.png.gbsres'
         data=json.loads(path.read_text());attrs=json.loads((project/f'original-art/{slug}_attributes.json').read_text())
         assert len(attrs)==data['width']*data['height']
         data['tileColors']=compress(attrs);path.write_text(json.dumps(data,indent=2)+'\n')
+        collisions=json.loads((ROOT/f'content/districts/{slug}_art.json').read_text())['collisions']
+        scene=project/f'project/scenes/toronto_{slug}/scene.gbsres';data=json.loads(scene.read_text())
+        assert len(collisions)==data['width']*data['height']
+        data['collisions']=compress(collisions);scene.write_text(json.dumps(data,indent=2)+'\n')
     print('Native CGB attributes synchronized; roof/canopy tiles carry background priority.')
 if __name__=='__main__':main()
