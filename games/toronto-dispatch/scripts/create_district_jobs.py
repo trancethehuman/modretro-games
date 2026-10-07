@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "content/districts/west_jobs.json"
 SPEEDS = {0: 86.25, 1: 71.25, 2: 101.25, 3: 63.75}
 FOOT_SPEED = 30.0
-BASE_STOPS_SHA256 = "981629d78d412ae0cc1a12fdd6158331c092976e9c1bdd173c83fdbedf55d08f"
-BASE_QUESTS_SHA256 = "be356c3b6e9736ce43a998ba4b0856b438dfc60b90dbf288b0a317b88e1efd5b"
+BASE_STOPS_SHA256 = "26c2e8bee34a7a0bd54ffa520e770b03dc41a26f91943c081d3fed517ebba69b"
+BASE_QUESTS_SHA256 = "5dd27d2a3d1e1e8e520e8f9e767e07cc2f3a0698d1caee8b3af2721384d7c4f5"
 BASE_QUEST_FIELDS = ("id", "title", "brief", "kind_id", "required_vehicle",
                      "min_completed", "route", "time_limit_seconds", "reward")
 STOP_NAMES = [

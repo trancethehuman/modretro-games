@@ -372,12 +372,12 @@ static void lf_ambient(void){
         else{if(pu<48+LF_VIEW_U)return;u=pu-LF_VIEW_U;}
         leg=west?2:0;v=west?lane+8:lane-8;
     }else if(i==4){
-        /* Southbound at x 824 (leg 0) or northbound at x 808 (leg 2). */
-        if(lf_patrol||lf_dist(816,pu)>280)return;
-        if(lf_dist(816,pu)>=LF_VIEW_U)v=pv<48?48:pv>792?792:pv;
+        /* Parliament: southbound at x 792 (leg 0) or northbound at x 776 (leg 2). */
+        if(lf_patrol||lf_dist(784,pu)>280)return;
+        if(lf_dist(784,pu)>=LF_VIEW_U)v=pv<48?48:pv>792?792:pv;
         else if(west){if(pv+LF_VIEW_V>792)return;v=pv+LF_VIEW_V;}
         else{if(pv<48+LF_VIEW_V)return;v=pv-LF_VIEW_V;}
-        leg=west?2:0;u=west?808:824;
+        leg=west?2:0;u=west?776:792;
     }else return;
     u<<=4;v<<=4;
     if(!lf_spot_clear(i,u,v))return;

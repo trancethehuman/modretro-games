@@ -13,6 +13,7 @@
 #define td_get_street td_authored_get_street
 #define td_get_west_street td_authored_get_west_street
 #include "content_under_test.c"
+#include "street_names_under_test.c"
 #undef td_get_stop
 #undef td_get_job
 #undef td_get_brief
@@ -70,7 +71,7 @@ static UBYTE district_tile(UBYTE district,UBYTE x,UBYTE y) {
     if (geometry==EAST_WALL && x>=50) return 15;
     if (geometry==SOUTH_CURB && y>=50) return 15;
     if (geometry==SOUTHWEST_CORNER && y>=50 && x<50) return 15;
-    if (geometry==ALIGHT_BARRIER&&x==71&&y==90) return 15;
+    if (geometry==ALIGHT_BARRIER&&x==73&&y==92) return 15;
     if (geometry==NATIVE_GRID||geometry==ALIGHT_BARRIER) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
     if (geometry==HIDDEN_NPC_TILE && x==48 && y==53) return 15;
     return 0;
@@ -281,7 +282,7 @@ static void test_passenger_comfort(void) {
 
 static void test_entry_collision(void) {
     reset_case();geometry=NATIVE_GRID;
-    td.park_u=76*16;td.park_v=744*16;td.u=92*16;td.v=766*16;td.onfoot=1;
+    td.park_u=340*16;td.park_v=814*16;td.u=356*16;td.v=790*16;td.onfoot=1;
     expect(lf_drive(td.park_u>>4,td.park_v>>4),"rail fixture parked car has a usable footprint");
     expect(td_walkable(td.u>>4,td.v>>4),"rail fixture courier endpoint is walkable");
     UWORD before_u=td.u,before_v=td.v;td_enter_exit();
@@ -307,14 +308,14 @@ static void test_hidden_pedestrian(void) {
 
 static void test_signal_and_autonomous_traffic(void) {
     reset_case();td.onfoot=1;td.seconds=8;
-    td_traffic_u[0]=184*16;td_traffic_v[0]=288*16;UWORD before=td_traffic_u[0];
+    td_traffic_u[0]=232*16;td_traffic_v[0]=288*16;UWORD before=td_traffic_u[0];
     td_traffic_step();expect(td_traffic_u[0]==before,"red traffic stops before the Bathurst intersection in world units");
     td.seconds=0;td_traffic_step();expect(td_traffic_u[0]>before,"green traffic leaves the stop line");
 
-    td.seconds=8;td_traffic_u[0]=182*16+6;before=td_traffic_u[0];
+    td.seconds=8;td_traffic_u[0]=230*16+6;before=td_traffic_u[0];
     td_traffic_step();expect(td_traffic_u[0]>before,"red traffic does not stop at arbitrary eight-pixel intervals");
 
-    td.seconds=0;td_traffic_u[4]=824*16;td_traffic_v[4]=376*16;before=td_traffic_v[4];
+    td.seconds=0;td_traffic_u[4]=792*16;td_traffic_v[4]=376*16;before=td_traffic_v[4];
     td_traffic_step();expect(td_traffic_v[4]==before,"vertical red traffic stops before Dundas");
     td.seconds=8;td_traffic_step();expect(td_traffic_v[4]>before,"vertical green traffic resumes");
 
@@ -325,7 +326,7 @@ static void test_signal_and_autonomous_traffic(void) {
 
 static void test_city_routes_and_walking(void) {
     reset_case();geometry=NATIVE_GRID;
-    expect(!lf_drive(76,756),"car footprint rejects a narrow solid rail under its centre");
+    expect(!lf_drive(120,796),"car footprint rejects a narrow solid rail under its centre");
     reset_case();geometry=NATIVE_GRID;td.u=793*16+2;td.v=730*16+12;
     td.heading=4;td.speed=21;td_vx=0;td_vy=336;
     for(unsigned i=0;i<16;i++)driving_tick(J_A);
@@ -336,7 +337,7 @@ static void test_city_routes_and_walking(void) {
     driving_tick(J_A);expect(td.speed<=0&&td.u==394*16,"corner assist cannot bypass a broad head-on wall");
 
     reset_case();geometry=NATIVE_GRID;toronto_init();td.mode=TD_ROAM;
-    td.u=560*16;td.v=720*16;td.onfoot=0;
+    td.u=576*16;td.v=740*16;td.onfoot=0;
     int usable=1,continuous=1;
     for(unsigned step=0;step<12000;step++) {
         UWORD old_u=td_traffic_u[5],old_v=td_traffic_v[5];
@@ -815,7 +816,7 @@ static void test_fresh_transit_after_failure(void) {
 
 static void native_case(void) {
     reset_case();geometry=NATIVE_GRID;authored_content=1;
-    td.u=td.park_u=td.safe_u=560*16;td.v=td.park_v=td.safe_v=720*16;
+    td.u=td.park_u=td.safe_u=576*16;td.v=td.park_v=td.safe_v=740*16;
 }
 
 static void test_pickup_damage_lifecycle(void) {
@@ -883,7 +884,7 @@ static void test_pickup_damage_lifecycle(void) {
         expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.stage==0&&td.health==0&&td.left==0&&
                td.seconds==previous_seconds+1&&td.cash==previous_cash,
                "an accepted parcel, fragile or passenger deadline still expires before its first pickup without rewarding the approach");
-        expect(td_target.district==0&&td_target.u==560&&td_target.v==720,
+        expect(td_target.district==0&&td_target.u==576&&td_target.v==740,
                "pre-pickup timeout clears the former objective and restores Union free-roam guidance");
     }
     /* Old version6 saves can contain approach damage. Validate their real
@@ -1164,7 +1165,7 @@ static void test_v5_migration_and_interrupted_upgrade(void) {
 static void test_district_semantic_fallback(void) {
     native_case();td.cash=111;td_save();td.cash=222;td_save();
     UBYTE newest=td_save_slot,image[sizeof(td_test_sram)];memcpy(image,td_test_sram,sizeof(image));
-    expect(td_district_drivable(0,560,720)&&!td_district_drivable(1,560,720),
+    expect(td_district_drivable(0,576,740)&&!td_district_drivable(1,576,740),
            "semantic fixture uses a real core road that is blocked in the requested western district");
     for(unsigned fault=0;fault<7;fault++) {
         memcpy(td_test_sram,image,sizeof(image));volatile UBYTE *record=td_save_address(newest);
@@ -1207,35 +1208,35 @@ static void test_safe_transit_alighting(void) {
         td_stop_t depot;td_get_stop(0,&depot);
         if(traffic) {
             td.park_u=640*16;td.park_v=640*16;
-            td_traffic_u[0]=560*16;td_traffic_v[0]=720*16;
-            td_traffic_u[1]=572*16;td_traffic_v[1]=720*16;
+            td_traffic_u[0]=576*16;td_traffic_v[0]=740*16;
+            td_traffic_u[1]=588*16;td_traffic_v[1]=740*16;
         }
         world_tick(J_A,1);world_tick(0,240);
-        UWORD expected_u=(traffic?548:572)*16;
-        expect(td.mode==TD_ROAM&&td.onfoot&&td.cash==27&&td.u==expected_u&&td.v==720*16&&
+        UWORD expected_u=(traffic?564:588)*16;
+        expect(td.mode==TD_ROAM&&td.onfoot&&td.cash==27&&td.u==expected_u&&td.v==740*16&&
                td.safe_u==td.u&&td.safe_v==td.v&&td_foot_free(td.u,td.v)&&td_near(&depot),
                "Union returns alight beside the actual parked car or loaded traffic at a clear reachable stop-side point");
         td_state_t arrived=td;memset(&td,0,sizeof(td));
         expect(td_restore()&&!memcmp(&td,&arrived,sizeof(td)),
                "safe Union alighting commits its actual clear foot position and single paid fare");
         world_tick(traffic?J_LEFT:J_RIGHT,1);
-        expect(td.u==expected_u+(traffic?-8:8)&&td.v==720*16&&td.onfoot&&td.cash==27,
+        expect(td.u==expected_u+(traffic?-8:8)&&td.v==740*16&&td.onfoot&&td.cash==27,
                "the first ordinary walking step escapes the alighting obstacle instead of trapping the courier inside it");
     }
 
     /* Four close traffic centres reject all12px points but leave the18px
        fallback usable. The courier can walk back into handoff range. */
     transit_menu_case(6,12);td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
-    td_traffic_u[0]=563*16;td_traffic_v[0]=720*16;
-    td_traffic_u[1]=557*16;td_traffic_v[1]=720*16;
-    td_traffic_u[2]=560*16;td_traffic_v[2]=723*16;
-    td_traffic_u[3]=560*16;td_traffic_v[3]=717*16;
+    td_traffic_u[0]=579*16;td_traffic_v[0]=740*16;
+    td_traffic_u[1]=573*16;td_traffic_v[1]=740*16;
+    td_traffic_u[2]=576*16;td_traffic_v[2]=743*16;
+    td_traffic_u[3]=576*16;td_traffic_v[3]=737*16;
     td_second();
-    expect(td.mode==TD_ROAM&&td.u==578*16&&td.v==720*16&&td_foot_free(td.u,td.v),
+    expect(td.mode==TD_ROAM&&td.u==594*16&&td.v==740*16&&td_foot_free(td.u,td.v),
            "blocked12px landings fall back to an actual clear18px position rather than the vehicle centre");
     for(unsigned i=0;i<8;i++)driving_tick(J_LEFT);
     td_stop_t depot;td_get_stop(0,&depot);
-    expect(td.u==574*16&&td_near(&depot)&&td_foot_free(td.u,td.v),
+    expect(td.u==590*16&&td_near(&depot)&&td_foot_free(td.u,td.v),
            "the18px fallback can approach the real stop into interaction range without entering the parked-car or traffic boxes");
 
     /* A temporary crowd covers the centre and every12/18px endpoint. The
@@ -1243,7 +1244,7 @@ static void test_safe_transit_alighting(void) {
     transit_menu_case(6,12);td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
     td.park_u=640*16;td.park_v=640*16;
     td.job=0;td_get_job(0,&td_job);td.stage=1;td.left=2;td_set_target();
-    const WORD blocked_u[5]={560,578,542,560,560},blocked_v[5]={720,720,720,738,702};
+    const WORD blocked_u[5]={576,594,558,576,576},blocked_v[5]={740,740,740,758,722};
     for(unsigned i=0;i<5;i++){td_traffic_u[i]=blocked_u[i]*16;td_traffic_v[i]=blocked_v[i]*16;}
     UWORD origin_u=td.u,origin_v=td.v;td_second();
     expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.u==origin_u&&td.v==origin_v&&
@@ -1254,14 +1255,14 @@ static void test_safe_transit_alighting(void) {
            "a fully blocked alighting attempt remains a valid recoverable paid origin save");
     td_second();
     expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.job==TD_NONE&&td.health==0&&
-           td.u==origin_u&&td.v==origin_v&&td_target.district==0&&td_target.u==560&&td_target.v==720,
+           td.u==origin_u&&td.v==origin_v&&td_target.district==0&&td_target.u==576&&td_target.v==740,
            "deadline expiry while alighting is obstructed clears the job and objective while preserving the paid retry");
     retry=td;memset(&td,0,sizeof(td));
     expect(td_restore()&&!memcmp(&td,&retry,sizeof(td)),
            "the expired paid retry restores with failure condition instead of losing its ride or charging another fare");
     for(unsigned i=0;i<6;i++){td_traffic_u[i]=30000;td_traffic_v[i]=30000;}
     td_second();
-    expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.health==0&&td.cash==27&&td.u==560*16&&td.v==720*16&&
+    expect(td.mode==TD_RESULT&&td.job==TD_NONE&&td.health==0&&td.cash==27&&td.u==576*16&&td.v==740*16&&
            td.safe_u==td.u&&td.safe_v==td.v&&td_near(&depot),
            "removing the obstruction completes the expired paid journey once at its clear destination before showing failure");
     td_state_t failed=td;memset(&td,0,sizeof(td));
@@ -1269,22 +1270,22 @@ static void test_safe_transit_alighting(void) {
            td.u==failed.u&&td.v==failed.v,
            "a failed but safely alighted destination remains a valid persistent free-roam state");
     td=failed;world_tick(J_B,1);world_tick(J_RIGHT,1);
-    expect(td.mode==TD_ROAM&&td.u==560*16+8&&td.v==720*16&&td.cash==27,
+    expect(td.mode==TD_ROAM&&td.u==576*16+8&&td.v==740*16&&td.cash==27,
            "dismissed expired-trip results allow the first walking step from the clear destination");
 
     /* Keep the registered grid except one synthetic solid tile between
        Union and the east18px endpoint. Clear endpoints cannot bypass it. */
     transit_menu_case(6,12);geometry=ALIGHT_BARRIER;td.mode=TD_RIDE;td.cash=27;td.ride_left=1;
-    td_traffic_u[0]=542*16;td_traffic_v[0]=720*16;
-    td_traffic_u[1]=560*16;td_traffic_v[1]=738*16;
-    td_traffic_u[2]=560*16;td_traffic_v[2]=702*16;
-    expect(td_district_walkable(0,578,720)&&!td_district_walkable(0,572,720),
+    td_traffic_u[0]=558*16;td_traffic_v[0]=740*16;
+    td_traffic_u[1]=576*16;td_traffic_v[1]=758*16;
+    td_traffic_u[2]=576*16;td_traffic_v[2]=722*16;
+    expect(td_district_walkable(0,594,740)&&!td_district_walkable(0,588,740),
            "alighting barrier fixture has a clear distant endpoint with a real intervening collision tile");
     td_second();
-    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.u!=578*16,
+    expect(td.mode==TD_RIDE&&td.ride_left==1&&td.cash==27&&td.u!=594*16,
            "alighting rejects a clear18px endpoint when its swept walking path crosses solid collision");
     geometry=NATIVE_GRID;td_second();
-    expect(td.mode==TD_ROAM&&td.u==572*16&&td.v==720*16&&td.cash==27,
+    expect(td.mode==TD_ROAM&&td.u==588*16&&td.v==740*16&&td.cash==27,
            "removing the collision barrier lets the same paid trip retry its nearest safe landing");
 
     /* Synthetic left-boundary stop: both west offsets underflow, while
@@ -1421,7 +1422,7 @@ static void test_cross_district_streetcar(void) {
                td.mode==(failing?TD_RESULT:TD_ROAM)&&td.cash==27&&td.onfoot&&
                PLAYER.pos.x==destination.u*32&&PLAYER.pos.y==destination.v*32,
                "loaded Queen destination presents the courier on foot and retains its intended arrival mode");
-        expect(td.park_district==0&&td.park_u==560*16&&td.park_v==720*16,
+        expect(td.park_district==0&&td.park_u==576*16&&td.park_v==740*16,
                "cross-district Queen travel never teleports the car parked at Union");
     }
 }
@@ -1432,8 +1433,8 @@ static void test_reciprocal_portals(void) {
         test_current_district=td.district=portal->from;td_session_live=1;td.onfoot=foot;
         td.u=portal->u*16;td.v=portal->v*16;
         td.park_district=foot?(portal->from?0:2):portal->from;
-        td.park_u=foot?(td.park_district?736:560)*16:td.u;
-        td.park_v=foot?(td.park_district?640:720)*16:td.v;
+        td.park_u=foot?(td.park_district?736:576)*16:td.u;
+        td.park_v=foot?(td.park_district?640:740)*16:td.v;
         td.job=72;td.stage=1;td.left=170;td.done=3;td.complete[0]=7;td.health=93;
         UBYTE horizontal=portal->u==24||portal->u==1000,negative=(horizontal?portal->u:portal->v)==24;
         td.cash=333;td.seconds=137;td.subsecond=21;td.heading=horizontal?(negative?8:0):(negative?12:4);
@@ -1522,7 +1523,7 @@ static void test_car_entry_at_portal(void) {
 }
 
 static void test_first_frame_actors(void) {
-    const UWORD locations[TD_DISTRICT_COUNT][2]={{560,720},{800,64},{736,640},{224,528}};
+    const UWORD locations[TD_DISTRICT_COUNT][2]={{576,740},{800,64},{736,640},{224,528}};
     for(unsigned district=0;district<TD_DISTRICT_COUNT;district++) {
         native_case();td_session_live=1;test_current_district=td.district=td.park_district=district;
         td.u=(locations[district][0]+18)*16;td.v=locations[district][1]*16;

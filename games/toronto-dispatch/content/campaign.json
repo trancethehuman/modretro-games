@@ -28,8 +28,8 @@
   "stops": [
     {
       "id": 0,
-      "u": 560,
-      "v": 720,
+      "u": 576,
+      "v": 740,
       "name": "UNION DEPOT",
       "transit": 1,
       "district": 0,
@@ -37,8 +37,8 @@
     },
     {
       "id": 1,
-      "u": 768,
-      "v": 720,
+      "u": 712,
+      "v": 740,
       "name": "ST LAWRENCE",
       "transit": 0,
       "district": 0,
@@ -46,8 +46,8 @@
     },
     {
       "id": 2,
-      "u": 816,
-      "v": 720,
+      "u": 820,
+      "v": 740,
       "name": "DISTILLERY",
       "transit": 0,
       "district": 0,
@@ -55,8 +55,8 @@
     },
     {
       "id": 3,
-      "u": 560,
-      "v": 528,
+      "u": 576,
+      "v": 516,
       "name": "CITY HALL",
       "transit": 0,
       "district": 0,
@@ -64,8 +64,8 @@
     },
     {
       "id": 4,
-      "u": 336,
-      "v": 528,
+      "u": 204,
+      "v": 516,
       "name": "QUEEN WEST",
       "transit": 0,
       "district": 0,
@@ -73,8 +73,8 @@
     },
     {
       "id": 5,
-      "u": 336,
-      "v": 400,
+      "u": 448,
+      "v": 412,
       "name": "AGO / GRANGE",
       "transit": 0,
       "district": 0,
@@ -82,8 +82,8 @@
     },
     {
       "id": 6,
-      "u": 480,
-      "v": 64,
+      "u": 464,
+      "v": 76,
       "name": "ROM / BLOOR",
       "transit": 0,
       "district": 0,
@@ -91,8 +91,8 @@
     },
     {
       "id": 7,
-      "u": 208,
-      "v": 400,
+      "u": 372,
+      "v": 344,
       "name": "KENSINGTON",
       "transit": 0,
       "district": 0,
@@ -100,8 +100,8 @@
     },
     {
       "id": 8,
-      "u": 80,
-      "v": 528,
+      "u": 76,
+      "v": 476,
       "name": "DUFFERIN",
       "transit": 0,
       "district": 0,
@@ -109,8 +109,8 @@
     },
     {
       "id": 9,
-      "u": 944,
-      "v": 528,
+      "u": 968,
+      "v": 540,
       "name": "RIVERSIDE",
       "transit": 0,
       "district": 0,
@@ -118,8 +118,8 @@
     },
     {
       "id": 10,
-      "u": 640,
-      "v": 784,
+      "u": 584,
+      "v": 828,
       "name": "FERRY TERMINAL",
       "transit": 3,
       "district": 0,
@@ -127,8 +127,8 @@
     },
     {
       "id": 11,
-      "u": 816,
-      "v": 784,
+      "u": 724,
+      "v": 828,
       "name": "EAST BAYFRONT",
       "transit": 0,
       "district": 0,
@@ -136,8 +136,8 @@
     },
     {
       "id": 12,
-      "u": 640,
-      "v": 640,
+      "u": 652,
+      "v": 688,
       "name": "KING STATION",
       "transit": 1,
       "district": 0,
@@ -145,8 +145,8 @@
     },
     {
       "id": 13,
-      "u": 640,
-      "v": 528,
+      "u": 652,
+      "v": 580,
       "name": "QUEEN STATION",
       "transit": 1,
       "district": 0,
@@ -154,8 +154,8 @@
     },
     {
       "id": 14,
-      "u": 640,
-      "v": 400,
+      "u": 652,
+      "v": 444,
       "name": "DUNDAS STATION",
       "transit": 1,
       "district": 0,
@@ -163,8 +163,8 @@
     },
     {
       "id": 15,
-      "u": 640,
-      "v": 288,
+      "u": 652,
+      "v": 332,
       "name": "COLLEGE STATION",
       "transit": 1,
       "district": 0,
@@ -172,8 +172,8 @@
     },
     {
       "id": 16,
-      "u": 640,
-      "v": 176,
+      "u": 652,
+      "v": 212,
       "name": "WELLESLEY",
       "transit": 1,
       "district": 0,
@@ -181,8 +181,8 @@
     },
     {
       "id": 17,
-      "u": 640,
-      "v": 64,
+      "u": 652,
+      "v": 108,
       "name": "BLOOR-YONGE",
       "transit": 1,
       "district": 0,
@@ -190,8 +190,8 @@
     },
     {
       "id": 18,
-      "u": 144,
-      "v": 64,
+      "u": 164,
+      "v": 108,
       "name": "OSSINGTON BUS",
       "transit": 2,
       "district": 0,
@@ -199,8 +199,8 @@
     },
     {
       "id": 19,
-      "u": 816,
-      "v": 64,
+      "u": 828,
+      "v": 76,
       "name": "CASTLE FRANK",
       "transit": 2,
       "district": 0,
@@ -235,8 +235,8 @@
     },
     {
       "id": 23,
-      "u": 336,
-      "v": 720,
+      "u": 464,
+      "v": 740,
       "name": "CN TOWER",
       "transit": 0,
       "district": 0,
@@ -568,7 +568,7 @@
     },
     {
       "id": 45,
-      "u": 372,
+      "u": 340,
       "v": 556,
       "name": "QUEEN SPADINA",
       "transit": 4,
@@ -788,13 +788,13 @@
         1
       ],
       "time_limit_seconds": 120,
-      "reward": 86,
+      "reward": 84,
       "timing_design": {
-        "vehicle_route_pixels": 208,
+        "vehicle_route_pixels": 136,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 3.1,
+        "modeled_road_and_foot_seconds": 2.0,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -816,13 +816,13 @@
         5
       ],
       "time_limit_seconds": 120,
-      "reward": 119,
+      "reward": 117,
       "timing_design": {
-        "vehicle_route_pixels": 544,
+        "vehicle_route_pixels": 456,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 8.1,
+        "modeled_road_and_foot_seconds": 6.8,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -844,13 +844,13 @@
         2
       ],
       "time_limit_seconds": 120,
-      "reward": 102,
+      "reward": 101,
       "timing_design": {
-        "vehicle_route_pixels": 256,
+        "vehicle_route_pixels": 240,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 3.8,
+        "modeled_road_and_foot_seconds": 3.6,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -873,14 +873,14 @@
         2,
         11
       ],
-      "time_limit_seconds": 130,
-      "reward": 133,
+      "time_limit_seconds": 135,
+      "reward": 136,
       "timing_design": {
-        "vehicle_route_pixels": 320,
+        "vehicle_route_pixels": 424,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 4.3,
+        "modeled_road_and_foot_seconds": 5.7,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -908,13 +908,13 @@
         0
       ],
       "time_limit_seconds": 235,
-      "reward": 222,
+      "reward": 221,
       "timing_design": {
-        "vehicle_route_pixels": 3264,
+        "vehicle_route_pixels": 3216,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 48.4,
+        "modeled_road_and_foot_seconds": 47.6,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -942,13 +942,13 @@
         0
       ],
       "time_limit_seconds": 235,
-      "reward": 229,
+      "reward": 227,
       "timing_design": {
-        "vehicle_route_pixels": 2528,
+        "vehicle_route_pixels": 2448,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_road_and_foot_seconds": 36.3,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -972,13 +972,13 @@
         0
       ],
       "time_limit_seconds": 145,
-      "reward": 120,
+      "reward": 121,
       "timing_design": {
-        "vehicle_route_pixels": 800,
+        "vehicle_route_pixels": 816,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 11.9,
+        "modeled_road_and_foot_seconds": 12.1,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1036,14 +1036,14 @@
         8,
         0
       ],
-      "time_limit_seconds": 230,
-      "reward": 208,
+      "time_limit_seconds": 245,
+      "reward": 222,
       "timing_design": {
-        "vehicle_route_pixels": 2240,
+        "vehicle_route_pixels": 2784,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 33.2,
+        "modeled_road_and_foot_seconds": 41.2,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1068,14 +1068,14 @@
         7,
         5
       ],
-      "time_limit_seconds": 190,
-      "reward": 198,
+      "time_limit_seconds": 195,
+      "reward": 203,
       "timing_design": {
-        "vehicle_route_pixels": 1632,
+        "vehicle_route_pixels": 1824,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 24.2,
+        "modeled_road_and_foot_seconds": 27.0,
         "modeled_control_allowance_seconds": 25,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1102,14 +1102,14 @@
         17,
         0
       ],
-      "time_limit_seconds": 160,
-      "reward": 229,
+      "time_limit_seconds": 165,
+      "reward": 235,
       "timing_design": {
-        "vehicle_route_pixels": 2464,
+        "vehicle_route_pixels": 2704,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 36.5,
+        "modeled_road_and_foot_seconds": 40.1,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1136,14 +1136,14 @@
         4,
         0
       ],
-      "time_limit_seconds": 205,
-      "reward": 219,
+      "time_limit_seconds": 215,
+      "reward": 226,
       "timing_design": {
-        "vehicle_route_pixels": 1664,
+        "vehicle_route_pixels": 1960,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 22.2,
+        "modeled_road_and_foot_seconds": 26.1,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1171,14 +1171,14 @@
         16,
         17
       ],
-      "time_limit_seconds": 245,
-      "reward": 244,
+      "time_limit_seconds": 240,
+      "reward": 243,
       "timing_design": {
-        "vehicle_route_pixels": 3264,
+        "vehicle_route_pixels": 3216,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 48.4,
+        "modeled_road_and_foot_seconds": 47.6,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1205,14 +1205,14 @@
         23,
         0
       ],
-      "time_limit_seconds": 245,
-      "reward": 245,
+      "time_limit_seconds": 235,
+      "reward": 239,
       "timing_design": {
-        "vehicle_route_pixels": 2720,
+        "vehicle_route_pixels": 2480,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 40.3,
+        "modeled_road_and_foot_seconds": 36.7,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1237,14 +1237,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 175,
-      "reward": 158,
+      "time_limit_seconds": 180,
+      "reward": 162,
       "timing_design": {
-        "vehicle_route_pixels": 1024,
+        "vehicle_route_pixels": 1200,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 15.2,
+        "modeled_road_and_foot_seconds": 17.8,
         "modeled_control_allowance_seconds": 25,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1303,14 +1303,14 @@
         11,
         0
       ],
-      "time_limit_seconds": 220,
-      "reward": 214,
+      "time_limit_seconds": 235,
+      "reward": 229,
       "timing_design": {
-        "vehicle_route_pixels": 1568,
+        "vehicle_route_pixels": 2176,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 23.2,
+        "modeled_road_and_foot_seconds": 32.2,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1337,14 +1337,14 @@
         23,
         6
       ],
-      "time_limit_seconds": 245,
-      "reward": 257,
+      "time_limit_seconds": 240,
+      "reward": 255,
       "timing_design": {
-        "vehicle_route_pixels": 2720,
+        "vehicle_route_pixels": 2608,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 40.3,
+        "modeled_road_and_foot_seconds": 38.6,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1372,13 +1372,13 @@
         0
       ],
       "time_limit_seconds": 155,
-      "reward": 239,
+      "reward": 237,
       "timing_design": {
-        "vehicle_route_pixels": 2368,
+        "vehicle_route_pixels": 2312,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 35.1,
+        "modeled_road_and_foot_seconds": 34.3,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1405,14 +1405,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 225,
-      "reward": 249,
+      "time_limit_seconds": 240,
+      "reward": 260,
       "timing_design": {
-        "vehicle_route_pixels": 2400,
+        "vehicle_route_pixels": 2816,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 32.0,
+        "modeled_road_and_foot_seconds": 37.5,
         "modeled_control_allowance_seconds": 35,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1442,13 +1442,13 @@
         0
       ],
       "time_limit_seconds": 250,
-      "reward": 266,
+      "reward": 265,
       "timing_design": {
-        "vehicle_route_pixels": 3280,
+        "vehicle_route_pixels": 3224,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 48.6,
+        "modeled_road_and_foot_seconds": 47.8,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1476,14 +1476,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 225,
-      "reward": 245,
+      "time_limit_seconds": 240,
+      "reward": 255,
       "timing_design": {
-        "vehicle_route_pixels": 1824,
+        "vehicle_route_pixels": 2240,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 27.0,
+        "modeled_road_and_foot_seconds": 33.2,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1511,14 +1511,14 @@
         2,
         0
       ],
-      "time_limit_seconds": 245,
-      "reward": 238,
+      "time_limit_seconds": 250,
+      "reward": 240,
       "timing_design": {
-        "vehicle_route_pixels": 2528,
+        "vehicle_route_pixels": 2640,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_road_and_foot_seconds": 39.1,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1578,14 +1578,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 260,
-      "reward": 264,
+      "time_limit_seconds": 265,
+      "reward": 266,
       "timing_design": {
-        "vehicle_route_pixels": 2688,
+        "vehicle_route_pixels": 2800,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 39.8,
+        "modeled_road_and_foot_seconds": 41.5,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1614,14 +1614,14 @@
         23,
         1
       ],
-      "time_limit_seconds": 255,
-      "reward": 285,
+      "time_limit_seconds": 275,
+      "reward": 297,
       "timing_design": {
-        "vehicle_route_pixels": 2528,
+        "vehicle_route_pixels": 3040,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_road_and_foot_seconds": 45.0,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1649,14 +1649,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 175,
-      "reward": 277,
+      "time_limit_seconds": 180,
+      "reward": 279,
       "timing_design": {
-        "vehicle_route_pixels": 3040,
+        "vehicle_route_pixels": 3104,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_road_and_foot_seconds": 46.0,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1685,14 +1685,14 @@
         9,
         8
       ],
-      "time_limit_seconds": 250,
-      "reward": 284,
+      "time_limit_seconds": 270,
+      "reward": 303,
       "timing_design": {
-        "vehicle_route_pixels": 2496,
+        "vehicle_route_pixels": 3280,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 33.3,
+        "modeled_road_and_foot_seconds": 43.7,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1725,11 +1725,11 @@
       "time_limit_seconds": 285,
       "reward": 311,
       "timing_design": {
-        "vehicle_route_pixels": 4192,
+        "vehicle_route_pixels": 4176,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 62.1,
+        "modeled_road_and_foot_seconds": 61.9,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1758,14 +1758,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 255,
-      "reward": 285,
+      "time_limit_seconds": 260,
+      "reward": 287,
       "timing_design": {
-        "vehicle_route_pixels": 2528,
+        "vehicle_route_pixels": 2608,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 37.5,
+        "modeled_road_and_foot_seconds": 38.6,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1795,14 +1795,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 285,
-      "reward": 282,
+      "time_limit_seconds": 295,
+      "reward": 292,
       "timing_design": {
-        "vehicle_route_pixels": 3040,
+        "vehicle_route_pixels": 3424,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_road_and_foot_seconds": 50.7,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1866,14 +1866,14 @@
         3,
         11
       ],
-      "time_limit_seconds": 250,
-      "reward": 264,
+      "time_limit_seconds": 265,
+      "reward": 278,
       "timing_design": {
-        "vehicle_route_pixels": 2240,
+        "vehicle_route_pixels": 2784,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 33.2,
+        "modeled_road_and_foot_seconds": 41.2,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1902,14 +1902,14 @@
         6,
         5
       ],
-      "time_limit_seconds": 255,
-      "reward": 293,
+      "time_limit_seconds": 265,
+      "reward": 303,
       "timing_design": {
-        "vehicle_route_pixels": 2400,
+        "vehicle_route_pixels": 2800,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 35.6,
+        "modeled_road_and_foot_seconds": 41.5,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1939,13 +1939,13 @@
         0
       ],
       "time_limit_seconds": 175,
-      "reward": 290,
+      "reward": 287,
       "timing_design": {
-        "vehicle_route_pixels": 2656,
+        "vehicle_route_pixels": 2560,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 39.3,
+        "modeled_road_and_foot_seconds": 37.9,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -1974,14 +1974,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 255,
-      "reward": 303,
+      "time_limit_seconds": 265,
+      "reward": 309,
       "timing_design": {
-        "vehicle_route_pixels": 2784,
+        "vehicle_route_pixels": 3024,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 37.1,
+        "modeled_road_and_foot_seconds": 40.3,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2011,13 +2011,13 @@
         10
       ],
       "time_limit_seconds": 260,
-      "reward": 298,
+      "reward": 297,
       "timing_design": {
-        "vehicle_route_pixels": 3568,
+        "vehicle_route_pixels": 3528,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 52.9,
+        "modeled_road_and_foot_seconds": 52.3,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2046,14 +2046,14 @@
         23,
         0
       ],
-      "time_limit_seconds": 265,
-      "reward": 304,
+      "time_limit_seconds": 270,
+      "reward": 307,
       "timing_design": {
-        "vehicle_route_pixels": 2816,
+        "vehicle_route_pixels": 2928,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 41.7,
+        "modeled_road_and_foot_seconds": 43.4,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2082,14 +2082,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 265,
-      "reward": 278,
+      "time_limit_seconds": 270,
+      "reward": 281,
       "timing_design": {
-        "vehicle_route_pixels": 2784,
+        "vehicle_route_pixels": 2896,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 41.2,
+        "modeled_road_and_foot_seconds": 42.9,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2154,14 +2154,14 @@
         5,
         6
       ],
-      "time_limit_seconds": 275,
-      "reward": 301,
+      "time_limit_seconds": 285,
+      "reward": 307,
       "timing_design": {
-        "vehicle_route_pixels": 2816,
+        "vehicle_route_pixels": 3072,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 41.7,
+        "modeled_road_and_foot_seconds": 45.5,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2191,14 +2191,14 @@
         6,
         5
       ],
-      "time_limit_seconds": 275,
-      "reward": 325,
+      "time_limit_seconds": 280,
+      "reward": 331,
       "timing_design": {
-        "vehicle_route_pixels": 2784,
+        "vehicle_route_pixels": 3008,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 41.2,
+        "modeled_road_and_foot_seconds": 44.6,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2227,14 +2227,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 175,
-      "reward": 301,
+      "time_limit_seconds": 180,
+      "reward": 309,
       "timing_design": {
-        "vehicle_route_pixels": 2624,
+        "vehicle_route_pixels": 2952,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 38.9,
+        "modeled_road_and_foot_seconds": 43.7,
         "modeled_control_allowance_seconds": 45,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2264,14 +2264,14 @@
         4,
         23
       ],
-      "time_limit_seconds": 265,
-      "reward": 322,
+      "time_limit_seconds": 280,
+      "reward": 338,
       "timing_design": {
-        "vehicle_route_pixels": 2656,
+        "vehicle_route_pixels": 3296,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 35.4,
+        "modeled_road_and_foot_seconds": 43.9,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2301,14 +2301,14 @@
         0,
         5
       ],
-      "time_limit_seconds": 270,
-      "reward": 323,
+      "time_limit_seconds": 265,
+      "reward": 319,
       "timing_design": {
-        "vehicle_route_pixels": 3712,
+        "vehicle_route_pixels": 3536,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 55.0,
+        "modeled_road_and_foot_seconds": 52.4,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2338,14 +2338,14 @@
         6,
         0
       ],
-      "time_limit_seconds": 310,
-      "reward": 355,
+      "time_limit_seconds": 320,
+      "reward": 364,
       "timing_design": {
-        "vehicle_route_pixels": 3968,
+        "vehicle_route_pixels": 4352,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 58.8,
+        "modeled_road_and_foot_seconds": 64.5,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2375,14 +2375,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 280,
-      "reward": 302,
+      "time_limit_seconds": 290,
+      "reward": 314,
       "timing_design": {
-        "vehicle_route_pixels": 2880,
+        "vehicle_route_pixels": 3344,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 42.7,
+        "modeled_road_and_foot_seconds": 49.5,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2448,14 +2448,14 @@
         4,
         0
       ],
-      "time_limit_seconds": 295,
-      "reward": 328,
+      "time_limit_seconds": 305,
+      "reward": 338,
       "timing_design": {
-        "vehicle_route_pixels": 3040,
+        "vehicle_route_pixels": 3424,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_road_and_foot_seconds": 50.7,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2485,14 +2485,14 @@
         5,
         6
       ],
-      "time_limit_seconds": 280,
-      "reward": 340,
+      "time_limit_seconds": 285,
+      "reward": 347,
       "timing_design": {
-        "vehicle_route_pixels": 2912,
+        "vehicle_route_pixels": 3184,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 43.1,
+        "modeled_road_and_foot_seconds": 47.2,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2522,14 +2522,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 200,
-      "reward": 343,
+      "time_limit_seconds": 210,
+      "reward": 357,
       "timing_design": {
-        "vehicle_route_pixels": 3424,
+        "vehicle_route_pixels": 3968,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 50.7,
+        "modeled_road_and_foot_seconds": 58.8,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2559,14 +2559,14 @@
         0,
         1
       ],
-      "time_limit_seconds": 250,
-      "reward": 323,
+      "time_limit_seconds": 260,
+      "reward": 331,
       "timing_design": {
-        "vehicle_route_pixels": 2240,
+        "vehicle_route_pixels": 2544,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 29.9,
+        "modeled_road_and_foot_seconds": 33.9,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2596,14 +2596,14 @@
         14,
         0
       ],
-      "time_limit_seconds": 275,
-      "reward": 338,
+      "time_limit_seconds": 270,
+      "reward": 336,
       "timing_design": {
-        "vehicle_route_pixels": 3824,
+        "vehicle_route_pixels": 3744,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 56.7,
+        "modeled_road_and_foot_seconds": 55.5,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2634,14 +2634,14 @@
         17,
         0
       ],
-      "time_limit_seconds": 295,
-      "reward": 354,
+      "time_limit_seconds": 300,
+      "reward": 361,
       "timing_design": {
-        "vehicle_route_pixels": 3072,
+        "vehicle_route_pixels": 3328,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 45.5,
+        "modeled_road_and_foot_seconds": 49.3,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2672,14 +2672,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 295,
-      "reward": 328,
+      "time_limit_seconds": 305,
+      "reward": 337,
       "timing_design": {
-        "vehicle_route_pixels": 3040,
+        "vehicle_route_pixels": 3376,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_road_and_foot_seconds": 50.0,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2747,14 +2747,14 @@
         7,
         0
       ],
-      "time_limit_seconds": 310,
-      "reward": 354,
+      "time_limit_seconds": 315,
+      "reward": 359,
       "timing_design": {
-        "vehicle_route_pixels": 3584,
+        "vehicle_route_pixels": 3776,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 53.1,
+        "modeled_road_and_foot_seconds": 55.9,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2785,14 +2785,14 @@
         8,
         5
       ],
-      "time_limit_seconds": 300,
-      "reward": 371,
+      "time_limit_seconds": 310,
+      "reward": 379,
       "timing_design": {
-        "vehicle_route_pixels": 3264,
+        "vehicle_route_pixels": 3584,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 48.4,
+        "modeled_road_and_foot_seconds": 53.1,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2823,14 +2823,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 210,
-      "reward": 368,
+      "time_limit_seconds": 215,
+      "reward": 378,
       "timing_design": {
-        "vehicle_route_pixels": 3552,
+        "vehicle_route_pixels": 3952,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 52.6,
+        "modeled_road_and_foot_seconds": 58.5,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2861,14 +2861,14 @@
         9,
         11
       ],
-      "time_limit_seconds": 285,
-      "reward": 369,
+      "time_limit_seconds": 295,
+      "reward": 377,
       "timing_design": {
-        "vehicle_route_pixels": 3168,
+        "vehicle_route_pixels": 3488,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 42.2,
+        "modeled_road_and_foot_seconds": 46.5,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2899,14 +2899,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 280,
-      "reward": 357,
+      "time_limit_seconds": 270,
+      "reward": 348,
       "timing_design": {
-        "vehicle_route_pixels": 3696,
+        "vehicle_route_pixels": 3352,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 54.8,
+        "modeled_road_and_foot_seconds": 49.7,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2937,14 +2937,14 @@
         23,
         0
       ],
-      "time_limit_seconds": 290,
-      "reward": 363,
+      "time_limit_seconds": 295,
+      "reward": 368,
       "timing_design": {
-        "vehicle_route_pixels": 2944,
+        "vehicle_route_pixels": 3152,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 43.6,
+        "modeled_road_and_foot_seconds": 46.7,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -2975,14 +2975,14 @@
         8,
         0
       ],
-      "time_limit_seconds": 295,
-      "reward": 344,
+      "time_limit_seconds": 310,
+      "reward": 357,
       "timing_design": {
-        "vehicle_route_pixels": 3168,
+        "vehicle_route_pixels": 3696,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 46.9,
+        "modeled_road_and_foot_seconds": 54.8,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3050,14 +3050,14 @@
         1,
         23
       ],
-      "time_limit_seconds": 305,
-      "reward": 361,
+      "time_limit_seconds": 315,
+      "reward": 372,
       "timing_design": {
-        "vehicle_route_pixels": 3392,
+        "vehicle_route_pixels": 3808,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 50.3,
+        "modeled_road_and_foot_seconds": 56.4,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3088,14 +3088,14 @@
         19,
         6
       ],
-      "time_limit_seconds": 305,
-      "reward": 387,
+      "time_limit_seconds": 320,
+      "reward": 401,
       "timing_design": {
-        "vehicle_route_pixels": 3424,
+        "vehicle_route_pixels": 4000,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 50.7,
+        "modeled_road_and_foot_seconds": 59.3,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3126,14 +3126,14 @@
         23,
         0
       ],
-      "time_limit_seconds": 200,
-      "reward": 367,
+      "time_limit_seconds": 205,
+      "reward": 374,
       "timing_design": {
-        "vehicle_route_pixels": 3040,
+        "vehicle_route_pixels": 3296,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 45.0,
+        "modeled_road_and_foot_seconds": 48.8,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3164,14 +3164,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 310,
-      "reward": 401,
+      "time_limit_seconds": 330,
+      "reward": 421,
       "timing_design": {
-        "vehicle_route_pixels": 3968,
+        "vehicle_route_pixels": 4784,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 52.9,
+        "modeled_road_and_foot_seconds": 63.8,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3202,14 +3202,14 @@
         1,
         0
       ],
-      "time_limit_seconds": 295,
-      "reward": 385,
+      "time_limit_seconds": 290,
+      "reward": 378,
       "timing_design": {
-        "vehicle_route_pixels": 4352,
+        "vehicle_route_pixels": 4048,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 64.5,
+        "modeled_road_and_foot_seconds": 60.0,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3240,14 +3240,14 @@
         8,
         1
       ],
-      "time_limit_seconds": 315,
-      "reward": 397,
+      "time_limit_seconds": 320,
+      "reward": 400,
       "timing_design": {
-        "vehicle_route_pixels": 3824,
+        "vehicle_route_pixels": 3960,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 56.7,
+        "modeled_road_and_foot_seconds": 58.7,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3278,14 +3278,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 310,
-      "reward": 369,
+      "time_limit_seconds": 330,
+      "reward": 383,
       "timing_design": {
-        "vehicle_route_pixels": 3712,
+        "vehicle_route_pixels": 4256,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 55.0,
+        "modeled_road_and_foot_seconds": 63.1,
         "modeled_control_allowance_seconds": 55,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       }
@@ -3347,7 +3347,7 @@
         0
       ],
       "time_limit_seconds": 230,
-      "reward": 215,
+      "reward": 217,
       "stages": [
         {
           "stop_id": 0,
@@ -3379,10 +3379,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3264,
+        "vehicle_route_pixels": 3328,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 32.2,
-        "normalized_moving_seconds_slow": 51.2,
+        "normalized_moving_seconds_fast": 32.9,
+        "normalized_moving_seconds_slow": 52.2,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -3390,7 +3390,7 @@
             "to_stop": 27,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1040,
+            "vehicle_pixels": 1072,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -3419,7 +3419,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1392,
+            "vehicle_pixels": 1424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -3447,8 +3447,8 @@
         31,
         5
       ],
-      "time_limit_seconds": 190,
-      "reward": 199,
+      "time_limit_seconds": 195,
+      "reward": 204,
       "stages": [
         {
           "stop_id": 5,
@@ -3475,10 +3475,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2096,
+        "vehicle_route_pixels": 2320,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 32.9,
-        "normalized_moving_seconds_slow": 32.9,
+        "normalized_moving_seconds_fast": 36.4,
+        "normalized_moving_seconds_slow": 36.4,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
           {
@@ -3486,10 +3486,10 @@
             "to_stop": 29,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 624,
+            "vehicle_pixels": 728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "Queen east"
             ]
           },
           {
@@ -3506,7 +3506,7 @@
             "to_stop": 5,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 992,
+            "vehicle_pixels": 1112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east"
@@ -3536,7 +3536,7 @@
         0
       ],
       "time_limit_seconds": 170,
-      "reward": 265,
+      "reward": 267,
       "stages": [
         {
           "stop_id": 0,
@@ -3568,10 +3568,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5264,
+        "vehicle_route_pixels": 5328,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 52.0,
-        "normalized_moving_seconds_slow": 52.0,
+        "normalized_moving_seconds_fast": 52.6,
+        "normalized_moving_seconds_slow": 52.6,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -3579,7 +3579,7 @@
             "to_stop": 28,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1440,
+            "vehicle_pixels": 1472,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -3612,7 +3612,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1584,
+            "vehicle_pixels": 1616,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east"
@@ -3642,7 +3642,7 @@
         29,
         0
       ],
-      "time_limit_seconds": 270,
+      "time_limit_seconds": 265,
       "reward": 290,
       "stages": [
         {
@@ -3680,10 +3680,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4800,
+        "vehicle_route_pixels": 4776,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 67.4,
-        "normalized_moving_seconds_slow": 67.4,
+        "normalized_moving_seconds_fast": 67.0,
+        "normalized_moving_seconds_slow": 67.0,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
@@ -3691,7 +3691,7 @@
             "to_stop": 27,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1360,
+            "vehicle_pixels": 1304,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -3733,7 +3733,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 912,
+            "vehicle_pixels": 944,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -3763,8 +3763,8 @@
         30,
         0
       ],
-      "time_limit_seconds": 255,
-      "reward": 242,
+      "time_limit_seconds": 260,
+      "reward": 245,
       "stages": [
         {
           "stop_id": 0,
@@ -3801,10 +3801,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3856,
+        "vehicle_route_pixels": 3968,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 38.1,
-        "normalized_moving_seconds_slow": 60.5,
+        "normalized_moving_seconds_fast": 39.2,
+        "normalized_moving_seconds_slow": 62.2,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
@@ -3812,7 +3812,7 @@
             "to_stop": 17,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 736,
+            "vehicle_pixels": 704,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
@@ -3821,7 +3821,7 @@
             "to_stop": 18,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 496,
+            "vehicle_pixels": 552,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
@@ -3830,7 +3830,7 @@
             "to_stop": 28,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 368,
+            "vehicle_pixels": 424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor east"
@@ -3850,7 +3850,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1584,
+            "vehicle_pixels": 1616,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east"
@@ -3880,7 +3880,7 @@
         0
       ],
       "time_limit_seconds": 270,
-      "reward": 241,
+      "reward": 243,
       "stages": [
         {
           "stop_id": 0,
@@ -3912,10 +3912,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4304,
+        "vehicle_route_pixels": 4368,
         "required_walking_pixels": 160,
-        "normalized_moving_seconds_fast": 47.8,
-        "normalized_moving_seconds_slow": 72.8,
+        "normalized_moving_seconds_fast": 48.5,
+        "normalized_moving_seconds_slow": 73.9,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -3923,7 +3923,7 @@
             "to_stop": 29,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 912,
+            "vehicle_pixels": 944,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -3954,7 +3954,7 @@
             "to_stop": 0,
             "from_district": 2,
             "to_district": 0,
-            "vehicle_pixels": 1888,
+            "vehicle_pixels": 1920,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",
@@ -3984,8 +3984,8 @@
         27,
         0
       ],
-      "time_limit_seconds": 205,
-      "reward": 216,
+      "time_limit_seconds": 210,
+      "reward": 217,
       "stages": [
         {
           "stop_id": 0,
@@ -4017,10 +4017,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3296,
+        "vehicle_route_pixels": 3360,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 38.2,
-        "normalized_moving_seconds_slow": 38.2,
+        "normalized_moving_seconds_fast": 39.0,
+        "normalized_moving_seconds_slow": 39.0,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -4028,7 +4028,7 @@
             "to_stop": 31,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1392,
+            "vehicle_pixels": 1424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "King east"
@@ -4057,7 +4057,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1040,
+            "vehicle_pixels": 1072,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -4090,7 +4090,7 @@
         0
       ],
       "time_limit_seconds": 330,
-      "reward": 314,
+      "reward": 315,
       "stages": [
         {
           "stop_id": 0,
@@ -4137,10 +4137,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5776,
+        "vehicle_route_pixels": 5840,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 90.6,
-        "normalized_moving_seconds_slow": 90.6,
+        "normalized_moving_seconds_fast": 91.6,
+        "normalized_moving_seconds_slow": 91.6,
         "assumed_interaction_allowance_seconds": 40,
         "legs": [
           {
@@ -4148,7 +4148,7 @@
             "to_stop": 27,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1040,
+            "vehicle_pixels": 1072,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -4208,7 +4208,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 912,
+            "vehicle_pixels": 944,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -4324,8 +4324,8 @@
         37,
         5
       ],
-      "time_limit_seconds": 210,
-      "reward": 243,
+      "time_limit_seconds": 205,
+      "reward": 238,
       "stages": [
         {
           "stop_id": 5,
@@ -4357,10 +4357,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3392,
+        "vehicle_route_pixels": 3168,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 39.3,
-        "normalized_moving_seconds_slow": 39.3,
+        "normalized_moving_seconds_fast": 36.7,
+        "normalized_moving_seconds_slow": 36.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -4368,7 +4368,7 @@
             "to_stop": 35,
             "from_district": 0,
             "to_district": 3,
-            "vehicle_pixels": 1168,
+            "vehicle_pixels": 1064,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -4397,7 +4397,7 @@
             "to_stop": 5,
             "from_district": 3,
             "to_district": 0,
-            "vehicle_pixels": 944,
+            "vehicle_pixels": 824,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4528,8 +4528,8 @@
         37,
         11
       ],
-      "time_limit_seconds": 210,
-      "reward": 231,
+      "time_limit_seconds": 220,
+      "reward": 238,
       "stages": [
         {
           "stop_id": 11,
@@ -4561,10 +4561,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2912,
+        "vehicle_route_pixels": 3184,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 40.9,
-        "normalized_moving_seconds_slow": 40.9,
+        "normalized_moving_seconds_fast": 44.7,
+        "normalized_moving_seconds_slow": 44.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -4572,7 +4572,7 @@
             "to_stop": 39,
             "from_district": 0,
             "to_district": 3,
-            "vehicle_pixels": 928,
+            "vehicle_pixels": 1064,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4601,7 +4601,7 @@
             "to_stop": 11,
             "from_district": 3,
             "to_district": 0,
-            "vehicle_pixels": 592,
+            "vehicle_pixels": 728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4686,7 +4686,7 @@
             "to_stop": 17,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 736,
+            "vehicle_pixels": 704,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
@@ -4695,7 +4695,7 @@
             "to_stop": 35,
             "from_district": 0,
             "to_district": 3,
-            "vehicle_pixels": 528,
+            "vehicle_pixels": 560,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -4724,7 +4724,7 @@
             "to_stop": 12,
             "from_district": 3,
             "to_district": 0,
-            "vehicle_pixels": 1280,
+            "vehicle_pixels": 1320,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east crossing"
@@ -4735,7 +4735,7 @@
             "to_stop": 0,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 160,
+            "vehicle_pixels": 120,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           }
@@ -5002,7 +5002,7 @@
         0
       ],
       "time_limit_seconds": 405,
-      "reward": 391,
+      "reward": 392,
       "stages": [
         {
           "stop_id": 0,
@@ -5059,10 +5059,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 7920,
+        "vehicle_route_pixels": 7952,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 124.2,
-        "normalized_moving_seconds_slow": 124.2,
+        "normalized_moving_seconds_fast": 124.7,
+        "normalized_moving_seconds_slow": 124.7,
         "assumed_interaction_allowance_seconds": 50,
         "legs": [
           {
@@ -5149,7 +5149,7 @@
             "to_stop": 0,
             "from_district": 2,
             "to_district": 0,
-            "vehicle_pixels": 1888,
+            "vehicle_pixels": 1920,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",

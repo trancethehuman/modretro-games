@@ -130,7 +130,7 @@ def fixture_header():
             "The oracle must cover the actual world and exercise all four pixel classes.")
     # Check the independent water oracle at real geographic boundary examples.
     core = json.loads((GAME / "content/city_art.json").read_text())
-    require(authored_water("toronto_city", (892, 100), core) and
+    require(authored_water("toronto_city", (868, 120), core) and
             not authored_water("toronto_city", (400, 924), core) and
             authored_water("toronto_city", (620, 924), core),
             "Core water oracle lost the Don River, Island land or intervening lake.")

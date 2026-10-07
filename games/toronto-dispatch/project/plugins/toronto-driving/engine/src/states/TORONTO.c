@@ -38,8 +38,8 @@ static UBYTE td_transition_pending;
 typedef char td_serialized_state_must_be_58_bytes[(sizeof(td_state_t)==58)?1:-1];
 static const BYTE td_dx[]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
 static const BYTE td_dy[]={0,6,11,15,16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6};
-static const UWORD td_rows[]={64,176,288,400,528,640,720,784};
-static const UWORD td_cols[]={80,208,336,480,560,640,720,816,944};
+/* Core street centrelines (scripts/city_layout.py). */
+static const UWORD td_rows[]={64,176,288,400,528,640,736,824};
 /* Global: td_life.c moves owned vehicles (impacts, pursuit, theft). */
 UWORD td_traffic_u[6],td_traffic_v[6];
 td_traffic_sample_t td_traffic_samples[6];
@@ -523,9 +523,10 @@ static void td_second(void){
 }
 /* Q4 stop lines: td_rows/td_cols*16 -/+ 384 for forward/reverse approaches. */
 #define TD_STOP_LINES(a,b,c,d,e,f,g,h,o) {a*16+o,b*16+o,c*16+o,d*16+o,e*16+o,f*16+o,g*16+o,h*16+o}
-static const UWORD td_stop_rows[2][8]={TD_STOP_LINES(64,176,288,400,528,640,720,784,-384),TD_STOP_LINES(64,176,288,400,528,640,720,784,384)};
-static const UWORD td_stop_cols[2][9]={{80*16-384,208*16-384,336*16-384,480*16-384,560*16-384,640*16-384,720*16-384,816*16-384,944*16-384},
-    {80*16+384,208*16+384,336*16+384,480*16+384,560*16+384,640*16+384,720*16+384,816*16+384,944*16+384}};
+static const UWORD td_stop_rows[2][8]={TD_STOP_LINES(64,176,288,400,528,640,736,824,-384),TD_STOP_LINES(64,176,288,400,528,640,736,824,384)};
+/* Nine entries for the fixed-count scan: Broadview is repeated. */
+#define TD_STOP_COLS(o) {64*16+o,160*16+o,256*16+o,384*16+o,512*16+o,640*16+o,784*16+o,928*16+o,928*16+o}
+static const UWORD td_stop_cols[2][9]={TD_STOP_COLS(-384),TD_STOP_COLS(384)};
 static UBYTE td_signal_stop(UWORD pos,UBYTE vertical,UBYTE reverse){
     UBYTE count=vertical?8:9;const UWORD *line=vertical?td_stop_rows[reverse?1:0]:td_stop_cols[reverse?1:0];
     do{if(pos>=*line&&pos<*line+8)return TRUE;line++;}while(--count);
@@ -534,8 +535,10 @@ static UBYTE td_signal_stop(UWORD pos,UBYTE vertical,UBYTE reverse){
 /* Core loops in Q4: east/westbound lanes on td_rows[2..5] sit 8px either side
  * of the centreline; the bus loop visits its six fixed junctions. */
 static const UWORD td_core_lane_v[4]={288*16,400*16,528*16,640*16};
-static const UWORD td_bus_u[6]={144*16,208*16,208*16,640*16,816*16,816*16};
-static const UWORD td_bus_v[6]={64*16,64*16,176*16,176*16,176*16,64*16};
+/* 94 Wellesley: Ossington station, Ossington, Harbord/Wellesley, Parliament,
+ * Castle Frank on Bloor, then back west along Bloor. */
+static const UWORD td_bus_u[6]={160*16,160*16,784*16,784*16,836*16,512*16};
+static const UWORD td_bus_v[6]={64*16,176*16,176*16,64*16,64*16,64*16};
 /* A road vehicle never drives into the courier's car: a step that would end
  * overlapping it is undone, so traffic queues behind or stops in front.
  * Vehicles already overlapping (an impact in progress) may move apart. */
@@ -728,13 +731,13 @@ UBYTE td_traffic_kernel(void) NAKED {
         jp 70$
     66$:
         jr nz, 68$
-        ld de, #0x3380
+        ld de, #0x3180
         ld a, (_td_tk_leg)
         or a, a
         jr z, 67$
         cp a, #3
         jr z, 67$
-        ld de, #0x3280
+        ld de, #0x3080
     67$:
         ld a, e
         ld (_td_tk_tu), a
@@ -1087,7 +1090,7 @@ static void td_traffic_step(void){
             if(leg==0||leg==3)target_v-=128;else target_v+=128;
             if((leg==0||leg==2)&&phase>=7&&td_signal_stop(u,0,leg==2))goto collide;
         }else if(i==4){
-            target_u=leg==0||leg==3?824*16:808*16;target_v=leg<2?792*16:48*16;
+            target_u=leg==0||leg==3?792*16:776*16;target_v=leg<2?792*16:48*16;
             if((leg==0||leg==2)&&phase<7&&td_signal_stop(v,1,leg==2))goto collide;
         }else{target_u=td_bus_u[leg];target_v=td_bus_v[leg];}
         if(u<target_u){gap=target_u-u;u+=gap<8?gap:8;}
@@ -1603,7 +1606,7 @@ static void td_traffic_present(void){
         if(district)frame=sample->frame;
         else{
             leg=*legs;
-            frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==2?2:leg==0?4:leg==5?6:0);
+            frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):8+(leg==1?2:leg==0||leg==5?4:leg==3?6:0);
         }
         a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(frame&7));
     }
@@ -1711,7 +1714,7 @@ void toronto_init(void) BANKED {
         td_district_reset();td_transition_pending=0;
         td_tick=td_notice_timer=td_red_cooldown=td_entry_timer=td_turn_tick=0;td_vx=td_vy=0;td_last_frame=sys_time;td_corner_used=0;
         if(!td_restore()){
-            memset(&td,0,sizeof(td));td.u=560*16;td.v=720*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
+            memset(&td,0,sizeof(td));td.u=576*16;td.v=740*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
             td.vitality=100;td.ammo=TD_AMMO_START;
         }
         if(td.job!=TD_NONE&&!td.stage)td.health=100;
@@ -1742,7 +1745,7 @@ void toronto_init(void) BANKED {
     }
     if(td.district)td_world_traffic_init(td.district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
     for(i=0;i<6;i++)
-        if(!td.district){td_traffic_u[i]=(i<4?80+i*120:i==4?824:144)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=i==5?1:0;}
+        if(!td.district){td_traffic_u[i]=(i<4?80+i*120:i==4?792:160)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=0;}
     for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
     td_life_reset(cold);td_anim_reset();

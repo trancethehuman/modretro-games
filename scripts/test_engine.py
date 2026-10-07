@@ -183,6 +183,7 @@ def main():
         work = Path(directory)
         (work / "engine_under_test.c").write_text(source)
         shutil.copyfile(ENGINE / "src/td_content.c", work / "content_under_test.c")
+        shutil.copyfile(ENGINE / "src/td_street_names.c", work / "street_names_under_test.c")
         game = ROOT / "games/toronto-dispatch"
         (work / "native_collision_fixture.h").write_text(native_fixture(game, ENGINE / "include"))
         shutil.copyfile(FIXTURES / "gbvm_stubs.h", work / "gbvm_stubs.h")

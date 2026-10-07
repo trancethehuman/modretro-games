@@ -9,8 +9,8 @@
   "base_quest_count": 80,
   "result_stop_count": 43,
   "result_quest_count": 88,
-  "preserved_base_stops_sha256": "bff457f90876b5d6eb0c3186b1439e6c2193448d71884125379e6093b256c14e",
-  "preserved_base_quests_sha256": "fb1387c15dbd67bf190f9c8631cd119dfd5198aad7c7aba9d25370520832f1a6",
+  "preserved_base_stops_sha256": "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380",
+  "preserved_base_quests_sha256": "30cc65f0d9226a944dbedd421a7338dad4e9c9b58326c390d52526e1a1121d2a",
   "preserved_base_stop_fields": [
     "id",
     "u",
@@ -36,7 +36,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92"
+      "collision_sha256": "30aeacd69971f3e5aeaff3112835ca72d76c6012d95263036fc1795d70d9e980"
     },
     {
       "district": 1,
@@ -296,8 +296,8 @@
         37,
         5
       ],
-      "time_limit_seconds": 210,
-      "reward": 243,
+      "time_limit_seconds": 205,
+      "reward": 238,
       "stages": [
         {
           "stop_id": 5,
@@ -329,10 +329,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3392,
+        "vehicle_route_pixels": 3168,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 39.3,
-        "normalized_moving_seconds_slow": 39.3,
+        "normalized_moving_seconds_fast": 36.7,
+        "normalized_moving_seconds_slow": 36.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -340,7 +340,7 @@
             "to_stop": 35,
             "from_district": 0,
             "to_district": 3,
-            "vehicle_pixels": 1168,
+            "vehicle_pixels": 1064,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -369,7 +369,7 @@
             "to_stop": 5,
             "from_district": 3,
             "to_district": 0,
-            "vehicle_pixels": 944,
+            "vehicle_pixels": 824,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -500,8 +500,8 @@
         37,
         11
       ],
-      "time_limit_seconds": 210,
-      "reward": 231,
+      "time_limit_seconds": 220,
+      "reward": 238,
       "stages": [
         {
           "stop_id": 11,
@@ -533,10 +533,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2912,
+        "vehicle_route_pixels": 3184,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 40.9,
-        "normalized_moving_seconds_slow": 40.9,
+        "normalized_moving_seconds_fast": 44.7,
+        "normalized_moving_seconds_slow": 44.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -544,7 +544,7 @@
             "to_stop": 39,
             "from_district": 0,
             "to_district": 3,
-            "vehicle_pixels": 928,
+            "vehicle_pixels": 1064,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -573,7 +573,7 @@
             "to_stop": 11,
             "from_district": 3,
             "to_district": 0,
-            "vehicle_pixels": 592,
+            "vehicle_pixels": 728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -658,7 +658,7 @@
             "to_stop": 17,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 736,
+            "vehicle_pixels": 704,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
@@ -667,7 +667,7 @@
             "to_stop": 35,
             "from_district": 0,
             "to_district": 3,
-            "vehicle_pixels": 528,
+            "vehicle_pixels": 560,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -696,7 +696,7 @@
             "to_stop": 12,
             "from_district": 3,
             "to_district": 0,
-            "vehicle_pixels": 1280,
+            "vehicle_pixels": 1320,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east crossing"
@@ -707,7 +707,7 @@
             "to_stop": 0,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 160,
+            "vehicle_pixels": 120,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           }
@@ -974,7 +974,7 @@
         0
       ],
       "time_limit_seconds": 405,
-      "reward": 391,
+      "reward": 392,
       "stages": [
         {
           "stop_id": 0,
@@ -1031,10 +1031,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 7920,
+        "vehicle_route_pixels": 7952,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 124.2,
-        "normalized_moving_seconds_slow": 124.2,
+        "normalized_moving_seconds_fast": 124.7,
+        "normalized_moving_seconds_slow": 124.7,
         "assumed_interaction_allowance_seconds": 50,
         "legs": [
           {
@@ -1121,7 +1121,7 @@
             "to_stop": 0,
             "from_district": 2,
             "to_district": 0,
-            "vehicle_pixels": 1888,
+            "vehicle_pixels": 1920,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",

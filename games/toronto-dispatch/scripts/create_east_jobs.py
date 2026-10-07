@@ -21,8 +21,8 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "content/districts/east_jobs.json"
 PREFIX_STOPS, PREFIX_QUESTS = 35, 80
 PREFIX_STOP_FIELDS = ("id", "u", "v", "name", "transit", "district", "reserved")
-PREFIX_STOPS_SHA256 = "bff457f90876b5d6eb0c3186b1439e6c2193448d71884125379e6093b256c14e"
-PREFIX_QUESTS_SHA256 = "fb1387c15dbd67bf190f9c8631cd119dfd5198aad7c7aba9d25370520832f1a6"
+PREFIX_STOPS_SHA256 = "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380"
+PREFIX_QUESTS_SHA256 = "30cc65f0d9226a944dbedd421a7338dad4e9c9b58326c390d52526e1a1121d2a"
 STOP_KEYS = ("danforth_hall", "withrow_walk", "riverside_queen", "gerrard_pape",
              "carlaw_works", "leslie_queen", "greenwood_walk", "ashbridge_queen")
 STOP_NAMES = ("DANFORTH HALL", "WITHROW POST", "RIVERSIDE QUEEN", "GERRARD / PAPE",

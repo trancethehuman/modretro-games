@@ -3,7 +3,7 @@ import json
 import sys
 from pathlib import Path
 from check_campaign import decode
-from city_layout import ROAD_HALF, ROWS
+from city_layout import ROAD_HALF, STREETS
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADER = ROOT / "project/plugins/toronto-driving/engine/include/td_world_routes.h"
@@ -21,12 +21,17 @@ def source():
 
     routes = []
     sidewalk_centre = ROAD_HALF + 4
-    for y in [row + side for row in ROWS for side in (-sidewalk_centre, sidewalk_centre)] + [920, 936, 912]:
-        # Paces every 96 pixels: neighbouring walkers share a block face.
-        for centre in [128, 224, 320, 416, 512, 608, 704, 800, 896, 952]:
-            start, end = centre - 32, centre + 31
-            if all(free(x, y) for x in range(start, end + 1)):
+    # Core: both sidewalks of every east-west street, paced 48 pixels apart,
+    # then the Island paths.
+    lines = [(s['at'] + side * (s['half'] + 4), s['a'], s['b']) for s in STREETS
+             if s['axis'] == 'h' and s['walk'] for side in (-1, 1)]
+    lines += [(920, 336, 600), (936, 336, 600), (912, 640, 784), (912, 800, 928)]
+    for y, left, right in sorted(lines):
+        for start in range((left + 7) // 8 * 8 + 8, right - 64, 48):
+            if all(free(x, y) for x in range(start, start + 64)) and (start, y) not in routes:
                 routes.append((start, y))
+    if len(routes) > ROUTE_IDS:
+        routes = [routes[i * len(routes) // ROUTE_IDS] for i in range(ROUTE_IDS)]
     assert 24 <= len(routes) <= ROUTE_IDS
     core_routes = routes
     district_routes = [core_routes]

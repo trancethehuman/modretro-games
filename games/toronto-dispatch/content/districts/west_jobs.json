@@ -9,8 +9,8 @@
   "base_quest_count": 72,
   "result_stop_count": 35,
   "result_quest_count": 80,
-  "preserved_base_stops_sha256": "981629d78d412ae0cc1a12fdd6158331c092976e9c1bdd173c83fdbedf55d08f",
-  "preserved_base_quests_sha256": "be356c3b6e9736ce43a998ba4b0856b438dfc60b90dbf288b0a317b88e1efd5b",
+  "preserved_base_stops_sha256": "26c2e8bee34a7a0bd54ffa520e770b03dc41a26f91943c081d3fed517ebba69b",
+  "preserved_base_quests_sha256": "5dd27d2a3d1e1e8e520e8f9e767e07cc2f3a0698d1caee8b3af2721384d7c4f5",
   "preserved_base_quest_fields": [
     "id",
     "title",
@@ -27,7 +27,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "4de9abe15b7fe9fb42e31d345f0e0d2a726dbd94826c928a5adb562132836c92"
+      "collision_sha256": "30aeacd69971f3e5aeaff3112835ca72d76c6012d95263036fc1795d70d9e980"
     },
     {
       "district": 1,
@@ -203,7 +203,7 @@
         0
       ],
       "time_limit_seconds": 230,
-      "reward": 215,
+      "reward": 217,
       "stages": [
         {
           "stop_id": 0,
@@ -235,10 +235,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3264,
+        "vehicle_route_pixels": 3328,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 32.2,
-        "normalized_moving_seconds_slow": 51.2,
+        "normalized_moving_seconds_fast": 32.9,
+        "normalized_moving_seconds_slow": 52.2,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -246,7 +246,7 @@
             "to_stop": 27,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1040,
+            "vehicle_pixels": 1072,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -275,7 +275,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1392,
+            "vehicle_pixels": 1424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -303,8 +303,8 @@
         31,
         5
       ],
-      "time_limit_seconds": 190,
-      "reward": 199,
+      "time_limit_seconds": 195,
+      "reward": 204,
       "stages": [
         {
           "stop_id": 5,
@@ -331,10 +331,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2096,
+        "vehicle_route_pixels": 2320,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 32.9,
-        "normalized_moving_seconds_slow": 32.9,
+        "normalized_moving_seconds_fast": 36.4,
+        "normalized_moving_seconds_slow": 36.4,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
           {
@@ -342,10 +342,10 @@
             "to_stop": 29,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 624,
+            "vehicle_pixels": 728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "Queen east"
             ]
           },
           {
@@ -362,7 +362,7 @@
             "to_stop": 5,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 992,
+            "vehicle_pixels": 1112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east"
@@ -392,7 +392,7 @@
         0
       ],
       "time_limit_seconds": 170,
-      "reward": 265,
+      "reward": 267,
       "stages": [
         {
           "stop_id": 0,
@@ -424,10 +424,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5264,
+        "vehicle_route_pixels": 5328,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 52.0,
-        "normalized_moving_seconds_slow": 52.0,
+        "normalized_moving_seconds_fast": 52.6,
+        "normalized_moving_seconds_slow": 52.6,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -435,7 +435,7 @@
             "to_stop": 28,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1440,
+            "vehicle_pixels": 1472,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -468,7 +468,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1584,
+            "vehicle_pixels": 1616,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east"
@@ -498,7 +498,7 @@
         29,
         0
       ],
-      "time_limit_seconds": 270,
+      "time_limit_seconds": 265,
       "reward": 290,
       "stages": [
         {
@@ -536,10 +536,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4800,
+        "vehicle_route_pixels": 4776,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 67.4,
-        "normalized_moving_seconds_slow": 67.4,
+        "normalized_moving_seconds_fast": 67.0,
+        "normalized_moving_seconds_slow": 67.0,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
@@ -547,7 +547,7 @@
             "to_stop": 27,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1360,
+            "vehicle_pixels": 1304,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -589,7 +589,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 912,
+            "vehicle_pixels": 944,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -619,8 +619,8 @@
         30,
         0
       ],
-      "time_limit_seconds": 255,
-      "reward": 242,
+      "time_limit_seconds": 260,
+      "reward": 245,
       "stages": [
         {
           "stop_id": 0,
@@ -657,10 +657,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3856,
+        "vehicle_route_pixels": 3968,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 38.1,
-        "normalized_moving_seconds_slow": 60.5,
+        "normalized_moving_seconds_fast": 39.2,
+        "normalized_moving_seconds_slow": 62.2,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
@@ -668,7 +668,7 @@
             "to_stop": 17,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 736,
+            "vehicle_pixels": 704,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
@@ -677,7 +677,7 @@
             "to_stop": 18,
             "from_district": 0,
             "to_district": 0,
-            "vehicle_pixels": 496,
+            "vehicle_pixels": 552,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
@@ -686,7 +686,7 @@
             "to_stop": 28,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 368,
+            "vehicle_pixels": 424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor east"
@@ -706,7 +706,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1584,
+            "vehicle_pixels": 1616,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Dundas east"
@@ -736,7 +736,7 @@
         0
       ],
       "time_limit_seconds": 270,
-      "reward": 241,
+      "reward": 243,
       "stages": [
         {
           "stop_id": 0,
@@ -768,10 +768,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4304,
+        "vehicle_route_pixels": 4368,
         "required_walking_pixels": 160,
-        "normalized_moving_seconds_fast": 47.8,
-        "normalized_moving_seconds_slow": 72.8,
+        "normalized_moving_seconds_fast": 48.5,
+        "normalized_moving_seconds_slow": 73.9,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -779,7 +779,7 @@
             "to_stop": 29,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 912,
+            "vehicle_pixels": 944,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"
@@ -810,7 +810,7 @@
             "to_stop": 0,
             "from_district": 2,
             "to_district": 0,
-            "vehicle_pixels": 1888,
+            "vehicle_pixels": 1920,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",
@@ -840,8 +840,8 @@
         27,
         0
       ],
-      "time_limit_seconds": 205,
-      "reward": 216,
+      "time_limit_seconds": 210,
+      "reward": 217,
       "stages": [
         {
           "stop_id": 0,
@@ -873,10 +873,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3296,
+        "vehicle_route_pixels": 3360,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 38.2,
-        "normalized_moving_seconds_slow": 38.2,
+        "normalized_moving_seconds_fast": 39.0,
+        "normalized_moving_seconds_slow": 39.0,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -884,7 +884,7 @@
             "to_stop": 31,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1392,
+            "vehicle_pixels": 1424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "King east"
@@ -913,7 +913,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 1040,
+            "vehicle_pixels": 1072,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -946,7 +946,7 @@
         0
       ],
       "time_limit_seconds": 330,
-      "reward": 314,
+      "reward": 315,
       "stages": [
         {
           "stop_id": 0,
@@ -993,10 +993,10 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5776,
+        "vehicle_route_pixels": 5840,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 90.6,
-        "normalized_moving_seconds_slow": 90.6,
+        "normalized_moving_seconds_fast": 91.6,
+        "normalized_moving_seconds_slow": 91.6,
         "assumed_interaction_allowance_seconds": 40,
         "legs": [
           {
@@ -1004,7 +1004,7 @@
             "to_stop": 27,
             "from_district": 0,
             "to_district": 1,
-            "vehicle_pixels": 1040,
+            "vehicle_pixels": 1072,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "College east"
@@ -1064,7 +1064,7 @@
             "to_stop": 0,
             "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 912,
+            "vehicle_pixels": 944,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east"

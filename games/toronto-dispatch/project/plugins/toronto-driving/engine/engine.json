@@ -107,7 +107,8 @@
         "include/td_anim.h",
         "src/td_anim.c",
         "include/td_radio_data.h",
-        "src/td_radio.c"
+        "src/td_radio.c",
+        "src/td_street_names.c"
       ]
     }
   ]

@@ -1,7 +1,7 @@
 """Synchronize authored CGB priority/palette attributes using native GB Studio RLE."""
 from pathlib import Path
 import json
-from city_layout import WIDTH,HEIGHT,road,walkable
+from city_layout import WIDTH,HEIGHT
 ROOT=Path(__file__).resolve().parents[1]
 def compress(values):
     output=[];last=None;count=0
@@ -18,13 +18,8 @@ def main():
     data.update(width=WIDTH//8,height=HEIGHT//8,imageWidth=WIDTH,imageHeight=HEIGHT,tileColors=compress(attrs))
     path.write_text(json.dumps(data,indent=2)+'\n')
     city=json.loads((ROOT/'content/city_art.json').read_text())
-    collisions=[]
-    for y in range(4,HEIGHT,8):
-        for x in range(4,WIDTH,8):
-            blocked=any(b['x']<=x<b['x']+b['width'] and b['y']<=y<b['y']+b['depth'] for b in city['blocks'])
-            if 32<=x<=560 and 752<=y<760:blocked=True
-            if 376<=x<408 and 664<=y<696:blocked=True
-            collisions.append(15 if blocked or not walkable(x,y) else 0 if road(x,y) else 16)
+    collisions=city['collisions']
+    assert len(collisions)==WIDTH//8*(HEIGHT//8)
     scene=project/'project/scenes/toronto_city/scene.gbsres';data=json.loads(scene.read_text());data.update(width=WIDTH//8,height=HEIGHT//8,collisions=compress(collisions));scene.write_text(json.dumps(data,indent=2)+'\n')
     # District backgrounds: palette/priority bytes come from each generator's
     # attributes file; their collisions are authored by the generators.
