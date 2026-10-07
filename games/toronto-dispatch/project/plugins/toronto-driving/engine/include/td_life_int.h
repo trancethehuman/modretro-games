@@ -122,6 +122,8 @@ static UBYTE lf_walk(UWORD u,UWORD v){
 void td_lf_fx(UBYTE kind,UWORD u,UWORD v,UBYTE timer) BANKED;
 void td_lf_crime(UBYTE kind) BANKED;
 void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED;
+/* Walkers in view near (u,v) (pixels) run from trouble. */
+void td_lf_panic(UWORD u,UWORD v) BANKED;
 void td_lf_own_car(UBYTE i,UBYTE mode) BANKED;
 UBYTE td_lf_tr_heading(UBYTE i) BANKED;
 /* Give traffic slot i a new design and colour (call while it is out of view). */

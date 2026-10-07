@@ -3137,6 +3137,26 @@
     24,
     32
    ]
+  },
+  {
+   "name": "SPRAY BAY",
+   "rect": [
+    192,
+    618,
+    32,
+    16
+   ],
+   "kind": "gameplay"
+  },
+  {
+   "name": "YONGE-DUNDAS SCREEN",
+   "rect": [
+    680,
+    432,
+    32,
+    16
+   ],
+   "kind": "scenery"
   }
  ],
  "collisions": [
@@ -18763,8 +18783,9 @@
   "solid": 15
  },
  "validation": {
-  "raw_unique_tiles": 376,
-  "flip_canonical_unique_tiles": 326
+  "raw_unique_tiles": 438,
+  "flip_canonical_unique_tiles": 372,
+  "animated_water_tiles": 1856
  },
  "scope": "Compressed central Toronto (Dufferin to Broadview, Bloor to the harbour) and the Islands"
 }

@@ -102,6 +102,16 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Human read-through on the Chromatic: dialogue length, typing speed and the pacing of chapter calls.
 - Next: a story recap in the pause menu and individual portraits if UI tiles can be freed.
 
+## Gameplay, scenery and performance — implemented 2026-10-07, human review pending
+
+- [x] Spray bay on King St West, 20 lost parcels with a $500 bonus, and walkers who run from gunfire.
+- [x] Animated ripple water with foam and sand shores in all four scenes; the Yonge-Dundas rooftop screen.
+- [x] Story: staged mid-campaign and festival-week chatter, delivery reactions, the police call's spray-bay hint, and Ernie's lost-parcel thread.
+- [x] Fixed UI glyphs on the core scene's water and roofs (UI art moved clear of scene tiles).
+- [x] Faster frames: walkers laid out on alternate updates; animated tiles copied inside vertical blank by an interrupt handler.
+- [ ] Handheld review: animation on the Chromatic's screen, parcel visibility, spray bay price, the three-second status line in a vehicle, and VRAM timing on hardware.
+- Next: spray bays in the other scenes, a parcel count on the pause menu, ferry-lane ripples, and more rooftop signs.
+
 ## Next playable polish
 
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.

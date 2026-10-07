@@ -285,3 +285,170 @@ def dress_lots(d, box, tw, th, lot, set_attr, colors, salt, parks=()):
                                 set_attr(xx, yy, 6 | 128)
                         canopies.append([cx8, cy8, 16, 16])
     return canopies
+
+
+# Open water: a 32 x 32 px ripple texture (16 tiles) repeated on a global grid
+# so every scene shares the same water tiles, and four frames of drifting
+# ripples and twinkling glints that the engine swaps into those tiles
+# (td_scenery.c). Colour indices are into COLORS: 3 cream, 2 teal (the water),
+# 1 slate, 0 dark.
+WATER_SIZE = 32
+WATER_FRAMES = 4
+# Ripples: left x, row, length, drift direction, frames with a glint.
+_RIPPLES = [(2, 3, 7, 1, (0,)), (19, 5, 5, -1, (2,)), (11, 10, 4, 1, ()), (25, 12, 8, -1, (1,)),
+            (4, 18, 6, -1, (3,)), (16, 21, 7, 1, (0, 2)), (28, 25, 4, 1, ()), (8, 28, 8, -1, (1,))]
+_SPECKS = [(14, 1), (30, 8), (6, 14), (21, 16), (1, 23), (23, 29)]
+# Steady dots: every tile carries a mark, so no water tile equals plain ground.
+_DOTS = [(27, 4), (21, 9), (13, 19), (30, 21), (3, 26), (18, 26)]
+_DRIFT = [0, 1, 2, 1]
+
+
+def water_pattern(frame):
+    """32 x 32 COLORS indices of the open-water texture in one frame."""
+    g = [[2] * WATER_SIZE for _ in range(WATER_SIZE)]
+    for x, y in _SPECKS:
+        if (x + y + frame) % 4:
+            g[y][x] = 1
+    for x, y in _DOTS:
+        g[y][x] = 1
+    for x0, row, length, sign, glints in _RIPPLES:
+        x = x0 + sign * _DRIFT[frame]
+        for i in range(length):
+            px = (x + i) % WATER_SIZE
+            if i in (0, length - 1):
+                g[row - 1][px] = 1
+            else:
+                g[row][px] = 1
+        if frame in glints:
+            g[row - 1][(x + 2) % WATER_SIZE] = 3
+            if length > 5:
+                g[row - 1][(x + 3) % WATER_SIZE] = 3
+    return g
+
+
+def water_tiles():
+    """[frame][tile] -> 64 COLORS indices, tile = (y // 8) * 4 + x // 8."""
+    out = []
+    for f in range(WATER_FRAMES):
+        g = water_pattern(f)
+        out.append([[g[ty * 8 + y][tx * 8 + x] for y in range(8) for x in range(8)]
+                    for ty in range(4) for tx in range(4)])
+    return out
+
+
+def texture_water(img, attrs, tw, is_water, colors):
+    """Repaint open water with the shared texture and a foam edge.
+
+    A pixel is water when is_water(x, y) holds, its tile uses palette slot 0
+    and it still has the plain water colour (COLORS[2]) after everything else
+    was drawn. Whole-water tiles take the texture's first frame exactly (the
+    engine animates those); tiles on a shore are calm shallows (plain water)
+    with a cream foam line along the land and a broken second line, so a
+    shoreline adds few tile patterns; grass or ground beside the water gets a
+    sand line. Returns the number of whole-water tiles."""
+    px = img.load(); w, h = img.size
+    base = tuple(int(colors[2][i:i + 2], 16) for i in (1, 3, 5))
+    rgb = [tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in colors]
+    wet = bytearray(w * h)
+    for y in range(h):
+        row = (y // 8) * tw
+        for x in range(w):
+            if attrs[row + x // 8] & 7 == 0 and px[x, y] == base and is_water(x, y):
+                wet[y * w + x] = 1
+    pattern = water_pattern(0)
+    whole = 0
+    # Grass and ground meeting the water get a sand line (land side), so a
+    # tile-aligned shore shows an edge without breaking whole-water tiles.
+    sand = []
+    for y in range(h):
+        for x in range(w):
+            if not wet[y * w + x]:
+                continue
+            for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                if 0 <= nx < w and 0 <= ny < h and not wet[ny * w + nx] and \
+                        attrs[(ny // 8) * tw + nx // 8] & 7 == 6 and px[nx, ny] == base:
+                    sand.append((nx, ny))
+    for x, y in sand:
+        px[x, y] = rgb[3]
+
+    def dry(x, y):
+        return 0 <= x < w and 0 <= y < h and not wet[y * w + x]
+    for ty in range(h // 8):
+        for tx in range(w // 8):
+            cells = [(tx * 8 + x, ty * 8 + y) for y in range(8) for x in range(8)]
+            full = all(wet[y * w + x] for x, y in cells)
+            whole += full
+            for x, y in cells:
+                if not wet[y * w + x]:
+                    continue
+                c = pattern[y % WATER_SIZE][x % WATER_SIZE] if full else 2
+                if not full:
+                    edge = dry(x - 1, y) or dry(x + 1, y) or dry(x, y - 1) or dry(x, y + 1)
+                    near = dry(x - 2, y) or dry(x + 2, y) or dry(x, y - 2) or dry(x, y + 2)
+                    if edge or (near and (x + y) % 3 == 0):
+                        c = 3
+                px[x, y] = rgb[c]
+    return whole
+
+
+# Video screens on the roofs at Yonge and Dundas: 32 x 16 px (eight tiles),
+# four frames that the engine cycles like the water. Colour indices into
+# COLORS: 3 light, 2 the building's accent, 1 deep, 0 dark frame.
+SCREEN_W, SCREEN_H = 32, 16
+_LANTERN = ["..XX..", ".XXXX.", "XXXXXX", "XXXXXX", ".XXXX.", "..XX.."]
+_PARCEL = ["XXXXXXX", "X..X..X", "XXXXXXX", "X..X..X", "X..X..X", "XXXXXXX"]
+
+
+def screen_pattern(frame):
+    """32 x 16 COLORS indices of the screen in one frame."""
+    w, h = SCREEN_W, SCREEN_H
+    g = [[1] * w for _ in range(h)]
+    if frame == 0:          # Lakelight: a lantern and its glow
+        for y, row in enumerate(_LANTERN):
+            for x, c in enumerate(row):
+                if c == 'X':
+                    g[4 + y][4 + x] = 3
+        for x in range(13, 29, 3):
+            g[7][x] = 2; g[9][x + 1] = 2
+    elif frame == 1:        # stripes sweeping across
+        for y in range(h):
+            for x in range(w):
+                if (x + y) % 8 < 3:
+                    g[y][x] = 2
+    elif frame == 2:        # a parcel: the depot's ad
+        for y, row in enumerate(_PARCEL):
+            for x, c in enumerate(row):
+                if c == 'X':
+                    g[4 + y][12 + x] = 3
+        for x in range(3, 9):
+            g[13][x] = 2; g[13][w - 1 - x] = 2
+    else:                   # fireworks over the lake
+        for x, y in ((6, 4), (12, 9), (19, 5), (25, 10), (9, 12), (22, 3)):
+            g[y][x] = 3
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                g[y + dy][x + dx] = 2
+    for x in range(w):
+        g[0][x] = g[h - 1][x] = 0
+    for y in range(h):
+        g[y][0] = g[y][w - 1] = 0
+    return g
+
+
+def screen_tiles():
+    """[frame][tile] -> 64 COLORS indices, tile = (y // 8) * 4 + x // 8."""
+    out = []
+    for f in range(4):
+        g = screen_pattern(f)
+        out.append([[g[ty * 8 + y][tx * 8 + x] for y in range(8) for x in range(8)]
+                    for ty in range(SCREEN_H // 8) for tx in range(SCREEN_W // 8)])
+    return out
+
+
+def paint_screen(img, x0, y0, colors):
+    """Draws the screen's first frame at a tile-aligned (x0, y0)."""
+    assert x0 % 8 == 0 and y0 % 8 == 0
+    px = img.load(); g = screen_pattern(0)
+    rgb = [tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in colors]
+    for y in range(SCREEN_H):
+        for x in range(SCREEN_W):
+            px[x0 + x, y0 + y] = rgb[g[y][x]]

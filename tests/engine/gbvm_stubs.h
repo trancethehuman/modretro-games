@@ -66,5 +66,8 @@ UBYTE tile_at(UBYTE x,UBYTE y);
 void actor_set_frames(actor_t *actor,UBYTE first,UBYTE end);
 void activate_actor(actor_t *actor);
 void deactivate_actor(actor_t *actor);
+/* CGB VRAM bank select and tile uploads (animated water). */
+extern UBYTE VBK_REG;
+void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles);
 
 #endif

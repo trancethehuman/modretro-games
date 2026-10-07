@@ -356,7 +356,7 @@ void td_life_foot_b(void) BANKED {
     fx_look=((h+1)&15)>>1;
     if(lf_shake<2)lf_shake=2;
     td_audio_play(TD_AUDIO_IMPACT);
-    td_lf_crime(CR_GUN);
+    td_lf_crime(CR_GUN);td_lf_panic(pu,pv);
 }
 
 UBYTE td_lf_drive(UWORD u,UWORD v) BANKED {return lf_drive(u,v);}

@@ -26,8 +26,12 @@ ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
 COLS, LINES = 17, 3
 PAGES_PER_BANK = 290          # 290 x 52 bytes = 15.1 KB of each 16 KB bank
 # Scripts the engine indexes as a group, in engine order.
-GROUPS = {'FAIL': 3, 'CHATTER': 16}
-# Calls a new call may cut short (ambient, not story).
+GROUPS = {'FAIL': 3, 'CHATTER': 16, 'PARCELS': 4, 'MID': 8, 'LATE': 8, 'DENTED': 3, 'EARLY': 3}
+# Chatter pools that unlock with the story: (group, chapter that opens it).
+STAGE_CHATTER = (('MID', 4), ('LATE', 7))
+AMBIENT_GROUPS = ('CHATTER', 'MID', 'LATE')
+# Calls a new call may cut short (ambient, not story): these and the chatter
+# groups below.
 INTERRUPTIBLE = ('NIGHT', 'MORNING')
 CONTRACT_PARTS = ('call', 'pick', 'done')
 
@@ -172,8 +176,11 @@ def build():
         lines.append(f'#define TD_RADIO_{group}_COUNT {count}')
     lines.append('#define TD_RADIO_INTERRUPTIBLE(s) (' + '||'.join(
         [f'(s)=={order.index(n)}' for n in INTERRUPTIBLE] +
-        [f'((s)>={order.index("CHATTER_0")}&&(s)<{order.index("CHATTER_0") + GROUPS["CHATTER"]})',
-         f'(s)=={contract_id}']) + ')')
+        [f'((s)>={order.index(g + "_0")}&&(s)<{order.index(g + "_0") + GROUPS[g]})' for g in AMBIENT_GROUPS] +
+        [f'(s)=={contract_id}']) + ')')
+    for group, chapter in STAGE_CHATTER:
+        assert GROUPS[group] == 8, 'stage chatter is picked with a 3-bit index'
+        lines.append(f'#define TD_RADIO_{group}_CHAPTER {chapter}')
     for b in range(len(banks)):
         lines.append(f'void td_radio_text{b}(UWORD page,UBYTE from,UBYTE n,char *dest) BANKED;')
         lines.append(f'UBYTE td_radio_speaker{b}(UWORD page) BANKED;')

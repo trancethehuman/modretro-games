@@ -47,7 +47,10 @@
 #define TD_MSG_AMMO 29
 #define TD_MSG_SMOKING 30
 #define TD_MSG_WRECKED 31
-#define TD_MSG_COUNT 32
+#define TD_MSG_PARCEL 32
+#define TD_MSG_SPRAY 33
+#define TD_MSG_SPRAY_NEAR 34
+#define TD_MSG_COUNT 35
 
 /* Sidewalk pickups (td_street.c tables, collected in TORONTO.c). */
 #define TD_PICKUP_CASH 15
@@ -116,6 +119,10 @@ void td_life_peds(UBYTE near) BANKED;
 void td_life_present(void) BANKED;
 /* Pause menu supplies: ammunition and first aid. FALSE when unaffordable. */
 UBYTE td_life_buy(void) BANKED;
+/* The spray bay: lose the police, repair and repaint the car (price below);
+ * FALSE when the courier cannot pay. */
+#define TD_SPRAY_PRICE 25
+UBYTE td_life_spray(void) BANKED;
 /* Apply an arrest (fine, attention cleared, job lost). */
 void td_life_busted(void) BANKED;
 /* Prepare hospital recovery; outputs the core exit in Q4. */

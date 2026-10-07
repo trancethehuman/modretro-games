@@ -4,6 +4,14 @@ A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Co
 
 **Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, the downtown street plan from the City of Toronto Centreline, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
 
+![Animated harbour by Centre Island](docs/screenshots/water-islands.png) ![The Don](docs/screenshots/water-don.png) ![Lake Ontario in the West scene](docs/screenshots/water-west.png) ![Yonge-Dundas screen](docs/screenshots/screen-yonge-dundas.png)
+
+![Spray bay nearby](docs/screenshots/spray-near.png) ![Resprayed](docs/screenshots/spray-done.png) ![A lost parcel on the lawn](docs/screenshots/parcel-seen.png) ![Lost parcel found](docs/screenshots/parcel-found.png)
+
+![Before: UI glyphs on the harbour](docs/screenshots/before-water-islands.png) ![After](docs/screenshots/water-islands.png) ![Before: glyphs on Front St roofs](docs/screenshots/before-roofs-front-st.png) ![After](docs/screenshots/roofs-front-st.png)
+
+Gameplay and scenery, 2026-10-07: animated ripple water in every scene, with foam and sand at the shore; the video screen at Yonge and Dundas; the spray bay on King St West, which clears the stars for $25; and one of the 20 lost parcels. The last row compares the previous build with this one. The previous build showed UI glyphs on the water and on some roofs, because the UI art overwrote part of the core tileset; that is fixed. Unmodified PyBoy frames, some staged by writing position, cash or stars in emulator memory; [provenance](docs/screenshots/provenance.json).
+
 ![Contract briefing](docs/screenshots/story-briefing.png) ![Sal answers on delivery](docs/screenshots/story-client.png) ![A contract waits for the story](docs/screenshots/story-locked.png) ![A chapter opens](docs/screenshots/story-chapter.png)
 
 ![Dev of Rushly](docs/screenshots/story-rival.png) ![Margo's answer to Vance](docs/screenshots/story-torn.png) ![Dev quits Rushly](docs/screenshots/story-dev-quits.png) ![Dev at the depot](docs/screenshots/story-dev-joins.png)

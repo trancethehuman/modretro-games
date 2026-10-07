@@ -71,7 +71,11 @@ typedef struct {
     UBYTE district,park_district;
 } td_state_t;
 extern td_state_t td;
-extern td_job_t td_job,td_offer;
+/* The active contract. The dispatch board browses offers in the same copy
+ * (td_offer): it opens only between jobs, or from the pause menu, which
+ * reloads the active contract when the board closes. */
+extern td_job_t td_job;
+#define td_offer td_job
 extern td_stop_t td_target,td_cursor;
 void td_get_stop(UBYTE index,td_stop_t *dest) BANKED;
 /* Whole-pixel parking cue. FALSE leaves outputs unchanged; use WRAM buffers. */
@@ -105,8 +109,26 @@ void td_radio_contract(UBYTE job,UBYTE part) BANKED;
  * the contract, a delivery-count beat, the openings of chapters it unlocks
  * (td_radio_open() taken before the delivery counted) and the finale. */
 void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) BANKED;
+/* A chatter call for a quiet stretch (general, or the story's current
+ * people once their chapter is open). */
+void td_radio_chatter(void) BANKED;
 /* The story chapters open now, one bit each. */
 UWORD td_radio_open(void) BANKED;
+/* Lost parcels (td_street.c): the hidden collectibles, found once each.
+ * Found ones are bits TD_PARCEL_BIT.. of td.complete (bytes 12..14; the
+ * contracts use bytes 0..10). */
+#define TD_PARCELS 20
+#define TD_PARCEL_BIT 96
+#define TD_PARCEL_REWARD 50
+#define TD_PARCEL_BONUS 500
+UBYTE td_parcels_found(void) BANKED;
+UBYTE td_street_parcel(UBYTE slot) BANKED;
+/* Animated scenery (td_scenery.c): find the scene's water and screen tiles
+ * after it loads; draw their next frame. */
+void td_scenery_find(void) BANKED;
+void td_scenery_tick(void) BANKED;
+/* Its vertical-blank interrupt handler (added by td_scenery_find). */
+void td_scenery_vbl(void) NONBANKED;
 /* The current page's speaker card into dest; TRUE when it is Rosa. */
 UBYTE td_radio_speaker(char *dest) BANKED;
 void td_radio_tick(void) BANKED;

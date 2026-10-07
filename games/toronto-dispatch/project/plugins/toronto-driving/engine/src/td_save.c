@@ -87,6 +87,12 @@ void td_crc_run(void) NAKED {
 }
 #endif
 static volatile UBYTE *td_save_address(UBYTE slot){return slot?(volatile UBYTE*)0xA180:(volatile UBYTE*)0xA100;}
+/* The bits of td.complete byte i that record lost parcels. */
+static UBYTE td_parcel_bits(UBYTE i){
+    UBYTE b,m=0;UWORD bit;
+    for(b=0;b<8;b++){bit=(UWORD)i*8+b;if(bit>=TD_PARCEL_BIT&&bit<TD_PARCEL_BIT+TD_PARCELS)m|=1<<b;}
+    return m;
+}
 static UBYTE td_valid_state(td_state_t *s){
     UBYTE i,bits=0,value;td_job_t job;td_stop_t stop;
     if(s->vehicle>3||s->heading>15||s->onfoot>1||s->health>100||s->subsecond>=60||s->mode>TD_HELP)return FALSE;
@@ -96,7 +102,8 @@ static UBYTE td_valid_state(td_state_t *s){
     if(!td_district_drivable(s->park_district,s->park_u>>4,s->park_v>>4)||!(s->onfoot?td_district_walkable(s->district,s->u>>4,s->v>>4):td_district_drivable(s->district,s->u>>4,s->v>>4)))return FALSE;
     for(i=0;i<TD_COMPLETE_BYTES;i++){
         value=s->complete[i];
-        if(i>=(TD_QUESTS+7)/8&&value)return FALSE;
+        /* Above the contracts only found lost parcels may be set. */
+        if(i>=(TD_QUESTS+7)/8){if(value&~td_parcel_bits(i))return FALSE;continue;}
 #if (TD_QUESTS & 7)
         if(i==TD_QUESTS/8&&value>>(TD_QUESTS&7))return FALSE;
 #endif

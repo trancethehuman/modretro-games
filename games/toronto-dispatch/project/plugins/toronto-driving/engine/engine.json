@@ -112,7 +112,9 @@
         "src/td_radio_text1.c",
         "src/td_street_names.c",
         "include/td_hud.h",
-        "src/td_hud.c"
+        "src/td_hud.c",
+        "include/td_scenery_data.h",
+        "src/td_scenery.c"
       ]
     }
   ]

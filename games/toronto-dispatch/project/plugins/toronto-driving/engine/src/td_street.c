@@ -1,8 +1,9 @@
 #pragma bank 255
-/* Sidewalk pickups and transit berths. The tables live in this bank; the
- * scene keeps two nearby pickups in a small WRAM cache. Pickups never change
- * collision, traffic or the saved state; a short ring of recently collected
- * pickups keeps them from reappearing straight away. */
+/* Sidewalk pickups, lost parcels and transit berths. The tables live in
+ * this bank; the scene keeps two nearby pickups in a small WRAM cache.
+ * Pickups never change collision or traffic; a short ring of recently
+ * collected pickups keeps them from reappearing straight away, and a lost
+ * parcel, once found, is saved and never comes back. */
 #include <gbdk/platform.h>
 #include <string.h>
 #include "td_game.h"
@@ -33,6 +34,23 @@ static UBYTE td_pickup_was_taken(UBYTE global){
     UBYTE k;
     for(k=0;k<TD_PICKUP_TAKEN;k++)if(td_pickup_taken[k]==global)return TRUE;
     return FALSE;
+}
+
+typedef char td_parcels_match[(TD_PICKUP_PARCELS==TD_PARCELS&&TD_PARCEL_BIT>=TD_QUESTS&&
+    TD_PARCEL_BIT+TD_PARCELS<=TD_COMPLETE_BYTES*8)?1:-1];
+static UBYTE td_parcel_taken(UBYTE global){
+    UBYTE p=td_parcel_of[global];
+    return p!=255&&TD_DONE(TD_PARCEL_BIT+p);
+}
+/* The lost parcel a slot holds (255 for other pickups). */
+UBYTE td_street_parcel(UBYTE slot) BANKED {
+    if(slot>=TD_PICKUP_SLOTS||td_pickup_slot[slot]==255)return 255;
+    return td_parcel_of[td_pickup_base+td_pickup_slot[slot]];
+}
+UBYTE td_parcels_found(void) BANKED {
+    UBYTE i,n=0;
+    for(i=0;i<TD_PARCELS;i++)if(TD_DONE(TD_PARCEL_BIT+i))n++;
+    return n;
 }
 
 void td_street_take(UBYTE slot) BANKED {
@@ -167,7 +185,7 @@ void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED {
             if(td_pickup_slot[s]==i){free_slot=254;break;}
             if(td_pickup_slot[s]==255&&free_slot==255)free_slot=s;
         }
-        if(free_slot>=TD_PICKUP_SLOTS||td_pickup_was_taken(start+i))continue;
+        if(free_slot>=TD_PICKUP_SLOTS||td_pickup_was_taken(start+i)||td_parcel_taken(start+i))continue;
         td_pickup_slot[free_slot]=i;
         td_pickup_su8[free_slot]=td_pickup_uv8[(UWORD)(start+i)*2];td_pickup_sv8[free_slot]=td_pickup_uv8[(UWORD)(start+i)*2+1];
         td_pickup_su[free_slot]=td_pickup_u[start+i];td_pickup_sv[free_slot]=td_pickup_v[start+i];

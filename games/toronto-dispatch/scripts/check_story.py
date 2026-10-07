@@ -17,6 +17,7 @@
 import json
 import re
 from pathlib import Path
+import create_radio
 
 ROOT = Path(__file__).resolve().parents[1]
 # Facts and the calls that establish them (scripts or contract ids).
@@ -33,7 +34,10 @@ FACTS = {
     'VOTED': ('BEAT_AWARD',),
 }
 # Calls that can play at any time: they establish nothing and assume nothing.
-AMBIENT = ('FAIL_', 'CHATTER_', 'WANTED', 'LOST', 'BUSTED', 'WASTED', 'NIGHT', 'MORNING')
+AMBIENT = ('FAIL_', 'CHATTER_', 'WANTED', 'LOST', 'BUSTED', 'WASTED', 'NIGHT', 'MORNING', 'PARCELS_', 'SPRAY',
+           'DENTED_', 'EARLY_')
+# Chatter that only plays once a chapter is open.
+STAGED = {group + '_': chapter for group, chapter in create_radio.STAGE_CHATTER}
 
 
 def speaker_of(text, speakers, current):
@@ -148,6 +152,9 @@ def main():
     for name in radio['scripts']:
         if name.startswith(AMBIENT):
             check(name, {'INTRO'})
+        for prefix, chapter in STAGED.items():
+            if name.startswith(prefix):
+                check(name, heard_before(ids[chapter * 8]) | {f'CHAPTER_{chapter}'})
     told = set(counted.values()) | set(follows.values()) | {f'CHAPTER_{k}' for k in range(1, chapter_count)}
     unused = [n for n in radio['scripts'] if n.startswith(('BEAT_', 'CHAPTER_')) and n not in told]
     assert not unused, f'story calls never played: {unused}'

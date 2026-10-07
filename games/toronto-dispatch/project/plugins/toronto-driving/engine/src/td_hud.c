@@ -48,7 +48,7 @@ void td_ui_hud_tick(void) BANKED {
     if(td_pop_job)td_pop_job--;
     /* Repaint only when something that could show has changed. */
     key[0]=(td_pop_street?1:0)|(td_pop_target?2:0)|(td_pop_cash?4:0)|(td_pop_vit?8:0)|(td_pop_ammo?16:0)|(td_pop_car?32:0)|
-           (td_pop_job?64:0)|(td_still>=10?128:0)|((UWORD)td.wanted<<8)|((UWORD)(td_station_near!=TD_NONE)<<11)|((UWORD)td.msg<<12);
+           (td_pop_job?64:0)|(TD_HUD_IDLE()?128:0)|((UWORD)td.wanted<<8)|((UWORD)(td_station_near!=TD_NONE)<<11)|((UWORD)td.msg<<12);
     key[1]=td.cash;key[2]=td.vitality|((UWORD)td.ammo<<8);key[3]=td_car_damage|((UWORD)td.health<<8);
     key[4]=td.job==TD_NONE?65535:td.left|((UWORD)td.stage<<10);
     key[5]=td.job==TD_NONE||!td_beacon_shown?0:((td_beacon_u>u?td_beacon_u-u:u-td_beacon_u)+(td_beacon_v>v?td_beacon_v-v:v-td_beacon_v))>>2;

@@ -342,8 +342,9 @@ void td_ui_init(void) BANKED {
     UBYTE i;td_ui_mode=255;td_map_active=0;td_hud_y=0;td_title_shown=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);
     /* A fresh scene reports its objective once and starts with no pop-ups. */
     td_hud_rows=0;td_hud_reset();
-    /* Font in bank 1 from tile 192, art in bank 0 tiles 128..191 (above the
-     * scene's 128 bank-0 tiles and outside the sprite tiles). Every window
+    /* Font in bank 1 from tile 192, art in bank 0 tiles 192..255: above the
+     * scene's bank-0 tiles (up to 192 when a scene has more than 256) and
+     * outside the sprite tiles. Every window
      * cell starts as a bank-1 font cell on UI palette 7. */
     VBK_REG=1;for(i=0;i<18;i++)set_win_tiles(0,i,20,1,td_attrs);
     VBK_REG=1;set_bkg_data(TD_FONT_FIRST,sizeof(td_font)/16,td_font);
@@ -397,7 +398,8 @@ void td_ui_tick(void) BANKED {
 }
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
             "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","HOLD A+B: GET OUT","HOSPITAL",
-            "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR"};
+            "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR",
+            "LOST PARCEL +$50","RESPRAYED -$25","SPRAY BAY: PULL IN"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
 /* ------------------------------------------------------------ pop-up HUD
  * Nothing covers the city by default. Up to two rows rise from the bottom
@@ -415,6 +417,7 @@ static char *td_cat(char *d,const char *s){while(*s)*d++=*s++;*d=0;return d;}
 /* Row A text into td_line; FALSE when there is nothing to say. */
 static UBYTE td_hud_row_a(void){
     UBYTE i;
+    if(td.msg==TD_MSG_PARCEL){td_format(td_line,TD_UI_BOX "LOST PARCEL %u/%u",td_parcels_found(),TD_PARCELS);return TRUE;}
     if(td.msg){strcpy(td_line,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":td_messages[td.msg]);return TRUE;}
     if(td_station_near!=TD_NONE){td_line[0]=TD_UI_BTN_B[0];td_transit_label(td_station_near,td_line+1);return TRUE;}
     if(td_pop_target&&td.job!=TD_NONE){
@@ -435,7 +438,7 @@ static UBYTE td_hud_row_a(void){
 }
 /* Row B text into td_line; FALSE when nothing is worth showing. */
 static UBYTE td_hud_row_b(void){
-    char *d=td_line;UBYTE all=td_still>=10;
+    char *d=td_line;UBYTE all=TD_HUD_IDLE();
     *d=0;
     if(td.job!=TD_NONE&&(td_pop_job||all||td.left<=15)){
         *d++=TD_UI_BOX[0];d=td_digits(d,td.stage+1,0);*d++='/';d=td_digits(d,td_job.count,0);*d++=' ';

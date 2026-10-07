@@ -56,14 +56,12 @@ def generate(spec,check=False):
     for x,y,w,h in [(0,0,WIDTH,16),(0,HEIGHT-16,WIDTH,16),(0,0,16,HEIGHT),(WIDTH-16,0,16,HEIGHT)]:
         box(x,y,w,h,1); solid(x,y,w,h)
     for x,y,w,h in spec["water"]:
-        box(x,y,w,h,1); solid(x,y,w,h); attr(x,y,w,h,0)
-        for py in range(y+8,y+h,16):
-            for px in range(0,WIDTH,32): box(px,py,8,1,3)
+        box(x,y,w,h,2); solid(x,y,w,h); attr(x,y,w,h,0)
     for park in spec["parks"]:
         x,y,w,h=park["rect"]
         box(x,y,w,h,2);attr(x,y,w,h,6)
     if "pond" in spec:
-        d.polygon(spec["pond"],fill=COLORS[1],outline=COLORS[0])
+        d.polygon(spec["pond"],fill=COLORS[2],outline=COLORS[0])
         pond_mask=Image.new("1",(WIDTH,HEIGHT));ImageDraw.Draw(pond_mask).polygon(spec["pond"],fill=1)
         for ty in range(TH):
             for tx in range(TW):
@@ -256,6 +254,13 @@ def generate(spec,check=False):
     canopies+=city_kit.dress_lots(d,box,TW,TH,lot,set_attr,COLORS,spec["slug"],[tuple(p["rect"]) for p in spec["parks"]])
     assert collisions==before,"lot decoration must not change collision"
     paint_streetcar_stops(d,spec['id'],COLORS)
+    # Open water takes the shared animated texture, with foam along the shore.
+    pond=None
+    if "pond" in spec:
+        pond=Image.new("1",(WIDTH,HEIGHT));ImageDraw.Draw(pond).polygon(spec["pond"],fill=1)
+    def is_water(x,y):
+        return any(wx<=x<wx+ww and wy<=y<wy+wh for wx,wy,ww,wh in spec["water"]) or bool(pond and pond.getpixel((x,y)))
+    water_tiles=city_kit.texture_water(img,attrs,TW,is_water,COLORS)
     patterns=set();raw_patterns=set()
     for ty in range(TH):
         for tx in range(TW):
@@ -277,7 +282,7 @@ def generate(spec,check=False):
             assert current.convert("RGB").tobytes()==img.convert("RGB").tobytes(),(spec["slug"],"background pixels are stale")
     else:
         img.save(out)
-    metadata={**spec,"projection":"original compressed orthogonal north-up; not GIS coordinates","dimensions":[WIDTH,HEIGHT],"tile_dimensions":[TW,TH],"road_half_width":ROAD_HALF,"walk_half_width":WALK_HALF,"blocks":blocks,"canopies":canopies,"collisions":collisions,"collision_rules":{"road":0,"foot_only":16,"solid":15},"background_filename":filename,"background_sha256":hashlib.sha256(out.read_bytes()).hexdigest(),"source_research":"content/districts/west-research.json","validation":{"raw_unique_tiles":len(raw_patterns),"flip_canonical_unique_tiles":len(patterns),"traffic_loops":len(spec["traffic_loops"]),"traffic_footprint_half_pixels":8,"traffic_swept_all_overlapped_tiles_clear":True,"portal_car_offsets_verified":[-12,0,12],"all_foot_clients_and_ports_connected":True,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
+    metadata={**spec,"projection":"original compressed orthogonal north-up; not GIS coordinates","dimensions":[WIDTH,HEIGHT],"tile_dimensions":[TW,TH],"road_half_width":ROAD_HALF,"walk_half_width":WALK_HALF,"blocks":blocks,"canopies":canopies,"collisions":collisions,"collision_rules":{"road":0,"foot_only":16,"solid":15},"background_filename":filename,"background_sha256":hashlib.sha256(out.read_bytes()).hexdigest(),"source_research":"content/districts/west-research.json","validation":{"raw_unique_tiles":len(raw_patterns),"flip_canonical_unique_tiles":len(patterns),"animated_water_tiles":water_tiles,"traffic_loops":len(spec["traffic_loops"]),"traffic_footprint_half_pixels":8,"traffic_swept_all_overlapped_tiles_clear":True,"portal_car_offsets_verified":[-12,0,12],"all_foot_clients_and_ports_connected":True,"native_build_verified":False,"measured_gameplay_duration_verified":False}}
     # Canonical stable candidate keys consumed by campaign tooling.
     keys=["dufferin_college","lansdowne_bloor","parkdale_queen","roncy_howard_park","sorauren"] if spec["id"]==1 else ["bloor_park_gate","parkside_south","colborne_service"]
     metadata["stop_candidates"]=[{"key":key,**stop} for key,stop in zip(keys,spec["stop_candidates"])]

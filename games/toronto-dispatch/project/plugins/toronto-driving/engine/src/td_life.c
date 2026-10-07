@@ -7,6 +7,7 @@
 #include "td_life_int.h"
 #include "td_audio.h"
 #include "td_district.h"
+#include "td_radio_data.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -86,8 +87,21 @@ void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED {
     pk_span[i]=pk_timer[i]=lethal?32:(vu||vv)?20:12;
     pk_mode[i]=PK_FLY;pk_drawn&=~bit;
     if(lethal)pk_lethal|=bit;else pk_lethal&=~bit;
+    td_lf_panic(pk_u[i]>>4,pk_v[i]>>4);
     if(look==LF_LOOK_OFFICER)td_lf_crime(lethal?CR_COP_KILL:CR_COP);
     else td_lf_crime(lethal?CR_KILL:CR_MINOR);
+}
+
+/* Gunfire or a struck walker: everyone else close by and in view runs from
+ * the courier for a few seconds (officers excepted). */
+void td_lf_panic(UWORD u,UWORD v) BANKED {
+    UBYTE i,bit,route;actor_t *a=&actors[TD_ACTOR_PEDS];
+    for(i=0,bit=1;i<TD_PEDS;i++,bit<<=1,a++){
+        route=td_ped_route[i];
+        if((td_ped_ovr&bit)||route==TD_NONE||(a->flags&ACTOR_FLAG_HIDDEN)||(route&7)==LF_LOOK_OFFICER)continue;
+        if(lf_dist(a->pos.x>>5,u)>=96||lf_dist(a->pos.y>>5,v)>=80)continue;
+        lf_own_ped(i,route&7);pk_mode[i]=PK_FLEE;pk_timer[i]=160;pk_drawn&=~bit;
+    }
 }
 
 static void lf_release_ped(UBYTE i){
@@ -575,6 +589,18 @@ UBYTE td_life_routes(UBYTE moved) BANKED {
     /* The scene's first population is placed during the fade-in. */
     if(!pending)lf_warm=0;
     return pending;
+}
+
+UBYTE td_life_spray(void) BANKED {
+    UBYTE was=td.wanted;
+    if(td.cash<TD_SPRAY_PRICE){td_message(TD_MSG_NO_CASH);return FALSE;}
+    td.cash-=TD_SPRAY_PRICE;td.wanted=0;td.heat=0;lf_chaos=0;lf_stand_down();td_car_damage=0;
+    /* A stolen car comes out another colour (skipping the patrol navy);
+     * the depot's own car keeps its livery. */
+    if(td_car_colour!=TD_PAL_COURIER){td_car_colour=td_car_colour>=TD_PAL_VIOLET?TD_PAL_RED:td_car_colour+1;if(td_car_colour==TD_PAL_NAVY)td_car_colour++;}
+    td_message(TD_MSG_SPRAY);td_audio_play(TD_AUDIO_COMPLETE);
+    if(was)td_radio_say(TD_RADIO_SPRAY);
+    return TRUE;
 }
 
 UBYTE td_life_buy(void) BANKED {

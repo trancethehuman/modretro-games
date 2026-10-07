@@ -99,6 +99,9 @@ void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) {
 }
 UWORD td_radio_open(void) { return radio_open_now; }
 void td_radio_tick(void) {}
+/* Tile uploads: animated scenery writes one tile at a time. */
+UBYTE VBK_REG;static unsigned bkg_uploads;static UBYTE bkg_last_first,bkg_last_bank;static const UBYTE *bkg_last_data;
+void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles){bkg_uploads+=count;bkg_last_first=first;bkg_last_bank=VBK_REG;bkg_last_data=tiles;}
 UBYTE td_radio_playing(void) { return radio_said; }
 void td_map_open(void) {
     test_map_opens++;test_map_active=1;
@@ -151,8 +154,8 @@ UBYTE td_district_walkable(UBYTE district,UWORD u,UWORD v) {
 }
 
 static void reset_case(void) {
-    memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));
-    memset(&td_offer,0,sizeof(td_offer));memset(actors,0,sizeof(actors));
+    memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));td_ped_flip=0;
+    memset(actors,0,sizeof(actors));
     memset(&td_cursor,0,sizeof(td_cursor));memset(&td_target,0,sizeof(td_target));
     memset(td_test_sram,0,sizeof(td_test_sram));td_car_damage=0;td_car_colour=0;
     for(unsigned i=0;i<6;i++)td_traffic_bases[i]=TD_FRAME_PLAYER_CAR;
@@ -366,6 +369,11 @@ static void test_city_routes_and_walking(void) {
     td.u=136*16;td_pedestrians();
     expect(td_ped_route[0]==identity&&actors[9].pos.x==npc_u&&actors[9].pos.y==npc_v,
            "crossing the old camera segment boundary does not teleport a visible pedestrian");
+    {UBYTE first=td_ped_flip;td_pedestrians();expect(td_ped_flip!=first,"walkers alternate between laid-out and skipped updates");
+     if(!td_ped_flip)td_pedestrians();
+     actors[9].pos.x^=32;npc_u=actors[9].pos.x;td_pedestrians();
+     expect(!td_ped_flip&&actors[9].pos.x==npc_u,"a skipped update leaves walkers where they were");
+     td_pedestrians();expect(actors[9].pos.x!=npc_u,"the next update lays them out again");}
 
     reset_case();td.onfoot=1;td_traffic_u[0]=410*16;td_traffic_v[0]=450*16;
     UWORD player_u=td.u;for(unsigned i=0;i<40;i++)driving_tick(J_RIGHT);
@@ -423,6 +431,12 @@ static void test_audio_event_integration(void) {
     reset_case();td.job=4;radio_done=65535;radio_said=255;td_finish(FALSE);
     expect(radio_done==65535&&radio_said>=TD_RADIO_FAIL,"a failure is not a delivery");
     /* Taking a job plays its briefing; dismissing the title of a fresh game welcomes the courier. */
+    /* The board browses offers in the active contract's copy: closing it
+     * reloads the contract. */
+    reset_case();authored_content=1;td.job=3;td_get_job(3,&td_job);td.mode=TD_BOARD;td.menu=10;td_get_job(10,&td_offer);
+    joy=0;world_tick(J_B,2);authored_content=0;
+    {td_job_t three;td_authored_get_job(3,&three);
+     expect(td.mode==TD_ROAM&&!memcmp(&td_job,&three,sizeof(three)),"closing the board restores the active contract");}
     reset_case();td.job=TD_NONE;td.mode=TD_BOARD;td.menu=0;td_get_job(0,&td_offer);td.onfoot=0;radio_contract=65535;
     joy=joy_pressed=J_A;sys_time+=2;toronto_update();
     expect(td.job==0&&radio_contract==0,"accepting a contract plays its briefing call");
@@ -1759,7 +1773,7 @@ static void test_sidewalk_pickups(void) {
     for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)expect(td_pickup_slot[s]!=0,"a recently collected pickup does not come back");
     /* First aid is left for later at full vitality, ammunition when full. */
     for(UBYTE i=0;i<td_pickup_count[0];i++){
-        UBYTE k=td_pickup_kind[start+i];if(k==0)continue;
+        UBYTE k=td_pickup_kind[start+i];if(k==0||k==TD_PICKUP_PARCEL)continue;
         native_case();td.mode=TD_ROAM;td.onfoot=0;td.district=0;td_street_reset(1);
         td.u=td_pickup_u[start+i]*16;td.v=(td_pickup_v[start+i]+40)*16;td.vitality=100;td.ammo=TD_AMMO_MAX;
         for(unsigned n=0;n<16;n++)td_pickups_present();
@@ -1779,6 +1793,65 @@ static void test_sidewalk_pickups(void) {
             expect(native_collision[d][(v>>3)*TD_DISTRICT_TILE_WIDTH+(u>>3)]==16,"pickups lie on pavement");
         }
     }
+}
+
+/* Lost parcels, the spray bay and crowd panic (GTA-style street life). */
+static void test_parcels_spray_panic(void) {
+    UBYTE start=td_pickup_start[0],p=255,slot=255,i;
+    for(i=0;i<td_pickup_count[0];i++)if(td_pickup_kind[start+i]==TD_PICKUP_PARCEL){p=i;break;}
+    expect(p!=255&&td_parcel_of[start+p]==0,"the first district holds the first lost parcel");
+    {UBYTE n[TD_DISTRICT_COUNT]={0};for(i=0;i<td_pickup_start[3]+td_pickup_count[3];i++)if(td_pickup_kind[i]==TD_PICKUP_PARCEL)n[td_parcel_of[i]/5]++;
+     expect(n[0]==5&&n[1]==5&&n[2]==5&&n[3]==5,"five lost parcels hide in each district");}
+    native_case();td.mode=TD_ROAM;td.onfoot=1;td.district=0;td_street_reset(1);td.cash=30;
+    td.u=td_pickup_u[start+p]*16;td.v=(td_pickup_v[start+p]+40)*16;
+    for(unsigned n=0;n<16;n++)td_pickups_present();
+    for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)if(td_pickup_slot[s]==p)slot=s;
+    expect(slot!=255&&actors[TD_ACTOR_PICKUPS+slot].frame_start==TD_FRAME_PARCEL,"a lost parcel shows as a parcel");
+    radio_said=255;td.v=td_pickup_v[start+p]*16;td_pickups_present();
+    expect(TD_DONE(TD_PARCEL_BIT)&&td_parcels_found()==1&&td.cash==30+TD_PARCEL_REWARD&&td.msg==TD_MSG_PARCEL&&radio_said==255,
+           "finding a lost parcel records it, pays and shows the count");
+    td.u=(td_pickup_u[start+p]+400)*16;for(unsigned n=0;n<64;n++)td_pickups_present();
+    td_street_reset(1);td.u=td_pickup_u[start+p]*16;td.v=(td_pickup_v[start+p]+40)*16;for(unsigned n=0;n<32;n++)td_pickups_present();
+    for(UBYTE s=0;s<TD_PICKUP_SLOTS;s++)expect(td_pickup_slot[s]!=p,"a found parcel never comes back, even after a reset");
+    td.complete[TD_PARCEL_BIT>>3]=0x1E;td_street_reset(1);td.v=(td_pickup_v[start+p]+40)*16;
+    for(unsigned n=0;n<16;n++)td_pickups_present();
+    radio_said=255;td.v=td_pickup_v[start+p]*16;td_pickups_present();
+    expect(td_parcels_found()==5&&radio_said==TD_RADIO_PARCELS,"every fifth parcel brings Rosa's count");
+    memset(td.complete+(TD_PARCEL_BIT>>3),0xFF,2);td.complete[(TD_PARCEL_BIT>>3)+2]=0x0F;td.complete[TD_PARCEL_BIT>>3]&=~1;
+    td.cash=0;td_street_reset(1);td.v=(td_pickup_v[start+p]+40)*16;for(unsigned n=0;n<16;n++)td_pickups_present();
+    radio_said=255;td.v=td_pickup_v[start+p]*16;td_pickups_present();
+    expect(td_parcels_found()==TD_PARCELS&&td.cash==TD_PARCEL_REWARD+TD_PARCEL_BONUS&&radio_said==TD_RADIO_PARCELS+3,
+           "the last parcel pays the bonus");
+    /* Found parcels survive a save; anything else above the contracts is corrupt. */
+    {td_state_t saved=td;td.mode=TD_ROAM;td.job=TD_NONE;td_save();memset(&td,0,sizeof(td));
+     expect(td_restore()&&td_parcels_found()==TD_PARCELS&&td.done==saved.done,"found parcels are saved with the contracts");
+     td.complete[11]=1;expect(!td_valid_state(&td),"bits between the contracts and the parcels make a save invalid");
+     td.complete[11]=0;td.complete[14]|=0x10;expect(!td_valid_state(&td),"bits past the last parcel make a save invalid");
+     td.complete[14]&=0x0F;expect(td_valid_state(&td),"parcel bits alone keep a save valid");}
+    /* The spray bay on King St West. */
+    native_case();td.mode=TD_ROAM;td.district=0;td.onfoot=0;td.speed=0;td.cash=100;td.wanted=3;td.heat=20;td_car_damage=70;
+    td.u=TD_SPRAY_U*16;td.v=TD_SPRAY_V*16;td_spray_state=0;radio_said=255;td_spray_check();
+    expect(!td.wanted&&!td.heat&&td.cash==100-TD_SPRAY_PRICE&&!td_car_damage&&td.msg==TD_MSG_SPRAY&&radio_said==TD_RADIO_SPRAY,
+           "stopping in the spray bay loses the police and repairs the car");
+    td.cash=100;td_spray_check();expect(td.cash==100,"sitting in the bay pays once");
+    td_car_colour=TD_PAL_YELLOW;td.u=(TD_SPRAY_U+300)*16;td_spray_check();td.u=TD_SPRAY_U*16;td_spray_check();
+    expect(td_car_colour!=TD_PAL_YELLOW&&td_car_colour!=TD_PAL_NAVY&&td_car_colour!=TD_PAL_COURIER,"a stolen car comes out another colour");
+    td.u=(TD_SPRAY_U+300)*16;td_spray_check();td.cash=10;td.wanted=2;td.u=TD_SPRAY_U*16;td_spray_check();
+    expect(td.wanted==2&&td.msg==TD_MSG_NO_CASH,"no money, no paint");
+    td.u=(TD_SPRAY_U+300)*16;td_spray_check();td.cash=100;td.speed=12;td.u=TD_SPRAY_U*16;td_spray_check();
+    expect(td.wanted==2,"driving through the bay does nothing");
+    td.speed=0;td.u=(TD_SPRAY_U+300)*16;td_spray_check();td.msg=0;td.u=(TD_SPRAY_U+80)*16;td_spray_check();
+    expect(td.msg==TD_MSG_SPRAY_NEAR,"with stars on, the bay announces itself nearby");
+    td.msg=0;td_spray_check();expect(!td.msg,"once");
+    td.district=1;td.u=TD_SPRAY_U*16;td_spray_check();expect(td.wanted==2,"other districts have no bay there");
+    /* Crowd panic: walkers in view near trouble run, officers stand. */
+    native_case();td.mode=TD_ROAM;td.district=0;
+    for(i=0;i<TD_PEDS;i++){td_ped_route[i]=i==2?5:8+i;actors[TD_ACTOR_PEDS+i].flags=0;actors[TD_ACTOR_PEDS+i].pos.x=(400+i*8)*32;actors[TD_ACTOR_PEDS+i].pos.y=400*32;}
+    actors[TD_ACTOR_PEDS+7].pos.x=700*32;td_ped_ovr=0;
+    td_lf_panic(400,400);
+    expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLEE&&!(td_ped_ovr&(1<<2))&&!(td_ped_ovr&(1<<7)),
+           "gunfire sends nearby walkers running, not officers or walkers far away");
+    for(i=0;i<TD_PEDS;i++){td_ped_ovr&=~(1<<i);pk_mode[i]=0;}
 }
 
 static void test_visible_transit(void) {
@@ -1856,6 +1929,44 @@ static void test_ambient_traffic(void) {
 static unsigned hour_seconds(unsigned minutes) {
     /* Play seconds (mod one game day) that show the given time of day. */
     unsigned phase=(minutes*32+44)/45;return (phase+TD_DN_DAY_SECONDS-TD_DN_START)%TD_DN_DAY_SECONDS;
+}
+/* Animated scenery: water and screen tiles found in a scene's tilesets get
+ * the next frame a few times a second. */
+static void test_scenery(void) {
+    UBYTE other[16];
+    expect(td_scenery_vram_tile(5,163)==5&&td_scenery_vram_tile(128,163)==157&&td_scenery_vram_tile(162,163)==191&&
+           td_scenery_vram_tile(130,200)==130,"scenery tiles are placed where GB Studio loads tileset entries");
+    td_scenery_find();expect(!td_scenery_found[0]&&!td_scenery_found[1]&&!td_scenery_found[2],"a scene without tilesets has no scenery tiles");
+    memset(other,0x55,sizeof(other));td_scenery_match(other,7,163,0);
+    expect(!td_scenery_found[0],"other tiles are not scenery");
+    td_scenery_match(td_scenery_frames[0][3],130,163,1);td_scenery_match(td_scenery_frames[0][TD_SCENERY_SCREEN+2],12,163,0);
+    expect(td_scenery_found[0]==(1u<<3)&&td_scenery_found[(TD_SCENERY_SCREEN+2)>>3]==(1u<<((TD_SCENERY_SCREEN+2)&7))&&
+           td_scenery_bank1[0]==(1u<<3)&&td_scenery_slot[3]==159&&td_scenery_slot[TD_SCENERY_SCREEN+2]==12,
+           "the scene's water and screen tiles are recorded with their VRAM tile and bank");
+    /* A new frame starts with the clock (every 16 frames); each update arms
+     * eight tiles that the vertical-blank handler copies: three for all. */
+    bkg_uploads=0;sys_time=16;td.mode=TD_ROAM;td_scenery_tick();
+    expect(bkg_uploads==0,"an update only arms the copy");
+    td_scenery_vbl();
+    expect(bkg_uploads==1&&bkg_last_first==159&&bkg_last_bank==1&&bkg_last_data==td_scenery_frames[1][3]&&!VBK_REG,
+           "the vertical blank draws the first eight tiles into their VRAM tile and bank and restores the VRAM bank");
+    td_scenery_vbl();expect(bkg_uploads==1,"an unarmed vertical blank does nothing");
+    td_scenery_tick();td_scenery_vbl();expect(bkg_uploads==1,"the next chunk follows");
+    td_scenery_tick();td_scenery_vbl();
+    expect(bkg_uploads==2&&bkg_last_first==12&&bkg_last_bank==0&&bkg_last_data==td_scenery_frames[1][TD_SCENERY_SCREEN+2],
+           "the third reaches the screen");
+    td_scenery_tick();td_scenery_vbl();expect(bkg_uploads==2,"then nothing until the next frame");
+    VBK_REG=1;sys_time+=16;td_scenery_tick();td_scenery_vbl();expect(VBK_REG==1,"the handler keeps the interrupted VRAM bank");
+    VBK_REG=0;sys_time+=16;td_scenery_tick();td.mode=TD_MAP;td_scenery_vbl();td.mode=TD_ROAM;
+    expect(bkg_uploads==3,"nothing is drawn while the map owns the tiles");
+    sys_time+=16;for(unsigned k=0;k<3;k++){td_scenery_tick();td_scenery_vbl();}
+    expect(bkg_last_data==td_scenery_frames[0][TD_SCENERY_SCREEN+2],"the four frames repeat");
+    reset_case();td.mode=TD_ROAM;td_scenery_find();td_scenery_match(td_scenery_frames[0][2],12,163,0);
+    bkg_uploads=0;sys_time=48;toronto_update();td_scenery_vbl();
+    expect(bkg_uploads==1,"the city redraws its scenery at the next vertical blank");
+    sys_time+=4;toronto_update();td_scenery_vbl();expect(bkg_uploads==1,"and not on every update");
+    td.mode=TD_PAUSE;sys_time+=16;toronto_update();td_scenery_vbl();expect(bkg_uploads==1,"menus hold it still (the map owns those tiles)");
+    td_scenery_find();
 }
 static void test_day_night(void) {
     reset_case();td.seconds=0;
@@ -1990,8 +2101,8 @@ int main(void) {
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
-    test_sidewalk_pickups();test_visible_transit();test_ambient_traffic();
-    test_day_night();test_animation();test_car_damage();
+    test_sidewalk_pickups();test_parcels_spray_panic();test_visible_transit();test_ambient_traffic();
+    test_day_night();test_animation();test_car_damage();test_scenery();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;
 }

@@ -11,7 +11,7 @@
 #include "ui_under_test.c"
 
 td_state_t td;
-td_job_t td_job,td_offer;
+td_job_t td_job;
 td_stop_t td_target,td_cursor;
 UBYTE td_route_district;
 UBYTE td_resume_mode;
@@ -59,8 +59,8 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
     int marker=VBK_REG==1&&first>=8&&(unsigned)first+count<=15;
     int ground=VBK_REG==1&&first>=16&&(unsigned)first+count<=188;
     int font=VBK_REG==1&&first>=TD_FONT_FIRST&&(unsigned)first+count<=TD_FONT_FIRST+TD_FONT_GLYPHS;
-    int art=VBK_REG==0&&first>=TD_UI_ART_FIRST&&(unsigned)first+count<=192;
-    expect(marker||ground||font||art,"uploads stay within marker8..14, ground16..187, font or bank-0 art128..191 reservations");
+    int art=VBK_REG==0&&first>=TD_UI_ART_FIRST&&(unsigned)first+count<=256;
+    expect(marker||ground||font||art,"uploads stay within marker8..14, ground16..187, font or bank-0 art192..255 reservations");
     if(VBK_REG>=2||!tiles||!count||(unsigned)first+count>256)return;
     if(ground)ground_uploads+=count;
     memcpy(vram[VBK_REG][first],tiles,(size_t)count*16);
@@ -76,6 +76,8 @@ UBYTE td_audio_get_mode(void) {return TD_AUDIO_FULL;}
 UBYTE td_tick;static unsigned audio_plays;
 void td_audio_play(UBYTE cue) {(void)cue;audio_plays++;}
 UBYTE td_service(UBYTE origin) {(void)origin;return 1;}
+/* Lost parcels found (td_street.c). */
+UBYTE td_parcels_found(void) {return 3;}
 UBYTE td_next_departure(UBYTE origin,UWORD seconds) {(void)origin;(void)seconds;return 7;}
 void td_get_street(UWORD u,UWORD v,char *dest) {(void)u;(void)v;content_reads++;strcpy(dest,"TEST ROAD");}
 void td_get_district_name(UBYTE district,char *dest) {(void)district;content_reads++;strcpy(dest,"TEST DISTRICT");}
@@ -90,7 +92,7 @@ typedef struct {
 } game_snapshot_t;
 
 static game_snapshot_t snapshot_game(void) {
-    game_snapshot_t snapshot={td,td_job,td_offer,td_target,td_cursor,td_route_district,actors_len,td_resume_mode};
+    game_snapshot_t snapshot={td,td_job,td_job,td_target,td_cursor,td_route_district,actors_len,td_resume_mode};
     return snapshot;
 }
 
@@ -103,7 +105,7 @@ static void expect_game_unchanged(const game_snapshot_t *snapshot) {
 }
 
 static void reset_case(void) {
-    memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));memset(&td_offer,0,sizeof(td_offer));
+    memset(&td,0,sizeof(td));memset(&td_job,0,sizeof(td_job));
     memset(&td_target,0,sizeof(td_target));memset(&td_cursor,0,sizeof(td_cursor));
     memset(actors,0,sizeof(actors));memset(window_tiles,0xEE,sizeof(window_tiles));memset(vram,0xEE,sizeof(vram));
     td.district=0;td.u=560*16;td.v=720*16;td.onfoot=1;
@@ -537,6 +539,7 @@ static void test_menus_and_radio(void) {
      * beat that follows the contract, a count beat, the chapters it opens
      * and the finale. A replay adds nothing. */
     td_radio_script=td_radio_next=TD_NONE;memset(td.complete,0,sizeof(td.complete));
+    td.seconds=4320;/* an even clock: no early-arrival remark in these cases */
     td.done=6;td.complete[0]=0x5F;
     {UWORD open=td_radio_open();expect(open==3,"six deliveries and contract 7 open the second chapter");
     td.complete[1]|=1;td.done=7;td_radio_done(8,6,open);}
@@ -566,6 +569,29 @@ static void test_menus_and_radio(void) {
     td.complete[TD_QUESTS/8-1]|=0x80;td.done=TD_QUESTS;td_radio_done(TD_QUESTS-1,TD_QUESTS-1,open);}
     expect(radio_after(TD_RADIO_CONTRACT)==TD_RADIO_MASTER,"the last delivery brings the finale");
     radio_after(TD_RADIO_MASTER);memset(td.complete,0,sizeof(td.complete));td.done=0;
+    /* How it went: dented cargo is noticed before the story moves on. */
+    td.done=6;td.complete[0]=0x5F;td.health=30;
+    {UWORD open=td_radio_open();td.complete[1]|=1;td.done=7;td_radio_done(8,6,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)>=TD_RADIO_DENTED&&td_radio_playing()<TD_RADIO_DENTED+TD_RADIO_DENTED_COUNT,
+           "a client notices dented cargo after the delivery call");
+    expect(radio_after(td_radio_playing())==TD_RADIO_BEAT_RIVAL,"then the story goes on");
+    radio_after(TD_RADIO_BEAT_RIVAL);td.health=100;
+    td.left=100;td_job.seconds=120;td.seconds=1;
+    {UWORD open=td_radio_open();td_radio_done(8,7,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)>=TD_RADIO_EARLY&&td_radio_playing()<TD_RADIO_EARLY+TD_RADIO_EARLY_COUNT,
+           "an early arrival sometimes earns a word");
+    radio_after(td_radio_playing());td.seconds=2;
+    {UWORD open=td_radio_open();td_radio_done(8,7,open);}
+    expect(radio_after(TD_RADIO_CONTRACT)==TD_NONE,"not every time");
+    /* Chatter follows the story: festival-week people once that chapter is open. */
+    memset(td.complete,0,sizeof(td.complete));td.done=0;td.seconds=1;td_radio_chatter();
+    expect(td_radio_playing()>=TD_RADIO_CHATTER&&td_radio_playing()<TD_RADIO_CHATTER+TD_RADIO_CHATTER_COUNT,"early on, the city's own chatter");
+    radio_after(td_radio_playing());
+    memset(td.complete,0xFF,7);td.done=56;td_radio_chatter();
+    expect(td_radio_playing()>=TD_RADIO_LATE&&td_radio_playing()<TD_RADIO_LATE+8,"in festival week, its people talk");
+    radio_after(td_radio_playing());td.seconds=2;td_radio_chatter();
+    expect(td_radio_playing()>=TD_RADIO_CHATTER&&td_radio_playing()<TD_RADIO_CHATTER+TD_RADIO_CHATTER_COUNT,"half the time");
+    radio_after(td_radio_playing());memset(td.complete,0,sizeof(td.complete));td.done=0;td.seconds=4321;
     td_radio_say(TD_RADIO_CHATTER);td_radio_say(TD_RADIO_WANTED);
     expect(td_radio_playing()==TD_RADIO_WANTED,"chatter gives way to a story call at once");
     /* A call that starts while an old card is still up gets a clean card. */
@@ -575,7 +601,9 @@ static void test_menus_and_radio(void) {
     read_window_text(1,text);expect(!strcmp(text+3,"NIGHT SHIFT.     "),"a new call never types over an old card");
     td_radio_script=td_radio_next=TD_NONE;td.mode=TD_PAUSE;td_ui_draw();td.mode=TD_ROAM;td_ui_draw();
     /* Stars bring a call; the arrest clears them without "lost them". */
-    td.wanted=1;td_tick=1;td_radio_tick();expect(td_radio_playing()==TD_RADIO_WANTED,"a first star brings a police call");
+    td.job=TD_NONE;td.wanted=1;td_tick=1;td_radio_tick();expect(td_radio_playing()==TD_RADIO_WANTED,"a first star brings a police call");
+    td_radio_script=td_radio_next=TD_NONE;td.wanted=0;td_radio_tick();td_radio_script=td_radio_next=TD_NONE;
+    td.job=84;td.wanted=1;td_radio_tick();expect(td_radio_playing()==TD_RADIO_WANTED_JOB,"on a job the call says so");
     td_radio_script=TD_NONE;td_radio_next=TD_NONE;td_radio_say(TD_RADIO_BUSTED);td.wanted=0;td_radio_tick();
     expect(td_radio_playing()==TD_RADIO_BUSTED&&td_radio_next==TD_NONE,"an arrest does not also report losing the police");
 
@@ -600,12 +628,19 @@ static void test_menus_and_radio(void) {
     read_window_text(0,text);expect(window_y==144-8&&strstr(text,"123")&&strstr(text,"77")&&strstr(text,"33")==NULL&&strstr(text,"32"),
                                     "standing still shows cash, vitality and ammunition");
     td.u+=16;td_ui_hud_tick();expect(window_y==144,"moving again hides the status line");
+    td.onfoot=0;for(unsigned i=0;i<12;i++)td_ui_hud_tick();
+    expect(window_y==144,"in a vehicle a short stop (a red light) shows nothing");
+    for(unsigned i=0;i<14;i++)td_ui_hud_tick();
+    expect(window_y==144-8,"a longer stop in a vehicle shows the status line");
+    td.u+=16;td_ui_hud_tick();td.onfoot=1;
     td.vitality=20;td_ui_hud_tick();td_ui_hud_tick();
     for(unsigned i=0;i<30;i++){td.u+=16;td_ui_hud_tick();}
     read_window_text(0,text);expect(window_y==144-8&&strstr(text,"20"),"low vitality stays on screen");
     td.vitality=90;td.wanted=2;for(unsigned i=0;i<30;i++){td.u+=16;td_ui_hud_tick();}
     read_window_text(0,text);expect(window_y==144-8&&strstr(text,"WANTED"),"wanted stars stay up while the police are looking");
-    td.wanted=0;td.msg=9;td_ui_draw();read_window_text(0,text);
+    td.wanted=0;td.msg=TD_MSG_PARCEL;td_ui_draw();read_window_text(0,text);
+    expect(strstr(text,"LOST PARCEL 3/20")!=NULL,"a found parcel pops up the count");
+    td.msg=9;td_ui_draw();read_window_text(0,text);
     expect(window_y==144-8&&strstr(text,"VEHICLE IS PARKED"),"a notice pops up on its own");
 }
 

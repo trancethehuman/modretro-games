@@ -66,7 +66,7 @@ static void td_radio_queue(UBYTE script,UWORD first,UWORD end){
 }
 void td_radio_say(UBYTE script) BANKED {
     /* An arrest or the hospital clears the stars without a "lost them". */
-    if(script==TD_RADIO_BUSTED||script==TD_RADIO_WASTED)td_radio_wanted=0;
+    if(script==TD_RADIO_BUSTED||script==TD_RADIO_WASTED||script==TD_RADIO_SPRAY)td_radio_wanted=0;
     td_radio_queue(script,td_radio_first[script],td_radio_first[script+1]);
 }
 /* A contract's briefing (part 0), first pickup (1) or delivery (2). A
@@ -104,6 +104,10 @@ UWORD td_radio_open(void) BANKED {
 void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) BANKED {
     UBYTE i;UWORD open;
     td_radio_contract(job,2);
+    /* How it went: dented cargo is noticed, an early arrival sometimes. */
+    i=(UBYTE)(td.seconds%3);
+    if(td.health<50)td_radio_story_add(TD_RADIO_DENTED+i);
+    else if((td.seconds&1)&&(UWORD)td.left*3>=td_job.seconds)td_radio_story_add(TD_RADIO_EARLY+i);
     if(td.done==done_before)return;
     for(i=0;i<TD_RADIO_FOLLOWS;i++)if(td_radio_follow_job[i]==job)td_radio_story_add(td_radio_follow_script[i]);
     for(i=0;i<TD_RADIO_BEATS;i++)if(td_radio_beat_at[i]==td.done)td_radio_story_add(td_radio_beat_script[i]);
@@ -130,11 +134,20 @@ void td_chapter_name(UBYTE chapter,char *dest) BANKED {
     while(*s)*dest++=*s++;
     *dest=0;
 }
+/* Chatter on a quiet stretch: half the time, once the story has reached
+ * them, the people of the current part of the story talk (MID, then LATE);
+ * otherwise the city's general chatter. */
+void td_radio_chatter(void) BANKED {
+    UBYTE r=(UBYTE)(td.seconds+td.done);UWORD open=td_radio_open();
+    if((r&1)&&(open&(1<<TD_RADIO_LATE_CHAPTER)))td_radio_say(TD_RADIO_LATE+((r>>1)&7));
+    else if((r&1)&&(open&(1<<TD_RADIO_MID_CHAPTER)))td_radio_say(TD_RADIO_MID+((r>>1)&7));
+    else td_radio_say(TD_RADIO_CHATTER+(r&(TD_RADIO_CHATTER_COUNT-1)));
+}
 /* Once per rendered update in the HUD modes. */
 void td_radio_tick(void) BANKED {
     UWORD minutes;UBYTE night,c,line;char page[TD_RADIO_PAGE];
     /* Story beats from the city's state. */
-    if(td.wanted&&!td_radio_wanted)td_radio_say(TD_RADIO_WANTED);
+    if(td.wanted&&!td_radio_wanted)td_radio_say(td.job!=TD_NONE?TD_RADIO_WANTED_JOB:TD_RADIO_WANTED);
     else if(!td.wanted&&td_radio_wanted&&td.mode==TD_ROAM)td_radio_say(TD_RADIO_LOST);
     td_radio_wanted=td.wanted;
     if(!(td_tick&63)){
@@ -142,8 +155,7 @@ void td_radio_tick(void) BANKED {
         if(night!=td_radio_night){if(td_radio_night!=255)td_radio_say(night?TD_RADIO_NIGHT:TD_RADIO_MORNING);td_radio_night=night;}
         /* Chatter on quiet stretches of free roam. */
         if(td.job!=TD_NONE||td.wanted||td.mode!=TD_ROAM)td_radio_quiet=0;
-        else if(td_radio_script==TD_NONE&&++td_radio_quiet>=TD_RADIO_CHATTER_SECONDS)
-            td_radio_say(TD_RADIO_CHATTER+((UBYTE)(td.seconds+td.done)&(TD_RADIO_CHATTER_COUNT-1)));
+        else if(td_radio_script==TD_NONE&&++td_radio_quiet>=TD_RADIO_CHATTER_SECONDS)td_radio_chatter();
     }
     if(td_radio_script==TD_NONE&&td_radio_next==TD_NONE)td_radio_story_next();
     if(td_radio_script==TD_NONE||!td_ui_radio_ready())return;

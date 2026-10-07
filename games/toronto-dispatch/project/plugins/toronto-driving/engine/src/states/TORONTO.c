@@ -9,6 +9,7 @@
 #include "td_world.h"
 #include "td_transit.h"
 #include "td_sprites.h"
+#include "td_street.h"
 #include "td_life.h"
 #include "td_anim.h"
 #include "td_daynight.h"
@@ -29,7 +30,7 @@ typedef char td_actor_pool_fits[(MAX_ACTORS>=TD_ACTORS)?1:-1];
 #endif
 /* Lit vehicle frames follow the 32 daytime ones; frame indices are bytes. */
 typedef char td_lit_frames_fit[(TD_FRAME_PLAYER_CAR_LIT+32<=TD_SPRITE_FRAMES&&TD_SPRITE_FRAMES<=256)?1:-1];
-td_job_t td_job,td_offer;
+td_job_t td_job;
 td_stop_t td_target,td_cursor;
 /* Registered engine field: stock bootstrap resets this on cold/soft boot. */
 UBYTE td_session_live;
@@ -356,8 +357,16 @@ static void td_transit_present(UBYTE frames){
  * only rewritten when a slot changes or its highlight blinks. */
 static UBYTE td_pickups_hidden;
 static void td_pickup_collect(UBYTE i){
-    UBYTE k=td_pickup_sk[i];
-    if(k==1){
+    UBYTE k=td_pickup_sk[i],p,n;UWORD pay;
+    if(k==TD_PICKUP_PARCEL){
+        /* A lost parcel: found once for good, paid for, and Rosa keeps count. */
+        p=td_street_parcel(i);if(p>=TD_PARCELS)return;
+        td.complete[(TD_PARCEL_BIT+p)>>3]|=1<<((TD_PARCEL_BIT+p)&7);
+        n=td_parcels_found();pay=n==TD_PARCELS?TD_PARCEL_REWARD+TD_PARCEL_BONUS:TD_PARCEL_REWARD;
+        td.cash=td.cash>60000-pay?60000:td.cash+pay;td_message(TD_MSG_PARCEL);
+        if(!(n%5))td_radio_say(TD_RADIO_PARCELS+n/5-1);
+        td_save();
+    }else if(k==1){
         if(td.vitality>=100)return;
         td.vitality=td.vitality>100-TD_PICKUP_FIRST_AID?100:td.vitality+TD_PICKUP_FIRST_AID;td_message(TD_MSG_FIRST_AID);
     }else if(k==2){
@@ -367,7 +376,7 @@ static void td_pickup_collect(UBYTE i){
         td.cash=td.cash>60000-TD_PICKUP_CASH?60000:td.cash+TD_PICKUP_CASH;td_message(TD_MSG_CASH);
     }
     td_audio_play(TD_AUDIO_PICKUP);
-    td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_CASH+k,td_pickup_su[i],td_pickup_sv[i]);
+    td_anim_spawn(TD_PART_POP,k==TD_PICKUP_PARCEL?TD_FRAME_PARCEL:TD_FRAME_PICKUP_CASH+k,td_pickup_su[i],td_pickup_sv[i]);
     td_street_take(i);
 }
 static void td_pickups_present(void){
@@ -388,7 +397,7 @@ static void td_pickups_present(void){
         if(!(td_pickup_dirty&mask))continue;
         if(td_pickup_slot[i]==TD_NONE||td_pickups_hidden){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
         td_position(a,td_pickup_su[i],td_pickup_sv[i]-((td_tick>>4)&1));
-        td_frame(a,TD_FRAME_PICKUP_CASH+td_pickup_sk[i]);
+        td_frame(a,td_pickup_sk[i]==TD_PICKUP_PARCEL?TD_FRAME_PARCEL:TD_FRAME_PICKUP_CASH+td_pickup_sk[i]);
         a->flags&=~ACTOR_FLAG_HIDDEN;
     }
     td_pickup_dirty=0;
@@ -462,7 +471,11 @@ static void td_menu_update(void){
         else td_map_update(joy,joy_pressed);
         return;
     }
-    if(INPUT_B_PRESSED||INPUT_START_PRESSED){td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;}
+    if(INPUT_B_PRESSED||INPUT_START_PRESSED){
+        /* Browsing offers used the active contract's copy: reload it. */
+        if(td.mode==TD_BOARD&&td.job!=TD_NONE)td_get_job(td.job,&td_job);
+        td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;
+    }
     if(td.mode==TD_PAUSE){
         if(INPUT_DOWN_PRESSED)td.menu=(td.menu+1)%9;
         if(INPUT_UP_PRESSED)td.menu=(td.menu+8)%9;
@@ -474,7 +487,7 @@ static void td_menu_update(void){
             if(td.job!=TD_NONE){td_message(2);return;}
             if(!td_offer_open()){td_message(3);return;}
             if(td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)){td_message(2);return;}
-            td.job=td.menu;td_job=td_offer;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);
+            td.job=td.menu;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);
             td_radio_contract(td.job,0);td_set_target();td_save();td_ui_draw();return;
         }
     }else if(td.mode==TD_TRANSIT){
@@ -1662,6 +1675,24 @@ static void td_walker_colours(void){
         TD_PALETTE(a)=(route&7)==5?TD_PEOPLE_PAL(TD_PAL_NAVY):td_civilian_pal[(route>>3)&3];
     }
 }
+static UBYTE td_ped_flip;
+/* The spray bay in the north lane of King St West (core): a car stopped in
+ * it loses the police and is repaired and repainted (td_life_spray). With
+ * stars on, coming near it says so once. */
+#define TD_SPRAY_U 208
+#define TD_SPRAY_V 626
+static UBYTE td_spray_state;
+static void td_spray_check(void){
+    UWORD du,dv;
+    if(td.district||td.onfoot){td_spray_state=0;return;}
+    du=td_distance(td.u>>4,TD_SPRAY_U);dv=td_distance(td.v>>4,TD_SPRAY_V);
+    if(du<14&&dv<8){
+        if(td_spray_state<2&&td.speed<=2&&td.speed>=-2){td_spray_state=2;td_life_spray();}
+        return;
+    }
+    if(du<120&&dv<104){if(!td_spray_state&&td.wanted){td_spray_state=1;td_message(TD_MSG_SPRAY_NEAR);}}
+    else td_spray_state=0;
+}
 static void td_pedestrians(void){
     UBYTE refresh,near,moved;UWORD player_u=td.u>>4,player_v=td.v>>4;
     /* Empty slots look for a route again once the courier has moved. */
@@ -1673,12 +1704,19 @@ static void td_pedestrians(void){
         if(td_life_routes(moved))td_ped_refresh=2;
         td_walker_colours();
     }
+    /* Walkers step a pixel every few updates, so they are laid out on
+     * alternate updates (half the cost, unseen). The strike check uses the
+     * mask from those updates: a car at full speed still meets a walker's
+     * ten-pixel reach on one of them. */
+    near=0;
+    if((td_ped_flip^=1)){
 #ifdef __SDCC
-    td_pl_base=td_ped_base();td_pl_step=(td_tick>>3)&1;td_pl_pu=player_u;td_pl_pv=player_v;
-    near=td_ped_layout();
+        td_pl_base=td_ped_base();td_pl_step=(td_tick>>3)&1;td_pl_pu=player_u;td_pl_pv=player_v;
+        near=td_ped_layout();
 #else
-    near=td_ped_layout_c(td_ped_base(),(td_tick>>3)&1,player_u,player_v);
+        near=td_ped_layout_c(td_ped_base(),(td_tick>>3)&1,player_u,player_v);
 #endif
+    }
     /* Struck walkers are thrown and fall; owned slots are drawn by td_life. */
     td_life_peds(near);
 }
@@ -1785,18 +1823,21 @@ void toronto_init(void) BANKED {
     for(i=0;i<6;i++)
         if(!td.district){td_traffic_u[i]=(i<4?80+i*120:i==4?792:160)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=0;}
     for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
-    td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;
+    td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;td_ped_flip=0;
     td_life_reset(cold);td_anim_reset();
     for(i=0;i<6;i++)td_lf_new_look(i,(UBYTE)(i*37+td.seconds+(td.district<<3)));
     td_frame(&actors[1],TD_FRAME_BEACON);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());td_traffic_present();td_pedestrians();
     td_street_reset(cold);td_transit_present(0);td_pickups_present();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=0;camera_deadzone_x=8;camera_deadzone_y=8;
-    if(cold)td_audio_init();td_ui_init();
+    if(cold)td_audio_init();td_ui_init();td_scenery_find();
 }
 void toronto_update(void) BANKED {
     UWORD now,elapsed,seconds,old_u,old_v;UBYTE motion,step,was_entering,consumed=0;
     if(td_transition_pending){if(td_transition_pending==2&&td_district_queue(td.district))td_transition_pending=1;return;}
+    /* Water and the Yonge and Dundas screen: arm the next chunk for the
+     * vertical-blank handler (menus and the map own the tiles). */
+    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)td_scenery_tick();
     if(td_dn_pending){td_dn_pending=0;td_daynight_apply(TD_DN_HW);}
     /* A station within reach replaces the street name with its B prompt. */
     if(++td_station_tick>=12){UBYTE near;td_station_tick=0;near=td.onfoot&&td.mode==TD_ROAM&&!td.wanted?td_origin():TD_NONE;if(near!=td_station_near){td_station_near=near;td_ui_pending=1;}}
@@ -1821,6 +1862,7 @@ void toronto_update(void) BANKED {
         if(td.mode==TD_ROAM){
             old_u=td.u;old_v=td.v;was_entering=td_entry_timer;
             td_drive();if(!was_entering&&td_cross_portal(old_u,old_v))return;
+            if(!step)td_spray_check();
         }
         td_traffic_step();
         /* Street life runs once per rendered update, not per catch-up step. */

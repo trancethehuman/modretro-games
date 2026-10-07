@@ -106,11 +106,8 @@ def main(check=False):
         if record:
             solids.append({'name': record, 'rect': [x, y, w, h]})
 
-    # Water everywhere first; land, roads and islands on top.
+    # Water everywhere first (textured at the end); land, roads and islands on top.
     box(0, 0, WIDTH, HEIGHT, 2)
-    for py in range(8, HEIGHT, 16):
-        for px in range((py // 16 % 2) * 16, WIDTH, 32):
-            box(px, py, 8, 1, 3)
     for i in range(TW * TH):
         collisions[i] = 15; attrs[i] = 0
     mx0, my0, mx1, my1 = L.MAINLAND
@@ -127,8 +124,6 @@ def main(check=False):
     # Don River channel with wooded banks.
     box(L.RIVER[0], 24, L.RIVER[1] - L.RIVER[0], my1 - 24, 2)
     d.line((L.RIVER[0], 24, L.RIVER[0], my1 - 1), fill=COLORS[0]); d.line((L.RIVER[1] - 1, 24, L.RIVER[1] - 1, my1 - 1), fill=COLORS[0])
-    for py in range(28, my1, 12):
-        box(L.RIVER[0] + 8 + (py // 12 % 2) * 12, py, 8, 1, 3)
     solid(L.RIVER[0], 24, L.RIVER[1] - L.RIVER[0], my1 - 24)
     for _, _, i in cells(L.RIVER[0], 24, L.RIVER[1] - L.RIVER[0], my1 - 24):
         attrs[i] = 0
@@ -529,6 +524,33 @@ def main(check=False):
             if collisions[i] == 16 and not L.road(x, y, L.WALK_HALF) and \
                not any(rx <= x < rx + rw and ry <= y < ry + rh for rx, ry, rw, rh in open_ground):
                 collisions[i] = 15
+    # The spray bay (gameplay: TORONTO.c td_spray_check): hazard-striped bay in
+    # the north lane of King St West between Ossington and Bathurst, with the
+    # body shop's roll-up door on the house behind it.
+    bay = (192, L.ROWS[5] - 22, 32, 16)
+    bx, by, bw, bh = bay
+    box(bx, by, bw, bh, 0)
+    for x in range(bx + 2, bx + bw - 2, 4):
+        box(x, by + 2, 2, bh - 4, 3)
+    d.rectangle((bx, by, bx + bw - 1, by + bh - 1), outline=COLORS[3])
+    box(bx + 2, by - 30, bw - 4, 20, 0)
+    for y in range(by - 28, by - 10, 3):
+        d.line((bx + 4, y, bx + bw - 5, y), fill=COLORS[1])
+    box(bx + 10, by - 34, 12, 3, 3)
+    engine = (PROJECT / 'plugins/toronto-driving/engine/src/states/TORONTO.c').read_text()
+    assert f'#define TD_SPRAY_U {bx + bw // 2}' in engine and f'#define TD_SPRAY_V {by + bh // 2}' in engine, 'spray bay moved: update TORONTO.c'
+    districts.append({'name': 'SPRAY BAY', 'rect': list(bay), 'kind': 'gameplay'})
+    # The video screen on the roof at the south-east corner of Yonge and
+    # Dundas (the square), animated by the engine like the water.
+    sx, sy = L.COLS[5] + 40, L.ROWS[3] + 32
+    assert all(attrs[ty * TW + tx] & 7 in (1, 2, 3, 4, 5) for ty in range(sy // 8, sy // 8 + 2) for tx in range(sx // 8, sx // 8 + 4)), \
+        'the screen sits on a roof'
+    city_kit.paint_screen(img, sx, sy, COLORS)
+    districts.append({'name': 'YONGE-DUNDAS SCREEN', 'rect': [sx, sy, city_kit.SCREEN_W, city_kit.SCREEN_H], 'kind': 'scenery'})
+    # Open water takes the shared animated texture, with foam along the shore.
+    def is_water(x, y):
+        return (L.RIVER[0] <= x < L.RIVER[1] and 24 <= y < my1) or y >= my1
+    water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS)
     patterns = set(); raw = set()
     for ty in range(TH):
         for tx in range(TW):
@@ -544,7 +566,8 @@ def main(check=False):
                'mainland': L.MAINLAND, 'islands': L.ISLANDS, 'blocks': blocks, 'canopies': canopies,
                'solids': solids, 'districts': districts, 'collisions': collisions,
                'collision_rules': {'road': 0, 'foot_only': 16, 'solid': 15},
-               'validation': {'raw_unique_tiles': len(raw), 'flip_canonical_unique_tiles': len(patterns)},
+               'validation': {'raw_unique_tiles': len(raw), 'flip_canonical_unique_tiles': len(patterns),
+                              'animated_water_tiles': water_tiles},
                'scope': 'Compressed central Toronto (Dufferin to Broadview, Bloor to the harbour) and the Islands'}
     texts = {ROOT / 'content/city_art.json': json.dumps(content, indent=1) + '\n',
              PROJECT / 'original-art/city_attributes.json': json.dumps(attrs) + '\n'}
