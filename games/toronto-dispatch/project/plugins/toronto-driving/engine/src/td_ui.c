@@ -456,6 +456,7 @@ static void td_hud(UBYTE changed){
             strcpy(td_line,"WANTED ");
             for(i=0;i<td.wanted;i++)td_line[7+i]=TD_UI_STAR[0];
             td_line[7+i]=0;
+        }else if(td_station_near!=TD_NONE){td_line[0]=TD_UI_BTN_B[0];td_transit_label(td_station_near,td_line+1);
         }else if(td.district==0&&u>608&&u<672&&v>496&&v<560)strcpy(td_line,td.seconds%12<7?"YONGE: EW GO":"YONGE: NS GO");
         else{
             if(u!=td_street_u||v!=td_street_v||td.district!=td_street_d){

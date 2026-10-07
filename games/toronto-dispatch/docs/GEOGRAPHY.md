@@ -15,6 +15,15 @@ The goal is a recognisable compressed city, with accurate street names, intersec
 
 Before art production, inspect the actual data/map, confirm each proposed district's road graph and landmark locations, and add official landmark references. Maintain north/south/east/west relationships in the north-up top-down camera. Choose and document a baseline map era; current construction detours should not silently reshape the game.
 
+## Core street plan from the Centreline, 2026-10-07
+
+The core scene's streets come from the [Toronto Centreline](https://open.toronto.ca/dataset/toronto-centreline-tcl/) (v2, EPSG:2952, downloaded 2026-10-07; Open Government Licence – Toronto). Source facts and method are in [core-research.json](../content/districts/core-research.json); the compressed layout is `scripts/city_layout.py`.
+
+- Source-derived: street order, relative spacing and extents. Segments were rotated 16.6 degrees to the downtown grid; positions are metres east of Yonge and north of Queen (Bathurst −2,075 m, Spadina −1,438, University −592, Parliament 1,247, Broadview 2,478; Bloor 2,079 m, College 1,040, Dundas 460, King −382, Front −688, rail about −820, Queens Quay about −1,200).
+- Compressed design: piecewise-linear mapping between anchor streets; seam rows shared with the West and East scenes unchanged; north-south streets snapped to 64 px where possible (atlas tile budget). Minor streets are omitted (Bay, Church, Jarvis, Sherbourne, Shaw, Strachan, St George, McCaul, Richmond, Adelaide, Wellington, the Esplanade); Lake Shore folds into Queens Quay; Harbord and Wellesley form one row, as do College, Carlton and Gerrard; Front continues east of Parliament as Mill St.
+- Streets end where they do: Ossington and Broadview at Queen, Front at Bathurst, King and Mill at the Don. The Don is crossed at Bloor, Gerrard, Dundas, Queen and the waterfront; the rail corridor passes over Dufferin, Bathurst, Spadina, Yonge and Parliament.
+- Neighbourhoods are character areas looked up from real positions (not official boundaries). Landmark art is original.
+
 ## First-district proposals
 
 Union Station, St. Lawrence Market, and the Distillery District are proposed anchors. The depot is fictional. Precise entrances, street links, lane directions, streetcar intersections, industrial boundaries, and coordinates are intentionally absent until researched.

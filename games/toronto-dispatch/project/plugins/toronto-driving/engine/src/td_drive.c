@@ -41,15 +41,16 @@ static WORD lf_scale(BYTE d,WORD s){
     return d<0?-r:r;
 }
 /* Vehicles may use roads, sidewalks and open lots; buildings, water and
- * rails (collision 15) stay solid. Whole-pixel centre, 11/13px bodies. */
+ * rails (collision 15) stay solid. Whole-pixel centre, 13/15px bodies for
+ * the 20x14 full-size cars. */
 static UBYTE lf_drive(UWORD u,UWORD v){
     if(u<8||v<8||u>1016||v>968)return FALSE;
-    return lf_area((u-5)>>3,(u+5)>>3,(v-5)>>3,(v+5)>>3);
+    return lf_area((u-6)>>3,(u+6)>>3,(v-6)>>3,(v+6)>>3);
 }
 
 static UBYTE lf_body(UWORD u,UWORD v){
     if(u<8||v<8||u>1016||v>968)return FALSE;
-    return lf_area((u-6)>>3,(u+6)>>3,(v-6)>>3,(v+6)>>3);
+    return lf_area((u-7)>>3,(u+7)>>3,(v-7)>>3,(v+7)>>3);
 }
 
 /* 1-D impact with restitution 1/2 along the dominant axis. Velocities are
@@ -275,34 +276,60 @@ static UBYTE lf_heading16(WORD dx,WORD dy){
     if(dx>=0)return dy>=0?k:(UBYTE)(16-k)&15;
     return dy>=0?8-k:8+k;
 }
-/* Nearest walker (0..7) or the patrol car (8) within about 45 degrees of
- * the aim and 112 px, favouring targets straight ahead. */
+/* Nearest walker (0..7) or the patrol car (8) within about 60 degrees of
+ * the aim and 128 px, favouring targets straight ahead. */
+#define LF_AIM_RANGE 128
+#define LF_AIM_KEEP 152
+UBYTE td_aim_hold;
+static UBYTE lf_aim_diff(WORD du,WORD dv){
+    UBYTE diff=(UBYTE)(lf_heading16(du,dv)-(td_aim_dir<<1))&15;
+    return diff>8?16-diff:diff;
+}
+static UBYTE lf_ped_aimable(UBYTE i,UBYTE bit,actor_t *a){
+    if(a->flags&ACTOR_FLAG_HIDDEN)return FALSE;
+    return !((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN));
+}
 static UBYTE lf_find_target(void){
-    UBYTE i,bit,best=TD_NONE,diff,aim=td_aim_dir<<1;UWORD score,best_score=65535;WORD du,dv;
+    UBYTE i,bit,best=TD_NONE,diff;UWORD score,best_score=65535;WORD du,dv;
     UWORD pu=td.u>>4,pv=td.v>>4;actor_t *a;
     for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
-        if(a->flags&ACTOR_FLAG_HIDDEN)continue;
-        if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN))continue;
+        if(!lf_ped_aimable(i,bit,a))continue;
         du=(WORD)(a->pos.x>>5)-(WORD)pu;dv=(WORD)(a->pos.y>>5)-(WORD)pv;
-        score=lf_abs(du)+lf_abs(dv);if(score>=112||score<4)continue;
-        diff=(UBYTE)(lf_heading16(du,dv)-aim)&15;if(diff>2&&diff<14)continue;
-        if(diff>8)diff=16-diff;
-        score+=diff*24;
+        score=lf_abs(du)+lf_abs(dv);if(score>=LF_AIM_RANGE||score<4)continue;
+        diff=lf_aim_diff(du,dv);if(diff>3)continue;
+        score+=diff*20;
         if(score<best_score){best_score=score;best=i;}
     }
     if(LF_IS_PATROL(TD_POLICE_SLOT)&&tr_mode[TD_POLICE_SLOT]!=TR_GONE){
         du=(WORD)(td_traffic_u[TD_POLICE_SLOT]>>4)-(WORD)pu;dv=(WORD)(td_traffic_v[TD_POLICE_SLOT]>>4)-(WORD)pv;
-        score=lf_abs(du)+lf_abs(dv);diff=(UBYTE)(lf_heading16(du,dv)-aim)&15;
-        if(score<112&&(diff<=2||diff>=14)){if(diff>8)diff=16-diff;if(score+diff*24<best_score)best=8;}
+        score=lf_abs(du)+lf_abs(dv);diff=lf_aim_diff(du,dv);
+        if(score<LF_AIM_RANGE&&diff<=3&&score+diff*20<best_score)best=8;
     }
     return best;
+}
+/* A lock holds while B is held (strafing keeps firing at the same target)
+ * or while the target stays inside the aim cone, so a closer walker
+ * crossing the cone does not steal it. */
+static UBYTE lf_keep_target(UBYTE t){
+    WORD du,dv;UWORD pu=td.u>>4,pv=td.v>>4;actor_t *a;
+    if(t==8){
+        if(!LF_IS_PATROL(TD_POLICE_SLOT)||tr_mode[TD_POLICE_SLOT]==TR_GONE)return FALSE;
+        du=(WORD)(td_traffic_u[TD_POLICE_SLOT]>>4)-(WORD)pu;dv=(WORD)(td_traffic_v[TD_POLICE_SLOT]>>4)-(WORD)pv;
+    }else{
+        a=&actors[TD_ACTOR_PEDS+t];
+        if(!lf_ped_aimable(t,1<<t,a))return FALSE;
+        du=(WORD)(a->pos.x>>5)-(WORD)pu;dv=(WORD)(a->pos.y>>5)-(WORD)pv;
+    }
+    if(lf_abs(du)+lf_abs(dv)>=LF_AIM_KEEP)return FALSE;
+    return td_aim_hold||lf_aim_diff(du,dv)<=3;
 }
 static void lf_target_at(UBYTE t,UWORD *u,UWORD *v){
     if(t==8){*u=td_traffic_u[TD_POLICE_SLOT]>>4;*v=td_traffic_v[TD_POLICE_SLOT]>>4;}
     else{*u=actors[TD_ACTOR_PEDS+t].pos.x>>5;*v=actors[TD_ACTOR_PEDS+t].pos.y>>5;}
 }
 void td_life_aim(void) BANKED {
-    td_aim_target=(td.onfoot&&td.ammo&&td.mode==TD_ROAM&&!td_life_locked())?lf_find_target():TD_NONE;
+    if(!td.onfoot||!td.ammo||td.mode!=TD_ROAM||td_life_locked()){td_aim_target=TD_NONE;return;}
+    if(td_aim_target==TD_NONE||!lf_keep_target(td_aim_target))td_aim_target=lf_find_target();
 }
 
 /* The pistol: a long tracer round towards the locked-on target, or along

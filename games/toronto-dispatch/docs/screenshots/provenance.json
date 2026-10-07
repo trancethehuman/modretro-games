@@ -190,14 +190,6 @@
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
   },
   {
-    "file": "lock-on.png",
-    "frame": 1124,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "8efa31ea746a9b14bfc7bd0d09d69c981288d63a90656fd68638590a09921443",
-    "inputs": "boot, welcome call left to finish (480 frames), A+B held 70 frames (leave car), 30 frames, walking a square for 62 frames until the pistol locks on to a walker",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
     "file": "tracer-flight.png",
     "frame": 1108,
     "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
@@ -220,5 +212,141 @@
     "png_sha256": "44b35769e3a4771f9f145a6eeb8ff4f63211f61dfd535d6ceb6daeecd143e9ce",
     "inputs": "boot, welcome call left to finish (480 frames), play clock written for 22:00 and car colour set to blue in emulator memory, 130 frames, A held 36 frames",
     "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+  },
+  {
+    "file": "union-station-front-st.png",
+    "frame": 962,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "0b44b8792f10eb8cc1e3e650e7f215c4d2df1b052361714ce067e83715a91863",
+    "inputs": "boot, A on title, 480 frames for the welcome call to finish (car parked on Front St at Union Station)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "downtown-map.png",
+    "frame": 1076,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "3a656d721e156934fa954e61f8c7b25093e88a8e33a94f301e0257ed339839aa",
+    "inputs": "boot, 480 frames, Start, Down, A (City map), 90 frames",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "cn-tower-rogers-centre.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "bd8bfb1363e977486d53d037c2583ec002df9a4a498c6dd33790dd1749ca4939",
+    "inputs": "boot, 480 frames, courier car written to (440,740) heading 0 in emulator memory, 90 frames: Front St W at John: CN Tower and Rogers Centre south of Front",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "city-hall-eaton-centre.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "076b48fb1258b814ad49b40b06490e232f04428f4e1d80f9903b70b04ddf5717",
+    "inputs": "boot, 480 frames, courier car written to (576,516) heading 0 in emulator memory, 90 frames: Queen St W at Bay: City Hall, Nathan Phillips Square, Old City Hall and the Eaton Centre",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "st-lawrence-flatiron.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "e35b6f7ab0957fb7488b930a070fd3dfabb9cf1df10cae160a1130f7a91fa141",
+    "inputs": "boot, 480 frames, courier car written to (700,740) heading 0 in emulator memory, 90 frames: Front St E: Gooderham Flatiron and St Lawrence Market",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "kensington-chinatown.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "6124176310fc224abdd6fc102acf077803ec9ac78d016c7ef1625b0a2f91cec2",
+    "inputs": "boot, 480 frames, courier car written to (384,344) heading 4 in emulator memory, 90 frames: Spadina Ave between College and Dundas: Kensington Market (west) and Chinatown (east)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "queens-park-legislature.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "ad077164fdadd0ca896ddc60932b68d82a7443eb93866c4ab07d79509a7e8f2f",
+    "inputs": "boot, 480 frames, courier car written to (512,220) heading 4 in emulator memory, 90 frames: Queen's Park: the Legislature and U of T",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "distillery-don-river.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "9e8af81c892e8080965a441496631729af2f6805cb950ac0ed6e00c3412113ed",
+    "inputs": "boot, 480 frames, courier car written to (820,760) heading 0 in emulator memory, 90 frames: Mill St: Distillery District and the Don River",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "liberty-village-fort-york.png",
+    "frame": 1052,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "35de26e6ca37281dab3593c64d8d57f53cb4c11c070aa763bbf9e72bbdb7d63a",
+    "inputs": "boot, 480 frames, courier car written to (200,700) heading 0 in emulator memory, 90 frames: King St W area: Liberty Village warehouses and Fort York",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "bigger-cars-traffic.png",
+    "frame": 1342,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "670a034de03d3d811041f38b1ea9fce5c3e300e9a4f930d5ef72f29cabbda11e",
+    "inputs": "boot, 480 frames, driving with A and Left/Right in 2-second turns for 380 frames (wanted held at 0), first frame with two road vehicles in view",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "station-prompt.png",
+    "frame": 1072,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "b8839ac31d3a3795a35fdda26b3dc0a71a4bd17f68c506cee67e669559fa1a5b",
+    "inputs": "boot, 480 frames, A+B held 70 frames (leave the car at Union), 40 frames: the HUD offers B for Line 1",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "ttc-menu.png",
+    "frame": 1094,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "8a6f2a4e4a25ac467a8b9ed925cd76dc87097fbdd58310d1329e32143021fea4",
+    "inputs": "then B: the Line 1 menu opens on the next station, not Union itself",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "queen-streetcar.png",
+    "frame": 2805,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "282c3d7e450d14a463cea56e2372d51e3a7ff1decac522ac90ab4e60db8b78be",
+    "inputs": "boot, 480 frames, left the car, courier written to the Queen and Yonge platform (676,556), B, A (wait); the frame 30 frames before boarding at frame 2834: the 501 streetcar pulling in",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "ferry-arriving.png",
+    "frame": 1904,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "1c171b7f3a227d1a1436720889afc6970d7115b13459cdc075af5b97bf036a8f",
+    "inputs": "boot, 480 frames, left the car, courier written to the ferry terminal (584,832), B, A, 794 frames: the ferry comes in over the harbour",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "lock-on.png",
+    "frame": 1124,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "ae3612d75ff0e09d1083732aaa853ddb6a864147aed1ec69461131403f953f3f",
+    "inputs": "boot, 480 frames, left the car, walking a square for 62 frames until the pistol locks on",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "sticky-lock-firing.png",
+    "frame": 1133,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "6d64cee4776ea2ca0865da5487330a1eec256eb38f0cc0ee8e1820eae79c5557",
+    "inputs": "then B held 3 frames and B+Down 6 frames: the lock stays on its target while the courier strafes",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "free-aim-sight.png",
+    "frame": 1116,
+    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+    "png_sha256": "5b676657d12c0bfadf8a05a387dcb8c6478f4fb802334fad26145e0fd5ee90b4",
+    "inputs": "boot, 480 frames, left the car, courier written to the Queen St W sidewalk (452,488), faced right with nothing to lock, B held 12 frames: the blinking sight shows where the pistol fires",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
   }
 ]

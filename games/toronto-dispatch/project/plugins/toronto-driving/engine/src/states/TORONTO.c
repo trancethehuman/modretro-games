@@ -263,11 +263,30 @@ static void td_interact(void){
     if(td.stage==1)td_radio_say(TD_RADIO_PICKUP);
     td_set_target();td_save();td_ui_draw();
 }
+/* Stations reach the sign on the sidewalk beside the curb-lane stop. The
+ * current district's boarding stops are cached so the HUD prompt can look
+ * for one cheaply. */
+#define TD_STATION_CACHE 16
+static UBYTE td_st_district=255,td_st_count,td_st_id[TD_STATION_CACHE];
+static UWORD td_st_u[TD_STATION_CACHE],td_st_v[TD_STATION_CACHE];
 static UBYTE td_origin(void){
     UBYTE i;td_stop_t s;
-    for(i=0;i<TD_STOPS;i++){td_get_stop(i,&s);if(s.transit&&td_transit_can_origin(i)&&td_near(&s))return i;}
+    if(td_st_district!=td.district){
+        td_st_district=td.district;td_st_count=0;
+        for(i=0;i<TD_STOPS&&td_st_count<TD_STATION_CACHE;i++){
+            td_get_stop(i,&s);
+            if(s.transit&&s.district==td.district&&td_transit_can_origin(i)){
+                td_st_id[td_st_count]=i;td_st_u[td_st_count]=s.u;td_st_v[td_st_count]=s.v;td_st_count++;
+            }
+        }
+    }
+    for(i=0;i<td_st_count;i++)
+        if(td_distance(td.u>>4,td_st_u[i])<24&&td_distance(td.v>>4,td_st_v[i])<24)return td_st_id[i];
     return TD_NONE;
 }
+/* The station within reach on foot, refreshed a few times a second for the HUD. */
+UBYTE td_station_near=TD_NONE;
+static UBYTE td_station_tick;
 UBYTE td_service(UBYTE origin) BANKED {
     return td_transit_service(origin);
 }
@@ -294,7 +313,10 @@ static void td_tv_begin(UBYTE phase,UBYTE stop){
 static void td_tv_show(UBYTE service,UBYTE stop,UBYTE heading,UWORD offset,UBYTE arriving){
     actor_t *a=&actors[TD_ACTOR_TRANSIT];UWORD u,v;UBYTE frame;
     td_tv_shown=0;
-    if(service==TD_TRANSIT_TRAIN||heading>TD_HEADING_NORTH||offset>240||!td_street_berth(stop,td.district,&u,&v)){a->flags|=ACTOR_FLAG_HIDDEN;return;}
+    UBYTE berth;
+    if(service==TD_TRANSIT_TRAIN||heading>TD_HEADING_NORTH||offset>240||!(berth=td_street_berth(stop,td.district,&u,&v))){a->flags|=ACTOR_FLAG_HIDDEN;return;}
+    /* Ferries come in from, and leave over, the open water beside the dock. */
+    if(berth>1){if(berth==2)v+=offset;else v-=offset;offset=0;}
     if(heading==TD_HEADING_EAST){v+=8;if(arriving)u-=offset;else u+=offset;}
     else if(heading==TD_HEADING_WEST){v-=8;if(arriving)u+=offset;else u-=offset;}
     else if(heading==TD_HEADING_SOUTH){if(arriving)v-=offset;else v+=offset;}
@@ -391,7 +413,18 @@ static void td_transit_open(void){
         td.menu=origin-TD_TRANSIT_QUEEN_FIRST+1;
         if(td.menu>=TD_TRANSIT_QUEEN_COUNT)td.menu=TD_TRANSIT_QUEEN_COUNT-2;
     }
-    td.transit_target=td_route_stop(origin,td.menu);td_get_stop(td.transit_target,&td_cursor);td.mode=TD_TRANSIT;td_ui_draw();
+    td.transit_target=td_route_stop(origin,td.menu);
+    /* Never offer the stop the courier is standing at. */
+    if(td.transit_target==origin){td.menu=(td.menu+1)%td_transit_count(origin);td.transit_target=td_route_stop(origin,td.menu);}
+    td_get_stop(td.transit_target,&td_cursor);td.mode=TD_TRANSIT;td_ui_draw();
+}
+static void td_transit_step(BYTE delta){
+    UBYTE count=td_transit_count(td.transit_origin),n;
+    for(n=0;n<count;n++){
+        td.menu=(td.menu+count+delta)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);
+        if(td.transit_target!=(td.transit_origin&63))break;
+    }
+    td_get_stop(td.transit_target,&td_cursor);
 }
 static void td_pause_choose(void){
     if((td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)&&td.menu>1&&td.menu!=8){td_message(2);return;}
@@ -446,10 +479,12 @@ static void td_menu_update(void){
         if((INPUT_UP_PRESSED||INPUT_DOWN_PRESSED)&&(td.transit_origin&63)==16){
             td.transit_origin^=64;td.menu=0;td.transit_target=td_route_stop(td.transit_origin,0);td_get_stop(td.transit_target,&td_cursor);
         }
-        if(INPUT_RIGHT_PRESSED){UBYTE count=td_transit_count(td.transit_origin);if(count){td.menu=(td.menu+1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}}
-        if(INPUT_LEFT_PRESSED){UBYTE count=td_transit_count(td.transit_origin);if(count){td.menu=(td.menu+count-1)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);td_get_stop(td.transit_target,&td_cursor);}}
+        if(INPUT_RIGHT_PRESSED&&td_transit_count(td.transit_origin))td_transit_step(1);
+        if(INPUT_LEFT_PRESSED&&td_transit_count(td.transit_origin))td_transit_step(-1);
         if(INPUT_A_PRESSED){
             if(!td_transit_valid(td.transit_origin,td.transit_target))return;
+            /* Short of the fare: say so before waiting for a departure. */
+            if(td.cash<td_transit_fare(td.transit_origin)){td.mode=TD_ROAM;td_save();td_message(4);return;}
             td.mode=TD_WAIT;td.speed=0;
             /* The displayed two-second window includes the current second;
                confirmation must not wait for another clock tick to board. */
@@ -1679,6 +1714,7 @@ static void td_drive(void){
         if(td_input_edge&&INPUT_B_PRESSED&&!td_entry_timer){if(td_origin()!=TD_NONE)td_transit_open();else{td_fire_hold=1;td_life_foot_b();}}
         else if(td_fire_hold&&td_input_edge&&INPUT_B)td_life_foot_b();
         if(!INPUT_B)td_fire_hold=0;
+        td_aim_hold=td_fire_hold;
         return;
     }
     if(td_life_drive()&TD_DRIVE_EXIT){td_enter_exit();return;}
@@ -1760,6 +1796,8 @@ void toronto_update(void) BANKED {
     UWORD now,elapsed,seconds,old_u,old_v;UBYTE motion,step,was_entering,consumed=0;
     if(td_transition_pending){if(td_transition_pending==2&&td_district_queue(td.district))td_transition_pending=1;return;}
     if(td_dn_pending){td_dn_pending=0;td_daynight_apply(TD_DN_HW);}
+    /* A station within reach replaces the street name with its B prompt. */
+    if(++td_station_tick>=12){UBYTE near;td_station_tick=0;near=td.onfoot&&td.mode==TD_ROAM&&!td.wanted?td_origin():TD_NONE;if(near!=td_station_near){td_station_near=near;td_ui_pending=1;}}
     if(td_ui_pending){td_ui_pending=0;td_ui_draw();}
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
     td_corner_used=0;

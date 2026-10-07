@@ -2,7 +2,13 @@
 
 A north-up, top-down pixel-art courier game for ModRetro Chromatic / Game Boy Color. Drive, brake into corners, park, walk and take timed transit through four compressed Toronto areas and selected Island routes.
 
-**Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, 211 buildings, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
+**Status: Prototype 6 milestone.** The native game contains four linked scenes, four vehicles, 88 authored contracts, the downtown street plan from the City of Toronto Centreline, moving pedestrians and traffic, paid scheduled subway/bus/ferry travel, a scrollable city atlas, original music/effects, and SRAM progression. Roads have 48 pixels of asphalt plus sidewalks. Prototype 4's native tests completed nine distinct jobs and kept the car moving through the previously stopping turn while acceleration stayed held. Build-specific checks also cover walking/car entry, collision and roof occlusion, transit, timeout/retry, pause and reset recovery. The two-hour release target, full Old Toronto coverage, physical cartridge testing and further handling polish remain open.
+
+![Union Station on Front St](docs/screenshots/union-station-front-st.png) ![CN Tower and Rogers Centre](docs/screenshots/cn-tower-rogers-centre.png) ![City Hall and the Eaton Centre](docs/screenshots/city-hall-eaton-centre.png) ![Kensington and Chinatown](docs/screenshots/kensington-chinatown.png)
+
+![Station prompt](docs/screenshots/station-prompt.png) ![501 Queen streetcar](docs/screenshots/queen-streetcar.png) ![Ferry arriving](docs/screenshots/ferry-arriving.png) ![Larger cars](docs/screenshots/bigger-cars-traffic.png)
+
+Development build, 2026-10-07: the downtown street plan from the City of Toronto Centreline with neighbourhood blocks and landmarks in place, the station prompt, the 501 pulling in, the ferry coming in over the harbour and the larger cars. Unmodified PyBoy frames (some staged by writing the courier's position in emulator memory); [provenance](docs/screenshots/provenance.json).
 
 ![Rosa's welcome call](docs/screenshots/radio-welcome.png) ![Pause menu](docs/screenshots/pause-menu.png) ![Pause menu scrolled](docs/screenshots/pause-menu-scrolled.png) ![Dispatch board](docs/screenshots/dispatch-board.png)
 

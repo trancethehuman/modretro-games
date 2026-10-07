@@ -116,7 +116,7 @@
     "real_ttc_fare": false
   },
   "schedule": {
-    "period_seconds": 64,
+    "period_seconds": 32,
     "boarding_window_seconds": 2,
     "adjacent_stop_ride_seconds": 4,
     "maximum_ride_seconds": 28,
@@ -131,17 +131,17 @@
       28
     ],
     "westbound_departure_seconds": [
-      60,
-      56,
-      52,
-      48,
-      44,
-      40,
-      36,
-      32
+      28,
+      24,
+      20,
+      16,
+      12,
+      8,
+      4,
+      0
     ],
     "clock": "Autonomous world clock, including when the route is off-screen. Paused game/map freezes the existing clock.",
-    "notice": "Fictional fixed timetable. Ride time is 4*abs(destination_index-origin_index), independent of pixel distance; boarding window does not add another ride second. Fare/schedule values are design choices, not real TTC data."
+    "notice": "Fictional fixed timetable: a car each way every 32 seconds. Ride time is 4*abs(destination_index-origin_index), independent of pixel distance; boarding window does not add another ride second. Fare/schedule values are design choices, not real TTC data."
   },
   "stops": [
     {
@@ -504,7 +504,7 @@
       49,
       50
     ],
-    "period_seconds": 64,
+    "period_seconds": 32,
     "boarding_window_seconds": 2,
     "segment_seconds": 4,
     "fare": 3,
@@ -519,14 +519,14 @@
       28
     ],
     "westbound_phases": [
-      60,
-      56,
-      52,
-      48,
-      44,
-      40,
-      36,
-      32
+      28,
+      24,
+      20,
+      16,
+      12,
+      8,
+      4,
+      0
     ],
     "notice": "Normal-corridor fictional game operation; shared directional platforms, original fare and schedule; current construction detours omitted, era unadopted.",
     "source_refs": [

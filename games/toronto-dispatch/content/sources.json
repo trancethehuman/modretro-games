@@ -282,5 +282,11 @@
     "reviewed": "2026-10-02",
     "scope": "TTC terms reserve website material and trademarks and restrict republication of substantial material. Research retains selected factual identities and citations only; no maps, logos, live data, timetable text or route geometry are imported.",
     "rights": "Factual research reference only; no TTC artwork, map, logo, timetable or route geometry copied. City Open Government Licence does not cover TTC website material."
+  },
+  {
+    "id": "toronto-centreline-core-20261007",
+    "url": "https://open.toronto.ca/dataset/toronto-centreline-tcl/",
+    "reviewed": "2026-10-07",
+    "scope": "Toronto Centreline v2 (EPSG:2952 CSV, SHA-256 e01e322f...) downloaded 2026-10-07: downtown street order, spacing and extents for the core scene; derived positions in content/districts/core-research.json"
   }
 ]

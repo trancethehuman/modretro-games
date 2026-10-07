@@ -10,7 +10,7 @@
 #define TD_TRANSIT_NONE 255
 #define TD_TRANSIT_QUEEN_FIRST 43
 #define TD_TRANSIT_QUEEN_COUNT 8
-#define TD_TRANSIT_QUEEN_PERIOD 64
+#define TD_TRANSIT_QUEEN_PERIOD 32
 #define TD_TRANSIT_QUEEN_HOP_SECONDS 4
 
 /* Pure timetable/route queries. Origins are plain six-bit stop IDs except

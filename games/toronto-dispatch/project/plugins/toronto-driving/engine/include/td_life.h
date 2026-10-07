@@ -98,9 +98,11 @@ void td_life_foot_a(void) BANKED;
 void td_life_foot_b(void) BANKED;
 /* On foot: aim direction (eight headings, E=0 clockwise) from the D-pad,
  * and the soft lock-on refreshed every few ticks: the nearest walker or
- * patrol car within about 45 degrees of the aim and 112 px (TD_NONE when
+ * patrol car within about 60 degrees of the aim and 128 px (TD_NONE when
  * there is none). The lock-on marker shows it. */
 extern UBYTE td_aim_dir,td_aim_target;
+/* Set while B is held on foot: a lock then follows its target anywhere in range. */
+extern UBYTE td_aim_hold;
 void td_life_aim(void) BANKED;
 /* TRUE while the courier is knocked down, being arrested or hurt-stunned. */
 UBYTE td_life_locked(void) BANKED;

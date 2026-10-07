@@ -78,6 +78,7 @@ void td_get_job(UBYTE index,td_job_t *dest) BANKED;
 void td_get_brief(UBYTE index,char *dest) BANKED;
 void td_get_street(UWORD u,UWORD v,char *dest) BANKED;
 void td_get_west_street(UBYTE district,UWORD u,UWORD v,char *dest) BANKED;
+extern UBYTE td_station_near;
 /* Re-picks at most TD_ROUTE_PICKS out-of-range slots per call; TRUE when
  * more slots still wait for a route (call again soon). Empty slots are only
  * retried when retry_empty is set (the courier has moved since). */

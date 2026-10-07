@@ -20,6 +20,7 @@ UWORD td_beacon_u,td_beacon_v;
 UBYTE td_beacon_shown,td_life_fine;
 /* Car wear owned by td_drive.c. */
 UBYTE td_car_damage,td_car_colour;
+UBYTE td_station_near=TD_NONE;
 actor_t actors[TD_ACTORS];
 /* Day/night palettes (td_daynight.c) are not part of this fixture. */
 UBYTE td_daynight_apply(UBYTE flags) {(void)flags;return 0;}

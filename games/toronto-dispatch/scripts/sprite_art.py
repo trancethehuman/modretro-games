@@ -75,8 +75,8 @@ def eight_headings(east, south, south_east):
 # supersampling and redraws the outline, so all eight headings share one
 # design. Colours: 1 light, 2 body, 3 dark.
 
-def _layers(spec, tyres=True):
-    g = [[0] * W for _ in range(H)]
+def _layers(spec, tyres=True, w=W, h=H):
+    g = [[0] * w for _ in range(h)]
 
     def rect(x0, y0, x1, y1, c):
         for y in range(y0, y1 + 1):
@@ -145,12 +145,13 @@ def _truck_spec():
 
 def _outline(g, lamps=()):
     out = [row[:] for row in g]
-    for y in range(H):
-        for x in range(W):
+    h, w = len(g), len(g[0])
+    for y in range(h):
+        for x in range(w):
             if g[y][x] in (1, 2):
                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                     nx, ny = x + dx, y + dy
-                    if not (0 <= nx < W and 0 <= ny < H) or g[ny][nx] == 0:
+                    if not (0 <= nx < w and 0 <= ny < h) or g[ny][nx] == 0:
                         out[y][x] = 3
                         break
     for x, y in lamps:
@@ -180,14 +181,77 @@ def _rotate45(g, ss=5):
     return out
 
 
+CAR_LAMPS = ((15, 4), (15, 11))
+TRUCK_LAMPS = ((15, 5), (15, 10))
+COMPACT_LAMPS = ((13, 4), (13, 11))
+
+# Full-size road vehicles: 20 long and 14 wide (12 of body plus tyres). The
+# east view sits in a 24x16 frame and the south view (its transpose) in a
+# centred 16x32 frame, so west and north are tile flips of them. The 45
+# degree views keep the 16x16 drawing, whose diagonal already spans about
+# 20 pixels. Compact cars and coupes stay 16 long.
+LONG = 24
+LONG_CAR_LAMPS = ((21, 3), (21, 12))
+LONG_TRUCK_LAMPS = ((21, 4), (21, 11))
+_CORNERS = [('cut', 2, 2, 2, 2, 0), ('cut', 21, 2, 21, 2, 0), ('cut', 2, 13, 2, 13, 0), ('cut', 21, 13, 21, 13, 0)]
+_LONG_TYRES = [('tyre', 4, 1, 7, 1, 3), ('tyre', 16, 1, 19, 1, 3), ('tyre', 4, 14, 7, 14, 3), ('tyre', 16, 14, 19, 14, 3)]
+
+
+def _sedan_long(body=2, sign=False, lightbar=False, shine=True, flash=False):
+    spec = [('body', 2, 2, 21, 13, body)] + _CORNERS + [('cabin', 7, 4, 16, 11, 3), ('roof', 8, 5, 14, 10, body)]
+    if shine:
+        spec += [('flank', 3, 3, 20, 3, 1), ('roofshine', 8, 5, 10, 5, 1), ('trunk', 3, 6, 3, 9, 1), ('hood', 18, 5, 18, 10, 1)]
+    if sign:
+        spec += [('sign', 10, 7, 12, 8, 1)]
+    if lightbar:
+        spec += [('stripe', 3, 3, 20, 3, 2), ('stripe', 3, 12, 20, 12, 2), ('bar', 10, 5, 11, 10, 2)]
+    if flash:
+        spec += [('flash', 10, 5, 11, 7, 1), ('blue', 10, 8, 11, 10, 2)]
+    return spec + [('glint', 16, 5, 16, 5, 1)] + _LONG_TYRES
+
+
+def _truck_long():
+    return [('box', 2, 2, 15, 13, 1), ('panel', 3, 3, 14, 3, 2), ('panel', 3, 12, 14, 12, 2),
+            ('rib', 5, 4, 5, 11, 2), ('rib', 9, 4, 9, 11, 2), ('rib', 13, 4, 13, 11, 2),
+            ('cab', 16, 3, 21, 12, 2), ('divide', 16, 3, 16, 12, 3), ('screen', 19, 4, 19, 11, 3),
+            ('glint', 19, 4, 19, 4, 1), ('flank', 17, 3, 20, 3, 1),
+            ('tyre', 4, 1, 7, 1, 3), ('tyre', 4, 14, 7, 14, 3), ('tyre', 17, 2, 19, 2, 3), ('tyre', 17, 13, 19, 13, 3)]
+
+
+def _pickup_long():
+    return [('body', 2, 2, 21, 13, 2)] + _CORNERS + [
+            ('bed', 3, 4, 11, 11, 3), ('floor', 4, 5, 11, 10, 2), ('load', 5, 6, 8, 9, 1),
+            ('cab', 13, 4, 17, 11, 3), ('cabroof', 14, 5, 16, 10, 2), ('glint', 17, 5, 17, 5, 1),
+            ('flank', 13, 3, 20, 3, 1), ('rail', 3, 3, 11, 3, 1)] + _LONG_TYRES
+
+
+def _long_east(spec, lamps):
+    return _outline(_layers(spec, w=LONG), lamps)
+
+
+def _south32(east):
+    """South view of a 24-long east view, centred in a 16x32 frame."""
+    south = transpose(east)
+    blank = [[0] * len(south[0]) for _ in range(4)]
+    return blank + south + [row[:] for row in blank]
+
+
+def _diagonal(spec, lamps):
+    bare = _outline(_layers(spec, tyres=False), lamps)
+    return _outline(_rotate45([[c if c != 3 or _inside(bare, x, y) else 0 for x, c in enumerate(row)]
+                               for y, row in enumerate(bare)]))
+
+
 def _vehicle(spec, lamps):
     east = _outline(_layers(spec), lamps)
     # The diagonal leaves out tyres (they would read as bumps) and gains its
     # outline after rotation.
-    bare = _outline(_layers(spec, tyres=False), lamps)
-    se = _outline(_rotate45([[c if c != 3 or _inside(bare, x, y) else 0 for x, c in enumerate(row)]
-                             for y, row in enumerate(bare)]))
-    return eight_headings(east, transpose(east), se)
+    return eight_headings(east, transpose(east), _diagonal(spec, lamps))
+
+
+def _long_vehicle(long_spec, long_lamps, spec, lamps):
+    east = _long_east(long_spec, long_lamps)
+    return eight_headings(east, _south32(east), _diagonal(spec, lamps))
 
 
 def _inside(g, x, y):
@@ -195,17 +259,12 @@ def _inside(g, x, y):
     return ((0 < x < W - 1 and g[y][x - 1] and g[y][x + 1]) or (0 < y < H - 1 and g[y - 1][x] and g[y + 1][x]))
 
 
-CAR_LAMPS = ((15, 4), (15, 11))
-TRUCK_LAMPS = ((15, 5), (15, 10))
-COMPACT_LAMPS = ((13, 4), (13, 11))
-
-
 def car_frames(taxi=False):
-    return _vehicle(_sedan_spec(sign=taxi), CAR_LAMPS)
+    return _long_vehicle(_sedan_long(sign=taxi), LONG_CAR_LAMPS, _sedan_spec(sign=taxi), CAR_LAMPS)
 
 
 def van_frames():
-    return _vehicle(_truck_spec(), TRUCK_LAMPS)
+    return _long_vehicle(_truck_long(), LONG_TRUCK_LAMPS, _truck_spec(), TRUCK_LAMPS)
 
 
 def _cardinal_vehicle(spec, lamps):
@@ -216,12 +275,18 @@ def _cardinal_vehicle(spec, lamps):
     return [east, east, south, south, flip_h(east), flip_h(east), flip_v(south), flip_v(south)]
 
 
+def _cardinal_long(spec, lamps):
+    east = _long_east(spec, lamps)
+    south = _south32(east)
+    return [east, east, south, south, flip_h(east), flip_h(east), flip_v(south), flip_v(south)]
+
+
 def compact_frames():
     return _cardinal_vehicle(_compact_spec(), COMPACT_LAMPS)
 
 
 def pickup_frames():
-    return _cardinal_vehicle(_pickup_spec(), CAR_LAMPS)
+    return _cardinal_long(_pickup_long(), LONG_CAR_LAMPS)
 
 
 def sports_frames():
@@ -229,9 +294,9 @@ def sports_frames():
 
 
 def door_frame():
-    """The parked courier car, east-facing, with its door swung open."""
+    """The parked courier car, east-facing, with its driver door swung open."""
     g = [row[:] for row in car_frames()[0]]
-    for x, y, c in ((5, 13, 3), (5, 14, 3), (6, 14, 2), (6, 15, 3), (7, 15, 3)):
+    for x, y, c in ((10, 14, 3), (10, 15, 3), (11, 15, 2), (12, 15, 3)):
         g[y][x] = c
     return g
 
@@ -300,8 +365,9 @@ def moto_frames():
 
 
 def scooter_frames():
-    east = grid(SCOOTER_E)
-    return eight_headings(east, transpose(east), raster(moto_zone(9.0, 2.0), 45))
+    """The scooter shares the motorcycle's drawing (and tiles); it differs in
+    handling, not looks, so full-size cars fit the sprite tile budget."""
+    return moto_frames()
 
 
 # ---------------------------------------------------------------- people
@@ -525,21 +591,11 @@ def big_frame(zone, heading, size):
 # dark glass. Patrol units drive cardinally; diagonal slots repeat the
 # nearest cardinal view so they cost no extra tiles.
 def police_frames():
-    east = _outline(_layers(_sedan_spec(body=1, lightbar=True, shine=False)), CAR_LAMPS)
-    south = transpose(east)
-    west, north = flip_h(east), flip_v(south)
-    return [east, east, south, south, west, west, north, north]
+    return _cardinal_long(_sedan_long(body=1, lightbar=True, shine=False), LONG_CAR_LAMPS)
 
 
-# Pursuit: the light bar flashes white over its front half [E, S, W, N]; the
-# engine alternates these with the plain patrol car.
-def police_flash_frames():
-    spec = _sedan_spec(body=1, lightbar=True, shine=False) + [('flash', 5, 6, 8, 7, 1), ('blue', 6, 8, 7, 9, 2)]
-    east = _outline(_layers(spec), CAR_LAMPS)
-    south = transpose(east)
-    return [east, south, flip_h(east), flip_v(south)]
-
-
+# Pursuit: the engine flashes the light bar and stripes by alternating the
+# patrol car's palette between blue and red; no extra tiles.
 # A struck person tumbles through the air (four quarter turns made from one
 # drawing by flips), then lies on the ground. Non-graphic: no blood. Drawn
 # in the people palette, so the actor's clothing colour carries over.
@@ -630,12 +686,13 @@ def _centre8(rows8, top=4):
 
 
 # Tyre smoke and dust (traffic palette: 1 pale grey-blue, 3 near black): a
-# dense fresh puff, a dithered cloud, then a thinning haze.
+# dense fresh puff, then a dithered cloud that shimmers (its mirror image
+# shares the tile).
 SMOKE = [
     _centre8(["........", "...33...", "..3113..", ".311113.", ".311113.", "..3113..", "...33...", "........"]),
     _centre8(["..1.1...", ".1.1.1.1", "1.1.1.1.", ".1.1.1.1", "1.1.1.1.", ".1.1.1..", "..1.1...", "........"]),
-    _centre8(["...1....", ".1...1..", "....1..1", "1.1.....", "...1..1.", ".1...1..", "....1...", "........"]),
 ]
+SMOKE.append(flip_h(SMOKE[1]))
 # A courier parcel that pops up when it is collected (courier palette).
 PARCEL = _centre8([".333333.", "32221223", "32221223", "31111113", "32221223", "32221223", ".333333."], 5)
 # Delivery sparkle (beacon yellow): a four-point star, then a burst.
@@ -648,8 +705,8 @@ SPARKLE = [
 def _beam(angle_deg):
     """Night headlamp light ahead of the vehicle, dithered so the road shows
     through: a bright spot at each lamp, then two soft cones that thin out.
-    The frame centre sits 14 px ahead of the vehicle centre and the light
-    starts at the 16-pixel vehicle's bumper; the lamps are 2.5 px either
+    The frame centre sits 16 px ahead of the vehicle centre (14 on the
+    diagonals) and the light starts just past the bumper; the lamps are 2.5 px either
     side of its axis."""
     a = math.radians(angle_deg)
     ca, sa = math.cos(a), math.sin(a)

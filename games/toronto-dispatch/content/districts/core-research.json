@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-07",
+  "status": "Source-derived street positions plus original compressed layout (scripts/city_layout.py). Engine-integrated; geography is compressed, not surveyed.",
+  "source": {
+    "dataset": "Toronto Centreline (TCL), version 2, EPSG:2952 CSV",
+    "portal": "https://open.toronto.ca/dataset/toronto-centreline-tcl/",
+    "downloaded_on": "2026-10-07",
+    "file_sha256": "e01e322f9785596489c23e52f969c7af4df209acc4e63118d7404e1593853ffe",
+    "bundled": false,
+    "note": "The raw file is kept out of Git; only the derived positions below are recorded."
+  },
+  "licence": {
+    "name": "Open Government Licence - Toronto",
+    "version": "1.0",
+    "url": "https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/",
+    "attribution": "Contains information licensed under the Open Government Licence \u2013 Toronto."
+  },
+  "method": [
+    "Centreline segments were selected by street name and projected (EPSG:2952, metres).",
+    "Coordinates were rotated 16.6 degrees so the downtown street grid is axis-aligned (Yonge St runs about 72.9 degrees from east, Queen St about 16.1 degrees).",
+    "Origin: Yonge St at Queen St. u is metres east of Yonge, w is metres north of Queen.",
+    "Each street's position is the median rotated coordinate of its segments inside the downtown window; extents are the observed segment ranges, rounded."
+  ],
+  "observed_positions_m": {
+    "north_south_u_east_of_yonge": {
+      "Dufferin St": -4121,
+      "Ossington Ave": -3297,
+      "Shaw St": -3096,
+      "Strachan Ave": -2859,
+      "Bathurst St": -2075,
+      "Spadina Ave": -1438,
+      "St George St": -1114,
+      "McCaul St": -883,
+      "University Ave": -592,
+      "Bay St": -241,
+      "Yonge St": 0,
+      "Church St": 289,
+      "Jarvis St": 508,
+      "Sherbourne St": 817,
+      "Parliament St": 1247,
+      "River St": 1910,
+      "Don River (near Queen)": 2150,
+      "Broadview Ave": 2478
+    },
+    "east_west_w_north_of_queen": {
+      "Bloor St": 2079,
+      "Harbord St": 1662,
+      "Wellesley St": 1452,
+      "College St": 1040,
+      "Carlton St": 1008,
+      "Gerrard St": 760,
+      "Dundas St": 460,
+      "Queen St": 0,
+      "Richmond St": -88,
+      "Adelaide St": -234,
+      "King St": -382,
+      "Wellington St": -534,
+      "Front St W": -688,
+      "The Esplanade": -638,
+      "Union Station rail corridor (Bathurst to Yonge)": -820,
+      "Lake Shore Blvd (west / east)": [
+        -1178,
+        -953
+      ],
+      "Queens Quay (west / east)": [
+        -1284,
+        -1111
+      ],
+      "Shoreline (west of Spadina / at Yonge / Parliament slip)": [
+        -1300,
+        -1240,
+        -1049
+      ]
+    }
+  },
+  "observed_extents": [
+    "Front St W runs Bathurst to Yonge; Front St E Yonge to about 2015 m east.",
+    "Ossington Ave runs Queen to Bloor and beyond.",
+    "University Ave runs Front to College, continuing as Queen's Park.",
+    "Harbord St runs Ossington to St George; Wellesley St from Queen's Park east past Parliament.",
+    "Carlton St runs Yonge to Parliament; Gerrard St E continues east across the Don.",
+    "King St E ends near the Don; Broadview Ave starts at Queen/Eastern."
+  ],
+  "compression": {
+    "design": "original",
+    "scene_pixels": [
+      1024,
+      976
+    ],
+    "u_anchors_metres_to_px": [
+      [
+        -4121,
+        64
+      ],
+      [
+        -3297,
+        160
+      ],
+      [
+        -2075,
+        256
+      ],
+      [
+        -1438,
+        384
+      ],
+      [
+        -592,
+        512
+      ],
+      [
+        0,
+        640
+      ],
+      [
+        1247,
+        784
+      ],
+      [
+        2120,
+        868
+      ],
+      [
+        2478,
+        928
+      ]
+    ],
+    "w_anchors_metres_to_px": [
+      [
+        2079,
+        64
+      ],
+      [
+        1550,
+        176
+      ],
+      [
+        1040,
+        288
+      ],
+      [
+        460,
+        400
+      ],
+      [
+        0,
+        528
+      ],
+      [
+        -382,
+        640
+      ],
+      [
+        -688,
+        736
+      ],
+      [
+        -820,
+        776
+      ],
+      [
+        -1100,
+        824
+      ],
+      [
+        -1300,
+        848
+      ]
+    ],
+    "rule": "Piecewise-linear: streets keep their real order and proportional spacing between anchors. North-south streets are snapped to 64 px where possible to keep the city atlas inside its tile budget; seam rows shared with the West and East scenes are unchanged.",
+    "omitted": [
+      "Bay St",
+      "Church St",
+      "Jarvis St",
+      "Sherbourne St",
+      "Shaw St",
+      "Strachan Ave",
+      "St George St",
+      "McCaul St",
+      "Richmond St",
+      "Adelaide St",
+      "Wellington St",
+      "The Esplanade",
+      "Lake Shore Blvd (folded into Queens Quay)",
+      "Gardiner Expressway"
+    ],
+    "simplified": [
+      "Harbord St and Wellesley St form one continuous row (the Hoskin Ave jog is omitted).",
+      "College St, Carlton St and Gerrard St E form one row.",
+      "Front St continues east of Parliament as Mill St.",
+      "Don River bridges: Bloor (Prince Edward Viaduct), Gerrard, Dundas, Queen and the waterfront.",
+      "The rail corridor passes over Dufferin, Bathurst, Spadina, Yonge and Parliament."
+    ]
+  },
+  "neighbourhoods": "Blocks take the character of the neighbourhood at their real position (REGIONS in scripts/create_city_art.py). Extents are approximate character areas, not official boundaries; City Neighbourhoods data is a reference only and no boundary geometry is bundled.",
+  "landmarks": [
+    "Union Station",
+    "CN Tower",
+    "Rogers Centre",
+    "City Hall and Nathan Phillips Square",
+    "Old City Hall",
+    "Eaton Centre",
+    "Art Gallery of Ontario and Grange Park",
+    "Royal Ontario Museum",
+    "Ontario Legislative Building and Queen's Park",
+    "St Lawrence Market",
+    "Gooderham Flatiron",
+    "Allan Gardens",
+    "Moss Park and Armoury",
+    "Massey Hall",
+    "Distillery District",
+    "Fort York",
+    "Riverdale Park and Farm"
+  ],
+  "landmark_art": "Original pixel art placed at the landmark's compressed position; no photographs, logos or map imagery."
+}

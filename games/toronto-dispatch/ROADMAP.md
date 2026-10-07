@@ -88,6 +88,12 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Publish [Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) after real CI jobs pass; anonymously verify the exact ZIP, native ROM, member checksums, source identity and notices. [TESTING.md](TESTING.md) records its identities.
 - [ ] Validate human route-choice value, remaining platforms/arrival conditions and future visible streetcar boarding/riding. Full501, King 504, fuller TTC coverage and current detours are separate work.
 
+## Realistic downtown — implemented 2026-10-07, human review pending
+
+- Centreline-derived core street plan with a street hierarchy, neighbourhood blocks and landmarks in place.
+- Larger cars, a sticky and wider pistol lock, and transit prompts, fare checks and a more frequent 501.
+- Next: station markers on the city map, laneways in the largest blocks, larger diagonal car frames if sprite tiles allow, and applying the same method to the West and East scenes.
+
 ## Next playable polish
 
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.

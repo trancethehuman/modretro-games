@@ -95,8 +95,8 @@ static unsigned oracle_departure(unsigned origin, unsigned target, unsigned cloc
     else if (service == 2) { period = 24; phase = index * 4; }
     else if (service == 3) { period = 30; phase = index * 7; }
     else {
-        period = 64;
-        phase = oracle_index(service, target) >= index ? index * 4 : 32 + 4 * (7 - index);
+        period = 32;
+        phase = oracle_index(service, target) >= index ? index * 4 : 4 * (7 - index);
     }
     /* Signed remainder is deliberately unlike the implementation's unsigned
      * period-offset expression, including clocks before a stop's phase. */

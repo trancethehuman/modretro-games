@@ -5,7 +5,7 @@
 typedef char td_transit_queen_ids_fit_origin[
     (TD_TRANSIT_QUEEN_FIRST + TD_TRANSIT_QUEEN_COUNT <= 64) ? 1 : -1];
 typedef char td_transit_queen_timetable_matches_eight_stops[
-    (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 64 &&
+    (TD_TRANSIT_QUEEN_COUNT == 8 && TD_TRANSIT_QUEEN_PERIOD == 32 &&
      TD_TRANSIT_QUEEN_HOP_SECONDS == 4) ? 1 : -1];
 
 static const UBYTE td_transit_train_stops[] = {0, 12, 13, 14, 15, 16, 17};
@@ -119,7 +119,8 @@ UBYTE td_transit_departure(UBYTE origin, UBYTE target, UWORD seconds) BANKED {
     } else {
         period = TD_TRANSIT_QUEEN_PERIOD;
         target_index = td_transit_index_local(service, target);
-        phase = target_index >= source_index ? source_index * 4 : 32 + (7 - source_index) * 4;
+        /* A car each way every period: eastbound and westbound runs interleave. */
+        phase = target_index >= source_index ? source_index * 4 : (7 - source_index) * 4;
     }
     /* Reduce the UWORD first: all subsequent arithmetic stays below128. */
     elapsed = (seconds % period + period - phase) % period;

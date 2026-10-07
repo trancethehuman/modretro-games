@@ -160,7 +160,7 @@ static void reset_case(void) {
     td_corner_used=0;
     memset(td_nearby_routes,0,sizeof(td_nearby_routes));
     joy=joy_pressed=0;sys_time=0;stop_reads=ui_draws=0;
-    stop0_here=authored_content=0;test_queue_calls=test_reset_calls=0;
+    stop0_here=authored_content=0;td_st_district=255;test_queue_calls=test_reset_calls=0;
     test_map_opens=test_map_updates=test_map_closes=0;
     test_map_active=test_map_buttons=test_map_pressed=test_map_camera_settings=0;
     test_map_camera_x=test_map_camera_y=0;
@@ -208,11 +208,11 @@ static void test_acceleration_and_turning(void) {
 
 static void test_glancing_contact(void) {
     reset_case();WORD baseline=prime_car();
-    td.u=300*16;td.v=394*16;td.heading=1;geometry=SOUTH_CURB;
+    td.u=300*16;td.v=393*16;td.heading=1;geometry=SOUTH_CURB;
     UWORD start=td.u;WORD minimum=td.speed;
     for(unsigned i=0;i<80;i++) {
         driving_tick(J_A);if(td.speed<minimum)minimum=td.speed;
-        expect(td.v>>4<395,"glancing contact remains outside curb footprint");
+        expect(td.v>>4<394,"glancing contact remains outside curb footprint");
     }
     expect(td.u>start+32*16,"glancing contact slides forward beside curb");
     expect(minimum>=baseline*3/4,"continuous glancing contact does not repeatedly drain speed");
@@ -220,7 +220,7 @@ static void test_glancing_contact(void) {
 }
 
 static void test_wall_and_brake(void) {
-    reset_case();prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;
+    reset_case();prime_car();td.u=393*16;td.v=450*16;geometry=EAST_WALL;
     UWORD before=td.u;driving_tick(J_A);
     expect(td.u==before,"head-on wall blocks forward movement");
     expect(td.speed<0&&td_vx<0&&td_vy==0,"a fast head-on wall impact throws the car back instead of passing through");
@@ -333,8 +333,8 @@ static void test_city_routes_and_walking(void) {
     expect(td.speed>=21&&td.v>738*16,"held throttle clears a small quantised corner overlap without losing forward speed");
     expect(lf_drive(td.u>>4,td.v>>4),"corner slide retains a collision-valid car footprint");
 
-    reset_case();geometry=EAST_WALL;td.u=394*16;td.v=450*16;td.heading=0;td.speed=24;td_vx=384;
-    driving_tick(J_A);expect(td.speed<=0&&td.u==394*16,"corner assist cannot bypass a broad head-on wall");
+    reset_case();geometry=EAST_WALL;td.u=393*16;td.v=450*16;td.heading=0;td.speed=24;td_vx=384;
+    driving_tick(J_A);expect(td.speed<=0&&td.u==393*16,"corner assist cannot bypass a broad head-on wall");
 
     reset_case();geometry=NATIVE_GRID;toronto_init();td.mode=TD_ROAM;
     td.u=576*16;td.v=740*16;td.onfoot=0;
@@ -423,7 +423,7 @@ static void test_audio_event_integration(void) {
 
 static void test_bounded_corner_assist(void) {
     for(unsigned shift=1;shift<=7;shift++) {
-        reset_case();geometry=SOUTHWEST_CORNER;td.u=(405-shift)*16;td.v=394*16;
+        reset_case();geometry=SOUTHWEST_CORNER;td.u=(406-shift)*16;td.v=393*16;
         td.heading=4;td.speed=16;td_vx=0;td_vy=256;
         UWORD old_u=td.u,old_v=td.v;driving_tick(J_A);
         if(shift<=6) {
@@ -433,15 +433,15 @@ static void test_bounded_corner_assist(void) {
     }
     const UBYTE prohibited[]={0,J_A|J_B,J_B};
     for(unsigned input=0;input<3;input++) {
-        reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;td.speed=16;td_vy=256;joy=prohibited[input];
-        expect(!lf_corner_slide(td.u,395*16),"coasting and braking do not invoke throttle corner assistance");
+        reset_case();geometry=SOUTHWEST_CORNER;td.u=405*16;td.v=393*16;td.speed=16;td_vy=256;joy=prohibited[input];
+        expect(!lf_corner_slide(td.u,394*16),"coasting and braking do not invoke throttle corner assistance");
     }
-    reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16;td.v=394*16;td.speed=-6;td_vy=256;joy=J_A;
-    expect(!lf_corner_slide(td.u,395*16),"reverse does not invoke forward corner assistance");
+    reset_case();geometry=SOUTHWEST_CORNER;td.u=405*16;td.v=393*16;td.speed=-6;td_vy=256;joy=J_A;
+    expect(!lf_corner_slide(td.u,394*16),"reverse does not invoke forward corner assistance");
     td.speed=16;td_vx=td_vy=256;
-    expect(!lf_corner_slide(td.u,395*16),"equal diagonal velocity has no arbitrary assistance axis");
+    expect(!lf_corner_slide(td.u,394*16),"equal diagonal velocity has no arbitrary assistance axis");
     td_vx=0;td_vy=256;td_corner_used=1;
-    expect(!lf_corner_slide(td.u,395*16),"catch-up steps cannot apply multiple lateral assists in one rendered update");
+    expect(!lf_corner_slide(td.u,394*16),"catch-up steps cannot apply multiple lateral assists in one rendered update");
     reset_case();joy=J_A;td.speed=16;td_vy=256;td.v=968*16;
     expect(!lf_corner_slide(td.u,td.v+16),"corner assistance cannot push the car beyond the southern map bound");
 }
@@ -493,6 +493,16 @@ static void test_street_life(void) {
            actors[TD_ACTOR_FX].frame_start<TD_FRAME_TRACER+8,"the tracer shows at once even if GBVM had flagged the actor off screen");
     for(unsigned i=0;i<8&&td_fx_kind==FX_BULLET;i++)td_life_tick();
     expect((td_ped_ovr&2)&&pk_mode[1]==PK_FLY,"the tracer reaches the locked walker within a few ticks");
+    /* Holding B keeps a lock while strafing; releasing it drops a lock
+     * outside the aim cone. The cone reaches about 60 degrees. */
+    td_aim_target=TD_NONE;td_aim_dir=6;td_life_aim();
+    expect(td_aim_target==2,"the north walker is locked before strafing");
+    td_aim_hold=1;td_aim_dir=0;td_life_aim();
+    expect(td_aim_target==2,"holding B keeps the lock while the courier strafes away from the target");
+    td_aim_hold=0;td_life_aim();
+    expect(td_aim_target==TD_NONE,"releasing B drops a lock that is outside the aim cone");
+    actors[11].pos.x=330*32;actors[11].pos.y=360*32;td_aim_dir=0;td_life_aim();
+    expect(td_aim_target==2,"a walker about 60 degrees off the aim is within the lock cone");
     td.onfoot=0;td_life_aim();
     expect(td_aim_target==TD_NONE,"no lock-on while driving");
 
@@ -547,8 +557,11 @@ static void test_street_life(void) {
     expect(actors[2+TD_POLICE_SLOT].frame_start>=TD_FRAME_POLICE&&actors[2+TD_POLICE_SLOT].frame_start<TD_FRAME_POLICE+8,
            "the pursuing car shows the patrol livery");
     td_tick=8;td_life_present();
-    expect(actors[2+TD_POLICE_SLOT].frame_start>=TD_FRAME_POLICE_FLASH&&actors[2+TD_POLICE_SLOT].frame_start<TD_FRAME_POLICE_FLASH+4,
-           "a pursuing patrol car flashes its light bar");
+    expect(actors[2+TD_POLICE_SLOT].frame_start>=TD_FRAME_POLICE&&actors[2+TD_POLICE_SLOT].frame_start<TD_FRAME_POLICE+8&&
+           TD_PALETTE(&actors[2+TD_POLICE_SLOT])==TD_PAL_RED,
+           "a pursuing patrol car flashes its light bar by switching to the red palette");
+    td_tick=0;td_life_present();
+    expect(TD_PALETTE(&actors[2+TD_POLICE_SLOT])==TD_PAL_BLUE,"the flash returns to the blue patrol palette");
     td.wanted=0;lf_cars_tick();
     expect(tr_mode[TD_POLICE_SLOT]==TR_PARK&&lf_patrol,"a pursuit ending leaves the patrol car parked until it is out of view");
     lf_cars_tick();
@@ -792,8 +805,8 @@ static void test_fresh_transit_after_failure(void) {
            "an actual missed deadline produces a failed contract before free roaming");
     world_tick(J_B,1);world_tick(0,1);world_tick(J_B,1);
     expect(td.mode==TD_TRANSIT&&td.job==TD_NONE,"a failed contract permits a new free-roaming transit booking");
-    world_tick(J_RIGHT,1);td.seconds=2;world_tick(J_A,1);
-    expect(td.mode==TD_WAIT&&td.transit_target==12,"fresh trip selects a different served destination");
+    td.seconds=2;world_tick(J_A,1);
+    expect(td.mode==TD_WAIT&&td.transit_target==12,"fresh trip defaults to a different served destination than its origin");
     td.seconds=17;td.subsecond=59;world_tick(0,1);
     expect(td.mode==TD_RIDE&&td.cash==27,"fresh free-roaming trip boards and charges exactly one fare");
     world_tick(0,60);
@@ -802,7 +815,7 @@ static void test_fresh_transit_after_failure(void) {
 
     reset_case();stop0_here=1;td.onfoot=1;td.job=0;td.left=2;td_job.kind=0;
     world_tick(J_B,1);
-    for(unsigned i=0;i<6;i++){world_tick(J_RIGHT,1);world_tick(0,1);}
+    for(unsigned i=0;i<5;i++){world_tick(J_RIGHT,1);world_tick(0,1);}
     td.seconds=2;world_tick(J_A,1);td.seconds=17;td.subsecond=59;world_tick(0,1);
     expect(td.mode==TD_RIDE&&td.transit_target==17&&td.cash==27&&td.job==0,
            "an active parcel boards a longer paid trip before its deadline");
@@ -851,14 +864,14 @@ static void test_pickup_damage_lifecycle(void) {
             expect(td.speed==10&&td_vx==160&&td.cooldown==30&&td.msg==5&&td.u==before_u&&(td_tr_ctrl&1)&&tr_pu[0]==22,
                    "a traffic impact shoves the other car, slows and warns an empty, carrying or retired vehicle");
         }else if(hazard==1) {
-            geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;
+            geometry=EAST_WALL;td.u=393*16;td.safe_u=td.u;
             driving_tick(0);damage=kind==1?20:8;
-            expect(td.u==394*16&&td.speed==-6&&td_vx==-96&&!td_vy&&td.cooldown==45&&td.msg==5,
+            expect(td.u==393*16&&td.speed==-6&&td_vx==-96&&!td_vy&&td.cooldown==45&&td.msg==5,
                    "a broad wall still stops the vehicle with a rebound and applies collision cooldown before and after pickup");
         }else if(hazard==2) {
-            geometry=EAST_WALL;td.u=394*16;td.safe_u=td.u;td.heading=1;td_vy=128;
+            geometry=EAST_WALL;td.u=393*16;td.safe_u=td.u;td.heading=1;td_vy=128;
             driving_tick(0);damage=kind==1?4:1;
-            expect(td.u==394*16&&td.v>450*16&&td.speed==24&&!td_vx&&td_vy>0&&td.cooldown==30&&td.msg==5,
+            expect(td.u==393*16&&td.v>450*16&&td.speed==24&&!td_vx&&td_vy>0&&td.cooldown==30&&td.msg==5,
                    "glancing curb recovery keeps forward speed and its warning independently of cargo occupancy");
         }else {
             geometry=CLEAR_GROUND;td_turn_tick=11;driving_tick(J_RIGHT);
@@ -1033,11 +1046,8 @@ static void test_transit_funds_pause_and_deadline(void) {
         expect(td.mode==TD_RIDE&&td.cash==0,"the exact fare is sufficient for immediate boarding on each service");
         transit_menu_case(service,phase+2);td.cash=transit_cases[service].fare-1;
         world_tick(J_A,1);
-        expect(td.mode==TD_WAIT&&td.msg==0&&td.cash==transit_cases[service].fare-1,
-               "a closed window defers its funds check until the scheduled boarding opportunity");
-        world_tick(0,(transit_cases[service].period-2)*60-37);
-        expect(td.mode==TD_ROAM&&td.msg==4&&td.cash==transit_cases[service].fare-1,
-               "an insufficient scheduled fare uses the same unpaid rejection as immediate boarding");
+        expect(td.mode==TD_ROAM&&td.msg==4&&td.cash==transit_cases[service].fare-1&&td.ride_left==0,
+               "a closed window checks the fare on confirmation instead of leaving the courier waiting for a refusal");
     }
 
     transit_menu_case(6,transit_cases[6].phase+1);td.job=0;td_get_job(0,&td_job);td.left=2;
@@ -1337,7 +1347,7 @@ static void test_safe_transit_alighting(void) {
 static void test_cross_district_streetcar(void) {
     for(UBYTE index=0;index<8;index++)for(UBYTE scenario=0;scenario<3;scenario++) {
         UBYTE origin_id=43+index,target_id=origin_id<48?50:43;
-        UBYTE phase=target_id>origin_id?index*4:32+(7-index)*4;
+        UBYTE phase=target_id>origin_id?index*4:(7-index)*4;
         UBYTE duration=(target_id>origin_id?target_id-origin_id:origin_id-target_id)*4;
         UBYTE waiting=scenario==1,failing=scenario==2;
         td_stop_t origin,destination,depot;
@@ -1366,7 +1376,7 @@ static void test_cross_district_streetcar(void) {
         expect(td.mode==(waiting?TD_WAIT:TD_RIDE)&&td.seconds==second&&td.subsecond==subsecond&&
                td.cash==(waiting?30:27)&&td.ride_left==ride_left,
                "closing Queen map and pause resumes the same origin trip without time advancement or another fare");
-        if(waiting)world_tick(0,62*60-td.subsecond);
+        if(waiting)world_tick(0,30*60-td.subsecond);
         expect(td.mode==TD_RIDE&&td.cash==27&&td.ride_left==duration&&td.district==origin.district,
                "scheduled Queen boarding commits one fare while keeping the paid rider in the origin district");
         /* Atlas navigation changes the unsaved menu selection. The paid
@@ -1892,14 +1902,14 @@ static void test_animation(void) {
 
 static void test_car_damage(void) {
     /* A hard wall strike wears the car by its speed; vans take half. */
-    reset_case();prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;
+    reset_case();prime_car();td.u=393*16;td.v=450*16;geometry=EAST_WALL;
     UBYTE speed=(UBYTE)td.speed;driving_tick(J_A);
     expect(td_car_damage==speed,"a wall strike at speed damages the car by that speed");
-    reset_case();td.vehicle=1;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;
+    reset_case();td.vehicle=1;prime_car();td.u=393*16;td.v=450*16;geometry=EAST_WALL;
     speed=(UBYTE)td.speed;driving_tick(J_A);
     expect(td_car_damage==(speed+1)/2,"a van shrugs off half the damage");
     /* Past seventy the engine fails: a warning, smoke and a lower top speed. */
-    reset_case();td_car_damage=60;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
+    reset_case();td_car_damage=60;prime_car();td.u=393*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
     expect(td_car_damage>=TD_DAMAGE_FAIL&&td.msg==TD_MSG_SMOKING,"crossing the failing threshold warns of a smoking engine");
     geometry=CLEAR_GROUND;td.cooldown=0;td.speed=0;td_vx=td_vy=0;
     for(unsigned i=0;i<400;i++)driving_tick(J_A);
@@ -1909,7 +1919,7 @@ static void test_car_damage(void) {
     for(unsigned i=0;i<40;i++){td_tick++;td_anim_update();}
     expect(td_anim_parts[0].time&&td_anim_parts[0].kind==TD_PART_SMOKE,"a failing engine smokes from the bonnet");
     /* At a hundred the car is wrecked and only crawls until repaired. */
-    reset_case();td_car_damage=95;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
+    reset_case();td_car_damage=95;prime_car();td.u=393*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
     expect(td_car_damage==TD_DAMAGE_WRECK&&td.msg==TD_MSG_WRECKED,"a wrecked car says so");
     geometry=CLEAR_GROUND;td.speed=0;td_vx=td_vy=0;for(unsigned i=0;i<200;i++)driving_tick(J_A);
     expect(td.speed==6,"a wreck crawls");

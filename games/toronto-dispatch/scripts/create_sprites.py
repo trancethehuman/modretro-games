@@ -61,8 +61,8 @@ def frames():
     courier, traffic in six colours, civilians in four and the police."""
     out = []
 
-    def add(name, g, pal, size=(16, 16)):
-        out.append((name, g, P[pal], size))
+    def add(name, g, pal, size=None):
+        out.append((name, g, P[pal], size or (len(g[0]), len(g))))
 
     for vehicle, design in (('car', A.car_frames()), ('van', A.van_frames()),
                             ('motorcycle', A.moto_frames()), ('scooter', A.scooter_frames())):
@@ -75,13 +75,12 @@ def frames():
     add('beacon_pulse', A.grid(A.BEACON_PULSE), 'signal_yellow')
     add('car_door_open', A.door_frame(), 'courier_vehicle')
     # Traffic-only designs (cardinal views), also in the vehicle palette.
-    for name, design in (('traffic_taxi', cardinal(A.car_frames(True))), ('traffic_compact', A.compact_frames()),
+    # Taxis are the full-size sedan in yellow: they share its tiles.
+    for name, design in (('traffic_taxi', cardinal(A.car_frames())), ('traffic_compact', A.compact_frames()),
                          ('traffic_pickup', A.pickup_frames()), ('traffic_sports', A.sports_frames()),
                          ('police', A.police_frames())):
         for i, g in enumerate(design):
             add(f'{name}_{i}', g, 'courier_vehicle')
-    for i, g in enumerate(A.police_flash_frames()):
-        add(f'police_flash_{i}', g, 'courier_vehicle')
     # Sidewalk pickups: cash, first aid, ammunition (they bob, no glint frame).
     for name, design, pal in (('pickup_cash', A.PICKUP_CASH, 'signal_yellow'),
                               ('pickup_first_aid', A.PICKUP_FIRST_AID, 'traffic_red'),
@@ -128,7 +127,7 @@ def cardinal(frames):
 # The courier's vehicles in engine order, and the headlamp beam frame centre
 # relative to the vehicle in the eight headings (E, SE, S, SW, W, NW, N, NE).
 PLAYER_VEHICLES = ('car', 'van', 'motorcycle', 'scooter')
-BEAM_OFFSETS = ((14, 0), (10, 10), (0, 14), (-10, 10), (-14, 0), (-10, -10), (0, -14), (10, -10))
+BEAM_OFFSETS = ((16, 0), (10, 10), (0, 16), (-10, 10), (-16, 0), (-10, -10), (0, -16), (10, -10))
 
 
 def slice_count(fr, sheet, places, frame_defs):
@@ -151,7 +150,7 @@ def narrow(g):
     return all(not v for row in g for x, v in enumerate(row) if x < 4 or x > 11)
 
 
-def tile_boxes(size, g=None):
+def tile_boxes(size, g=None, centred=False):
     """8x16 tile cells and their canvas coordinates for a frame size.
 
     Small frames keep the original 16x16 coordinates (x 0/8, y 0) so compiled
@@ -161,6 +160,10 @@ def tile_boxes(size, g=None):
     w, h = size
     if size == (16, 16) and g is not None and narrow(g):
         return [(4, 0, 4, 0)], (0, 0)
+    if centred and size == (16, 32):
+        # Full-size vehicles facing north or south: centred on the 16x16 point,
+        # rows -8..24, so the north view is the vertical flip of the south.
+        return [(px, 16 * r, px, 8 - 16 * r) for r in range(2) for px in (0, 8)], (0, 0)
     if size == (32, 32):
         # Diagonal tracers: centred like wide frames, growing upward like tall ones.
         return [(px, 16 - 16 * r, px - 8, 16 * r) for r in range(2) for px in range(0, 32, 8)], (0, 8)
@@ -208,7 +211,7 @@ def build():
     frame_defs, anchors = [], {}
     for i, (name, g, pal, size) in enumerate(fr):
         ox, oy = places[i]
-        cells, anchor = tile_boxes(size, g)
+        cells, anchor = tile_boxes(size, g, centred=not name.startswith('tracer_'))
         if size != (16, 16) and not name.startswith('tracer_'):
             anchors[name] = anchor
         tiles = []
@@ -234,14 +237,16 @@ def build():
             # GB Studio's compiler hides pixels that overlap in one frame,
             # which would create new tiles: the light never touches the body.
             car, light = fr[index[f'player_{vehicle}_{d}']][1], fr[index[f'beam_{d}']][1]
-            assert not any(light[y][x] and 0 <= x + dx < 16 and 0 <= y + dy < 16 and car[y + dy][x + dx]
-                           for y in range(16) for x in range(16)), name
+            def pixels(g, ox=0, oy=0):
+                h, w = len(g), len(g[0])
+                return {(x - w // 2 + ox, y - h // 2 + oy) for y in range(h) for x in range(w) if g[y][x]}
+            assert not pixels(car) & pixels(light, dx, dy), name
             # GB Studio tile y grows upward; screen dy grows downward.
             tiles = [dict(t, id=ident(f'{name}-body-{n}')) for n, t in enumerate(body['tiles'])]
             tiles += [dict(t, id=ident(f'{name}-beam-{n}'), x=t['x'] + dx, y=t['y'] - dy)
                       for n, t in enumerate(beam['tiles'])]
             frame_defs.append({'id': ident(f'{name}-frame'), 'tiles': tiles})
-            fr.append((name, None, P['courier_vehicle'], (16, 16)))
+            fr.append((name, None, P['courier_vehicle'], fr[index[f'player_{vehicle}_{d}']][3]))
     assert len(fr) <= 256, 'actor frame indices are one byte'
     # Colour-only scenes split OBJ tiles evenly over both VRAM banks below the
     # UI art at tile 128: at most 64 8x16 tiles (128 8x8 tiles) per bank.
@@ -299,7 +304,7 @@ def outputs():
     for name in ('player_car_0', 'player_van_0', 'player_motorcycle_0', 'player_scooter_0',
                  *(f'person_{d}_0' for d in A.PEOPLE_DESIGNS),
                  'beacon', 'beacon_pulse', 'car_door_open',
-                 'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0', 'police_flash_0',
+                 'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0',
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
                  'bus_e', 'bus_w', 'streetcar_e', 'streetcar_w', 'ferry_s', 'ferry_n',
                  'knock_0', 'spark', 'tracer_0', 'reticle', 'arrow_0',

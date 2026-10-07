@@ -21,10 +21,10 @@ def check():
     assert stops == campaign['stops'][43:51] and len(campaign['stops']) == 51
     service = authored['service']
     assert service['stops'] == list(range(43, 51))
-    assert service['fare'] == 3 and service['period_seconds'] == 64
+    assert service['fare'] == 3 and service['period_seconds'] == 32
     assert service['boarding_window_seconds'] == 2 and service['segment_seconds'] == 4
     assert service['eastbound_phases'] == list(range(0, 32, 4))
-    assert service['westbound_phases'] == list(range(60, 28, -4))
+    assert service['westbound_phases'] == list(range(28, -4, -4))
     assert campaign['transit']['streetcar501'] == service
     assert [stop['district'] for stop in stops] == [1, 0, 0, 0, 0, 3, 3, 3]
     grids = {}

@@ -86,11 +86,18 @@ static void lf_beacon(void){
  * its lit frames). */
 static const BYTE lf_beam_dx[8]=TD_BEAM_DX;
 static const BYTE lf_beam_dy[8]=TD_BEAM_DY;
+static const BYTE lf_sight_dx[8]={40,28,0,-28,-40,-28,0,28};
+static const BYTE lf_sight_dy[8]={0,28,40,28,0,-28,-40,-28};
 static void lf_marker(void){
     actor_t *r=&actors[TD_ACTOR_RETICLE];UBYTE t=td_aim_target,f,d;
     if(td.onfoot&&t!=TD_NONE&&td.mode==TD_ROAM){
         if(t==8)lf_place_q4(r,td_traffic_u[TD_POLICE_SLOT],td_traffic_v[TD_POLICE_SLOT]);
         else{r->pos.x=actors[TD_ACTOR_PEDS+t].pos.x;r->pos.y=actors[TD_ACTOR_PEDS+t].pos.y;}
+        f=TD_FRAME_RETICLE;
+    }else if(td.onfoot&&td_aim_hold&&td.ammo&&td.mode==TD_ROAM&&(td_tick&4)){
+        /* Firing with nothing locked: a blinking sight 40 px along the aim. */
+        d=td_aim_dir&7;
+        lf_place(r,(UWORD)((WORD)(td.u>>4)+lf_sight_dx[d]),(UWORD)((WORD)(td.v>>4)+lf_sight_dy[d]));
         f=TD_FRAME_RETICLE;
     }else if(!td.onfoot&&td_daynight_lights&&td_car_colour!=TD_PAL_COURIER&&!td_entry_timer&&(td.mode==TD_ROAM||td.mode==TD_WAIT)){
         d=((td.heading+1)&15)>>1;
@@ -114,8 +121,8 @@ void td_life_present(void) BANKED {
         if(!(td_tr_ctrl&bit))continue;
         if(tr_mode[i]==TR_GONE){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
         lf_place_q4(a,td_traffic_u[i],td_traffic_v[i]);
-        /* A pursuing patrol car flashes its light bar. */
-        if(LF_IS_PATROL(i))lf_frame(a,td.wanted&&(td_tick&8)?TD_FRAME_POLICE_FLASH+(tr_head[i]>>1):TD_FRAME_POLICE+tr_head[i]);
+        /* A pursuing patrol car flashes its light bar red and blue. */
+        if(LF_IS_PATROL(i)){lf_frame(a,TD_FRAME_POLICE+tr_head[i]);TD_PALETTE(a)=td.wanted&&(td_tick&8)?TD_PAL_RED:TD_PAL_BLUE;}
         else lf_frame(a,td_traffic_bases[i]+tr_head[i]);
     }
     if(td_fx_kind){
