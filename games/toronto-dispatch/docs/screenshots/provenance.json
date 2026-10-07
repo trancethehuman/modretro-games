@@ -348,5 +348,61 @@
     "png_sha256": "5b676657d12c0bfadf8a05a387dcb8c6478f4fb802334fad26145e0fd5ee90b4",
     "inputs": "boot, 480 frames, left the car, courier written to the Queen St W sidewalk (452,488), faced right with nothing to lock, B held 12 frames: the blinking sight shows where the pistol fires",
     "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-none-driving.png",
+    "frame": 992,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "92cd709cb342179c69879734a6d6540e7e4a349dd748159b4d641a3a0f0e2e0d",
+    "inputs": "boot, 480 frames, A held 27 frames until driving at speed with no pop-up",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-notice.png",
+    "frame": 1026,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "fdbacae96ebe027dac9b810478d3e80d03a0a9e0acfb414e0ec46a644e7f510d",
+    "inputs": "then A+Right held 31 frames until the first pop-up (a kerb strike notice)",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-street-name.png",
+    "frame": 986,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "419953376d4a14b651da9f74c923b95aa6b4d3e31baf81b2b6b7efa49e5a8082",
+    "inputs": "boot, 480 frames, car written to Spadina Ave (380,620) heading north, 20 frames, A held 1 frames: the new street name pops up",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-job-accepted.png",
+    "frame": 1051,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "05325c477f710f01937ca5e5600099e007906ab48f862744a7538c319d54b47b",
+    "inputs": "boot, 480 frames, Select, A (contract 1), 70 frames: the briefing card above the next stop and the job row",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-job-driving.png",
+    "frame": 1199,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "42916d80e5f00e4278b54b4b6bdc5d99093deb5e0ec1987d0a40c3dc0a710584",
+    "inputs": "then A held 145 frames: once the call ends and the stop has been shown, driving clears the screen",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-idle-status.png",
+    "frame": 1295,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "068c626ba32b5f0b7e9a98f8ee444d6d92d61cbc913cb45a1ae639b7cbe814ac",
+    "inputs": "boot, 480 frames, A+B 70 frames (leave the car), courier written to (452,488), Right 20 frames, then 240 frames standing still",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+  },
+  {
+    "file": "hud-shot-ammo.png",
+    "frame": 1319,
+    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+    "png_sha256": "ac251b78ff686fd0dae94ea37aa2a2c73fe7b223b91eef58fc42e41d0936d0b4",
+    "inputs": "then walking right until clear (1 frames), B 4 frames, 6 frames: the shot pops up the ammunition count",
+    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
   }
 ]

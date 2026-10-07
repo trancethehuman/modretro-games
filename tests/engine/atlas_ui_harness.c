@@ -486,25 +486,29 @@ static void test_menus_and_radio(void) {
 
     /* A radio call raises the HUD and types Rosa's lines, then closes. */
     reset_case();td.mode=TD_ROAM;td_ui_init();td_ui_draw();
-    expect(window_y==120,"the HUD is three rows without a call");
+    expect(window_y==144,"nothing covers the city before there is something to report");
+    td_ui_hud_tick();
+    expect(window_y==144-16,"an active job pops up its next stop and its status row");
+    read_window_text(0,text);expect(window_tiles[0][0][0]==glyph_tile(TD_UI_PIN)&&strstr(text,"TEST DISTRICT"),"the first pop-up row names where to go");
+    read_window_text(1,text);expect(strstr(text,"199S")!=NULL&&strstr(text,"4/5")!=NULL,"the second shows the stop count and time left");
     unsigned plays=audio_plays;
     td_radio_say(TD_RADIO_INTRO);td_tick=1;td_radio_tick();
-    expect(window_y==96&&audio_plays==plays+1,"a call chirps and raises the HUD for the radio card");
+    expect(window_y==144-40&&audio_plays==plays+1,"a call chirps and raises its card above the pop-up rows");
     read_window_text(0,text);expect(!strncmp(text+3,"ROSA - DISPATCH",15),"the card names the speaker beside the portrait");
     expect(window_tiles[0][0][0]==glyph_tile(TD_UI_PORTRAIT_0)&&window_tiles[0][2][2]==glyph_tile(TD_UI_PORTRAIT_8),
            "the card shows the portrait's nine tiles");
-    read_window_text(4,text);expect(strstr(text,"199S")!=NULL,"the HUD's job row moves below the card");
+    read_window_text(4,text);expect(strstr(text,"199S")!=NULL,"the job row sits below the card");
     read_window_text(1,text);expect(text[3]==' ',"text starts blank");
     for(unsigned i=0;i<40;i++){td_tick++;td_radio_tick();}
     read_window_text(1,text);expect(!strncmp(text+3,"MORNING, ROOKIE.",16),"the first line types out");
     read_window_text(2,text);expect(!strncmp(text+3,"ROSA ON DISPATCH.",17),"then the second");
     td_radio_say(TD_RADIO_JOB);
-    for(unsigned i=0;i<4*(34+TD_RADIO_HOLD)&&window_y==96;i++){td_tick++;td_radio_tick();}
+    for(unsigned i=0;i<4*(34+TD_RADIO_HOLD)&&window_y==144-40;i++){td_tick++;td_radio_tick();}
     read_window_text(1,text);expect(!strcmp(text+3,"PARCEL ROUND.    "),"a queued call follows the current one on a clean card");
     read_window_text(2,text);expect(!strcmp(text+3,"STOP AT EACH PIN."),"with its own second line");
     for(unsigned i=0;i<2*(34+TD_RADIO_HOLD);i++){td_tick++;td_radio_tick();}
-    expect(window_y==120&&td_radio_playing()==TD_NONE,"the HUD drops back once the calls end");
-    read_window_text(1,text);expect(strstr(text,"199S")!=NULL,"the HUD repaints in its own rows");
+    expect(window_y==144-16&&td_radio_playing()==TD_NONE,"the card drops away once the calls end");
+    read_window_text(1,text);expect(strstr(text,"199S")!=NULL,"the pop-up rows repaint in their own rows");
     /* A call that starts while an old card is still up gets a clean card. */
     td_radio_say(TD_RADIO_INTRO);for(unsigned i=0;i<20;i++){td_tick++;td_radio_tick();}
     td_radio_script=TD_NONE;td_radio_say(TD_RADIO_NIGHT);
@@ -516,12 +520,34 @@ static void test_menus_and_radio(void) {
     td_radio_script=TD_NONE;td_radio_next=TD_NONE;td_radio_say(TD_RADIO_BUSTED);td.wanted=0;td_radio_tick();
     expect(td_radio_playing()==TD_RADIO_BUSTED&&td_radio_next==TD_NONE,"an arrest does not also report losing the police");
 
-    /* On a job the HUD shows the distance to the objective before the compass. */
+    /* On a job the status row shows the distance to the objective. */
     td_radio_script=td_radio_next=TD_NONE;reset_case();td.mode=TD_ROAM;td.district=0;td_target.district=0;td_beacon_shown=1;
-    td_beacon_u=(td.u>>4)+100;td_beacon_v=td.v>>4;td_ui_init();td_ui_draw();
-    read_window_text(0,text);expect(!strncmp(text+15,"400M",4),"a hundred pixels reads as 400 m");
-    td_beacon_u=(td.u>>4)+300;td_tick=0;td_ui_compass();
-    read_window_text(0,text);expect(!strncmp(text+15,"1.2K",4),"three hundred pixels reads as 1.2 km");
+    td_beacon_u=(td.u>>4)+100;td_beacon_v=td.v>>4;td_ui_init();td_ui_draw();td_tick=1;td_ui_hud_tick();
+    read_window_text(1,text);expect(strstr(text,"400M")!=NULL,"a hundred pixels reads as 400 m");
+    td_beacon_u=(td.u>>4)+300;td_ui_hud_tick();
+    read_window_text(1,text);expect(strstr(text,"1.2K")!=NULL,"three hundred pixels reads as 1.2 km");
+
+    /* Pop-ups: free roam shows nothing until something changes; a shot
+     * shows the ammunition for a few seconds; standing still shows the
+     * status line; low vitality stays up. */
+    reset_case();td.mode=TD_ROAM;td.job=TD_NONE;td_beacon_shown=0;td_ui_init();td_ui_draw();td_tick=1;
+    td_ui_hud_tick();expect(window_y==144,"free roam with nothing to report leaves the whole screen to the city");
+    td.u+=16;td.ammo--;td_ui_hud_tick();
+    read_window_text(0,text);expect(window_y==144-8&&strstr(text,"32")!=NULL&&strstr(text,"123")==NULL,
+                                    "a shot pops up the ammunition only");
+    for(unsigned i=0;i<30;i++){td.u+=16;td_ui_hud_tick();}
+    expect(window_y==144,"the ammunition count sinks again after a few seconds");
+    for(unsigned i=0;i<12;i++)td_ui_hud_tick();
+    read_window_text(0,text);expect(window_y==144-8&&strstr(text,"123")&&strstr(text,"77")&&strstr(text,"33")==NULL&&strstr(text,"32"),
+                                    "standing still shows cash, vitality and ammunition");
+    td.u+=16;td_ui_hud_tick();expect(window_y==144,"moving again hides the status line");
+    td.vitality=20;td_ui_hud_tick();td_ui_hud_tick();
+    for(unsigned i=0;i<30;i++){td.u+=16;td_ui_hud_tick();}
+    read_window_text(0,text);expect(window_y==144-8&&strstr(text,"20"),"low vitality stays on screen");
+    td.vitality=90;td.wanted=2;for(unsigned i=0;i<30;i++){td.u+=16;td_ui_hud_tick();}
+    read_window_text(0,text);expect(window_y==144-8&&strstr(text,"WANTED"),"wanted stars stay up while the police are looking");
+    td.wanted=0;td.msg=9;td_ui_draw();read_window_text(0,text);
+    expect(window_y==144-8&&strstr(text,"VEHICLE IS PARKED"),"a notice pops up on its own");
 }
 
 int main(void) {

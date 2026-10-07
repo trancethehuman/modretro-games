@@ -86,7 +86,7 @@ void deactivate_actor(actor_t *actor) { actor->flags&=~ACTOR_FLAG_ACTIVE; }
 void td_ui_init(void) { ui_draws++; }
 void td_ui_draw(void) { ui_draws++; }
 void td_ui_tick(void) {}
-void td_ui_compass(void) {}
+void td_ui_hud_tick(void) {}
 /* Radio calls are drawn by td_ui.c (atlas_ui_harness); here the runtime
  * only records which script it queued last. */
 UBYTE radio_said=255,td_radio_script=255,td_radio_wanted;UWORD td_last_pay;
@@ -1172,6 +1172,20 @@ static void test_v5_migration_and_interrupted_upgrade(void) {
     }
 }
 
+static void test_station_reach(void) {
+    /* Every boarding stop of the scene is cached, including the last of
+     * the core's seventeen; reach covers the sidewalk sign beside a stop. */
+    for(UBYTE id=0;id<TD_STOPS;id++) {
+        td_stop_t stop;native_case();td_get_stop(id,&stop);
+        if(!stop.transit||!td_transit_can_origin(id))continue;
+        test_current_district=td.district=stop.district;td.onfoot=1;
+        td.u=stop.u*16;td.v=(stop.v+16)*16;
+        char name[90];snprintf(name,sizeof(name),"station %u is offered from its sidewalk sign",id);
+        expect(td_origin()==id,name);
+    }
+    native_case();td.u=300*16;td.v=300*16;expect(td_origin()==TD_NONE,"away from stations there is no TTC prompt");
+}
+
 static void test_district_semantic_fallback(void) {
     native_case();td.cash=111;td_save();td.cash=222;td_save();
     UBYTE newest=td_save_slot,image[sizeof(td_test_sram)];memcpy(image,td_test_sram,sizeof(image));
@@ -1887,7 +1901,7 @@ static void test_animation(void) {
     td.u=400*16;td.v=450*16;
     for(unsigned i=0;i<150;i++){driving_tick(J_A);td_anim_update();}
     expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR,"no headlamps by day");
-    expect(camera_offset_x<=-20&&camera_offset_y==-16,"the camera looks ahead of an eastbound car");
+    expect(camera_offset_x<=-20&&camera_offset_y==0,"the camera looks ahead of an eastbound car");
     td.seconds=(UWORD)hour_seconds(22*60);td_daynight_apply(0);driving_tick(J_A);
     expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR_LIT,"night headlamps light the road ahead of the car");
     expect(actors[8].frame_start<TD_FRAME_PLAYER_CAR_LIT,"a parked car keeps its lamps off");
@@ -1896,7 +1910,7 @@ static void test_animation(void) {
     td.vehicle=0;td.onfoot=1;td.speed=0;driving_tick(0);
     expect(PLAYER.frame_start>=TD_FRAME_COURIER_WALK&&PLAYER.frame_start<TD_FRAME_COURIER_WALK+8,"headlamps go out on foot");
     for(unsigned i=0;i<80;i++){td_tick++;td_anim_update();}
-    expect(camera_offset_x==0&&camera_offset_y==-16,"the camera recentres on foot");
+    expect(camera_offset_x==0&&camera_offset_y==0,"the camera recentres on foot");
 }
 
 
@@ -1948,7 +1962,7 @@ int main(void) {
     test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
     test_safe_transit_alighting();
     test_cross_district_streetcar();
-    test_v5_migration_and_interrupted_upgrade();test_district_semantic_fallback();
+    test_v5_migration_and_interrupted_upgrade();test_district_semantic_fallback();test_station_reach();
     test_reciprocal_portals();test_queue_failure_and_remote_boot();test_car_entry_at_portal();test_first_frame_actors();
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();

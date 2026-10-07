@@ -141,5 +141,5 @@ void td_anim_update(void) BANKED {
         if(td_look_y<an_ty)td_look_y++;else if(td_look_y>an_ty)td_look_y--;
         cam=1;
     }
-    if(cam){camera_offset_x=shake-td_look_x;camera_offset_y=-16-td_look_y;}
+    if(cam){camera_offset_x=shake-td_look_x;camera_offset_y=-td_look_y;}
 }

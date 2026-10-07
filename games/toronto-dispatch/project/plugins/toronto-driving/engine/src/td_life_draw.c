@@ -62,7 +62,7 @@ static void lf_beacon(void){
     actor_t *b=&actors[1];WORD x,y;UWORD ax,ay,pu=td.u>>4,pv=td.v>>4;UBYTE east,south,d;
     if(!td_beacon_shown){b->flags|=ACTOR_FLAG_HIDDEN;return;}
     x=(WORD)(td_beacon_u-(UWORD)scroll_x);y=(WORD)(td_beacon_v-(UWORD)scroll_y);
-    if((UWORD)(x-4)<152&&(UWORD)(y-8)<108){
+    if((UWORD)(x-4)<152&&(UWORD)(y-8)<128){
         lf_place(b,td_beacon_u,td_beacon_v-12-((sys_time>>4)&1));
         lf_frame(b,TD_FRAME_BEACON+((sys_time>>4)&1));
     }else{
@@ -72,7 +72,7 @@ static void lf_beacon(void){
         if(ax>(ay<<1))d=east?0:4;
         else if(ay>(ax<<1))d=south?2:6;
         else d=south?(east?1:3):(east?7:5);
-        x=x<10?10:x>148?148:x;y=y<14?14:y>110?110:y;
+        x=x<10?10:x>148?148:x;y=y<14?14:y>126?126:y;
         lf_place(b,scroll_x+x+4,scroll_y+y+4);
         lf_frame(b,TD_FRAME_ARROW+d);
     }

@@ -91,7 +91,7 @@ void td_ui_init(void) BANKED;
 void td_ui_draw(void) BANKED;
 /* Menu cursor/prompt animation and the HUD compass; cheap when unchanged. */
 void td_ui_tick(void) BANKED;
-void td_ui_compass(void) BANKED;
+void td_ui_hud_tick(void) BANKED;
 /* Dispatcher radio calls (td_ui.c): queue a script from td_radio_data.h;
  * the tick types, holds and closes calls and raises the story beats that
  * come from the city's state (stars, nightfall, quiet stretches). */

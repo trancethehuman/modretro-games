@@ -10,6 +10,7 @@
 #include "td_atlas.h"
 #include "td_life.h"
 #include "td_daynight.h"
+#include "td_hud.h"
 #include "td_radio_data.h"
 #include "actor.h"
 #include "data_manager.h"
@@ -34,6 +35,7 @@ static UWORD td_map_camera_x,td_map_camera_y;
 static UBYTE td_ui_mode=255;
 /* First window row of the HUD: 0, or 3 below a radio card. */
 static UBYTE td_hud_y;
+static UBYTE td_hud_rows;
 UWORD td_last_pay;
 static char td_line[40];
 static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
@@ -338,6 +340,8 @@ void td_map_close(void) BANKED {
 }
 void td_ui_init(void) BANKED {
     UBYTE i;td_ui_mode=255;td_map_active=0;td_hud_y=0;td_title_shown=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);
+    /* A fresh scene reports its objective once and starts with no pop-ups. */
+    td_hud_rows=0;td_hud_reset();
     /* Font in bank 1 from tile 192, art in bank 0 tiles 128..191 (above the
      * scene's 128 bank-0 tiles and outside the sprite tiles). Every window
      * cell starts as a bank-1 font cell on UI palette 7. */
@@ -359,20 +363,9 @@ static const char *const td_menu_hints[TD_MENU_ITEMS]={
     "BACK TO THE CITY","SEE ROUTE AND CITY","PICK A DELIVERY","STEP OUT ON FOOT",
     "PARKED, NO JOB","AT A STOP, ON FOOT","HEAL, AMMO, REPAIR","DROP THE JOB","A: CHANGE SOUND"};
 static const char *const td_audio_names[]={"MUSIC+FX","FX ONLY","SILENT"};
-static UBYTE td_ui_blink,td_compass,td_menu_top;
+static UBYTE td_ui_blink,td_menu_top;
 static const char *td_service_icon(UBYTE service){
     return service==TD_TRANSIT_TRAIN?TD_UI_SUBWAY:service==TD_TRANSIT_BUS?TD_UI_BUS:service==TD_TRANSIT_FERRY?TD_UI_FERRY:TD_UI_TRANSIT;
-}
-/* Direction from the courier to the objective (td_beacon_u/v), in eight
- * steps; a ring once close, blank without a reachable objective. */
-static char td_compass_code(void){
-    UWORD bu=td_beacon_u,bv=td_beacon_v,pu=td.u>>4,pv=td.v>>4,ax,ay;UBYTE east,south;
-    if(!td_beacon_shown)return ' ';
-    east=bu>=pu;south=bv>=pv;ax=east?bu-pu:pu-bu;ay=south?bv-pv:pv-bv;
-    if(ax<12&&ay<12)return TD_UI_TARGET[0];
-    if(ax>(ay<<1))return east?TD_UI_ARROW_E[0]:TD_UI_ARROW_W[0];
-    if(ay>(ax<<1))return south?TD_UI_ARROW_S[0]:TD_UI_ARROW_N[0];
-    return south?(east?TD_UI_ARROW_SE[0]:TD_UI_ARROW_SW[0]):(east?TD_UI_ARROW_NE[0]:TD_UI_ARROW_NW[0]);
 }
 /* Writes n characters into window row y from column x, keeping the row
  * cache in step. */
@@ -395,19 +388,6 @@ static void td_distance_text(char *d){
     else{t[0]='0'+(UBYTE)(m/1000);t[1]='.';t[2]='0'+(UBYTE)((m%1000)/100);t[3]='K';e=t+4;}
     n=(UBYTE)(e-t);for(i=0;i<n;i++)d[4-n+i]=t[i];
 }
-/* Called every few frames while driving or walking: repaints only the
- * distance and compass cells when they change. */
-void td_ui_compass(void) BANKED {
-    char c;UBYTE y=td_hud_y;
-    if(td.mode!=TD_ROAM||td_ui_mode!=TD_ROAM||td.msg)return;
-    if(td.job!=TD_NONE){
-        td_distance_text(td_line);
-        if(memcmp(&td_cached_rows[y][15],td_line,4))td_put(15,y,td_line,4);
-    }
-    c=td_compass_code();
-    if(c==td_compass)return;
-    td_compass=c;td_put(19,y,&c,1);
-}
 /* Menus animate their cursor (and the title its prompt) every 16 frames. */
 void td_ui_tick(void) BANKED {
     UBYTE blink=(sys_time>>4)&1;
@@ -415,88 +395,96 @@ void td_ui_tick(void) BANKED {
     td_ui_blink=blink;
     if(td.mode==TD_PAUSE||td.mode==TD_HELP||td.mode==TD_BOARD||td.mode==TD_TRANSIT||td.mode==TD_RESULT)td_ui_draw();
 }
-/* HUD inputs from the previous repaint: row 1's values and the courier
- * position whose street name is cached. A repaint after another screen
- * (changed) always reformats. */
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
             "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","HOLD A+B: GET OUT","HOSPITAL",
             "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
-static UWORD td_hud_key[6];
-static UWORD td_street_u=65535,td_street_v;static UBYTE td_street_d;
-static char td_street_name[20];
-static void td_radio_paint(void);
-static void td_hud(UBYTE changed){
-    UBYTE service,i,y;UWORD key[6],u=td.u>>4,v=td.v>>4;
-    /* A radio call raises the HUD by three rows and sits above it. */
-    if(td_radio_script!=TD_NONE){
-        if(!td_hud_y||changed){td_hud_y=3;td_radio_paint();changed=1;}
-        ui_set_pos(0,96);
-    }else{
-        if(td_hud_y){td_hud_y=0;changed=1;}
-        ui_set_pos(0,120);
-    }
-    y=td_hud_y;
-    if(td.mode==TD_WAIT){
-        service=td_transit_service(td.transit_origin);
-        td_format(td_line,TD_UI_CLOCK "DEPARTS IN %u SEC",td_transit_departure(td.transit_origin,td.transit_target,td.seconds));td_row(y,td_line);
-        strcpy(td_line,td_service_icon(service));td_transit_label(td.transit_origin,td_line+1);td_row(y+1,td_line);
-        td_row(y+2,TD_UI_BTN_B "CANCEL WAIT");td_hud_key[0]=255;return;
-    }
-    if(td.mode==TD_RIDE){
-        td_format(td_line,"%sRIDING %u SEC",td_service_icon(td_transit_service(td.transit_origin)),td.ride_left);td_row(y,td_line);
-        td_line[0]=TD_UI_PIN[0];strcpy(td_line+1,td_cursor.name);td_row(y+1,td_line);
-        td_row(y+2,TD_UI_CHECK "FARE PAID / ON TIME");td_hud_key[0]=255;return;
-    }
-    if(td.msg){
-        td_row(y,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":td_messages[td.msg]);
-    }else{
-        if(td.wanted){
-            /* Police attention replaces the street name while it lasts. */
-            strcpy(td_line,"WANTED ");
-            for(i=0;i<td.wanted;i++)td_line[7+i]=TD_UI_STAR[0];
-            td_line[7+i]=0;
-        }else if(td_station_near!=TD_NONE){td_line[0]=TD_UI_BTN_B[0];td_transit_label(td_station_near,td_line+1);
-        }else if(td.district==0&&u>608&&u<672&&v>496&&v<560)strcpy(td_line,td.seconds%12<7?"YONGE: EW GO":"YONGE: NS GO");
-        else{
-            if(u!=td_street_u||v!=td_street_v||td.district!=td_street_d){
-                td_get_street(u,v,td_street_name);td_street_u=u;td_street_v=v;td_street_d=td.district;
-            }
-            strcpy(td_line,td_street_name);
-        }
-        /* Street name, then the compass in the last column. */
-        for(i=0;i<19&&td_line[i];i++);
-        for(;i<19;i++)td_line[i]=' ';
-        /* On a job, the distance to the objective precedes the compass. */
-        if(td.job!=TD_NONE){td_line[14]=' ';td_distance_text(td_line+15);}
-        td_compass=td_compass_code();td_line[19]=td_compass;td_line[20]=0;td_row(y,td_line);
-    }
-    key[5]=td.district|((UWORD)td_route_district<<8)|((UWORD)td_target.district<<12);
-    if(td.job!=TD_NONE){key[0]=1;key[1]=td.stage;key[2]=td_job.count;key[3]=td.left;key[4]=td.health|((UWORD)td.vitality<<8);}
-    else{key[0]=2;key[1]=td.cash;key[2]=td.onfoot|(td.vehicle<<1);key[3]=td.done|((UWORD)td_car_damage<<8);key[4]=td.vitality|((UWORD)td.ammo<<8);}
-    if(!changed&&!memcmp(key,td_hud_key,sizeof(key)))return;
-    memcpy(td_hud_key,key,sizeof(key));
-    if(td.job!=TD_NONE){
-        /* The last ten seconds flash a red clock. */
-        td_format(td_line,TD_UI_BOX "%u/%u %s%uS " TD_UI_HEART "%u",td.stage+1,td_job.count,
-                  td.left<=10&&(td.left&1)?TD_UI_CLOCK_ALERT:TD_UI_CLOCK,td.left,td.health);td_row(y+1,td_line);
+/* ------------------------------------------------------------ pop-up HUD
+ * Nothing covers the city by default. Up to two rows rise from the bottom
+ * edge when there is something to say and sink again afterwards:
+ *   row A, one item by priority: a notice, the station within reach, the
+ *     next stop after a job starts or advances, a new street name, wanted
+ *     stars;
+ *   row B, what changed or matters now: the job (time, distance, cargo)
+ *     when time is short, the stop has just changed or the courier stands
+ *     still; cash, vitality, ammunition and car condition for a few seconds
+ *     after they change (ammunition after every shot), vitality while low.
+ * Standing still for a moment shows the whole status line. Timers count
+ * calls of td_ui_hud_tick (every eighth update, about 7 a second). */
+static char *td_cat(char *d,const char *s){while(*s)*d++=*s++;*d=0;return d;}
+/* Row A text into td_line; FALSE when there is nothing to say. */
+static UBYTE td_hud_row_a(void){
+    UBYTE i;
+    if(td.msg){strcpy(td_line,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":td_messages[td.msg]);return TRUE;}
+    if(td_station_near!=TD_NONE){td_line[0]=TD_UI_BTN_B[0];td_transit_label(td_station_near,td_line+1);return TRUE;}
+    if(td_pop_target&&td.job!=TD_NONE){
         td_line[0]=TD_UI_PIN[0];
         if(td_target.district!=td.district){
             if(td_route_district!=TD_NONE)td_get_district_name(td_route_district,td_line+1);
             else strcpy(td_line+1,"NO ROAD ROUTE");
         }else strcpy(td_line+1,td_target.name);
-        /* Objective name, then the courier's own vitality. */
-        td_line[14]=0;for(i=1;i<14&&td_line[i];i++);
-        td_format(td_line+i," " TD_UI_MEDIC "%u",td.vitality);
-        td_row(y+2,td_line);
-    }else{
-        /* Driving, the last figure is the car's condition; on foot, deliveries. */
-        td_format(td_line,TD_UI_COIN "%u " TD_UI_MEDIC "%u " TD_UI_AMMO "%u %s%u",td.cash,td.vitality,td.ammo,
-                  td.onfoot?TD_UI_BOX:TD_UI_CAR,td.onfoot?td.done:TD_DAMAGE_WRECK-td_car_damage);td_row(y+1,td_line);
-        td_row(y+2,td.onfoot?TD_UI_BTN_A "PUNCH " TD_UI_BTN_B "SHOOT " TD_UI_BTN_START_0 TD_UI_BTN_START_1 TD_UI_BTN_START_2:
-                           TD_UI_BTN_SEL_0 TD_UI_BTN_SEL_1 "JOBS " TD_UI_BTN_A TD_UI_BTN_B "HOLD: EXIT");
+        return TRUE;
     }
+    if(td_pop_street){strcpy(td_line,td_street_name);return TRUE;}
+    if(td.wanted){
+        strcpy(td_line,"WANTED ");
+        for(i=0;i<td.wanted;i++)td_line[7+i]=TD_UI_STAR[0];
+        td_line[7+i]=0;return TRUE;
+    }
+    return FALSE;
 }
+/* Row B text into td_line; FALSE when nothing is worth showing. */
+static UBYTE td_hud_row_b(void){
+    char *d=td_line;UBYTE all=td_still>=10;
+    *d=0;
+    if(td.job!=TD_NONE&&(td_pop_job||all||td.left<=15)){
+        *d++=TD_UI_BOX[0];d=td_digits(d,td.stage+1,0);*d++='/';d=td_digits(d,td_job.count,0);*d++=' ';
+        d=td_cat(d,td.left<=10&&(td.left&1)?TD_UI_CLOCK_ALERT:TD_UI_CLOCK);d=td_digits(d,td.left,0);*d++='S';
+        if(td_beacon_shown){char t[5],*k=t;td_distance_text(t);t[4]=0;while(*k==' ')k++;if(*k!='0'){*d++=' ';d=td_cat(d,k);}}
+        if(td.health<100){*d++=' ';d=td_cat(d,TD_UI_HEART);d=td_digits(d,td.health,0);}
+        *d=0;
+    }
+    if(td_pop_cash||all){if(d!=td_line)*d++=' ';d=td_cat(d,TD_UI_COIN);d=td_digits(d,td.cash,0);}
+    if(td_pop_vit||(all&&td.vitality<100)||td.vitality<=30){if(d!=td_line)*d++=' ';d=td_cat(d,TD_UI_MEDIC);d=td_digits(d,td.vitality,0);}
+    if(td_pop_ammo||(all&&td.onfoot)){if(d!=td_line)*d++=' ';d=td_cat(d,TD_UI_AMMO);d=td_digits(d,td.ammo,0);}
+    if(!td.onfoot&&(td_pop_car||(all&&td_car_damage))){if(d!=td_line)*d++=' ';d=td_cat(d,TD_UI_CAR);d=td_digits(d,TD_DAMAGE_WRECK-td_car_damage,0);}
+    *d=0;td_line[20]=0;
+    return d!=td_line;
+}
+static void td_radio_paint(void);
+static void td_hud(UBYTE changed){
+    UBYTE rows,a,b,top;
+    char row_a[21];
+    /* A radio call puts its three-row card above the pop-up rows. */
+    if(td_radio_script!=TD_NONE){if(!td_hud_y||changed){td_hud_y=3;td_radio_paint();changed=1;}}
+    else if(td_hud_y){td_hud_y=0;changed=1;}
+    if(td.mode==TD_WAIT||td.mode==TD_RIDE){
+        rows=3;if(changed||td_hud_rows!=rows){td_hud_rows=rows;ui_set_pos(0,(UBYTE)(144-((td_hud_y+rows)<<3)));}
+        top=td_hud_y;
+        if(td.mode==TD_WAIT){
+            td_format(td_line,TD_UI_CLOCK "DEPARTS IN %u SEC",td_transit_departure(td.transit_origin,td.transit_target,td.seconds));td_row(top,td_line);
+            strcpy(td_line,td_service_icon(td_transit_service(td.transit_origin)));td_transit_label(td.transit_origin,td_line+1);td_row(top+1,td_line);
+            td_row(top+2,TD_UI_BTN_B "CANCEL WAIT");
+        }else{
+            td_format(td_line,"%sRIDING %u SEC",td_service_icon(td_transit_service(td.transit_origin)),td.ride_left);td_row(top,td_line);
+            td_line[0]=TD_UI_PIN[0];strcpy(td_line+1,td_cursor.name);td_row(top+1,td_line);
+            td_row(top+2,TD_UI_CHECK "FARE PAID / ON TIME");
+        }
+        return;
+    }
+    a=td_hud_row_a();if(a){memcpy(row_a,td_line,20);row_a[20]=0;}
+    b=td_hud_row_b();
+    rows=a+b;
+    if(changed||rows!=td_hud_rows){
+        td_hud_rows=rows;
+        ui_set_pos(0,(UBYTE)(144-((td_hud_y+rows)<<3)));
+    }
+    top=td_hud_y;
+    if(a)td_row(top++,row_a);
+    if(b)td_row(top,td_line);
+}
+/* td_hud.c decides when the pop-ups change; this repaints them. */
+void td_ui_hud_paint(void) BANKED {if(td_ui_mode==td.mode&&td.mode==TD_ROAM)td_hud(0);}
 /* The controls card below the title illustration starts at row 11. */
 typedef char td_title_leaves_card_rows[(TD_TITLE_ROWS==11)?1:-1];
 /* Menus are bottom sheets over the paused city: a frame of `rows` window

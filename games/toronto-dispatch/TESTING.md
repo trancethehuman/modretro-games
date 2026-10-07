@@ -1,5 +1,16 @@
 # Testing record
 
+## Pop-up HUD — candidate, 2026-10-07
+
+Same toolchain as below; CLI build and PyBoy evidence only.
+
+- ROM: `make:rom` of this source, 524,288 bytes, SHA-256 `6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265`. Memory guard passes: heap `DAF0`, stack `DF00`, 1,040 bytes of reserve. The first attempt overflowed `td_ui.c`'s bank by 106 bytes and, after moving the timing code to `td_hud.c`, left 1,020 bytes of reserve; storing station positions as bytes restored 1,040.
+- `make check` passes: 4,418 host engine checks (new: every boarding stop in every scene is offered from its sidewalk sign, none away from stations; the camera has no HUD offset), 7,408,583 atlas UI checks (new: nothing shown in free roam with nothing to report, a job's next stop and status rising on start, the radio card above the pop-up rows, a shot showing only the ammunition and its fading, standing still showing the status line and moving hiding it, low vitality staying, wanted stars, notices; distance in the job row), and the other suites.
+- Emulator (PyBoy; inputs in `docs/screenshots/provenance.json`): driving with nothing to report leaves the whole screen to the city; a kerb strike pops up its notice; turning onto Spadina pops up "SPADINA AVE"; accepting contract 1 raises Rosa's card above the next stop and the job row, which clear once the call ends and the car is moving; standing still shows cash and ammunition; a shot shows the ammunition only.
+- Pacing, PyBoy, 3,600 frames per route from boot, previous build (`b72a8adc…`) -> this build: driving 55.40 -> 56.29 updates per second over ten routes, walking 58.70 -> 58.85 over four. The pop-up tick costs about 1.1 scanlines per frame while driving (1.7 before repaints were skipped when nothing visible changed).
+- OAM, 900 samples: driving at most 15 hardware sprites and 7 on one scanline, walking 15 and 6, shooting 14 and 5; none over 10.
+- Not verified: hardware or cartridge display and timing, plugin build, and human judgement of pop-up timing and legibility.
+
 ## Realistic downtown, aiming, bigger cars and transit — candidate, 2026-10-07
 
 Same Linux toolchain as below (GB Studio CLI 4.3.2 from source, GBDK 4.5.0, PyBoy 2.7.0); CLI build and emulator evidence only, not plugin, streamed-device or cartridge evidence. "Previous" is the round-3 candidate `3f5574b5…` below.
