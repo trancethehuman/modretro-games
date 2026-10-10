@@ -17,10 +17,11 @@ static UWORD td_route_position(UBYTE base,UBYTE identity,UWORD start){
 }
 
 #define TD_ROUTE_CANDIDATES 48
-/* A slot keeps its route while the walker is this close (whole pixels);
-   walkers show within 112 x 96 of the courier (TORONTO.c). */
+/* A slot keeps its route while the walker is this close (whole pixels)
+   and is drawn the same distance out (TORONTO.c), past everything the
+   look-ahead camera shows, so nobody appears or vanishes in view. */
 #define TD_ROUTE_KEEP_U 136
-#define TD_ROUTE_KEEP_V 104
+#define TD_ROUTE_KEEP_V 120
 /* Identities per district stay below TD_ROUTE_IDS (td_world_routes.h);
    held/window sets keep one bit each. */
 #define TD_ROUTE_BYTES (TD_ROUTE_IDS/8)

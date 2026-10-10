@@ -14,7 +14,10 @@
 #define TD_WANTED_MAX 5
 #define TD_AMMO_START 12
 #define TD_AMMO_MAX 99
-#define TD_HEAT_SECONDS 12
+/* Seconds out of police sight that lose a star: shorter at low levels, so
+ * a minor offence is easy to shake off. TD_HEAT_SECONDS is the largest. */
+#define TD_HEAT_FOR(w) (4+((w)<<1))
+#define TD_HEAT_SECONDS TD_HEAT_FOR(TD_WANTED_MAX)
 #define TD_SUPPLY_PRICE 20
 
 /* Fictional hospital forecourt in the core district (east of University,
@@ -104,6 +107,11 @@ void td_life_punch(void) BANKED;
 /* Pressed-button edges are valid on the first motion step of an update
  * (TORONTO.c); td_running is set while the courier runs on foot. */
 extern UBYTE td_input_edge,td_running;
+/* On foot, A and B together while moving: a dodge roll (TORONTO.c). Rounds
+ * miss a rolling courier. */
+extern UBYTE td_rolling;
+/* Updates the world stays frozen after a telling blow (hit-stop). */
+extern UBYTE td_hitstop;
 /* Set by the A+B chord in a vehicle until the car stops and the courier
  * gets out. */
 extern UBYTE lf_exit_req;

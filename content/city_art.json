@@ -21,7 +21,7 @@
     976,
     0
    ],
-   "tiles": 352
+   "tiles": 343
   },
   {
    "slug": "toronto_core_sw",
@@ -9650,11 +9650,11 @@
  },
  "greenery": {
   "tiles": {
-   "species": 1828,
+   "species": 1808,
    "iron": 169,
-   "hedge": 199,
+   "hedge": 83,
    "planter": 9,
-   "bush": 114,
+   "bush": 66,
    "clover": 536,
    "flowers": 8
   },
@@ -9664,7 +9664,10 @@
    "toronto_core_ne:clover",
    "toronto_core_ne:planter",
    "toronto_core_ne:iron",
-   "toronto_core_ne:picket"
+   "toronto_core_ne:picket",
+   "toronto_core_ne:bush",
+   "toronto_core_ne:hedge",
+   "toronto_core_ne:species_willow"
   ]
  },
  "validation": {

@@ -18,7 +18,7 @@ import world2x
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "content/districts/west_jobs.json"
 # Top speeds (lf_top in td_drive.c, sixteenths of a pixel per frame, x60/16).
-SPEEDS = {0: 75.0, 1: 63.75, 2: 86.25, 3: 56.25}
+SPEEDS = {0: 67.5, 1: 63.75, 2: 78.75, 3: 56.25}
 FOOT_SPEED = 30.0
 BASE_STOPS_SHA256 = "20ad899171e66d3670925d30325ca4b6f4ae6fb3ed3c9f2203235227e984a9f3"
 BASE_QUESTS_SHA256 = "a40d8c5f50cf52a9b6a52946e7f614bd0e475effd45deab9958cedbc6c513c14"

@@ -137,6 +137,17 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] More walkers on screen at once (eight slots are tied to the actor pool and bitmask code).
 - [ ] Draw more vehicle designs and local streets in the outer districts (their plans carry only main roads, so some blocks are very large).
 
+## Police, combat and vehicles — implemented 2026-10-10, human review pending
+
+- [x] A redrawn police helicopter with no weapon that loses the courier under cover and searches; patrol cars that hang back and box in; stars that drain only out of sight; a beat cruiser in traffic; a police boat.
+- [x] Panic from gunfire, crashes and knock-downs, spreading between walkers; drivers who flee.
+- [x] Telegraphed police fire, punch combos, a running tackle, a dodge roll, hit-stop and dropped magazines.
+- [x] Slower, heavier cars; rarer, slower sharks; motorboats and sailboats.
+- [x] Ambulances, fire trucks, TTC buses, box trucks and garbage trucks in traffic; six special vehicles (a tank among them) parked beside landmarks, each with its own handling.
+- [x] Pop-in: walkers drawn across the whole route-keeping area, pickups no longer appearing at the screen edge.
+- [ ] Handheld review: pursuit difficulty and leeway, combat timing, handling of each vehicle, overlay flicker.
+- [ ] Drivable boats, a weapon for the tank, more than one special vehicle design on screen at once, new walker designs.
+
 ## Next playable polish
 
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.

@@ -23,7 +23,8 @@ OUTPUT = ROOT / "content/districts/east_jobs.json"
 PREFIX_STOPS, PREFIX_QUESTS = 35, 80
 PREFIX_STOP_FIELDS = ("id", "u", "v", "name", "transit", "district", "reserved")
 PREFIX_STOPS_SHA256 = "64a094c134e3d3dd077a8a3296ccd9605a3ab2f43d2f03c734c7fd4f993d2953"
-PREFIX_QUESTS_SHA256 = "ed4272ddfad5b9fa63537f3dc9d3a9e08d3ffaaa49c227fc3298067965f81b4f"
+# Updated 2026-10-10: the western time limits follow the slower, heavier cars.
+PREFIX_QUESTS_SHA256 = "75f94296936f5e8b4749ab2f73c936cfded6e7878275cbf139d8080031c0016e"
 STOP_KEYS = ("danforth_hall", "withrow_walk", "riverside_queen", "gerrard_pape",
              "carlaw_works", "leslie_queen", "greenwood_walk", "ashbridge_queen")
 STOP_NAMES = ("DANFORTH HALL", "WITHROW POST", "RIVERSIDE QUEEN", "GERRARD / PAPE",

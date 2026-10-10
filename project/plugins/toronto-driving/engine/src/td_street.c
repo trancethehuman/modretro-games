@@ -177,10 +177,11 @@ void td_street_refresh(UBYTE district,UBYTE pu8,UBYTE pv8) BANKED {
     for(n=0;n<td_ss_found;n++){
         i=td_ss_hits[n];free_slot=255;
         /* A pickup already in view never pops in: it waits until it is
-         * outside the 20x18-tile screen plus one tile, except during the
-         * scene fade-in. Recently collected pickups stay away. */
-        if(!td_pickup_warm&&(UBYTE)(td_pickup_uv8[(UWORD)(start+i)*2]-sl+1)<22&&
-           (UBYTE)(td_pickup_uv8[(UWORD)(start+i)*2+1]-st+1)<20)continue;
+         * outside the 20x18-tile screen plus two tiles (no sliver at the
+         * edge as the camera moves), except during the scene fade-in.
+         * Recently collected pickups stay away. */
+        if(!td_pickup_warm&&(UBYTE)(td_pickup_uv8[(UWORD)(start+i)*2]-sl+2)<24&&
+           (UBYTE)(td_pickup_uv8[(UWORD)(start+i)*2+1]-st+2)<22)continue;
         for(s=0;s<TD_PICKUP_SLOTS;s++){
             if(td_pickup_slot[s]==i){free_slot=254;break;}
             if(td_pickup_slot[s]==255&&free_slot==255)free_slot=s;

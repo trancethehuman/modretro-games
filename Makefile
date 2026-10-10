@@ -22,6 +22,7 @@ check:
 	python3 scripts/create_daynight.py --check
 	python3 scripts/create_scenery.py --check
 	python3 scripts/create_overlay.py --check
+	python3 scripts/create_hidden_vehicles.py --check
 	python3 scripts/create_radio.py --check
 	python3 scripts/check_story.py
 	python3 scripts/create_world_routes.py --check

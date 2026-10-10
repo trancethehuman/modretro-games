@@ -3127,7 +3127,7 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 6520,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 75.6,
+        "normalized_moving_seconds_fast": 82.8,
         "normalized_moving_seconds_slow": 115.9,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
@@ -3294,7 +3294,7 @@
         30,
         0
       ],
-      "time_limit_seconds": 270,
+      "time_limit_seconds": 285,
       "reward": 267,
       "stages": [
         {
@@ -3329,8 +3329,8 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 10656,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 123.5,
-        "normalized_moving_seconds_slow": 123.5,
+        "normalized_moving_seconds_fast": 135.3,
+        "normalized_moving_seconds_slow": 135.3,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -3574,7 +3574,7 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 7768,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 90.1,
+        "normalized_moving_seconds_fast": 98.6,
         "normalized_moving_seconds_slow": 138.1,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
@@ -3694,7 +3694,7 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 8752,
         "required_walking_pixels": 304,
-        "normalized_moving_seconds_fast": 111.6,
+        "normalized_moving_seconds_fast": 121.3,
         "normalized_moving_seconds_slow": 165.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
@@ -3768,7 +3768,7 @@
         27,
         0
       ],
-      "time_limit_seconds": 295,
+      "time_limit_seconds": 315,
       "reward": 216,
       "stages": [
         {
@@ -3803,8 +3803,8 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 6616,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 88.2,
-        "normalized_moving_seconds_slow": 88.2,
+        "normalized_moving_seconds_fast": 98.0,
+        "normalized_moving_seconds_slow": 98.0,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -4068,7 +4068,7 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 5160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 59.8,
+        "normalized_moving_seconds_fast": 65.5,
         "normalized_moving_seconds_slow": 91.7,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
@@ -4129,7 +4129,7 @@
         37,
         5
       ],
-      "time_limit_seconds": 285,
+      "time_limit_seconds": 300,
       "reward": 236,
       "stages": [
         {
@@ -4164,8 +4164,8 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 6168,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 82.2,
-        "normalized_moving_seconds_slow": 82.2,
+        "normalized_moving_seconds_fast": 91.4,
+        "normalized_moving_seconds_slow": 91.4,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -4237,7 +4237,7 @@
         38,
         0
       ],
-      "time_limit_seconds": 210,
+      "time_limit_seconds": 220,
       "reward": 218,
       "stages": [
         {
@@ -4272,8 +4272,8 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 6784,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 78.7,
-        "normalized_moving_seconds_slow": 78.7,
+        "normalized_moving_seconds_fast": 86.1,
+        "normalized_moving_seconds_slow": 86.1,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
@@ -4497,7 +4497,7 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 6488,
         "required_walking_pixels": 432,
-        "normalized_moving_seconds_fast": 89.6,
+        "normalized_moving_seconds_fast": 96.8,
         "normalized_moving_seconds_slow": 129.7,
         "assumed_interaction_allowance_seconds": 35,
         "legs": [
@@ -4629,7 +4629,7 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 7760,
         "required_walking_pixels": 656,
-        "normalized_moving_seconds_fast": 111.8,
+        "normalized_moving_seconds_fast": 120.4,
         "normalized_moving_seconds_slow": 159.8,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
@@ -4713,7 +4713,7 @@
         37,
         0
       ],
-      "time_limit_seconds": 295,
+      "time_limit_seconds": 310,
       "reward": 222,
       "stages": [
         {
@@ -4753,8 +4753,8 @@
         "measured_duration_seconds": null,
         "vehicle_route_pixels": 6160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 82.1,
-        "normalized_moving_seconds_slow": 82.1,
+        "normalized_moving_seconds_fast": 91.3,
+        "normalized_moving_seconds_slow": 91.3,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {

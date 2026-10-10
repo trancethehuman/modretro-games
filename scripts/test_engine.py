@@ -167,7 +167,9 @@ def main():
                 (ENGINE / "src/td_daynight.c").read_text() + '\n' +
                 (ENGINE / "src/td_anim.c").read_text() + '\n' +
                 (ENGINE / "src/td_scenery.c").read_text() + '\n' +
-                (ENGINE / "src/td_overlay.c").read_text())
+                (ENGINE / "src/td_overlay.c").read_text() + '\n' +
+                (ENGINE / "src/td_special.c").read_text() + '\n' +
+                (ENGINE / "src/td_vehicles.c").read_text())
 
     # Adapt the hardware address only; leave every gameplay routine unmodified.
     def host_sram(match):

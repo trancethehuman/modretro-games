@@ -11,6 +11,7 @@
 #include "td_radio_data.h"
 #include "td_shots.h"
 #include "td_anim.h"
+#include "td_special.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -28,10 +29,17 @@ UBYTE fx_timer,fx_look;
 UWORD fx_u,fx_v;
 BYTE fx_du,fx_dv;
 UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
-UBYTE lf_patrol,lf_lost,lf_drop,lf_amb,lf_vest,lf_calm,lf_unit;
+UBYTE lf_patrol,lf_lost,lf_drop,lf_amb,lf_vest,lf_calm,lf_unit,lf_beat,lf_seen;
+UWORD lf_seen_u,lf_seen_v;
+UBYTE lf_aim_who=TD_NONE,lf_aim_time,lf_combo,lf_combo_t;
+static UBYTE lf_strafe,lf_strafe_who=TD_NONE;static BYTE lf_strafe_dir;
+
+static void lf_panic_r(UWORD u,UWORD v,UBYTE ru,UBYTE rv);
 
 /* ------------------------------------------------------------ effects */
 void td_lf_fx(UBYTE kind,UWORD u,UWORD v,UBYTE timer) BANKED {
+    /* A magazine on the ground stays until it is picked up or expires. */
+    if(td_fx_kind==FX_DROP&&kind!=FX_DROP)return;
     TD_PALETTE(&actors[TD_ACTOR_FX])=0;td_fx_kind=kind;fx_u=u<<4;fx_v=v<<4;fx_timer=timer;fx_du=fx_dv=0;
 }
 
@@ -45,7 +53,7 @@ static UBYTE lf_is_officer(UBYTE i){
 
 static UBYTE lf_police_near(UWORD range_u,UWORD range_v){
     UBYTE i;UWORD pu=td.u>>4,pv=td.v>>4;actor_t *a;
-    if(lf_patrol&&tr_mode[TD_POLICE_SLOT]!=TR_GONE&&lf_dist(td_traffic_u[TD_POLICE_SLOT]>>4,pu)<range_u&&
+    if((lf_patrol||lf_beat)&&tr_mode[TD_POLICE_SLOT]!=TR_GONE&&lf_dist(td_traffic_u[TD_POLICE_SLOT]>>4,pu)<range_u&&
        lf_dist(td_traffic_v[TD_POLICE_SLOT]>>4,pv)<range_v)return TRUE;
     for(i=0,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,a++){
         if((a->flags&ACTOR_FLAG_HIDDEN)||!lf_is_officer(i))continue;
@@ -70,7 +78,7 @@ void td_lf_crime(UBYTE kind) BANKED {
     if(lf_chaos>=16){lf_chaos-=16;if(level<4)level++;}
     if(level>TD_WANTED_MAX)level=TD_WANTED_MAX;
     if(level>td.wanted){td.wanted=level;td_message(TD_MSG_STARS);}
-    if(td.wanted)td.heat=TD_HEAT_SECONDS;
+    if(td.wanted){td.heat=TD_HEAT_FOR(td.wanted);lf_seen_u=td.u;lf_seen_v=td.v;}
 }
 
 /* ------------------------------------------------------------ pedestrians */
@@ -93,8 +101,29 @@ void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED {
     if(lethal)pk_lethal|=bit;else pk_lethal&=~bit;
     td_lf_panic(pk_u[i]>>4,pk_v[i]>>4);
     if(!blame)return;
-    if(look==LF_LOOK_OFFICER)td_lf_crime(lethal?CR_COP_KILL:CR_COP);
+    if(td_hitstop<3)td_hitstop=3;
+    if(look==LF_LOOK_OFFICER){
+        td_lf_crime(lethal?CR_COP_KILL:CR_COP);
+        /* A downed officer's spare magazine lies where they fell. */
+        if(!td_fx_kind)td_lf_fx(FX_DROP,pk_u[i]>>4,(pk_v[i]>>4)+4,255);
+    }
     else td_lf_crime(lethal?CR_KILL:CR_MINOR);
+}
+
+/* A jab staggers a walker back a step; they stand dazed for half a second,
+ * then a civilian runs and an officer fights on. Witnesses scatter. */
+void td_lf_stun(UBYTE i,BYTE vu,BYTE vv) BANKED {
+    UBYTE look,bit=1<<i,mode=pk_mode[i];UWORD u,v;
+    if(td_ped_ovr&bit)look=pk_look[i];
+    else look=td_ped_route[i]!=TD_NONE?td_ped_route[i]&7:0;
+    if((td_ped_ovr&bit)&&(mode==PK_FLY||mode==PK_DEAD||mode==PK_DOWN))return;
+    lf_own_ped(i,look);
+    pk_mode[i]=PK_STUN;pk_timer[i]=28;pk_drawn&=~bit;
+    u=pk_u[i]+((WORD)vu<<4);v=pk_v[i]+((WORD)vv<<4);
+    if(lf_walk(u>>4,v>>4)){pk_u[i]=u;pk_v[i]=v;}
+    lf_panic_r(pk_u[i]>>4,pk_v[i]>>4,64,56);
+    if(look==LF_LOOK_OFFICER){if(!td.wanted)td_lf_crime(CR_COP);}
+    else td_lf_crime(CR_MINOR);
 }
 
 void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED {
@@ -107,15 +136,33 @@ void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED {
     td_lf_crime(CR_COP);
 }
 
-/* Gunfire or a struck walker: everyone else close by and in view runs from
- * the courier for a few seconds (officers excepted). */
-void td_lf_panic(UWORD u,UWORD v) BANKED {
+/* Trouble near (u,v): everyone close by and in view runs from the courier
+ * for a few seconds (officers excepted). */
+static void lf_panic_r(UWORD u,UWORD v,UBYTE ru,UBYTE rv){
     UBYTE i,bit,route;actor_t *a=&actors[TD_ACTOR_PEDS];
     for(i=0,bit=1;i<TD_PEDS;i++,bit<<=1,a++){
         route=td_ped_route[i];
         if((td_ped_ovr&bit)||route==TD_NONE||(a->flags&ACTOR_FLAG_HIDDEN)||(route&7)==LF_LOOK_OFFICER)continue;
-        if(lf_dist(a->pos.x>>5,u)>=96||lf_dist(a->pos.y>>5,v)>=80)continue;
+        if(lf_dist(a->pos.x>>5,u)>=ru||lf_dist(a->pos.y>>5,v)>=rv)continue;
         lf_own_ped(i,route&7);pk_mode[i]=PK_FLEE;pk_timer[i]=160;pk_drawn&=~bit;
+    }
+}
+void td_lf_panic(UWORD u,UWORD v) BANKED {lf_panic_r(u,v,128,112);}
+void td_lf_dodge(UBYTE i) BANKED {
+    UBYTE route=td_ped_route[i];
+    if((td_ped_ovr&(1<<i))||route==TD_NONE)return;
+    lf_own_ped(i,route&7);pk_mode[i]=PK_FLEE;pk_timer[i]=60;pk_drawn&=~(1<<i);
+}
+
+/* Gunfire or a crash also sends the drivers near it and in view speeding
+ * away (the police car excepted). */
+void td_lf_scatter(UWORD u,UWORD v) BANKED {
+    UBYTE i,bit;
+    lf_panic_r(u,v,128,112);
+    for(i=0,bit=1;i<6;i++,bit<<=1){
+        if((td_tr_ctrl&bit)||(i==TD_POLICE_SLOT&&(lf_patrol||lf_beat)))continue;
+        if(lf_dist(td_traffic_u[i]>>4,u)>=112||lf_dist(td_traffic_v[i]>>4,v)>=96||!lf_on_screen(td_traffic_u[i]>>4,td_traffic_v[i]>>4))continue;
+        td_lf_own_car(i,TR_FLEE);tr_timer[i]=200;
     }
 }
 
@@ -164,27 +211,52 @@ static void lf_peds_tick(void){
             break;
         case PK_DEAD:
             break;
+        case PK_STUN:
+            if(!--pk_timer[i]){
+                pk_mode[i]=pk_look[i]==LF_LOOK_OFFICER&&td.wanted?PK_CHASE:PK_FLEE;pk_timer[i]=160;pk_drawn&=~bit;
+            }
+            break;
         case PK_FLEE:
             /* Walkers on foot move every other tick with a double step. */
             if(!(td_tick&1))lf_step(i,-du,-dv,20);
-            if(pk_timer[i])pk_timer[i]--;
+            if(pk_timer[i]){
+                /* Fear spreads: a running walker starts those beside them. */
+                if(!(--pk_timer[i]&31))lf_panic_r(pk_u[i]>>4,pk_v[i]>>4,40,32);
+            }
             break;
         case PK_CHASE:
             if(!td.wanted){pk_mode[i]=PK_FLEE;pk_timer[i]=200;break;}
+            /* Left far behind, an officer gives up and walks off. */
+            if(lf_abs(du)>2560||lf_abs(dv)>2240){pk_mode[i]=PK_FLEE;pk_timer[i]=120;break;}
             if(lf_abs(du)<112&&lf_abs(dv)<112){
                 /* Hands on the courier: holding on for a moment arrests a
                  * courier on foot or boxes in a stopped car. */
                 if((td.onfoot||a<2)&&lf_bust<LF_BUST_TICKS)lf_bust+=2;
                 break;
             }
-            /* Armed officers keep their distance and shoot (lf_police_fire). */
-            if(td.wanted>=4&&lf_abs(du)<640&&lf_abs(dv)<560)break;
+            /* An officer aiming stands still (lf_police_fire). */
+            if(i==lf_aim_who)break;
+            /* Armed officers keep their distance and shoot (lf_police_fire);
+             * after a shot they sidestep, which spoils the courier's aim. */
+            if(td.wanted>=4&&lf_abs(du)<640&&lf_abs(dv)<560){
+                if(i==lf_strafe_who&&lf_strafe){
+                    lf_strafe--;
+                    if(!(td_tick&1)){if(lf_abs(du)>lf_abs(dv))lf_step(i,0,lf_strafe_dir*16,12);else lf_step(i,lf_strafe_dir*16,0,12);}
+                }
+                break;
+            }
             /* Below four stars a walking courier (8 per tick) can outpace them. */
             if(!(td_tick&1))lf_step(i,du,dv,(6+(td.wanted>>1))<<1);
             break;
         }
+        /* A running courier bowls over anyone in their path. */
+        if(td.onfoot&&td_running&&(pk_mode[i]==PK_FLEE||pk_mode[i]==PK_CHASE||pk_mode[i]==PK_STUN)&&
+           lf_abs(du)<128&&lf_abs(dv)<128){
+            td_lf_knock(i,du>0?-20:du<0?20:0,dv>0?-20:dv<0?20:0,0);
+            lf_shake=3;td_audio_play(TD_AUDIO_IMPACT);continue;
+        }
         /* The courier's moving car strikes owned walkers too. */
-        if(!td.onfoot&&a>=3&&(pk_mode[i]==PK_FLEE||pk_mode[i]==PK_CHASE)&&
+        if(!td.onfoot&&a>=3&&(pk_mode[i]==PK_FLEE||pk_mode[i]==PK_CHASE||pk_mode[i]==PK_STUN)&&
            lf_abs(du)<160&&lf_abs(dv)<160){
             td_lf_knock(i,lf_div16(td_vx+(td_vx>>1)),lf_div16(td_vy+(td_vy>>1)),a>=16);
             td.speed-=lf_div4(td.speed);td_vx-=lf_div4(td_vx);td_vy-=lf_div4(td_vy);
@@ -209,9 +281,9 @@ void td_lf_own_car(UBYTE i,UBYTE mode) BANKED {
 }
 
 /* A traffic slot entering play out of view takes a new design and colour:
- * sedans, hatchbacks, pickups, coupes, taxis, vans and motorcycles. The
- * core bus-loop proxy (slot 5) stays a van. */
-static const UBYTE lf_design[8]={TD_FRAME_PLAYER_CAR,TD_FRAME_TRAFFIC_COMPACT,TD_FRAME_PLAYER_CAR,TD_FRAME_TRAFFIC_PICKUP,
+ * sedans, hatchbacks, pickups, coupes, taxis (two in eight: Toronto's are
+ * everywhere), vans and motorcycles. */
+static const UBYTE lf_design[8]={TD_FRAME_PLAYER_CAR,TD_FRAME_TRAFFIC_COMPACT,TD_FRAME_TRAFFIC_TAXI,TD_FRAME_TRAFFIC_PICKUP,
     TD_FRAME_TRAFFIC_SPORTS,TD_FRAME_TRAFFIC_TAXI,TD_FRAME_PLAYER_VAN,TD_FRAME_PLAYER_MOTORCYCLE};
 static const UBYTE lf_colour[8]={TD_PAL_RED,TD_PAL_BLUE,TD_PAL_TEAL,TD_PAL_VIOLET,TD_PAL_NAVY,TD_PAL_RED,TD_PAL_BLUE,TD_PAL_YELLOW};
 /* xorshift16 for road vehicle looks, stirred by the update counter so
@@ -223,6 +295,7 @@ static UBYTE lf_random(void){
 }
 void td_lf_new_look(UBYTE i,UBYTE seed) BANKED {
     UBYTE base;
+    if(i==TD_POLICE_SLOT)lf_beat=0;
     base=lf_design[seed&7];
     td_traffic_bases[i]=base;
     TD_PALETTE(&actors[2+i])=base==TD_FRAME_TRAFFIC_TAXI?TD_PAL_YELLOW:lf_colour[(seed>>3)&7];
@@ -281,7 +354,7 @@ static void lf_cars_tick(void){
                 if(tr_timer[i]&1){tr_pu[i]-=lf_div4(tr_pu[i]);tr_pv[i]-=lf_div4(tr_pv[i]);}
             }
             if((tr_spin&bit)&&!(tr_timer[i]&3))tr_head[i]=(tr_head[i]+2)&6;
-            if(!--tr_timer[i]){tr_mode[i]=LF_IS_PATROL(i)?(td.wanted?TR_CHASE:TR_PARK):TR_RETURN;tr_spin&=~bit;}
+            if(!--tr_timer[i]){tr_mode[i]=LF_IS_PATROL(i)?(td.wanted?TR_CHASE:TR_PARK):i==td_hidden_slot?TR_STILL:TR_RETURN;tr_spin&=~bit;}
             break;
         case TR_RETURN:
             /* Easing back into lane runs every other tick with a double step. */
@@ -301,30 +374,30 @@ static void lf_cars_tick(void){
         case TR_CHASE:
             if(!td.wanted){tr_mode[i]=TR_PARK;break;}
             if(tr_timer[i]){tr_timer[i]--;break;}
+            /* Within a block (112 x 96 px) the patrol follows the courier;
+             * out of that it drives to where they were last seen and waits,
+             * so a courier who gets away can stay away. */
             du=(WORD)td.u-(WORD)u;dv=(WORD)td.v-(WORD)v;
-            /* From four stars the patrol holds off a courier on foot and
-             * the officers shoot instead of closing in. */
-            if(td.onfoot&&td.wanted>=4&&lf_abs(du)<640&&lf_abs(dv)<560)break;
-            if(lf_abs(du)<224&&lf_abs(dv)<224){
-                /* Alongside the courier: stop by a courier on foot and let an
-                 * officer out (lf_recruit), box in a stopped car, and from
-                 * four stars nudge a car that is still moving. */
-                if(td.onfoot)lf_drop=1;
-                else if(a<3){if(lf_bust<LF_BUST_TICKS)lf_bust+=2;}
-                else if(td.wanted>=4){
-                    td_vx+=lf_abs(du)>=lf_abs(dv)?(du>0?96:-96):0;
-                    td_vy+=lf_abs(du)<lf_abs(dv)?(dv>0?96:-96):0;
-                    td.speed-=lf_div4(td.speed)>>1;tr_timer[i]=48;lf_shake=6;
-                    td_audio_play(TD_AUDIO_IMPACT);
-                    if(td.job!=TD_NONE&&td.stage)td.health=td.health>4?td.health-4:0;
+            if(lf_abs(du)<1792&&lf_abs(dv)<1536){lf_seen_u=td.u;lf_seen_v=td.v;su=1;}
+            else{du=(WORD)lf_seen_u-(WORD)u;dv=(WORD)lf_seen_v-(WORD)v;su=0;}
+            /* It keeps its distance: 72 px behind a moving car, 40 px from a
+             * courier on foot (an officer gets out), alongside a stopped car
+             * (boxing it in). It never rams. */
+            speed=td.onfoot?640:a<3?224:1152;
+            if(lf_abs(du)<speed&&lf_abs(dv)<speed){
+                if(su){
+                    if(td.onfoot)lf_drop=1;
+                    else if(a<3&&lf_bust<LF_BUST_TICKS)lf_bust+=2;
                 }
                 break;
             }
+            /* Sirens: walkers near the patrol car get out of its way. */
+            if(!(td_tick&31))lf_panic_r(u>>4,v>>4,48,40);
             /* The patrol car moves every other tick with a double step:
-             * 0.7 to 0.9 pixels per tick, so a car at full speed (1.5)
+             * 0.56 to 0.81 pixels per tick, so a car at full speed (1.1)
              * outruns it and a courier on foot (0.5) does not. */
             if(td_tick&1)break;
-            speed=20+(td.wanted<<1);
+            speed=16+(td.wanted<<1);
             /* Keep the current axis until it is blocked or nearly closed. */
             if(lf_axis==0&&lf_abs(du)<64)lf_axis=1;
             else if(lf_axis==1&&lf_abs(dv)<64)lf_axis=0;
@@ -341,14 +414,20 @@ static void lf_cars_tick(void){
                 }
             }
             if(su||sv)tr_head[i]=su>0?0:su<0?4:sv>0?2:6;
-            /* Wedged out of view, or left far behind for several seconds
-             * from two stars: the patrol catches up just outside the view. */
-            if(lf_on_screen(td_traffic_u[i]>>4,td_traffic_v[i]>>4))lf_lost=0;
-            else if(lf_abs(du)>4096||lf_abs(dv)>4096){if(lf_lost<255)lf_lost++;}
-            if(!lf_on_screen(td_traffic_u[i]>>4,td_traffic_v[i]>>4)&&
-               ((td.wanted>=2&&lf_lost>=200)||lf_stuck>90)&&lf_spot(1,&u,&v)){
-                td_traffic_u[i]=u<<4;td_traffic_v[i]=v<<4;lf_stuck=0;lf_lost=0;
+            /* Wedged out of view for a while: it comes round another way,
+             * from just beyond the screen edge. */
+            if(lf_stuck>90&&!lf_on_screen(td_traffic_u[i]>>4,td_traffic_v[i]>>4)&&lf_spot(1,&u,&v)){
+                td_traffic_u[i]=u<<4;td_traffic_v[i]=v<<4;lf_stuck=0;
             }
+            break;
+        case TR_STILL:
+            break;
+        case TR_FLEE:
+            /* Away along its heading at a fast clip, turning where blocked,
+             * until it is out of view; then it waits to rejoin its lane. */
+            su=tr_head[i]==0?24:tr_head[i]==4?-24:0;sv=tr_head[i]==2?24:tr_head[i]==6?-24:0;
+            if(!lf_car_move(i,su,sv))tr_head[i]=(tr_head[i]+((tr_timer[i]&8)?2:6))&6;
+            if(!lf_on_screen(td_traffic_u[i]>>4,td_traffic_v[i]>>4)||!--tr_timer[i])tr_mode[i]=TR_PARK;
             break;
         case TR_PARK:
         case TR_GONE:
@@ -387,6 +466,10 @@ static void lf_ambient(void){
     if(!td_world_traffic_recycle(td.district,i,pu,pv,LF_VIEW_U,LF_VIEW_V,&u,&v,&leg,&sample)||!lf_spot_clear(i,u,v))return;
     td_traffic_u[i]=u;td_traffic_v[i]=v;td_traffic_leg[i]=leg;td_traffic_samples[i]=sample;
     td_lf_new_look(i,lf_random());
+    /* One time in four slot 4 comes round as a cruiser on its beat. */
+    if(i==TD_POLICE_SLOT){
+        if(!lf_patrol&&!(lf_random()&3)){lf_beat=1;td_traffic_bases[i]=TD_FRAME_POLICE;TD_PALETTE(&actors[2+i])=TD_PAL_BLUE;}
+    }else if(!(lf_random()&3))td_veh_special(i);
 }
 
 /* ------------------------------------------------------------ police response */
@@ -432,6 +515,11 @@ static void lf_recruit(void){
     if(lf_patrol){
         /* The same patrol car resumes a pursuit it had given up. */
         if(tr_mode[TD_POLICE_SLOT]==TR_PARK){tr_mode[TD_POLICE_SLOT]=TR_CHASE;tr_timer[TD_POLICE_SLOT]=0;}
+    }else if(lf_beat&&!(td_tr_ctrl&(1<<TD_POLICE_SLOT))&&lf_dist(td_traffic_u[TD_POLICE_SLOT]>>4,pu)<200&&
+             lf_dist(td_traffic_v[TD_POLICE_SLOT]>>4,pv)<180){
+        /* The cruiser on its beat nearby takes up the pursuit at once. */
+        td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;lf_beat=0;lf_unit=LF_UNIT_CRUISER;lf_stuck=0;
+        tr_timer[TD_POLICE_SLOT]=20;
     }else if(!(td_tr_ctrl&(1<<TD_POLICE_SLOT))&&
              !lf_on_screen(td_traffic_u[TD_POLICE_SLOT]>>4,td_traffic_v[TD_POLICE_SLOT]>>4)&&lf_spot(1,&u,&v)){
         /* The slot-4 car leaves its lane out of view; a patrol car arrives
@@ -448,9 +536,9 @@ static void lf_recruit(void){
  * division sets Q4 increments; each sample is a single collision byte. */
 static UBYTE lf_line_clear(UWORD u,UWORD v,UWORD x,UWORD y){
     WORD du=(WORD)x-(WORD)u,dv=(WORD)y-(WORD)v,su,sv;UBYTE i,steps;UWORD span=lf_abs(du)>lf_abs(dv)?lf_abs(du):lf_abs(dv),pu,pv;
-    steps=(UBYTE)(span>>3);if(steps>12)return FALSE;
+    steps=(UBYTE)(span>>3);if(steps>14)return FALSE;
     if(steps<2)return TRUE;
-    su=(du<<4)/steps;sv=(dv<<4)/steps;pu=u<<4;pv=v<<4;
+    su=(du*16)/steps;sv=(dv*16)/steps;pu=u<<4;pv=v<<4;
     for(i=1;i<steps;i++){pu+=su;pv+=sv;if(!lf_walk(pu>>4,pv>>4))return FALSE;}
     return TRUE;
 }
@@ -466,31 +554,55 @@ static void lf_hurt_player(UBYTE damage){
 
 void td_lf_hurt(UBYTE damage) BANKED {lf_hurt_player(damage);}
 
-/* From four stars officers within range shoot; at five the patrol car
- * does too. Their rounds fly like the courier's (td_shots.c), aimed at
- * where the courier is now with a spread that grows with distance, so
- * moving and breaking line of sight both help. About one shot a second;
- * the shooter takes turns among the officers in range. */
+/* From four stars officers within range shoot; at five the patrol car's
+ * crew does too. Every shot is telegraphed: the shooter stops and aims,
+ * flashing, for about a third of a second, so a courier who moves or
+ * breaks the line of sight can avoid it. Rounds fly like the courier's
+ * (td_shots.c) with a spread that grows with distance and when the
+ * courier runs. After a shot the officer sidesteps. About one shot a
+ * second, the shooter taking turns among the officers in range. */
+static UBYTE lf_shooter_at(UBYTE i,UWORD *u,UWORD *v){
+    if(i==8){
+        if(!lf_patrol||tr_mode[TD_POLICE_SLOT]!=TR_CHASE)return FALSE;
+        *u=td_traffic_u[TD_POLICE_SLOT]>>4;*v=td_traffic_v[TD_POLICE_SLOT]>>4;return TRUE;
+    }
+    if(!(td_ped_ovr&(1<<i))||pk_mode[i]!=PK_CHASE)return FALSE;
+    *u=pk_u[i]>>4;*v=pk_v[i]>>4;return TRUE;
+}
 static void lf_police_fire(void){
-    UBYTE i,k,in_range=TD_NONE;UWORD pu=td.u>>4,pv=td.v>>4,su=0,sv=0,d;
-    if(td.wanted<4||lf_down||lf_arrest||td.mode!=TD_ROAM)return;
+    UBYTE i,k,in_range=TD_NONE,spread;UWORD pu=td.u>>4,pv=td.v>>4,su=0,sv=0,d;
+    if(td.wanted<4||lf_down||lf_arrest||td.mode!=TD_ROAM){lf_aim_who=TD_NONE;return;}
+    if(lf_aim_who!=TD_NONE){
+        if(--lf_aim_time)return;
+        i=lf_aim_who;lf_aim_who=TD_NONE;
+        if(!lf_shooter_at(i,&su,&sv)||!lf_line_clear(su,sv,pu,pv)){lf_cop_cool=20;return;}
+        d=lf_dist(su,pu)+lf_dist(sv,pv);
+        spread=(UBYTE)(5+(d>>4))+(td_running?6:0);
+        /* The round leaves the muzzle clear of the shooter (9 px along the
+         * line of fire; 12 from the patrol car), never inside their reach. */
+        {WORD du=(WORD)pu-(WORD)su,dv=(WORD)pv-(WORD)sv;UWORD m=lf_abs(du)>lf_abs(dv)?lf_abs(du):lf_abs(dv);UBYTE out=i==8?12:9;
+         if(!m)m=1;su=(UWORD)((WORD)su+(WORD)((du*out)/(WORD)m));sv=(UWORD)((WORD)sv+(WORD)((dv*out)/(WORD)m));}
+        if(!td_shot_fire(TD_SHOT_POLICE,su,sv-2,pu,pv,spread)){lf_cop_cool=10;return;}
+        lf_cop_cool=100-(td.wanted*10);
+        td_anim_spawn(TD_PART_FLASH,0,su,sv-6);
+        td_audio_play(TD_AUDIO_IMPACT);
+        lf_panic_r(su,sv,96,80);
+        if(i<8){lf_strafe_who=i;lf_strafe=24;lf_strafe_dir=(td_tick&1)?1:-1;}
+        return;
+    }
     if(lf_cop_cool){lf_cop_cool--;return;}
     for(k=0;k<TD_PEDS&&in_range==TD_NONE;k++){
         i=(UBYTE)(k+td_tick)&7;
-        if(pk_mode[i]!=PK_CHASE)continue;
-        su=pk_u[i]>>4;sv=pk_v[i]>>4;
+        if(!lf_shooter_at(i,&su,&sv))continue;
         if(lf_dist(su,pu)<80&&lf_dist(sv,pv)<72&&lf_line_clear(su,sv,pu,pv))in_range=i;
     }
-    if(in_range==TD_NONE&&td.wanted>=5&&lf_patrol&&tr_mode[TD_POLICE_SLOT]==TR_CHASE){
-        su=td_traffic_u[TD_POLICE_SLOT]>>4;sv=td_traffic_v[TD_POLICE_SLOT]>>4;
+    if(in_range==TD_NONE&&td.wanted>=5&&lf_shooter_at(8,&su,&sv)){
         if(lf_dist(su,pu)<88&&lf_dist(sv,pv)<80&&lf_line_clear(su,sv,pu,pv))in_range=8;
     }
     if(in_range==TD_NONE){lf_cop_cool=8;return;}
-    d=lf_dist(su,pu)+lf_dist(sv,pv);
-    if(!td_shot_fire(TD_SHOT_POLICE,su,sv-2,pu,pv,(UBYTE)(5+(d>>4))))return;
-    lf_cop_cool=100-(td.wanted*10);
-    td_anim_spawn(TD_PART_FLASH,0,su,sv-6);
-    td_audio_play(TD_AUDIO_IMPACT);
+    /* Wind-up: a little shorter at five stars. */
+    lf_aim_who=in_range;lf_aim_time=td.wanted>=5?16:22;
+    if(in_range<8)pk_drawn&=~(1<<in_range);
 }
 
 /* ------------------------------------------------------------ public API */
@@ -498,7 +610,8 @@ void td_life_reset(UBYTE cold) BANKED {
     memset(pk_mode,0,sizeof(pk_mode));memset(tr_mode,0,sizeof(tr_mode));memset(tr_timer,0,sizeof(tr_timer));
     td_ped_ovr=td_tr_ctrl=pk_fresh=pk_lethal=pk_drawn=tr_spin=0;td_fx_kind=0;td_life_event=0;
     lf_warm=1;lf_stun=lf_flash=lf_punch=lf_hurt=lf_down=lf_arrest=lf_bust=lf_cop_cool=lf_rev_wait=lf_shake=lf_stuck=0;lf_exit_req=lf_spd_acc=lf_spd_ctl=0;lf_a_age=lf_b_age=255;
-    lf_patrol=lf_lost=lf_drop=lf_amb=lf_vest=lf_calm=0;
+    lf_patrol=lf_lost=lf_drop=lf_amb=lf_vest=lf_calm=lf_beat=lf_seen=0;lf_seen_u=td.u;lf_seen_v=td.v;
+    lf_aim_who=lf_strafe_who=td_hidden_slot=TD_NONE;lf_aim_time=lf_strafe=lf_combo=lf_combo_t=0;td_rolling=td_hitstop=0;
     lf_fx_end();td_shot_reset();
     camera_offset_x=0;
     if(cold){
@@ -515,6 +628,15 @@ UBYTE td_life_locked(void) BANKED {return lf_down||lf_arrest||lf_hurt>22;}
 static void lf_fx_tick(void){
     if(!td_fx_kind)return;
     if(!fx_timer||!--fx_timer){lf_fx_end();return;}
+    if(td_fx_kind==FX_DROP){
+        /* Walking over the magazine picks it up. */
+        if(td.onfoot&&lf_dist(td.u,fx_u)<160&&lf_dist(td.v,fx_v)<192){
+            td.ammo=td.ammo>TD_AMMO_MAX-6?TD_AMMO_MAX:td.ammo+6;td_message(TD_MSG_AMMO);td_audio_play(TD_AUDIO_COMPLETE);
+            td_anim_spawn(TD_PART_POP,TD_FRAME_PICKUP_AMMO,fx_u>>4,(fx_v>>4)-8);
+            td_fx_kind=0;lf_fx_end();
+        }
+        return;
+    }
     if(td_fx_kind==FX_RUNNER){
         if(lf_walk((fx_u+fx_du)>>4,fx_v>>4))fx_u+=fx_du;else fx_v+=12;
     }
@@ -522,6 +644,7 @@ static void lf_fx_tick(void){
 
 void td_life_tick(void) BANKED {
     if(lf_punch)lf_punch--;
+    if(lf_combo_t)lf_combo_t--;
     if(lf_hurt)lf_hurt--;
     td_shot_tick();
     if(lf_down){
@@ -536,6 +659,7 @@ void td_life_tick(void) BANKED {
     if(td_tr_ctrl)lf_cars_tick();
     lf_fx_tick();
     if(!(td_tick&7)&&td.mode!=TD_RIDE)lf_ambient();
+    if((td_tick&15)==9&&td.mode!=TD_RIDE)td_veh_hidden();
     if(td.wanted&&(td.mode==TD_ROAM||td.mode==TD_WAIT)){
         lf_police_fire();
         if(lf_bust>=LF_BUST_TICKS&&td.vitality&&!td_entry_timer){
@@ -546,16 +670,35 @@ void td_life_tick(void) BANKED {
     }else lf_bust=0;
 }
 
+/* The police see the courier: the patrol car or an officer within a block
+ * with a clear line between them (buildings block it). */
+static UBYTE lf_police_sees(void){
+    UBYTE i;UWORD pu=td.u>>4,pv=td.v>>4,u,v;actor_t *a;
+    if((lf_patrol||lf_beat)&&tr_mode[TD_POLICE_SLOT]!=TR_GONE){
+        u=td_traffic_u[TD_POLICE_SLOT]>>4;v=td_traffic_v[TD_POLICE_SLOT]>>4;
+        if(lf_dist(u,pu)<112&&lf_dist(v,pv)<96&&lf_line_clear(u,v,pu,pv))return TRUE;
+    }
+    for(i=0,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,a++){
+        if((a->flags&ACTOR_FLAG_HIDDEN)||!lf_is_officer(i))continue;
+        u=a->pos.x>>5;v=a->pos.y>>5;
+        if(lf_dist(u,pu)<96&&lf_dist(v,pv)<80&&lf_line_clear(u,v-4,pu,pv-4))return TRUE;
+    }
+    return FALSE;
+}
+
 void td_life_second(void) BANKED {
     /* Out of trouble for a while, the courier recovers to half vitality. */
     if(lf_calm<255)lf_calm++;
     if(!td.wanted&&lf_calm>=6&&td.vitality&&td.vitality<50&&!(td.seconds&1))td.vitality++;
-    if(!td.wanted){if(lf_chaos)lf_chaos--;return;}
-    /* Officers or the helicopter in sight keep the heat on. */
-    if(td.mode!=TD_RIDE&&(lf_police_near(128,104)||td_overlay_heli_near(144,120)))td.heat=TD_HEAT_SECONDS;
+    if(!td.wanted){if(lf_chaos)lf_chaos--;lf_seen=0;return;}
+    /* Officers, the patrol car, the helicopter or the police boat with the
+     * courier in sight keep the heat on; out of sight it drains, and each
+     * star takes a little longer to lose than the one below it. */
+    lf_seen=td.mode!=TD_RIDE&&(lf_police_sees()||td_overlay_spotted());
+    if(lf_seen){td.heat=TD_HEAT_FOR(td.wanted);lf_seen_u=td.u;lf_seen_v=td.v;}
     else if(td.heat)td.heat--;
     if(!td.heat){
-        td.wanted--;td.heat=TD_HEAT_SECONDS;
+        td.wanted--;td.heat=TD_HEAT_FOR(td.wanted);
         if(!td.wanted){td.heat=0;lf_stand_down();td_message(TD_MSG_LOST);return;}
     }
     lf_recruit();

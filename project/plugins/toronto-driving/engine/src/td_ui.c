@@ -295,6 +295,7 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
 }
 #ifdef __SDCC
 #include "palette.h"
+#include "td_special.h"
 #include "data/sprite_top_down_vehicles_and_courier.h"
 void load_bkg_tileset(const tileset_t *tiles,UBYTE bank) BANKED;
 UBYTE load_sprite(UBYTE sprite_offset,const spritesheet_t *sprite,UBYTE bank) BANKED;
@@ -309,6 +310,8 @@ static void td_restore_scene_tiles(void){
     MemcpyBanked(&bkg,scene.background.ptr,sizeof(bkg),scene.background.bank);
     if(bkg.cgb_tileset.ptr){VBK_REG=1;load_bkg_tileset(bkg.cgb_tileset.ptr,bkg.cgb_tileset.bank);VBK_REG=0;}
     load_sprite(0,&sprite_top_down_vehicles_and_courier,BANK(sprite_top_down_vehicles_and_courier));
+    /* The special vehicles' block comes back as placeholders: refill it. */
+    td_special_restore();
 }
 /* The title swaps in its own BG palettes 0..6; the scene's come back as
  * the current time of day's set. The title only appears while a scene

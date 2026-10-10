@@ -15,6 +15,7 @@
 #define PK_DEAD 3   /* stays down until out of view */
 #define PK_FLEE 4   /* running away from the courier */
 #define PK_CHASE 5  /* officer pursuing the courier */
+#define PK_STUN 6   /* staggered by a jab: stands dazed, then runs or fights on */
 extern UBYTE pk_mode[TD_PEDS],pk_timer[TD_PEDS],pk_look[TD_PEDS],pk_dir[TD_PEDS],pk_span[TD_PEDS];
 extern UWORD pk_u[TD_PEDS],pk_v[TD_PEDS];
 extern BYTE pk_vu[TD_PEDS],pk_vv[TD_PEDS];
@@ -26,6 +27,8 @@ extern UBYTE pk_fresh,pk_lethal,pk_drawn;
 #define TR_CHASE 3   /* patrol car pursuing the courier */
 #define TR_PARK 4    /* pursuit over: waits until out of view */
 #define TR_GONE 5    /* stolen: hidden until its lane point is out of view */
+#define TR_FLEE 6    /* driver speeding away from gunfire or a crash */
+#define TR_STILL 7   /* a hidden special vehicle parked by its landmark */
 #define TD_POLICE_SLOT 4
 extern UBYTE tr_mode[6],tr_timer[6],tr_head[6],tr_spin;
 extern BYTE tr_pu[6],tr_pv[6];
@@ -35,6 +38,7 @@ extern UWORD tr_au[6],tr_av[6];
  * in flight are td_shots.c). */
 #define FX_SPARK 1
 #define FX_RUNNER 3
+#define FX_DROP 4    /* a downed officer's spare magazine, lying where they fell */
 extern UBYTE fx_timer,fx_look;
 extern UWORD fx_u,fx_v;
 extern BYTE fx_du,fx_dv;
@@ -46,6 +50,13 @@ extern UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_
 /* Slot 4 is an ordinary blue car until a pursuit needs it: it becomes the
  * patrol car only while out of view and changes back the same way. */
 extern UBYTE lf_patrol,lf_lost;
+/* Slot 4 on its beat: a marked cruiser in ordinary traffic (no pursuit).
+ * It witnesses crimes and takes up a pursuit at once. */
+extern UBYTE lf_beat;
+/* The police can see the courier (lf_seen, refreshed each update) and the
+ * last place they did (Q4); pursuers head there when they lose sight. */
+extern UBYTE lf_seen;
+extern UWORD lf_seen_u,lf_seen_v;
 /* The patrol's vehicle: 0 cruiser, 1 SUV (from three stars), 2 unmarked. */
 #define LF_UNIT_CRUISER 0
 #define LF_UNIT_SUV 1
@@ -69,6 +80,8 @@ static const UBYTE lf_look_walk[9]={TD_FRAME_PERSON_SHORT,TD_FRAME_PERSON_LONG,T
 static const UBYTE lf_civilian_pal[4]={TD_PEOPLE_PAL(TD_PAL_RED),TD_PEOPLE_PAL(TD_PAL_YELLOW),TD_PEOPLE_PAL(TD_PAL_TEAL),TD_PEOPLE_PAL(TD_PAL_VIOLET)};
 #define LF_OFFICER_PAL TD_PEOPLE_PAL(TD_PAL_NAVY)
 #define LF_IS_PATROL(i) ((i)==TD_POLICE_SLOT&&lf_patrol)
+/* A police car either way: in pursuit or on its beat. */
+#define LF_IS_POLICE(i) ((i)==TD_POLICE_SLOT&&(lf_patrol||lf_beat))
 
 #define CR_MINOR 0
 #define CR_GUN 1
@@ -135,8 +148,25 @@ extern UBYTE lf_vest;
 void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED;
 /* A police round or a blow hurts the courier. */
 void td_lf_hurt(UBYTE damage) BANKED;
-/* Walkers in view near (u,v) (pixels) run from trouble. */
+/* A jab: walker slot i staggers back (vu, vv pixels) and stands dazed. */
+void td_lf_stun(UBYTE i,BYTE vu,BYTE vv) BANKED;
+/* Police gunfire is telegraphed: the officer (slot, or 8 for the patrol
+ * car's crew) stands and aims, flashing, for lf_aim_time ticks first. */
+extern UBYTE lf_aim_who,lf_aim_time;
+/* The courier's punches: combination count and the window to continue it. */
+extern UBYTE lf_combo,lf_combo_t;
+/* Special vehicles in traffic and the hidden ones (td_vehicles.c): a slot
+ * coming into play may become one; td_hidden_slot shows a hidden vehicle
+ * (TD_NONE when none). */
+extern UBYTE td_hidden_slot;
+void td_veh_special(UBYTE i) BANKED;
+void td_veh_hidden(void) BANKED;
+/* Walkers in view near (u,v) (pixels) run from trouble; td_lf_scatter
+ * also sends nearby drivers speeding away (gunfire, a crash). */
 void td_lf_panic(UWORD u,UWORD v) BANKED;
+void td_lf_scatter(UWORD u,UWORD v) BANKED;
+/* Walker slot i jumps out of the way of the courier's car. */
+void td_lf_dodge(UBYTE i) BANKED;
 void td_lf_own_car(UBYTE i,UBYTE mode) BANKED;
 UBYTE td_lf_tr_heading(UBYTE i) BANKED;
 /* Give traffic slot i a new design and colour (call while it is out of view). */

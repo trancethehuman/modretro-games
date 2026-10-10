@@ -16,6 +16,7 @@
 #include "td_anim.h"
 #include "td_daynight.h"
 #include "td_overlay.h"
+#include "td_special.h"
 #include "td_district_world.h"
 #include "actor.h"
 #include "camera.h"
@@ -106,7 +107,13 @@ static void td_frame(actor_t *a,UBYTE f){if(a->frame_start!=f||a->frame_end!=f+1
 /* The courier's vehicle; from dusk to dawn its frames carry the headlamp beam. */
 /* The lit composites carry the beam in the courier's palette; a stolen car
  * in another paint draws its beam with a separate actor (td_life_draw.c). */
-static UBYTE td_vehicle_frame(void){return (td_daynight_lights&&td_car_colour==TD_PAL_COURIER?TD_FRAME_PLAYER_CAR_LIT:0)+(td.vehicle<<3)+(((td.heading+1)&15)>>1);}
+/* The courier's vehicle frame: one of eight headings, lit at night in the
+ * depot's own car; a special vehicle shows its nearest cardinal view. */
+static UBYTE td_body_frame(void){
+    if(td_player_special)return TD_FRAME_SPECIAL+((((td.heading+2)&15)>>2)<<1);
+    return (td.vehicle<<3)+(((td.heading+1)&15)>>1);
+}
+static UBYTE td_vehicle_frame(void){return (!td_player_special&&td_daynight_lights&&td_car_colour==TD_PAL_COURIER?TD_FRAME_PLAYER_CAR_LIT:0)+td_body_frame();}
 void td_message(UBYTE m) BANKED {td.msg=m;td_notice_timer=90;if(m==5||m==13)td_audio_play(TD_AUDIO_IMPACT);td_ui_draw();}
 static void td_sound_update(void){td_audio_update(td.speed,td.vehicle,td.onfoot,!!INPUT_B,td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);}
 static UBYTE td_near(td_stop_t *s){return s->district==td.district&&td_distance(td.u>>4,s->u)<15&&td_distance(td.v>>4,s->v)<15;}
@@ -467,7 +474,7 @@ static void td_pause_choose(void){
         case TD_MENU_JOBS:td.mode=TD_BOARD;if(td.job==TD_NONE)td_ready_offer();else{td.menu=td.job;td_get_job(td.menu,&td_offer);}break;
         case TD_MENU_VEHICLE:
             if(td.job!=TD_NONE||td.speed>2||td.speed<-2||td.onfoot){td_message(2);return;}
-            td.vehicle=(td.vehicle+1)&3;td_car_damage=0;td_car_colour=TD_PAL_COURIER;td_save();break;
+            td.vehicle=(td.vehicle+1)&3;td_player_special=0;td_car_damage=0;td_car_colour=TD_PAL_COURIER;td_save();break;
         case TD_MENU_SUPPLIES:if(td_life_buy())td_save();td.mode=TD_ROAM;break;
         case TD_MENU_CANCEL:
             if(td.job==TD_NONE){td_message(2);return;}
@@ -1238,7 +1245,7 @@ UBYTE td_ped_layout(void) NAKED {
         or a, a
         jr nz, 20$
         ld a, e
-        cp a, #112
+        cp a, #136
         jr nc, 20$
         cp a, #10
         ld a, #0
@@ -1264,7 +1271,7 @@ UBYTE td_ped_layout(void) NAKED {
         or a, a
         jr nz, 20$
         ld a, e
-        cp a, #96
+        cp a, #120
         jr nc, 20$
         ld hl, #_td_pl_ap
         ld c, a
@@ -1343,7 +1350,9 @@ static UBYTE td_ped_layout_c(UBYTE base,UBYTE step,UWORD player_u,UWORD player_v
         u+=phase<64?phase:127-phase;
         a->pos.x=u<<5;a->pos.y=v<<5;TD_FRAME(a,td_walker_bases[route&7]+(phase<64?0:2)+step);
         gap=player_u>u?player_u-u:u-player_u;
-        if(gap<112&&(player_v>v?player_v-v:v-player_v)<96){
+        /* Drawn wherever the route is kept (td_routes.c): the look-ahead
+         * camera shows up to 112 x 96 px from the courier plus a sprite. */
+        if(gap<136&&(player_v>v?player_v-v:v-player_v)<120){
             a->flags&=~ACTOR_FLAG_HIDDEN;
             if(gap<10&&(player_v>v?player_v-v:v-player_v)<10)near|=1<<i;
         }else a->flags|=ACTOR_FLAG_HIDDEN;
@@ -1475,8 +1484,12 @@ static void td_traffic_present(void){
         a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(sample->frame&7));
     }
 #endif
+    if(td_special_kind==TD_SPECIAL_AMBULANCE||td_special_kind==TD_SPECIAL_FIRE_TRUCK){
+        UBYTE k;
+        for(k=0;k<6;k++)if(td_traffic_bases[k]==TD_FRAME_SPECIAL&&!(td_tr_ctrl&(1<<k)))TD_PALETTE(&actors[2+k])=(td_tick&8)?TD_PAL_RED:TD_PAL_BLUE;
+    }
     TD_PALETTE(&actors[8])=td_car_colour;
-    td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer?TD_FRAME_CAR_DOOR_OPEN:(td.vehicle<<3)+(((td.heading+1)&15)>>1));
+    td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer&&!td_player_special?TD_FRAME_CAR_DOOR_OPEN:td_body_frame());
     if(td.onfoot&&td.park_district==td.district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
 }
 /* Clothing colours: civilians by route identity, navy for officers. */
@@ -1525,7 +1538,10 @@ static void td_pedestrians(void){
      * mask from those updates: a car at full speed still meets a walker's
      * ten-pixel reach on one of them. */
     near=0;
-    if((td_ped_flip^=1)){
+    /* A refresh lays walkers out at once: a slot given a new route must be
+     * at its new place before td_life_peds decides whether it is in view
+     * (otherwise it could be shown from its old place and pop in). */
+    if((td_ped_flip^=1)||refresh){
 #ifdef __SDCC
         td_pl_base=td_ped_base();td_pl_step=(td_tick>>3)&1;td_pl_pu=player_u;td_pl_pv=player_v;
         near=td_ped_layout();
@@ -1546,7 +1562,12 @@ static UBYTE td_fire_hold;
  * (TD_NONE while that press has already been used). */
 #define TD_RUN_AFTER 8
 static UBYTE td_a_held=TD_NONE;
-UBYTE td_running;
+UBYTE td_running,td_rolling,td_hitstop;
+/* A and B pressed within a few ticks of each other while moving on foot:
+ * a dodge roll, 14 ticks at 1.75 px a tick through which rounds miss. */
+#define TD_ROLL_TICKS 14
+#define TD_ROLL_CHORD 6
+static UBYTE td_foot_a_age=255,td_foot_b_age=255;static BYTE td_roll_x,td_roll_y;
 static void td_drive(void){
     WORD nu,nv;BYTE walk_x,walk_y;UBYTE moving=0,step;
     if(td_entry_timer){
@@ -1555,9 +1576,26 @@ static void td_drive(void){
         td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());return;
     }
     if(td.onfoot){
-        if(td_life_locked()){td.speed=0;td_running=0;return;}
+        if(td_life_locked()){td.speed=0;td_running=0;td_rolling=0;return;}
+        if(td_rolling){
+            /* Mid-roll: tumbling along, no other action. */
+            td_rolling--;td_running=0;
+            nu=td.u+td_roll_x*(td_roll_y?20:28);nv=td.v+td_roll_y*(td_roll_x?20:28);
+            if(td_step_free(nu,nv)){td.u=nu;td.v=nv;}
+            else{if(nu!=(WORD)td.u&&td_step_free(nu,td.v))td.u=nu;if(nv!=(WORD)td.v&&td_step_free(td.u,nv))td.v=nv;}
+            td_frame(&PLAYER,TD_FRAME_KNOCK+((TD_ROLL_TICKS-1-td_rolling)>>2));
+            return;
+        }
         nu=td.u;nv=td.v;
         walk_x=!!INPUT_RIGHT-!!INPUT_LEFT;walk_y=!!INPUT_DOWN-!!INPUT_UP;
+        if(td_input_edge&&INPUT_A_PRESSED)td_foot_a_age=0;else if(td_foot_a_age<255)td_foot_a_age++;
+        if(td_input_edge&&INPUT_B_PRESSED)td_foot_b_age=0;else if(td_foot_b_age<255)td_foot_b_age++;
+        if((walk_x||walk_y)&&INPUT_A&&INPUT_B&&td_foot_a_age<TD_ROLL_CHORD&&td_foot_b_age<TD_ROLL_CHORD&&
+           !td_swimmable(td.u>>4,td.v>>4)&&!td_entry_timer){
+            td_rolling=TD_ROLL_TICKS;td_roll_x=walk_x;td_roll_y=walk_y;td_foot_a_age=td_foot_b_age=255;
+            td_a_held=TD_NONE;td_fire_hold=0;td_aim_hold=0;td_audio_play(TD_AUDIO_MENU);
+            td_frame(&PLAYER,TD_FRAME_KNOCK);return;
+        }
         td_swimming=td_swimmable(td.u>>4,td.v>>4);
         td_running=!td_swimming&&(walk_x||walk_y)&&INPUT_A&&td_a_held!=TD_NONE&&td_a_held>=TD_RUN_AFTER;
         /* Walking covers 8 Q4 a tick, running 13 and swimming 5; diagonals
@@ -1667,7 +1705,7 @@ void toronto_init(void) BANKED {
     td_world_signals(td.district,td_signal_u,td_signal_v);
     for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;td_ped_flip=0;
-    td_life_reset(cold);td_anim_reset();
+    td_life_reset(cold);td_anim_reset();td_special_init();
     for(i=0;i<6;i++)td_lf_new_look(i,(UBYTE)(i*37+td.seconds+(td.district<<3)));
     td_frame(&actors[1],TD_FRAME_BEACON);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());td_traffic_present();td_pedestrians();
@@ -1689,6 +1727,8 @@ void toronto_update(void) BANKED {
     now=sys_time;elapsed=now-td_last_frame;td_last_frame=now;
     td_corner_used=0;
     motion=elapsed>4?4:elapsed;
+    /* Hit-stop: the world holds still for a moment after a telling blow. */
+    if(td_hitstop){td_hitstop--;motion=0;}
     if(td.mode!=TD_ROAM&&td.mode!=TD_WAIT&&td.mode!=TD_RIDE){td_menu_update();td_sound_update();return;}
     if(INPUT_START_PRESSED){td_resume_mode=td.mode;td.mode=TD_PAUSE;td.menu=0;td_audio_play(TD_AUDIO_MENU);td_ui_draw();td_sound_update();return;}
     /* A deliberate cancel wins over departure on the same input frame. */

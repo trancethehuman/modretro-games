@@ -378,9 +378,9 @@ static void test_city_routes_and_walking(void) {
     expect(!lf_drive(120,804),"car footprint rejects a narrow solid rail under its centre");
     /* Southbound with the left edge a pixel over a corner tile (400,400). */
     reset_case();geometry=SOUTHWEST_CORNER;td.u=404*16+2;td.v=390*16+12;
-    td.heading=4;td.speed=19;td_vx=0;td_vy=304;
+    td.heading=4;td.speed=17;td_vx=0;td_vy=272;
     for(unsigned i=0;i<16;i++)driving_tick(J_A);
-    expect(td.speed>=19&&td.v>398*16,"held throttle clears a small quantised corner overlap without losing forward speed");
+    expect(td.speed>=17&&td.v>398*16,"held throttle clears a small quantised corner overlap without losing forward speed");
     expect(lf_drive(td.u>>4,td.v>>4),"corner slide retains a collision-valid car footprint");
 
     reset_case();geometry=EAST_WALL;td.u=393*16;td.v=450*16;td.heading=0;td.speed=24;td_vx=384;
@@ -540,7 +540,7 @@ static void test_running_and_clips(void) {
     for(unsigned i=0;i<3;i++)driving_tick(J_RIGHT|J_A);
     expect(!td_ped_ovr,"a tap while walking waits for release before punching");
     driving_tick(J_RIGHT);
-    expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLY,"releasing a short tap while walking throws the punch");
+    expect((td_ped_ovr&1)&&pk_mode[0]==PK_STUN,"releasing a short tap while walking throws the punch (a jab: dazed)");
 
     reset_case();geometry=CLEAR_GROUND;td.u=400*16;td.v=450*16;td.heading=0;td.speed=16;td_vx=256;td_vy=0;
     td_traffic_u[0]=td.u+176;td_traffic_v[0]=td.v+144;td_traffic_bases[0]=TD_FRAME_PLAYER_CAR;actors[2].frame=td_traffic_bases[0];
@@ -561,11 +561,18 @@ static void test_street_life(void) {
     for(unsigned i=0;i<16;i++)driving_tick(0);
     expect(!td.onfoot&&td.u==300*16&&td.v==280*16,"the courier ends up driving the stolen vehicle");
 
-    /* A punch knocks a walker down; a pistol shot uses a round. */
-    reset_case();td.onfoot=1;td.u=300*16;td.v=300*16;td_walk_dir=0;td.ammo=3;
+    /* Two quick jabs daze a walker, the third knocks them down; a pistol
+     * shot uses a round. */
+    reset_case();td.onfoot=1;td.u=300*16;td.v=300*16;td_walk_dir=0;td.ammo=3;geometry=CLEAR_GROUND;
     actors[9].pos.x=307*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=0;
     td_life_punch();
-    expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLY,"a punch throws the walker in front of the courier");
+    expect((td_ped_ovr&1)&&pk_mode[0]==PK_STUN&&pk_u[0]>307*16&&td_hitstop,"a jab staggers the walker in front of the courier back a step");
+    for(unsigned i=0;i<12;i++)td_life_tick();
+    actors[9].pos.x=pk_u[0]<<1;actors[9].pos.y=pk_v[0]<<1;td_life_punch();
+    expect(pk_mode[0]==PK_STUN&&lf_combo==1,"a second jab in quick succession keeps them dazed");
+    for(unsigned i=0;i<12;i++)td_life_tick();
+    actors[9].pos.x=pk_u[0]<<1;actors[9].pos.y=pk_v[0]<<1;td_life_punch();
+    expect(pk_mode[0]==PK_FLY&&lf_combo==2,"the third blow of the combination throws the walker");
     for(unsigned i=0;i<40;i++)td_life_tick();
     expect(pk_mode[0]==PK_DOWN,"a punched walker lands and stays down for a while");
     for(unsigned i=0;i<20;i++)td_life_tick();
@@ -635,7 +642,7 @@ static void test_street_life(void) {
     for(unsigned i=0;i<10;i++)td_lf_crime(CR_GUN);
     expect(td.wanted==0,"eleven unseen shots are still not enough for a star");
     for(unsigned i=0;i<5;i++)td_lf_crime(CR_GUN);
-    expect(td.wanted==1&&td.heat==TD_HEAT_SECONDS,"repeated unseen chaos eventually draws a star");
+    expect(td.wanted==1&&td.heat==TD_HEAT_FOR(1),"repeated unseen chaos eventually draws a star");
     reset_case();td_lf_crime(CR_COP);
     expect(td.wanted==1,"assaulting an officer adds one star");
     td_lf_crime(CR_COP_KILL);
@@ -677,6 +684,44 @@ static void test_street_life(void) {
     { UWORD u0=td_traffic_u[TD_POLICE_SLOT];for(unsigned i=0;i<60;i++){td_tick++;lf_cars_tick();}
       expect(td_traffic_u[TD_POLICE_SLOT]-u0<=60*16,"at five stars the patrol car covers under a pixel per update"); }
 
+    /* The patrol car keeps its distance from a moving car (72 px), comes
+     * alongside a stopped one, and never jumps back beside the courier. */
+    reset_case();geometry=CLEAR_GROUND;td.wanted=3;td.speed=10;td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;tr_timer[TD_POLICE_SLOT]=0;
+    td_traffic_u[TD_POLICE_SLOT]=td.u-90*16;td_traffic_v[TD_POLICE_SLOT]=td.v;lf_axis=0;
+    for(unsigned i=0;i<400;i++){td_tick++;lf_cars_tick();}
+    expect(lf_dist(td_traffic_u[TD_POLICE_SLOT],td.u)>=64*16&&lf_dist(td_traffic_u[TD_POLICE_SLOT],td.u)<=80*16,
+           "the patrol car trails a moving car at about 72 px instead of tailgating");
+    td.speed=0;for(unsigned i=0;i<400;i++){td_tick++;lf_cars_tick();}
+    expect(lf_dist(td_traffic_u[TD_POLICE_SLOT],td.u)<16*16&&lf_bust,"a stopped car is boxed in");
+    reset_case();geometry=CLEAR_GROUND;td.wanted=2;td.speed=10;td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;tr_timer[TD_POLICE_SLOT]=0;
+    td_traffic_u[TD_POLICE_SLOT]=td.u-200*16;td_traffic_v[TD_POLICE_SLOT]=td.v;lf_seen_u=td.u-150*16;lf_seen_v=td.v;lf_axis=0;
+    { UWORD before=td_traffic_u[TD_POLICE_SLOT],jumps=0;
+      for(unsigned i=0;i<300;i++){td_tick++;lf_cars_tick();if(lf_dist(td_traffic_u[TD_POLICE_SLOT],before)>32)jumps++;before=td_traffic_u[TD_POLICE_SLOT];}
+      expect(!jumps,"a pursuer left behind never reappears beside the courier");
+      expect(lf_dist(td_traffic_u[TD_POLICE_SLOT],lf_seen_u)<80*16&&lf_dist(td_traffic_u[TD_POLICE_SLOT],td.u)>100*16,
+             "out of sight the patrol car heads for where the courier was last seen"); }
+    /* Out of sight a star drains in its heat time: six seconds at one star. */
+    reset_case();td.wanted=1;td.heat=TD_HEAT_FOR(1);td_traffic_u[TD_POLICE_SLOT]=30000;
+    for(unsigned s=0;s<TD_HEAT_FOR(1)-1;s++)td_life_second();
+    expect(td.wanted==1,"a star holds until its heat runs out");
+    td_life_second();expect(td.wanted==0&&td.msg==TD_MSG_LOST,"six unseen seconds lose one star");
+    /* A cruiser on its beat witnesses crimes and takes up the pursuit at once. */
+    reset_case();native_case();td.mode=TD_ROAM;scroll_x=(td.u>>4)-80;scroll_y=(td.v>>4)-72;
+    lf_beat=1;td_traffic_u[TD_POLICE_SLOT]=td.u+60*16;td_traffic_v[TD_POLICE_SLOT]=td.v;
+    td_lf_crime(CR_MINOR);expect(td.wanted==1,"a cruiser on its beat sees a crime");
+    lf_recruit();expect(lf_patrol&&!lf_beat&&tr_mode[TD_POLICE_SLOT]==TR_CHASE,"the beat cruiser in view takes up the pursuit at once");
+    /* Gunfire scatters drivers in view; a speeding car makes walkers jump clear. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;scroll_x=(td.u>>4)-80;scroll_y=(td.v>>4)-72;
+    td_traffic_u[1]=td.u+40*16;td_traffic_v[1]=td.v;td_lf_scatter(td.u>>4,td.v>>4);
+    expect((td_tr_ctrl&2)&&tr_mode[1]==TR_FLEE,"gunfire sends a nearby driver speeding away");
+    { UWORD u0=td_traffic_u[1],v0=td_traffic_v[1];for(unsigned i=0;i<20;i++){td_tick++;lf_cars_tick();}
+      expect(lf_dist(td_traffic_u[1],u0)+lf_dist(td_traffic_v[1],v0)>=20*16,"the fleeing car drives off fast"); }
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=0;td.mode=TD_ROAM;td.speed=16;td_vx=256;td_vy=0;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    actors[9].pos.x=((td.u>>4)+18)*32;actors[9].pos.y=(td.v>>4)*32;actors[9].flags=0;td_ped_route[0]=1;
+    { unsigned dodged=0;for(unsigned i=0;i<64&&!dodged;i++){td_tick++;td_life_peds(0);if((td_ped_ovr&1)&&pk_mode[0]==PK_FLEE)dodged=1;}
+      expect(dodged,"a walker in the path of a speeding car jumps clear"); }
+
     /* Officers on foot are slower than a walking courier below four stars,
      * and an arrest needs sustained contact. */
     reset_case();td.onfoot=1;td.wanted=2;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=LF_LOOK_OFFICER;
@@ -698,12 +743,65 @@ static void test_street_life(void) {
     /* From four stars their rounds fly: a courier who stands still is hit
      * within a few shots; no round lands instantly. */
     td.wanted=4;lf_police_fire();
-    expect(td_shot_live&&td.vitality==100,"a four-star officer's shot is a round in flight, not an instant hit");
+    expect(lf_aim_who==0&&!td_shot_live,"a four-star officer first stops and aims (the shot is telegraphed)");
+    for(unsigned i=0;i<30&&!td_shot_live;i++)lf_police_fire();
+    expect(td_shot_live&&td.vitality==100&&lf_aim_who==TD_NONE,"a four-star officer's shot is a round in flight, not an instant hit");
     {unsigned shots=1,hits=0;UBYTE last=100;
      for(unsigned i=0;i<600;i++){td_tick++;td_life_tick();if(td.vitality<last){hits++;last=td.vitality;}
          if(lf_cop_cool==100-40)shots++;}
      expect(hits>=2&&td.vitality<100&&td.vitality>=100-hits*8,"standing still in the line of fire, the courier is hit by some rounds");
      expect(shots>=hits,"no more hits than rounds fired");}
+    /* A police round leaves the muzzle clear: it never hits the officer who fired it. */
+    reset_case();td.onfoot=1;td.wanted=4;td.mode=TD_ROAM;geometry=CLEAR_GROUND;td.u=300*16;td.v=300*16;td.vitality=100;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=LF_LOOK_OFFICER;pk_u[0]=360*16;pk_v[0]=300*16;
+    actors[9].pos.x=360*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=5;
+    for(unsigned i=0;i<60&&!td_shot_live;i++){td_tick++;lf_police_fire();}
+    for(unsigned i=0;i<12;i++){td_tick++;td_shot_tick();}
+    expect(pk_mode[0]==PK_CHASE,"an officer's own round never hits them");
+    /* After a shot (inside 40 px, where officers stand their ground) the
+     * officer sidesteps. */
+    pk_u[0]=330*16;actors[9].pos.x=330*32;lf_cop_cool=0;
+    for(unsigned i=0;i<60&&!td_shot_live;i++){td_tick++;lf_police_fire();}
+    { UWORD v0=pk_v[0];for(unsigned i=0;i<24;i++){td_tick++;lf_peds_tick();}
+      expect(pk_v[0]!=v0,"after shooting, the officer sidesteps"); }
+    /* A dodge roll (A and B together while moving): the courier tumbles a
+     * few tiles and police rounds pass through. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;geometry=CLEAR_GROUND;td.u=300*16;td.v=300*16;td.vitality=100;td_rolling=0;
+    driving_tick(J_RIGHT);driving_tick(J_RIGHT|J_A);driving_tick(J_RIGHT|J_A|J_B);
+    expect(td_rolling&&PLAYER.frame_start>=TD_FRAME_KNOCK&&PLAYER.frame_start<TD_FRAME_KNOCK+4,"A and B together while moving start a roll");
+    { UWORD u0=td.u;for(unsigned i=0;i<6;i++)driving_tick(J_RIGHT|J_A|J_B);
+      expect(td.u-u0>=6*24,"a roll covers ground quickly"); }
+    td_shot_fire(TD_SHOT_POLICE,(td.u>>4)+30,td.v>>4,td.u>>4,td.v>>4,0);
+    for(unsigned i=0;i<8&&td_shot_live;i++){td_tick++;td_shot_tick();}
+    expect(td.vitality==100,"rounds pass a rolling courier");
+    for(unsigned i=0;i<20;i++)driving_tick(0);
+    expect(!td_rolling,"the roll ends");
+    /* Running into a walker bowls them over. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;geometry=CLEAR_GROUND;td.u=300*16;td.v=300*16;td_walk_dir=0;td_running=1;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    actors[9].pos.x=305*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=1;
+    td_life_peds(1);
+    expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLY&&pk_vu[0]>0,"a running courier bowls over a walker");
+    /* A downed officer drops a magazine the courier can pick up. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;geometry=CLEAR_GROUND;td.u=300*16;td.v=300*16;td.ammo=3;
+    actors[9].pos.x=340*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=5;
+    td_lf_knock(0,8,0,0);
+    expect(td_fx_kind==FX_DROP,"a downed officer drops a magazine");
+    td_lf_fx(FX_SPARK,10,10,6);expect(td_fx_kind==FX_DROP,"a spark does not replace the magazine on the ground");
+    td.u=fx_u;td.v=fx_v;td_tick++;td_life_tick();
+    expect(td.ammo==9&&!td_fx_kind,"walking over the magazine picks up six rounds");
+    /* Hit-stop: after a telling blow the world holds for a few updates. */
+    reset_case();native_case();td_session_live=1;toronto_init();td.mode=TD_ROAM;td.onfoot=1;td_hitstop=3;
+    { UBYTE tick0=td_tick;world_tick(0,1);world_tick(0,1);
+      expect(td_tick==tick0&&td_hitstop==1,"hit-stop freezes the world for a moment");
+      world_tick(0,1);world_tick(0,1);expect(td_tick!=tick0,"then play resumes"); }
+    /* A civilian who has a pistol pointed at them runs. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;geometry=CLEAR_GROUND;td.u=300*16;td.v=300*16;td.ammo=5;td_aim_dir=0;td_aim_target=TD_NONE;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    actors[9].pos.x=360*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=2;
+    td_life_aim();
+    expect(td_aim_target==0&&(td_ped_ovr&1)&&pk_mode[0]==PK_FLEE,"a civilian with a pistol pointed at them runs");
     /* Officers wear vests: the courier's first round staggers, the second downs. */
     reset_case();td.onfoot=1;td.mode=TD_ROAM;td.u=300*16;td.v=300*16;geometry=CLEAR_GROUND;
     for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
@@ -2065,6 +2163,55 @@ static void test_visible_transit(void) {
 }
 
 
+/* Special vehicles share one tile block: the first loads its design, the
+ * rest take the same kind; the courier can take and drive one (its own
+ * handling), and a hidden one waits beside its landmark. */
+static void test_special_vehicles(void) {
+    reset_case();native_case();td_session_live=1;toronto_init();td.mode=TD_ROAM;
+    td_player_special=0;td_special_kind=0;for(UBYTE k=0;k<6;k++)td_lf_new_look(k,(UBYTE)(k*37));
+    td_veh_special(1);
+    expect(td_traffic_bases[1]==TD_FRAME_SPECIAL&&td_special_kind>=1&&td_special_kind<=TD_SPECIAL_KINDS,"a slot coming into play can be a special vehicle");
+    UBYTE kind=td_special_kind;
+    for(unsigned n=0;n<20;n++)td_veh_special(2);
+    expect(td_special_kind==kind&&td_traffic_bases[2]==TD_FRAME_SPECIAL,"while one is in use, others take the same kind (one tile block)");
+    td_lf_new_look(1,0);td_lf_new_look(2,0);
+    /* Taking a bus: the courier drives it with the bus's handling. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.u=300*16;td.v=292*16;td.park_u=100*16;td.park_v=100*16;td_player_special=0;
+    td_special_load(TD_SPECIAL_BUS);td_traffic_u[1]=300*16;td_traffic_v[1]=280*16;td_traffic_bases[1]=TD_FRAME_SPECIAL;actors[3].frame=TD_FRAME_SPECIAL;
+    td_input_edge=1;driving_tick(J_A);
+    expect(td_player_special==TD_SPECIAL_BUS&&td.vehicle==1,"a stolen bus is the courier's (kept as a van in a save)");
+    for(unsigned i=0;i<16;i++)driving_tick(0);
+    expect(!td.onfoot&&PLAYER.frame_start>=TD_FRAME_SPECIAL&&PLAYER.frame_start<TD_FRAME_SPECIAL+8,"the courier drives the bus (its own frames)");
+    geometry=CLEAR_GROUND;td.speed=0;td_vx=td_vy=0;for(unsigned i=0;i<600;i++)driving_tick(J_A);
+    expect(td.speed==14,"a bus tops out lower than a car");
+    /* The tank: armour and weight. */
+    td_player_special=TD_SPECIAL_TANK;td_car_damage=0;lf_wear(40);
+    expect(td_car_damage==0,"nothing dents a tank");
+    td_player_special=0;td_special_kind=0;
+    /* The hidden tank by the Moss Park Armoury: parked when the courier is
+     * near and it is out of view, back into traffic once they leave. */
+    { UBYTE k=0;for(;k<TD_HIDDEN_COUNT&&td_hidden_kind[k]!=TD_SPECIAL_TANK;k++);
+      expect(k<TD_HIDDEN_COUNT,"a tank is hidden somewhere");
+      reset_case();native_case();td.district=td_hidden_scene[k];td_session_live=1;toronto_init();td.mode=TD_ROAM;td_player_special=0;
+      td.u=(td_hidden_u[k]+200)*16;td.v=td_hidden_v[k]*16;scroll_x=(td.u>>4)-80;scroll_y=(td.v>>4)-72;
+      for(UBYTE s=0;s<6;s++){td_traffic_u[s]=(td.u>>4)*16+2000*16;td_traffic_v[s]=td.v;}
+      td_hidden_slot=TD_NONE;td_veh_hidden();
+      UBYTE slot=td_hidden_slot;
+      expect(slot!=TD_NONE&&tr_mode[slot]==TR_STILL&&td_traffic_bases[slot]==TD_FRAME_SPECIAL&&td_special_kind==TD_SPECIAL_TANK&&
+             td_traffic_u[slot]==td_hidden_u[k]*16,"the tank is parked by its landmark when the courier comes near");
+      td.u=(td_hidden_u[k]+500)*16;scroll_x=(td.u>>4)-80;td_veh_hidden();
+      expect(td_hidden_slot==TD_NONE&&tr_mode[slot]==TR_PARK,"once the courier leaves, it goes back to being traffic");
+      /* A bus off in traffic holds the block: the tank takes it back. */
+      reset_case();native_case();td.district=td_hidden_scene[k];td_session_live=1;toronto_init();td.mode=TD_ROAM;td_player_special=0;
+      td.u=(td_hidden_u[k]+200)*16;td.v=td_hidden_v[k]*16;scroll_x=(td.u>>4)-80;scroll_y=(td.v>>4)-72;
+      for(UBYTE s=0;s<6;s++){td_traffic_u[s]=(td.u>>4)*16+2000*16;td_traffic_v[s]=td.v;}
+      td_special_load(TD_SPECIAL_BUS);td_traffic_bases[1]=TD_FRAME_SPECIAL;
+      td_hidden_slot=TD_NONE;td_veh_hidden();
+      expect(td_hidden_slot!=TD_NONE&&td_special_kind==TD_SPECIAL_TANK&&td_traffic_bases[1]!=TD_FRAME_SPECIAL,
+             "a bus out of view gives the tile block back to the hidden tank");
+      scroll_x=scroll_y=0; }
+}
+
 static void test_ambient_traffic(void) {
     /* A vehicle far out of view comes back onto its own loop just beyond the
      * screen, heading toward the courier; one in view is left alone. */
@@ -2229,7 +2376,7 @@ static void test_car_damage(void) {
     expect(td_car_damage>=TD_DAMAGE_FAIL&&td.msg==TD_MSG_SMOKING,"crossing the failing threshold warns of a smoking engine");
     geometry=CLEAR_GROUND;td.cooldown=0;td.speed=0;td_vx=td_vy=0;
     for(unsigned i=0;i<400;i++)driving_tick(J_A);
-    expect(td.speed==15,"a failing car tops out at three quarters of its speed");
+    expect(td.speed==14,"a failing car tops out at three quarters of its speed");
     native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;td.onfoot=0;geometry=CLEAR_GROUND;
     td_car_damage=TD_DAMAGE_FAIL;memset(td_anim_parts,0,sizeof(td_anim_parts));
     for(unsigned i=0;i<40;i++){td_tick++;td_anim_update();}
@@ -2260,27 +2407,50 @@ static void test_swimming_and_overlay(void) {
     for(unsigned i=0;i<60;i++)driving_tick(J_UP);
     expect(!td_swimming&&td.v<480*16,"the courier climbs out onto the sidewalk");
     expect(td_district_swimmable(0,400,500)&&!td_district_walkable(0,400,500),"open water is swimmable, not walkable");
-    /* A shark rises in open water, closes in and bites; out of the water
-       the courier is safe. */
+    /* A shark rises in open water, circles, closes in and bites; out of
+       the water the courier is safe. */
     reset_case();geometry=LAKE_SOUTH;td.onfoot=1;td.u=400*16;td.v=600*16;td.vitality=100;td.mode=TD_ROAM;
     td_swimming=1;shark_state=0;shark_wait=0;
-    unsigned spawned=0,bitten=0;
-    for(unsigned t=0;t<2000&&!bitten;t++){td_tick++;shark_tick();if(shark_state==1)spawned=1;if(td.vitality<100)bitten=1;}
-    expect(spawned&&bitten&&td.vitality==75,"a shark finds a swimmer in open water and bites");
-    expect(shark_state==2,"after a bite the shark swims off");
+    unsigned spawned=0,circled=0,bitten=0;
+    for(unsigned t=0;t<8000&&!bitten;t++){td_tick++;shark_tick();if(shark_state)spawned=1;if(shark_state==SHARK_CIRCLE)circled=1;if(td.vitality<100)bitten=1;}
+    expect(spawned&&circled&&bitten&&td.vitality==75,"a shark rises in open water, circles, closes in and bites");
+    expect(shark_state==SHARK_LEAVE,"after a bite the shark swims off");
     for(unsigned t=0;t<200;t++){td_tick++;shark_tick();}
     expect(!shark_state,"the shark leaves");
     td_swimming=0;shark_wait=0;for(unsigned t=0;t<600;t++){td_tick++;shark_tick();}
     expect(!shark_state,"no sharks for a courier on land");
-    /* From four stars the police helicopter circles the courier and keeps
-       the heat on; below three it leaves. */
-    reset_case();td.mode=TD_ROAM;td.u=500*16;td.v=500*16;td.wanted=3;heli_state=0;heli_tick();
+    /* Closing in, a shark gains on a swimmer only slowly (a third of a
+       pixel a tick against 0.31), so one near the shore can get out. */
+    td_swimming=1;shark_state=SHARK_CLOSE;shark_u=460;shark_v=600;td_tick=0;
+    for(unsigned t=0;t<60;t++){td_tick++;shark_tick();}
+    expect(shark_state==SHARK_CLOSE&&shark_u>=440&&shark_u<460,"a shark closes in at a third of a pixel a tick");
+    /* From four stars the police helicopter tracks the courier and keeps
+       the heat on; it has no weapon, loses them under cover, searches,
+       and leaves below three stars. */
+    reset_case();td.mode=TD_ROAM;td.u=500*16;td.v=500*16;td.wanted=3;heli_state=0;td_test_cover=0;heli_tick();
     expect(!heli_state,"no helicopter below four stars");
-    td.wanted=4;heli_tick();expect(heli_state==1&&td.msg==TD_MSG_HELI,"four stars call the helicopter");
+    td.wanted=4;heli_tick();expect(heli_state==HELI_TRACK&&td.msg==TD_MSG_HELI,"four stars call the helicopter");
     for(unsigned t=0;t<400;t++){td_tick++;heli_tick();}
-    expect(td_overlay_heli_near(64,64),"the helicopter circles over the courier");
+    expect(td_overlay_spotted()&&lf_abs(heli_u-500)<48&&lf_abs(heli_v-500)<48,"the helicopter tracks the courier in the open");
+    td.wanted=5;td_shot_reset();for(unsigned t=0;t<900;t++){td_tick++;heli_tick();}
+    expect(!td_shot_live,"the helicopter has no weapon, even at five stars");
+    td_test_cover=1;for(unsigned t=0;t<70;t++){td_tick++;heli_tick();}
+    expect(heli_state==HELI_SEARCH&&!td_overlay_spotted(),"under a roof or canopy the courier drops out of the helicopter's sight");
+    td_test_cover=0;for(unsigned t=0;t<4;t++){td_tick++;heli_tick();}
+    expect(heli_state==HELI_TRACK,"back in the open nearby, the helicopter finds them again");
     td.wanted=2;for(unsigned t=0;t<600&&heli_state;t++){td_tick++;heli_tick();}
     expect(!heli_state,"with the heat down the helicopter flies off");
+    /* Boats cross open water; a swimmer with stars draws the police boat,
+       which keeps its distance and the heat on. */
+    reset_case();geometry=LAKE_SOUTH;td.onfoot=1;td.u=400*16;td.v=600*16;td.mode=TD_ROAM;td_swimming=1;td.wanted=0;
+    scroll_x=320;scroll_y=528;memset(boat_kind,0,sizeof(boat_kind));boat_wait=0;
+    for(unsigned t=0;t<400;t++){td_tick++;boats_tick();}
+    expect((boat_kind[0]==BOAT_MOTOR||boat_kind[0]==BOAT_SAIL)&&!td_overlay_spotted(),"boats come out on open water");
+    td.wanted=2;boat_wait=0;
+    for(unsigned t=0;t<900;t++){td_tick++;boats_tick();}
+    expect(boat_kind[0]==BOAT_POLICE&&td_overlay_spotted()&&lf_abs(boat_u[0]-400)>=30,"a swimmer with stars draws the police boat, which stands off");
+    td.wanted=0;td_tick++;boats_tick();expect(boat_kind[0]!=BOAT_POLICE,"with no stars the police boat goes back to being a boat");
+    td_swimming=0;scroll_x=scroll_y=0;
     /* Weather follows the clock: a spell every 128 play seconds. */
     reset_case();td.seconds=4*128;td_overlay_second();expect(td_weather==TD_WEATHER_RAIN,"the fifth spell is rain");
     td.seconds=2*128;expect(td_overlay_second()&&td_weather==TD_WEATHER_CLOUDY,"the third is overcast");
@@ -2335,7 +2505,7 @@ int main(void) {
     test_walk_pace_dispatch_and_foot_delivery();
     test_park_delivery_guidance();
     test_atlas_driver_handoff_and_freeze();
-    test_sidewalk_pickups();test_parcels_spray_panic();test_visible_transit();test_ambient_traffic();
+    test_sidewalk_pickups();test_parcels_spray_panic();test_visible_transit();test_ambient_traffic();test_special_vehicles();
     test_day_night();test_animation();test_car_damage();test_scenery();test_places();
     printf("Host engine regressions: %u checks, %u failures. Hardware/emulator evidence remains separate.\n",checks,failures);
     return failures?1:0;

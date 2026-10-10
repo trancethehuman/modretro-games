@@ -1108,5 +1108,77 @@
   "png_sha256": "3f4c320a5e147af5b1febd8cbbefba0a43bfcc6ae404a53d1891d25be0a25a2a",
   "inputs": "Allan Gardens as above, then Start, Down, A (city map), 200 frames, B, B, 60 frames",
   "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "traffic-garbage-truck.png",
+  "frame": 4041,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "06c7720db42e07b5fca944a6746e389626eae4bd6db3e7045bde556c89044001",
+  "inputs": "driving the core SW avenues until a special vehicle is in view",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "hidden-tank-moss-park.png",
+  "frame": 4216,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "f4c2b416f0fa18de6d1806c56046965c0b26358c4107956de281746869c4d4da",
+  "inputs": "courier on foot written 180 px east of the Moss Park Armoury tank spot (scene 1) until it is parked, then walked in: the hidden tank",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "tank-driving.png",
+  "frame": 4370,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "a079cd290c9e5497a6beefc847210e342f8775d06f1c8669fad7cb1ea1d47b9e",
+  "inputs": "A beside the tank: the courier takes it and drives (A held, a right turn)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "combat-roll.png",
+  "frame": 4477,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "d1f005581b79611be18da0c94f625c07c82c67915919890df87ece722d7355e3",
+  "inputs": "on foot on King St (scene 3): Right, then A and B together: a dodge roll",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "officer-aims.png",
+  "frame": 4554,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "c9326911c3bb6b0e7b4809a570e61306f54b60a74e8f6652a5d922831c41e407",
+  "inputs": "four stars written on foot: an officer stops and aims, flashing, before firing",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "officer-fires.png",
+  "frame": 4569,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "9152d91a441810ef2c5d038e6ab9e624dda4feea93370c7e5aa5b04b536d2f83",
+  "inputs": "a third of a second later: the round in flight",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "police-heli-tracking.png",
+  "frame": 1714,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "98f6f72fc59a980871b6e07e90afcea3d656233d3030d029531d9f78fbf5249c",
+  "inputs": "on foot on King St (scene 3), four stars written: the police helicopter tracks the courier (no weapon)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "harbour-boats.png",
+  "frame": 2367,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "42959ca06def192d44a822fac88a8a6aba453c014555a7fde6dd912dab362e86",
+  "inputs": "walked off Queens Quay into the harbour (scene 3), treading water: boats crossing",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "police-boat.png",
+  "frame": 3119,
+  "rom_sha256": "a7c67b45ecc5ade4476e3a259e21965e3f6d7e51697c16254d8f166be32af64a",
+  "png_sha256": "020d456aaada93a9cf62e133a1d5a82b3951e54fe7bfdad9d001d738868fe136",
+  "inputs": "two stars written while swimming: the police boat stands off, lights flashing",
+  "source": "Unmodified PyBoy 2.7.0 frame"
  }
 ]

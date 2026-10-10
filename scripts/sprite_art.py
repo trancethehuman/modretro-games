@@ -322,6 +322,97 @@ def _cardinal_long(spec, lamps):
     return [east, east, south, south, flip_h(east), flip_h(east), flip_v(south), flip_v(south)]
 
 
+# Special vehicles: 32 long, drawn east-facing in a 32x16 frame; south is
+# its transpose (16x32), and west and north are tile flips. They share one
+# block of eight sprite tiles that the engine refills (td_special.c), so
+# any number of designs cost the sheet no more than one.
+SPECIAL = 32
+_SPECIAL_TYRES = [('tyre', 4, 1, 8, 1, 3), ('tyre', 4, 14, 8, 14, 3), ('tyre', 22, 1, 25, 1, 3), ('tyre', 22, 14, 25, 14, 3)]
+SPECIAL_LAMPS = ((29, 4), (29, 11))
+
+
+def _ambulance_special():
+    """White box ambulance: red side stripes, the star of life on the roof
+    and a light bar over the cab (the engine flashes it red and blue)."""
+    return [('box', 2, 2, 20, 13, 1), ('stripe', 3, 4, 19, 4, 2), ('stripe', 3, 11, 19, 11, 2),
+            ('cross', 9, 7, 14, 8, 2), ('cross', 11, 5, 12, 10, 2),
+            ('cab', 21, 3, 29, 12, 1), ('divide', 21, 3, 21, 12, 3), ('screen', 26, 4, 26, 11, 3),
+            ('bar', 23, 5, 24, 10, 2), ('glint', 27, 4, 27, 4, 1)] + _SPECIAL_TYRES
+
+
+def _fire_special():
+    """Pumper fire truck: red, the ladder along the roof, a light bar."""
+    spec = [('body', 2, 2, 29, 13, 2), ('ladder', 4, 6, 21, 6, 1), ('ladder', 4, 9, 21, 9, 1),
+            ('cab', 22, 3, 22, 12, 3), ('screen', 27, 4, 27, 11, 3), ('bar', 24, 5, 25, 10, 1),
+            ('reel', 3, 3, 20, 3, 1), ('reel', 3, 12, 20, 12, 1)]
+    spec += [('rung', x, 7, x, 8, 1) for x in range(5, 21, 3)]
+    return spec + _SPECIAL_TYRES
+
+
+def _bus_special():
+    """TTC bus: red skirts, a band of windows down each side, the white
+    roof with air conditioning at the back, and the windscreen ahead."""
+    spec = [('roof', 1, 2, 29, 13, 1), ('skirt', 1, 2, 29, 3, 2), ('skirt', 1, 12, 29, 13, 2),
+            ('screen', 27, 4, 28, 11, 3), ('air', 3, 5, 8, 10, 3), ('air', 4, 6, 7, 9, 1), ('hatch', 17, 6, 18, 9, 2),
+            ('rear', 1, 4, 1, 11, 3)]
+    spec += [('window', x, 4, x + 2, 4, 3) for x in range(3, 26, 4)]
+    spec += [('window', x, 11, x + 2, 11, 3) for x in range(3, 26, 4)]
+    return spec
+
+
+def _box_truck_special():
+    """Box truck: a long cargo box with panel lines, then the cab."""
+    spec = [('box', 1, 2, 21, 13, 1), ('panel', 2, 3, 20, 3, 2), ('panel', 2, 12, 20, 12, 2),
+            ('cab', 22, 3, 29, 12, 2), ('divide', 22, 3, 22, 12, 3), ('screen', 26, 4, 26, 11, 3),
+            ('glint', 26, 4, 26, 4, 1), ('flank', 23, 3, 28, 3, 1)]
+    spec += [('rib', x, 4, x, 11, 2) for x in range(4, 21, 4)]
+    return spec + _SPECIAL_TYRES
+
+
+def _garbage_special():
+    """Garbage truck: the compactor body with its ribs, the hopper at the
+    back and the cab (body tones only: the teal palette's light is skin)."""
+    spec = [('body', 2, 2, 21, 13, 2), ('hopper', 1, 3, 4, 12, 3),
+            ('cab', 22, 3, 29, 12, 2), ('divide', 22, 3, 22, 12, 3), ('screen', 26, 4, 26, 11, 3), ('band', 6, 7, 20, 8, 3)]
+    spec += [('rib', x, 3, x, 12, 3) for x in range(7, 21, 4)]
+    return spec + _SPECIAL_TYRES
+
+
+def _tank_special():
+    """Army tank: hull between two tracks, a domed turret with a hatch and
+    a long gun pointing ahead (body tones only)."""
+    spec = [('hull', 3, 3, 26, 12, 2), ('track', 2, 1, 27, 3, 3), ('track', 2, 12, 27, 14, 3),
+            ('turret', 9, 4, 18, 11, 2), ('ring', 9, 4, 18, 4, 3), ('ring', 9, 11, 18, 11, 3),
+            ('ring', 9, 4, 9, 11, 3), ('ring', 18, 4, 18, 11, 3), ('hatch', 12, 6, 13, 7, 3),
+            ('gun', 19, 7, 31, 8, 3), ('vent', 22, 5, 25, 5, 3), ('vent', 22, 10, 25, 10, 3)]
+    spec += [('tread', x, 2, x, 2, 2) for x in range(3, 27, 3)]
+    spec += [('tread', x, 13, x, 13, 2) for x in range(3, 27, 3)]
+    return spec
+
+
+SPECIAL_DESIGNS = (('ambulance', _ambulance_special, True), ('fire_truck', _fire_special, True),
+                   ('bus', _bus_special, False), ('box_truck', _box_truck_special, True),
+                   ('garbage_truck', _garbage_special, True), ('tank', _tank_special, False))
+
+
+def special_views(name):
+    """(east 32x16, south 16x32) drawings of a special vehicle."""
+    spec, lamps = {n: (f, l) for n, f, l in SPECIAL_DESIGNS}[name]
+    east = _outline(_layers(spec(), w=SPECIAL), SPECIAL_LAMPS if lamps else ())
+    return east, transpose(east)
+
+
+def special_placeholder():
+    """The tile block's own pixels in the sheet: unique noise, so GB Studio
+    gives each of the eight slices a tile of its own (the engine replaces
+    them). East 32x16 and south 16x32, cardinal like traffic."""
+    import random
+    rng = random.Random('toronto-dispatch special vehicle block')
+    east = [[rng.randint(1, 3) for _ in range(SPECIAL)] for _ in range(16)]
+    south = [[rng.randint(1, 3) for _ in range(16)] for _ in range(SPECIAL)]
+    return [east, east, south, south, flip_h(east), flip_h(east), flip_v(south), flip_v(south)]
+
+
 def compact_frames():
     return _cardinal_vehicle(_compact_spec(), COMPACT_LAMPS)
 

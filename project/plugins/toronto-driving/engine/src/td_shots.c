@@ -67,14 +67,15 @@ static UBYTE sh_hit(UBYTE k,UWORD bu,UWORD bv){
         if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN))continue;
         if(lf_dist(a->pos.x>>5,bu)>=5||lf_dist(a->pos.y>>5,bv)>=7)continue;
         look=(td_ped_ovr&bit)?pk_look[i]:(td_ped_route[i]!=TD_NONE?td_ped_route[i]&7:0);
-        if(owner==TD_SHOT_COURIER&&look==LF_LOOK_OFFICER&&!(lf_vest&bit))td_lf_stagger(i,sh_du[k]>>3,sh_dv[k]>>3);
+        if(owner==TD_SHOT_COURIER&&look==LF_LOOK_OFFICER&&!(lf_vest&bit)){td_lf_stagger(i,sh_du[k]>>3,sh_dv[k]>>3);if(td_hitstop<2)td_hitstop=2;}
         else td_lf_knock(i,sh_du[k]>>2,sh_dv[k]>>2,owner==TD_SHOT_COURIER?1:3);
         td_lf_fx(FX_SPARK,bu,bv,6);
         return TRUE;
     }
     if(owner==TD_SHOT_POLICE&&td.mode==TD_ROAM){
         pu=td.u>>4;pv=td.v>>4;reach=td.onfoot?5:9;
-        if(lf_dist(pu,bu)<reach&&lf_dist(pv,bv)<reach+2){
+        /* A rolling courier lets the round pass. */
+        if(!td_rolling&&lf_dist(pu,bu)<reach&&lf_dist(pv,bv)<reach+2){
             /* Just hit: a moment's grace, and the round flies past. */
             if(lf_hurt>14)return FALSE;
             td_lf_hurt(td.onfoot?4+td.wanted:(UBYTE)((4+td.wanted)>>1));
@@ -85,7 +86,9 @@ static UBYTE sh_hit(UBYTE k,UWORD bu,UWORD bv){
     for(i=0;i<6;i++){
         if(tr_mode[i]==TR_GONE)continue;
         if(lf_dist(td_traffic_u[i]>>4,bu)>=9||lf_dist(td_traffic_v[i]>>4,bv)>=9)continue;
-        if(owner==TD_SHOT_COURIER&&LF_IS_PATROL(i))td_lf_crime(CR_COP);
+        if(owner==TD_SHOT_COURIER&&LF_IS_POLICE(i))td_lf_crime(CR_COP);
+        /* A civilian driver under fire floors it. */
+        else if(owner==TD_SHOT_COURIER&&!(td_tr_ctrl&(1<<i))){td_lf_own_car(i,TR_FLEE);tr_timer[i]=200;}
         td_lf_fx(FX_SPARK,bu,bv,6);
         return TRUE;
     }

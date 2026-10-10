@@ -77,8 +77,10 @@ TILES = {
 }
 
 # Greenery kinds, least important first: a scene over its tile budget drops
-# them in this order.
-DROP_ORDER = ('flowers', 'meadow', 'clover', 'planter', 'iron', 'picket', 'bush', 'hedge', 'species')
+# them in this order, tree species one at a time (a dropped species shows
+# the plain round tree again).
+DROP_ORDER = ('flowers', 'meadow', 'clover', 'planter', 'iron', 'picket', 'bush', 'hedge',
+              'species_willow', 'species_blossom', 'species_spruce', 'species_linden', 'species_maple')
 
 # Which species grow where (weights). Slot 5 draws a maple as a honey locust.
 MIX = {
@@ -225,7 +227,7 @@ def dress(img, attrs, collisions, tw, canopies, colors, salt, old_id, kind_at, p
         mix = 'shore' if near_water else 'high_park' if park and 'HIGH PARK' in park.upper() else 'park' if park else 'yard'
         name, slot = pick(MIX[mix], seed(salt, 'tree', x, y))
         for k, rows in enumerate(tree_quarters(name)):
-            stamp('species', tx + k % 2, ty + k // 2, rows, slot, priority=True)
+            stamp('species_' + name, tx + k % 2, ty + k // 2, rows, slot, priority=True)
 
     # Sidewalk edges of lawns: front-yard hedges and white pickets, iron
     # railings round parks, flower beds by shops. A run is cut into
@@ -360,6 +362,7 @@ def dress(img, attrs, collisions, tw, canopies, colors, salt, old_id, kind_at, p
         assert city_kit.flip_canonical_count(img.crop(box)) <= city_kit.SCENE_TILE_BUDGET, (old_id, q)
     counts = {}
     for k, _ in placed:
+        k = 'species' if k.startswith('species_') else k
         counts[k] = counts.get(k, 0) + 1
     return {'tiles': counts, 'dropped': [f'{world2x.scene_slug(old_id * 4 + q)}:{k}' for q, k in dropped]}
 

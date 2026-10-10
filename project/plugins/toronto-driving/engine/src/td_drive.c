@@ -8,6 +8,7 @@
 #include "td_world.h"
 #include "td_anim.h"
 #include "td_shots.h"
+#include "td_special.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -15,11 +16,19 @@
 static const BYTE lf_dx[16]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
 static const BYTE lf_dy[16]={0,6,11,15,16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6};
 static const BYTE lf_face_u[4]={1,-1,0,0},lf_face_v[4]={0,0,1,-1};
-static const UBYTE lf_mass_player[4]={4,7,2,2};
+/* Handling classes: the four courier vehicles (car, van, motorcycle,
+ * scooter), then the special vehicles in TD_SPECIAL_* order (ambulance,
+ * fire truck, bus, box truck, garbage truck, tank). */
+#define LF_CLASSES (4+TD_SPECIAL_KINDS)
+static UBYTE lf_class(void){return td_player_special?3+td_player_special:td.vehicle&3;}
+/* Masses: the big vehicles shove traffic aside; the tank barely notices. */
+static const UBYTE lf_mass_player[LF_CLASSES]={4,7,2,2,6,10,10,8,10,24};
+static const UBYTE lf_mass_special[TD_SPECIAL_KINDS]={6,10,10,8,10,24};
 /* Mass of a traffic design: vans 7, pickups 6, motorcycles 2, cars 4. */
 static UBYTE lf_mass_slot(UBYTE i){
     UBYTE b=td_traffic_bases[i];
-    if(LF_IS_PATROL(i))return 5;
+    if(LF_IS_POLICE(i))return 5;
+    if(b==TD_FRAME_SPECIAL&&td_special_kind)return lf_mass_special[td_special_kind-1];
     return b==TD_FRAME_PLAYER_VAN?7:b==TD_FRAME_TRAFFIC_PICKUP?6:b==TD_FRAME_PLAYER_MOTORCYCLE?2:4;
 }
 UBYTE td_car_damage,td_car_colour;
@@ -27,6 +36,8 @@ UBYTE td_car_damage,td_car_colour;
  * when the engine starts failing, another when it is wrecked. */
 static void lf_wear(UBYTE points){
     UBYTE before=td_car_damage;
+    /* Armour plate: nothing dents a tank. */
+    if(td_player_special==TD_SPECIAL_TANK)return;
     if(td.vehicle==1)points=(points+1)>>1;
     td_car_damage=points>=TD_DAMAGE_WRECK-td_car_damage?TD_DAMAGE_WRECK:td_car_damage+points;
     if(before<TD_DAMAGE_WRECK&&td_car_damage==TD_DAMAGE_WRECK)td_message(TD_MSG_WRECKED);
@@ -95,7 +106,7 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
             td_audio_play(TD_AUDIO_IMPACT);lf_wear((UBYTE)(v1>>2)+1);
             if(td.job!=TD_NONE&&td.stage)td.health=td.health>3?td.health-3:0;
             if(v1>=12)lf_shake=4;
-            if(LF_IS_PATROL(i)&&v1>=12)td_lf_crime(CR_COP);
+            if(LF_IS_POLICE(i)&&v1>=12)td_lf_crime(CR_COP);
             continue;
         }
         td.u=old_u;td.v=old_v;
@@ -104,7 +115,7 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
         v2=(tr_mode[i]&&tr_mode[i]!=TR_CHASE)?0:8;
         v2=((head==0&&sx>0)||(head==4&&sx<0)||(head==2&&sy>0)||(head==6&&sy<0))?v2:
            ((head==0&&sx<0)||(head==4&&sx>0)||(head==2&&sy<0)||(head==6&&sy>0))?-v2:0;
-        pm=lf_mass_player[td.vehicle&3];nm=lf_mass_slot(i);sum=pm+nm;
+        pm=lf_mass_player[lf_class()];nm=lf_mass_slot(i);sum=pm+nm;
         /* Restitution 3/4: a head-on or heavier body throws the car back. */
         rel=v1-v2;
         n1=((WORD)pm*v1+(WORD)nm*v2-((((WORD)nm*rel)*3)>>2))/sum;
@@ -127,9 +138,9 @@ static void lf_car_hits(UWORD old_u,UWORD old_v){
             if(rel>=14)lf_shake=10;
             /* The driver is jolted: throttle returns after a moment, so the
              * rebound is visible even with A held. */
-            if(rel>=10)lf_stun=12;
-            /* Only a hard ram counts as an attack on the patrol car. */
-            if(LF_IS_PATROL(i)&&rel>=12)td_lf_crime(CR_COP);
+            if(rel>=10){lf_stun=12;td_lf_scatter(td.u>>4,td.v>>4);}
+            /* Only a hard ram counts as an attack on a police car. */
+            if(LF_IS_POLICE(i)&&rel>=12)td_lf_crime(CR_COP);
         }
     }
 }
@@ -163,12 +174,17 @@ static void lf_dust(UBYTE kind){
     td_anim_spawn(kind,0,(UWORD)((WORD)(td.u>>4)+((lf_dx[h]*7)>>4)),(UWORD)((WORD)(td.v>>4)+((lf_dy[h]*7)>>4)));
 }
 
-/* Handling (sixteenths of a speed unit per tick, by vehicle: car, van,
- * motorcycle, scooter). Throttle pulls hardest from rest and tapers towards
- * top speed; vans are heavy and take longest to start and stop. */
-static const UBYTE lf_top[4]={20,17,23,15};
-static const UBYTE lf_pull[4][3]={{4,3,2},{3,2,1},{6,4,3},{5,3,2}};
-static const UBYTE lf_stop[4]={10,7,11,10};
+/* Handling (sixteenths of a speed unit per tick, by class: car, van,
+ * motorcycle, scooter, then ambulance, fire truck, bus, box truck, garbage
+ * truck, tank). Throttle pulls hardest from rest and tapers towards top
+ * speed; heavy vehicles take longest to start, stop and turn. Courier top
+ * speeds are 67.5, 63.75, 78.75 and 56.25 px/s; the ambulance is the
+ * quickest big vehicle and the tank crawls (37.5 px/s). */
+static const UBYTE lf_top[LF_CLASSES]={18,17,21,15,19,15,14,15,13,10};
+static const UBYTE lf_pull[LF_CLASSES][3]={{3,3,2},{3,2,1},{5,4,2},{4,3,2},{3,3,2},{2,2,1},{2,1,1},{2,2,1},{2,1,1},{2,1,1}};
+static const UBYTE lf_stop[LF_CLASSES]={9,7,10,9,8,6,6,6,6,5};
+/* Extra steering period (slower to turn) by class. */
+static const UBYTE lf_turn_slow[LF_CLASSES]={0,3,0,0,2,5,6,4,5,8};
 #define LF_ROLL 2
 #define LF_REVERSE 3
 /* Brake force for the A+B exit and for throttle against reverse. */
@@ -187,7 +203,7 @@ static void lf_speed_add(BYTE dir,UBYTE rate){
 }
 
 UBYTE td_life_drive(void) BANKED {
-    WORD nu,nv,tx,ty;UBYTE limit,period,slide=0,a,gas,brake,drift,result=0,red,ctl,kind=td.vehicle&3;UWORD u,v,old_u=td.u,old_v=td.v;BYTE dir;
+    WORD nu,nv,tx,ty;UBYTE limit,period,slide=0,a,gas,brake,drift,result=0,red,ctl,kind=lf_class();UWORD u,v,old_u=td.u,old_v=td.v;BYTE dir;
     if(td.cooldown)td.cooldown--;
     if(td_red_cooldown)td_red_cooldown--;
     gas=!!INPUT_A;brake=!!INPUT_B;
@@ -233,7 +249,7 @@ UBYTE td_life_drive(void) BANKED {
     drift=brake&&a>12&&!!INPUT_LEFT!=!!INPUT_RIGHT;
     if(a&&!!INPUT_LEFT!=!!INPUT_RIGHT){
         period=a<3?16:a<7?10:a<12?7:a<16?8:10;
-        if(kind==1)period+=3;else if(kind>=2)period--;
+        if(kind==2||kind==3)period--;else period+=lf_turn_slow[kind];
         if(drift)period-=2;
         if(++td_turn_tick>=period){
             td_turn_tick=0;dir=INPUT_LEFT?-1:1;if(td.speed<0)dir=-dir;
@@ -250,7 +266,7 @@ UBYTE td_life_drive(void) BANKED {
     }
     tx=lf_scale_x;ty=lf_scale_y;
     if(drift){td_vx+=lf_div16(tx-td_vx);td_vy+=lf_div16(ty-td_vy);}
-    else if(a>15){WORD ex=lf_div16(tx-td_vx),ey=lf_div16(ty-td_vy);td_vx+=ex+ex+ex;td_vy+=ey+ey+ey;}
+    else if(a>12){WORD ex=lf_div16(tx-td_vx),ey=lf_div16(ty-td_vy);td_vx+=ex+ex+ex;td_vy+=ey+ey+ey;}
     else{td_vx+=lf_div4(tx-td_vx);td_vy+=lf_div4(ty-td_vy);}
     if(!td.speed){td_vx=lf_div2(td_vx);td_vy=lf_div2(td_vy);}
     nu=td.u+lf_div16(td_vx);nv=td.v+lf_div16(td_vy);u=nu>>4;v=nv>>4;
@@ -297,29 +313,35 @@ static UBYTE lf_carjack(void){
     }
     if(best==TD_NONE)return FALSE;
     base=td_traffic_bases[best];
-    td.vehicle=base==TD_FRAME_PLAYER_VAN||base==TD_FRAME_TRAFFIC_PICKUP?1:base==TD_FRAME_PLAYER_MOTORCYCLE?2:0;
+    td.vehicle=base==TD_FRAME_PLAYER_VAN||base==TD_FRAME_TRAFFIC_PICKUP||base==TD_FRAME_SPECIAL?1:base==TD_FRAME_PLAYER_MOTORCYCLE?2:0;
+    td_player_special=base==TD_FRAME_SPECIAL?td_special_kind:0;
     td.heading=td_lf_tr_heading(best)<<1;
     /* A fresh car in its own paint. */
     td_car_damage=0;td_car_colour=TD_PALETTE(&actors[2+best]);
     td.park_u=td_traffic_u[best];td.park_v=td_traffic_v[best];td.park_district=td.district;
+    if(LF_IS_POLICE(best)&&!lf_patrol)lf_beat=0;
     td_lf_own_car(best,TR_GONE);actors[2+best].flags|=ACTOR_FLAG_HIDDEN;
     /* The driver bails out and runs off the far side. */
-    fx_look=LF_IS_PATROL(best)?LF_LOOK_OFFICER:best&3;
+    fx_look=LF_IS_POLICE(best)?LF_LOOK_OFFICER:best&3;
     td_lf_fx(FX_RUNNER,td.park_u>>4,td.park_v>>4,54);
-    TD_PALETTE(&actors[TD_ACTOR_FX])=LF_IS_PATROL(best)?LF_OFFICER_PAL:lf_civilian_pal[best&3];
+    TD_PALETTE(&actors[TD_ACTOR_FX])=fx_look==LF_LOOK_OFFICER?LF_OFFICER_PAL:lf_civilian_pal[best&3];
     fx_du=td.park_u>td.u?12:-12;fx_dv=0;
     td_entry_target=0;td_entry_timer=12;td.speed=0;td_vx=td_vy=0;
     td_audio_play(TD_AUDIO_IMPACT);
-    td_lf_crime(LF_IS_PATROL(best)?CR_COP:CR_MINOR);
+    td_lf_crime(fx_look==LF_LOOK_OFFICER?CR_COP:CR_MINOR);
     td_message(TD_MSG_CARJACK);
     return TRUE;
 }
 
+/* Punches thrown in quick succession make a combination: two quick jabs
+ * stagger (the target stands dazed), the third is a heavy blow that
+ * knocks them down. A blow also breaks an officer's hold. */
 static void lf_punch_now(void){
-    UBYTE i,best=TD_NONE,d=td_walk_dir&3,bit;WORD fu,fv,du,dv;actor_t *a;
+    UBYTE i,best=TD_NONE,d=td_walk_dir&3,bit,heavy;WORD fu,fv,du,dv;actor_t *a;
     if(lf_punch)return;
-    lf_punch=16;td_anim_pose(TD_FRAME_COURIER_PUNCH,10);
-    fu=(WORD)(td.u>>4)+lf_face_u[d]*7;fv=(WORD)(td.v>>4)+lf_face_v[d]*7;
+    lf_combo=lf_combo_t&&lf_combo<2?lf_combo+1:0;heavy=lf_combo==2;lf_combo_t=30;
+    lf_punch=heavy?18:10;td_anim_pose(TD_FRAME_COURIER_PUNCH,heavy?12:8);
+    fu=(WORD)(td.u>>4)+lf_face_u[d]*(heavy?8:7);fv=(WORD)(td.v>>4)+lf_face_v[d]*(heavy?8:7);
     for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
         if(a->flags&ACTOR_FLAG_HIDDEN)continue;
         if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN))continue;
@@ -328,7 +350,11 @@ static void lf_punch_now(void){
     }
     td_lf_fx(FX_SPARK,fu,fv,6);
     td_audio_play(TD_AUDIO_MENU);
-    if(best!=TD_NONE){td_lf_knock(best,lf_face_u[d]*18,lf_face_v[d]*18,0);td_audio_play(TD_AUDIO_IMPACT);}
+    if(best==TD_NONE){lf_combo_t=0;return;}
+    if(heavy){td_lf_knock(best,lf_face_u[d]*28,lf_face_v[d]*28,0);lf_shake=4;}
+    else{td_lf_stun(best,lf_face_u[d]*4,lf_face_v[d]*4);if(td_hitstop<2)td_hitstop=2;lf_shake=2;}
+    lf_bust=0;
+    td_audio_play(TD_AUDIO_IMPACT);
 }
 
 UBYTE td_life_carjack(void) BANKED {
@@ -402,8 +428,12 @@ static void lf_target_at(UBYTE t,UWORD *u,UWORD *v){
     else{*u=actors[TD_ACTOR_PEDS+t].pos.x>>5;*v=actors[TD_ACTOR_PEDS+t].pos.y>>5;}
 }
 void td_life_aim(void) BANKED {
+    UBYTE t;
     if(!td.onfoot||!td.ammo||td.mode!=TD_ROAM||td_life_locked()){td_aim_target=TD_NONE;return;}
-    if(td_aim_target==TD_NONE||!lf_keep_target(td_aim_target))td_aim_target=lf_find_target();
+    if(td_aim_target!=TD_NONE&&lf_keep_target(td_aim_target))return;
+    t=td_aim_target=lf_find_target();
+    /* A civilian who finds a pistol pointed at them runs. */
+    if(t<8&&!(td_ped_ovr&(1<<t))&&td_ped_route[t]!=TD_NONE&&(td_ped_route[t]&7)!=LF_LOOK_OFFICER)td_lf_dodge(t);
 }
 
 /* The pistol: a round towards the locked-on target, or along the aim;
@@ -425,7 +455,7 @@ void td_life_foot_b(void) BANKED {
     td_anim_spawn(TD_PART_FLASH,0,pu+((lf_dx[h]*9)>>4),pv+((lf_dy[h]*9)>>4)-6);
     if(lf_shake<2)lf_shake=2;
     td_audio_play(TD_AUDIO_IMPACT);
-    td_lf_crime(CR_GUN);td_lf_panic(pu,pv);
+    td_lf_crime(CR_GUN);td_lf_scatter(pu,pv);
 }
 
 UBYTE td_lf_drive(UWORD u,UWORD v) BANKED {return lf_drive(u,v);}

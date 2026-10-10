@@ -744,8 +744,9 @@ def paint_park_feature(d, box, colors, kind, x, y, w, h):
 # scenes that overlap by 48 px. Each scene's background must leave VRAM for
 # the actor sprites: GB Studio packs a scene's tiles beyond 256 towards tile
 # 191 of each bank, and the sprite sheet uses tiles from 0, so a scene of at
-# most SCENE_TILE_BUDGET flip-canonical tiles leaves 144 per bank for sprites.
-SCENE_TILE_BUDGET = 352
+# most SCENE_TILE_BUDGET flip-canonical tiles leaves 148 per bank for sprites
+# (the last eight are the special vehicles' tile block, td_special.c).
+SCENE_TILE_BUDGET = 344
 
 # Open water is solid to vehicles and walkers (collision bits 15) and marked
 # swimmable with bit 0x20: the courier can swim in it (td_drive).
