@@ -1,31 +1,803 @@
 {
  "about": "Names the HUD announces: neighbourhoods on entry, landmarks within reach, junctions crossed. Rectangles are native pixels of each scene; sources and the compression notes are in content/districts/core-research.json (\"navigation\").",
  "scenes": {
-  "core": {
+  "core_nw": {
+   "areas": [
+    {
+     "name": "UNIV OF TORONTO",
+     "rect": [
+      912,
+      0,
+      1024,
+      640
+     ]
+    },
+    {
+     "name": "HARBORD VILLAGE",
+     "rect": [
+      608,
+      0,
+      912,
+      640
+     ]
+    },
+    {
+     "name": "GRANGE PARK",
+     "rect": [
+      912,
+      896,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "CHINATOWN",
+     "rect": [
+      912,
+      640,
+      1024,
+      896
+     ]
+    },
+    {
+     "name": "KENSINGTON MARKET",
+     "rect": [
+      608,
+      640,
+      912,
+      896
+     ]
+    },
+    {
+     "name": "ALEXANDRA PARK",
+     "rect": [
+      608,
+      896,
+      912,
+      976
+     ]
+    },
+    {
+     "name": "TRINITY BELLWOODS",
+     "rect": [
+      376,
+      896,
+      608,
+      976
+     ]
+    },
+    {
+     "name": "LITTLE PORTUGAL",
+     "rect": [
+      0,
+      640,
+      376,
+      976
+     ]
+    },
+    {
+     "name": "LITTLE ITALY",
+     "rect": [
+      376,
+      640,
+      608,
+      896
+     ]
+    },
+    {
+     "name": "DUFFERIN GROVE",
+     "rect": [
+      0,
+      0,
+      376,
+      640
+     ]
+    },
+    {
+     "name": "PALMERSTON",
+     "rect": [
+      376,
+      0,
+      608,
+      640
+     ]
+    },
+    {
+     "name": "DOWNTOWN",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "ART GALLERY (AGO)",
+     "rect": [
+      960,
+      912,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "ROYAL ONTARIO MUSEUM",
+     "rect": [
+      992,
+      160,
+      1024,
+      272
+     ]
+    },
+    {
+     "name": "CONVOCATION HALL",
+     "rect": [
+      944,
+      400,
+      1024,
+      496
+     ]
+    },
+    {
+     "name": "HOSPITAL ROW",
+     "rect": [
+      1008,
+      656,
+      1024,
+      880
+     ]
+    },
+    {
+     "name": "DUFFERIN GROVE PARK",
+     "rect": [
+      168,
+      160,
+      368,
+      480
+     ]
+    },
+    {
+     "name": "TRINITY BELLWOODS",
+     "rect": [
+      384,
+      912,
+      592,
+      976
+     ]
+    }
+   ],
+   "junctions": [
+    {
+     "name": "DUFFERIN & BLOOR",
+     "rect": [
+      120,
+      112,
+      184,
+      176
+     ]
+    },
+    {
+     "name": "DUFFERIN & COLLEGE",
+     "rect": [
+      120,
+      608,
+      184,
+      672
+     ]
+    },
+    {
+     "name": "DUFFERIN & DUNDAS",
+     "rect": [
+      120,
+      864,
+      184,
+      928
+     ]
+    },
+    {
+     "name": "OSSINGTON & BLOOR",
+     "rect": [
+      352,
+      112,
+      400,
+      176
+     ]
+    },
+    {
+     "name": "OSSINGTON & HARBORD",
+     "rect": [
+      352,
+      368,
+      400,
+      416
+     ]
+    },
+    {
+     "name": "OSSINGTON & COLLEGE",
+     "rect": [
+      352,
+      608,
+      400,
+      672
+     ]
+    },
+    {
+     "name": "OSSINGTON & DUNDAS",
+     "rect": [
+      352,
+      864,
+      400,
+      928
+     ]
+    },
+    {
+     "name": "BATHURST & BLOOR",
+     "rect": [
+      576,
+      112,
+      640,
+      176
+     ]
+    },
+    {
+     "name": "BATHURST & HARBORD",
+     "rect": [
+      576,
+      368,
+      640,
+      416
+     ]
+    },
+    {
+     "name": "BATHURST & COLLEGE",
+     "rect": [
+      576,
+      608,
+      640,
+      672
+     ]
+    },
+    {
+     "name": "BATHURST & DUNDAS",
+     "rect": [
+      576,
+      864,
+      640,
+      928
+     ]
+    },
+    {
+     "name": "SPADINA & BLOOR",
+     "rect": [
+      880,
+      112,
+      944,
+      176
+     ]
+    },
+    {
+     "name": "SPADINA & HARBORD",
+     "rect": [
+      880,
+      368,
+      944,
+      416
+     ]
+    },
+    {
+     "name": "SPADINA & COLLEGE",
+     "rect": [
+      880,
+      608,
+      944,
+      672
+     ]
+    },
+    {
+     "name": "SPADINA & DUNDAS",
+     "rect": [
+      880,
+      864,
+      944,
+      928
+     ]
+    }
+   ]
+  },
+  "core_ne": {
+   "areas": [
+    {
+     "name": "QUEENS PARK",
+     "rect": [
+      64,
+      285,
+      282,
+      640
+     ]
+    },
+    {
+     "name": "UNIV OF TORONTO",
+     "rect": [
+      232,
+      169,
+      384,
+      392
+     ]
+    },
+    {
+     "name": "RIVERDALE",
+     "rect": [
+      764,
+      0,
+      830,
+      976
+     ]
+    },
+    {
+     "name": "RIVERDALE",
+     "rect": [
+      830,
+      0,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "REGENT PARK",
+     "rect": [
+      624,
+      640,
+      764,
+      976
+     ]
+    },
+    {
+     "name": "CABBAGETOWN",
+     "rect": [
+      624,
+      0,
+      764,
+      640
+     ]
+    },
+    {
+     "name": "MOSS PARK",
+     "rect": [
+      459,
+      896,
+      624,
+      976
+     ]
+    },
+    {
+     "name": "GARDEN DISTRICT",
+     "rect": [
+      384,
+      896,
+      459,
+      976
+     ]
+    },
+    {
+     "name": "GARDEN DISTRICT",
+     "rect": [
+      459,
+      640,
+      624,
+      896
+     ]
+    },
+    {
+     "name": "YONGE-DUNDAS",
+     "rect": [
+      384,
+      640,
+      459,
+      896
+     ]
+    },
+    {
+     "name": "CHURCH-WELLESLEY",
+     "rect": [
+      384,
+      270,
+      624,
+      640
+     ]
+    },
+    {
+     "name": "BLOOR-YONGE",
+     "rect": [
+      176,
+      0,
+      624,
+      270
+     ]
+    },
+    {
+     "name": "BAY ST CORRIDOR",
+     "rect": [
+      176,
+      270,
+      384,
+      640
+     ]
+    },
+    {
+     "name": "UNIV OF TORONTO",
+     "rect": [
+      0,
+      0,
+      176,
+      640
+     ]
+    },
+    {
+     "name": "DISCOVERY DISTRICT",
+     "rect": [
+      176,
+      640,
+      384,
+      896
+     ]
+    },
+    {
+     "name": "BAY ST CORRIDOR",
+     "rect": [
+      176,
+      896,
+      384,
+      976
+     ]
+    },
+    {
+     "name": "GRANGE PARK",
+     "rect": [
+      0,
+      896,
+      176,
+      976
+     ]
+    },
+    {
+     "name": "CHINATOWN",
+     "rect": [
+      0,
+      640,
+      176,
+      896
+     ]
+    },
+    {
+     "name": "DOWNTOWN",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "CITY HALL",
+     "rect": [
+      208,
+      912,
+      296,
+      976
+     ]
+    },
+    {
+     "name": "EATON CENTRE",
+     "rect": [
+      248,
+      912,
+      368,
+      976
+     ]
+    },
+    {
+     "name": "ART GALLERY (AGO)",
+     "rect": [
+      0,
+      912,
+      128,
+      976
+     ]
+    },
+    {
+     "name": "ONTARIO LEGISLATURE",
+     "rect": [
+      88,
+      512,
+      264,
+      616
+     ]
+    },
+    {
+     "name": "ROYAL ONTARIO MUSEUM",
+     "rect": [
+      16,
+      160,
+      160,
+      272
+     ]
+    },
+    {
+     "name": "GARDINER MUSEUM",
+     "rect": [
+      192,
+      160,
+      304,
+      256
+     ]
+    },
+    {
+     "name": "VICTORIA COLLEGE",
+     "rect": [
+      272,
+      400,
+      368,
+      496
+     ]
+    },
+    {
+     "name": "CONVOCATION HALL",
+     "rect": [
+      0,
+      400,
+      64,
+      496
+     ]
+    },
+    {
+     "name": "PALM HOUSE",
+     "rect": [
+      432,
+      656,
+      576,
+      752
+     ]
+    },
+    {
+     "name": "MOSS PARK ARMOURY",
+     "rect": [
+      464,
+      912,
+      608,
+      976
+     ]
+    },
+    {
+     "name": "HOSPITAL ROW",
+     "rect": [
+      32,
+      656,
+      160,
+      880
+     ]
+    },
+    {
+     "name": "MARS CENTRE",
+     "rect": [
+      192,
+      656,
+      368,
+      760
+     ]
+    },
+    {
+     "name": "SANKOFA SQUARE",
+     "rect": [
+      416,
+      928,
+      496,
+      976
+     ]
+    },
+    {
+     "name": "QUEENS PARK",
+     "rect": [
+      84,
+      329,
+      268,
+      632
+     ]
+    },
+    {
+     "name": "ALLAN GARDENS",
+     "rect": [
+      400,
+      656,
+      608,
+      880
+     ]
+    },
+    {
+     "name": "RIVERDALE FARM",
+     "rect": [
+      640,
+      296,
+      744,
+      480
+     ]
+    },
+    {
+     "name": "RIVERDALE PARK",
+     "rect": [
+      784,
+      160,
+      856,
+      624
+     ]
+    },
+    {
+     "name": "REGENT PARK",
+     "rect": [
+      640,
+      784,
+      744,
+      880
+     ]
+    }
+   ],
+   "junctions": [
+    {
+     "name": "UNIVERSITY & COLLEGE",
+     "rect": [
+      144,
+      608,
+      208,
+      672
+     ]
+    },
+    {
+     "name": "UNIVERSITY & DUNDAS",
+     "rect": [
+      144,
+      864,
+      208,
+      928
+     ]
+    },
+    {
+     "name": "QUEENS PARK & BLOOR",
+     "rect": [
+      144,
+      112,
+      208,
+      176
+     ]
+    },
+    {
+     "name": "YONGE & BLOOR",
+     "rect": [
+      352,
+      112,
+      416,
+      176
+     ]
+    },
+    {
+     "name": "YONGE & WELLESLEY",
+     "rect": [
+      352,
+      368,
+      416,
+      416
+     ]
+    },
+    {
+     "name": "YONGE & COLLEGE",
+     "rect": [
+      352,
+      608,
+      416,
+      672
+     ]
+    },
+    {
+     "name": "YONGE & DUNDAS",
+     "rect": [
+      352,
+      864,
+      416,
+      928
+     ]
+    },
+    {
+     "name": "PARLIAMENT & BLOOR",
+     "rect": [
+      592,
+      112,
+      656,
+      176
+     ]
+    },
+    {
+     "name": "PARLIAMENT/WELLESLEY",
+     "rect": [
+      592,
+      368,
+      656,
+      416
+     ]
+    },
+    {
+     "name": "PARLIAMENT & CARLTON",
+     "rect": [
+      592,
+      608,
+      656,
+      672
+     ]
+    },
+    {
+     "name": "PARLIAMENT & DUNDAS",
+     "rect": [
+      592,
+      864,
+      656,
+      928
+     ]
+    },
+    {
+     "name": "BROADVIEW & DANFORTH",
+     "rect": [
+      840,
+      112,
+      888,
+      176
+     ]
+    },
+    {
+     "name": "BROADVIEW & GERRARD",
+     "rect": [
+      840,
+      608,
+      888,
+      672
+     ]
+    },
+    {
+     "name": "BROADVIEW & DUNDAS",
+     "rect": [
+      840,
+      864,
+      888,
+      928
+     ]
+    },
+    {
+     "name": "QUEENS PARK & HOSKIN",
+     "rect": [
+      68,
+      368,
+      108,
+      416
+     ]
+    },
+    {
+     "name": "QUEENS PK/WELLESLEY",
+     "rect": [
+      244,
+      368,
+      284,
+      416
+     ]
+    }
+   ]
+  },
+  "core_sw": {
    "areas": [
     {
      "name": "HANLANS POINT",
      "rect": [
-      336,
-      880,
-      600,
-      976
-     ]
-    },
-    {
-     "name": "CENTRE ISLAND",
-     "rect": [
-      600,
-      880,
-      792,
-      976
-     ]
-    },
-    {
-     "name": "WARDS ISLAND",
-     "rect": [
-      792,
-      860,
+      817,
+      803,
       1024,
       976
      ]
@@ -34,7 +806,7 @@
      "name": "INNER HARBOUR",
      "rect": [
       0,
-      848,
+      745,
       1024,
       976
      ]
@@ -42,388 +814,522 @@
     {
      "name": "HARBOURFRONT",
      "rect": [
-      256,
-      800,
-      640,
-      848
-     ]
-    },
-    {
-     "name": "EAST BAYFRONT",
-     "rect": [
-      640,
-      800,
-      848,
-      848
+      608,
+      680,
+      1024,
+      745
      ]
     },
     {
      "name": "WATERFRONT",
      "rect": [
       0,
-      800,
+      680,
       1024,
-      848
+      745
      ]
     },
     {
      "name": "FORT YORK",
      "rect": [
-      176,
-      640,
-      256,
-      800
-     ]
-    },
-    {
-     "name": "QUEENS PARK",
-     "rect": [
-      440,
-      128,
-      584,
-      288
-     ]
-    },
-    {
-     "name": "UNIV OF TORONTO",
-     "rect": [
-      544,
-      88,
-      640,
-      176
-     ]
-    },
-    {
-     "name": "RIVERDALE",
-     "rect": [
-      868,
-      0,
-      903,
-      616
-     ]
-    },
-    {
-     "name": "RIVERDALE",
-     "rect": [
-      903,
-      0,
-      1024,
-      616
-     ]
-    },
-    {
-     "name": "SOUTH RIVERDALE",
-     "rect": [
-      868,
-      616,
-      1024,
-      860
-     ]
-    },
-    {
-     "name": "DISTILLERY DISTRICT",
-     "rect": [
-      784,
-      677,
-      868,
-      807
-     ]
-    },
-    {
-     "name": "CORKTOWN",
-     "rect": [
-      784,
-      528,
-      868,
-      677
-     ]
-    },
-    {
-     "name": "REGENT PARK",
-     "rect": [
-      784,
-      288,
-      868,
-      528
-     ]
-    },
-    {
-     "name": "CABBAGETOWN",
-     "rect": [
-      784,
-      0,
-      868,
-      288
-     ]
-    },
-    {
-     "name": "ST LAWRENCE",
-     "rect": [
-      640,
-      736,
-      784,
-      807
-     ]
-    },
-    {
-     "name": "OLD TOWN",
-     "rect": [
-      640,
-      528,
-      784,
-      736
-     ]
-    },
-    {
-     "name": "MOSS PARK",
-     "rect": [
-      689,
-      400,
-      784,
-      528
-     ]
-    },
-    {
-     "name": "GARDEN DISTRICT",
-     "rect": [
-      640,
-      400,
-      689,
-      528
-     ]
-    },
-    {
-     "name": "GARDEN DISTRICT",
-     "rect": [
-      689,
-      288,
-      784,
-      400
-     ]
-    },
-    {
-     "name": "YONGE-DUNDAS",
-     "rect": [
-      640,
-      288,
-      689,
-      400
-     ]
-    },
-    {
-     "name": "CHURCH-WELLESLEY",
-     "rect": [
-      640,
-      123,
-      784,
-      288
-     ]
-    },
-    {
-     "name": "BLOOR-YONGE",
-     "rect": [
-      512,
-      0,
-      784,
-      123
-     ]
-    },
-    {
-     "name": "BAY ST CORRIDOR",
-     "rect": [
-      512,
-      123,
-      640,
-      288
-     ]
-    },
-    {
-     "name": "UNIV OF TORONTO",
-     "rect": [
-      384,
-      0,
-      512,
-      288
-     ]
-    },
-    {
-     "name": "HARBORD VILLAGE",
-     "rect": [
-      256,
-      0,
-      384,
-      288
-     ]
-    },
-    {
-     "name": "DISCOVERY DISTRICT",
-     "rect": [
-      512,
-      288,
-      640,
-      400
-     ]
-    },
-    {
-     "name": "BAY ST CORRIDOR",
-     "rect": [
-      512,
-      400,
-      640,
-      528
-     ]
-    },
-    {
-     "name": "FINANCIAL DISTRICT",
-     "rect": [
-      512,
-      528,
-      640,
-      736
-     ]
-    },
-    {
-     "name": "FINANCIAL DISTRICT",
-     "rect": [
-      512,
-      736,
-      640,
-      807
+      393,
+      392,
+      608,
+      680
      ]
     },
     {
      "name": "ENTERTAINMENT DIST",
      "rect": [
-      384,
-      528,
-      512,
-      736
+      912,
+      200,
+      1024,
+      560
      ]
     },
     {
      "name": "ENTERTAINMENT DIST",
      "rect": [
-      384,
-      736,
-      512,
-      807
+      912,
+      560,
+      1024,
+      694
      ]
     },
     {
      "name": "CITYPLACE",
      "rect": [
-      256,
-      736,
-      384,
-      807
+      608,
+      560,
+      912,
+      694
      ]
     },
     {
      "name": "KING WEST",
      "rect": [
-      256,
-      528,
-      384,
-      736
+      608,
+      200,
+      912,
+      560
      ]
     },
     {
      "name": "GRANGE PARK",
      "rect": [
-      384,
-      400,
-      512,
-      528
-     ]
-    },
-    {
-     "name": "CHINATOWN",
-     "rect": [
-      384,
-      288,
-      512,
-      400
-     ]
-    },
-    {
-     "name": "KENSINGTON MARKET",
-     "rect": [
-      256,
-      288,
-      384,
-      400
+      912,
+      0,
+      1024,
+      200
      ]
     },
     {
      "name": "ALEXANDRA PARK",
      "rect": [
-      256,
-      400,
-      384,
-      528
+      608,
+      0,
+      912,
+      200
      ]
     },
     {
      "name": "LIBERTY VILLAGE",
      "rect": [
       0,
-      640,
-      256,
-      807
+      392,
+      608,
+      694
      ]
     },
     {
      "name": "WEST QUEEN WEST",
      "rect": [
       0,
-      528,
-      256,
-      640
+      200,
+      608,
+      392
      ]
     },
     {
      "name": "TRINITY BELLWOODS",
      "rect": [
-      160,
-      400,
-      256,
-      528
+      376,
+      0,
+      608,
+      200
      ]
     },
     {
      "name": "LITTLE PORTUGAL",
      "rect": [
       0,
-      288,
-      160,
-      528
+      0,
+      376,
+      200
      ]
     },
     {
-     "name": "LITTLE ITALY",
+     "name": "DOWNTOWN",
      "rect": [
-      160,
-      288,
-      256,
-      400
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "ROGERS CENTRE",
+     "rect": [
+      926,
+      566,
+      1024,
+      682
      ]
     },
     {
-     "name": "DUFFERIN GROVE",
+     "name": "ART GALLERY (AGO)",
      "rect": [
+      960,
       0,
-      0,
-      160,
-      288
+      1024,
+      88
      ]
     },
     {
-     "name": "PALMERSTON",
+     "name": "THE GRANGE",
      "rect": [
-      160,
+      976,
+      64,
+      1024,
+      144
+     ]
+    },
+    {
+     "name": "FORT YORK",
+     "rect": [
+      368,
+      536,
+      592,
+      688
+     ]
+    },
+    {
+     "name": "PRINCESS OF WALES",
+     "rect": [
+      928,
+      216,
+      1024,
+      376
+     ]
+    },
+    {
+     "name": "ROYAL ALEX THEATRE",
+     "rect": [
+      1008,
+      216,
+      1024,
+      376
+     ]
+    },
+    {
+     "name": "GRANGE PARK",
+     "rect": [
+      928,
+      64,
+      1024,
+      184
+     ]
+    },
+    {
+     "name": "TRINITY BELLWOODS",
+     "rect": [
+      384,
       0,
-      256,
-      288
+      592,
+      184
+     ]
+    }
+   ],
+   "junctions": [
+    {
+     "name": "DUFFERIN & QUEEN",
+     "rect": [
+      120,
+      168,
+      184,
+      232
+     ]
+    },
+    {
+     "name": "DUFFERIN & KING",
+     "rect": [
+      120,
+      360,
+      184,
+      424
+     ]
+    },
+    {
+     "name": "DUFFERIN/QUEENS QUAY",
+     "rect": [
+      120,
+      688,
+      184,
+      736
+     ]
+    },
+    {
+     "name": "OSSINGTON & QUEEN",
+     "rect": [
+      352,
+      168,
+      400,
+      232
+     ]
+    },
+    {
+     "name": "BATHURST & QUEEN",
+     "rect": [
+      576,
+      168,
+      640,
+      232
+     ]
+    },
+    {
+     "name": "BATHURST & KING",
+     "rect": [
+      576,
+      360,
+      640,
+      424
+     ]
+    },
+    {
+     "name": "BATHURST & FRONT",
+     "rect": [
+      576,
+      536,
+      640,
+      584
+     ]
+    },
+    {
+     "name": "BATHURST/QUEENS QUAY",
+     "rect": [
+      576,
+      688,
+      640,
+      736
+     ]
+    },
+    {
+     "name": "SPADINA & QUEEN",
+     "rect": [
+      880,
+      168,
+      944,
+      232
+     ]
+    },
+    {
+     "name": "SPADINA & KING",
+     "rect": [
+      880,
+      360,
+      944,
+      424
+     ]
+    },
+    {
+     "name": "SPADINA & FRONT",
+     "rect": [
+      880,
+      536,
+      944,
+      584
+     ]
+    },
+    {
+     "name": "SPADINA/QUEENS QUAY",
+     "rect": [
+      880,
+      688,
+      944,
+      736
+     ]
+    }
+   ]
+  },
+  "core_se": {
+   "areas": [
+    {
+     "name": "HANLANS POINT",
+     "rect": [
+      0,
+      803,
+      323,
+      976
+     ]
+    },
+    {
+     "name": "CENTRE ISLAND",
+     "rect": [
+      323,
+      803,
+      632,
+      976
+     ]
+    },
+    {
+     "name": "WARDS ISLAND",
+     "rect": [
+      632,
+      766,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "INNER HARBOUR",
+     "rect": [
+      0,
+      745,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "HARBOURFRONT",
+     "rect": [
+      0,
+      680,
+      384,
+      745
+     ]
+    },
+    {
+     "name": "EAST BAYFRONT",
+     "rect": [
+      384,
+      680,
+      726,
+      745
+     ]
+    },
+    {
+     "name": "WATERFRONT",
+     "rect": [
+      0,
+      680,
+      1024,
+      745
+     ]
+    },
+    {
+     "name": "RIVERDALE",
+     "rect": [
+      764,
+      0,
+      830,
+      368
+     ]
+    },
+    {
+     "name": "RIVERDALE",
+     "rect": [
+      830,
+      0,
+      1024,
+      368
+     ]
+    },
+    {
+     "name": "SOUTH RIVERDALE",
+     "rect": [
+      764,
+      368,
+      1024,
+      766
+     ]
+    },
+    {
+     "name": "DISTILLERY DISTRICT",
+     "rect": [
+      624,
+      445,
+      764,
+      694
+     ]
+    },
+    {
+     "name": "CORKTOWN",
+     "rect": [
+      624,
+      200,
+      764,
+      445
+     ]
+    },
+    {
+     "name": "REGENT PARK",
+     "rect": [
+      624,
+      0,
+      764,
+      200
+     ]
+    },
+    {
+     "name": "ST LAWRENCE",
+     "rect": [
+      384,
+      560,
+      624,
+      694
+     ]
+    },
+    {
+     "name": "OLD TOWN",
+     "rect": [
+      384,
+      200,
+      624,
+      560
+     ]
+    },
+    {
+     "name": "MOSS PARK",
+     "rect": [
+      459,
+      0,
+      624,
+      200
+     ]
+    },
+    {
+     "name": "GARDEN DISTRICT",
+     "rect": [
+      384,
+      0,
+      459,
+      200
+     ]
+    },
+    {
+     "name": "BAY ST CORRIDOR",
+     "rect": [
+      176,
+      0,
+      384,
+      200
+     ]
+    },
+    {
+     "name": "FINANCIAL DISTRICT",
+     "rect": [
+      176,
+      200,
+      384,
+      560
+     ]
+    },
+    {
+     "name": "FINANCIAL DISTRICT",
+     "rect": [
+      176,
+      560,
+      384,
+      694
+     ]
+    },
+    {
+     "name": "ENTERTAINMENT DIST",
+     "rect": [
+      0,
+      200,
+      176,
+      560
+     ]
+    },
+    {
+     "name": "ENTERTAINMENT DIST",
+     "rect": [
+      0,
+      560,
+      176,
+      694
+     ]
+    },
+    {
+     "name": "GRANGE PARK",
+     "rect": [
+      0,
+      0,
+      176,
+      200
      ]
     },
     {
@@ -440,862 +1346,295 @@
     {
      "name": "UNION STATION",
      "rect": [
-      528,
-      736,
-      624,
-      816
+      216,
+      568,
+      344,
+      688
      ]
     },
     {
      "name": "CN TOWER",
      "rect": [
-      432,
-      728,
-      496,
-      808
+      96,
+      560,
+      160,
+      664
      ]
     },
     {
      "name": "ROGERS CENTRE",
      "rect": [
-      392,
-      736,
-      472,
-      816
+      0,
+      566,
+      66,
+      682
      ]
     },
     {
      "name": "CITY HALL",
      "rect": [
-      520,
-      408,
-      600,
-      480
+      208,
+      0,
+      296,
+      88
      ]
     },
     {
      "name": "EATON CENTRE",
      "rect": [
-      552,
-      408,
-      632,
-      480
+      248,
+      0,
+      368,
+      88
      ]
     },
     {
      "name": "OLD CITY HALL",
      "rect": [
-      552,
-      440,
-      632,
-      520
+      248,
+      64,
+      368,
+      184
      ]
     },
     {
      "name": "ART GALLERY (AGO)",
      "rect": [
-      400,
-      408,
-      496,
-      480
+      0,
+      0,
+      128,
+      88
      ]
     },
     {
      "name": "THE GRANGE",
      "rect": [
-      408,
-      440,
-      488,
-      504
-     ]
-    },
-    {
-     "name": "ONTARIO LEGISLATURE",
-     "rect": [
-      456,
-      184,
-      568,
-      264
-     ]
-    },
-    {
-     "name": "ROYAL ONTARIO MUSEUM",
-     "rect": [
-      392,
-      80,
-      480,
-      160
-     ]
-    },
-    {
-     "name": "GARDINER MUSEUM",
-     "rect": [
-      528,
-      72,
-      608,
+      0,
+      64,
+      112,
       144
-     ]
-    },
-    {
-     "name": "VICTORIA COLLEGE",
-     "rect": [
-      560,
-      104,
-      632,
-      176
-     ]
-    },
-    {
-     "name": "CONVOCATION HALL",
-     "rect": [
-      392,
-      188,
-      464,
-      260
      ]
     },
     {
      "name": "ST LAWRENCE MARKET",
      "rect": [
-      672,
-      736,
-      768,
-      816
+      448,
+      568,
+      592,
+      688
      ]
     },
     {
      "name": "GOODERHAM FLATIRON",
      "rect": [
-      648,
-      656,
-      728,
-      736
-     ]
-    },
-    {
-     "name": "PALM HOUSE",
-     "rect": [
-      664,
-      296,
-      760,
-      368
+      400,
+      432,
+      512,
+      552
      ]
     },
     {
      "name": "MOSS PARK ARMOURY",
      "rect": [
-      680,
-      408,
-      776,
-      480
+      464,
+      0,
+      608,
+      88
      ]
     },
     {
      "name": "MASSEY HALL",
      "rect": [
-      648,
-      440,
-      728,
-      520
+      400,
+      64,
+      512,
+      184
      ]
     },
     {
      "name": "DISTILLERY",
      "rect": [
-      792,
-      736,
-      872,
-      816
-     ]
-    },
-    {
-     "name": "FORT YORK",
-     "rect": [
-      152,
-      712,
-      248,
-      816
-     ]
-    },
-    {
-     "name": "HOSPITAL ROW",
-     "rect": [
-      424,
-      296,
-      504,
-      392
-     ]
-    },
-    {
-     "name": "MARS CENTRE",
-     "rect": [
-      520,
-      296,
-      632,
-      360
+      640,
+      568,
+      752,
+      688
      ]
     },
     {
      "name": "PRINCESS OF WALES",
      "rect": [
-      392,
-      536,
-      472,
-      624
+      0,
+      216,
+      80,
+      376
      ]
     },
     {
      "name": "ROYAL ALEX THEATRE",
      "rect": [
-      424,
-      536,
-      504,
-      624
+      32,
+      216,
+      160,
+      376
      ]
     },
     {
      "name": "ST JAMES CATHEDRAL",
      "rect": [
-      664,
-      552,
-      744,
-      632
-     ]
-    },
-    {
-     "name": "ROY THOMSON HALL",
-     "rect": [
-      424,
-      648,
-      504,
-      736
+      464,
+      248,
+      544,
+      376
      ]
     },
     {
      "name": "SANKOFA SQUARE",
      "rect": [
-      656,
-      408,
-      736,
-      472
+      416,
+      0,
+      496,
+      64
      ]
     },
     {
      "name": "GRANGE PARK",
      "rect": [
-      392,
-      440,
-      504,
-      520
-     ]
-    },
-    {
-     "name": "QUEENS PARK",
-     "rect": [
-      456,
-      120,
-      568,
-      280
-     ]
-    },
-    {
-     "name": "ALLAN GARDENS",
-     "rect": [
-      648,
-      296,
-      776,
-      392
+      0,
+      64,
+      160,
+      184
      ]
     },
     {
      "name": "MOSS PARK",
      "rect": [
-      680,
-      440,
-      776,
-      520
-     ]
-    },
-    {
-     "name": "DUFFERIN GROVE PARK",
-     "rect": [
-      72,
-      72,
-      160,
-      192
-     ]
-    },
-    {
-     "name": "RIVERDALE FARM",
-     "rect": [
-      792,
-      136,
-      872,
-      240
-     ]
-    },
-    {
-     "name": "TRINITY BELLWOODS",
-     "rect": [
-      160,
-      408,
-      248,
-      520
-     ]
-    },
-    {
-     "name": "REGENT PARK",
-     "rect": [
-      792,
-      448,
-      872,
-      520
+      464,
+      64,
+      608,
+      184
      ]
     },
     {
      "name": "ST JAMES PARK",
      "rect": [
-      704,
-      552,
-      776,
-      632
+      520,
+      248,
+      608,
+      376
      ]
     }
    ],
    "junctions": [
     {
-     "name": "DUFFERIN & BLOOR",
-     "rect": [
-      32,
-      32,
-      96,
-      96
-     ]
-    },
-    {
-     "name": "DUFFERIN & COLLEGE",
-     "rect": [
-      32,
-      256,
-      96,
-      320
-     ]
-    },
-    {
-     "name": "DUFFERIN & DUNDAS",
-     "rect": [
-      32,
-      368,
-      96,
-      432
-     ]
-    },
-    {
-     "name": "DUFFERIN & QUEEN",
-     "rect": [
-      32,
-      496,
-      96,
-      560
-     ]
-    },
-    {
-     "name": "DUFFERIN & KING",
-     "rect": [
-      32,
-      608,
-      96,
-      672
-     ]
-    },
-    {
-     "name": "DUFFERIN/QUEENS QUAY",
-     "rect": [
-      32,
-      800,
-      96,
-      848
-     ]
-    },
-    {
-     "name": "OSSINGTON & BLOOR",
-     "rect": [
-      136,
-      32,
-      184,
-      96
-     ]
-    },
-    {
-     "name": "OSSINGTON & HARBORD",
-     "rect": [
-      136,
-      152,
-      184,
-      200
-     ]
-    },
-    {
-     "name": "OSSINGTON & COLLEGE",
-     "rect": [
-      136,
-      256,
-      184,
-      320
-     ]
-    },
-    {
-     "name": "OSSINGTON & DUNDAS",
-     "rect": [
-      136,
-      368,
-      184,
-      432
-     ]
-    },
-    {
-     "name": "OSSINGTON & QUEEN",
-     "rect": [
-      136,
-      496,
-      184,
-      560
-     ]
-    },
-    {
-     "name": "BATHURST & BLOOR",
-     "rect": [
-      224,
-      32,
-      288,
-      96
-     ]
-    },
-    {
-     "name": "BATHURST & HARBORD",
-     "rect": [
-      224,
-      152,
-      288,
-      200
-     ]
-    },
-    {
-     "name": "BATHURST & COLLEGE",
-     "rect": [
-      224,
-      256,
-      288,
-      320
-     ]
-    },
-    {
-     "name": "BATHURST & DUNDAS",
-     "rect": [
-      224,
-      368,
-      288,
-      432
-     ]
-    },
-    {
-     "name": "BATHURST & QUEEN",
-     "rect": [
-      224,
-      496,
-      288,
-      560
-     ]
-    },
-    {
-     "name": "BATHURST & KING",
-     "rect": [
-      224,
-      608,
-      288,
-      672
-     ]
-    },
-    {
-     "name": "BATHURST & FRONT",
-     "rect": [
-      224,
-      712,
-      288,
-      760
-     ]
-    },
-    {
-     "name": "BATHURST/QUEENS QUAY",
-     "rect": [
-      224,
-      800,
-      288,
-      848
-     ]
-    },
-    {
-     "name": "SPADINA & BLOOR",
-     "rect": [
-      352,
-      32,
-      416,
-      96
-     ]
-    },
-    {
-     "name": "SPADINA & HARBORD",
-     "rect": [
-      352,
-      152,
-      416,
-      200
-     ]
-    },
-    {
-     "name": "SPADINA & COLLEGE",
-     "rect": [
-      352,
-      256,
-      416,
-      320
-     ]
-    },
-    {
-     "name": "SPADINA & DUNDAS",
-     "rect": [
-      352,
-      368,
-      416,
-      432
-     ]
-    },
-    {
-     "name": "SPADINA & QUEEN",
-     "rect": [
-      352,
-      496,
-      416,
-      560
-     ]
-    },
-    {
-     "name": "SPADINA & KING",
-     "rect": [
-      352,
-      608,
-      416,
-      672
-     ]
-    },
-    {
-     "name": "SPADINA & FRONT",
-     "rect": [
-      352,
-      712,
-      416,
-      760
-     ]
-    },
-    {
-     "name": "SPADINA/QUEENS QUAY",
-     "rect": [
-      352,
-      800,
-      416,
-      848
-     ]
-    },
-    {
-     "name": "UNIVERSITY & COLLEGE",
-     "rect": [
-      480,
-      256,
-      544,
-      320
-     ]
-    },
-    {
-     "name": "UNIVERSITY & DUNDAS",
-     "rect": [
-      480,
-      368,
-      544,
-      432
-     ]
-    },
-    {
      "name": "UNIVERSITY & QUEEN",
      "rect": [
-      480,
-      496,
-      544,
-      560
+      144,
+      168,
+      208,
+      232
      ]
     },
     {
      "name": "UNIVERSITY & KING",
      "rect": [
-      480,
-      608,
-      544,
-      672
+      144,
+      360,
+      208,
+      424
      ]
     },
     {
      "name": "UNIVERSITY & FRONT",
      "rect": [
-      480,
-      712,
-      544,
-      760
-     ]
-    },
-    {
-     "name": "QUEENS PARK & BLOOR",
-     "rect": [
-      480,
-      32,
-      544,
-      96
-     ]
-    },
-    {
-     "name": "QUEENS PARK & HOSKIN",
-     "rect": [
-      440,
-      152,
-      480,
-      200
-     ]
-    },
-    {
-     "name": "QUEENS PK/WELLESLEY",
-     "rect": [
-      544,
-      152,
-      584,
-      200
-     ]
-    },
-    {
-     "name": "YONGE & BLOOR",
-     "rect": [
-      608,
-      32,
-      672,
-      96
-     ]
-    },
-    {
-     "name": "YONGE & WELLESLEY",
-     "rect": [
-      608,
-      152,
-      672,
-      200
-     ]
-    },
-    {
-     "name": "YONGE & COLLEGE",
-     "rect": [
-      608,
-      256,
-      672,
-      320
-     ]
-    },
-    {
-     "name": "YONGE & DUNDAS",
-     "rect": [
-      608,
-      368,
-      672,
-      432
+      144,
+      536,
+      208,
+      584
      ]
     },
     {
      "name": "YONGE & QUEEN",
      "rect": [
-      608,
-      496,
-      672,
-      560
+      352,
+      168,
+      416,
+      232
      ]
     },
     {
      "name": "YONGE & KING",
      "rect": [
-      608,
-      608,
-      672,
-      672
+      352,
+      360,
+      416,
+      424
      ]
     },
     {
      "name": "YONGE & FRONT",
      "rect": [
-      608,
-      712,
-      672,
-      760
+      352,
+      536,
+      416,
+      584
      ]
     },
     {
      "name": "YONGE & QUEENS QUAY",
      "rect": [
-      608,
-      800,
-      672,
-      848
-     ]
-    },
-    {
-     "name": "PARLIAMENT & BLOOR",
-     "rect": [
-      752,
-      32,
-      816,
-      96
-     ]
-    },
-    {
-     "name": "PARLIAMENT/WELLESLEY",
-     "rect": [
-      752,
-      152,
-      816,
-      200
-     ]
-    },
-    {
-     "name": "PARLIAMENT & CARLTON",
-     "rect": [
-      752,
-      256,
-      816,
-      320
-     ]
-    },
-    {
-     "name": "PARLIAMENT & DUNDAS",
-     "rect": [
-      752,
-      368,
-      816,
-      432
+      352,
+      688,
+      416,
+      736
      ]
     },
     {
      "name": "PARLIAMENT & QUEEN",
      "rect": [
-      752,
-      496,
-      816,
-      560
+      592,
+      168,
+      656,
+      232
      ]
     },
     {
      "name": "PARLIAMENT & KING",
      "rect": [
-      752,
-      608,
-      816,
-      672
+      592,
+      360,
+      656,
+      424
      ]
     },
     {
      "name": "PARLIAMENT & FRONT",
      "rect": [
-      752,
-      712,
-      816,
-      760
-     ]
-    },
-    {
-     "name": "BROADVIEW & DANFORTH",
-     "rect": [
-      904,
-      32,
-      952,
-      96
-     ]
-    },
-    {
-     "name": "BROADVIEW & GERRARD",
-     "rect": [
-      904,
-      256,
-      952,
-      320
-     ]
-    },
-    {
-     "name": "BROADVIEW & DUNDAS",
-     "rect": [
-      904,
-      368,
-      952,
-      432
+      592,
+      536,
+      656,
+      584
      ]
     },
     {
      "name": "BROADVIEW & QUEEN",
      "rect": [
-      904,
-      496,
-      952,
-      560
+      840,
+      168,
+      888,
+      232
      ]
     }
    ]
   },
-  "west": {
+  "west_nw": {
    "areas": [
-    {
-     "name": "SUNNYSIDE",
-     "rect": [
-      0,
-      760,
-      1024,
-      976
-     ]
-    },
-    {
-     "name": "BLOORDALE",
-     "rect": [
-      800,
-      0,
-      1024,
-      288
-     ]
-    },
-    {
-     "name": "BROCKTON VILLAGE",
-     "rect": [
-      800,
-      288,
-      1024,
-      528
-     ]
-    },
-    {
-     "name": "PARKDALE",
-     "rect": [
-      640,
-      528,
-      1024,
-      760
-     ]
-    },
     {
      "name": "JUNCTION TRIANGLE",
      "rect": [
-      416,
+      928,
       0,
-      800,
-      112
+      1024,
+      216
      ]
     },
     {
@@ -1303,8 +1642,78 @@
      "rect": [
       0,
       0,
-      416,
-      240
+      928,
+      464
+     ]
+    },
+    {
+     "name": "RONCESVALLES",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [],
+   "junctions": [
+    {
+     "name": "DUNDAS & BLOOR",
+     "rect": [
+      824,
+      272,
+      888,
+      336
+     ]
+    },
+    {
+     "name": "DUNDAS & BLOOR",
+     "rect": [
+      896,
+      272,
+      960,
+      336
+     ]
+    },
+    {
+     "name": "DUNDAS/RONCESVALLES",
+     "rect": [
+      896,
+      432,
+      960,
+      496
+     ]
+    }
+   ]
+  },
+  "west_ne": {
+   "areas": [
+    {
+     "name": "BLOORDALE",
+     "rect": [
+      632,
+      0,
+      1024,
+      552
+     ]
+    },
+    {
+     "name": "BROCKTON VILLAGE",
+     "rect": [
+      632,
+      552,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "JUNCTION TRIANGLE",
+     "rect": [
+      0,
+      0,
+      632,
+      216
      ]
     },
     {
@@ -1321,19 +1730,10 @@
     {
      "name": "SORAUREN PARK",
      "rect": [
-      552,
-      360,
+      210,
       728,
-      504
-     ]
-    },
-    {
-     "name": "STREETCAR CARHOUSE",
-     "rect": [
-      408,
-      656,
-      568,
-      744
+      496,
+      928
      ]
     }
    ],
@@ -1341,185 +1741,236 @@
     {
      "name": "BROCK & BLOOR",
      "rect": [
-      880,
-      32,
-      944,
-      96
+      800,
+      88,
+      864,
+      152
      ]
     },
     {
      "name": "LANSDOWNE & BLOOR",
      "rect": [
-      768,
-      80,
-      832,
-      144
-     ]
-    },
-    {
-     "name": "DUNDAS & BLOOR",
-     "rect": [
-      352,
-      128,
-      448,
-      192
-     ]
-    },
-    {
-     "name": "DUNDAS/RONCESVALLES",
-     "rect": [
-      384,
-      208,
-      448,
-      272
+      600,
+      184,
+      664,
+      248
      ]
     },
     {
      "name": "COLLEGE & LANSDOWNE",
      "rect": [
-      768,
-      256,
-      832,
-      352
+      600,
+      520,
+      664,
+      648
      ]
     },
     {
      "name": "BROCK & COLLEGE",
      "rect": [
-      880,
-      256,
-      944,
-      320
+      800,
+      520,
+      864,
+      584
      ]
     },
     {
      "name": "DUNDAS & HOWARD PARK",
      "rect": [
-      448,
-      288,
-      512,
-      352
+      48,
+      584,
+      112,
+      648
      ]
     },
     {
      "name": "SORAUREN & DUNDAS",
      "rect": [
-      512,
-      288,
-      576,
-      352
+      160,
+      584,
+      224,
+      648
      ]
     },
     {
      "name": "DUNDAS & COLLEGE",
      "rect": [
-      608,
-      288,
-      672,
-      352
+      328,
+      584,
+      392,
+      648
      ]
     },
     {
      "name": "DUNDAS & LANSDOWNE",
      "rect": [
-      768,
-      320,
-      832,
-      432
+      600,
+      640,
+      664,
+      704
+     ]
+    },
+    {
+     "name": "DUNDAS & LANSDOWNE",
+     "rect": [
+      600,
+      736,
+      664,
+      800
      ]
     },
     {
      "name": "BROCK & DUNDAS",
      "rect": [
-      880,
-      368,
-      944,
-      432
-     ]
-    },
-    {
-     "name": "LANSDOWNE & QUEEN",
-     "rect": [
-      768,
-      496,
-      832,
-      560
-     ]
-    },
-    {
-     "name": "BROCK & QUEEN",
-     "rect": [
-      880,
-      496,
-      944,
-      560
-     ]
-    },
-    {
-     "name": "SORAUREN & QUEEN",
-     "rect": [
-      672,
-      544,
+      800,
       736,
-      608
-     ]
-    },
-    {
-     "name": "QUEEN & RONCESVALLES",
-     "rect": [
-      608,
-      576,
-      672,
-      640
+      864,
+      800
      ]
     }
    ]
   },
-  "high_park": {
+  "west_sw": {
    "areas": [
-    {
-     "name": "HIGH PARK",
-     "rect": [
-      608,
-      312,
-      960,
-      632
-     ]
-    },
     {
      "name": "SUNNYSIDE",
      "rect": [
       0,
-      760,
+      549,
       1024,
       976
      ]
     },
     {
-     "name": "THE JUNCTION",
+     "name": "RONCESVALLES",
      "rect": [
-      432,
+      0,
       0,
       1024,
-      192
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "STREETCAR CARHOUSE",
+     "rect": [
+      920,
+      376,
+      1024,
+      473
+     ]
+    }
+   ],
+   "junctions": []
+  },
+  "west_se": {
+   "areas": [
+    {
+     "name": "SUNNYSIDE",
+     "rect": [
+      0,
+      549,
+      1024,
+      976
      ]
     },
     {
-     "name": "HIGH PARK NORTH",
+     "name": "BROCKTON VILLAGE",
      "rect": [
-      432,
-      192,
+      632,
+      0,
       1024,
-      312
+      88
+     ]
+    },
+    {
+     "name": "PARKDALE",
+     "rect": [
+      360,
+      88,
+      1024,
+      549
      ]
     },
     {
      "name": "RONCESVALLES",
      "rect": [
-      944,
-      312,
+      0,
+      0,
       1024,
-      760
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "STREETCAR CARHOUSE",
+     "rect": [
+      0,
+      376,
+      216,
+      473
+     ]
+    }
+   ],
+   "junctions": [
+    {
+     "name": "LANSDOWNE & QUEEN",
+     "rect": [
+      600,
+      56,
+      664,
+      120
+     ]
+    },
+    {
+     "name": "BROCK & QUEEN",
+     "rect": [
+      800,
+      56,
+      864,
+      120
+     ]
+    },
+    {
+     "name": "SORAUREN & QUEEN",
+     "rect": [
+      440,
+      152,
+      504,
+      216
+     ]
+    },
+    {
+     "name": "QUEEN & RONCESVALLES",
+     "rect": [
+      328,
+      216,
+      392,
+      280
+     ]
+    }
+   ]
+  },
+  "high_park_nw": {
+   "areas": [
+    {
+     "name": "THE JUNCTION",
+     "rect": [
+      856,
+      0,
+      1024,
+      408
+     ]
+    },
+    {
+     "name": "HIGH PARK NORTH",
+     "rect": [
+      856,
+      408,
+      1024,
+      656
      ]
     },
     {
@@ -1527,8 +1978,132 @@
      "rect": [
       0,
       0,
-      432,
-      384
+      856,
+      816
+     ]
+    },
+    {
+     "name": "SWANSEA",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [],
+   "junctions": [
+    {
+     "name": "RUNNYMEDE & DUNDAS",
+     "rect": [
+      824,
+      208,
+      888,
+      272
+     ]
+    },
+    {
+     "name": "ANNETTE & RUNNYMEDE",
+     "rect": [
+      824,
+      376,
+      888,
+      440
+     ]
+    },
+    {
+     "name": "ANNETTE & RUNNYMEDE",
+     "rect": [
+      824,
+      448,
+      888,
+      512
+     ]
+    },
+    {
+     "name": "ANNETTE & JANE",
+     "rect": [
+      320,
+      489,
+      384,
+      553
+     ]
+    },
+    {
+     "name": "BLOOR & RUNNYMEDE",
+     "rect": [
+      824,
+      616,
+      888,
+      680
+     ]
+    },
+    {
+     "name": "JANE & BLOOR",
+     "rect": [
+      320,
+      720,
+      384,
+      784
+     ]
+    },
+    {
+     "name": "SOUTH KINGSWAY/BLOOR",
+     "rect": [
+      472,
+      720,
+      536,
+      784
+     ]
+    },
+    {
+     "name": "BLOOR & RUNNYMEDE",
+     "rect": [
+      824,
+      720,
+      888,
+      784
+     ]
+    }
+   ]
+  },
+  "high_park_ne": {
+   "areas": [
+    {
+     "name": "HIGH PARK",
+     "rect": [
+      204,
+      656,
+      904,
+      976
+     ]
+    },
+    {
+     "name": "THE JUNCTION",
+     "rect": [
+      0,
+      0,
+      1024,
+      408
+     ]
+    },
+    {
+     "name": "HIGH PARK NORTH",
+     "rect": [
+      0,
+      408,
+      1024,
+      656
+     ]
+    },
+    {
+     "name": "RONCESVALLES",
+     "rect": [
+      872,
+      656,
+      1024,
+      976
      ]
     },
     {
@@ -1545,46 +2120,19 @@
     {
      "name": "HIGH PARK",
      "rect": [
-      584,
-      288,
-      984,
-      656
-     ]
-    },
-    {
-     "name": "HIGH PARK ZOO",
-     "rect": [
-      728,
-      472,
-      816,
-      552
+      180,
+      632,
+      928,
+      976
      ]
     },
     {
      "name": "GRENADIER POND",
      "rect": [
-      584,
-      368,
-      728,
-      648
-     ]
-    },
-    {
-     "name": "COLBORNE LODGE",
-     "rect": [
-      768,
-      520,
-      864,
-      608
-     ]
-    },
-    {
-     "name": "SUNNYSIDE PAVILION",
-     "rect": [
-      760,
-      888,
-      936,
-      960
+      180,
+      800,
+      456,
+      976
      ]
     }
    ],
@@ -1592,192 +2140,251 @@
     {
      "name": "DUNDAS & KEELE",
      "rect": [
-      816,
-      64,
-      880,
-      144
+      656,
+      176,
+      720,
+      272
      ]
     },
     {
      "name": "ANNETTE & DUNDAS",
      "rect": [
-      928,
-      64,
-      992,
-      128
-     ]
-    },
-    {
-     "name": "RUNNYMEDE & DUNDAS",
-     "rect": [
-      400,
-      80,
-      464,
-      144
-     ]
-    },
-    {
-     "name": "ANNETTE & RUNNYMEDE",
-     "rect": [
-      400,
-      160,
-      464,
-      256
+      872,
+      176,
+      936,
+      240
      ]
     },
     {
      "name": "KEELE & ANNETTE",
      "rect": [
-      912,
-      160,
-      976,
-      224
+      840,
+      376,
+      904,
+      440
      ]
     },
     {
      "name": "BLOOR & KEELE",
      "rect": [
-      912,
-      208,
-      976,
-      272
-     ]
-    },
-    {
-     "name": "ANNETTE & JANE",
-     "rect": [
-      144,
-      224,
-      208,
-      288
+      840,
+      480,
+      904,
+      544
      ]
     },
     {
      "name": "BLOOR & PARKSIDE",
      "rect": [
-      912,
-      240,
-      976,
-      304
-     ]
-    },
-    {
-     "name": "BLOOR & RUNNYMEDE",
-     "rect": [
-      400,
-      272,
-      464,
-      384
-     ]
-    },
-    {
-     "name": "JANE & BLOOR",
-     "rect": [
-      144,
-      320,
-      208,
-      384
-     ]
-    },
-    {
-     "name": "SOUTH KINGSWAY/BLOOR",
-     "rect": [
-      224,
-      320,
-      288,
-      384
+      840,
+      544,
+      904,
+      608
      ]
     },
     {
      "name": "PARKSIDE/HOWARD PARK",
      "rect": [
-      912,
-      352,
-      976,
-      416
+      840,
+      784,
+      904,
+      848
+     ]
+    }
+   ]
+  },
+  "high_park_sw": {
+   "areas": [
+    {
+     "name": "SUNNYSIDE",
+     "rect": [
+      0,
+      608,
+      1024,
+      976
      ]
     },
     {
+     "name": "SWANSEA",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [],
+   "junctions": []
+  },
+  "high_park_se": {
+   "areas": [
+    {
+     "name": "HIGH PARK",
+     "rect": [
+      204,
+      0,
+      904,
+      353
+     ]
+    },
+    {
+     "name": "SUNNYSIDE",
+     "rect": [
+      0,
+      608,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "RONCESVALLES",
+     "rect": [
+      872,
+      0,
+      1024,
+      608
+     ]
+    },
+    {
+     "name": "SWANSEA",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "HIGH PARK",
+     "rect": [
+      180,
+      0,
+      928,
+      377
+     ]
+    },
+    {
+     "name": "HIGH PARK ZOO",
+     "rect": [
+      480,
+      88,
+      614,
+      176
+     ]
+    },
+    {
+     "name": "GRENADIER POND",
+     "rect": [
+      180,
+      0,
+      456,
+      368
+     ]
+    },
+    {
+     "name": "COLBORNE LODGE",
+     "rect": [
+      566,
+      156,
+      704,
+      293
+     ]
+    },
+    {
+     "name": "SUNNYSIDE PAVILION",
+     "rect": [
+      547,
+      832,
+      840,
+      925
+     ]
+    }
+   ],
+   "junctions": [
+    {
      "name": "ELLIS & MORNINGSIDE",
      "rect": [
-      544,
-      464,
-      608,
-      528
+      128,
+      80,
+      192,
+      144
      ]
     },
     {
      "name": "ELLIS & QUEENSWAY",
      "rect": [
-      544,
-      608,
-      608,
-      720
+      128,
+      336,
+      192,
+      400
      ]
     },
     {
      "name": "PARKSIDE & QUEENSWAY",
      "rect": [
-      912,
-      608,
-      976,
-      672
+      840,
+      336,
+      904,
+      400
+     ]
+    },
+    {
+     "name": "ELLIS & QUEENSWAY",
+     "rect": [
+      128,
+      424,
+      192,
+      488
      ]
     }
    ]
   },
-  "east": {
+  "east_nw": {
    "areas": [
     {
      "name": "GREEKTOWN",
      "rect": [
       0,
       0,
-      704,
-      112
-     ]
-    },
-    {
-     "name": "THE DANFORTH",
-     "rect": [
-      704,
-      0,
       1024,
-      112
+      225
      ]
     },
     {
      "name": "CHINATOWN EAST",
      "rect": [
       0,
-      248,
-      384,
-      344
+      536,
+      824,
+      760
      ]
     },
     {
      "name": "RIVERDALE",
      "rect": [
       0,
-      112,
+      225,
       1024,
-      264
+      552
      ]
     },
     {
      "name": "RIVERSIDE",
      "rect": [
       0,
-      456,
-      320,
-      640
+      973,
+      697,
+      976
      ]
     },
     {
      "name": "LESLIEVILLE",
      "rect": [
-      384,
-      440,
+      824,
+      918,
       1024,
       976
      ]
@@ -1796,46 +2403,28 @@
     {
      "name": "WITHROW PARK",
      "rect": [
-      232,
-      80,
-      376,
-      200
-     ]
-    },
-    {
-     "name": "GREENWOOD PARK",
-     "rect": [
-      824,
-      264,
-      936,
-      360
+      498,
+      178,
+      808,
+      424
      ]
     },
     {
      "name": "DANFORTH MUSIC HALL",
      "rect": [
-      80,
-      88,
-      208,
-      184
+      204,
+      201,
+      413,
+      367
      ]
     },
     {
      "name": "OPERA HOUSE",
      "rect": [
-      40,
-      424,
-      168,
-      504
-     ]
-    },
-    {
-     "name": "ASHBRIDGE ESTATE",
-     "rect": [
-      832,
-      384,
-      928,
-      472
+      116,
+      921,
+      339,
+      976
      ]
     }
    ],
@@ -1843,271 +2432,421 @@
     {
      "name": "LOGAN & DANFORTH",
      "rect": [
-      192,
-      32,
-      256,
-      96
+      448,
+      104,
+      512,
+      168
      ]
     },
     {
      "name": "CARLAW & DANFORTH",
      "rect": [
-      352,
-      32,
-      416,
-      96
-     ]
-    },
-    {
-     "name": "PAPE & DANFORTH",
-     "rect": [
-      512,
-      32,
-      576,
-      96
-     ]
-    },
-    {
-     "name": "JONES & DANFORTH",
-     "rect": [
-      672,
-      32,
-      736,
-      96
-     ]
-    },
-    {
-     "name": "GREENWOOD & DANFORTH",
-     "rect": [
-      912,
-      32,
-      976,
-      96
+      792,
+      104,
+      856,
+      168
      ]
     },
     {
      "name": "LOGAN & BAIN",
      "rect": [
-      192,
-      176,
-      256,
-      240
+      448,
+      408,
+      512,
+      472
      ]
     },
     {
      "name": "CARLAW & BAIN",
      "rect": [
-      352,
-      176,
-      416,
-      240
-     ]
-    },
-    {
-     "name": "PAPE & BAIN",
-     "rect": [
-      512,
-      176,
-      576,
-      240
-     ]
-    },
-    {
-     "name": "JONES & GERRARD",
-     "rect": [
-      672,
-      224,
-      736,
-      288
-     ]
-    },
-    {
-     "name": "LESLIE & GERRARD",
-     "rect": [
-      784,
-      224,
-      848,
-      288
-     ]
-    },
-    {
-     "name": "GREENWOOD & GERRARD",
-     "rect": [
-      912,
-      224,
-      976,
-      288
+      792,
+      408,
+      856,
+      472
      ]
     },
     {
      "name": "LOGAN & GERRARD",
      "rect": [
-      192,
-      256,
-      256,
-      320
+      448,
+      584,
+      512,
+      648
      ]
     },
     {
      "name": "CARLAW & GERRARD",
      "rect": [
-      352,
-      256,
-      416,
-      320
-     ]
-    },
-    {
-     "name": "PAPE & GERRARD",
-     "rect": [
-      512,
-      256,
-      576,
-      320
-     ]
-    },
-    {
-     "name": "JONES & DUNDAS",
-     "rect": [
-      672,
-      336,
-      736,
-      400
-     ]
-    },
-    {
-     "name": "LESLIE & DUNDAS",
-     "rect": [
-      784,
-      336,
-      848,
-      400
-     ]
-    },
-    {
-     "name": "GREENWOOD & DUNDAS",
-     "rect": [
-      912,
-      336,
-      976,
-      400
+      792,
+      584,
+      856,
+      648
      ]
     },
     {
      "name": "LOGAN & DUNDAS",
      "rect": [
-      192,
-      368,
-      256,
-      432
+      448,
+      816,
+      512,
+      880
      ]
     },
     {
      "name": "CARLAW & DUNDAS",
      "rect": [
-      352,
-      368,
-      416,
-      432
+      792,
+      816,
+      856,
+      880
+     ]
+    }
+   ]
+  },
+  "east_ne": {
+   "areas": [
+    {
+     "name": "GREEKTOWN",
+     "rect": [
+      0,
+      0,
+      456,
+      225
+     ]
+    },
+    {
+     "name": "THE DANFORTH",
+     "rect": [
+      456,
+      0,
+      1024,
+      225
+     ]
+    },
+    {
+     "name": "RIVERDALE",
+     "rect": [
+      0,
+      225,
+      1024,
+      552
+     ]
+    },
+    {
+     "name": "LESLIEVILLE",
+     "rect": [
+      0,
+      918,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "SOUTH RIVERDALE",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "GREENWOOD PARK",
+     "rect": [
+      673,
+      592,
+      864,
+      768
+     ]
+    },
+    {
+     "name": "ASHBRIDGE ESTATE",
+     "rect": [
+      691,
+      832,
+      846,
+      969
+     ]
+    }
+   ],
+   "junctions": [
+    {
+     "name": "PAPE & DANFORTH",
+     "rect": [
+      136,
+      104,
+      200,
+      168
+     ]
+    },
+    {
+     "name": "JONES & DANFORTH",
+     "rect": [
+      424,
+      104,
+      488,
+      168
+     ]
+    },
+    {
+     "name": "GREENWOOD & DANFORTH",
+     "rect": [
+      848,
+      104,
+      912,
+      168
+     ]
+    },
+    {
+     "name": "PAPE & BAIN",
+     "rect": [
+      136,
+      408,
+      200,
+      472
+     ]
+    },
+    {
+     "name": "JONES & GERRARD",
+     "rect": [
+      424,
+      512,
+      488,
+      576
+     ]
+    },
+    {
+     "name": "LESLIE & GERRARD",
+     "rect": [
+      624,
+      512,
+      688,
+      576
+     ]
+    },
+    {
+     "name": "GREENWOOD & GERRARD",
+     "rect": [
+      848,
+      512,
+      912,
+      576
+     ]
+    },
+    {
+     "name": "PAPE & GERRARD",
+     "rect": [
+      136,
+      584,
+      200,
+      648
+     ]
+    },
+    {
+     "name": "JONES & DUNDAS",
+     "rect": [
+      424,
+      752,
+      488,
+      816
+     ]
+    },
+    {
+     "name": "LESLIE & DUNDAS",
+     "rect": [
+      624,
+      752,
+      688,
+      816
+     ]
+    },
+    {
+     "name": "GREENWOOD & DUNDAS",
+     "rect": [
+      848,
+      752,
+      912,
+      816
      ]
     },
     {
      "name": "PAPE & DUNDAS",
      "rect": [
-      512,
-      368,
-      576,
-      432
+      136,
+      816,
+      200,
+      880
+     ]
+    }
+   ]
+  },
+  "east_sw": {
+   "areas": [
+    {
+     "name": "RIVERSIDE",
+     "rect": [
+      0,
+      45,
+      697,
+      384
      ]
     },
     {
-     "name": "JONES & QUEEN",
+     "name": "LESLIEVILLE",
      "rect": [
-      672,
-      464,
-      736,
-      528
+      824,
+      0,
+      1024,
+      976
      ]
     },
     {
-     "name": "LESLIE & QUEEN",
+     "name": "SOUTH RIVERDALE",
      "rect": [
-      784,
-      464,
-      848,
-      528
+      0,
+      0,
+      1024,
+      976
      ]
-    },
+    }
+   ],
+   "marks": [
     {
-     "name": "GREENWOOD & QUEEN",
+     "name": "OPERA HOUSE",
      "rect": [
-      912,
-      464,
-      976,
-      528
+      116,
+      0,
+      339,
+      120
      ]
-    },
+    }
+   ],
+   "junctions": [
     {
      "name": "LOGAN & QUEEN",
      "rect": [
-      192,
-      496,
-      256,
-      560
+      448,
+      136,
+      512,
+      200
      ]
     },
     {
      "name": "CARLAW & QUEEN",
      "rect": [
-      352,
-      496,
-      416,
-      560
-     ]
-    },
-    {
-     "name": "PAPE & QUEEN",
-     "rect": [
-      512,
-      496,
-      576,
-      560
-     ]
-    },
-    {
-     "name": "LESLIE & EASTERN",
-     "rect": [
-      784,
-      624,
-      848,
-      688
+      792,
+      136,
+      856,
+      200
      ]
     },
     {
      "name": "CARLAW & EASTERN",
      "rect": [
-      352,
-      656,
-      416,
-      752
-     ]
-    },
-    {
-     "name": "PAPE & EASTERN",
-     "rect": [
-      512,
-      656,
-      576,
-      720
+      792,
+      424,
+      856,
+      544
      ]
     },
     {
      "name": "LOGAN & EASTERN",
      "rect": [
-      192,
+      448,
+      480,
+      512,
+      544
+     ]
+    }
+   ]
+  },
+  "east_se": {
+   "areas": [
+    {
+     "name": "LESLIEVILLE",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    },
+    {
+     "name": "SOUTH RIVERDALE",
+     "rect": [
+      0,
+      0,
+      1024,
+      976
+     ]
+    }
+   ],
+   "marks": [
+    {
+     "name": "ASHBRIDGE ESTATE",
+     "rect": [
+      691,
+      0,
+      846,
+      41
+     ]
+    }
+   ],
+   "junctions": [
+    {
+     "name": "JONES & QUEEN",
+     "rect": [
+      424,
+      80,
+      488,
+      144
+     ]
+    },
+    {
+     "name": "LESLIE & QUEEN",
+     "rect": [
+      624,
+      80,
       688,
-      256,
-      752
+      144
+     ]
+    },
+    {
+     "name": "GREENWOOD & QUEEN",
+     "rect": [
+      848,
+      80,
+      912,
+      144
+     ]
+    },
+    {
+     "name": "PAPE & QUEEN",
+     "rect": [
+      136,
+      136,
+      200,
+      200
+     ]
+    },
+    {
+     "name": "LESLIE & EASTERN",
+     "rect": [
+      624,
+      368,
+      688,
+      432
+     ]
+    },
+    {
+     "name": "PAPE & EASTERN",
+     "rect": [
+      136,
+      424,
+      200,
+      488
      ]
     }
    ]

@@ -5,7 +5,7 @@ portals; writes the BANKED data header `td_street.h`. Pickups are cash, first
 aid and ammunition the courier collects on foot or by driving over them: they
 lie on the pavement beside straight curbs, well apart from each other, never
 change a collision value and keep clear of stops, parking anchors and
-district seams. Lost parcels (five a district) are the hidden collectibles:
+district seams. Lost parcels (twenty in all) are the hidden collectibles:
 deep in parks, plazas and squares, away from any road, each found once. Berths are where the visible bus, streetcar or ferry stops for
 each transit stop.
 
@@ -19,9 +19,9 @@ from check_campaign import ROOT, decode
 
 ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
 OUTPUT = ENGINE / 'include/td_street.h'
-PICKUPS_PER_DISTRICT = 24
+PICKUPS_PER_DISTRICT = 14  # per scene (sixteen scenes; indexes fit a byte)
 KINDS = ('cash', 'first_aid', 'ammo', 'parcel')
-PARCELS_PER_DISTRICT = 5
+PARCELS = 20            # lost parcels in all: two in each core scene, one elsewhere
 PARCEL_SPACING = 128    # px between lost parcels (Chebyshev)
 CLEARANCE = 32          # px from stops, anchors and seams
 SPACING = 144           # px between pickups (Chebyshev)
@@ -85,7 +85,7 @@ def curb_runs(w, h, at):
 def load_priority(scene):
     """CGB background-priority flags (attribute bit 7) per tile: roof lips,
     canopies and overhanging upper floors that hide sprites."""
-    attrs = json.loads((ROOT / 'project/original-art' / (scene.removeprefix('toronto_') + '_attributes.json')).read_text())
+    attrs = json.loads((ROOT / 'project/original-art' / (scene + '_attributes.json')).read_text())
     return [bool(a & 0x80) for a in attrs]
 
 
@@ -145,21 +145,25 @@ def place_parcels(district, w, h, at, avoid, priority, pickups):
     for _, u, v in candidates:
         if all(max(abs(u - a), abs(v - b)) >= PARCEL_SPACING for a, b in chosen):
             chosen.append((u, v))
-        if len(chosen) == PARCELS_PER_DISTRICT:
+        if len(chosen) == parcels_in(district):
             break
-    assert len(chosen) == PARCELS_PER_DISTRICT, (district, len(chosen))
+    assert len(chosen) == parcels_in(district), (district, len(chosen))
     return [(u, v, KINDS.index('parcel')) for u, v in sorted(chosen, key=lambda c: (c[1], c[0]))]
+
+
+def parcels_in(district):
+    return 2 if district < 4 else 1
 
 
 def road_centre(at, w, h, u, v):
     """Centre (px) of the east-west road nearest the stop, measured where the
     road is narrowest so a crossing street does not widen it."""
     best = None
-    for du in range(-48, 49, 8):
+    for du in range(-96, 97, 8):
         tx = (u + du) // 8
         if not 0 <= tx < w:
             continue
-        for dv in range(0, 48, 8):
+        for dv in range(0, 96, 8):
             for sign in (1, -1):
                 ty = (v + sign * dv) // 8
                 if 0 <= ty < h and at(tx, ty) == ROAD:
@@ -168,15 +172,12 @@ def road_centre(at, w, h, u, v):
                         top -= 1
                     while bottom < h - 1 and at(tx, bottom + 1) == ROAD:
                         bottom += 1
-                    span = (bottom - top + 1, abs(dv), (top * 8 + (bottom + 1) * 8) // 2)
-                    if best is None or span < best:
+                    span = (bottom - top + 1, abs(dv), abs(du), (top * 8 + (bottom + 1) * 8) // 2)
+                    # A north-south road runs on: only a crossing counts.
+                    if span[0] <= 8 and (best is None or span < best):
                         best = span
-                    break
-            else:
-                continue
-            break
-    assert best and best[0] <= 8, ('no east-west road near stop', u, v, best)
-    return best[2]
+    assert best, ('no east-west road near stop', u, v)
+    return best[3]
 
 
 def ferry_berth(at, w, h, u, v):
@@ -219,13 +220,13 @@ def build():
                     avoid.append((end['u'], end['v']))
         priority = load_priority(d['scene'])
         pickups = place_pickups(did, w, h, at, avoid, priority)
-        assert len(pickups) >= 12, (d['scene'], len(pickups))
+        assert len(pickups) >= 6, (d['scene'], len(pickups))
         pickups += place_parcels(did, w, h, at, avoid, priority, pickups)
         starts.append(len(flat)); counts.append(len(pickups)); flat += pickups
         summary.append(f"{d['scene'].removeprefix('toronto_')}:{len(pickups)}")
     assert len(flat) < 255
-    lines.append('static const UBYTE td_pickup_start[4]={' + ','.join(map(str, starts)) + '};')
-    lines.append('static const UBYTE td_pickup_count[4]={' + ','.join(map(str, counts)) + '};')
+    lines.append(f'static const UBYTE td_pickup_start[{len(starts)}]={{' + ','.join(map(str, starts)) + '};')
+    lines.append(f'static const UBYTE td_pickup_count[{len(counts)}]={{' + ','.join(map(str, counts)) + '};')
     lines.append('static const UWORD td_pickup_u[%d]={%s};' % (len(flat), ','.join(str(p[0]) for p in flat)))
     lines.append('static const UWORD td_pickup_v[%d]={%s};' % (len(flat), ','.join(str(p[1]) for p in flat)))
     lines.append('/* 0 cash, 1 first aid, 2 ammunition, 3 lost parcel. */')

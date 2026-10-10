@@ -81,14 +81,14 @@ def seed_of(*values):
     return int(hashlib.sha256(repr(values).encode()).hexdigest()[:8], 16)
 
 
-def roof_details(d, box, x, y, w, h, roof, seed, colors, aligned=False):
+def roof_details(d, box, x, y, w, h, roof, seed, colors, aligned=False, kinds=2):
     """Varied rooftop equipment inside the existing roof outline. Picks one or
     two features from the seed: water tank, HVAC units, skylight strip, solar
     grid or a stair bulkhead. Never draws outside (x+5..x+w-6, y+5..).
     aligned: a water tank or HVAC units inside one tile measured from the
     roof's top-right corner, so buildings of a style share tiles (the core
     scene, where the tile budget is tight)."""
-    if aligned:
+    if aligned and kinds <= 2:
         if w < 32 or h - roof < 14:
             return
         l, t = x + w - 16, y + 8          # inside one tile of the roof
@@ -98,8 +98,13 @@ def roof_details(d, box, x, y, w, h, roof, seed, colors, aligned=False):
             box(l + 1, t, 3, 4, 3); box(l + 4, t, 3, 4, 3)
             d.rectangle((l + 1, t, l + 3, t + 3), outline=colors[0]); d.rectangle((l + 4, t, l + 6, t + 3), outline=colors[0])
         return
-        l, t = x + w - 15, y + 6
-        kind = seed % 6
+    if aligned:
+        # kinds > 2: six roof features, each inside one tile measured from
+        # the roof's top-right corner (outer districts have the tile room).
+        if w < 32 or h - roof < 14:
+            return
+        l, t = x + w - 16, y + 8
+        kind = seed % kinds
         if kind == 0:      # water tank
             d.ellipse((l + 1, t, l + 6, t + 4), fill=colors[3], outline=colors[0])
         elif kind == 1:    # two HVAC units
@@ -719,3 +724,44 @@ def paint_park_feature(d, box, colors, kind, x, y, w, h):
     elif kind != 'meadow':
         raise ValueError(kind)
     return solid, slots
+
+
+# ------------------------------------------------------------- scene split
+# A district is drawn at double scale (world2x.py) and cut into four native
+# scenes that overlap by 48 px. Each scene's background must leave VRAM for
+# the actor sprites: GB Studio packs a scene's tiles beyond 256 towards tile
+# 191 of each bank, and the sprite sheet uses tiles from 0, so a scene of at
+# most SCENE_TILE_BUDGET flip-canonical tiles leaves 144 per bank for sprites.
+SCENE_TILE_BUDGET = 352
+
+
+def flip_canonical_count(img):
+    from PIL import Image as _I
+    pats = set()
+    for ty in range(img.height // 8):
+        for tx in range(img.width // 8):
+            t = img.crop((tx * 8, ty * 8, tx * 8 + 8, ty * 8 + 8))
+            v = [t, t.transpose(_I.Transpose.FLIP_LEFT_RIGHT), t.transpose(_I.Transpose.FLIP_TOP_BOTTOM),
+                 t.transpose(_I.Transpose.ROTATE_180)]
+            pats.add(min(x.tobytes() for x in v))
+    return len(pats)
+
+
+def split_scenes(img, attrs, collisions, tw, old_id):
+    """Four scene crops of a district image with their attributes and
+    collisions (lists in tile order) and flip-canonical tile counts."""
+    import world2x
+    out = []
+    for q in range(4):
+        new_id = old_id * 4 + q
+        ox, oy = world2x.scene_origin(new_id)
+        sw, sh = world2x.SCENE_W, world2x.SCENE_H
+        crop = img.crop((ox, oy, ox + sw, oy + sh))
+        a, c = [], []
+        for ty in range(sh // 8):
+            row = (oy // 8 + ty) * tw + ox // 8
+            a += attrs[row:row + sw // 8]
+            c += collisions[row:row + sw // 8]
+        out.append({'slug': world2x.scene_slug(new_id), 'district': new_id, 'origin': [ox, oy], 'image': crop,
+                    'attrs': a, 'collisions': c, 'tiles': flip_canonical_count(crop)})
+    return out

@@ -25,8 +25,8 @@ static UWORD td_route_position(UBYTE base,UBYTE identity,UWORD start){
    held/window sets keep one bit each. */
 #define TD_ROUTE_BYTES (TD_ROUTE_IDS/8)
 typedef char td_route_ids_fit_sets[(TD_ROUTE_IDS%8==0&&TD_ROUTE_IDS<=248)?1:-1];
-/* The window scan assembly uses literal 20 set bytes and 48 candidates. */
-typedef char td_route_scan_literals_match[(TD_ROUTE_BYTES==20&&TD_ROUTE_CANDIDATES==48)?1:-1];
+/* The window scan assembly uses literal 16 set bytes and 48 candidates. */
+typedef char td_route_scan_literals_match[(TD_ROUTE_BYTES==16&&TD_ROUTE_CANDIDATES==48)?1:-1];
 /* Refresh scratch lives in WRAM: SDCC indexes static arrays far more cheaply
    than stack frames, and the refresh runs from the main loop only.
    td_route_free[c] is the score of candidate c, or 65535 while a slot holds
@@ -94,7 +94,7 @@ const UBYTE *td_rw_routes;const UBYTE *td_rw_order;
 UBYTE td_route_window_scan(void) NAKED {
     __asm
         ld hl, #_td_route_window_set
-        ld b, #20
+        ld b, #16
         xor a, a
     1$:
         ld (hl+), a
@@ -342,7 +342,7 @@ UBYTE td_route_window_scan(void) NAKED {
         ld hl, #_td_rw_byte
         inc (hl)
         ld a, (hl)
-        cp a, #20
+        cp a, #16
         jp c, 21$
         ld a, (_td_rw_found)
         ret

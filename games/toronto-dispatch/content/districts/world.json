@@ -1,300 +1,4129 @@
 {
-  "status": "Four scenes passed bounded native build, delivery, crossing and reset checks; see TESTING.md. Full Old Toronto and two-hour campaign unfinished.",
-  "projection": "North-up local pixels; each scene is 1024 by 976. Distances and seam lanes are original compression.",
-  "districts": [
-    {
-      "id": 0,
-      "name": "CENTRAL TORONTO",
-      "scene": "toronto_city",
-      "symbol": "scene_toronto_city",
-      "width_pixels": 1024,
-      "height_pixels": 976,
-      "atlas_x": 2048,
-      "atlas_y": 0
-    },
-    {
-      "id": 1,
-      "name": "WEST END",
-      "scene": "toronto_west",
-      "symbol": "scene_toronto_west",
-      "width_pixels": 1024,
-      "height_pixels": 976,
-      "atlas_x": 1024,
-      "atlas_y": 0
-    },
-    {
-      "id": 2,
-      "name": "HIGH PARK/JUNCTION",
-      "scene": "toronto_high_park",
-      "symbol": "scene_toronto_high_park",
-      "width_pixels": 1024,
-      "height_pixels": 976,
-      "atlas_x": 0,
-      "atlas_y": 0
-    },
-    {
-      "id": 3,
-      "name": "TORONTO EAST END",
-      "scene": "toronto_east",
-      "symbol": "scene_toronto_east",
-      "width_pixels": 1024,
-      "height_pixels": 976,
-      "atlas_x": 3072,
-      "atlas_y": 0
-    }
-  ],
-  "portals": [
-    {
-      "name": "Bloor east",
-      "from": {
-        "district": 0,
-        "u": 24,
-        "v": 64
-      },
-      "to": {
-        "district": 1,
-        "u": 1000,
-        "v": 64
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "College east",
-      "from": {
-        "district": 0,
-        "u": 24,
-        "v": 288
-      },
-      "to": {
-        "district": 1,
-        "u": 1000,
-        "v": 288
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Dundas east",
-      "from": {
-        "district": 0,
-        "u": 24,
-        "v": 400
-      },
-      "to": {
-        "district": 1,
-        "u": 1000,
-        "v": 400
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Queen east",
-      "from": {
-        "district": 0,
-        "u": 24,
-        "v": 528
-      },
-      "to": {
-        "district": 1,
-        "u": 1000,
-        "v": 528
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "King east",
-      "from": {
-        "district": 0,
-        "u": 24,
-        "v": 640
-      },
-      "to": {
-        "district": 1,
-        "u": 1000,
-        "v": 640
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Dundas Junction",
-      "from": {
-        "district": 1,
-        "u": 24,
-        "v": 96
-      },
-      "to": {
-        "district": 2,
-        "u": 1000,
-        "v": 96
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Bloor west",
-      "from": {
-        "district": 1,
-        "u": 24,
-        "v": 240
-      },
-      "to": {
-        "district": 2,
-        "u": 1000,
-        "v": 240
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Howard Park",
-      "from": {
-        "district": 1,
-        "u": 24,
-        "v": 352
-      },
-      "to": {
-        "district": 2,
-        "u": 1000,
-        "v": 352
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "The Queensway",
-      "from": {
-        "district": 1,
-        "u": 24,
-        "v": 640
-      },
-      "to": {
-        "district": 2,
-        "u": 1000,
-        "v": 640
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Lake Shore",
-      "from": {
-        "district": 1,
-        "u": 24,
-        "v": 832
-      },
-      "to": {
-        "district": 2,
-        "u": 1000,
-        "v": 832
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Martin Goodman",
-      "from": {
-        "district": 1,
-        "u": 24,
-        "v": 896
-      },
-      "to": {
-        "district": 2,
-        "u": 1000,
-        "v": 896
-      },
-      "access": [
-        "foot"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Bloor/Danforth east",
-      "from": {
-        "district": 0,
-        "u": 1000,
-        "v": 64
-      },
-      "to": {
-        "district": 3,
-        "u": 24,
-        "v": 64
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Dundas east crossing",
-      "from": {
-        "district": 0,
-        "u": 1000,
-        "v": 400
-      },
-      "to": {
-        "district": 3,
-        "u": 24,
-        "v": 400
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    },
-    {
-      "name": "Queen east crossing",
-      "from": {
-        "district": 0,
-        "u": 1000,
-        "v": 528
-      },
-      "to": {
-        "district": 3,
-        "u": 24,
-        "v": 528
-      },
-      "access": [
-        "foot",
-        "vehicle"
-      ],
-      "modeled_crossing_pixels": 48
-    }
-  ],
-  "notice": "These three scenes expand the central prototype westward. They do not cover the full former City of Toronto. Road shapes, mission entrances, timetables and art are original game design based on separately attributed geographic facts."
+ "status": "Sixteen native scenes: four compressed districts drawn at double scale (world2x.py).",
+ "projection": "North-up local pixels; each scene is 1024 by 976 and overlaps its neighbours by 48 px. Positions in the 1x plan map through world2x.map_point.",
+ "districts": [
+  {
+   "id": 0,
+   "name": "KENSINGTON/U OF T",
+   "scene": "toronto_core_nw",
+   "symbol": "scene_toronto_core_nw",
+   "plan_district": 0,
+   "origin": [
+    0,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 4000,
+   "atlas_y": 0
+  },
+  {
+   "id": 1,
+   "name": "YONGE & CHURCH",
+   "scene": "toronto_core_ne",
+   "symbol": "scene_toronto_core_ne",
+   "plan_district": 0,
+   "origin": [
+    976,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 4976,
+   "atlas_y": 0
+  },
+  {
+   "id": 2,
+   "name": "QUEEN & KING WEST",
+   "scene": "toronto_core_sw",
+   "symbol": "scene_toronto_core_sw",
+   "plan_district": 0,
+   "origin": [
+    0,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 4000,
+   "atlas_y": 928
+  },
+  {
+   "id": 3,
+   "name": "FINANCIAL DISTRICT",
+   "scene": "toronto_core_se",
+   "symbol": "scene_toronto_core_se",
+   "plan_district": 0,
+   "origin": [
+    976,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 4976,
+   "atlas_y": 928
+  },
+  {
+   "id": 4,
+   "name": "JUNCTION TRIANGLE",
+   "scene": "toronto_west_nw",
+   "symbol": "scene_toronto_west_nw",
+   "plan_district": 1,
+   "origin": [
+    0,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 2000,
+   "atlas_y": 0
+  },
+  {
+   "id": 5,
+   "name": "BROCKTON VILLAGE",
+   "scene": "toronto_west_ne",
+   "symbol": "scene_toronto_west_ne",
+   "plan_district": 1,
+   "origin": [
+    976,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 2976,
+   "atlas_y": 0
+  },
+  {
+   "id": 6,
+   "name": "RONCESVALLES",
+   "scene": "toronto_west_sw",
+   "symbol": "scene_toronto_west_sw",
+   "plan_district": 1,
+   "origin": [
+    0,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 2000,
+   "atlas_y": 928
+  },
+  {
+   "id": 7,
+   "name": "PARKDALE",
+   "scene": "toronto_west_se",
+   "symbol": "scene_toronto_west_se",
+   "plan_district": 1,
+   "origin": [
+    976,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 2976,
+   "atlas_y": 928
+  },
+  {
+   "id": 8,
+   "name": "BLOOR WEST VILLAGE",
+   "scene": "toronto_high_park_nw",
+   "symbol": "scene_toronto_high_park_nw",
+   "plan_district": 2,
+   "origin": [
+    0,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 0,
+   "atlas_y": 0
+  },
+  {
+   "id": 9,
+   "name": "THE JUNCTION",
+   "scene": "toronto_high_park_ne",
+   "symbol": "scene_toronto_high_park_ne",
+   "plan_district": 2,
+   "origin": [
+    976,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 976,
+   "atlas_y": 0
+  },
+  {
+   "id": 10,
+   "name": "SWANSEA",
+   "scene": "toronto_high_park_sw",
+   "symbol": "scene_toronto_high_park_sw",
+   "plan_district": 2,
+   "origin": [
+    0,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 0,
+   "atlas_y": 928
+  },
+  {
+   "id": 11,
+   "name": "HIGH PARK",
+   "scene": "toronto_high_park_se",
+   "symbol": "scene_toronto_high_park_se",
+   "plan_district": 2,
+   "origin": [
+    976,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 976,
+   "atlas_y": 928
+  },
+  {
+   "id": 12,
+   "name": "RIVERDALE",
+   "scene": "toronto_east_nw",
+   "symbol": "scene_toronto_east_nw",
+   "plan_district": 3,
+   "origin": [
+    0,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 6000,
+   "atlas_y": 0
+  },
+  {
+   "id": 13,
+   "name": "GREENWOOD",
+   "scene": "toronto_east_ne",
+   "symbol": "scene_toronto_east_ne",
+   "plan_district": 3,
+   "origin": [
+    976,
+    0
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 6976,
+   "atlas_y": 0
+  },
+  {
+   "id": 14,
+   "name": "RIVERSIDE",
+   "scene": "toronto_east_sw",
+   "symbol": "scene_toronto_east_sw",
+   "plan_district": 3,
+   "origin": [
+    0,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 6000,
+   "atlas_y": 928
+  },
+  {
+   "id": 15,
+   "name": "LESLIEVILLE",
+   "scene": "toronto_east_se",
+   "symbol": "scene_toronto_east_se",
+   "plan_district": 3,
+   "origin": [
+    976,
+    928
+   ],
+   "width_pixels": 1024,
+   "height_pixels": 976,
+   "atlas_x": 6976,
+   "atlas_y": 928
+  }
+ ],
+ "portals": [
+  {
+   "name": "Bloor east",
+   "from": {
+    "district": 0,
+    "u": 24,
+    "v": 144
+   },
+   "to": {
+    "district": 5,
+    "u": 1000,
+    "v": 120
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "College east",
+   "from": {
+    "district": 0,
+    "u": 24,
+    "v": 640
+   },
+   "to": {
+    "district": 5,
+    "u": 1000,
+    "v": 552
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Dundas east",
+   "from": {
+    "district": 0,
+    "u": 24,
+    "v": 896
+   },
+   "to": {
+    "district": 5,
+    "u": 1000,
+    "v": 768
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Queen east",
+   "from": {
+    "district": 2,
+    "u": 24,
+    "v": 200
+   },
+   "to": {
+    "district": 7,
+    "u": 1000,
+    "v": 88
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "King east",
+   "from": {
+    "district": 2,
+    "u": 24,
+    "v": 392
+   },
+   "to": {
+    "district": 7,
+    "u": 1000,
+    "v": 312
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Dundas Junction",
+   "from": {
+    "district": 4,
+    "u": 24,
+    "v": 184
+   },
+   "to": {
+    "district": 9,
+    "u": 1000,
+    "v": 208
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Bloor west",
+   "from": {
+    "district": 4,
+    "u": 24,
+    "v": 464
+   },
+   "to": {
+    "district": 9,
+    "u": 1000,
+    "v": 512
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Howard Park",
+   "from": {
+    "district": 4,
+    "u": 24,
+    "v": 672
+   },
+   "to": {
+    "district": 9,
+    "u": 1000,
+    "v": 752
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "The Queensway",
+   "from": {
+    "district": 6,
+    "u": 24,
+    "v": 312
+   },
+   "to": {
+    "district": 11,
+    "u": 1000,
+    "v": 368
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Lake Shore",
+   "from": {
+    "district": 6,
+    "u": 24,
+    "v": 688
+   },
+   "to": {
+    "district": 11,
+    "u": 1000,
+    "v": 720
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Martin Goodman",
+   "from": {
+    "district": 6,
+    "u": 24,
+    "v": 816
+   },
+   "to": {
+    "district": 11,
+    "u": 1000,
+    "v": 832
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Bloor/Danforth east",
+   "from": {
+    "district": 1,
+    "u": 1000,
+    "v": 144
+   },
+   "to": {
+    "district": 12,
+    "u": 24,
+    "v": 136
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Dundas east crossing",
+   "from": {
+    "district": 1,
+    "u": 1000,
+    "v": 896
+   },
+   "to": {
+    "district": 12,
+    "u": 24,
+    "v": 848
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "Queen east crossing",
+   "from": {
+    "district": 3,
+    "u": 1000,
+    "v": 200
+   },
+   "to": {
+    "district": 14,
+    "u": 24,
+    "v": 168
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 48
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 1000,
+    "v": 144
+   },
+   "to": {
+    "district": 1,
+    "u": 24,
+    "v": 144
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 1000,
+    "v": 392
+   },
+   "to": {
+    "district": 1,
+    "u": 24,
+    "v": 392
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 1000,
+    "v": 640
+   },
+   "to": {
+    "district": 1,
+    "u": 24,
+    "v": 640
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 1000,
+    "v": 896
+   },
+   "to": {
+    "district": 1,
+    "u": 24,
+    "v": 896
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 76
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 76
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 200
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 200
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 392
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 392
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 560
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 560
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 660
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 660
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 712
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 712
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 2,
+    "u": 1000,
+    "v": 900
+   },
+   "to": {
+    "district": 3,
+    "u": 24,
+    "v": 900
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 152,
+    "v": 952
+   },
+   "to": {
+    "district": 2,
+    "u": 152,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 376,
+    "v": 952
+   },
+   "to": {
+    "district": 2,
+    "u": 376,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 608,
+    "v": 952
+   },
+   "to": {
+    "district": 2,
+    "u": 608,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 0,
+    "u": 912,
+    "v": 952
+   },
+   "to": {
+    "district": 2,
+    "u": 912,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 1,
+    "u": 176,
+    "v": 952
+   },
+   "to": {
+    "district": 3,
+    "u": 176,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 1,
+    "u": 384,
+    "v": 952
+   },
+   "to": {
+    "district": 3,
+    "u": 384,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 1,
+    "u": 624,
+    "v": 952
+   },
+   "to": {
+    "district": 3,
+    "u": 624,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "core inner seam",
+   "from": {
+    "district": 1,
+    "u": 864,
+    "v": 952
+   },
+   "to": {
+    "district": 3,
+    "u": 864,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 32
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 32
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 144
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 144
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 304
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 304
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 464
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 464
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 616
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 616
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 744
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 744
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 1000,
+    "v": 888
+   },
+   "to": {
+    "district": 5,
+    "u": 24,
+    "v": 888
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 6,
+    "u": 1000,
+    "v": 72
+   },
+   "to": {
+    "district": 7,
+    "u": 24,
+    "v": 72
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 6,
+    "u": 1000,
+    "v": 132
+   },
+   "to": {
+    "district": 7,
+    "u": 24,
+    "v": 132
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 6,
+    "u": 1000,
+    "v": 312
+   },
+   "to": {
+    "district": 7,
+    "u": 24,
+    "v": 312
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 6,
+    "u": 1000,
+    "v": 488
+   },
+   "to": {
+    "district": 7,
+    "u": 24,
+    "v": 488
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 6,
+    "u": 1000,
+    "v": 572
+   },
+   "to": {
+    "district": 7,
+    "u": 24,
+    "v": 572
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 6,
+    "u": 1000,
+    "v": 688
+   },
+   "to": {
+    "district": 7,
+    "u": 24,
+    "v": 688
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 92,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 92,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 200,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 200,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 328,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 328,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 456,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 456,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 584,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 584,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 712,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 712,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 840,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 840,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 4,
+    "u": 968,
+    "v": 952
+   },
+   "to": {
+    "district": 6,
+    "u": 968,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 5,
+    "u": 136,
+    "v": 952
+   },
+   "to": {
+    "district": 7,
+    "u": 136,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 5,
+    "u": 268,
+    "v": 952
+   },
+   "to": {
+    "district": 7,
+    "u": 268,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 5,
+    "u": 472,
+    "v": 952
+   },
+   "to": {
+    "district": 7,
+    "u": 472,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 5,
+    "u": 632,
+    "v": 952
+   },
+   "to": {
+    "district": 7,
+    "u": 632,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "west inner seam",
+   "from": {
+    "district": 5,
+    "u": 832,
+    "v": 952
+   },
+   "to": {
+    "district": 7,
+    "u": 832,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 44
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 44
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 100
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 100
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 240
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 240
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 408
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 408
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 556
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 556
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 648
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 648
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 1000,
+    "v": 912
+   },
+   "to": {
+    "district": 9,
+    "u": 24,
+    "v": 912
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 10,
+    "u": 1000,
+    "v": 112
+   },
+   "to": {
+    "district": 11,
+    "u": 24,
+    "v": 112
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 10,
+    "u": 1000,
+    "v": 456
+   },
+   "to": {
+    "district": 11,
+    "u": 24,
+    "v": 456
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 10,
+    "u": 1000,
+    "v": 580
+   },
+   "to": {
+    "district": 11,
+    "u": 24,
+    "v": 580
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 10,
+    "u": 1000,
+    "v": 628
+   },
+   "to": {
+    "district": 11,
+    "u": 24,
+    "v": 628
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 10,
+    "u": 1000,
+    "v": 720
+   },
+   "to": {
+    "district": 11,
+    "u": 24,
+    "v": 720
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 10,
+    "u": 1000,
+    "v": 916
+   },
+   "to": {
+    "district": 11,
+    "u": 24,
+    "v": 916
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 92,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 92,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 200,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 200,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 328,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 328,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 504,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 504,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 604,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 604,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 712,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 712,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 856,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 856,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 8,
+    "u": 988,
+    "v": 952
+   },
+   "to": {
+    "district": 10,
+    "u": 988,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 9,
+    "u": 136,
+    "v": 952
+   },
+   "to": {
+    "district": 11,
+    "u": 136,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "high_park inner seam",
+   "from": {
+    "district": 9,
+    "u": 872,
+    "v": 952
+   },
+   "to": {
+    "district": 11,
+    "u": 872,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 32
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 32
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 136
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 136
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 292
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 292
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 440
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 440
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 540
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 540
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 616
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 616
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 1000,
+    "v": 848
+   },
+   "to": {
+    "district": 13,
+    "u": 24,
+    "v": 848
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 14,
+    "u": 1000,
+    "v": 72
+   },
+   "to": {
+    "district": 15,
+    "u": 24,
+    "v": 72
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 14,
+    "u": 1000,
+    "v": 168
+   },
+   "to": {
+    "district": 15,
+    "u": 24,
+    "v": 168
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 14,
+    "u": 1000,
+    "v": 456
+   },
+   "to": {
+    "district": 15,
+    "u": 24,
+    "v": 456
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 14,
+    "u": 1000,
+    "v": 624
+   },
+   "to": {
+    "district": 15,
+    "u": 24,
+    "v": 624
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 108,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 108,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 340,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 340,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 408,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 408,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 480,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 480,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 604,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 604,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 824,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 824,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 12,
+    "u": 968,
+    "v": 952
+   },
+   "to": {
+    "district": 14,
+    "u": 968,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 13,
+    "u": 168,
+    "v": 952
+   },
+   "to": {
+    "district": 15,
+    "u": 168,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 13,
+    "u": 268,
+    "v": 952
+   },
+   "to": {
+    "district": 15,
+    "u": 268,
+    "v": 24
+   },
+   "access": [
+    "foot"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 13,
+    "u": 456,
+    "v": 952
+   },
+   "to": {
+    "district": 15,
+    "u": 456,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 13,
+    "u": 656,
+    "v": 952
+   },
+   "to": {
+    "district": 15,
+    "u": 656,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  },
+  {
+   "name": "east inner seam",
+   "from": {
+    "district": 13,
+    "u": 880,
+    "v": 952
+   },
+   "to": {
+    "district": 15,
+    "u": 880,
+    "v": 24
+   },
+   "access": [
+    "foot",
+    "vehicle"
+   ],
+   "modeled_crossing_pixels": 8
+  }
+ ],
+ "start": {
+  "district": 3,
+  "u": 268,
+  "v": 564
+ },
+ "hospital": {
+  "district": 1,
+  "u": 316,
+  "v": 864
+ },
+ "spray_bays": [
+  {
+   "district": 2,
+   "u": 488,
+   "v": 376
+  },
+  {
+   "district": 6,
+   "u": 584,
+   "v": 298
+  },
+  {
+   "district": 8,
+   "u": 712,
+   "v": 738
+  },
+  {
+   "district": 14,
+   "u": 936,
+   "v": 154
+  }
+ ],
+ "traffic": [
+  {
+   "district": 0,
+   "loops": [
+    [
+     [
+      369,
+      650
+     ],
+     [
+      369,
+      886
+     ],
+     [
+      162,
+      886
+     ],
+     [
+      162,
+      650
+     ]
+    ],
+    [
+     [
+      618,
+      154
+     ],
+     [
+      902,
+      154
+     ],
+     [
+      902,
+      385
+     ],
+     [
+      618,
+      385
+     ]
+    ],
+    [
+     [
+      618,
+      650
+     ],
+     [
+      902,
+      650
+     ],
+     [
+      902,
+      886
+     ],
+     [
+      618,
+      886
+     ]
+    ],
+    [
+     [
+      383,
+      399
+     ],
+     [
+      598,
+      399
+     ],
+     [
+      598,
+      630
+     ],
+     [
+      383,
+      630
+     ]
+    ],
+    [
+     [
+      369,
+      630
+     ],
+     [
+      162,
+      630
+     ],
+     [
+      162,
+      154
+     ],
+     [
+      369,
+      154
+     ]
+    ],
+    [
+     [
+      383,
+      385
+     ],
+     [
+      383,
+      154
+     ],
+     [
+      598,
+      154
+     ],
+     [
+      598,
+      385
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     376,
+     640
+    ],
+    [
+     376,
+     896
+    ],
+    [
+     152,
+     896
+    ],
+    [
+     152,
+     640
+    ]
+   ]
+  },
+  {
+   "district": 1,
+   "loops": [
+    [
+     [
+      374,
+      650
+     ],
+     [
+      374,
+      886
+     ],
+     [
+      186,
+      886
+     ],
+     [
+      186,
+      650
+     ]
+    ],
+    [
+     [
+      634,
+      630
+     ],
+     [
+      634,
+      154
+     ],
+     [
+      857,
+      154
+     ],
+     [
+      857,
+      630
+     ]
+    ],
+    [
+     [
+      634,
+      650
+     ],
+     [
+      857,
+      650
+     ],
+     [
+      857,
+      886
+     ],
+     [
+      634,
+      886
+     ]
+    ],
+    [
+     [
+      614,
+      630
+     ],
+     [
+      394,
+      630
+     ],
+     [
+      394,
+      399
+     ],
+     [
+      614,
+      399
+     ]
+    ],
+    [
+     [
+      614,
+      385
+     ],
+     [
+      394,
+      385
+     ],
+     [
+      394,
+      154
+     ],
+     [
+      614,
+      154
+     ]
+    ],
+    [
+     [
+      614,
+      650
+     ],
+     [
+      614,
+      886
+     ],
+     [
+      394,
+      886
+     ],
+     [
+      394,
+      650
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     384,
+     640
+    ],
+    [
+     384,
+     896
+    ],
+    [
+     176,
+     896
+    ],
+    [
+     624,
+     640
+    ]
+   ]
+  },
+  {
+   "district": 2,
+   "loops": [
+    [
+     [
+      618,
+      705
+     ],
+     [
+      618,
+      567
+     ],
+     [
+      902,
+      567
+     ],
+     [
+      902,
+      705
+     ]
+    ],
+    [
+     [
+      598,
+      210
+     ],
+     [
+      598,
+      382
+     ],
+     [
+      162,
+      382
+     ],
+     [
+      162,
+      210
+     ]
+    ],
+    [
+     [
+      618,
+      210
+     ],
+     [
+      902,
+      210
+     ],
+     [
+      902,
+      382
+     ],
+     [
+      618,
+      382
+     ]
+    ],
+    [
+     [
+      598,
+      705
+     ],
+     [
+      162,
+      705
+     ],
+     [
+      162,
+      402
+     ],
+     [
+      598,
+      402
+     ]
+    ],
+    [
+     [
+      40,
+      210
+     ],
+     [
+      984,
+      210
+     ],
+     [
+      984,
+      190
+     ],
+     [
+      40,
+      190
+     ]
+    ],
+    [
+     [
+      618,
+      553
+     ],
+     [
+      618,
+      402
+     ],
+     [
+      902,
+      402
+     ],
+     [
+      902,
+      553
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     912,
+     560
+    ],
+    [
+     608,
+     200
+    ],
+    [
+     608,
+     392
+    ],
+    [
+     152,
+     392
+    ]
+   ]
+  },
+  {
+   "district": 3,
+   "loops": [
+    [
+     [
+      374,
+      553
+     ],
+     [
+      186,
+      553
+     ],
+     [
+      186,
+      402
+     ],
+     [
+      374,
+      402
+     ]
+    ],
+    [
+     [
+      40,
+      210
+     ],
+     [
+      984,
+      210
+     ],
+     [
+      984,
+      190
+     ],
+     [
+      40,
+      190
+     ]
+    ],
+    [
+     [
+      394,
+      705
+     ],
+     [
+      394,
+      567
+     ],
+     [
+      614,
+      567
+     ],
+     [
+      614,
+      705
+     ]
+    ],
+    [
+     [
+      374,
+      210
+     ],
+     [
+      374,
+      382
+     ],
+     [
+      186,
+      382
+     ],
+     [
+      186,
+      210
+     ]
+    ],
+    [
+     [
+      614,
+      553
+     ],
+     [
+      394,
+      553
+     ],
+     [
+      394,
+      402
+     ],
+     [
+      614,
+      402
+     ]
+    ],
+    [
+     [
+      614,
+      210
+     ],
+     [
+      614,
+      382
+     ],
+     [
+      394,
+      382
+     ],
+     [
+      394,
+      210
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     384,
+     560
+    ],
+    [
+     176,
+     392
+    ],
+    [
+     384,
+     392
+    ],
+    [
+     624,
+     560
+    ]
+   ]
+  },
+  {
+   "district": 4,
+   "loops": [
+    [
+     [
+      846,
+      304
+     ],
+     [
+      846,
+      464
+     ],
+     [
+      866,
+      464
+     ],
+     [
+      866,
+      304
+     ]
+    ],
+    [
+     [
+      40,
+      682
+     ],
+     [
+      928,
+      682
+     ],
+     [
+      928,
+      662
+     ],
+     [
+      40,
+      662
+     ]
+    ],
+    [
+     [
+      40,
+      194
+     ],
+     [
+      856,
+      194
+     ],
+     [
+      856,
+      174
+     ],
+     [
+      40,
+      174
+     ]
+    ],
+    [
+     [
+      918,
+      464
+     ],
+     [
+      918,
+      888
+     ],
+     [
+      938,
+      888
+     ],
+     [
+      938,
+      464
+     ]
+    ],
+    [
+     [
+      40,
+      474
+     ],
+     [
+      856,
+      474
+     ],
+     [
+      856,
+      454
+     ],
+     [
+      40,
+      454
+     ]
+    ],
+    [
+     [
+      918,
+      304
+     ],
+     [
+      918,
+      464
+     ],
+     [
+      938,
+      464
+     ],
+     [
+      938,
+      304
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 5,
+   "loops": [
+    [
+     [
+      622,
+      626
+     ],
+     [
+      622,
+      662
+     ],
+     [
+      370,
+      662
+     ],
+     [
+      370,
+      626
+     ]
+    ],
+    [
+     [
+      674,
+      130
+     ],
+     [
+      822,
+      130
+     ],
+     [
+      822,
+      542
+     ],
+     [
+      642,
+      542
+     ],
+     [
+      642,
+      226
+     ],
+     [
+      674,
+      226
+     ]
+    ],
+    [
+     [
+      136,
+      226
+     ],
+     [
+      664,
+      226
+     ],
+     [
+      664,
+      206
+     ],
+     [
+      136,
+      206
+     ]
+    ],
+    [
+     [
+      822,
+      120
+     ],
+     [
+      822,
+      936
+     ],
+     [
+      842,
+      936
+     ],
+     [
+      842,
+      120
+     ]
+    ],
+    [
+     [
+      642,
+      562
+     ],
+     [
+      822,
+      562
+     ],
+     [
+      822,
+      758
+     ],
+     [
+      642,
+      758
+     ]
+    ],
+    [
+     [
+      622,
+      120
+     ],
+     [
+      622,
+      936
+     ],
+     [
+      642,
+      936
+     ],
+     [
+      642,
+      120
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     832,
+     552
+    ],
+    [
+     832,
+     768
+    ]
+   ]
+  },
+  {
+   "district": 6,
+   "loops": [
+    [
+     [
+      40,
+      322
+     ],
+     [
+      984,
+      322
+     ],
+     [
+      984,
+      302
+     ],
+     [
+      40,
+      302
+     ]
+    ],
+    [
+     [
+      40,
+      698
+     ],
+     [
+      984,
+      698
+     ],
+     [
+      984,
+      678
+     ],
+     [
+      40,
+      678
+     ]
+    ],
+    [
+     [
+      40,
+      322
+     ],
+     [
+      984,
+      322
+     ],
+     [
+      984,
+      302
+     ],
+     [
+      40,
+      302
+     ]
+    ],
+    [
+     [
+      40,
+      698
+     ],
+     [
+      984,
+      698
+     ],
+     [
+      984,
+      678
+     ],
+     [
+      40,
+      678
+     ]
+    ],
+    [
+     [
+      40,
+      322
+     ],
+     [
+      984,
+      322
+     ],
+     [
+      984,
+      302
+     ],
+     [
+      40,
+      302
+     ]
+    ],
+    [
+     [
+      40,
+      698
+     ],
+     [
+      984,
+      698
+     ],
+     [
+      984,
+      678
+     ],
+     [
+      40,
+      678
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 7,
+   "loops": [
+    [
+     [
+      136,
+      258
+     ],
+     [
+      360,
+      258
+     ],
+     [
+      360,
+      238
+     ],
+     [
+      136,
+      238
+     ]
+    ],
+    [
+     [
+      632,
+      98
+     ],
+     [
+      984,
+      98
+     ],
+     [
+      984,
+      78
+     ],
+     [
+      632,
+      78
+     ]
+    ],
+    [
+     [
+      40,
+      698
+     ],
+     [
+      984,
+      698
+     ],
+     [
+      984,
+      678
+     ],
+     [
+      40,
+      678
+     ]
+    ],
+    [
+     [
+      472,
+      418
+     ],
+     [
+      776,
+      418
+     ],
+     [
+      776,
+      398
+     ],
+     [
+      472,
+      398
+     ]
+    ],
+    [
+     [
+      360,
+      194
+     ],
+     [
+      632,
+      194
+     ],
+     [
+      632,
+      174
+     ],
+     [
+      360,
+      174
+     ]
+    ],
+    [
+     [
+      136,
+      258
+     ],
+     [
+      360,
+      258
+     ],
+     [
+      360,
+      238
+     ],
+     [
+      136,
+      238
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 8,
+   "loops": [
+    [
+     [
+      494,
+      752
+     ],
+     [
+      494,
+      936
+     ],
+     [
+      514,
+      936
+     ],
+     [
+      514,
+      752
+     ]
+    ],
+    [
+     [
+      846,
+      240
+     ],
+     [
+      846,
+      936
+     ],
+     [
+      866,
+      936
+     ],
+     [
+      866,
+      240
+     ]
+    ],
+    [
+     [
+      352,
+      490
+     ],
+     [
+      856,
+      490
+     ],
+     [
+      856,
+      470
+     ],
+     [
+      352,
+      470
+     ]
+    ],
+    [
+     [
+      342,
+      521
+     ],
+     [
+      342,
+      752
+     ],
+     [
+      362,
+      752
+     ],
+     [
+      362,
+      521
+     ]
+    ],
+    [
+     [
+      312,
+      762
+     ],
+     [
+      504,
+      762
+     ],
+     [
+      504,
+      742
+     ],
+     [
+      312,
+      742
+     ]
+    ],
+    [
+     [
+      210,
+      762
+     ],
+     [
+      856,
+      762
+     ],
+     [
+      856,
+      742
+     ],
+     [
+      210,
+      742
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 9,
+   "loops": [
+    [
+     [
+      688,
+      218
+     ],
+     [
+      984,
+      218
+     ],
+     [
+      984,
+      198
+     ],
+     [
+      688,
+      198
+     ]
+    ],
+    [
+     [
+      320,
+      586
+     ],
+     [
+      872,
+      586
+     ],
+     [
+      872,
+      566
+     ],
+     [
+      320,
+      566
+     ]
+    ],
+    [
+     [
+      40,
+      250
+     ],
+     [
+      688,
+      250
+     ],
+     [
+      688,
+      230
+     ],
+     [
+      40,
+      230
+     ]
+    ],
+    [
+     [
+      862,
+      512
+     ],
+     [
+      862,
+      936
+     ],
+     [
+      882,
+      936
+     ],
+     [
+      882,
+      512
+     ]
+    ],
+    [
+     [
+      40,
+      418
+     ],
+     [
+      904,
+      418
+     ],
+     [
+      904,
+      398
+     ],
+     [
+      40,
+      398
+     ]
+    ],
+    [
+     [
+      698,
+      366
+     ],
+     [
+      698,
+      218
+     ],
+     [
+      894,
+      218
+     ],
+     [
+      894,
+      398
+     ],
+     [
+      882,
+      398
+     ],
+     [
+      882,
+      366
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 10,
+   "loops": [
+    [
+     [
+      760,
+      466
+     ],
+     [
+      984,
+      466
+     ],
+     [
+      984,
+      446
+     ],
+     [
+      760,
+      446
+     ]
+    ],
+    [
+     [
+      140,
+      754
+     ],
+     [
+      760,
+      754
+     ],
+     [
+      760,
+      734
+     ],
+     [
+      140,
+      734
+     ]
+    ],
+    [
+     [
+      504,
+      146
+     ],
+     [
+      760,
+      146
+     ],
+     [
+      760,
+      126
+     ],
+     [
+      504,
+      126
+     ]
+    ],
+    [
+     [
+      320,
+      554
+     ],
+     [
+      760,
+      554
+     ],
+     [
+      760,
+      534
+     ],
+     [
+      320,
+      534
+     ]
+    ],
+    [
+     [
+      760,
+      730
+     ],
+     [
+      984,
+      730
+     ],
+     [
+      984,
+      710
+     ],
+     [
+      760,
+      710
+     ]
+    ],
+    [
+     [
+      750,
+      136
+     ],
+     [
+      750,
+      544
+     ],
+     [
+      770,
+      544
+     ],
+     [
+      770,
+      136
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 11,
+   "loops": [
+    [
+     [
+      862,
+      40
+     ],
+     [
+      862,
+      368
+     ],
+     [
+      882,
+      368
+     ],
+     [
+      882,
+      40
+     ]
+    ],
+    [
+     [
+      40,
+      730
+     ],
+     [
+      984,
+      730
+     ],
+     [
+      984,
+      710
+     ],
+     [
+      40,
+      710
+     ]
+    ],
+    [
+     [
+      150,
+      112
+     ],
+     [
+      150,
+      456
+     ],
+     [
+      170,
+      456
+     ],
+     [
+      170,
+      112
+     ]
+    ],
+    [
+     [
+      160,
+      378
+     ],
+     [
+      984,
+      378
+     ],
+     [
+      984,
+      358
+     ],
+     [
+      160,
+      358
+     ]
+    ],
+    [
+     [
+      462,
+      368
+     ],
+     [
+      462,
+      720
+     ],
+     [
+      482,
+      720
+     ],
+     [
+      482,
+      368
+     ]
+    ],
+    [
+     [
+      862,
+      40
+     ],
+     [
+      862,
+      368
+     ],
+     [
+      882,
+      368
+     ],
+     [
+      882,
+      40
+     ]
+    ]
+   ],
+   "signals": []
+  },
+  {
+   "district": 12,
+   "loops": [
+    [
+     [
+      490,
+      450
+     ],
+     [
+      814,
+      450
+     ],
+     [
+      814,
+      606
+     ],
+     [
+      490,
+      606
+     ]
+    ],
+    [
+     [
+      40,
+      146
+     ],
+     [
+      984,
+      146
+     ],
+     [
+      984,
+      126
+     ],
+     [
+      40,
+      126
+     ]
+    ],
+    [
+     [
+      40,
+      858
+     ],
+     [
+      984,
+      858
+     ],
+     [
+      984,
+      838
+     ],
+     [
+      40,
+      838
+     ]
+    ],
+    [
+     [
+      814,
+      146
+     ],
+     [
+      814,
+      430
+     ],
+     [
+      490,
+      430
+     ],
+     [
+      490,
+      146
+     ]
+    ],
+    [
+     [
+      40,
+      626
+     ],
+     [
+      984,
+      626
+     ],
+     [
+      984,
+      606
+     ],
+     [
+      40,
+      606
+     ]
+    ],
+    [
+     [
+      490,
+      838
+     ],
+     [
+      490,
+      626
+     ],
+     [
+      814,
+      626
+     ],
+     [
+      814,
+      838
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     824,
+     440
+    ],
+    [
+     824,
+     616
+    ],
+    [
+     480,
+     616
+    ],
+    [
+     480,
+     848
+    ]
+   ]
+  },
+  {
+   "district": 13,
+   "loops": [
+    [
+     [
+      646,
+      774
+     ],
+     [
+      466,
+      774
+     ],
+     [
+      466,
+      554
+     ],
+     [
+      646,
+      554
+     ]
+    ],
+    [
+     [
+      40,
+      146
+     ],
+     [
+      921,
+      146
+     ],
+     [
+      921,
+      126
+     ],
+     [
+      40,
+      126
+     ]
+    ],
+    [
+     [
+      466,
+      146
+     ],
+     [
+      870,
+      146
+     ],
+     [
+      870,
+      534
+     ],
+     [
+      466,
+      534
+     ]
+    ],
+    [
+     [
+      382,
+      774
+     ],
+     [
+      382,
+      838
+     ],
+     [
+      178,
+      838
+     ],
+     [
+      178,
+      626
+     ],
+     [
+      402,
+      626
+     ],
+     [
+      402,
+      554
+     ],
+     [
+      446,
+      554
+     ],
+     [
+      446,
+      774
+     ]
+    ],
+    [
+     [
+      446,
+      136
+     ],
+     [
+      446,
+      936
+     ],
+     [
+      466,
+      936
+     ],
+     [
+      466,
+      136
+     ]
+    ],
+    [
+     [
+      666,
+      774
+     ],
+     [
+      666,
+      554
+     ],
+     [
+      870,
+      554
+     ],
+     [
+      870,
+      774
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     656,
+     784
+    ],
+    [
+     456,
+     784
+    ],
+    [
+     456,
+     544
+    ],
+    [
+     880,
+     544
+    ]
+   ]
+  },
+  {
+   "district": 14,
+   "loops": [
+    [
+     [
+      824,
+      466
+     ],
+     [
+      984,
+      466
+     ],
+     [
+      984,
+      446
+     ],
+     [
+      824,
+      446
+     ]
+    ],
+    [
+     [
+      40,
+      178
+     ],
+     [
+      984,
+      178
+     ],
+     [
+      984,
+      158
+     ],
+     [
+      40,
+      158
+     ]
+    ],
+    [
+     [
+      175,
+      522
+     ],
+     [
+      824,
+      522
+     ],
+     [
+      824,
+      502
+     ],
+     [
+      175,
+      502
+     ]
+    ],
+    [
+     [
+      490,
+      178
+     ],
+     [
+      814,
+      178
+     ],
+     [
+      814,
+      502
+     ],
+     [
+      490,
+      502
+     ]
+    ],
+    [
+     [
+      814,
+      40
+     ],
+     [
+      814,
+      512
+     ],
+     [
+      834,
+      512
+     ],
+     [
+      834,
+      40
+     ]
+    ],
+    [
+     [
+      470,
+      40
+     ],
+     [
+      470,
+      512
+     ],
+     [
+      490,
+      512
+     ],
+     [
+      490,
+      40
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     480,
+     168
+    ],
+    [
+     824,
+     168
+    ]
+   ]
+  },
+  {
+   "district": 15,
+   "loops": [
+    [
+     [
+      646,
+      40
+     ],
+     [
+      646,
+      400
+     ],
+     [
+      666,
+      400
+     ],
+     [
+      666,
+      40
+     ]
+    ],
+    [
+     [
+      40,
+      466
+     ],
+     [
+      456,
+      466
+     ],
+     [
+      456,
+      446
+     ],
+     [
+      40,
+      446
+     ]
+    ],
+    [
+     [
+      646,
+      390
+     ],
+     [
+      446,
+      390
+     ],
+     [
+      446,
+      446
+     ],
+     [
+      178,
+      446
+     ],
+     [
+      178,
+      178
+     ],
+     [
+      402,
+      178
+     ],
+     [
+      402,
+      122
+     ],
+     [
+      646,
+      122
+     ]
+    ],
+    [
+     [
+      158,
+      40
+     ],
+     [
+      158,
+      456
+     ],
+     [
+      178,
+      456
+     ],
+     [
+      178,
+      40
+     ]
+    ],
+    [
+     [
+      456,
+      410
+     ],
+     [
+      921,
+      410
+     ],
+     [
+      921,
+      390
+     ],
+     [
+      456,
+      390
+     ]
+    ],
+    [
+     [
+      392,
+      122
+     ],
+     [
+      921,
+      122
+     ],
+     [
+      921,
+      102
+     ],
+     [
+      392,
+      102
+     ]
+    ]
+   ],
+   "signals": [
+    [
+     168,
+     168
+    ],
+    [
+     656,
+     112
+    ]
+   ]
+  }
+ ],
+ "notice": "Road shapes, mission entrances, timetables and art are original game design based on separately attributed geographic facts; the districts do not cover all of the former City of Toronto."
 }

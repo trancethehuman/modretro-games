@@ -4,11 +4,9 @@
 #include <gbdk/platform.h>
 #include "bankdata.h"
 
-#define TD_DISTRICT_CITY 0
-#define TD_DISTRICT_WEST 1
-#define TD_DISTRICT_HIGH_PARK 2
-#define TD_DISTRICT_EAST 3
-#define TD_DISTRICT_COUNT 4
+/* Plan district of a scene (0 core, 1 west, 2 High Park, 3 east). */
+#define TD_PLAN_DISTRICT(d) ((d)>>2)
+#define TD_DISTRICT_COUNT 16
 #define TD_DISTRICT_NONE 255
 #define TD_DISTRICT_TILE_WIDTH 128
 #define TD_DISTRICT_TILE_HEIGHT 122

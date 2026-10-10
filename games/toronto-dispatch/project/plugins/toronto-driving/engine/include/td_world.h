@@ -5,8 +5,11 @@
 #define TD_WORLD_MAX_DISTRICTS 32
 #define TD_WORLD_MAX_PORTALS 512
 #define TD_TRAFFIC_COUNT 6
-#define TD_TRAFFIC_POINTS 16
+#define TD_TRAFFIC_POINTS 8
+#define TD_SIGNALS 4
 typedef struct { UBYTE from,to; UWORD u,v,arrival_u,arrival_v; UBYTE vehicle; } td_portal_t;
+/* The current scene's signal junctions (TORONTO.c loads them on arrival). */
+extern UWORD td_signal_u[TD_SIGNALS],td_signal_v[TD_SIGNALS];
 typedef struct { UBYTE district; UWORD u,v; } td_crossing_t;
 /* Targets use native Q4; count/frame apply to the current target leg. */
 typedef struct { UWORD u,v; UBYTE count,frame; } td_traffic_sample_t;
@@ -22,8 +25,7 @@ UBYTE td_world_route(UBYTE from,UBYTE to,UBYTE onfoot,UWORD u,UWORD v,
  * Caller validates destination collision before committing/queueing a load. */
 UBYTE td_world_crossing(UBYTE district,UBYTE onfoot,UWORD old_u,UWORD old_v,
                        UWORD u,UWORD v,td_crossing_t *crossing) BANKED;
-/* Western metadata only: district0 retains its native signal-specific loops.
- * One banked call fills all six slots. Cache samples until a leg changes. */
+/* One banked call fills all six slots. Cache samples until a leg changes. */
 UBYTE td_world_traffic_init(UBYTE district,UWORD *u,UWORD *v,UBYTE *legs,
                            td_traffic_sample_t *samples) BANKED;
 UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,
@@ -33,4 +35,7 @@ UBYTE td_world_traffic_samples(UBYTE district,const UBYTE *legs,
  * the courier where possible. Outputs Q4 position, leg and its sample. */
 UBYTE td_world_traffic_recycle(UBYTE district,UBYTE i,UWORD pu,UWORD pv,UWORD vx,UWORD vy,
                               UWORD *u,UWORD *v,UBYTE *leg,td_traffic_sample_t *sample) BANKED;
+/* Copies the scene's TD_SIGNALS signal junctions (whole pixels, 0xFFFF for
+ * none) into u[] and v[]. */
+UBYTE td_world_signals(UBYTE district,UWORD *u,UWORD *v) BANKED;
 #endif

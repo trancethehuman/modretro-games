@@ -5,6 +5,7 @@
 #include "td_life_int.h"
 #include "td_audio.h"
 #include "td_district.h"
+#include "td_world.h"
 #include "td_anim.h"
 #include "td_shots.h"
 #include "camera.h"
@@ -254,11 +255,17 @@ UBYTE td_life_drive(void) BANKED {
     if(!td.speed){td_vx=lf_div2(td_vx);td_vy=lf_div2(td_vy);}
     nu=td.u+lf_div16(td_vx);nv=td.v+lf_div16(td_vy);u=nu>>4;v=nv>>4;
     if(lf_drive(u,v)){
-        if(td.district==0&&!td_red_cooldown&&a>6&&lf_dist(u,640)<14&&lf_dist(v,528)<14&&
-          (lf_dist(td.u>>4,640)>=14||lf_dist(td.v>>4,528)>=14)){
-            UBYTE ax=lf_abs(lf_dx[td.heading]),ay=lf_abs(lf_dy[td.heading]);
-            red=(UBYTE)(td.seconds%12);
-            if((ax>ay&&red>=7)||(ax<=ay&&red<7)){if(td.cash>=5)td.cash-=5;td_red_cooldown=120;td_message(7);}
+        /* Entering a signal junction against the light costs a fine. */
+        if(!td_red_cooldown&&a>6){
+            UBYTE k;
+            for(k=0;k<TD_SIGNALS;k++){
+                if(td_signal_u[k]==0xFFFF||lf_dist(u,td_signal_u[k])>=14||lf_dist(v,td_signal_v[k])>=14)continue;
+                if(lf_dist(td.u>>4,td_signal_u[k])<14&&lf_dist(td.v>>4,td_signal_v[k])<14)break;
+                {UBYTE ax=lf_abs(lf_dx[td.heading]),ay=lf_abs(lf_dy[td.heading]);
+                red=(UBYTE)(td.seconds%12);
+                if((ax>ay&&red>=7)||(ax<=ay&&red<7)){if(td.cash>=5)td.cash-=5;td_red_cooldown=120;td_message(7);}}
+                break;
+            }
         }
         td.u=nu;td.v=nv;
     }else{

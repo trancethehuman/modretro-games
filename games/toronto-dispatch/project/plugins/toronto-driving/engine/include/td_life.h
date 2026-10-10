@@ -19,9 +19,8 @@
 
 /* Fictional hospital forecourt in the core district (east of University,
  * south of College). Recovery validates the whole foot position. */
-#define TD_HOSPITAL_DISTRICT 0
-#define TD_HOSPITAL_U 540
-#define TD_HOSPITAL_V 344
+/* TD_HOSPITAL_DISTRICT/U/V: generated with the world (the hospital door). */
+#include "td_district_world.h"
 
 /* td_life_event: raised by td_life_tick, consumed by the city state. */
 #define TD_EVENT_NONE 0

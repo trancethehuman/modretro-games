@@ -1,4 +1,6 @@
 #pragma bank 255
+/* The spray-bay table of td_district_world.h is this file's. */
+#define TD_SPRAY_DATA
 #include <string.h>
 #include "states/TORONTO.h"
 #include "td_game.h"
@@ -13,6 +15,7 @@
 #include "td_life.h"
 #include "td_anim.h"
 #include "td_daynight.h"
+#include "td_district_world.h"
 #include "actor.h"
 #include "camera.h"
 #include "scroll.h"
@@ -35,12 +38,16 @@ td_stop_t td_target,td_cursor;
 /* Registered engine field: stock bootstrap resets this on cold/soft boot. */
 UBYTE td_session_live;
 UBYTE td_route_district;
-static UBYTE td_transition_pending;
+/* Global: emulator checks queue a scene load through it. */
+UBYTE td_transition_pending;
 typedef char td_serialized_state_must_be_58_bytes[(sizeof(td_state_t)==58)?1:-1];
 static const BYTE td_dx[]={16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6,0,6,11,15};
 static const BYTE td_dy[]={0,6,11,15,16,15,11,6,0,-6,-11,-15,-16,-15,-11,-6};
-/* Core street centrelines (scripts/city_layout.py). */
-static const UWORD td_rows[]={64,176,288,400,528,640,736,824};
+/* The scene's traffic-signal junctions (whole pixels; 0xFFFF unused):
+ * traffic stops for red there and td_drive.c fines a courier who runs one. */
+UWORD td_signal_u[TD_SIGNALS],td_signal_v[TD_SIGNALS];
+/* Bit i: road vehicle i waits at a red signal this step. */
+UBYTE td_tk_hold;
 /* Global: td_life.c moves owned vehicles (impacts, pursuit, theft). */
 UWORD td_traffic_u[6],td_traffic_v[6];
 td_traffic_sample_t td_traffic_samples[6];
@@ -572,30 +579,27 @@ static void td_second(void){
      * never share one frame's CPU time; clocks and state are already final. */
     td_save();td_ui_pending=1;
 }
-/* Q4 stop lines: td_rows/td_cols*16 -/+ 384 for forward/reverse approaches. */
-#define TD_STOP_LINES(a,b,c,d,e,f,g,h,o) {a*16+o,b*16+o,c*16+o,d*16+o,e*16+o,f*16+o,g*16+o,h*16+o}
-static const UWORD td_stop_rows[2][8]={TD_STOP_LINES(64,176,288,400,528,640,736,824,-384),TD_STOP_LINES(64,176,288,400,528,640,736,824,384)};
-/* Nine entries for the fixed-count scan: Broadview is repeated. */
-#define TD_STOP_COLS(o) {64*16+o,160*16+o,256*16+o,384*16+o,512*16+o,640*16+o,784*16+o,928*16+o,928*16+o}
-static const UWORD td_stop_cols[2][9]={TD_STOP_COLS(-384),TD_STOP_COLS(384)};
-static UBYTE td_signal_stop(UWORD pos,UBYTE vertical,UBYTE reverse){
-    UBYTE count=vertical?8:9;const UWORD *line=vertical?td_stop_rows[reverse?1:0]:td_stop_cols[reverse?1:0];
-    do{if(pos>=*line&&pos<*line+8)return TRUE;line++;}while(--count);
-    return FALSE;
+/* Hold road vehicles that reach a red signal's stop line: east-west traffic
+ * has green for seven of every twelve seconds, north-south for five. A
+ * vehicle whose next corner is a signal junction stops when it is 40 to 48
+ * pixels short of that corner (its front at the crossing); one already past
+ * the line clears the junction. */
+static void td_signal_holds(UBYTE phase){
+    UBYTE i,k,frame,horizontal;UWORD gap,su,sv;const td_traffic_sample_t *sample=td_traffic_samples;
+    td_tk_hold=0;
+    for(i=0;i<6;i++,sample++){
+        frame=sample->frame&7;horizontal=frame==0||frame==4;
+        if(horizontal?phase<7:phase>=7)continue;
+        for(k=0;k<TD_SIGNALS;k++){
+            su=td_signal_u[k];if(su==0xFFFF)continue;sv=td_signal_v[k];
+            /* The lane corner lies within 12 pixels of the junction centre. */
+            if(td_distance(sample->u>>4,su)>12||td_distance(sample->v>>4,sv)>12)continue;
+            gap=horizontal?td_distance(sample->u,td_traffic_u[i]):td_distance(sample->v,td_traffic_v[i]);
+            if(gap>=40*16&&gap<48*16)td_tk_hold|=1<<i;
+            break;
+        }
+    }
 }
-/* Core loops in Q4: east/westbound lanes on td_rows[2..5] sit 8px either side
- * of the centreline; the bus loop visits its six fixed junctions. */
-static const UWORD td_core_lane_v[4]={288*16,400*16,528*16,640*16};
-/* 94 Wellesley: Ossington station, Ossington, Harbord and Hoskin to Queen's
- * Park Crescent, round the crescent's north end (two legs follow its
- * 45-degree corners), Wellesley to Parliament, Castle Frank on Bloor, then
- * back west along Bloor. */
-#define TD_BUS_LEGS 9
-static const UWORD td_bus_u[TD_BUS_LEGS]={160*16,160*16,460*16,504*16,520*16,564*16,784*16,784*16,836*16};
-static const UWORD td_bus_v[TD_BUS_LEGS]={64*16,176*16,176*16,132*16,132*16,176*16,176*16,64*16,64*16};
-/* The bus's frame on each leg: E 0, SE 1, S 2, W 4, N 6, NE 7. */
-static const UBYTE td_bus_frame[TD_BUS_LEGS]={4,2,0,7,0,1,0,6,0};
-typedef char td_bus_legs_in_kernel[(TD_BUS_LEGS==9)?1:-1];
 /* A road vehicle never drives into the courier's car: a step that would end
  * overlapping it is undone, so traffic queues behind or stops in front.
  * Vehicles already overlapping (an impact in progress) may move apart. */
@@ -662,12 +666,12 @@ static void td_traffic_block(const UWORD *old_u,const UWORD *old_v,const UBYTE *
     }
 }
 #ifdef __SDCC
-/* Traffic stepping kernel. Inputs: td_tk_i (first vehicle), td_tk_phase,
- * td_tk_district, td_tk_yield, td_tk_hit, td_tk_pu/pv (player Q4). It moves
+/* Traffic stepping kernel. Inputs: td_tk_i (first vehicle), td_tk_hold,
+ * td_tk_yield, td_tk_hit, td_tk_pu/pv (player Q4). It moves
  * vehicles td_tk_i..5 exactly as the C reference below and returns the index
  * of the first vehicle that strikes the car (C applies the effects and
  * resumes after it), or 6 when done. td_tk_dirty records district arrivals. */
-UBYTE td_tk_i,td_tk_phase,td_tk_district,td_tk_yield,td_tk_hit,td_tk_dirty,td_tk_leg;
+UBYTE td_tk_i,td_tk_yield,td_tk_hit,td_tk_dirty,td_tk_leg;
 /* Bit masks for slot indices 0..5, shared by the kernels below. */
 const UBYTE td_slot_bits[6]={1,2,4,8,16,32};
 UWORD td_tk_pu,td_tk_pv,td_tk_u,td_tk_v,td_tk_tu,td_tk_tv;
@@ -705,9 +709,6 @@ UBYTE td_traffic_kernel(void) NAKED {
         add hl, bc
         ld a, (hl)
         ld (_td_tk_leg), a
-        ld a, (_td_tk_district)
-        or a, a
-        jr z, 62$
         ld hl, #_td_traffic_samples
         add hl, bc
         add hl, bc
@@ -727,131 +728,12 @@ UBYTE td_traffic_kernel(void) NAKED {
         inc de
         ld a, (hl)
         ld (de), a
-        jp 70$
-    62$:
-        ld a, c
-        cp a, #4
-        jp nc, 66$
-        ld de, #0x3480
-        ld a, (_td_tk_leg)
-        cp a, #2
-        jr c, 63$
-        ld de, #0x0300
-    63$:
-        ld a, e
-        ld (_td_tk_tu), a
-        ld a, d
-        ld (_td_tk_tu+1), a
-        ld hl, #_td_core_lane_v
+        ; A vehicle held at a red signal stays put this step.
+        ld hl, #_td_slot_bits
         add hl, bc
-        add hl, bc
-        ld a, (hl+)
-        ld e, a
-        ld d, (hl)
-        ld hl, #0x0080
-        ld a, (_td_tk_leg)
-        or a, a
-        jr z, 64$
-        cp a, #3
-        jr nz, 65$
-    64$:
-        ld hl, #0xff80
-    65$:
-        add hl, de
-        ld a, l
-        ld (_td_tk_tv), a
-        ld a, h
-        ld (_td_tk_tv+1), a
-        ld a, (_td_tk_leg)
-        or a, a
-        jr z, 165$
-        cp a, #2
-        jp nz, 70$
-    165$:
-        ld a, (_td_tk_phase)
-        cp a, #7
-        jp c, 70$
-        ld hl, #_td_stop_cols
-        ld a, (_td_tk_leg)
-        or a, a
-        jr z, 166$
-        ld de, #18
-        add hl, de
-    166$:
-        ld b, #9
-        ld a, (_td_tk_u)
-        ld e, a
-        ld a, (_td_tk_u+1)
-        ld d, a
-        call 90$
+        ld a, (_td_tk_hold)
+        and a, (hl)
         jp nz, 80$
-        jp 70$
-    66$:
-        jr nz, 68$
-        ld de, #0x3180
-        ld a, (_td_tk_leg)
-        or a, a
-        jr z, 67$
-        cp a, #3
-        jr z, 67$
-        ld de, #0x3080
-    67$:
-        ld a, e
-        ld (_td_tk_tu), a
-        ld a, d
-        ld (_td_tk_tu+1), a
-        ld de, #0x3180
-        ld a, (_td_tk_leg)
-        cp a, #2
-        jr c, 167$
-        ld de, #0x0300
-    167$:
-        ld a, e
-        ld (_td_tk_tv), a
-        ld a, d
-        ld (_td_tk_tv+1), a
-        ld a, (_td_tk_leg)
-        or a, a
-        jr z, 168$
-        cp a, #2
-        jr nz, 70$
-    168$:
-        ld a, (_td_tk_phase)
-        cp a, #7
-        jr nc, 70$
-        ld hl, #_td_stop_rows
-        ld a, (_td_tk_leg)
-        or a, a
-        jr z, 169$
-        ld de, #16
-        add hl, de
-    169$:
-        ld b, #8
-        ld a, (_td_tk_v)
-        ld e, a
-        ld a, (_td_tk_v+1)
-        ld d, a
-        call 90$
-        jp nz, 80$
-        jr 70$
-    68$:
-        ld a, (_td_tk_leg)
-        ld c, a
-        ld b, #0
-        ld hl, #_td_bus_u
-        add hl, bc
-        add hl, bc
-        ld a, (hl+)
-        ld (_td_tk_tu), a
-        ld a, (hl)
-        ld (_td_tk_tu+1), a
-        ld hl, #_td_bus_v
-        add hl, bc
-        add hl, bc
-        ld a, (hl+)
-        ld (_td_tk_tv), a
-        ld a, (hl)
-        ld (_td_tk_tv+1), a
     70$:
         ld hl, #_td_tk_u
         ld de, #_td_tk_tu
@@ -927,9 +809,6 @@ UBYTE td_traffic_kernel(void) NAKED {
         ld a, (_td_tk_i)
         ld c, a
         ld b, #0
-        ld a, (_td_tk_district)
-        or a, a
-        jr z, 76$
         ld hl, #(_td_traffic_samples + 4)
         add hl, bc
         add hl, bc
@@ -940,14 +819,6 @@ UBYTE td_traffic_kernel(void) NAKED {
         ld e, (hl)
         ld a, #1
         ld (_td_tk_dirty), a
-        jr 77$
-    76$:
-        ld e, #4
-        ld a, c
-        cp a, #5
-        jr nz, 77$
-        ld e, #9
-    77$:
         ld a, e
         or a, a
         jr z, 80$
@@ -994,32 +865,6 @@ UBYTE td_traffic_kernel(void) NAKED {
         ld hl, #_td_tk_i
         inc (hl)
         jp 60$
-    ; A=1/NZ if DE (pos) lies in [line, line+8) for one of B UWORD lines at HL.
-    90$:
-        ld a, (hl+)
-        ld c, a
-        ld a, e
-        sub a, c
-        ld c, a
-        ld a, (hl+)
-        push hl
-        ld h, a
-        ld a, d
-        sbc a, h
-        pop hl
-        jr nz, 91$
-        ld a, c
-        cp a, #8
-        jr c, 191$
-    91$:
-        dec b
-        jr nz, 90$
-        xor a, a
-        ret
-    191$:
-        ld a, #1
-        or a, a
-        ret
     ; DE = |(HL) - (DE)| for UWORD variables.
     92$:
         ld a, (de)
@@ -1114,7 +959,7 @@ UBYTE td_traffic_kernel(void) NAKED {
 }
 static void td_traffic_step(void){
     UWORD old_u[6],old_v[6];UBYTE old_leg[6];
-    td_tk_phase=td_signal_phase();td_tk_district=td.district;td_tk_dirty=0;
+    td_signal_holds(td_signal_phase());td_tk_dirty=0;
     /* Road users yield to a courier crossing on foot, including between catch-up steps. */
     td_tk_yield=(td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot;
     td_tk_pu=td.u;td_tk_pv=td.v;td_tk_i=0;td_tk_hit=0;
@@ -1128,29 +973,21 @@ static void td_traffic_step(void){
 }
 #else
 static void td_traffic_step(void){
-    UBYTE i,leg,phase=td_signal_phase(),dirty=0,yield,hit,district=td.district;
+    UBYTE i,leg,dirty=0,yield,hit;
     UWORD u,v,target_u,target_v,gap,pu=td.u,pv=td.v;
     UWORD *traffic_u=td_traffic_u,*traffic_v=td_traffic_v;UBYTE *legs=td_traffic_leg;
     const td_traffic_sample_t *sample=td_traffic_samples;
     /* Road users yield to a courier crossing on foot, including between catch-up steps. */
     UWORD old_u[6],old_v[6];UBYTE old_leg[6];
     yield=(td.mode==TD_ROAM||td.mode==TD_WAIT)&&td.onfoot;
-    hit=0;
+    hit=0;td_signal_holds(td_signal_phase());
     memcpy(old_u,td_traffic_u,sizeof(old_u));memcpy(old_v,td_traffic_v,sizeof(old_v));memcpy(old_leg,td_traffic_leg,sizeof(old_leg));
     for(i=0;i<6;i++,traffic_u++,traffic_v++,legs++,sample++){
         if(td_tr_ctrl&(1<<i))continue;
         u=*traffic_u;v=*traffic_v;leg=*legs;
-        if(district){target_u=sample->u;target_v=sample->v;}
-        else if(i<4){
-            target_u=leg<2?840*16:48*16;target_v=td_core_lane_v[i];
-            if(leg==0||leg==3)target_v-=128;else target_v+=128;
-            if((leg==0||leg==2)&&phase>=7&&td_signal_stop(u,0,leg==2))goto collide;
-        }else if(i==4){
-            target_u=leg==0||leg==3?792*16:776*16;target_v=leg<2?792*16:48*16;
-            if((leg==0||leg==2)&&phase<7&&td_signal_stop(v,1,leg==2))goto collide;
-        }else{target_u=td_bus_u[leg];target_v=td_bus_v[leg];}
-        /* Both axes step together: square legs are unchanged, 45-degree
-         * legs (the bus round Queen's Park Crescent) run diagonally. */
+        target_u=sample->u;target_v=sample->v;
+        if(td_tk_hold&(1<<i))goto collide;
+        /* Both axes step together (legs are cardinal). */
         if(u<target_u){gap=target_u-u;u+=gap<8?gap:8;}
         else if(u>target_u){gap=u-target_u;u-=gap<8?gap:8;}
         if(v<target_v){gap=target_v-v;v+=gap<8?gap:8;}
@@ -1161,9 +998,9 @@ static void td_traffic_step(void){
         }
         *traffic_u=u;*traffic_v=v;
         if(u==target_u&&v==target_v){
-            *legs=(leg+1)%(district?sample->count:i==5?TD_BUS_LEGS:4);
+            *legs=(leg+1)%sample->count;
             /* Banked targets and frames are cached between junctions. */
-            if(district)dirty=1;
+            dirty=1;
         }
 collide:
         if(hit&&!td.cooldown){
@@ -1202,7 +1039,7 @@ typedef char td_actor_layout_matches_asm[(sizeof(actor_t)==56&&offsetof(actor_t,
     offsetof(actor_t,anim_tick)==18&&sizeof(td_traffic_sample_t)==6&&offsetof(td_traffic_sample_t,frame)==5&&
     ACTOR_FLAG_HIDDEN==2)?1:-1];
 /* Scratch shared with the presentation routines (WRAM, main loop only). */
-UBYTE td_pl_base,td_pl_step,td_pl_phase,td_pl_close,td_pl_mask,td_pl_count,td_pl_near,td_pl_district;
+UBYTE td_pl_base,td_pl_step,td_pl_phase,td_pl_close,td_pl_mask,td_pl_count,td_pl_near;
 UWORD td_pl_pu,td_pl_pv,td_pl_u,td_pl_v;
 const UBYTE *td_pl_rp;const UWORD *td_pl_np;actor_t *td_pl_ap;
 /* Pedestrian slots 9..16: the C reference below (host builds) defines the
@@ -1520,9 +1357,6 @@ void td_traffic_layout(void) NAKED {
         ld a, (_td_tr_ctrl)
         and a, (hl)
         jp nz, 52$
-        ld a, (_td_pl_district)
-        or a, a
-        jr z, 41$
         ld hl, #(_td_traffic_samples + 5)
         add hl, bc
         add hl, bc
@@ -1530,40 +1364,6 @@ void td_traffic_layout(void) NAKED {
         add hl, bc
         add hl, bc
         add hl, bc
-        ld e, (hl)
-        jr 49$
-    41$:
-        ld hl, #_td_traffic_leg
-        add hl, bc
-        ld b, (hl)
-        ld a, c
-        cp a, #4
-        jr nc, 42$
-        ld a, b
-        add a, a
-        ld e, a
-        jr 49$
-    42$:
-        jr nz, 45$
-        ld e, #2
-        ld a, b
-        or a, a
-        jr z, 49$
-        ld e, #4
-        dec a
-        jr z, 49$
-        ld e, #6
-        dec a
-        jr z, 49$
-        ld e, #0
-        jr 49$
-    45$:
-        ld a, b
-        add a, #<(_td_bus_frame)
-        ld l, a
-        ld a, #0
-        adc a, #>(_td_bus_frame)
-        ld h, a
         ld e, (hl)
     49$:
         ld a, (_td_pl_count)
@@ -1650,19 +1450,14 @@ void td_traffic_layout(void) NAKED {
 #endif
 static void td_traffic_present(void){
 #ifdef __SDCC
-    td_pl_district=td.district;td_traffic_layout();
+    td_traffic_layout();
 #else
-    UBYTE i,leg,frame,district=td.district;actor_t *a=&actors[2];
+    UBYTE i;actor_t *a=&actors[2];
     const UWORD *traffic_u=td_traffic_u,*traffic_v=td_traffic_v;const UBYTE *legs=td_traffic_leg;
     const td_traffic_sample_t *sample=td_traffic_samples;
     for(i=0;i<6;i++,a++,traffic_u++,traffic_v++,legs++,sample++){
         if(td_tr_ctrl&(1<<i))continue;
-        if(district)frame=sample->frame;
-        else{
-            leg=*legs;
-            frame=i<4?leg<<1:i==4?(leg==0?2:leg==1?4:leg==2?6:0):td_bus_frame[leg];
-        }
-        a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(frame&7));
+        a->pos.x=TD_Q4_TO_ACTOR(*traffic_u);a->pos.y=TD_Q4_TO_ACTOR(*traffic_v);TD_FRAME(a,td_traffic_bases[i]+(sample->frame&7));
     }
 #endif
     TD_PALETTE(&actors[8])=td_car_colour;
@@ -1680,18 +1475,17 @@ static void td_walker_colours(void){
     }
 }
 static UBYTE td_ped_flip;
-/* Spray bays, one in a road lane in each scene (centre, pixels): King St
- * West (core), The Queensway (West), Bloor St West in Bloor West Village
- * (High Park) and Queen St East between Carlaw and Pape (East). A car
- * stopped in one loses the police and is repaired and repainted
- * (td_life_spray). With stars on, coming near one says so once. The art
- * scripts check these against the bays they draw. */
-#define TD_SPRAY_BAYS 4
-static const UWORD td_spray_at[TD_SPRAY_BAYS][2]={{208,624},{264,626},{360,338},{456,514}};
+/* Spray bays, one in a road lane in each district (centre, pixels; the
+ * table in td_district_world.h is per scene, 0xFFFF where a scene has
+ * none): King St West (core), The Queensway (West), Bloor St West in
+ * Bloor West Village (High Park) and Queen St East between Carlaw and Pape
+ * (East). A car stopped in one loses the police and is repaired and
+ * repainted (td_life_spray). With stars on, coming near one says so once. */
+#define TD_SPRAY_BAYS TD_DISTRICT_COUNT
 static UBYTE td_spray_state;
 static void td_spray_check(void){
     UWORD du,dv;
-    if(td.onfoot||td.district>=TD_SPRAY_BAYS){td_spray_state=0;return;}
+    if(td.onfoot||td.district>=TD_SPRAY_BAYS||td_spray_at[td.district][0]==0xFFFF){td_spray_state=0;return;}
     du=td_distance(td.u>>4,td_spray_at[td.district][0]);dv=td_distance(td.v>>4,td_spray_at[td.district][1]);
     if(du<14&&dv<8){
         if(td_spray_state<2&&td.speed<=2&&td.speed>=-2){td_spray_state=2;td_life_spray();}
@@ -1814,7 +1608,8 @@ void toronto_init(void) BANKED {
         td_district_reset();td_transition_pending=0;
         td_tick=td_notice_timer=td_red_cooldown=td_entry_timer=td_turn_tick=0;td_vx=td_vy=0;td_last_frame=sys_time;td_corner_used=0;
         if(!td_restore()){
-            memset(&td,0,sizeof(td));td.u=576*16;td.v=740*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
+            memset(&td,0,sizeof(td));td.district=td.park_district=TD_START_DISTRICT;
+            td.u=TD_START_U*16;td.v=TD_START_V*16;td.park_u=td.u;td.park_v=td.v;td.cash=30;td.job=TD_NONE;td.heading=0;td.health=100;
             td.vitality=100;td.ammo=TD_AMMO_START;
         }
         if(td.job!=TD_NONE&&!td.stage)td.health=100;
@@ -1843,9 +1638,8 @@ void toronto_init(void) BANKED {
         actors[i].next=actors_inactive_head; if(actors_inactive_head)actors_inactive_head->prev=&actors[i];actors_inactive_head=&actors[i];
         activate_actor(&actors[i]);
     }
-    if(td.district)td_world_traffic_init(td.district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
-    for(i=0;i<6;i++)
-        if(!td.district){td_traffic_u[i]=(i<4?80+i*120:i==4?792:160)*16;td_traffic_v[i]=(i<4?td_rows[2+i]-8:i==4?240:64)*16;td_traffic_leg[i]=0;}
+    td_world_traffic_init(td.district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
+    td_world_signals(td.district,td_signal_u,td_signal_v);
     for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;td_ped_flip=0;
     td_life_reset(cold);td_anim_reset();

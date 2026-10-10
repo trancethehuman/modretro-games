@@ -26,14 +26,15 @@ def check():
     assert service['eastbound_phases'] == list(range(0, 32, 4))
     assert service['westbound_phases'] == list(range(28, -4, -4))
     assert campaign['transit']['streetcar501'] == service
-    assert [stop['district'] for stop in stops] == [1, 0, 0, 0, 0, 3, 3, 3]
+    assert [stop['plan']['district'] for stop in stops] == [1, 0, 0, 0, 0, 3, 3, 3]
+    assert all(stop['district'] >> 2 == stop['plan']['district'] for stop in stops)
     grids = {}
     for entry in world['districts']:
         scene = json.loads((ROOT / 'project/project/scenes' / entry['scene'] / 'scene.gbsres').read_text())
         assert (scene['width'], scene['height']) == (128, 122)
         grids[entry['id']] = decode(scene['collisions'])
     model = RouteModel(world, campaign['stops'])
-    home = point(0, campaign['stops'][0]['u'], campaign['stops'][0]['v'])
+    home = point(campaign['stops'][0]['district'], campaign['stops'][0]['u'], campaign['stops'][0]['v'])
     for stop in stops:
         assert stop['transit'] == 4 and stop['reserved'] == 0
         assert len(stop['name']) <= 18 and stop['name'].isascii()

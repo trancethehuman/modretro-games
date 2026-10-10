@@ -27,9 +27,12 @@ static UBYTE td_cells[40];
 /* The atlas is paused and owns this cache until the text UI is repainted. */
 static union { UBYTE rows[18][20]; UWORD patterns[TD_ATLAS_VISIBLE_LIMIT]; } td_ui_cache;
 #define td_cached_rows td_ui_cache.rows
-typedef char td_atlas_cache_fits_existing_wram[(sizeof(td_ui_cache)==360)?1:-1];
-typedef char td_atlas_tiles_leave_font[(16+TD_ATLAS_VISIBLE_LIMIT<=192)?1:-1];
-typedef char td_atlas_hash_capacity[(TD_ATLAS_VISIBLE_LIMIT==172)?1:-1];
+typedef char td_atlas_cache_fits_existing_wram[(sizeof(td_ui_cache)==362)?1:-1];
+/* Cache slots 0..175 are bank-1 tiles 16..191 (below the font), slots
+ * 176..180 tiles 0..4 (below the map markers 8..14). */
+#define TD_MAP_SLOT_TILE(slot) ((UBYTE)((slot)<176?16+(slot):(slot)-176))
+typedef char td_atlas_tiles_leave_font[(16+176<=192&&TD_ATLAS_VISIBLE_LIMIT-176<=8)?1:-1];
+typedef char td_atlas_hash_capacity[(TD_ATLAS_VISIBLE_LIMIT==181)?1:-1];
 static UBYTE td_map_x,td_map_y,td_map_row,td_map_count,td_map_focus,td_map_active,td_map_error;
 static UBYTE td_map_camera_settings,td_map_actor_count,td_map_hidden[TD_ACTORS];
 static UWORD td_map_camera_x,td_map_camera_y;
@@ -222,7 +225,7 @@ static void td_map_markers(void){
     VBK_REG=0;
 }
 static void td_map_paint_row(void){
-    UWORD patterns[20],x,y,hash;UBYTE i,slot,stride,probes,bits,focus,valid=0,mark_x[3],mark_y[3],row=td_map_y+td_map_row;
+    UWORD patterns[20],x,y,hash,id;UBYTE i,slot,stride,probes,bits,focus,valid=0,mark_x[3],mark_y[3],row=td_map_y+td_map_row;
     if(!td_atlas_row(td_map_x,row,20,patterns)){td_map_error=1;td_map_row=12;td_map_headers();return;}
     for(focus=0;focus<3;focus++)if(td_map_point(focus,&x,&y)){
         mark_x[focus]=x>>3;mark_y[focus]=y>>3;valid|=1<<focus;
@@ -231,25 +234,31 @@ static void td_map_paint_row(void){
         bits=0;
         for(focus=0;focus<3;focus++)if((valid&(1<<focus))&&
             mark_x[focus]==td_map_x+i&&mark_y[focus]==row)bits|=1<<focus;
+        td_attrs[i]=td_glyph_attr[0];
         if(bits){td_tiles[i]=7+bits;continue;}
-        /* Odd strides 1..31 are coprime to 172: every slot is reachable.
-         * The largest slot+stride is 202, fitting the eight-bit counter. */
-        hash=patterns[i];while(hash>=TD_ATLAS_VISIBLE_LIMIT)hash-=TD_ATLAS_VISIBLE_LIMIT;
-        slot=hash;stride=1+((patterns[i]&15)<<1);
+        /* A stored pattern also draws mirrored (CGB attribute flips). */
+        id=patterns[i]&TD_ATLAS_ID_MASK;
+        if(patterns[i]&TD_ATLAS_FLIP_X)td_attrs[i]|=0x20;
+        if(patterns[i]&TD_ATLAS_FLIP_Y)td_attrs[i]|=0x40;
+        /* Odd strides 1..31 are coprime to 181 (a prime): every slot is
+         * reachable. The largest slot+stride is 211, fitting the counter. */
+        hash=id;while(hash>=TD_ATLAS_VISIBLE_LIMIT)hash-=TD_ATLAS_VISIBLE_LIMIT;
+        slot=hash;stride=1+((id&15)<<1);
         for(probes=0;probes<TD_ATLAS_VISIBLE_LIMIT;probes++){
-            if(td_ui_cache.patterns[slot]==patterns[i]||td_ui_cache.patterns[slot]==65535)break;
+            if(td_ui_cache.patterns[slot]==id||td_ui_cache.patterns[slot]==65535)break;
             slot+=stride;if(slot>=TD_ATLAS_VISIBLE_LIMIT)slot-=TD_ATLAS_VISIBLE_LIMIT;
         }
         if(probes==TD_ATLAS_VISIBLE_LIMIT){td_map_error=1;td_map_row=12;td_map_headers();return;}
         if(td_ui_cache.patterns[slot]==65535){
-            if(td_map_count>=TD_ATLAS_VISIBLE_LIMIT||!td_atlas_pattern(patterns[i],(UBYTE *)td_line)){
+            if(td_map_count>=TD_ATLAS_VISIBLE_LIMIT||!td_atlas_pattern(id,(UBYTE *)td_line)){
                 td_map_error=1;td_map_row=12;td_map_headers();return;
             }
-            td_ui_cache.patterns[slot]=patterns[i];td_map_count++;
-            VBK_REG=1;set_bkg_data(16+slot,1,(UBYTE *)td_line);
+            td_ui_cache.patterns[slot]=id;td_map_count++;
+            VBK_REG=1;set_bkg_data(TD_MAP_SLOT_TILE(slot),1,(UBYTE *)td_line);
         }
-        td_tiles[i]=16+slot;
+        td_tiles[i]=TD_MAP_SLOT_TILE(slot);
     }
+    VBK_REG=1;set_win_tiles(0,2+td_map_row,20,1,td_attrs);
     VBK_REG=0;set_win_tiles(0,2+td_map_row,20,1,td_tiles);
     if(++td_map_row==12)td_map_headers();
 }
@@ -340,7 +349,7 @@ void td_map_close(void) BANKED {
     td_restore_scene_tiles();set_bkg_palette(7,1,td_ui_palette);
     for(i=0;i<td_map_actor_count;i++)actors[i].flags=(actors[i].flags&~ACTOR_FLAG_HIDDEN)|td_map_hidden[i];
     camera_x=td_map_camera_x;camera_y=td_map_camera_y;camera_settings=td_map_camera_settings;
-    td_map_active=0;memset(td_cached_rows,255,sizeof(td_cached_rows));VBK_REG=0;
+    td_map_active=0;memset(&td_ui_cache,255,sizeof(td_ui_cache));VBK_REG=0;
 }
 void td_ui_init(void) BANKED {
     UBYTE i;td_ui_mode=255;td_map_active=0;td_hud_y=0;td_title_shown=0;memset(td_cached_rows,255,sizeof(td_cached_rows));memset(td_attrs,15,20);

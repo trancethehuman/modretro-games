@@ -9,8 +9,8 @@
   "base_quest_count": 80,
   "result_stop_count": 43,
   "result_quest_count": 88,
-  "preserved_base_stops_sha256": "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380",
-  "preserved_base_quests_sha256": "20f3f966dac28d476d744a8e7749941b68bc5efc88254bcae59fd030cbebb108",
+  "preserved_base_stops_sha256": "64a094c134e3d3dd077a8a3296ccd9605a3ab2f43d2f03c734c7fd4f993d2953",
+  "preserved_base_quests_sha256": "ed4272ddfad5b9fa63537f3dc9d3a9e08d3ffaaa49c227fc3298067965f81b4f",
   "preserved_base_stop_fields": [
     "id",
     "u",
@@ -31,41 +31,101 @@
     "time_limit_seconds",
     "reward"
   ],
-  "world_sha256": "626de8b9a745e87bbedfd6722488f51d82c62777ef8ff44de130fec1ea93866a",
+  "world_sha256": "727db27a64c87ac1ce9f3222bff339aad351c8a9e0fd17b2a48ad98dca55ed93",
   "collision_resources": [
     {
       "district": 0,
-      "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "296a880d116cbc19a2428a40cc9624f3f267c010228608ac768327dc72ba6f93"
+      "scene": "project/project/scenes/toronto_core_nw/scene.gbsres",
+      "collision_sha256": "ab8037c26bc2297bb5766bb6fe99263ad63b71656bd5fb432c0dd42ca67ddaa4"
     },
     {
       "district": 1,
-      "scene": "project/project/scenes/toronto_west/scene.gbsres",
-      "collision_sha256": "e92e53b44b87a00789ac9ef86c72afe721589bc625d3af47f68c235dc5ec813a"
+      "scene": "project/project/scenes/toronto_core_ne/scene.gbsres",
+      "collision_sha256": "dda30bdd90caf8b4f08fa82bfd3ce6c84086736bc4cdf1ff008d31095bd38e42"
     },
     {
       "district": 2,
-      "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
-      "collision_sha256": "69162311f0187ae8fb3244e32c7b51b103be3a8df186a0164fbe32dc97eca364"
+      "scene": "project/project/scenes/toronto_core_sw/scene.gbsres",
+      "collision_sha256": "70f13ad6c6db293ed4b42af14255c63257c70056d42c4eb8c7ef24f63202c846"
     },
     {
       "district": 3,
-      "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "collision_sha256": "bf44fb1510d194d2756c50c9d0bb5bd7fa79ab205cd2c27bf9d9dcdd08898185"
+      "scene": "project/project/scenes/toronto_core_se/scene.gbsres",
+      "collision_sha256": "5decbeb6f6bc9711a20d30429b65e4e22d8416a5aad88d430aba860d45f264ce"
+    },
+    {
+      "district": 4,
+      "scene": "project/project/scenes/toronto_west_nw/scene.gbsres",
+      "collision_sha256": "d29b8c7b030b0aeab707a1e7ec0d4cc8e6018ce297c9e4f330b42c8d5bef5ed6"
+    },
+    {
+      "district": 5,
+      "scene": "project/project/scenes/toronto_west_ne/scene.gbsres",
+      "collision_sha256": "f871cc32a0016d1ce3a8f5a722cffafc5968f2eee30badb19c08ce747b4661a1"
+    },
+    {
+      "district": 6,
+      "scene": "project/project/scenes/toronto_west_sw/scene.gbsres",
+      "collision_sha256": "af49514fcd6e20c0e67e2be05166f496c0bd3a34ffcef63c63cfefa0b1bf53a5"
+    },
+    {
+      "district": 7,
+      "scene": "project/project/scenes/toronto_west_se/scene.gbsres",
+      "collision_sha256": "de15a20bdcd5d657580f02ba63905ce99246096ec3fe0dcdec6a723740ba9dc3"
+    },
+    {
+      "district": 8,
+      "scene": "project/project/scenes/toronto_high_park_nw/scene.gbsres",
+      "collision_sha256": "8e81eb8908219a74948ed5e165fac9ea142ebbd79cc418d1b5583f52805e045f"
+    },
+    {
+      "district": 9,
+      "scene": "project/project/scenes/toronto_high_park_ne/scene.gbsres",
+      "collision_sha256": "445676130ccf00e4e9b46e63e819738a652d56d27ef95c54dfd99bf957da18ad"
+    },
+    {
+      "district": 10,
+      "scene": "project/project/scenes/toronto_high_park_sw/scene.gbsres",
+      "collision_sha256": "5caf19056403550c916cbdaa996abb9cd577234364fd9ce48267bfd683efe10d"
+    },
+    {
+      "district": 11,
+      "scene": "project/project/scenes/toronto_high_park_se/scene.gbsres",
+      "collision_sha256": "2296326267c492e3452aacbde09947e72e14d85e99f4945bf2ed2147ed1e67c3"
+    },
+    {
+      "district": 12,
+      "scene": "project/project/scenes/toronto_east_nw/scene.gbsres",
+      "collision_sha256": "d279880913a6a8a7948a823bfc1748168f407350e879c6956dc30033b8f0bf83"
+    },
+    {
+      "district": 13,
+      "scene": "project/project/scenes/toronto_east_ne/scene.gbsres",
+      "collision_sha256": "697f8d18db876cd48771461639c84d4c151b15b422f446376a47ecce34d80bad"
+    },
+    {
+      "district": 14,
+      "scene": "project/project/scenes/toronto_east_sw/scene.gbsres",
+      "collision_sha256": "3f0d8c5c9b685c304953154f1bf7da488fd7728081899f5a31b7a91f9ffa8405"
+    },
+    {
+      "district": 15,
+      "scene": "project/project/scenes/toronto_east_se/scene.gbsres",
+      "collision_sha256": "79cbf77e66ab07aea7db32318f075d64a09c2880e94ebd86c37e6d6aa1e9dc22"
     }
   ],
   "geography_metadata": [
     {
       "path": "content/districts/east_art.json",
-      "sha256": "1d392945717aab589af0e158c08710b5387b33aa49012ca75586e201b1e03bd4",
+      "sha256": "cb78cd7696dc28a02c6ae03300749361ade9e918d9d83a5f066ef491618381a8",
       "notice": "Source-derived geography and original compressed artwork; retain City attribution in metadata and distribution notices"
     }
   ],
   "normalized_cardinal_speeds_pixels_per_second": {
-    "car": 86.25,
-    "truck": 71.25,
-    "motorcycle": 101.25,
-    "scooter": 63.75,
+    "car": 75.0,
+    "truck": 63.75,
+    "motorcycle": 86.25,
+    "scooter": 56.25,
     "walking": 30.0
   },
   "transit_notice": "All eight eastern service points have transit=0. Existing core Line1/94 services are optional relay choices; Line2/streetcar boarding is not implemented by this content.",
@@ -76,11 +136,11 @@
   "stops": [
     {
       "id": 35,
-      "u": 144,
-      "v": 64,
+      "u": 315,
+      "v": 136,
       "name": "DANFORTH HALL",
       "transit": 0,
-      "district": 3,
+      "district": 12,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Danforth Hall",
@@ -89,29 +149,29 @@
     },
     {
       "id": 36,
-      "u": 320,
-      "v": 144,
+      "u": 697,
+      "v": 304,
       "name": "WITHROW POST",
       "transit": 0,
-      "district": 3,
+      "district": 12,
       "reserved": 1,
       "foot_only": true,
       "reference_label": "Withrow Parcel",
       "geography_reference": "docs/EAST_DISTRICT.md",
       "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
       "parking_anchor": {
-        "u": 224,
-        "v": 144
+        "u": 480,
+        "v": 304
       },
       "access_notice": "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
     },
     {
       "id": 37,
-      "u": 128,
-      "v": 528,
+      "u": 280,
+      "v": 168,
       "name": "RIVERSIDE QUEEN",
       "transit": 0,
-      "district": 3,
+      "district": 14,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Riverside Queen",
@@ -120,11 +180,11 @@
     },
     {
       "id": 38,
-      "u": 544,
-      "v": 288,
+      "u": 168,
+      "v": 616,
       "name": "GERRARD / PAPE",
       "transit": 0,
-      "district": 3,
+      "district": 13,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Gerrard / Pape",
@@ -133,11 +193,11 @@
     },
     {
       "id": 39,
-      "u": 384,
-      "v": 608,
+      "u": 824,
+      "v": 322,
       "name": "CARLAW WORKS",
       "transit": 0,
-      "district": 3,
+      "district": 14,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Carlaw Works",
@@ -146,11 +206,11 @@
     },
     {
       "id": 40,
-      "u": 816,
-      "v": 496,
+      "u": 656,
+      "v": 112,
       "name": "LESLIE / QUEEN",
       "transit": 0,
-      "district": 3,
+      "district": 15,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Leslie / Queen",
@@ -159,29 +219,29 @@
     },
     {
       "id": 41,
-      "u": 880,
-      "v": 312,
+      "u": 769,
+      "v": 664,
       "name": "GREENWOOD POST",
       "transit": 0,
-      "district": 3,
+      "district": 13,
       "reserved": 1,
       "foot_only": true,
       "reference_label": "Greenwood Parcel",
       "geography_reference": "docs/EAST_DISTRICT.md",
       "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
       "parking_anchor": {
-        "u": 816,
-        "v": 312
+        "u": 656,
+        "v": 664
       },
       "access_notice": "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
     },
     {
       "id": 42,
-      "u": 880,
-      "v": 496,
+      "u": 769,
+      "v": 112,
       "name": "ASHBRIDGE QUEEN",
       "transit": 0,
-      "district": 3,
+      "district": 15,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Ashbridge Queen",
@@ -208,27 +268,27 @@
         35,
         0
       ],
-      "time_limit_seconds": 205,
-      "reward": 188,
+      "time_limit_seconds": 295,
+      "reward": 186,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect east shop parcels"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside shop handoff"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth hall handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return reusable satchel"
         }
       ],
@@ -236,18 +296,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2656,
+        "vehicle_route_pixels": 5160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 26.2,
-        "normalized_moving_seconds_slow": 41.7,
+        "normalized_moving_seconds_fast": 59.8,
+        "normalized_moving_seconds_slow": 91.7,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 37,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 784,
+            "from_district": 3,
+            "to_district": 14,
+            "vehicle_pixels": 1400,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -256,21 +316,24 @@
           {
             "from_stop": 37,
             "to_stop": 35,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 14,
+            "to_district": 12,
+            "vehicle_pixels": 1336,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 35,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1264,
+            "from_district": 12,
+            "to_district": 3,
+            "vehicle_pixels": 2424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Bloor/Danforth east"
+              "Bloor/Danforth east",
+              "core inner seam"
             ]
           }
         ],
@@ -296,32 +359,32 @@
         37,
         5
       ],
-      "time_limit_seconds": 205,
-      "reward": 238,
+      "time_limit_seconds": 285,
+      "reward": 236,
       "stages": [
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Collect gallery print kits"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth event handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard print handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside gallery handoff"
         },
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Return protective cases"
         }
       ],
@@ -329,18 +392,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3168,
+        "vehicle_route_pixels": 6168,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 36.7,
-        "normalized_moving_seconds_slow": 36.7,
+        "normalized_moving_seconds_fast": 82.2,
+        "normalized_moving_seconds_slow": 82.2,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 5,
             "to_stop": 35,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1064,
+            "from_district": 1,
+            "to_district": 12,
+            "vehicle_pixels": 2024,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -349,30 +412,36 @@
           {
             "from_stop": 35,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 624,
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 1320,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 656,
+            "from_district": 13,
+            "to_district": 14,
+            "vehicle_pixels": 1360,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam",
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 37,
             "to_stop": 5,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 824,
+            "from_district": 14,
+            "to_district": 1,
+            "vehicle_pixels": 1464,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east crossing"
+              "Queen east crossing",
+              "core inner seam"
             ]
           }
         ],
@@ -398,32 +467,32 @@
         38,
         0
       ],
-      "time_limit_seconds": 145,
-      "reward": 222,
+      "time_limit_seconds": 210,
+      "reward": 218,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect timed print files"
         },
         {
           "stop_id": 40,
-          "district": 3,
+          "district": 15,
           "objective": "Leslie shop handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge service handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard copy-shop handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return dispatch copies"
         }
       ],
@@ -431,50 +500,55 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3552,
+        "vehicle_route_pixels": 6784,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 35.1,
-        "normalized_moving_seconds_slow": 35.1,
+        "normalized_moving_seconds_fast": 78.7,
+        "normalized_moving_seconds_slow": 78.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 40,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1504,
+            "from_district": 3,
+            "to_district": 15,
+            "vehicle_pixels": 2816,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east crossing"
+              "Queen east crossing",
+              "east inner seam"
             ]
           },
           {
             "from_stop": 40,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 64,
+            "from_district": 15,
+            "to_district": 15,
+            "vehicle_pixels": 112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 42,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 544,
+            "from_district": 15,
+            "to_district": 13,
+            "vehicle_pixels": 1112,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1440,
+            "from_district": 13,
+            "to_district": 3,
+            "vehicle_pixels": 2744,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east crossing"
+              "east inner seam",
+              "Dundas east crossing",
+              "core inner seam"
             ]
           }
         ],
@@ -500,32 +574,32 @@
         37,
         11
       ],
-      "time_limit_seconds": 220,
-      "reward": 238,
+      "time_limit_seconds": 305,
+      "reward": 233,
       "stages": [
         {
           "stop_id": 11,
-          "district": 0,
+          "district": 3,
           "objective": "Collect bayfront stock crates"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw workshop handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge shop handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside stock handoff"
         },
         {
           "stop_id": 11,
-          "district": 0,
+          "district": 3,
           "objective": "Return reusable crates"
         }
       ],
@@ -533,18 +607,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3184,
+        "vehicle_route_pixels": 5936,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 44.7,
-        "normalized_moving_seconds_slow": 44.7,
+        "normalized_moving_seconds_fast": 93.1,
+        "normalized_moving_seconds_slow": 93.1,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 11,
             "to_stop": 39,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1064,
+            "from_district": 3,
+            "to_district": 14,
+            "vehicle_pixels": 1984,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -553,27 +627,31 @@
           {
             "from_stop": 39,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 14,
+            "to_district": 15,
+            "vehicle_pixels": 1136,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 42,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 784,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1528,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 37,
             "to_stop": 11,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 728,
+            "from_district": 14,
+            "to_district": 3,
+            "vehicle_pixels": 1288,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -604,42 +682,42 @@
         12,
         0
       ],
-      "time_limit_seconds": 260,
-      "reward": 241,
+      "time_limit_seconds": 390,
+      "reward": 239,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect small relay parcels"
         },
         {
           "stop_id": 17,
-          "district": 0,
+          "district": 1,
           "objective": "Bloor dispatch handoff"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth hall handoff"
         },
         {
           "stop_id": 36,
-          "district": 3,
+          "district": 12,
           "objective": "Withrow on-foot park handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard rail-side handoff"
         },
         {
           "stop_id": 12,
-          "district": 0,
+          "district": 3,
           "objective": "King dispatch handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return relay pouch"
         }
       ],
@@ -647,27 +725,29 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3328,
-        "required_walking_pixels": 192,
-        "normalized_moving_seconds_fast": 39.3,
-        "normalized_moving_seconds_slow": 58.6,
+        "vehicle_route_pixels": 6488,
+        "required_walking_pixels": 432,
+        "normalized_moving_seconds_fast": 89.6,
+        "normalized_moving_seconds_slow": 129.7,
         "assumed_interaction_allowance_seconds": 35,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 17,
-            "from_district": 0,
-            "to_district": 0,
-            "vehicle_pixels": 704,
+            "from_district": 3,
+            "to_district": 1,
+            "vehicle_pixels": 1408,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "core inner seam"
+            ]
           },
           {
             "from_stop": 17,
             "to_stop": 35,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 560,
+            "from_district": 1,
+            "to_district": 12,
+            "vehicle_pixels": 1016,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -676,38 +756,42 @@
           {
             "from_stop": 35,
             "to_stop": 36,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 160,
-            "required_walking_pixels": 96,
+            "from_district": 12,
+            "to_district": 12,
+            "vehicle_pixels": 336,
+            "required_walking_pixels": 216,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 36,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 464,
-            "required_walking_pixels": 96,
-            "shortest_modeled_seams": []
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 984,
+            "required_walking_pixels": 216,
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 12,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1320,
+            "from_district": 13,
+            "to_district": 3,
+            "vehicle_pixels": 2520,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east crossing"
+              "east inner seam",
+              "Dundas east crossing",
+              "core inner seam"
             ]
           },
           {
             "from_stop": 12,
             "to_stop": 0,
-            "from_district": 0,
-            "to_district": 0,
-            "vehicle_pixels": 120,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 224,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           }
@@ -735,37 +819,37 @@
         39,
         0
       ],
-      "time_limit_seconds": 280,
-      "reward": 246,
+      "time_limit_seconds": 435,
+      "reward": 242,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect park supply parcels"
         },
         {
           "stop_id": 36,
-          "district": 3,
+          "district": 12,
           "objective": "Withrow on-foot handoff"
         },
         {
           "stop_id": 41,
-          "district": 3,
+          "district": 13,
           "objective": "Greenwood on-foot handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge supply handoff"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw workshop handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return park delivery satchel"
         }
       ],
@@ -773,56 +857,63 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4016,
-        "required_walking_pixels": 320,
-        "normalized_moving_seconds_fast": 50.3,
-        "normalized_moving_seconds_slow": 73.7,
+        "vehicle_route_pixels": 7760,
+        "required_walking_pixels": 656,
+        "normalized_moving_seconds_fast": 111.8,
+        "normalized_moving_seconds_slow": 159.8,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 36,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1264,
-            "required_walking_pixels": 96,
+            "from_district": 3,
+            "to_district": 12,
+            "vehicle_pixels": 2384,
+            "required_walking_pixels": 216,
             "shortest_modeled_seams": [
-              "Queen east crossing"
+              "core inner seam",
+              "Dundas east crossing"
             ]
           },
           {
             "from_stop": 36,
             "to_stop": 41,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 776,
-            "required_walking_pixels": 160,
-            "shortest_modeled_seams": []
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 1648,
+            "required_walking_pixels": 328,
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 41,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 248,
-            "required_walking_pixels": 64,
-            "shortest_modeled_seams": []
+            "from_district": 13,
+            "to_district": 15,
+            "vehicle_pixels": 496,
+            "required_walking_pixels": 112,
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 42,
             "to_stop": 39,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1136,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 39,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1120,
+            "from_district": 14,
+            "to_district": 3,
+            "vehicle_pixels": 2096,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -852,37 +943,37 @@
         37,
         0
       ],
-      "time_limit_seconds": 215,
-      "reward": 228,
+      "time_limit_seconds": 295,
+      "reward": 222,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect return envelopes"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw paperwork handoff"
         },
         {
           "stop_id": 40,
-          "district": 3,
+          "district": 15,
           "objective": "Leslie returns handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge returns handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside paperwork handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return original packet to Union"
         }
       ],
@@ -890,18 +981,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3296,
+        "vehicle_route_pixels": 6160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 38.2,
-        "normalized_moving_seconds_slow": 38.2,
+        "normalized_moving_seconds_fast": 82.1,
+        "normalized_moving_seconds_slow": 82.1,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 39,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1120,
+            "from_district": 3,
+            "to_district": 14,
+            "vehicle_pixels": 2096,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -910,36 +1001,40 @@
           {
             "from_stop": 39,
             "to_stop": 40,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 544,
+            "from_district": 14,
+            "to_district": 15,
+            "vehicle_pixels": 1024,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 40,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 64,
+            "from_district": 15,
+            "to_district": 15,
+            "vehicle_pixels": 112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 42,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 784,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1528,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 37,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 784,
+            "from_district": 14,
+            "to_district": 3,
+            "vehicle_pixels": 1400,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -973,57 +1068,57 @@
         33,
         0
       ],
-      "time_limit_seconds": 405,
-      "reward": 392,
+      "time_limit_seconds": 700,
+      "reward": 395,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect cross-city bundles"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth print handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard print handoff"
         },
         {
           "stop_id": 40,
-          "district": 3,
+          "district": 15,
           "objective": "Leslie shop handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge service handoff"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw workshop handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside shop handoff"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren west handoff"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside depot handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return empty bundle carrier"
         }
       ],
@@ -1031,101 +1126,114 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 7952,
+        "vehicle_route_pixels": 16160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 124.7,
-        "normalized_moving_seconds_slow": 124.7,
+        "normalized_moving_seconds_fast": 287.3,
+        "normalized_moving_seconds_slow": 287.3,
         "assumed_interaction_allowance_seconds": 50,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 35,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1264,
+            "from_district": 3,
+            "to_district": 12,
+            "vehicle_pixels": 2424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
               "Bloor/Danforth east"
             ]
           },
           {
             "from_stop": 35,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 624,
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 1320,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 40,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 480,
+            "from_district": 13,
+            "to_district": 15,
+            "vehicle_pixels": 1000,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 40,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 64,
+            "from_district": 15,
+            "to_district": 15,
+            "vehicle_pixels": 112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 42,
             "to_stop": 39,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1136,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 39,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 336,
+            "from_district": 14,
+            "to_district": 14,
+            "vehicle_pixels": 696,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 37,
             "to_stop": 31,
-            "from_district": 3,
-            "to_district": 1,
-            "vehicle_pixels": 1792,
+            "from_district": 14,
+            "to_district": 5,
+            "vehicle_pixels": 3456,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing",
-              "Queen east"
+              "core inner seam",
+              "Queen east",
+              "west inner seam"
             ]
           },
           {
             "from_stop": 31,
             "to_stop": 33,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 864,
+            "from_district": 5,
+            "to_district": 11,
+            "vehicle_pixels": 2112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "The Queensway"
+              "west inner seam",
+              "Howard Park",
+              "high_park inner seam"
             ]
           },
           {
             "from_stop": 33,
             "to_stop": 0,
-            "from_district": 2,
-            "to_district": 0,
-            "vehicle_pixels": 1920,
+            "from_district": 11,
+            "to_district": 3,
+            "vehicle_pixels": 3904,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",
-              "King east"
+              "west inner seam",
+              "King east",
+              "core inner seam"
             ]
           }
         ],

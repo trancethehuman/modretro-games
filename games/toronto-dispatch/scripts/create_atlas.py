@@ -17,13 +17,17 @@ ENGINE = ROOT / "project/plugins/toronto-driving/engine"
 OUTPUT = ROOT / "content/atlas.json"
 HEADER = ENGINE / "include/td_atlas.h"
 SOURCE = ENGINE / "src/td_atlas.c"
-SCALE = 8
+SCALE = 16          # one map pixel per 2 x 2 native tiles of the double-scale world
+SHIFT = 4
 VIEW_WIDTH, VIEW_HEIGHT = 20, 12
-VISIBLE_LIMIT = 172  # CGB bank1 tiles16..187; markers8..14 and font192..240.
+# CGB bank-1 tiles 16..191 then 0..4 (markers 8..14, font from 192); a
+# prime, so the renderer's odd hash strides reach every slot.
+VISIBLE_LIMIT = 181
+FLIP_X, FLIP_Y = 0x4000, 0x8000   # pattern id bits: draw the tile mirrored
 DATA_LIMIT = 12288  # Leave at least4KiB for banked code in the same16KiB unit.
 SOLID, ROAD, WALK, WATER = range(4)
-EXPECTED_SCENES = ("toronto_city", "toronto_west", "toronto_high_park", "toronto_east")
-EXPECTED_OFFSETS = ((2048, 0), (1024, 0), (0, 0), (3072, 0))
+# Districts west to east: High Park, west, core, east (plan ids 2, 1, 0, 3).
+DISTRICT_COLUMN = (2, 1, 0, 3)
 
 
 def require(condition, message):
@@ -86,36 +90,27 @@ def polygon_contains(points, x, y):
     return inside
 
 
-def water_model(district, metadata):
-    """Use authored water only; native road/walk permission overrides this mask."""
-    width, height = district["width_pixels"], district["height_pixels"]
-    if district["id"] == 0:
-        river = metadata.get("river")
-        require(isinstance(river, list) and len(river) == 2, "Core river bounds are missing")
-        left, right = [integer(v, 0, width, "river coordinate") for v in river]
-        require(left < right, "Invalid core river width")
-        mainland = rectangle(metadata.get("mainland"), width, height, endpoints=True)
-        require(isinstance(metadata.get("islands"), list) and metadata["islands"], "Missing core Island ground")
-        islands = [rectangle(r, width, height, endpoints=True) for r in metadata["islands"]]
+def water_model(old):
+    """Authored water of a plan district in district-world pixels; native
+    road/walk permission overrides this mask."""
+    import world2x
+    if old == 0:
+        metadata = read(ROOT / "content/city_art.json")
+        left, right = metadata["river"]
+        mainland = metadata["mainland"]
+        islands = [tuple(r) for r in metadata["islands"]]
         shapes = {"river": [left, mainland[1], right, mainland[3]],
                   "harbour_from_y": mainland[3], "island_land_exclusions": [list(r) for r in islands]}
 
         def wet(x, y):
             return contains(shapes["river"], x, y) or (y >= mainland[3] and not any(contains(r, x, y) for r in islands))
         return shapes, wet
-
-    require(isinstance(metadata.get("water"), list), "Missing authored water rectangles")
-    rectangles = [rectangle(r, width, height) for r in metadata["water"]]
-    pond = metadata.get("pond", [])
-    require(isinstance(pond, list) and (not pond or len(pond) >= 3), "Malformed pond polygon")
-    for p in pond:
-        require(isinstance(p, list) and len(p) == 2, "Malformed pond vertex")
-        integer(p[0], 0, width - 1, "pond x")
-        integer(p[1], 0, height - 1, "pond y")
-    require(not pond or len(set(map(tuple, pond))) >= 3, "Degenerate pond polygon")
-    require(not pond or sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(pond, pond[1:] + pond[:1])) != 0,
-            "Pond polygon has no area")
-    if district["id"] == 3:
+    import outer_art
+    plan = read(ROOT / f"content/districts/{world2x.OLD_NAMES[old]}_art.json")["plan"]
+    X, Y, rect = outer_art.mapper(old)
+    rectangles = [(x, y, x + w, y + h) for x, y, w, h in (rect(r) for r in plan.get("water", []))]
+    pond = [[X(x), Y(y)] for x, y in plan.get("pond", [])]
+    if old == 3:
         require(not rectangles and not pond, "East atlas must not invent Don/Port Lands water")
     shapes = {"rectangles": [list(r) for r in rectangles], "pond_polygon": pond}
 
@@ -136,6 +131,14 @@ def pack_tile(pixels):
     return bytes(result)
 
 
+def flipped(pixels, flips):
+    if flips & 1:
+        pixels = [pixels[y * 8 + 7 - x] for y in range(8) for x in range(8)]
+    if flips & 2:
+        pixels = [pixels[(7 - y) * 8 + x] for y in range(8) for x in range(8)]
+    return pixels
+
+
 def unpack_tile(data):
     require(len(data) == 16, "Invalid native2bpp tile length")
     return [((data[y * 2] >> (7 - x)) & 1) | (((data[y * 2 + 1] >> (7 - x)) & 1) << 1)
@@ -143,6 +146,7 @@ def unpack_tile(data):
 
 
 def model():
+    import world2x
     world_path = ROOT / "content/districts/world.json"
     world = read(world_path)
     districts = world.get("districts")
@@ -153,88 +157,83 @@ def model():
                           ("TD_DISTRICT_TILE_WIDTH", 128), ("TD_DISTRICT_TILE_HEIGHT", 122)):
         matches = re.findall(r"^#define\s+" + key + r"\s+(\d+)\s*$", canonical_text, re.M)
         require(len(matches) == 1 and int(matches[0]) == expected, "Atlas/canonical native dimensions disagree")
-    require(isinstance(districts, list) and len(districts) == int(counts[0]) == 4,
-            "Atlas requires the four actually registered native districts")
-    require([d.get("id") for d in districts] == list(range(4)) and all(type(d.get("id")) is int for d in districts),
-            "Native district IDs must be unique, contiguous and ordered")
-    bounds = []
+    require(isinstance(districts, list) and len(districts) == int(counts[0]) == 16,
+            "Atlas requires the sixteen registered native scenes")
+    require([d.get("id") for d in districts] == list(range(16)), "Native district IDs must be contiguous and ordered")
     for district in districts:
         i = district["id"]
-        require(district.get("scene") == EXPECTED_SCENES[i], "Unregistered or reassigned atlas district")
-        require(district.get("symbol") == "scene_" + EXPECTED_SCENES[i], "Invalid native scene symbol")
-        require((district.get("width_pixels"), district.get("height_pixels")) == (1024, 976),
-                "Atlas/native district dimensions disagree")
-        x = integer(district.get("atlas_x"), 0, 65535 - 1024, "atlas x")
-        y = integer(district.get("atlas_y"), 0, 65535 - 976, "atlas y")
-        require(x % SCALE == y % SCALE == 0, "Atlas offsets must align to native tiles")
-        bounds.append((x, y, x + 1024, y + 976))
+        require(district.get("scene") == world2x.scene_slug(i), "Unregistered or reassigned atlas district")
+        ox, oy = world2x.scene_origin(i)
+        require((district.get("atlas_x"), district.get("atlas_y")) == (DISTRICT_COLUMN[i >> 2] * world2x.WORLD_W + ox, oy),
+                "Atlas layout changed; review geography and generated budgets")
+        require(district["atlas_x"] % SCALE == district["atlas_y"] % SCALE == 0, "Atlas offsets must align to map pixels")
         name = district.get("name")
         require(isinstance(name, str) and 1 <= len(name) <= 18 and all(32 <= ord(c) <= 126 for c in name)
                 and '"' not in name and "\\" not in name, "District title exceeds native font bounds")
-    for i, a in enumerate(bounds):
-        for b in bounds[i + 1:]:
-            require(not (a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]),
-                    "Registered atlas districts overlap")
-    require(tuple((d["atlas_x"], d["atlas_y"]) for d in districts) == EXPECTED_OFFSETS,
-            "Current atlas layout changed; review geography and generated budgets")
-    width = max(r[2] for r in bounds) // SCALE
-    height = max(r[3] for r in bounds) // SCALE
-    tile_width, tile_height = (width + 7) // 8, (height + 7) // 8
-    require((width, height, tile_width, tile_height) == (512, 122, 64, 16), "Unexpected native atlas dimensions")
-    raster = [[SOLID] * (tile_width * 8) for _ in range(tile_height * 8)]
+    # Native ground in district-world tiles, districts side by side.
+    tw, th = world2x.WORLD_TW, world2x.WORLD_TH
+    ground = [[SOLID] * (4 * tw) for _ in range(th)]
     resources, compiled_districts = [], []
+    for old in range(4):
+        grid = world2x.world_grid(old)
+        shapes, wet = water_model(old)
+        column = DISTRICT_COLUMN[old] * tw
+        for y in range(th):
+            for x in range(tw):
+                native = grid[y * tw + x]
+                ground[y][column + x] = ROAD if native == 0 else WALK if native == 16 else \
+                    WATER if wet(x * 8 + 4, y * 8 + 4) else SOLID
+        compiled_districts.append({"plan_district": old, "x": column * 8 // SCALE, "water_shapes": shapes})
     for district in districts:
-        i = district["id"]
         scene_path = ROOT / "project/project/scenes" / district["scene"] / "scene.gbsres"
         require(scene_path.is_file(), "Atlas district has no registered scene resource")
         scene = read(scene_path)
-        require(scene.get("type") == "TORONTO" and scene.get("symbol") == district["symbol"]
-                and (scene.get("width"), scene.get("height")) == (128, 122),
+        require(scene.get("type") == "TORONTO" and (scene.get("width"), scene.get("height")) == (128, 122),
                 "Unavailable or malformed registered scene")
-        grid = decode_grid(scene.get("collisions"), 128 * 122)
-        metadata_path = ROOT / ("content/city_art.json" if i == 0 else
-                                "content/districts/" + district["scene"].removeprefix("toronto_") + "_art.json")
-        metadata = read(metadata_path)
-        require(metadata.get("dimensions") == [1024, 976], "Art/water metadata dimensions disagree")
-        if i:
-            require(metadata.get("collisions") == grid, "Authored and registered district collisions disagree")
-        shapes, wet = water_model(district, metadata)
-        origin_x, origin_y = district["atlas_x"] // SCALE, district["atlas_y"] // SCALE
-        counts = Counter()
-        for y in range(122):
-            for x in range(128):
-                native = grid[y * 128 + x]
-                value = ROAD if native == 0 else WALK if native == 16 else WATER if wet(x * 8 + 4, y * 8 + 4) else SOLID
-                raster[origin_y + y][origin_x + x] = value
-                counts[value] += 1
-                require((value == ROAD) == (native == 0) and (value == WALK) == (native == 16),
-                        "Atlas changed native ground permissions")
-        compiled_districts.append({"id": i, "name": district["name"], "x": origin_x, "y": origin_y,
-                                   "width": 128, "height": 122, "water_shapes": shapes,
-                                   "pixel_counts": {str(v): counts[v] for v in range(4)}})
-        resources.append({"district": i, "scene": str(scene_path.relative_to(ROOT)),
-                          "scene_sha256": sha(scene_path.read_bytes()),
-                          "collision_encoding_sha256": sha(scene["collisions"].encode()),
-                          "collision_bytes_sha256": sha(bytes(grid)),
-                          "art_metadata": str(metadata_path.relative_to(ROOT)),
-                          "art_metadata_sha256": sha(metadata_path.read_bytes())})
-
+        require(decode_grid(scene.get("collisions"), 128 * 122) == world2x.scene_grid(district["id"]),
+                "Registered scene collisions differ from the art")
+        resources.append({"district": district["id"], "scene": str(scene_path.relative_to(ROOT)),
+                          "collision_encoding_sha256": sha(scene["collisions"].encode())})
+    # One map pixel per 2 x 2 tiles: the commonest ground, roads first on a tie.
+    width, height = 4 * tw // 2, th // 2
+    tile_width, tile_height = 64, (height + 7) // 8
+    require(width <= tile_width * 8, "Atlas wider than its 64-tile rows")
+    raster = [[SOLID] * (tile_width * 8) for _ in range(tile_height * 8)]
+    order = (ROAD, WALK, WATER, SOLID)
+    for y in range(height):
+        for x in range(width):
+            cells = Counter(ground[2 * y + dy][2 * x + dx] for dy in (0, 1) for dx in (0, 1))
+            raster[y][x] = max(order, key=lambda v: (cells[v], -order.index(v)))
+    # A lone off-ground pixel (a park tree, a gap between houses) takes its
+    # surroundings: the map reads as ground, not noise, and repeats tiles.
+    for _ in range(2):
+        before = [row[:] for row in raster]
+        for y in range(1, height - 1):
+            for x in range(1, width - 1):
+                value = before[y][x]
+                if value == ROAD:
+                    continue
+                near = Counter((before[y - 1][x], before[y + 1][x], before[y][x - 1], before[y][x + 1]))
+                common, n = near.most_common(1)[0]
+                if n >= 3 and common != value and common != ROAD:
+                    raster[y][x] = common
     patterns, indices, lookup = [], [], {}
     for ty in range(tile_height):
         for tx in range(tile_width):
             pixels = [value for row in raster[ty * 8:ty * 8 + 8] for value in row[tx * 8:tx * 8 + 8]]
-            packed = pack_tile(pixels)
-            require(unpack_tile(packed) == pixels, "Native2bpp tile round trip failed")
+            # One stored pattern serves its mirror images (CGB tile flips).
+            flips, packed = min(((f, pack_tile(flipped(pixels, f))) for f in range(4)), key=lambda c: c[1])
+            require(flipped(unpack_tile(packed), flips) == pixels, "Native2bpp tile round trip failed")
             if packed not in lookup:
                 lookup[packed] = len(patterns)
                 patterns.append(packed)
-            indices.append(lookup[packed])
-    require(0 < len(patterns) <= 65535 and all(0 <= i < len(patterns) for i in indices),
+            indices.append(lookup[packed] | (FLIP_X if flips & 1 else 0) | (FLIP_Y if flips & 2 else 0))
+    require(0 < len(patterns) < FLIP_X and all(0 <= i & 0x3FFF < len(patterns) for i in indices),
             "Atlas dictionary indices cannot be represented natively")
     # Prove all225 allowed20x12 viewports, rather than checking district centres.
     visible = []
     for y in range(tile_height - VIEW_HEIGHT + 1):
-        visible.append([len({indices[yy * tile_width + xx]
+        visible.append([len({indices[yy * tile_width + xx] & 0x3FFF
                              for yy in range(y, y + VIEW_HEIGHT) for xx in range(x, x + VIEW_WIDTH)})
                         for x in range(tile_width - VIEW_WIDTH + 1)])
     worst = max(v for row in visible for v in row)
@@ -246,23 +245,24 @@ def model():
     # Reconstruct the complete raster independently from the dictionary layout.
     reconstructed = [[SOLID] * (tile_width * 8) for _ in range(tile_height * 8)]
     for i, pattern in enumerate(indices):
-        pixels = unpack_tile(patterns[pattern])
+        pixels = flipped(unpack_tile(patterns[pattern & 0x3FFF]), (1 if pattern & FLIP_X else 0) | (2 if pattern & FLIP_Y else 0))
         x, y = (i % tile_width) * 8, (i // tile_width) * 8
         for dy in range(8):
             reconstructed[y + dy][x:x + 8] = pixels[dy * 8:dy * 8 + 8]
     require(reconstructed == raster, "Dictionary schematic differs from source raster")
-    require(all(v == SOLID for row in raster[height:] for v in row), "Atlas padding must be solid")
+    require(all(v == SOLID for row in raster[height:] for v in row) and all(v == SOLID for row in raster for v in row[width:]),
+            "Atlas padding must be solid")
     flat = bytes(v for row in raster[:height] for v in row[:width])
     return {"format": "toronto-native-atlas-1", "status": "Original generated schematic; ROM/UI not yet verified",
-            "projection": "North-up ground permissions at one map pixel per native8x8 tile; original compression",
-            "scope": "Only four registered scenes, not complete former Toronto coverage or new transit service",
+            "projection": "North-up ground at one map pixel per 2x2 native tiles (16 world pixels) of the double-scale districts; original compression",
+            "scope": "The four compressed districts in sixteen registered scenes, not complete former Toronto coverage or new transit service",
             "scale": SCALE, "width_pixels": width, "height_pixels": height,
             "padded_height_pixels": tile_height * 8, "tile_width": tile_width, "tile_height": tile_height,
             "ground_values": {"solid": SOLID, "road": ROAD, "walk": WALK, "water": WATER},
-            "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour excludes Island land. East has no water.",
+            "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour excludes Island land. East has no water. Each map pixel takes the commonest of its four tiles (road, walk, water, solid on a tie).",
             "world_sha256": sha(world_path.read_bytes()), "canonical_district_header_sha256": sha(canonical_text.encode()),
             "sources": resources, "districts": compiled_districts,
-            "visual_west_to_east": [d["id"] for d in sorted(compiled_districts, key=lambda d: (d["y"], d["x"]))],
+            "visual_west_to_east": [d["plan_district"] for d in sorted(compiled_districts, key=lambda d: d["x"])],
             "raster_values_sha256": sha(flat), "patterns_2bpp_hex": [p.hex() for p in patterns],
             "tile_pattern_indices": indices,
             "budgets": {"dictionary_patterns": len(patterns), "dictionary_bytes": pattern_bytes,
@@ -285,6 +285,8 @@ def header(data):
         f"#define TD_ATLAS_PATTERNS {data['budgets']['dictionary_patterns']}",
         f"#define TD_ATLAS_VIEW_WIDTH {VIEW_WIDTH}", f"#define TD_ATLAS_VIEW_HEIGHT {VIEW_HEIGHT}",
         f"#define TD_ATLAS_VISIBLE_LIMIT {VISIBLE_LIMIT}",
+        "/* Pattern ids carry CGB flips: bit 14 mirrors left-right, bit 15 top-bottom. */",
+        "#define TD_ATLAS_ID_MASK 0x3FFF", "#define TD_ATLAS_FLIP_X 0x4000", "#define TD_ATLAS_FLIP_Y 0x8000",
         f"#define TD_ATLAS_WORST_VISIBLE {data['budgets']['worst_visible_patterns']}",
         f"#define TD_ATLAS_SOLID {SOLID}", f"#define TD_ATLAS_ROAD {ROAD}",
         f"#define TD_ATLAS_WALK {WALK}", f"#define TD_ATLAS_WATER {WATER}", "",
@@ -303,13 +305,13 @@ def header(data):
 
 
 def source(data):
-    districts = data["districts"]
+    districts = read(ROOT / "content/districts/world.json")["districts"]
     lines = ["/* Generated by scripts/create_atlas.py; source hashes and budgets in content/atlas.json. */",
              "#pragma bank 255", "#include <string.h>", '#include "td_atlas.h"', '#include "td_district.h"',
              f"typedef char td_atlas_registered_count_matches[(TD_DISTRICT_COUNT=={len(districts)})?1:-1];",
              "typedef char td_atlas_registered_dimensions_match[(TD_DISTRICT_PIXEL_WIDTH==1024&&TD_DISTRICT_PIXEL_HEIGHT==976)?1:-1];",
              f"static const UWORD td_atlas_origins[{len(districts)}][2]={{"]
-    lines += ["    {" + f"{d['x']},{d['y']}" + "}," for d in districts]
+    lines += ["    {" + f"{d['atlas_x'] // SCALE},{d['atlas_y'] // SCALE}" + "}," for d in districts]
     lines += ["};", f"static const char td_atlas_names[{len(districts)}][19]={{"]
     lines += [f'    "{d["name"]}",' for d in districts]
     lines += ["};", "static const UBYTE td_atlas_tiles[TD_ATLAS_PATTERNS][16]={"]
@@ -323,8 +325,8 @@ def source(data):
               "    *width_pixels=TD_ATLAS_WIDTH_PIXELS;*height_pixels=TD_ATLAS_HEIGHT_PIXELS;return TRUE;", "}",
               "UBYTE td_atlas_position(UBYTE district,UWORD local_u,UWORD local_v,UWORD *x,UWORD *y) BANKED {",
               "    if(!x||!y||district>=TD_DISTRICT_COUNT||local_u>=TD_DISTRICT_PIXEL_WIDTH||local_v>=TD_DISTRICT_PIXEL_HEIGHT)return FALSE;",
-              "    *x=td_atlas_origins[district][0]+(local_u>>3);",
-              "    *y=td_atlas_origins[district][1]+(local_v>>3);return TRUE;", "}",
+              f"    *x=td_atlas_origins[district][0]+(local_u>>{SHIFT});",
+              f"    *y=td_atlas_origins[district][1]+(local_v>>{SHIFT});return TRUE;", "}",
               "UBYTE td_atlas_row(UBYTE tile_x,UBYTE tile_y,UBYTE count,UWORD *patterns) BANKED {",
               "    UBYTE i;UWORD offset;",
               "    if(!patterns||!count||count>TD_ATLAS_VIEW_WIDTH||tile_x>=TD_ATLAS_TILE_WIDTH||tile_y>=TD_ATLAS_TILE_HEIGHT||count>TD_ATLAS_TILE_WIDTH-tile_x)return FALSE;",
@@ -332,7 +334,7 @@ def source(data):
               "    for(i=0;i<count;i++)patterns[i]=td_atlas_map[offset+i];",
               "    return TRUE;", "}",
               "UBYTE td_atlas_pattern(UWORD id,UBYTE *tile16) BANKED {",
-              "    if(!tile16||id>=TD_ATLAS_PATTERNS)return FALSE;",
+              "    id&=TD_ATLAS_ID_MASK;if(!tile16||id>=TD_ATLAS_PATTERNS)return FALSE;",
               "    memcpy(tile16,td_atlas_tiles[id],16);return TRUE;", "}",
               "UBYTE td_atlas_district(UWORD x,UWORD y,char *name19) BANKED {",
               "    UBYTE district;UWORD left,top;",
@@ -357,7 +359,7 @@ def main():
         else:
             path.write_text(expected)
     budget = data["budgets"]
-    print(f"Native atlas {'matches' if args.check else 'generated'}:512x122,64x16 tiles,{budget['dictionary_patterns']} patterns; "
+    print(f"Native atlas {'matches' if args.check else 'generated'}:{data['width_pixels']}x{data['height_pixels']},{data['tile_width']}x{data['tile_height']} tiles,{budget['dictionary_patterns']} patterns; "
           f"every20x12 viewport<={budget['worst_visible_patterns']}/{VISIBLE_LIMIT}; "
           f"{budget['native_data_bytes']}/{DATA_LIMIT} ROM data bytes,no persistent WRAM. ROM/UI proof pending.")
 

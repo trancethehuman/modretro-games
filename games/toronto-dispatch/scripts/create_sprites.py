@@ -291,7 +291,8 @@ def outputs():
         files[PROJECT / f'project/palettes/td_sprite_{key}.gbsres'] = json.dumps(
             {'_resourceType': 'palette', 'id': pid, 'name': 'Sprite ' + name, 'colors': colors,
              'defaultName': 'Sprite ' + name, 'defaultColors': colors}, indent=2) + '\n'
-    for scene in ('toronto_city', 'toronto_west', 'toronto_high_park', 'toronto_east'):
+    import world2x
+    for scene in (world2x.scene_slug(i) for i in range(16)):
         path = PROJECT / f'project/scenes/{scene}/scene.gbsres'
         data = json.loads(path.read_text())
         data['spritePaletteIds'] = palette_ids

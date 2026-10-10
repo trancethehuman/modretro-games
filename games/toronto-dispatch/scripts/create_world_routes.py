@@ -1,68 +1,60 @@
-"""Derive original fixed sidewalk routes from the registered native collision grid."""
+"""Derive original fixed sidewalk routes from each scene's native collision grid."""
 import json
 import sys
 from pathlib import Path
-from check_campaign import decode
-from city_layout import ROAD_HALF, STREETS
+import core2x
+import world2x
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADER = ROOT / "project/plugins/toronto-driving/engine/include/td_world_routes.h"
-# Per-district identity pool (the runtime keeps one bit per identity).
-ROUTE_IDS = 160
+# Per-scene identity pool (the runtime keeps one bit per identity).
+ROUTE_IDS = 128
+
+
+def district_lines(old):
+    """Walking lines (y, x_left, x_right) of a district in world pixels: the
+    middle of both sidewalks of every east-west street, and footpaths."""
+    if old == 0:
+        lines = [(s['at'] + side * (s['half'] + s['walk'] // 2), s['a'], s['b']) for s in core2x.STREETS
+                 if s['axis'] == 'h' and s['walk'] for side in (-1, 1)]
+        # The Islands' paths (plan pixels).
+        m = world2x.district_map(0)
+        for y, a, b in ((920, 336, 600), (936, 336, 600), (912, 640, 784), (912, 800, 928)):
+            lines.append((m.fy.map_int(y), m.fx.map_int(a), m.fx.map_int(b)))
+        return lines
+    metadata = json.loads((ROOT / f'content/districts/{world2x.OLD_NAMES[old]}_art.json').read_text())
+    walk = metadata['road_half_width'] + (metadata['walk_half_width'] - metadata['road_half_width']) // 2
+    lines = []
+    for kind, offsets in (('roads', (-walk, walk)), ('footpaths', (0,))):
+        for route in metadata['world'][kind]:
+            for a, b in zip(route['points'], route['points'][1:]):
+                if a[1] == b[1]:
+                    lines += [(a[1] + off, min(a[0], b[0]), max(a[0], b[0])) for off in offsets]
+    return lines
 
 
 def source():
-    scene = json.loads((ROOT / "project/project/scenes/toronto_city/scene.gbsres").read_text())
-    grid = decode(scene["collisions"])
-    width, height = scene["width"] * 8, scene["height"] * 8
+    district_routes = []
+    for district in range(16):
+        grid = world2x.scene_grid(district)
+        ox, oy = world2x.scene_origin(district)
 
-    def free(x, y):
-        return 0 <= x < width and 0 <= y < height and not grid[(y // 8) * scene["width"] + x // 8] & 15
-
-    routes = []
-    sidewalk_centre = ROAD_HALF + 4
-    # Core: both sidewalks of every east-west street, paced 48 pixels apart,
-    # then the Island paths.
-    lines = [(s['at'] + side * (s['half'] + 4), s['a'], s['b']) for s in STREETS
-             if s['axis'] == 'h' and s['walk'] for side in (-1, 1)]
-    lines += [(920, 336, 600), (936, 336, 600), (912, 640, 784), (912, 800, 928)]
-    for y, left, right in sorted(lines):
-        for start in range((left + 7) // 8 * 8 + 8, right - 64, 48):
-            if all(free(x, y) for x in range(start, start + 64)) and (start, y) not in routes:
-                routes.append((start, y))
-    if len(routes) > ROUTE_IDS:
-        routes = [routes[i * len(routes) // ROUTE_IDS] for i in range(ROUTE_IDS)]
-    assert 24 <= len(routes) <= ROUTE_IDS
-    core_routes = routes
-    district_routes = [core_routes]
-    world = json.loads((ROOT / 'content/districts/world.json').read_text())
-    assert [d['id'] for d in world['districts']] == list(range(len(world['districts'])))
-    for district in world['districts'][1:]:
-        assert district['scene'].startswith('toronto_')
-        slug = district['scene'].removeprefix('toronto_')
-        metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
-        scene = json.loads((ROOT / f'project/project/scenes/toronto_{slug}/scene.gbsres').read_text())
-        grid = decode(scene['collisions'])
+        def free(x, y):
+            return 8 <= x < 1016 and 8 <= y < 968 and not grid[(y // 8) * 128 + x // 8] & 15
         routes = set()
-        for route in metadata['roads'] + metadata['footpaths']:
-            points = route['points']
-            for a, b in zip(points, points[1:]):
-                if a[1] != b[1]:
-                    continue
-                left, right = sorted((a[0], b[0]))
-                offsets = (-sidewalk_centre, sidewalk_centre) if route in metadata['roads'] else (0,)
-                for offset in offsets:
-                    y = a[1] + offset
-                    # Overlapping paces 48 pixels apart for busier pavements.
-                    for start in range((left + 7) // 8 * 8, right - 62, 48):
-                        if all(free(x, y) for x in range(start, start + 64)):
-                            routes.add((start, y))
+        for y, left, right in district_lines(district >> 2):
+            y -= oy
+            # Overlapping paces 48 pixels apart for busier pavements.
+            for start in range(max(left - ox, 8) // 8 * 8 + 8, min(right - ox, 1016) - 64, 48):
+                if all(free(x, y) for x in range(start, start + 64)):
+                    routes.add((start, y))
         routes = sorted(routes, key=lambda p: (p[1], p[0]))
-        assert len(routes) >= 24, f'{slug}: insufficient usable sidewalk routes'
-        # Spread a bounded identity pool across the whole district, north to south.
+        assert len(routes) >= 8, f'{world2x.scene_slug(district)}: insufficient usable sidewalk routes'
+        # Spread a bounded identity pool across the whole scene, north to south.
         if len(routes) > ROUTE_IDS:
             routes = [routes[i * len(routes) // ROUTE_IDS] for i in range(ROUTE_IDS)]
         district_routes.append(routes)
+    core_routes = district_routes[0]
     # Runtime refresh index: identities ordered by y, and for each 32-pixel band
     # the first ordered position at or below that band. A window scan then visits
     # only nearby rows; identities themselves keep their authored order.

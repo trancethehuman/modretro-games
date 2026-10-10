@@ -6,16 +6,42 @@
 #include "data_manager.h"
 #include "vm.h"
 #include "vm_exceptions.h"
-#include "data/scene_toronto_city.h"
-#include "data/scene_toronto_west.h"
-#include "data/scene_toronto_high_park.h"
-#include "data/scene_toronto_east.h"
+#include "data/scene_toronto_core_nw.h"
+#include "data/scene_toronto_core_ne.h"
+#include "data/scene_toronto_core_sw.h"
+#include "data/scene_toronto_core_se.h"
+#include "data/scene_toronto_west_nw.h"
+#include "data/scene_toronto_west_ne.h"
+#include "data/scene_toronto_west_sw.h"
+#include "data/scene_toronto_west_se.h"
+#include "data/scene_toronto_high_park_nw.h"
+#include "data/scene_toronto_high_park_ne.h"
+#include "data/scene_toronto_high_park_sw.h"
+#include "data/scene_toronto_high_park_se.h"
+#include "data/scene_toronto_east_nw.h"
+#include "data/scene_toronto_east_ne.h"
+#include "data/scene_toronto_east_sw.h"
+#include "data/scene_toronto_east_se.h"
 
+/* District id = plan district * 4 + quadrant (NW, NE, SW, SE): the core,
+ * west, High Park and east, each drawn at double scale in four scenes. */
 static const far_ptr_t td_district_scenes[TD_DISTRICT_COUNT]={
-    TO_FAR_PTR_T(scene_toronto_city),
-    TO_FAR_PTR_T(scene_toronto_west),
-    TO_FAR_PTR_T(scene_toronto_high_park),
-    TO_FAR_PTR_T(scene_toronto_east)
+    TO_FAR_PTR_T(scene_toronto_core_nw),
+    TO_FAR_PTR_T(scene_toronto_core_ne),
+    TO_FAR_PTR_T(scene_toronto_core_sw),
+    TO_FAR_PTR_T(scene_toronto_core_se),
+    TO_FAR_PTR_T(scene_toronto_west_nw),
+    TO_FAR_PTR_T(scene_toronto_west_ne),
+    TO_FAR_PTR_T(scene_toronto_west_sw),
+    TO_FAR_PTR_T(scene_toronto_west_se),
+    TO_FAR_PTR_T(scene_toronto_high_park_nw),
+    TO_FAR_PTR_T(scene_toronto_high_park_ne),
+    TO_FAR_PTR_T(scene_toronto_high_park_sw),
+    TO_FAR_PTR_T(scene_toronto_high_park_se),
+    TO_FAR_PTR_T(scene_toronto_east_nw),
+    TO_FAR_PTR_T(scene_toronto_east_ne),
+    TO_FAR_PTR_T(scene_toronto_east_sw),
+    TO_FAR_PTR_T(scene_toronto_east_se)
 };
 
 /* This persistent WRAM buffer remains valid until core consumes the exception.

@@ -76,7 +76,8 @@ static UBYTE td_world_crossing_from(const td_portal_t *portals,UWORD count,UBYTE
     UBYTE horizontal;const td_portal_t *p;td_crossing_t result;
     if(!portals||!out||!districts||districts>TD_WORLD_MAX_DISTRICTS||count>TD_WORLD_MAX_PORTALS||
        district>=districts||onfoot>1||old_u>=1024*16||u>=1024*16||old_v>=976*16||v>=976*16)return FALSE;
-    limit=(onfoot?28:18)*16;
+    /* Lanes are 24 px either side of a road's centre and sidewalks 16 more. */
+    limit=(onfoot?44:30)*16;
     for(i=0;i<count;i++){
         p=&portals[i];
         if(!td_world_valid_portal(p,districts)||p->from!=district||(!onfoot&&!p->vehicle))continue;
@@ -109,27 +110,55 @@ UBYTE td_world_name(UBYTE district,char *name) BANKED {
     if(district>=TD_DISTRICT_COUNT||!name)return FALSE;
     memcpy(name,td_district_names[district],19);return TRUE;
 }
+/* The generated next-hop table (the same reverse breadth-first search, run
+ * at build time) names the neighbour; the nearest of its entrances wins. */
 UBYTE td_world_route(UBYTE from,UBYTE to,UBYTE onfoot,UWORD u,UWORD v,
                     UWORD target_u,UWORD target_v,td_portal_t *portal) BANKED {
-    return td_world_route_from(td_portals,TD_PORTALS,TD_DISTRICT_COUNT,from,to,onfoot,u,v,target_u,target_v,portal);
+    UBYTE next;UWORD i,score,best=65535;const td_portal_t *p,*selected=NULL;
+    if(!portal||from>=TD_DISTRICT_COUNT||to>=TD_DISTRICT_COUNT||from==to||onfoot>1||u>=1024||v>=976)return FALSE;
+    next=td_world_next[onfoot][from][to];
+    if(next>=TD_DISTRICT_COUNT)return FALSE;
+    for(i=0,p=td_portals;i<TD_PORTALS;i++,p++){
+        if(p->from!=from||p->to!=next||(!onfoot&&!p->vehicle))continue;
+        score=td_world_distance(u,p->u)+td_world_distance(v,p->v);
+        if(next==to)score+=td_world_distance(target_u,p->arrival_u)+td_world_distance(target_v,p->arrival_v);
+        if(score<best){best=score;selected=p;}
+    }
+    if(!selected)return FALSE;
+    *portal=*selected;return TRUE;
+}
+/* A district's four scenes join along open seams: x=1000 (west scenes) and
+ * x=24 (east), y=952 (north) and y=24 (south). Crossing one anywhere keeps
+ * the position in the district; scenes overlap by 976 x 928 px offsets.
+ * The caller validates the destination tile. Seams between districts are
+ * the portal table's. */
+static UBYTE td_world_inner(UBYTE district,UWORD old_u,UWORD old_v,UWORD u,UWORD v,td_crossing_t *out){
+    UBYTE q=district&3;
+    if(!(q&1)&&u>=1000*16&&u>old_u){out->district=district+1;out->u=u-976*16;out->v=v;return TRUE;}
+    if((q&1)&&u<=24*16&&u<old_u){out->district=district-1;out->u=u+976*16;out->v=v;return TRUE;}
+    if(!(q&2)&&v>=952*16&&v>old_v){out->district=district+2;out->u=u;out->v=v-928*16;return TRUE;}
+    if((q&2)&&v<=24*16&&v<old_v){out->district=district-2;out->u=u;out->v=v+928*16;return TRUE;}
+    return FALSE;
 }
 UBYTE td_world_crossing(UBYTE district,UBYTE onfoot,UWORD old_u,UWORD old_v,
                        UWORD u,UWORD v,td_crossing_t *crossing) BANKED {
-    return td_world_crossing_from(td_portals,TD_PORTALS,TD_DISTRICT_COUNT,district,onfoot,old_u,old_v,u,v,crossing);
+    if(!crossing||district>=TD_DISTRICT_COUNT)return FALSE;
+    if(td_world_crossing_from(td_portals,TD_PORTALS,TD_DISTRICT_COUNT,district,onfoot,old_u,old_v,u,v,crossing))return TRUE;
+    return td_world_inner(district,old_u,old_v,u,v,crossing);
 }
 
 static UBYTE td_world_valid_traffic(UBYTE district,const UBYTE *legs){
     UBYTE i,count;
-    if(!district||district>=TD_DISTRICT_COUNT)return FALSE;
+    if(district>=TD_DISTRICT_COUNT)return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++){
-        count=td_west_traffic_counts[district-1][i];
+        count=td_world_traffic_counts[district][i];
         if(count<2||count>TD_TRAFFIC_POINTS||(legs&&legs[i]>=count))return FALSE;
     }
     return TRUE;
 }
 static void td_world_sample(UBYTE district,UBYTE i,UBYTE leg,td_traffic_sample_t *sample){
-    const UWORD (*path)[2]=td_west_traffic[district-1][i];
-    UBYTE count=td_west_traffic_counts[district-1][i],previous=leg?leg-1:count-1;
+    const UWORD (*path)[2]=td_world_traffic[district][i];
+    UBYTE count=td_world_traffic_counts[district][i],previous=leg?leg-1:count-1;
     sample->u=path[leg][0]*16;sample->v=path[leg][1]*16;sample->count=count;
     sample->frame=path[leg][0]>path[previous][0]?0:path[leg][0]<path[previous][0]?4:path[leg][1]>path[previous][1]?2:6;
     sample->frame+=(i==5?1:i%4)*8;
@@ -138,7 +167,7 @@ UBYTE td_world_traffic_init(UBYTE district,UWORD *u,UWORD *v,UBYTE *legs,td_traf
     UBYTE i;
     if(!u||!v||!legs||!samples||!td_world_valid_traffic(district,NULL))return FALSE;
     for(i=0;i<TD_TRAFFIC_COUNT;i++){
-        u[i]=td_west_traffic[district-1][i][0][0]*16;v[i]=td_west_traffic[district-1][i][0][1]*16;
+        u[i]=td_world_traffic[district][i][0][0]*16;v[i]=td_world_traffic[district][i][0][1]*16;
         legs[i]=1;td_world_sample(district,i,1,&samples[i]);
     }
     return TRUE;
@@ -160,7 +189,7 @@ UBYTE td_world_traffic_recycle(UBYTE district,UBYTE i,UWORD pu,UWORD pv,UWORD vx
     const UWORD (*path)[2];UBYTE k,count,best_leg=TD_NONE_LEG;
     UWORD ax,ay,bx,by,lo,hi,x,y,d,best=TD_RECYCLE_REACH,best_x=0,best_y=0;
     if(!u||!v||!leg||!sample||!td_world_valid_traffic(district,NULL)||i>=TD_TRAFFIC_COUNT)return FALSE;
-    path=td_west_traffic[district-1][i];count=td_west_traffic_counts[district-1][i];
+    path=td_world_traffic[district][i];count=td_world_traffic_counts[district][i];
     for(k=0;k<count;k++){
         ax=path[k?k-1:count-1][0];ay=path[k?k-1:count-1][1];bx=path[k][0];by=path[k][1];
         if(ay==by){
@@ -180,5 +209,12 @@ UBYTE td_world_traffic_recycle(UBYTE district,UBYTE i,UWORD pu,UWORD pv,UWORD vx
     }
     if(best_leg==TD_NONE_LEG)return FALSE;
     *u=best_x*16;*v=best_y*16;*leg=best_leg;td_world_sample(district,i,best_leg,sample);
+    return TRUE;
+}
+/* The scene's signal junctions (whole pixels); 0xFFFF marks an unused slot. */
+UBYTE td_world_signals(UBYTE district,UWORD *u,UWORD *v) BANKED {
+    UBYTE i;
+    if(!u||!v||district>=TD_DISTRICT_COUNT)return FALSE;
+    for(i=0;i<TD_SIGNALS;i++){u[i]=td_world_signals_at[district][i][0];v[i]=td_world_signals_at[district][i][1];}
     return TRUE;
 }

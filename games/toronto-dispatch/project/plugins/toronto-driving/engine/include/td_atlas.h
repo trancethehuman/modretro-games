@@ -2,16 +2,20 @@
 #ifndef TD_ATLAS_H
 #define TD_ATLAS_H
 #include <gbdk/platform.h>
-#define TD_ATLAS_SCALE 8
-#define TD_ATLAS_WIDTH_PIXELS 512
-#define TD_ATLAS_HEIGHT_PIXELS 122
+#define TD_ATLAS_SCALE 16
+#define TD_ATLAS_WIDTH_PIXELS 500
+#define TD_ATLAS_HEIGHT_PIXELS 119
 #define TD_ATLAS_TILE_WIDTH 64
-#define TD_ATLAS_TILE_HEIGHT 16
-#define TD_ATLAS_PATTERNS 488
+#define TD_ATLAS_TILE_HEIGHT 15
+#define TD_ATLAS_PATTERNS 498
 #define TD_ATLAS_VIEW_WIDTH 20
 #define TD_ATLAS_VIEW_HEIGHT 12
-#define TD_ATLAS_VISIBLE_LIMIT 172
-#define TD_ATLAS_WORST_VISIBLE 172
+#define TD_ATLAS_VISIBLE_LIMIT 181
+/* Pattern ids carry CGB flips: bit 14 mirrors left-right, bit 15 top-bottom. */
+#define TD_ATLAS_ID_MASK 0x3FFF
+#define TD_ATLAS_FLIP_X 0x4000
+#define TD_ATLAS_FLIP_Y 0x8000
+#define TD_ATLAS_WORST_VISIBLE 175
 #define TD_ATLAS_SOLID 0
 #define TD_ATLAS_ROAD 1
 #define TD_ATLAS_WALK 2

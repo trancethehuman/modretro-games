@@ -38,18 +38,18 @@ static void test_positions(void) {
         const oracle_district_t *d=&oracle_districts[index];
         for(UWORD u=0;u<d->width;u++) {
             UWORD x=65535,y=65535;
-            expect(td_atlas_position(d->id,u,555,&x,&y)&&x==d->x+u/8&&y==d->y+555/8,
-                   "every local horizontal pixel maps north-up at exact one-eighth scale");
+            expect(td_atlas_position(d->id,u,555,&x,&y)&&x==d->x+u/16&&y==d->y+555/16,
+                   "every local horizontal pixel maps north-up at exact one-sixteenth scale");
         }
         for(UWORD v=0;v<d->height;v++) {
             UWORD x=65535,y=65535;
-            expect(td_atlas_position(d->id,511,v,&x,&y)&&x==d->x+511/8&&y==d->y+v/8,
-                   "every local vertical pixel maps north-up at exact one-eighth scale");
+            expect(td_atlas_position(d->id,511,v,&x,&y)&&x==d->x+511/16&&y==d->y+v/16,
+                   "every local vertical pixel maps north-up at exact one-sixteenth scale");
         }
         /* Independent resource tile centres cover every source collision cell. */
         for(UWORD v=4;v<d->height;v+=8)for(UWORD u=4;u<d->width;u+=8) {
             UWORD x=65535,y=65535;
-            expect(td_atlas_position(d->id,u,v,&x,&y)&&x==d->x+u/8&&y==d->y+v/8,
+            expect(td_atlas_position(d->id,u,v,&x,&y)&&x==d->x+u/16&&y==d->y+v/16,
                    "all registered collision centres map into the correct atlas district");
         }
         UWORD x=12345,y=23456;
@@ -74,7 +74,7 @@ static void test_positions(void) {
 
 static void test_rows_and_patterns(void) {
     UWORD ids[22];UBYTE tile[18];
-    const unsigned tile_width=ORACLE_WIDTH/8,tile_height=ORACLE_PADDED_HEIGHT/8;
+    const unsigned tile_width=ORACLE_ROW/8,tile_height=ORACLE_PADDED_HEIGHT/8;
     for(unsigned y=0;y<tile_height;y++)for(unsigned x=0;x<tile_width;x++) {
         ids[0]=43210;ids[1]=32109;ids[2]=21098;
         int okay=td_atlas_row((UBYTE)x,(UBYTE)y,1,&ids[1]);
@@ -83,16 +83,17 @@ static void test_rows_and_patterns(void) {
         if(!okay)continue;
         rows[y*tile_width+x]=ids[1];
         memset(tile,0xA5,sizeof(tile));
-        okay=td_atlas_pattern(ids[1],tile+1);
+        okay=td_atlas_pattern(ids[1]&TD_ATLAS_ID_MASK,tile+1);
         expect(okay&&tile[0]==0xA5&&tile[17]==0xA5,
                "pattern getter copies exactly sixteen native bytes");
         if(!okay)continue;
         /* Decode the Game Boy wire format: each pixel's low/high plane are
          * row bytes0/1, with bit7 at the left. Compare all65536atlaspixels. */
         for(unsigned py=0;py<8;py++)for(unsigned px=0;px<8;px++) {
-            unsigned bit=7-px;
-            UBYTE colour=((tile[1+py*2]>>bit)&1)|(((tile[2+py*2]>>bit)&1)<<1);
-            unsigned position=(y*8+py)*ORACLE_WIDTH+x*8+px;
+            /* The stored pattern draws mirrored per the id's CGB flip bits. */
+            unsigned sx=ids[1]&TD_ATLAS_FLIP_X?7-px:px,sy=ids[1]&TD_ATLAS_FLIP_Y?7-py:py,bit=7-sx;
+            UBYTE colour=((tile[1+sy*2]>>bit)&1)|(((tile[2+sy*2]>>bit)&1)<<1);
+            unsigned position=(y*8+py)*ORACLE_ROW+x*8+px;
             expect(colour==oracle_pixels[position],
                    "decoded native dictionary pixel matches independent registered collision/water oracle");
         }
@@ -110,6 +111,7 @@ static void test_rows_and_patterns(void) {
     /* IDs must be a contiguous, fully referenced dictionary: a zero-filled or
      * missing pattern remains observable in the exhaustive pixel comparison. */
     UWORD highest=0;
+    for(unsigned i=0;i<tile_width*tile_height;i++)rows[i]&=TD_ATLAS_ID_MASK;
     for(unsigned i=0;i<tile_width*tile_height;i++)if(rows[i]>highest)highest=rows[i];
     expect(highest<tile_width*tile_height,"dictionary IDs remain bounded by the authored tile count");
     if(highest>=tile_width*tile_height)return;
@@ -126,7 +128,7 @@ static void test_rows_and_patterns(void) {
     expect(!td_atlas_pattern(65535,tile+1),"maximum native pattern word is rejected");
     expect(!td_atlas_pattern(0,NULL),"null native pattern output is rejected");
     /* The real fullscreen ground viewport is20x12tiles. Font and marker slots
-     * reserve the rest of the CGB tile bank, so172unique patterns is its cap. */
+     * reserve the rest of the CGB tile bank, so181unique patterns is its cap. */
     for(unsigned y=0;y+12<=tile_height;y++)for(unsigned x=0;x+20<=tile_width;x++) {
         UWORD seen[240];unsigned used=0;
         for(unsigned py=0;py<12;py++)for(unsigned px=0;px<20;px++) {
@@ -134,7 +136,7 @@ static void test_rows_and_patterns(void) {
             for(i=0;i<used;i++)if(seen[i]==id)break;
             if(i==used)seen[used++]=id;
         }
-        expect(used<=172,"every actual twenty-by-twelve viewport fits native atlas pattern slots");
+        expect(used<=TD_ATLAS_VISIBLE_LIMIT,"every actual twenty-by-twelve viewport fits native atlas pattern slots");
     }
     const UBYTE invalid[][3]={{0,0,0},{0,0,21},{0,0,255},{64,0,1},{63,0,2},
                             {45,0,20},{0,16,1},{0,255,1},{255,0,1},{255,255,255}};
@@ -151,15 +153,24 @@ static void test_district_names(void) {
     char name[21];
     for(unsigned index=0;index<ORACLE_DISTRICT_COUNT;index++) {
         const oracle_district_t *d=&oracle_districts[index];
-        for(UWORD y=0;y<d->height/8;y++)for(UWORD x=0;x<d->width/8;x++) {
+        for(UWORD y=0;y<d->height/16;y++)for(UWORD x=0;x<d->width/16;x++) {
+            /* Neighbouring scenes overlap by three map pixels: the first
+               registered scene there names it. */
+            const oracle_district_t *first=d;
+            for(unsigned k=0;k<index;k++){
+                const oracle_district_t *o=&oracle_districts[k];
+                if(d->x+x>=o->x&&d->x+x<o->x+o->width/16&&d->y+y>=o->y&&d->y+y<o->y+o->height/16){first=o;break;}
+            }
             memset(name,0xA5,sizeof(name));
             int okay=td_atlas_district(d->x+x,d->y+y,name+1);
             expect(okay&&name[0]==(char)0xA5&&name[20]==(char)0xA5,
                    "every atlas pixel resolves a bounded registered district name");
-            if(okay)expect(!strcmp(name+1,d->name),"atlas district name matches registered geographic placement");
+            if(okay)expect(!strcmp(name+1,first->name),"atlas district name matches registered geographic placement");
         }
     }
     const UWORD invalid[][2]={{ORACLE_WIDTH,0},{0,ORACLE_HEIGHT},{65535,65535},{0,127}};
+    /* Inside the map, the gaps between districts' scenes: none (districts
+       touch); off-map pixels below are rejected. */
     for(unsigned i=0;i<sizeof(invalid)/sizeof(invalid[0]);i++) {
         memset(name,0xA5,sizeof(name));
         expect(!td_atlas_district(invalid[i][0],invalid[i][1],name+1),

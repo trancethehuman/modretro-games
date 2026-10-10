@@ -26,6 +26,9 @@ FIXTURES = ROOT / "tests/engine"
 
 
 def load_module(path, name):
+    import sys
+    if str(path.parent) not in sys.path:
+        sys.path.insert(0, str(path.parent))
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -69,8 +72,9 @@ def native_fixture(game, include):
             all(type(entry["id"]) is int for entry in entries) and
             [entry["id"] for entry in entries] == list(range(districts)),
             "Registered world IDs must be contiguous, ordered and match TD_DISTRICT_COUNT.")
-    require([entry["scene"] for entry in entries[:3]] == ["toronto_city", "toronto_west", "toronto_high_park"],
-            "The tested core/west/High Park district identities must remain unchanged.")
+    require([entry["scene"] for entry in entries] == [f"toronto_{d}_{q}" for d in ("core", "west", "high_park", "east")
+                                                        for q in ("nw", "ne", "sw", "se")],
+            "The tested sixteen-scene district identities must remain unchanged.")
     require(len({entry["scene"] for entry in entries}) == districts and
             len({entry["symbol"] for entry in entries}) == districts,
             "Registered scene names and symbols must be unique.")
@@ -102,10 +106,10 @@ def native_fixture(game, include):
             [stop["id"] for stop in stop_rows] == list(range(stops)), "Campaign stop IDs must remain contiguous and ordered.")
     require([job["id"] for job in job_rows] == [f"contract-{index:02d}" for index in range(1, quests + 1)],
             "Campaign contract IDs must remain contiguous and ordered.")
-    original_stops = [{field: stop[field] for field in ("id", "u", "v", "name", "transit")} for stop in stop_rows[:27]]
+    original_stops = [{field: stop[field] for field in ("id", "district", "u", "v", "name", "transit")} for stop in stop_rows[:27]]
     original_jobs = [{field: job[field] for field in core.BASE_QUEST_FIELDS} for job in job_rows[:72]]
     require(validator.canonical_sha(original_stops) == core.BASE_STOPS_SHA256 and
-            all(stop.get("district", 0) == 0 and stop.get("reserved", 0) == 0 for stop in stop_rows[:27]),
+            all(stop["district"] >> 2 == 0 and stop.get("reserved", 0) == 0 for stop in stop_rows[:27]),
             "Original 27 core stops changed.")
     require(validator.canonical_sha(original_jobs) == core.BASE_QUESTS_SHA256,
             "Original 72 contract fields changed.")

@@ -10,14 +10,19 @@ neighbourhood is wider than this compressed map, its rectangle is design.
 Landmarks come from the generated art (content/city_art.json and the
 district art files), junctions from the street layouts.
 
+Places are worked out per district in district-world pixels (the double-
+scale drawing, world2x.py) and cut into its four scenes.
+
 Writes content/places.json and engine/src/td_places.c. `--check` verifies
 both without writing.
 """
 from pathlib import Path
 import json, sys
 import city_layout as L
+import core2x
 import west_layout as W
 import east_layout as E
+import world2x
 from create_city_art import REGIONS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -133,7 +138,23 @@ def inverse(anchors, px):
     return pts[-1][1] + (px - pts[-1][0]) * 100
 
 
+def plan_rect(old, rect):
+    """A plan rectangle (x0, y0, x1, y1) in district-world pixels; the plan's
+    scene edges stay the district's edges."""
+    m = world2x.district_map(old)
+    x0, y0, x1, y1 = rect
+    X0 = 0 if x0 <= 0 else m.fx.map_int(x0)
+    Y0 = 0 if y0 <= 0 else m.fy.map_int(y0)
+    X1 = world2x.WORLD_W if x1 >= world2x.OLD_W else m.fx.map_int(x1)
+    Y1 = world2x.WORLD_H if y1 >= world2x.OLD_H else m.fy.map_int(y1)
+    return (X0, Y0, X1, Y1)
+
+
 def core_areas():
+    return [(n, plan_rect(0, r)) for n, r in core_areas_plan()]
+
+
+def core_areas_plan():
     out = [(n, r) for n, r in CORE_AREAS_FIRST]
     for name, u0, u1, w0, w1, _ in REGIONS:
         x0, x1 = L.map_u(u0), L.map_u(u1)
@@ -151,7 +172,7 @@ def core_areas():
 
 
 def core_junctions():
-    hs = [s for s in L.STREETS if s['axis'] == 'h']; vs = [s for s in L.STREETS if s['axis'] == 'v']
+    hs = [s for s in core2x.STREETS if s['axis'] == 'h']; vs = [s for s in core2x.STREETS if s['axis'] == 'v']
     out = []
 
     def label(s, p):
@@ -256,8 +277,8 @@ def core_marks():
     return marks_from(entries)
 
 
-def scene_marks(slug):
-    art = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
+def scene_marks(slug, old):
+    art = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())['plan']
     entries = [(p['name'], p['rect']) for p in art.get('parks', [])]
     for p in art.get('parks', []):
         for f in p.get('features', []):
@@ -269,16 +290,48 @@ def scene_marks(slug):
         xs = [p[0] for p in art['pond']]; ys = [p[1] for p in art['pond']]
         entries.append(('GRENADIER POND', [min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys)]))
     entries += [(m['name'], [m['x'], m['y'], m['width'], m['depth']]) for m in art.get('landmarks', [])]
-    return marks_from(entries)
+    # Plan rectangles (x, y, w, h) in district-world pixels.
+    mapped = []
+    for name, (x, y, w, h) in entries:
+        X0, Y0, X1, Y1 = plan_rect(old, (x, y, x + w, y + h))
+        mapped.append((name, [X0, Y0, X1 - X0, Y1 - Y0]))
+    return marks_from(mapped)
+
+
+def world_spec(slug):
+    return json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())['world']
+
+
+def split(district_places):
+    """Each scene's share of its district's places, in scene pixels; areas
+    keep their order (first match wins)."""
+    scenes = []
+    for new_id in range(16):
+        places = district_places[new_id >> 2]
+        ox, oy = world2x.scene_origin(new_id)
+        scene = {}
+        for kind in ('areas', 'marks', 'junctions'):
+            out = []
+            for name, (x0, y0, x1, y1) in places[kind]:
+                if x1 <= ox or x0 >= ox + world2x.SCENE_W or y1 <= oy or y0 >= oy + world2x.SCENE_H:
+                    continue
+                out.append((name, (max(x0 - ox, 0), max(y0 - oy, 0), min(x1 - ox, world2x.SCENE_W), min(y1 - oy, world2x.SCENE_H))))
+            scene[kind] = out
+        scenes.append(scene)
+    return scenes
 
 
 def build():
-    scenes = [
+    districts = [
         {'areas': core_areas(), 'marks': core_marks(), 'junctions': core_junctions()},
-        {'areas': SCENE_AREAS[1], 'marks': scene_marks('west'), 'junctions': graph_junctions(W.WEST, W.ROAD_HALF)},
-        {'areas': SCENE_AREAS[2], 'marks': scene_marks('high_park'), 'junctions': graph_junctions(W.HIGH_PARK, W.ROAD_HALF)},
-        {'areas': SCENE_AREAS[3], 'marks': scene_marks('east'), 'junctions': graph_junctions(E.EAST, E.ROAD_HALF)},
+        {'areas': [(n, plan_rect(1, r)) for n, r in SCENE_AREAS[1]], 'marks': scene_marks('west', 1),
+         'junctions': graph_junctions(world_spec('west'), 24)},
+        {'areas': [(n, plan_rect(2, r)) for n, r in SCENE_AREAS[2]], 'marks': scene_marks('high_park', 2),
+         'junctions': graph_junctions(world_spec('high_park'), 24)},
+        {'areas': [(n, plan_rect(3, r)) for n, r in SCENE_AREAS[3]], 'marks': scene_marks('east', 3),
+         'junctions': graph_junctions(world_spec('east'), 24)},
     ]
+    scenes = split(districts)
     for s in scenes:
         for kind in ('areas', 'marks', 'junctions'):
             for name, _ in s[kind]:
@@ -300,8 +353,10 @@ def c_source(scenes):
     # lookup reads only the spots near the courier. Areas keep their order
     # (first match wins) and are bucketed with their hold margin.
     spots, spot_start, spot_list = [], [], []
+    firsts = []
     for s in scenes:
         first = len(spots)
+        firsts.append(first)
         for kind, k in enumerate(kinds):
             for name, (x0, y0, x1, y1) in s[k]:
                 # Bytes in 4-pixel units (inclusive), so the lookup compares
@@ -317,9 +372,10 @@ def c_source(scenes):
                 for i in range(first, len(spots)):
                     x0, y0, x1, y1, kind, _ = spots[i]
                     if x0 <= X1 and X0 <= x1 and y0 <= Y1 and Y0 <= y1:
-                        spot_list.append(i)
+                        spot_list.append(i - first)
     spot_start.append(len(spot_list))
-    assert len(spots) < 256 and len(spot_list) < 65536
+    assert len(spots) < 65536 and len(spot_list) < 65536
+    assert all(f2 - f1 <= 256 for f1, f2 in zip(firsts, firsts[1:] + [len(spots)]))
     all_names = names['areas'] + names['marks'] + names['junctions']
     first = [0, len(names['areas']), len(names['areas']) + len(names['marks'])]
     lines = ['/* Generated by scripts/create_places.py: neighbourhood, landmark and',
@@ -335,6 +391,8 @@ def c_source(scenes):
     lines += ['  {%d,%d,%d,%d,%d,%d,0,0},' % (x0 // 4, y0 // 4, x1 // 4, y1 // 4, kind, name) for x0, y0, x1, y1, kind, name in spots]
     lines += ['};', f'static const UWORD td_spot_start[{len(spot_start)}]={{{",".join(map(str, spot_start))}}};',
               f'static const UBYTE td_spot_list[{len(spot_list)}]={{{",".join(map(str, spot_list))}}};',
+              '/* Each scene\'s spots start here; td_spot_list counts from it. */',
+              f'static const UWORD td_spot_first[{len(firsts)}]={{{",".join(map(str, firsts))}}};',
               '#define TD_HOLD4 (TD_AREA_HOLD/4)',
               '/* Name ids (TD_PLACE_NONE for none) of the places at (u,v): ids[0] the',
               '   neighbourhood, kept while (u,v) stays within TD_AREA_HOLD pixels of the',
@@ -343,13 +401,13 @@ def c_source(scenes):
               '   stored rectangle includes the hold margin; it contains (u,v) when',
               '   (u,v) is TD_HOLD4 units inside that. */',
               'void td_get_places(UWORD u,UWORD v,UBYTE *ids) BANKED {',
-              '    UBYTE area=TD_PLACE_NONE,hold=0,x,y,n;UWORD k;const UBYTE *list;const td_spot_t *s;',
+              '    UBYTE area=TD_PLACE_NONE,hold=0,x,y,n;UWORD k;const UBYTE *list;const td_spot_t *s,*base;',
               '    ids[1]=ids[2]=TD_PLACE_NONE;',
               '    if(td.district>=TD_DISTRICT_COUNT||u>=1024||v>=976){ids[0]=TD_PLACE_NONE;return;}',
               '    k=(UWORD)td.district*64+((v>>7)<<3)+(u>>7);list=td_spot_list+td_spot_start[k];n=(UBYTE)(td_spot_start[k+1]-td_spot_start[k]);',
-              '    x=(UBYTE)(u>>2);y=(UBYTE)(v>>2);',
+              '    x=(UBYTE)(u>>2);y=(UBYTE)(v>>2);base=td_spots+td_spot_first[td.district];',
               '    for(;n;n--){',
-              '        s=&td_spots[*list++];',
+              '        s=base+*list++;',
               '        if(x<s->x0||x>s->x1||y<s->y0||y>s->y1)continue;',
               '        if(!s->kind){',
               '            if(s->name==ids[0])hold=1;',
@@ -367,7 +425,7 @@ def c_source(scenes):
 
 def main(check=False):
     scenes = build()
-    labels = ['core', 'west', 'high_park', 'east']
+    labels = [world2x.scene_slug(i).removeprefix('toronto_') for i in range(16)]
     content = {'about': 'Names the HUD announces: neighbourhoods on entry, landmarks within reach, junctions crossed. '
                         'Rectangles are native pixels of each scene; sources and the compression notes are in '
                         'content/districts/core-research.json ("navigation").',

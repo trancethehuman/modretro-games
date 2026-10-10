@@ -10,7 +10,8 @@ content/city_art.json. Requires Pillow; no downloaded art or map imagery.
 from pathlib import Path
 import json, os, sys
 from PIL import Image, ImageDraw
-import city_layout as L
+import core2x as L
+import world2x
 from streetcar_art import paint_streetcar_stops
 import city_kit
 
@@ -63,6 +64,15 @@ REGIONS = [
 ]
 
 
+# Streets with TTC streetcar track in the core (None: the whole street; or the
+# x range). Route list: TTC Routes and Schedules, streetcar routes (ttc.ca),
+# reviewed 2026-10-10; the track is drawn on the game's compressed streets.
+STREETCAR_TRACK = {'QUEEN ST': None, 'KING ST': None, 'DUNDAS ST': None, 'COLLEGE ST': None,
+                   'SPADINA AVE': (64, 824), 'BATHURST ST': (64, 736), 'BROADVIEW AVE': (64, 528),
+                   'QUEENS QUAY': (384, 600)}
+
+ZEBRAS = False
+
 # Colour identities by neighbourhood (palette slots; no tiles of their own):
 # houses, and shop rows whose awnings carry the colours.
 HOUSE_SLOT = {'LITTLE PORTUGAL': 2, 'PALMERSTON': 1, 'RIVERDALE': 1}
@@ -78,7 +88,9 @@ def inverse(anchors, px):
 
 
 def region_of(x, y):
-    u, w = inverse(L.U_ANCHORS, x), inverse(L.W_ANCHORS, y)
+    """Neighbourhood at a district-world pixel (2x), looked up at its real
+    downtown-grid position."""
+    u, w = inverse(L.U_ANCHORS, L.old_u(x)), inverse(L.W_ANCHORS, L.old_v(y))
     for name, u0, u1, w0, w1, kind in REGIONS:
         if u0 <= u < u1 and w0 <= w < w1:
             return name, kind
@@ -186,17 +198,37 @@ def main(check=False):
                 box(p, s['at'], 8, 1, 3)
             else:
                 box(s['at'], p, 1, 8, 3)
+    # Streetcar track, two rails down the middle of each lane, on the
+    # streets the TTC's streetcars run (501 Queen, 504 King, 505 Dundas,
+    # 506 Carlton on College/Carlton/Gerrard, 510 Spadina, 511 Bathurst,
+    # 504/505 Broadview and 509/510 on Queens Quay west of Bay). Rails cross
+    # each other at junctions; they stop at the Don and the scene edges
+    # where the street does.
+    for s in L.STREETS:
+        span = STREETCAR_TRACK.get(s['name'], False)
+        if span is False:
+            continue
+        a, b = (s['a'], s['b']) if span is None else (max(span[0], s['a']), min(span[1], s['b']))
+        # Track ends on the tile grid, so a rail end makes no tile of its own.
+        a, b = (a + 7) // 8 * 8, b // 8 * 8
+        lane = s['half'] // 2
+        for o in (-lane - 3, -lane + 3, lane - 3, lane + 3):
+            for p in range(a, b):
+                x, y = (p, s['at'] + o) if s['axis'] == 'h' else (s['at'] + o, p)
+                if L.road(x, y):
+                    d.point((x, y), fill=COLORS[2])
     for v, h in junctions:
         cx, cy = v['at'], h['at']
-        # Zebra bars across an arm where the cross street's sidewalk continues.
-        if h['walk']:
+        # No zebra bars (user direction 2026-10-10: a more minimal look);
+        # the sidewalk corners mark each crossing.
+        if ZEBRAS and h['walk']:
             for arm, top in (('n', cy - h['half'] - h['walk']), ('s', cy + h['half'])):
                 beyond = top - 4 if arm == 'n' else top + h['walk'] + 4
                 if L.road(cx, top + h['walk'] // 2) and L.road(cx, beyond) and \
                    L.road(cx - v['half'] - 4, top + 4, L.WALK_HALF) and L.road(cx + v['half'] + 4, top + 4, L.WALK_HALF):
                     for x in range(cx - v['half'] + 2, cx + v['half'] - 1, 8):
                         box(x, top + 1, 4, h['walk'] - 2, 3)
-        if v['walk']:
+        if ZEBRAS and v['walk']:
             for arm, left in (('w', cx - v['half'] - v['walk']), ('e', cx + v['half'])):
                 beyond = left - 4 if arm == 'w' else left + v['walk'] + 4
                 if L.road(left + v['walk'] // 2, cy) and L.road(beyond, cy) and \
@@ -255,6 +287,13 @@ def main(check=False):
                     plain[i] = collisions[i] == 16 and attrs[i] == 6 and img.crop((tx, ty, tx + 8, ty + 8)).tobytes() == green_px
                 if plain[i]:
                     d.point((px, py), fill=COLORS[0])
+
+    def mirror(x, y, w, h):
+        """Copy the left half of a rectangle onto the right, mirrored, so a
+        symmetric landmark's right half reuses its left half's tiles."""
+        half = w // 2
+        left = img.crop((x, y, x + half, y + h)).transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        img.paste(left, (x + w - half, y))
 
     def lip_free(x, y, w, n):
         return y - n >= my0 and all(collisions[i] != 15 for _, _, i in cells(x, y - n, w, n))
@@ -343,12 +382,13 @@ def main(check=False):
             d.arc((x + 2, y + h - 14, x + w - 3, y + h + 6), 180, 360, fill=COLORS[3], width=2)
             box(x + w - 12, y + 4, 8, 8, 3)
         elif kind == 'crystal':      # ROM: the Crystal's prism on the Bloor St front of the stone wings
-            ccx, ccy = x + 24, y + 8    # a tile corner, so the prism's quarters share tiles
-            for py in range(ccy - 12, ccy + 12):
-                for px in range(ccx - 12, ccx + 12):
+            k = 24 if w >= 64 else 12
+            ccx, ccy = x + w // 2 - (x + w // 2) % 8, y + 16   # a tile corner, so the prism's quarters share tiles
+            for py in range(ccy - k, ccy + k):
+                for px in range(ccx - k, ccx + k):
                     a, b = abs(px + 0.5 - ccx), abs(py + 0.5 - ccy)
-                    if a + b < 12:
-                        c = 0 if a + b >= 11 else 1 if (a < 1 or b < 1 or abs(a - b) < 1) else 3
+                    if a + b < k:
+                        c = 0 if a + b >= k - 1 else 1 if (a < 1 or b < 1 or abs(a - b) < 1) else 3
                         d.point((px, py), fill=COLORS[c])
         elif kind == 'warehouse_chimney':  # Distillery brick works
             box(x + w - 8, y + 2, 4, 12, 0); box(x + w - 7, y + 1, 2, 2, 3)
@@ -469,16 +509,17 @@ def main(check=False):
         the corners, and trees."""
         reserved.append((x0, y0, x1 - x0, y1 - y0))
         cx = (x0 + x1) // 2
-        hx0, hy0, hx1, hy1 = cx - 24, y0, cx + 24, y0 + 24
+        hx0, hy0, hx1, hy1 = cx - 48, y0, cx + 48, y0 + 48
         box(hx0, hy0, hx1 - hx0, hy1 - hy0, 3)
-        for wx0 in (hx0 + 2, cx + 9):
-            box(wx0, hy0 + 6, 13, 12, 2); d.rectangle((wx0, hy0 + 6, wx0 + 12, hy0 + 17), outline=COLORS[0])
-            for mx in range(wx0 + 3, wx0 + 12, 3):
-                d.line((mx, hy0 + 7, mx, hy0 + 16), fill=COLORS[3])
-        d.ellipse((cx - 10, hy0 + 2, cx + 9, hy0 + 21), fill=COLORS[2], outline=COLORS[0])
-        d.line((cx - 1, hy0 + 3, cx - 1, hy0 + 20), fill=COLORS[3]); d.line((cx - 9, hy0 + 11, cx + 8, hy0 + 11), fill=COLORS[3])
-        d.ellipse((cx - 5, hy0 + 7, cx + 4, hy0 + 16), outline=COLORS[3])
-        solid(hx0 + 2, hy0 + 6, hx1 - hx0 - 4, 12)
+        for wx0 in (hx0 + 4, cx + 18):
+            box(wx0, hy0 + 12, 26, 24, 2); d.rectangle((wx0, hy0 + 12, wx0 + 25, hy0 + 35), outline=COLORS[0])
+            for mx in range(wx0 + 3, wx0 + 25, 3):
+                d.line((mx, hy0 + 13, mx, hy0 + 34), fill=COLORS[3])
+        d.ellipse((cx - 20, hy0 + 4, cx + 19, hy0 + 43), fill=COLORS[2], outline=COLORS[0])
+        d.line((cx - 1, hy0 + 5, cx - 1, hy0 + 42), fill=COLORS[3]); d.line((cx - 19, hy0 + 23, cx + 18, hy0 + 23), fill=COLORS[3])
+        d.ellipse((cx - 10, hy0 + 14, cx + 9, hy0 + 33), outline=COLORS[3])
+        mirror(hx0, hy0, hx1 - hx0, hy1 - hy0)
+        solid(hx0 + 4, hy0 + 12, hx1 - hx0 - 8, 24)
         attr(hx0, hy0, hx1 - hx0, hy1 - hy0, 2)
         districts.append({'name': 'Allan Gardens Palm House', 'kind': 'landmark', 'rect': [hx0, hy0, hx1 - hx0, hy1 - hy0]})
         # Paths: south from the Palm House doors to Dundas, and diagonals
@@ -498,10 +539,10 @@ def main(check=False):
         grew from, facing its park, with the walk to Queen St and trees."""
         reserved.append((x0, y0, x1 - x0, y1 - y0))
         cx = (x0 + x1) // 2
-        lm(cx - 16, y0, 32, 16, 0, None, 'The Grange', lip=False)
+        lm(cx - 32, y0, 64, 32, 0, None, 'The Grange', lip=False)
         ok = lawn_only(x0, y0, x1, y1)
-        for py in range(y0 + 20, y1):
-            for px in range(cx - 2, cx + 2):
+        for py in range(y0 + 36, y1):
+            for px in range(cx - 3, cx + 3):
                 if ok(px, py):
                     d.point((px, py), fill=COLORS[3])
         plant_trees(x0, y0, x1, y1, ok)
@@ -513,8 +554,8 @@ def main(check=False):
         the south end facing University Ave and College, its front lawn and
         flagpoles, and the park to the north with paths radiating from the
         King Edward VII statue under old trees. Around the crescent: the ROM
-        and Victoria College at Bloor, University College and the Whitney
-        Block on either side."""
+        and the Gardiner Museum at Bloor, Victoria College on the east side
+        and Convocation Hall's dome on the west."""
         zx0, zy0, zx1, zy1 = L.QP_ZONE
         ix0, iy0, ix1, iy1 = L.QP_INTERIOR
         lx, ly, lw, lh = L.QP_LEGISLATURE
@@ -529,105 +570,121 @@ def main(check=False):
 
         def park_px(px, py):
             return ix0 <= px < ix1 and iy0 <= py < iy1 and ground(px, py)
-        # Paths radiating from the statue as on the real trail network: north
-        # to the crescent's tip, across between Hoskin and Wellesley, south to
-        # the Legislature and on the two northern diagonals (the southern
-        # lawns keep their trees).
+        # Paths radiating from the statue: north to the crescent's tip,
+        # across, south to the Legislature and on the two northern diagonals.
         for py in range(iy0, ly):
             for px in range(ix0, ix1):
                 ax, ay = px - sx + 0.5, py - sy + 0.5
-                if park_px(px, py) and (abs(ax) < 2 or abs(ay) < 2 or (ay < 0 and abs(abs(ax) - abs(ay)) < 1.5)):
+                if park_px(px, py) and (abs(ax) < 3 or abs(ay) < 3 or (ay < 0 and abs(abs(ax) - abs(ay)) < 2)):
                     d.point((px, py), fill=COLORS[3])
-        d.ellipse((sx - 8, sy - 8, sx + 7, sy + 7), fill=COLORS[3], outline=COLORS[0])
+        d.ellipse((sx - 12, sy - 12, sx + 11, sy + 11), fill=COLORS[3], outline=COLORS[0])
         # King Edward VII on horseback, on a stone plinth.
-        d.rectangle((sx - 4, sy - 3, sx + 3, sy + 3), fill=COLORS[1], outline=COLORS[0])
-        box(sx - 3, sy - 1, 6, 2, 0); box(sx + 1, sy - 3, 2, 2, 0)
-        solid(sx - 8, sy - 4, 16, 8, 'King Edward VII statue')
+        d.rectangle((sx - 6, sy - 4, sx + 5, sy + 4), fill=COLORS[1], outline=COLORS[0])
+        box(sx - 4, sy - 1, 8, 2, 0); box(sx + 2, sy - 4, 2, 3, 0)
+        solid(sx - 8, sy - 8, 16, 16, 'King Edward VII statue')
         # The Legislative Building: pink sandstone, slate roofs, end pavilions
         # and the central block with its tower over the porte-cochere.
-        for py in range(ly + 4, ly + lh + 4):
-            for px in range(lx + 4, lx + lw + 4):
+        for py in range(ly + 6, ly + lh + 6):
+            for px in range(lx + 6, lx + lw + 6):
                 if not (lx <= px < lx + lw and ly <= py < ly + lh) and ground(px, py):
                     d.point((px, py), fill=COLORS[0])
-        box(lx, ly + 6, lw, lh - 14, 1); d.rectangle((lx, ly + 6, lx + lw - 1, ly + lh - 9), outline=COLORS[0])
-        d.line((lx + 12, ly + 14, lx + lw - 13, ly + 14), fill=COLORS[0])
-        for px0 in (lx, lx + lw - 12):
-            box(px0, ly + 2, 12, lh - 10, 2); d.rectangle((px0, ly + 2, px0 + 11, ly + lh - 9), outline=COLORS[0])
-            d.line((px0, ly + 2, px0 + 5, ly + 8), fill=COLORS[0]); d.line((px0 + 11, ly + 2, px0 + 6, ly + 8), fill=COLORS[0])
-        cx0 = lx + lw // 2 - 12
-        box(cx0, ly, 24, lh - 6, 2); d.rectangle((cx0, ly, cx0 + 23, ly + lh - 7), outline=COLORS[0])
-        d.line((cx0, ly, cx0 + 7, ly + 7), fill=COLORS[0]); d.line((cx0 + 23, ly, cx0 + 16, ly + 7), fill=COLORS[0])
-        box(cx0 + 7, ly + 5, 10, 10, 1); d.rectangle((cx0 + 7, ly + 5, cx0 + 16, ly + 14), outline=COLORS[0])
-        box(cx0 + 11, ly + 9, 2, 2, 3)
-        box(lx, ly + lh - 8, lw, 8, 2); d.line((lx, ly + lh - 8, lx + lw - 1, ly + lh - 8), fill=COLORS[0])
+        pw, cw = 24, 40
+        box(lx, ly + 8, lw, lh - 20, 1); d.rectangle((lx, ly + 8, lx + lw - 1, ly + lh - 13), outline=COLORS[0])
+        for yy in range(ly + 14, ly + lh - 14, 6):
+            d.line((lx + pw, yy, lx + lw - pw - 1, yy), fill=COLORS[0])
+        for px0 in (lx, lx + lw - pw):
+            box(px0, ly + 2, pw, lh - 14, 2); d.rectangle((px0, ly + 2, px0 + pw - 1, ly + lh - 13), outline=COLORS[0])
+            d.line((px0, ly + 2, px0 + pw // 2 - 1, ly + pw // 2 + 1), fill=COLORS[0])
+            d.line((px0 + pw - 1, ly + 2, px0 + pw // 2, ly + pw // 2 + 1), fill=COLORS[0])
+        cx0 = lx + lw // 2 - cw // 2
+        box(cx0, ly, cw, lh - 10, 2); d.rectangle((cx0, ly, cx0 + cw - 1, ly + lh - 11), outline=COLORS[0])
+        d.line((cx0, ly, cx0 + 11, ly + 11), fill=COLORS[0]); d.line((cx0 + cw - 1, ly, cx0 + cw - 12, ly + 11), fill=COLORS[0])
+        box(cx0 + cw // 2 - 8, ly + 8, 16, 16, 1); d.rectangle((cx0 + cw // 2 - 8, ly + 8, cx0 + cw // 2 + 7, ly + 23), outline=COLORS[0])
+        box(cx0 + cw // 2 - 2, ly + 14, 4, 4, 3)
+        # The south facade: windows along the wings, arches under the tower.
+        box(lx, ly + lh - 12, lw, 12, 2); d.line((lx, ly + lh - 12, lx + lw - 1, ly + lh - 12), fill=COLORS[0])
         d.rectangle((lx, ly, lx + lw - 1, ly + lh - 1), outline=COLORS[0])
-        for wx in range(lx + 3, lx + lw - 3, 4):
-            if not cx0 <= wx < cx0 + 24:
-                box(wx, ly + lh - 6, 2, 3, 3)
-        for ax in range(cx0 + 3, cx0 + 21, 7):
-            box(ax, ly + lh - 6, 5, 6, 3); d.line((ax, ly + lh - 6, ax + 4, ly + lh - 6), fill=COLORS[0])
+        for wx in range(lx + 4, lx + lw - 4, 6):
+            if not cx0 <= wx < cx0 + cw:
+                box(wx, ly + lh - 9, 3, 4, 3)
+        for ax in range(cx0 + 4, cx0 + cw - 6, 8):
+            box(ax, ly + lh - 9, 6, 9, 3); d.line((ax, ly + lh - 9, ax + 5, ly + lh - 9), fill=COLORS[0])
+        mirror(lx, ly, lw, lh)
         solid(lx, ly, lw, lh)
         attr(lx, ly, lw, lh, 3, True)
-        blocks.append({'x': lx, 'y': ly, 'width': lw, 'depth': lh, 'height': 8, 'style': 2,
+        blocks.append({'x': lx, 'y': ly, 'width': lw, 'depth': lh, 'height': 12, 'style': 2,
                        'landmark': 'Ontario Legislative Building', 'kind': 'legislature', 'overhang': 0})
         districts.append({'name': 'Ontario Legislative Building', 'kind': 'landmark', 'rect': [lx, ly, lw, lh]})
         # Front lawn: the walk from College to the doors and two flagpoles.
-        for py in range(ly + lh, iy1):
-            for px in range(sx - 4, sx + 4):
+        for py in range(ly + lh, iy1 + 24):
+            for px in range(sx - 6, sx + 6):
                 if ground(px, py):
                     d.point((px, py), fill=COLORS[3])
-        for fx in (sx - 12, sx + 11):
-            box(fx, ly + lh + 3, 1, 6, 0); d.point((fx, ly + lh + 2), fill=COLORS[3])
+        for fxp in (sx - 20, sx + 19):
+            box(fxp, ly + lh + 6, 1, 10, 0); d.point((fxp, ly + lh + 5), fill=COLORS[3])
         # Museums at Bloor and Queen's Park: the ROM on the west side and the
-        # Gardiner Museum across the road; Victoria College south of the
-        # Gardiner and Convocation Hall's dome south of Hoskin, for the
-        # University of Toronto. The other campus lawns are lawn and trees.
-        lm(416, 104, 40, 32, 3, 'crystal', 'Royal Ontario Museum')
-        solid(416, 96, 40, 8)    # under its roof lip, as before the lip moved onto the tile grid
+        # Gardiner Museum across the road; Victoria College on the east side
+        # and Convocation Hall's dome on the west, for the University of
+        # Toronto. The other campus lawns are lawn and trees.
 
         def clear_of_crescent(x, y, w, h):
             return not any(L.crescent(px + 0.5, py + 0.5, walk=True) or L.road(px, py, L.WALK_HALF)
-                           for py in range(y, y + h) for px in range(x, x + w))
+                           for py in range(y, y + h) for px in range(x, x + w)) and \
+                all(collisions[i] == 16 for _, _, i in cells(x, y, w, h))
+
+        def near_spot(x, y, w, h):
+            """The closest tile-aligned clear spot for a w x h footprint."""
+            x -= x % 8; y -= y % 8
+            for r in range(0, 120, 8):
+                for dx in range(-r, r + 1, 8):
+                    for dy in (-r, r) if abs(dx) != r else range(-r, r + 1, 8):
+                        if clear_of_crescent(x + dx, y + dy, w, h):
+                            return x + dx, y + dy
+            raise AssertionError(('no room near', x, y, w, h))
+        qx = L.fx(512)
+        rom = (*near_spot(qx - 40 - 96, L.fy(64) + 40, 96, 64), 96, 64)
+        lm(*rom, 3, 'crystal', 'Royal Ontario Museum')
         # The Gardiner: a pale limestone box, its glass top floor and terrace
         # looking west over Queen's Park.
-        gx, gy, gw, gh = 552, 96, 32, 24
-        assert clear_of_crescent(gx, gy, gw, gh)
+        gw, gh = 64, 48
+        gx, gy = near_spot(qx + 40, L.fy(64) + 40, gw, gh)
         reserved.append((gx, gy, gw, gh)); cast_shadow(gx, gy, gw, gh)
         box(gx, gy, gw, gh, 3); d.rectangle((gx, gy, gx + gw - 1, gy + gh - 1), outline=COLORS[0])
-        box(gx + 1, gy + 1, 8, gh - 10, 2)
-        for py in range(gy + 3, gy + gh - 9, 4):
-            d.line((gx + 2, py, gx + 7, py), fill=COLORS[1])
-        d.line((gx, gy + gh - 8, gx + gw - 1, gy + gh - 8), fill=COLORS[0])
-        box(gx + 2, gy + gh - 6, gw - 4, 3, 1)
+        box(gx + 2, gy + 2, 16, gh - 16, 2)
+        for py in range(gy + 4, gy + gh - 14, 4):
+            d.line((gx + 3, py, gx + 16, py), fill=COLORS[1])
+        d.line((gx, gy + gh - 12, gx + gw - 1, gy + gh - 12), fill=COLORS[0])
+        box(gx + 2, gy + gh - 9, gw - 4, 5, 1)
         solid(gx, gy, gw, gh); attr(gx, gy, gw, gh, 0, True)
-        blocks.append({'x': gx, 'y': gy, 'width': gw, 'depth': gh, 'height': 8, 'style': 3,
+        blocks.append({'x': gx, 'y': gy, 'width': gw, 'depth': gh, 'height': 12, 'style': 3,
                        'landmark': 'Gardiner Museum', 'kind': 'museum', 'overhang': 0})
         districts.append({'name': 'Gardiner Museum', 'kind': 'landmark', 'rect': [gx, gy, gw, gh]})
         # Victoria College: red sandstone, its tower over the doors.
-        assert clear_of_crescent(584, 128, 24, 24)
-        lm(584, 128, 24, 24, 0, 'clocktower', 'Victoria College')
+        vx, vy = near_spot(L.QP_DIAGONALS[1][2] + 40, (L.QP_DIAGONALS[3][1] + L.QP_DIAGONALS[1][3]) // 2 - 24, 48, 48)
+        lm(vx, vy, 48, 48, 0, 'clocktower', 'Victoria College')
         # Convocation Hall: the domed rotunda, its copper dome ribbed round
-        # the oculus; centred on a tile corner (vertically) and a tile's middle.
-        ccx, ccy, cr = 428, 224, 11.5
-        assert clear_of_crescent(416, 212, 24, 24)
-        for py in range(212, 236):
-            for px in range(416, 440):
+        # the oculus, centred on a tile corner.
+        ccx, ccy = near_spot(L.QP_DIAGONALS[0][2] - 96, (L.QP_DIAGONALS[2][1] + L.QP_DIAGONALS[0][3]) // 2 - 24, 48, 48)
+        ccx += 24; ccy += 24
+        cr = 19.5
+        for py in range(ccy - 20, ccy + 20):
+            for px in range(ccx - 20, ccx + 20):
                 dx, dy = abs(px + 0.5 - ccx), abs(py + 0.5 - ccy)
                 r = (dx * dx + dy * dy) ** 0.5
                 if r >= cr:
                     continue
-                c = 0 if r >= cr - 1 else 3 if (r >= cr - 2.5 or r < 2) else 0 if (dx < 0.6 or dy < 0.6 or abs(dx - dy) < 0.8) else 1
+                c = 0 if r >= cr - 1 else 3 if (r >= cr - 3 or r < 3) else 0 if (dx < 0.6 or dy < 0.6 or abs(dx - dy) < 0.8) else 1
                 d.point((px, py), fill=COLORS[c])
-        reserved.append((416, 212, 24, 24)); solid(420, 216, 16, 16, 'Convocation Hall')
-        districts.append({'name': 'Convocation Hall', 'kind': 'landmark', 'rect': [416, 212, 24, 24]})
+        reserved.append((ccx - 24, ccy - 24, 48, 48)); solid(ccx - 16, ccy - 16, 32, 32, 'Convocation Hall')
+        districts.append({'name': 'Convocation Hall', 'kind': 'landmark', 'rect': [ccx - 24, ccy - 24, 48, 48]})
         # Old trees on plain lawn, tile-aligned so every one reuses the same
         # tiles (a canopy over a path edge would make one-off tiles).
         taken = []
-        for ty in range(zy0, zy1 - 15, 8):
-            for tx in range(zx0, zx1 - 15, 8):
-                if any(abs(tx - ox) < 16 and abs(ty - oy) < 16 for ox, oy in taken):
+        for ty in range(zy0 - zy0 % 8, zy1 - 15, 8):
+            for tx in range(zx0 - zx0 % 8, zx1 - 15, 8):
+                if any(abs(tx - ox) < 24 and abs(ty - oy) < 24 for ox, oy in taken):
                     continue
-                if (tx - sx + 8) ** 2 + (ty - sy + 8) ** 2 < 24 ** 2:
+                if (tx - sx + 8) ** 2 + (ty - sy + 8) ** 2 < 32 ** 2:
                     continue
                 if all(ground(tx + a, ty + b) for a in range(16) for b in range(16)):
                     city_kit.tree(d, tx, ty, COLORS, (tx // 8 + ty // 8) & 1)
@@ -720,16 +777,18 @@ def main(check=False):
         quarters share tiles."""
         reserved.append((x, y, w, h))
         box(x, y, w, h, 3)
-        cx, cy = x + w // 2, y + 16
-        for py in range(cy - 16, cy + 16):
-            for px in range(cx - 16, cx + 16):
+        R = min(w, h) // 2 - 4
+        R -= R % 8
+        cx, cy = x + w // 2 - (x + w // 2) % 8, y + R + 4 - (y + R + 4) % 8
+        for py in range(cy - R, cy + R):
+            for px in range(cx - R, cx + R):
                 dx, dy = abs(px + 0.5 - cx), abs(py + 0.5 - cy)
                 r = (dx * dx + dy * dy) ** 0.5
-                if r >= 15.5:
+                if r >= R - 0.5:
                     continue
-                if r >= 14.3:
+                if r >= R - 1.7:
                     c = 0
-                elif 10 <= r < 11:
+                elif R * 0.62 <= r < R * 0.62 + 1:
                     c = 1
                 elif (dx + dy) % 4 == 1 or abs(dx - dy) % 4 == 0:
                     c = 1
@@ -774,8 +833,8 @@ def main(check=False):
         """Narrow shops and houses, each in its own colour, with striped
         awnings over the doors (and Chinatown's vertical signboards)."""
         x, k = x0, 0
-        while x + 16 <= x1:
-            w = x1 - x if x1 - x < 32 else 16
+        while x + 24 <= x1:
+            w = x1 - x if x1 - x < 48 else (32 if k % 3 == 1 else 24)
             if free(x, y, w, depth):
                 building(x, y, w, depth, 0, lip=lip)
                 slot = slots[k % len(slots)]
@@ -786,19 +845,19 @@ def main(check=False):
     def st_james(x0, y0, x1, y1):
         """St James Cathedral at King and Church: a cross-shaped slate roof,
         the spire over the King St doors, and St James Park beside it."""
-        cx = 704
+        cx = x0 + 48
         reserved.append((x0, y0, x1 - x0, y1 - y0))
-        nave = (cx - 8, y0, 16, y1 - y0); tr = (cx - 16, y0 + 8, 32, 8)
+        nave = (cx - 12, y0, 24, y1 - y0); tr = (cx - 32, y0 + 16, 64, 16)
         cast_shadow(*nave); cast_shadow(*tr)
         for bx, by, bw, bh in (nave, tr):
             box(bx, by, bw, bh, 1); d.rectangle((bx, by, bx + bw - 1, by + bh - 1), outline=COLORS[0])
-        box(cx - 7, y0 + 9, 14, 6, 1)
-        d.line((cx - 1, y0 + 1, cx - 1, y1 - 10), fill=COLORS[0]); d.line((cx, y0 + 1, cx, y1 - 10), fill=COLORS[0])
-        d.line((cx - 15, y0 + 11, cx + 14, y0 + 11), fill=COLORS[0]); d.line((cx - 15, y0 + 12, cx + 14, y0 + 12), fill=COLORS[0])
+        box(cx - 11, y0 + 17, 22, 14, 1)
+        d.line((cx - 1, y0 + 1, cx - 1, y1 - 18), fill=COLORS[0]); d.line((cx, y0 + 1, cx, y1 - 18), fill=COLORS[0])
+        d.line((cx - 31, y0 + 23, cx + 30, y0 + 23), fill=COLORS[0]); d.line((cx - 31, y0 + 24, cx + 30, y0 + 24), fill=COLORS[0])
         # Tower and spire: a pyramid seen from above, over the King St doors.
-        sy = y1 - 8
-        box(cx - 4, sy, 8, 8, 2); d.rectangle((cx - 4, sy, cx + 3, sy + 7), outline=COLORS[0])
-        d.line((cx - 3, sy + 1, cx + 2, sy + 6), fill=COLORS[0]); d.line((cx + 2, sy + 1, cx - 3, sy + 6), fill=COLORS[0])
+        sy = y1 - 16
+        box(cx - 8, sy, 16, 16, 2); d.rectangle((cx - 8, sy, cx + 7, sy + 15), outline=COLORS[0])
+        d.line((cx - 7, sy + 1, cx + 6, sy + 14), fill=COLORS[0]); d.line((cx + 6, sy + 1, cx - 7, sy + 14), fill=COLORS[0])
         for bx, by, bw, bh in (nave, tr):
             solid(bx, by, bw, bh); attr(bx, by, bw, bh, 4, True)
         blocks.append({'x': nave[0], 'y': nave[1], 'width': nave[2], 'depth': nave[3], 'height': 8, 'style': 1,
@@ -806,15 +865,15 @@ def main(check=False):
         districts.append({'name': 'St James Cathedral', 'kind': 'landmark', 'rect': [cx - 16, y0, 32, y1 - y0]})
         # St James Park: the Victorian garden east of the cathedral, a
         # fountain in its round bed and paths to King St.
-        gx0 = cx + 24
+        gx0 = cx + 40
         ok = lawn_only(gx0, y0, x1, y1)
         gcx, gcy = (gx0 + x1) // 2, (y0 + y1) // 2
         for py in range(y0, y1):
             for px in range(gx0, x1):
                 if ok(px, py) and (abs(px - gcx + 0.5) < 2 or abs(py - gcy + 0.5) < 2):
                     d.point((px, py), fill=COLORS[3])
-        d.ellipse((gcx - 6, gcy - 6, gcx + 5, gcy + 5), fill=COLORS[3], outline=COLORS[1])
-        d.ellipse((gcx - 3, gcy - 3, gcx + 2, gcy + 2), fill=COLORS[2], outline=COLORS[0])
+        d.ellipse((gcx - 10, gcy - 10, gcx + 9, gcy + 9), fill=COLORS[3], outline=COLORS[1])
+        d.ellipse((gcx - 5, gcy - 5, gcx + 4, gcy + 4), fill=COLORS[2], outline=COLORS[0])
         solid(gcx - 4, gcy - 4, 8, 8)
         flower_beds(gx0, y0, x1, y1, 2)
         tufts(gx0, y0, x1, y1)
@@ -833,29 +892,61 @@ def main(check=False):
             x += w + gap; k += 1
         return n
 
-    def stacked(x0, x1, y0, H, widths, styles, d=24):
-        """Rows of buildings filling a block from front to back: an 8 px
-        yard between rows takes the next row's roof lip; a short remainder
-        becomes a flush row of backyard sheds or shops."""
-        if H <= 32:
-            row(x0, x1, y0, H, widths, styles); return
-        n = (H + 8) // (d + 8); y = y0
+    def rows_of(y0, H):
+        """A block's depth in rows of buildings back to back, wall to wall,
+        no yards (user direction 2026-10-10: bigger buildings filling their
+        blocks): one row up to 96 px deep, two up to 192, else three."""
+        n = 1 if H <= 96 else 2 if H <= 192 else 3
+        out, y = [], y0
         for k in range(n):
-            row(x0, x1, y, d, widths[k % 2:] + widths[:k % 2], styles); y += d + 8
-        rest = y0 + H - (y - 8)
-        if rest >= 16:
-            row(x0, x1, y - 8, rest, widths[::-1], styles, lip=False)
+            depth = ((H - (y - y0)) // (n - k)) // 8 * 8 if k < n - 1 else y0 + H - y
+            out.append((y, depth)); y += depth
+        return out
+
+    def stacked(x0, x1, y0, H, widths, styles, d=24):
+        """Rows of buildings filling a block wall to wall; only the north
+        row can show upper floors over the street."""
+        for k, (y, depth) in enumerate(rows_of(y0, H)):
+            row(x0, x1, y, depth, widths[k % 2:] + widths[:k % 2], styles, lip=k == 0)
+
+    def terraces(x0, x1, y0, H):
+        """Toronto row houses: bay-and-gable terraces of 24 px houses wall to
+        wall along the block, terraces back to back on deep blocks."""
+        for k, (y, depth) in enumerate(rows_of(y0, H)):
+            x = x0
+            while x + 24 <= x1:
+                w = 24 if x1 - x >= 48 or x1 - x == 24 else x1 - x
+                if free(x, y, w, depth):
+                    building(x, y, w, depth, 2, lip=k == 0)
+                x += w
+
+    def tower_rows(x0, x1, y0, H, looks, widths=(56, 48, 64)):
+        """Towers along the north of a block and low buildings behind them on
+        deep blocks."""
+        rows = rows_of(y0, H)
+        y, depth = rows[0]
+        x, k = x0, 0
+        while x + 32 <= x1:
+            w = widths[k % len(widths)]
+            if x1 - (x + w) < 32:
+                w = x1 - x
+            if free(x, y, w, depth):
+                tower(x, y, w, depth, looks[k % len(looks)])
+            x += w; k += 1
+        for y, depth in rows[1:]:
+            row(x0, x1, y, depth, [64, 48, 80], [1, 0], lip=False)
 
     def fill(b, kind, seed):
         x0, y0, x1, y1 = b; W, H = x1 - x0, y1 - y0
         s = seed % 3
+        half_w = (W // 2) // 8 * 8
         if kind in ('park',):
             if region_of(x0, y0)[0] == 'TRINITY BELLWOODS':
                 trinity_bellwoods(x0, y0, x1, y1); return
             park(x0, y0, W, H, region_of(x0, y0)[0]); return
         if kind == 'houses':
             first = len(blocks)
-            stacked(x0, x1, y0, H, [24, 16, 24][s:] + [24], [2])
+            terraces(x0, x1, y0, H)
             # Each neighbourhood's houses in its own colour: Little Portugal's
             # azulejo blue, red brick in Palmerston and Riverdale.
             slot = HOUSE_SLOT.get(region_of(x0 + W // 2, y0 + H // 2)[0])
@@ -864,164 +955,179 @@ def main(check=False):
                     attr(b['x'], b['y'] - b['overhang'], b['width'], b['depth'] + b['overhang'], slot, True)
             return
         if kind == 'cabbagetown':
-            if H > 100:   # Riverdale Farm on the valley edge
-                park(x0, y0 + 64, W, 56, 'RIVERDALE FARM', paths=False)
-                stacked(x0, x1, y0, 56, [24, 16], [2]); stacked(x0, x1, y0 + 128, H - 128, [16, 24], [2])
+            if H > 200:   # Riverdale Farm on the valley edge
+                farm = (H // 3) // 8 * 8
+                terraces(x0, x1, y0, farm)
+                park(x0, y0 + farm, W, farm, 'RIVERDALE FARM', paths=False)
+                terraces(x0, x1, y0 + 2 * farm, H - 2 * farm)
             else:
-                stacked(x0, x1, y0, H, [24, 16], [2])
+                terraces(x0, x1, y0, H)
             return
         if kind == 'shops':
             name = region_of(x0 + W // 2, y0 + H // 2)[0]
             if name in SHOP_SLOTS:    # main streets of small shops under awnings
-                shopfronts(x0, x1, y0, 24, SHOP_SLOTS[name]); shopfronts(x0, x1, y0 + 24, H - 24, SHOP_SLOTS[name][::-1], lip=False)
+                rows = rows_of(y0, H)
+                for k, (y, depth) in enumerate(rows):
+                    shopfronts(x0, x1, y, depth, SHOP_SLOTS[name][::(1 if k % 2 == 0 else -1)], lip=k == 0)
                 return
-            stacked(x0, x1, y0, H, [24, 32, 24][s:] + [24], [0, 1]); return
+            stacked(x0, x1, y0, H, [48, 64, 56][s:] + [72], [0, 1]); return
         if kind == 'market':      # Kensington: narrow houses painted every colour, awnings
-            shopfronts(x0, x1, y0, 24, [1, 4, 5, 3, 2]); shopfronts(x0, x1, y0 + 24, H - 24, [3, 2, 1, 5, 4], lip=False); return
+            for k, (y, depth) in enumerate(rows_of(y0, H)):
+                shopfronts(x0, x1, y, depth, [1, 4, 5, 3, 2] if k % 2 == 0 else [3, 2, 1, 5, 4], lip=k == 0)
+            return
         if kind == 'chinatown':   # Spadina's shops, red and gold, signboards; a hospital on University
-            shopfronts(x0, x0 + 32, y0, 24, [1, 4], True); shopfronts(x0, x0 + 32, y0 + 24, H - 24, [4, 1], True, lip=False)
-            hospital(x0 + 32, y0, W - 32, H, 'Mount Sinai Hospital', (x0 + 48, y0 + 16)); return
+            for k, (y, depth) in enumerate(rows_of(y0, H)):
+                shopfronts(x0, x0 + half_w, y, depth, [1, 4] if k % 2 == 0 else [4, 1], True, lip=k == 0)
+            hospital(x0 + half_w, y0, W - half_w, H, 'Mount Sinai Hospital', (x0 + half_w + 32, y0 + 32)); return
         if kind == 'financial':
-            if H >= 48:           # Queen to King: red granite tower beside a glass one
-                tower(x0, y0, 32, H, 'granite'); tower(x0 + 32, y0, W - 32, H, 'glass')
+            if H >= 96:           # Queen to King: red granite tower beside a glass one
+                tower(x0, y0, half_w, H, 'granite'); tower(x0 + half_w, y0, W - half_w, H, 'glass')
             else:                 # King to Front: black towers and their low glass pavilion, gold towers by Union
-                tower(x0, y0, 24, H, 'black'); pavilion(x0 + 24, y0, 16, H); tower(x0 + 40, y0, W - 40, H, 'gold')
+                third = (W // 3) // 8 * 8
+                tower(x0, y0, third, H, 'black'); pavilion(x0 + third, y0, third, H); tower(x0 + 2 * third, y0, W - 2 * third, H, 'gold')
             return
         if kind == 'entertainment':
-            if H >= 48:           # north side of King: the two theatres and their marquees
-                lm(x0, y0, 32, 40, 0, 'marquee', 'Princess of Wales Theatre')
-                lm(x0 + 32, y0, 32, 40, 0, 'marquee', 'Royal Alexandra Theatre')
-                attr(x0, y0 - 8, 32, 48, 2, True)
+            if H >= 96:           # north side of King: the two theatres and their marquees
+                lm(x0, y0, half_w, H, 0, 'marquee', 'Princess of Wales Theatre')
+                lm(x0 + half_w, y0, W - half_w, H, 0, 'marquee', 'Royal Alexandra Theatre')
             else:                 # south side: a glass tower and Roy Thomson Hall at Simcoe
-                tower(x0, y0, 32, H, 'glass'); round_hall(x0 + 32, y0, W - 32, H, 'Roy Thomson Hall')
+                tower(x0, y0, half_w, H, 'glass'); round_hall(x0 + half_w, y0, W - half_w, H, 'Roy Thomson Hall')
             return
         if kind == 'discovery':   # MaRS on College; its atrium tower and the hospital behind
-            lm(x0, y0, W, 16, 0, 'mars', 'MaRS Centre')
-            tower(x0, y0 + 16, 32, 24, 'glass')
-            hospital(x0 + 32, y0 + 16, W - 32, 24, 'Toronto General Hospital', (x0 + 48, y0 + 24)); return
+            top = (H // 3) // 8 * 8
+            lm(x0, y0, W, top, 0, 'mars', 'MaRS Centre')
+            tower(x0, y0 + top, half_w, H - top, 'glass')
+            hospital(x0 + half_w, y0 + top, W - half_w, H - top, 'Toronto General Hospital', (x0 + half_w + 32, y0 + top + 32)); return
         if kind == 'cityplace':   # slim glass condo towers on the old railway lands
             x = x0
-            while x + 16 <= x1:
-                tower(x, y0, 16, H, 'condo')
-                if x + 24 <= x1:      # the podium between towers, its green roof
-                    box(x + 16, y0, 8, H, 1); d.rectangle((x + 16, y0, x + 23, y0 + H - 1), outline=COLORS[0])
+            while x + 32 <= x1:
+                tower(x, y0, 32, H, 'condo')
+                if x + 48 <= x1:      # the podium between towers, its green roof
+                    box(x + 32, y0, 16, H, 1); d.rectangle((x + 32, y0, x + 47, y0 + H - 1), outline=COLORS[0])
                     for py in range(y0 + 3, y0 + H - 2, 4):
-                        d.point((x + 19, py), fill=COLORS[2]); d.point((x + 20, py + 1), fill=COLORS[2])
-                    solid(x + 16, y0, 8, H); attr(x + 16, y0, 8, H, 6, True)
-                x += 24
+                        d.point((x + 39, py), fill=COLORS[2]); d.point((x + 40, py + 1), fill=COLORS[2])
+                    solid(x + 32, y0, 16, H); attr(x + 32, y0, 16, H, 6, True)
+                x += 48
             return
-        if kind == 'old_town' and H >= 48:   # shops on Queen; St James and its park on King
-            row(x0, x1, y0, 16, [24, 16], [1, 0])
-            st_james(x0 + 16, y0 + 16, x1, y1)
-            row(x0, x0 + 16, y0 + 16, H - 16, [16], [1], lip=False); return
+        if kind == 'old_town' and H >= 96:   # shops on Queen; St James and its park on King
+            row(x0, x1, y0, 32, [48, 32], [1, 0])
+            st_james(x0 + 32, y0 + 32, x1, y1)
+            row(x0, x0 + 32, y0 + 32, H - 32, [32], [1], lip=False); return
         if kind in ('apartments', 'regent'):
-            if kind == 'regent' and H >= 64:
-                park(x0, y1 - 24, W, 24, 'REGENT PARK', paths=False)
-                row(x0, x1, y0, 32, [W], [1]); return
-            stacked(x0, x1, y0, H, [32, 24], [1], 32 if H >= 72 else 24); return
+            if kind == 'regent' and H >= 128:
+                park(x0, y1 - 48, W, 48, 'REGENT PARK', paths=False)
+                tower_rows(x0, x1, y0, H - 48, ['condo', 'glass']); return
+            tower_rows(x0, x1, y0, H, ['condo', 'glass'] if s else ['glass', 'condo']); return
         if kind in ('brick', 'old_town'):
-            stacked(x0, x1, y0, H, [24, 16], [1, 0]); return
+            stacked(x0, x1, y0, H, [48, 40, 64], [1, 0]); return
         if kind == 'towers':
-            row(x0, x1, y0, min(48, H), [24, 24] if W < 56 else [32, 24], [4, 3] if s else [4])
-            return
-        if kind == 'towers_civic':
-            row(x0, x1, y0, min(40, H), [32, 24], [3, 4])
-            return
-        if kind == 'civic':
-            row(x0, x1, y0, 40 if H >= 48 else H, [W // 2 // 8 * 8 or 24], [3])
+            tower_rows(x0, x1, y0, H, ['glass', 'granite', 'condo'] if s else ['condo', 'glass'])
             return
         if kind == 'warehouse':
-            row(x0, x1, y0, 32 if H >= 40 else H, [48, 40], [5])
-            if H >= 72:
-                row(x0, x1, y1 - 32, 32, [40, 48], [5])
+            stacked(x0, x1, y0, H, [96, 80], [5])
             return
         if kind == 'campus':
-            row(x0, x1, y0, 24, [W // 8 * 8], [3])
-            if H >= 56:
-                park(x0, y0 + 32, W, H - 32, 'UNIVERSITY OF TORONTO', paths=False)
+            row(x0, x1, y0, 48, [W // 2 // 8 * 8 or 48], [3])
+            if H >= 112:
+                park(x0, y0 + 56, W, H - 56, 'UNIVERSITY OF TORONTO', paths=False)
             return
         if kind == 'dufferin_grove':
-            park(x0, y0, W, 72, 'DUFFERIN GROVE PARK', paths=False)
-            row(x0, x1, y0 + 80, 24, [24], [2]); row(x0, x1, y1 - 24, 24, [24], [2])
+            park(x0, y0, W, (H * 2 // 3) // 8 * 8, 'DUFFERIN GROVE PARK', paths=False)
+            terraces(x0, x1, y0 + (H * 2 // 3) // 8 * 8, H - (H * 2 // 3) // 8 * 8)
             return
         # Specific landmark blocks fall through to their own handling below.
-        row(x0, x1, y0, 24, [24, 32], [0, 1])
+        stacked(x0, x1, y0, H, [56, 72], [0, 1])
 
     # ------------------------------------------------------------- landmarks
+    # Positions are authored in the compressed 1x layout (city_layout.py)
+    # and placed at the new scale through core2x.rect; each landmark draws
+    # in proportion to its larger footprint.
     def lm(x, y, w, h, style, kind, name, lip=True):
         reserved.append((x, y, w, h))
         building(x, y, w, h, style, kind, name, lip=lip)
         districts.append({'name': name, 'kind': 'landmark', 'rect': [x, y, w, h]})
+
+    def dome(cx, cy, r, ring=True):
+        """A white dome from above (Rogers Centre): its ring and the seams
+        of the sliding roof panels."""
+        for py in range(cy - r, cy + r):
+            for px in range(cx - r, cx + r):
+                dx, dy = px + 0.5 - cx, py + 0.5 - cy
+                q = (dx * dx + dy * dy) ** 0.5
+                if q >= r - 0.5:
+                    continue
+                c = 3
+                if q >= r - 1.7:
+                    c = 0
+                elif ring and (r * 0.62 <= q < r * 0.62 + 1 or (q < r * 0.62 and r * 0.3 <= abs(dy) < r * 0.3 + 1)):
+                    c = 1
+                d.point((px, py), fill=COLORS[c])
     # Union Station (Front St W between York and Bay), CN Tower and Rogers Centre.
-    lm(552, 760, 48, 32, 3, 'colonnade', 'Union Station')
-    reserved.append((416, 760, 64, 32))
-    # The Rogers Centre's roof from above: a white dome, its ring and the
-    # seams of the sliding panels, centred on a tile corner so its four
-    # quarters share tiles.
-    rcx, rcy = 432, 776
-    for py in range(rcy - 16, rcy + 16):
-        for px in range(rcx - 16, rcx + 16):
-            dx, dy = px + 0.5 - rcx, py + 0.5 - rcy
-            r = (dx * dx + dy * dy) ** 0.5
-            if r >= 15.5:
-                continue
-            c = 3
-            if r >= 14.3:
-                c = 0
-            elif 10 <= r < 11 or (r < 10 and 5 <= abs(dy) < 6):
-                c = 1
-            d.point((px, py), fill=COLORS[c])
-    solid(424, 768, 16, 16, 'Rogers Centre'); attr(416, 760, 32, 32, 6, True)
-    d.ellipse((456, 768, 471, 783), fill=COLORS[1], outline=COLORS[0])
-    box(462, 752, 4, 22, 0); box(460, 772, 8, 6, 3)
-    solid(456, 768, 16, 16, 'CN Tower'); attr(456, 752, 16, 32, 4, True)
-    districts.append({'name': 'CN Tower', 'kind': 'landmark', 'rect': [456, 752, 16, 32]})
-    districts.append({'name': 'Rogers Centre', 'kind': 'landmark', 'rect': [416, 760, 32, 32]})
+    lm(*L.rect(552, 760, 48, 32), 3, 'colonnade', 'Union Station')
+    rx, ry, rw, rh = L.rect(416, 760, 64, 32)
+    reserved.append((rx, ry, rw, rh))
+    r = min(rh, rw // 2) // 2 - 2
+    rcx, rcy = rx + r + 4 - (rx + r + 4) % 8, ry + rh // 2 - (ry + rh // 2) % 8
+    dome(rcx, rcy, r)
+    solid(rcx - r + 4, rcy - r + 4, 2 * r - 8, 2 * r - 8, 'Rogers Centre'); attr(rcx - r, rcy - r, 2 * r, 2 * r, 6, True)
+    tx = rx + rw - 16
+    d.ellipse((tx, rcy - 8, tx + 15, rcy + 7), fill=COLORS[1], outline=COLORS[0])
+    box(tx + 6, rcy - 40, 4, 34, 0); box(tx + 4, rcy - 12, 8, 6, 3); box(tx + 5, rcy - 28, 6, 4, 3)
+    solid(tx, rcy - 8, 16, 16, 'CN Tower'); attr(tx, rcy - 40, 16, 56, 4, True)
+    districts.append({'name': 'CN Tower', 'kind': 'landmark', 'rect': [tx, rcy - 40, 16, 56]})
+    districts.append({'name': 'Rogers Centre', 'kind': 'landmark', 'rect': [rcx - r, rcy - r, 2 * r, 2 * r]})
     # City Hall and Nathan Phillips Square, Old City Hall, the Eaton Centre.
-    lm(544, 432, 32, 24, 3, 'twin_towers', 'City Hall')
-    plaza(544, 464, 32, 32)
-    lm(576, 432, 32, 24, 0, 'galleria', 'Eaton Centre')
-    lm(576, 464, 32, 32, 3, 'clocktower', 'Old City Hall')
+    lm(*L.rect(544, 432, 32, 24), 3, 'twin_towers', 'City Hall')
+    plaza(*L.rect(544, 464, 32, 32))
+    lm(*L.rect(576, 432, 32, 24), 0, 'galleria', 'Eaton Centre')
+    lm(*L.rect(576, 464, 32, 32), 3, 'clocktower', 'Old City Hall')
     # AGO and Grange Park on Dundas St W at McCaul.
-    lm(424, 432, 48, 24, 3, 'bowed_glass', 'Art Gallery of Ontario')
-    grange_park(416, 464, 480, 496)
+    lm(*L.rect(424, 432, 48, 24), 3, 'bowed_glass', 'Art Gallery of Ontario')
+    gx, gy, gw, gh = L.rect(416, 464, 64, 32)
+    grange_park(gx, gy, gx + gw, gy + gh)
     # Royal Ontario Museum at the north-west corner of Bloor and Queen's Park,
     # Victoria College across the street.
     queens_park()
     # St Lawrence Market and the Gooderham Flatiron on Front St E.
-    lm(696, 760, 48, 32, 1, 'market', 'St Lawrence Market')
-    lm(672, 680, 32, 32, 1, 'flatiron', 'Gooderham Flatiron')
+    lm(*L.rect(696, 760, 48, 32), 1, 'market', 'St Lawrence Market')
+    lm(*L.rect(672, 680, 32, 32), 1, 'flatiron', 'Gooderham Flatiron')
     # Allan Gardens palm house, Moss Park and its armoury, Massey Hall.
-    allan_gardens(672, 320, 752, 368)
-    park(704, 464, 48, 32, 'MOSS PARK', paths=False)
-    lm(704, 432, 48, 24, 5, 'armoury', 'Moss Park Armoury')
-    lm(672, 464, 32, 32, 3, 'hall', 'Massey Hall')
+    ax, ay, aw, ah = L.rect(672, 320, 80, 48)
+    allan_gardens(ax, ay, ax + aw, ay + ah)
+    park(*L.rect(704, 464, 48, 32), 'MOSS PARK', paths=False)
+    lm(*L.rect(704, 432, 48, 24), 5, 'armoury', 'Moss Park Armoury')
+    lm(*L.rect(672, 464, 32, 32), 3, 'hall', 'Massey Hall')
     # Distillery District south of Mill St.
-    lm(816, 760, 32, 32, 5, 'warehouse_chimney', 'Distillery District')
+    lm(*L.rect(816, 760, 32, 32), 5, 'warehouse_chimney', 'Distillery District')
     # Fort York beside the rail corridor: grassy ramparts with cut corners
     # (bastions at 45 degrees, so each corner repeats one tile) round the
-    # parade ground, and two brick barracks inside.
-    reserved.append((176, 736, 48, 56))
-    fx0, fy0, fx1, fy1, cut = 176, 744, 224, 792, 8
-    for py in range(fy0, fy1):
+    # parade ground, and brick barracks inside.
+    fx0, fy0, fw, fh = L.rect(176, 736, 48, 56)
+    reserved.append((fx0, fy0, fw, fh))
+    fy0b = fy0 + 8
+    fx1, fy1, cut = fx0 + fw, fy0 + fh, 16
+    for py in range(fy0b, fy1):
         for px in range(fx0, fx1):
-            a, b = min(px - fx0, fx1 - 1 - px), min(py - fy0, fy1 - 1 - py)
-            if a + b < cut:
+            a2, b2 = min(px - fx0, fx1 - 1 - px), min(py - fy0b, fy1 - 1 - py)
+            if a2 + b2 < cut:
                 continue
-            edge = min(a, b, a + b - cut)
-            d.point((px, py), fill=COLORS[0 if edge < 1 else 1 if edge < 4 else 2])
-    for bx0 in (184, 200):
-        box(bx0, 752, 16, 8, 2); d.rectangle((bx0, 752, bx0 + 15, 759), outline=COLORS[0])
-        d.line((bx0 + 2, 755, bx0 + 13, 755), fill=COLORS[1])
-    box(192, 772, 16, 8, 2); d.rectangle((192, 772, 207, 779), outline=COLORS[0]); d.line((194, 775, 205, 775), fill=COLORS[1])
-    solid(176, 736, 48, 56, 'Fort York')
-    attr(176, 736, 48, 56, 6)
-    attr(184, 752, 32, 8, 1); attr(192, 772, 16, 8, 1)
-    districts.append({'name': 'Fort York', 'kind': 'landmark', 'rect': [176, 736, 48, 56]})
+            edge = min(a2, b2, a2 + b2 - cut)
+            d.point((px, py), fill=COLORS[0 if edge < 1 else 1 if edge < 6 else 2])
+    for k in range(2):
+        bx0 = fx0 + 16 + k * (fw - 48)
+        box(bx0, fy0b + 16, 16, 8, 2); d.rectangle((bx0, fy0b + 16, bx0 + 15, fy0b + 23), outline=COLORS[0])
+        d.line((bx0 + 2, fy0b + 19, bx0 + 13, fy0b + 19), fill=COLORS[1])
+    by0 = fy1 - 32
+    box(fx0 + fw // 2 - 16, by0, 32, 8, 2); d.rectangle((fx0 + fw // 2 - 16, by0, fx0 + fw // 2 + 15, by0 + 7), outline=COLORS[0])
+    d.line((fx0 + fw // 2 - 14, by0 + 3, fx0 + fw // 2 + 13, by0 + 3), fill=COLORS[1])
+    solid(fx0, fy0, fw, fh, 'Fort York')
+    attr(fx0, fy0, fw, fh, 6)
+    attr(fx0 + 16, fy0b + 16, fw - 32, 8, 1); attr(fx0 + fw // 2 - 16, by0, 32, 8, 1)
+    districts.append({'name': 'Fort York', 'kind': 'landmark', 'rect': [fx0, fy0, fw, fh]})
     # Islands: Hanlan's, Centre Island and Ward's buildings.
-    building(480, 928, 32, 16, 3, 'hall', 'Hanlans service pavilion')
-    building(664, 904, 32, 24, 0, None, 'Centre Island pavilion')
-    building(872, 888, 24, 24, 2, None, 'Wards Island cottages')
+    building(*L.rect(480, 928, 32, 16), 3, 'hall', 'Hanlans service pavilion')
+    building(*L.rect(664, 904, 32, 24), 0, None, 'Centre Island pavilion')
+    building(*L.rect(872, 888, 24, 24), 2, None, 'Wards Island cottages')
 
     # ------------------------------------------------------------- blocks
     land = [[collisions[ty * TW + tx] == 16 and attrs[ty * TW + tx] == 6 and
@@ -1050,7 +1156,7 @@ def main(check=False):
         fill(b, kind, city_kit.seed_of('core-block', x0, y0))
 
     # ------------------------------------------------------------- dressing
-    for u in range(32, 992, 32):
+    for u in range(32, WIDTH - 32, 32):
         box(u, my1 - 4, 4, 4, 0)
     ground = bytes.fromhex(COLORS[2][1:]) * 64
     def lot(tx, ty):
@@ -1069,20 +1175,19 @@ def main(check=False):
             sx, sy = sign
             d.rectangle((sx - 4, sy - 4, sx + 3, sy + 3), fill=COLORS[3], outline=COLORS[0])
             d.line((sx - 2, sy - 2, sx + 1, sy - 2), fill=COLORS[0]); d.line((sx - 1, sy - 2, sx - 1, sy + 1), fill=COLORS[0])
-    paint_streetcar_stops(d, 0, COLORS)
+    paint_streetcar_stops(d, 0, COLORS, L.point)
     # The Water's Edge Promenade: Queens Quay's south sidewalk is a wooden
     # boardwalk along the harbour (planks across the walk, bollards kept).
     qq = next(st for st in L.STREETS if st['name'] == 'QUEENS QUAY')
-    wy = qq['at'] + qq['half']
-    for x in range(qq['a'], qq['b'], 8):
-        tile = img.crop((x, wy, x + 8, wy + 8)).tobytes()
-        if collisions[(wy // 8) * TW + x // 8] != 16:
-            continue
-        for px in range(x, x + 8):
-            for py in range(wy, wy + 8):
-                if img.getpixel((px, py)) == tuple(bytes.fromhex(COLORS[3][1:])):
-                    d.point((px, py), fill=COLORS[1 if px % 4 == 3 else 2])
-        attrs[(wy // 8) * TW + x // 8] = 1
+    for wy in range(qq['at'] + qq['half'], qq['at'] + qq['half'] + qq['walk'] - 7, 8):
+        for x in range(qq['a'], qq['b'], 8):
+            if collisions[(wy // 8) * TW + x // 8] != 16:
+                continue
+            for px in range(x, x + 8):
+                for py in range(wy, wy + 8):
+                    if img.getpixel((px, py)) == tuple(bytes.fromhex(COLORS[3][1:])):
+                        d.point((px, py), fill=COLORS[1 if px % 4 == 3 else 2])
+            attrs[(wy // 8) * TW + x // 8] = 1
     # Sidewalk slabs, last so only plain sidewalk is touched: the curb's
     # gutter line and concrete joints (not round Queen's Park's crescent or
     # under the rail bridges).
@@ -1102,18 +1207,21 @@ def main(check=False):
     # Everything flat stays open (user direction, 2026-10-07): lawns, lots,
     # plazas and yards take cars and walkers alike, and both pass under tree
     # canopies. Buildings, monuments, water, rails and walls block.
-    # The spray bay (gameplay: TORONTO.c td_spray_check): hazard-striped bay in
-    # the north lane of King St West between Ossington and Bathurst, with the
-    # body shop's roll-up door on the house behind it.
-    bay = (192, L.ROWS[5] - 24, 32, 16)          # on the tile grid, so its stripes repeat
-    bx, by, bw, bh = bay
+    # The spray bay (gameplay: td_spray.h): hazard-striped bay in the north
+    # lane of King St West between Ossington and Bathurst, with the body
+    # shop's roll-up door on the building behind it.
+    king = next(st for st in L.STREETS if st['name'] == 'KING ST')
+    bx = L.fx(200) - L.fx(200) % 8
+    by = king['at'] - 24
     city_kit.paint_spray_bay(d, box, COLORS, bx, by, by - 8, door_h=16)
-    engine = (PROJECT / 'plugins/toronto-driving/engine/src/states/TORONTO.c').read_text()
-    assert city_kit.spray_bay_registered(engine, 0, bx, by), 'spray bay moved: update td_spray_at in TORONTO.c'
-    districts.append({'name': 'SPRAY BAY', 'rect': list(bay), 'kind': 'gameplay'})
+    districts.append({'name': 'SPRAY BAY', 'rect': [bx, by, 32, 16], 'kind': 'gameplay'})
     # The video screen on the roof at the south-east corner of Yonge and
     # Dundas (the square), animated by the engine like the water.
-    sx, sy = L.COLS[5] + 40, L.ROWS[3] + 32
+    yonge = next(st for st in L.STREETS if st['name'] == 'YONGE ST')
+    dundas = next(st for st in L.STREETS if st['name'] == 'DUNDAS ST')
+    sx = yonge['at'] + yonge['half'] + yonge['walk'] + 16
+    sy = dundas['at'] + dundas['half'] + dundas['walk'] + 16
+    sx -= sx % 8; sy -= sy % 8
     assert all(attrs[ty * TW + tx] & 7 in (1, 2, 3, 4, 5) for ty in range(sy // 8, sy // 8 + 2) for tx in range(sx // 8, sx // 8 + 4)), \
         'the screen sits on a roof'
     city_kit.paint_screen(img, sx, sy, COLORS)
@@ -1122,45 +1230,49 @@ def main(check=False):
     def is_water(x, y):
         return (L.RIVER[0] <= x < L.RIVER[1] and 24 <= y < my1) or y >= my1
     water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS)
-    patterns = set(); raw = set()
-    for ty in range(TH):
-        for tx in range(TW):
-            tile = img.crop((tx * 8, ty * 8, tx * 8 + 8, ty * 8 + 8))
-            raw.add(tile.tobytes())
-            variants = [tile, tile.transpose(Image.Transpose.FLIP_LEFT_RIGHT), tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM), tile.transpose(Image.Transpose.ROTATE_180)]
-            patterns.add(min(v.tobytes() for v in variants))
-    # TD_ART_PREVIEW=path saves the art even when it is over the tile budget,
-    # for tile-budget work.
+    bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
+    assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])
+    scenes = city_kit.split_scenes(img, attrs, collisions, TW, 0)
     if os.environ.get('TD_ART_PREVIEW'):
         img.save(os.environ['TD_ART_PREVIEW'])
         Path(os.environ['TD_ART_PREVIEW'] + '.attrs.json').write_text(json.dumps(attrs))
-    assert len(patterns) <= 384, ('core background patterns', len(patterns))
-    bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
-    assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])
-    content = {'projection': 'compressed north-up; street order and spacing from the City of Toronto Centreline (see content/districts/core-research.json)',
-               'dimensions': [WIDTH, HEIGHT], 'rows': L.ROWS, 'columns': L.COLS,
+        Path(os.environ['TD_ART_PREVIEW'] + '.collisions.json').write_text(json.dumps(collisions))
+        print('scene tiles', [sc['tiles'] for sc in scenes])
+        Path(os.environ['TD_ART_PREVIEW'] + '.content.json').write_text(json.dumps({'blocks': blocks, 'districts': districts}))
+    if not os.environ.get('TD_ART_PREVIEW'):
+        for sc in scenes:
+            assert sc['tiles'] <= city_kit.SCENE_TILE_BUDGET, (sc['slug'], 'background patterns', sc['tiles'])
+    content = {'projection': 'compressed north-up at double scale; street order and spacing from the City of Toronto Centreline '
+                             '(see content/districts/core-research.json); world2x.py maps the 1x layout',
+               'dimensions': [WIDTH, HEIGHT], 'scenes': [{k: sc[k] for k in ('slug', 'district', 'origin', 'tiles')} for sc in scenes],
+               'rows': L.ROWS, 'columns': L.COLS,
                'streets': L.STREETS, 'river': L.RIVER, 'bridges': L.BRIDGES, 'rail': L.RAIL,
                'mainland': L.MAINLAND, 'islands': L.ISLANDS, 'blocks': blocks, 'canopies': canopies,
-               'solids': solids, 'districts': districts, 'collisions': collisions,
+               'solids': solids, 'districts': districts, 'spray_bay': [bx + 16, by + 8],
                'collision_rules': {'road': 0, 'foot_only': 16, 'solid': 15},
-               'validation': {'raw_unique_tiles': len(raw), 'flip_canonical_unique_tiles': len(patterns),
-                              'animated_water_tiles': water_tiles},
+               'validation': {'animated_water_tiles': water_tiles},
                'scope': 'Compressed central Toronto (Dufferin to Broadview, Bloor to the harbour) and the Islands'}
-    texts = {ROOT / 'content/city_art.json': json.dumps(content, indent=1) + '\n',
-             PROJECT / 'original-art/city_attributes.json': json.dumps(attrs) + '\n'}
-    png = PROJECT / 'assets/backgrounds/toronto_city.png'
+    texts = {ROOT / 'content/city_art.json': json.dumps(content, indent=1) + '\n'}
+    images = {}
+    for sc in scenes:
+        texts[PROJECT / f"original-art/{sc['slug']}_attributes.json"] = json.dumps(sc['attrs']) + '\n'
+        texts[ROOT / f"content/scenes/{sc['slug']}.json"] = json.dumps({'collisions': world2x.encode_grid(sc['collisions'])}) + '\n'
+        images[PROJECT / f"assets/backgrounds/{sc['slug']}.png"] = sc['image']
     if check:
-        with Image.open(png) as current:
-            assert current.convert('RGB').tobytes() == img.tobytes(), 'Core background pixels are stale'
+        for path, im in images.items():
+            with Image.open(path) as current:
+                assert current.convert('RGB').tobytes() == im.tobytes(), f'Stale core art: {path.name}'
         for path, text in texts.items():
             assert path.read_text() == text, f'Stale core art output: {path.relative_to(ROOT)}'
-        print(f'Core background matches its generator: {len(blocks)} buildings, {len(patterns)} flip-canonical tiles.')
+        print(f'Core backgrounds match their generator: {len(blocks)} buildings, scene tiles {[sc["tiles"] for sc in scenes]}.')
         return
-    img.save(png)
+    for path, im in images.items():
+        im.save(path)
     for path, text in texts.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text)
-    print(f'Authored {WIDTH}x{HEIGHT} core: {len(blocks)} buildings, {len(districts)} districts/landmarks, '
-          f'{len(patterns)} flip-canonical tiles ({len(raw)} raw).')
+    print(f'Authored {WIDTH}x{HEIGHT} core in four scenes: {len(blocks)} buildings, {len(districts)} districts/landmarks, '
+          f'scene tiles {[sc["tiles"] for sc in scenes]}.')
 
 
 if __name__ == '__main__':

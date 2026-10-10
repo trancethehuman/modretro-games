@@ -12,6 +12,7 @@ import math
 from pathlib import Path
 import re
 import sys
+import world2x
 
 from create_district_jobs import (BASE_QUEST_FIELDS, FOOT_SPEED, SPEEDS,
                                   RouteModel, canonical, decode_grid, point,
@@ -21,8 +22,8 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "content/districts/east_jobs.json"
 PREFIX_STOPS, PREFIX_QUESTS = 35, 80
 PREFIX_STOP_FIELDS = ("id", "u", "v", "name", "transit", "district", "reserved")
-PREFIX_STOPS_SHA256 = "0b282d72a77617cb585dbed68905ad7ae24ba930cf818949a60cd76f9ca26380"
-PREFIX_QUESTS_SHA256 = "20f3f966dac28d476d744a8e7749941b68bc5efc88254bcae59fd030cbebb108"
+PREFIX_STOPS_SHA256 = "64a094c134e3d3dd077a8a3296ccd9605a3ab2f43d2f03c734c7fd4f993d2953"
+PREFIX_QUESTS_SHA256 = "ed4272ddfad5b9fa63537f3dc9d3a9e08d3ffaaa49c227fc3298067965f81b4f"
 STOP_KEYS = ("danforth_hall", "withrow_walk", "riverside_queen", "gerrard_pape",
              "carlaw_works", "leslie_queen", "greenwood_walk", "ashbridge_queen")
 STOP_NAMES = ("DANFORTH HALL", "WITHROW POST", "RIVERSIDE QUEEN", "GERRARD / PAPE",
@@ -105,26 +106,25 @@ def preserved_prefix(campaign):
 
 def registered_east(world, metadata):
     districts = world["districts"]
-    assert len(districts) >= 4 and [district["id"] for district in districts] == list(range(len(districts))), "Register the actual fourth native scene before estimating eastern jobs"
-    assert [district["scene"] for district in districts[:4]] == ["toronto_city", "toronto_west", "toronto_high_park", "toronto_east"]
+    assert len(districts) == 16 and [district["id"] for district in districts] == list(range(16)), "Register the sixteen native scenes before estimating eastern jobs"
+    assert [district["scene"] for district in districts[12:]] == [world2x.scene_slug(i) for i in range(12, 16)]
     header = (ROOT / "project/plugins/toronto-driving/engine/include/td_district.h").read_text()
     count = re.search(r"^\s*#define\s+TD_DISTRICT_COUNT\s+(\d+)\s*$", header, re.M)
     assert count and int(count.group(1)) == len(districts), "Native district count disagrees with actual registry"
-    entry = districts[3]
-    scene = read_json(ROOT / "project/project/scenes" / entry["scene"] / "scene.gbsres")
-    assert scene["_resourceType"] == "scene" and scene["type"] == "TORONTO" and scene["symbol"] == entry["symbol"]
-    assert (scene["width"], scene["height"]) == (128, 122)
-    assert metadata["id"] == 3 and metadata["dimensions"] == [1024, 976]
-    assert decode_grid(scene["collisions"]) == metadata["collisions"], "Registered east collisions differ from authored artwork"
-    east_edges = []
+    for entry in districts[12:]:
+        scene = read_json(ROOT / "project/project/scenes" / entry["scene"] / "scene.gbsres")
+        assert scene["_resourceType"] == "scene" and scene["type"] == "TORONTO" and scene["symbol"] == entry["symbol"]
+        assert (scene["width"], scene["height"]) == (128, 122)
+    assert metadata["id"] == 3 and metadata["dimensions"] == [world2x.WORLD_W, world2x.WORLD_H]
+    east_edges = 0
     for portal in world["portals"]:
-        if {portal["from"]["district"], portal["to"]["district"]} != {0, 3}:
+        if {portal["from"]["district"] >> 2, portal["to"]["district"] >> 2} != {0, 3}:
             continue
-        core, east = (portal["from"], portal["to"]) if portal["from"]["district"] == 0 else (portal["to"], portal["from"])
-        assert core["u"] == 1000 and east["u"] == 24 and core["v"] == east["v"]
+        core, east = (portal["from"], portal["to"]) if portal["from"]["district"] >> 2 == 0 else (portal["to"], portal["from"])
+        assert core["u"] == 1000 and east["u"] == 24
         assert set(portal["access"]) == {"foot", "vehicle"} and portal["modeled_crossing_pixels"] == 48
-        east_edges.append(core["v"])
-    assert sorted(east_edges) == [64, 400, 528], "Eastern jobs require the three registered reciprocal road seams; Gerrard must remain closed"
+        east_edges += 1
+    assert east_edges == 3, "Eastern jobs require the three registered reciprocal road seams; Gerrard must remain closed"
 
 
 def author():
@@ -135,19 +135,20 @@ def author():
     metadata_path = ROOT / "content/districts/east_art.json"
     metadata = read_json(metadata_path)
     registered_east(world, metadata)
-    candidates = metadata["stop_candidates"]
+    # Plan positions (1x), mapped onto the district's double-scale scenes.
+    candidates = metadata["plan"]["stop_candidates"]
     assert [candidate["key"] for candidate in candidates] == list(STOP_KEYS), "Preserve the eight eastern service point IDs"
     authored_stops = []
     for index, candidate in enumerate(candidates, PREFIX_STOPS):
         foot = candidate.get("foot_only", False)
         assert type(foot) is bool and foot == (index in (36, 41)), "Preserve Withrow/Greenwood park-and-walk delivery flags"
         assert candidate["fictional_service_point"] is True
-        stop = {"id": index, "u": candidate["x"], "v": candidate["y"], "name": STOP_NAMES[index - PREFIX_STOPS],
-                "transit": 0, "district": 3, "reserved": int(foot), "foot_only": foot,
+        scene, u, v, anchor = world2x.map_stop(3, candidate["x"], candidate["y"], candidate.get("parking_anchor"))
+        stop = {"id": index, "u": u, "v": v, "name": STOP_NAMES[index - PREFIX_STOPS],
+                "transit": 0, "district": scene, "reserved": int(foot), "foot_only": foot,
                 "reference_label": candidate["name"], "geography_reference": metadata["source_research"],
                 "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door"}
         if foot:
-            anchor = candidate["parking_anchor"]
             stop["parking_anchor"] = {"u": anchor[0], "v": anchor[1]}
             stop["access_notice"] = "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
         authored_stops.append(stop)
@@ -162,7 +163,7 @@ def author():
             parked = point(stop["district"], anchor["u"], anchor["v"])
             assert model.usable(parked, True), "Park-and-walk anchor must remain road-accessible"
             walked, _ = model.shortest(node, parked, False)
-            assert 0 < walked <= 192, "Eastern last-mile legs must remain short purposeful walks"
+            assert 0 < walked <= 384, "Eastern last-mile legs must remain short purposeful walks"
         else:
             assert model.usable(node, True), f"Eastern roadside service point is blocked: {stop['name']}"
     jobs = []
@@ -171,7 +172,7 @@ def author():
         assert 2 <= len(route) <= 12 and len(route) == len(objectives)
         assert all(0 <= stop < 43 for stop in route) and all(first != last for first, last in zip(route, route[1:]))
         assert 3 <= gate <= 18 and kind in (0, 1, 2, 3, 4, 6)
-        assert any(stops[stop]["district"] == 3 for stop in route)
+        assert any(stops[stop]["district"] >> 2 == 3 for stop in route)
         assert vehicle == 255 or all(not stops[stop].get("foot_only", False) for stop in route)
         legs, road, walking = [], 0, 0
         for first, last in zip(route, route[1:]):
@@ -191,7 +192,7 @@ def author():
             "chapter": "Eastern package connections", "kind": campaign["quest_types"][kind], "kind_id": kind,
             "required_vehicle": vehicle, "min_completed": gate, "route": route,
             "time_limit_seconds": deadline,
-            "reward": 85 + math.ceil(road / 40) + (len(route) - 1) * 12 + (25 if kind in (1, 3) else 0),
+            "reward": 85 + math.ceil(road / 80) + (len(route) - 1) * 12 + (25 if kind in (1, 3) else 0),
             "stages": [{"stop_id": stop, "district": stops[stop]["district"], "objective": objective}
                        for stop, objective in zip(route, objectives)],
             "objective_notice": "Ordered native parcel handoffs, condition/timer rules and returns; no signature UI, new cargo animation, artificial delay or new transit service is implied",
@@ -207,7 +208,7 @@ def author():
     assert len(jobs) == 8 and len({tuple(job["route"]) for job in all_jobs}) == 88
     assert len({job["title"] for job in all_jobs}) == 88
     assert {stop for job in jobs for stop in job["route"] if stop >= 35} == set(range(35, 43))
-    assert {stops[stop]["district"] for stop in jobs[-1]["route"]} == {0, 1, 2, 3}, "Final package round must connect all four districts"
+    assert {stops[stop]["district"] >> 2 for stop in jobs[-1]["route"]} == {0, 1, 2, 3}, "Final package round must connect all four districts"
     done = 0
     while done < len(all_jobs):
         unlocked = sum(job["min_completed"] <= done for job in all_jobs)

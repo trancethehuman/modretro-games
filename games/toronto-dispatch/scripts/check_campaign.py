@@ -92,15 +92,23 @@ def check():
     # campaign-authoring dependencies local to full campaign validation.
     from create_district_jobs import BASE_STOPS_SHA256, BASE_QUESTS_SHA256, BASE_QUEST_FIELDS
 
+    import world2x
     campaign = json.loads((ROOT / 'content/campaign.json').read_text())
     city = json.loads((ROOT / 'content/city_art.json').read_text())
-    scene = json.loads((ROOT / 'project/project/scenes/toronto_city/scene.gbsres').read_text())
-    background = json.loads((ROOT / 'project/assets/backgrounds/toronto_city.png.gbsres').read_text())
-    width, height = scene['width'], scene['height']
-    grid, attrs = decode(scene['collisions']), decode(background['tileColors'])
-    assert len(grid) == len(attrs) == width * height, 'Native grid dimensions disagree'
+    # The core's four registered scenes, stitched in district-world tiles.
+    attrs = []
+    for quadrant in range(4):
+        slug = world2x.scene_slug(quadrant)
+        scene = json.loads((ROOT / 'project/project/scenes' / slug / 'scene.gbsres').read_text())
+        background = json.loads((ROOT / 'project/assets/backgrounds' / (slug + '.png.gbsres')).read_text())
+        cells = decode(scene['collisions'])
+        assert len(cells) == len(decode(background['tileColors'])) == scene['width'] * scene['height'] <= 16384, \
+            'Native grid dimensions disagree; a tile map must fit one ROM bank'
+        assert cells == world2x.scene_grid(quadrant), f'Registered collisions differ from the art: {slug}'
+        attrs += decode(background['tileColors'])
+    width, height = world2x.WORLD_TW, world2x.WORLD_TH
+    grid = world2x.world_grid(0)
     assert city['dimensions'] == [width * 8, height * 8]
-    assert width * height <= 16384, 'Tile map must fit one ROM bank'
     assert len(city['blocks']) >= 50, 'Core must retain architectural variety'
     assert len({block['style'] for block in city['blocks']}) == 6
     assert any(attr & 128 for attr in attrs), 'Missing actual CGB roof/canopy priority'
@@ -128,9 +136,10 @@ def check():
     assert len(stops) == TOTAL_STOPS and [s['id'] for s in stops] == list(range(TOTAL_STOPS))
     assert len(quests) == TOTAL_QUESTS and len({q['id'] for q in quests}) == TOTAL_QUESTS
     assert [q['id'] for q in quests] == [f'contract-{i:02d}' for i in range(1, TOTAL_QUESTS + 1)]
-    assert all(s.get('district', 0) == 0 and s.get('reserved', 0) == 0 for s in stops[:CORE_STOPS])
+    assert all(s['district'] >> 2 == 0 and s.get('reserved', 0) == 0 for s in stops[:CORE_STOPS])
     assert all(all(stop < CORE_STOPS for stop in q['route']) for q in quests[:CORE_QUESTS])
-    locations = [(s['u'] // 8, s['v'] // 8) for s in stops[:CORE_STOPS]]
+    origins = [world2x.scene_origin(s['district']) for s in stops[:CORE_STOPS]]
+    locations = [((s['u'] + ox) // 8, (s['v'] + oy) // 8) for s, (ox, oy) in zip(stops[:CORE_STOPS], origins)]
     for stop, (x, y) in zip(stops[:CORE_STOPS], locations):
         assert usable(x, y, False), f"Blocked core stop: {stop['name']}"
     walk, car = flood(locations[0]), flood(locations[0], True)
@@ -153,7 +162,7 @@ def check():
     assert tuple(preserved_fields) == BASE_QUEST_FIELDS
     assert west['preserved_base_stops_sha256'] == BASE_STOPS_SHA256
     assert west['preserved_base_quests_sha256'] == BASE_QUESTS_SHA256
-    normalized_stops = [{field: s[field] for field in ('id', 'u', 'v', 'name', 'transit')} for s in stops[:CORE_STOPS]]
+    normalized_stops = [{field: s[field] for field in ('id', 'district', 'u', 'v', 'name', 'transit')} for s in stops[:CORE_STOPS]]
     normalized_quests = [{field: q[field] for field in preserved_fields} for q in quests[:CORE_QUESTS]]
     assert canonical_sha(normalized_stops) == west['preserved_base_stops_sha256'], 'Original core stops changed'
     assert canonical_sha(normalized_quests) == west['preserved_base_quests_sha256'], 'Original 72 native contract fields changed'

@@ -66,35 +66,47 @@ static void test_graphs(void){
            "directed edges are not invented in reverse");
 }
 
-static void test_current_route_compatibility(void){
-    td_portal_t out;
-    for(unsigned from=0;from<3;from++)for(unsigned to=0;to<3;to++)if(from!=to)
-        for(unsigned foot=0;foot<2;foot++)for(unsigned v=32;v<944;v+=37){
-            unsigned next=from<to?from+1:from-1,best=65535;const td_portal_t *expected=NULL;
-            /* Independent legacy behavior: adjacent ID and nearest street row. */
-            for(unsigned i=0;i<TD_PORTALS;i++){
-                const td_portal_t *p=&td_portals[i];
-                if(p->from!=from||p->to!=next||(!foot&&!p->vehicle))continue;
-                unsigned score=abs((int)v-p->v)+abs(608-(int)p->arrival_v);
-                if(score<best){best=score;expected=p;}
-            }
-            expect(expected&&td_world_route(from,to,foot,500,v,784,608,&out)&&
-                   !memcmp(&out,expected,sizeof(out)),"current three-district portal choice preserves legacy nearest-row behavior");
+/* Fewest scene hops from every scene to `to` over the registered portals. */
+static void hops_to(unsigned to,unsigned foot,unsigned *dist){
+    unsigned queue[TD_DISTRICT_COUNT],head=0,tail=0;
+    for(unsigned d=0;d<TD_DISTRICT_COUNT;d++)dist[d]=255;
+    dist[to]=0;queue[tail++]=to;
+    while(head<tail){
+        unsigned node=queue[head++];
+        for(unsigned i=0;i<TD_PORTALS;i++){
+            const td_portal_t *p=&td_portals[i];
+            if(p->to!=node||(!foot&&!p->vehicle)||dist[p->from]!=255)continue;
+            dist[p->from]=dist[node]+1;queue[tail++]=p->from;
         }
+    }
+}
+static void test_current_route_compatibility(void){
+    /* The generated next-hop table agrees with the graph search over the
+       same portals: every chosen step is on a shortest route. */
+    td_portal_t out,searched;unsigned dist[TD_DISTRICT_COUNT];
+    for(unsigned to=0;to<TD_DISTRICT_COUNT;to++)for(unsigned foot=0;foot<2;foot++){
+        hops_to(to,foot,dist);
+        for(unsigned from=0;from<TD_DISTRICT_COUNT;from++)if(from!=to){
+            expect(td_world_route_from(td_portals,TD_PORTALS,TD_DISTRICT_COUNT,from,to,foot,500,400,500,400,&searched)&&
+                   dist[searched.to]+1==dist[from],"every scene reaches every other through the registered seams");
+            expect(td_world_route(from,to,foot,500,400,500,400,&out)&&out.from==from&&(foot||out.vehicle)&&
+                   dist[out.to]+1==dist[from],"the next-hop table steps along a shortest scene route");
+        }
+    }
 }
 
 static void test_registered_graph(void){
     td_portal_t portal;
-    /* East's ID follows High Park numerically but its actual neighbor is core.
-     * These registered routes catch a return to the old +/-1 ID assumption. */
+    /* Districts' actual neighbours: west and east meet only through the
+       core; High Park reaches the core through the west. */
     for(UBYTE foot=0;foot<2;foot++){
-        expect(td_world_route(1,3,foot,500,528,500,528,&portal)&&portal.to==0,
+        expect(td_world_route(5,12,foot,500,528,500,528,&portal)&&(portal.to>>2)==0,
                "West-to-East registered route first returns to Central Toronto");
-        expect(td_world_route(3,2,foot,500,400,500,608,&portal)&&portal.to==0,
+        expect(td_world_route(12,9,foot,500,400,500,608,&portal)&&(portal.to>>2)==0,
                "East-to-High-Park registered route follows its actual Central neighbor");
-        expect(td_world_route(2,3,foot,500,240,500,400,&portal)&&portal.to==1,
+        expect(td_world_route(9,12,foot,500,240,500,400,&portal)&&(portal.to>>2)==1,
                "High-Park-to-East registered route first uses West End");
-        expect(td_world_route(0,3,foot,800,400,500,400,&portal)&&portal.to==3&&portal.u==1000,
+        expect(td_world_route(1,12,foot,800,400,500,400,&portal)&&(portal.to>>2)==3&&portal.u==1000,
                "Central-to-East registered route uses the east-facing boundary");
     }
     for(UWORD i=0;i<TD_PORTALS;i++){
@@ -102,9 +114,11 @@ static void test_registered_graph(void){
         UWORD u=p->u*16,v=p->v*16;
         UWORD old_u=u+(horizontal?(p->u==24?16:-16):0);
         UWORD old_v=v+(!horizontal?(p->v==24?16:-16):0);
+        /* A district's inner seams are open to any movement. */
+        UBYTE inner=(p->from>>2)==(p->to>>2);
         for(UBYTE foot=0;foot<2;foot++){
             td_crossing_t out,prior;memset(&out,0xA5,sizeof(out));prior=out;
-            UBYTE permitted=foot||p->vehicle;
+            UBYTE permitted=foot||p->vehicle||inner;
             UBYTE crossed=td_world_crossing(p->from,foot,old_u,old_v,u,v,&out);
             expect(crossed==permitted,"each registered directed seam honors its authored travel modes");
             if(permitted)expect(out.district==p->to&&out.u==p->arrival_u*16&&out.v==p->arrival_v*16,
@@ -113,8 +127,15 @@ static void test_registered_graph(void){
         }
     }
     char name[19];
-    expect(td_world_name(3,name)&&strcmp(name,"TORONTO EAST END")==0,
+    expect(td_world_name(12,name)&&strcmp(name,"RIVERDALE")==0,
            "registered East district name is available through the banked metadata API");
+}
+
+/* The first foot-only seam between two districts. */
+static const td_portal_t *foot_only_edge(void){
+    for(unsigned i=0;i<TD_PORTALS;i++)
+        if(!td_portals[i].vehicle&&(td_portals[i].from>>2)!=(td_portals[i].to>>2)&&td_portals[i].u==1000)return &td_portals[i];
+    return NULL;
 }
 
 static void test_crossings(void){
@@ -123,7 +144,7 @@ static void test_crossings(void){
         {0,1,480,24,480,952,1},{0,1,480,952,480,24,1},
     };
     for(unsigned edge=0;edge<4;edge++)for(unsigned foot=0;foot<2;foot++){
-        const td_portal_t *p=&edges[edge];int limit=(foot?28:18)*16;
+        const td_portal_t *p=&edges[edge];int limit=(foot?44:30)*16;
         int horizontal=edge<2,negative=edge==0||edge==2;
         for(int offset=-limit;offset<=limit;offset++){
             UWORD u=p->u*16+(horizontal?0:offset),v=p->v*16+(horizontal?offset:0);
@@ -150,9 +171,9 @@ static void test_crossings(void){
                      v+(!horizontal?(negative?-32:32):0),&out),"already-outbound movement can retry a failed allocation");
     }
     td_portal_t p={0,1,24,200,1000,200,1};td_crossing_t out,prior;memset(&out,0xA5,sizeof(out));prior=out;
-    expect(!td_world_crossing_from(&p,1,2,0,0,40*16,320*16,20*16,200*16,&out)&&!memcmp(&out,&prior,sizeof(out)),
+    expect(!td_world_crossing_from(&p,1,2,0,0,40*16,360*16,20*16,200*16,&out)&&!memcmp(&out,&prior,sizeof(out)),
            "diagonal sweep outside the portal at intersection cannot enter by ending near its row");
-    expect(td_world_crossing_from(&p,1,2,0,1,40*16,320*16,20*16,200*16,&out),
+    expect(td_world_crossing_from(&p,1,2,0,1,40*16,360*16,20*16,200*16,&out),
            "same diagonal intersection inside wider walking lane remains permitted");
     p.v=p.arrival_v=920;
     expect(td_world_crossing_from(&p,1,2,0,0,1000*16,10*16,0,930*16,&out)&&out.v==930*16,
@@ -170,40 +191,51 @@ static void test_crossings(void){
     p=(td_portal_t){0,1,480,24,480,952,1};
     expect(td_world_route_from(&p,1,2,0,1,0,480,200,480,600,&(td_portal_t){0}),
            "north-south metadata participates in the unchanged graph search");
-    expect(td_world_crossing(1,1,25*16,896*16,24*16,896*16,&out)&&out.district==2,
+    {const td_portal_t *trail=foot_only_edge();
+    expect(trail&&td_world_crossing(trail->from,1,999*16,trail->v*16,1000*16,trail->v*16,&out)&&out.district==trail->to,
            "registered waterfront foot-only portal uses public metadata API");
+    expect(trail&&!td_world_crossing(trail->from,0,999*16,trail->v*16,1000*16,trail->v*16,&out),
+           "a vehicle cannot take the waterfront foot-only portal");}
 }
 
 static void test_traffic_and_names(void){
     UWORD u[6],v[6];UBYTE legs[6];td_traffic_sample_t samples[6],prior[6];
-    for(unsigned district=1;district<TD_DISTRICT_COUNT;district++){
-        expect(td_world_traffic_init(district,u,v,legs,samples),"all six western actors initialize in one query");
+    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++){
+        expect(td_world_traffic_init(district,u,v,legs,samples),"all six road vehicles initialize in one query");
         for(unsigned i=0;i<6;i++){
-            expect(u[i]==td_west_traffic[district-1][i][0][0]*16&&v[i]==td_west_traffic[district-1][i][0][1]*16&&
-                   legs[i]==1&&samples[i].count==td_west_traffic_counts[district-1][i],"initial pose and route count preserve generated traffic");
+            expect(u[i]==td_world_traffic[district][i][0][0]*16&&v[i]==td_world_traffic[district][i][0][1]*16&&
+                   legs[i]==1&&samples[i].count==td_world_traffic_counts[district][i],"initial pose and route count preserve generated traffic");
         }
         for(unsigned step=0;step<16;step++){
-            for(unsigned i=0;i<6;i++)legs[i]=step%td_west_traffic_counts[district-1][i];
+            for(unsigned i=0;i<6;i++)legs[i]=step%td_world_traffic_counts[district][i];
             expect(td_world_traffic_samples(district,legs,samples),"batched traffic query accepts all valid leg combinations");
-            for(unsigned i=0;i<6;i++)expect(samples[i].u==td_west_traffic[district-1][i][legs[i]][0]*16&&
-                  samples[i].v==td_west_traffic[district-1][i][legs[i]][1]*16,"batched targets cover closed-loop wrap and exact Q4 coordinates");
+            for(unsigned i=0;i<6;i++)expect(samples[i].u==td_world_traffic[district][i][legs[i]][0]*16&&
+                  samples[i].v==td_world_traffic[district][i][legs[i]][1]*16,"batched targets cover closed-loop wrap and exact Q4 coordinates");
         }
     }
     memset(samples,0xA5,sizeof(samples));memcpy(prior,samples,sizeof(samples));memset(legs,0,sizeof(legs));legs[5]=255;
     expect(!td_world_traffic_samples(1,legs,samples)&&!memcmp(samples,prior,sizeof(samples)),
            "invalid final actor leg cannot partially replace earlier cached samples");
-    expect(!td_world_traffic_samples(0,legs,samples),"core signal-specific loops stay with the driver");
+    memset(legs,0,sizeof(legs));
+    expect(td_world_traffic_samples(0,legs,samples),"the core's scenes have generated loops like every other");
     expect(!td_world_traffic_samples(TD_DISTRICT_COUNT,legs,samples),"unknown traffic district rejected");
     expect(!td_world_traffic_samples(1,NULL,samples)&&!td_world_traffic_samples(1,legs,NULL),"missing traffic query buffers rejected");
     expect(!td_world_traffic_init(1,NULL,v,legs,samples)&&!td_world_traffic_init(1,u,NULL,legs,samples)&&
            !td_world_traffic_init(1,u,v,NULL,samples)&&!td_world_traffic_init(1,u,v,legs,NULL),"missing traffic init buffers rejected");
-    td_world_traffic_init(1,u,v,legs,samples);
-    expect(u[0]==800*16&&v[0]==64*16&&samples[0].u==912*16&&samples[0].v==64*16&&samples[0].frame==0,
-           "known west loop starts east with original vehicle frame");
-    legs[0]=0;td_world_traffic_samples(1,legs,samples);
-    expect(samples[0].frame==6,"wrapped loop leg0 faces north toward its starting point");
+    /* Frames follow each leg's direction: 0 east, 2 south, 4 west, 6 north. */
+    {int frames=1;
+    for(unsigned district=0;district<TD_DISTRICT_COUNT;district++)for(unsigned i=0;i<4;i++){
+        const UWORD (*path)[2]=td_world_traffic[district][i];UBYTE count=td_world_traffic_counts[district][i];
+        for(UBYTE leg=0;leg<count;leg++){
+            UBYTE previous=leg?leg-1:count-1,want;
+            want=path[leg][0]>path[previous][0]?0:path[leg][0]<path[previous][0]?4:path[leg][1]>path[previous][1]?2:6;
+            memset(legs,0,sizeof(legs));legs[i]=leg;td_world_traffic_samples(district,legs,samples);
+            if(samples[i].frame!=want+i*8)frames=0;
+        }
+    }
+    expect(frames,"every loop leg faces its direction of travel with its vehicle's design");}
     char name[21];memset(name,0xA5,sizeof(name));
-    expect(td_world_name(2,name)&&strcmp(name,"HIGH PARK/JUNCTION")==0&&(unsigned char)name[19]==0xA5,
+    expect(td_world_name(2,name)&&strcmp(name,"QUEEN & KING WEST")==0&&(unsigned char)name[19]==0xA5,
            "district name copies exactly19 bytes with terminator and intact canary");
     char saved[21];memcpy(saved,name,sizeof(name));
     expect(!td_world_name(TD_DISTRICT_COUNT,name)&&!memcmp(name,saved,sizeof(name)),"unknown district preserves name buffer");

@@ -13,13 +13,15 @@ import json
 import math
 from pathlib import Path
 import sys
+import world2x
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "content/districts/west_jobs.json"
-SPEEDS = {0: 86.25, 1: 71.25, 2: 101.25, 3: 63.75}
+# Top speeds (lf_top in td_drive.c, sixteenths of a pixel per frame, x60/16).
+SPEEDS = {0: 75.0, 1: 63.75, 2: 86.25, 3: 56.25}
 FOOT_SPEED = 30.0
-BASE_STOPS_SHA256 = "26c2e8bee34a7a0bd54ffa520e770b03dc41a26f91943c081d3fed517ebba69b"
-BASE_QUESTS_SHA256 = "d75f7f54f19c27d7c6fd7b89e693edb7b7e121e226ba78c11c6c57336ce483b1"
+BASE_STOPS_SHA256 = "20ad899171e66d3670925d30325ca4b6f4ae6fb3ed3c9f2203235227e984a9f3"
+BASE_QUESTS_SHA256 = "a40d8c5f50cf52a9b6a52946e7f614bd0e475effd45deab9958cedbc6c513c14"
 BASE_QUEST_FIELDS = ("id", "title", "brief", "kind_id", "required_vehicle",
                      "min_completed", "route", "time_limit_seconds", "reward")
 STOP_NAMES = [
@@ -251,16 +253,17 @@ def author():
     assert [stop["id"] for stop in base_stops] == list(range(27))
     assert [job["id"] for job in base_jobs] == [f"contract-{index:02d}" for index in range(1, 73)]
     assert all(all(index < 27 for index in job["route"]) for job in base_jobs)
-    normalized_base_stops = [{field: stop[field] for field in ("id", "u", "v", "name", "transit")}
+    normalized_base_stops = [{field: stop[field] for field in ("id", "district", "u", "v", "name", "transit")}
                              for stop in base_stops]
     normalized_base_jobs = [{field: job[field] for field in BASE_QUEST_FIELDS} for job in base_jobs]
     assert sha(canonical(normalized_base_stops)) == BASE_STOPS_SHA256, "Existing core stops changed"
     assert sha(canonical(normalized_base_jobs)) == BASE_QUESTS_SHA256, "Existing 72 contracts changed"
-    stops = [{**stop, "district": 0} for stop in base_stops]
+    stops = [dict(stop) for stop in base_stops]
     authored_stops, metadata_sources = [], []
     for district, filename, expected in ((1, "west_art.json", 5), (2, "high_park_art.json", 3)):
         metadata = read_json(ROOT / "content/districts" / filename)
-        candidates = metadata["stop_candidates"]
+        # Plan positions (1x), mapped onto the district's double-scale scenes.
+        candidates = metadata["plan"]["stop_candidates"]
         assert len(candidates) == expected, filename
         metadata_sources.append({"path": f"content/districts/{filename}",
                                  "sha256": sha(canonical(metadata)),
@@ -268,8 +271,9 @@ def author():
         for candidate in candidates:
             index = len(authored_stops)
             assert candidate["key"] == STOP_KEYS[index], "Stop candidate order changed; preserve appended IDs"
-            stop = {"id": 27 + index, "u": candidate["x"], "v": candidate["y"],
-                    "name": STOP_NAMES[index], "transit": 0, "district": district,
+            scene, u, v, anchor = world2x.map_stop(district, candidate["x"], candidate["y"], candidate.get("parking_anchor"))
+            stop = {"id": 27 + index, "u": u, "v": v,
+                    "name": STOP_NAMES[index], "transit": 0, "district": scene,
                     "reserved": int(candidate.get("foot_only", False)), "foot_only": candidate.get("foot_only", False),
                     "reference_label": candidate["name"],
                     "geography_reference": metadata["source_research"],
@@ -277,7 +281,6 @@ def author():
             if "source_relation" in candidate:
                 stop["source_relation"] = candidate["source_relation"]
             if stop["foot_only"]:
-                anchor = candidate["parking_anchor"]
                 stop["parking_anchor"] = {"u": anchor[0], "v": anchor[1]}
                 stop["access_notice"] = "Game requires parking and walking; this does not reproduce real seasonal vehicle-access rules"
             assert len(stop["name"]) <= 18 and stop["name"].isascii()
@@ -296,7 +299,7 @@ def author():
         assert len(title) <= 18 and all(len(line) <= 18 for line in brief)
         assert 2 <= len(route) <= 12 and len(route) == len(objectives)
         assert all(first != last for first, last in zip(route, route[1:]))
-        assert any(stops[stop]["district"] != 0 for stop in route)
+        assert any(stops[stop]["district"] >> 2 != 0 for stop in route)
         assert vehicle == 255 or all(not stops[stop].get("foot_only") for stop in route)
         legs, road, walking = [], 0, 0
         for first, last in zip(route, route[1:]):
@@ -317,7 +320,7 @@ def author():
             "id": f"contract-{index:02d}", "title": title, "brief": list(brief),
             "chapter": "Western package routes", "kind": campaign["quest_types"][kind], "kind_id": kind,
             "required_vehicle": vehicle, "min_completed": gate, "route": route,
-            "time_limit_seconds": deadline, "reward": 85 + math.ceil(road / 40) + (len(route) - 1) * 12 + (25 if kind in (1, 3) else 0),
+            "time_limit_seconds": deadline, "reward": 85 + math.ceil(road / 80) + (len(route) - 1) * 12 + (25 if kind in (1, 3) else 0),
             "stages": [{"stop_id": stop, "district": stops[stop]["district"], "objective": objective}
                        for stop, objective in zip(route, objectives)],
             "objective_notice": "Ordered native handoffs and depot returns; descriptions do not imply new signatures, cargo animations or loading delays",

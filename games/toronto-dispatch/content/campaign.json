@@ -1,6 +1,6 @@
 {
   "status": "engine-integrated",
-  "scope": "Four linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.",
+  "scope": "Four linked original compressed districts, each drawn at double scale in four native scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.",
   "duration_target_minutes": 120,
   "duration_verified": false,
   "duration_notice": "Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.",
@@ -28,257 +28,257 @@
   "stops": [
     {
       "id": 0,
-      "u": 576,
-      "v": 740,
+      "district": 3,
+      "u": 268,
+      "v": 564,
       "name": "UNION DEPOT",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 1,
-      "u": 712,
-      "v": 740,
+      "district": 3,
+      "u": 504,
+      "v": 564,
       "name": "ST LAWRENCE",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 2,
-      "u": 820,
-      "v": 740,
+      "district": 3,
+      "u": 672,
+      "v": 564,
       "name": "DISTILLERY",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 3,
-      "u": 576,
-      "v": 516,
+      "district": 3,
+      "u": 268,
+      "v": 188,
       "name": "CITY HALL",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 4,
-      "u": 204,
-      "v": 516,
+      "district": 2,
+      "u": 489,
+      "v": 188,
       "name": "QUEEN WEST",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 5,
-      "u": 448,
-      "v": 412,
+      "district": 1,
+      "u": 76,
+      "v": 908,
       "name": "AGO / GRANGE",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 6,
-      "u": 464,
-      "v": 76,
+      "district": 1,
+      "u": 92,
+      "v": 156,
       "name": "ROM / BLOOR",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 7,
-      "u": 372,
-      "v": 344,
+      "district": 0,
+      "u": 900,
+      "v": 769,
       "name": "KENSINGTON",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 8,
-      "u": 76,
-      "v": 476,
+      "district": 2,
+      "u": 164,
+      "v": 113,
       "name": "DUFFERIN",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 9,
-      "u": 968,
-      "v": 540,
+      "district": 3,
+      "u": 925,
+      "v": 212,
       "name": "RIVERSIDE",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 10,
-      "u": 584,
-      "v": 828,
+      "district": 3,
+      "u": 282,
+      "v": 716,
       "name": "FERRY TERMINAL",
       "transit": 3,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 11,
-      "u": 724,
-      "v": 828,
+      "district": 3,
+      "u": 528,
+      "v": 716,
       "name": "EAST BAYFRONT",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 12,
-      "u": 652,
-      "v": 688,
+      "district": 3,
+      "u": 396,
+      "v": 471,
       "name": "KING STATION",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 13,
-      "u": 652,
-      "v": 580,
+      "district": 3,
+      "u": 396,
+      "v": 287,
       "name": "QUEEN STATION",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 14,
-      "u": 652,
-      "v": 444,
+      "district": 3,
+      "u": 396,
+      "v": 38,
       "name": "DUNDAS STATION",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 15,
-      "u": 652,
-      "v": 332,
+      "district": 1,
+      "u": 396,
+      "v": 726,
       "name": "COLLEGE STATION",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 16,
-      "u": 652,
-      "v": 212,
+      "district": 1,
+      "u": 396,
+      "v": 463,
       "name": "WELLESLEY",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 17,
-      "u": 652,
-      "v": 108,
+      "district": 1,
+      "u": 396,
+      "v": 223,
       "name": "BLOOR-YONGE",
       "transit": 1,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 18,
-      "u": 164,
-      "v": 108,
+      "district": 0,
+      "u": 380,
+      "v": 223,
       "name": "OSSINGTON BUS",
       "transit": 2,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 19,
-      "u": 828,
-      "v": 76,
+      "district": 1,
+      "u": 688,
+      "v": 156,
       "name": "CASTLE FRANK",
       "transit": 2,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 20,
-      "u": 444,
-      "v": 928,
+      "district": 3,
+      "u": 70,
+      "v": 889,
       "name": "HANLANS POINT",
       "transit": 3,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 21,
-      "u": 720,
-      "v": 920,
+      "district": 3,
+      "u": 520,
+      "v": 875,
       "name": "CENTRE ISLAND",
       "transit": 3,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 22,
-      "u": 848,
-      "v": 896,
+      "district": 3,
+      "u": 726,
+      "v": 832,
       "name": "WARDS ISLAND",
       "transit": 3,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 23,
-      "u": 464,
-      "v": 740,
+      "district": 3,
+      "u": 92,
+      "v": 564,
       "name": "CN TOWER",
       "transit": 0,
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 24,
-      "u": 560,
-      "v": 928,
+      "district": 3,
+      "u": 252,
+      "v": 889,
       "name": "HANLAN SERVICE",
       "transit": 0,
       "location_notice": "Original fictional delivery entrance on compressed Island terrain",
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 25,
-      "u": 760,
-      "v": 944,
+      "district": 3,
+      "u": 600,
+      "v": 918,
       "name": "CENTRE PARK POST",
       "transit": 0,
       "location_notice": "Original fictional delivery entrance on compressed Island terrain",
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 26,
-      "u": 912,
-      "v": 912,
+      "district": 3,
+      "u": 848,
+      "v": 860,
       "name": "WARD COTTAGE POST",
       "transit": 0,
       "location_notice": "Original fictional delivery entrance on compressed Island terrain",
-      "district": 0,
       "reserved": 0
     },
     {
       "id": 27,
-      "u": 976,
-      "v": 288,
+      "u": 933,
+      "v": 552,
       "name": "DUFFERIN COLLEGE",
       "transit": 0,
-      "district": 1,
+      "district": 5,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Dufferin-side College",
@@ -288,11 +288,11 @@
     },
     {
       "id": 28,
-      "u": 800,
-      "v": 64,
+      "u": 632,
+      "v": 120,
       "name": "LANSDOWNE BLOOR",
       "transit": 0,
-      "district": 1,
+      "district": 5,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Lansdowne / Bloor",
@@ -301,11 +301,11 @@
     },
     {
       "id": 29,
-      "u": 864,
-      "v": 528,
+      "u": 760,
+      "v": 88,
       "name": "PARKDALE QUEEN",
       "transit": 0,
-      "district": 1,
+      "district": 7,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Parkdale / Queen",
@@ -314,11 +314,11 @@
     },
     {
       "id": 30,
-      "u": 416,
-      "v": 352,
+      "u": 928,
+      "v": 672,
       "name": "RONCY HOWARD PARK",
       "transit": 0,
-      "district": 1,
+      "district": 4,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Roncesvalles / Howard",
@@ -327,11 +327,11 @@
     },
     {
       "id": 31,
-      "u": 544,
-      "v": 432,
+      "u": 192,
+      "v": 848,
       "name": "SORAUREN SERVICE",
       "transit": 0,
-      "district": 1,
+      "district": 5,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Sorauren Works",
@@ -340,11 +340,11 @@
     },
     {
       "id": 32,
-      "u": 656,
-      "v": 272,
+      "u": 320,
+      "v": 576,
       "name": "BLOOR PARK GATE",
       "transit": 0,
-      "district": 2,
+      "district": 9,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "High Park Gate",
@@ -354,11 +354,11 @@
     },
     {
       "id": 33,
-      "u": 944,
-      "v": 608,
+      "u": 872,
+      "v": 312,
       "name": "PARKSIDE SOUTH",
       "transit": 0,
-      "district": 2,
+      "district": 11,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Parkside Depot",
@@ -367,11 +367,11 @@
     },
     {
       "id": 34,
-      "u": 784,
-      "v": 608,
+      "u": 571,
+      "v": 312,
       "name": "COLBORNE SERVICE",
       "transit": 0,
-      "district": 2,
+      "district": 11,
       "reserved": 1,
       "foot_only": true,
       "reference_label": "Colborne Service",
@@ -379,18 +379,18 @@
       "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door",
       "source_relation": "Fictional park walk from south Queensway approach; not a claim of real all-day access policy.",
       "parking_anchor": {
-        "u": 736,
-        "v": 640
+        "u": 472,
+        "v": 368
       },
       "access_notice": "Game requires parking and walking; this does not reproduce real seasonal vehicle-access rules"
     },
     {
       "id": 35,
-      "u": 144,
-      "v": 64,
+      "u": 315,
+      "v": 136,
       "name": "DANFORTH HALL",
       "transit": 0,
-      "district": 3,
+      "district": 12,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Danforth Hall",
@@ -399,29 +399,29 @@
     },
     {
       "id": 36,
-      "u": 320,
-      "v": 144,
+      "u": 697,
+      "v": 304,
       "name": "WITHROW POST",
       "transit": 0,
-      "district": 3,
+      "district": 12,
       "reserved": 1,
       "foot_only": true,
       "reference_label": "Withrow Parcel",
       "geography_reference": "docs/EAST_DISTRICT.md",
       "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
       "parking_anchor": {
-        "u": 224,
-        "v": 144
+        "u": 480,
+        "v": 304
       },
       "access_notice": "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
     },
     {
       "id": 37,
-      "u": 128,
-      "v": 528,
+      "u": 280,
+      "v": 168,
       "name": "RIVERSIDE QUEEN",
       "transit": 0,
-      "district": 3,
+      "district": 14,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Riverside Queen",
@@ -430,11 +430,11 @@
     },
     {
       "id": 38,
-      "u": 544,
-      "v": 288,
+      "u": 168,
+      "v": 616,
       "name": "GERRARD / PAPE",
       "transit": 0,
-      "district": 3,
+      "district": 13,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Gerrard / Pape",
@@ -443,11 +443,11 @@
     },
     {
       "id": 39,
-      "u": 384,
-      "v": 608,
+      "u": 824,
+      "v": 322,
       "name": "CARLAW WORKS",
       "transit": 0,
-      "district": 3,
+      "district": 14,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Carlaw Works",
@@ -456,11 +456,11 @@
     },
     {
       "id": 40,
-      "u": 816,
-      "v": 496,
+      "u": 656,
+      "v": 112,
       "name": "LESLIE / QUEEN",
       "transit": 0,
-      "district": 3,
+      "district": 15,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Leslie / Queen",
@@ -469,29 +469,29 @@
     },
     {
       "id": 41,
-      "u": 880,
-      "v": 312,
+      "u": 769,
+      "v": 664,
       "name": "GREENWOOD POST",
       "transit": 0,
-      "district": 3,
+      "district": 13,
       "reserved": 1,
       "foot_only": true,
       "reference_label": "Greenwood Parcel",
       "geography_reference": "docs/EAST_DISTRICT.md",
       "location_notice": "Original fictional courier service entrance on compressed terrain; not a surveyed loading door",
       "parking_anchor": {
-        "u": 816,
-        "v": 312
+        "u": 656,
+        "v": 664
       },
       "access_notice": "Native delivery requires parking and walking; no real-world park vehicle-access policy is asserted"
     },
     {
       "id": 42,
-      "u": 880,
-      "v": 496,
+      "u": 769,
+      "v": 112,
       "name": "ASHBRIDGE QUEEN",
       "transit": 0,
-      "district": 3,
+      "district": 15,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Ashbridge Queen",
@@ -500,11 +500,11 @@
     },
     {
       "id": 43,
-      "u": 836,
-      "v": 556,
+      "u": 681,
+      "v": 164,
       "name": "QUEEN PARKDALE",
       "transit": 4,
-      "district": 1,
+      "district": 7,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -520,25 +520,32 @@
           "intersection": "Queen / Lansdowne"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Parkdale consolidates different Jameson eastbound and Lansdowne westbound stop identities; it is not an eastbound Lansdowne stop.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations. Parkdale consolidates different Jameson eastbound and Lansdowne westbound stop identities; it is not an eastbound Lansdowne stop.",
       "walking_approach": {
+        "road_point": [
+          760,
+          88
+        ],
+        "client_stop_id": 29,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 1,
+        "u": 836,
+        "v": 556,
         "road_point": [
           864,
           528
-        ],
-        "client_stop_id": 29,
-        "shortest_tile_steps": 7,
-        "estimated_pixels": 56,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 44,
-      "u": 116,
-      "v": 556,
+      "u": 269,
+      "v": 233,
       "name": "QUEEN DUFFERIN",
       "transit": 4,
-      "district": 0,
+      "district": 2,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -554,25 +561,32 @@
           "intersection": "Queen / Dufferin"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations.",
       "walking_approach": {
+        "road_point": [
+          168,
+          200
+        ],
+        "client_stop_id": 8,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 0,
+        "u": 116,
+        "v": 556,
         "road_point": [
           80,
           528
-        ],
-        "client_stop_id": 8,
-        "shortest_tile_steps": 7,
-        "estimated_pixels": 56,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 45,
-      "u": 340,
-      "v": 556,
+      "u": 830,
+      "v": 233,
       "name": "QUEEN SPADINA",
       "transit": 4,
-      "district": 0,
+      "district": 2,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -588,25 +602,32 @@
           "intersection": "Queen / Spadina"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations.",
       "walking_approach": {
+        "road_point": [
+          817,
+          200
+        ],
+        "client_stop_id": 4,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 0,
+        "u": 340,
+        "v": 556,
         "road_point": [
           336,
           528
-        ],
-        "client_stop_id": 4,
-        "shortest_tile_steps": 7,
-        "estimated_pixels": 56,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 46,
-      "u": 676,
-      "v": 556,
+      "u": 433,
+      "v": 233,
       "name": "QUEEN YONGE",
       "transit": 4,
-      "district": 0,
+      "district": 3,
       "reserved": 0,
       "source_refs": [
         "ttc-queen-yonge-reference-20261002"
@@ -621,25 +642,32 @@
           "intersection": "Queen / Yonge"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Normal Queen/Yonge identities are retained for the game; current 501 uses Adelaide/Richmond downtown.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations. Normal Queen/Yonge identities are retained for the game; current 501 uses Adelaide/Richmond downtown.",
       "walking_approach": {
+        "road_point": [
+          384,
+          200
+        ],
+        "client_stop_id": 13,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 0,
+        "u": 676,
+        "v": 556,
         "road_point": [
           640,
           528
-        ],
-        "client_stop_id": 13,
-        "shortest_tile_steps": 7,
-        "estimated_pixels": 56,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 47,
-      "u": 980,
-      "v": 556,
+      "u": 946,
+      "v": 233,
       "name": "QUEEN BROADVIEW",
       "transit": 4,
-      "district": 0,
+      "district": 3,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -655,25 +683,32 @@
           "intersection": "Queen / Broadview"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations.",
       "walking_approach": {
+        "road_point": [
+          881,
+          200
+        ],
+        "client_stop_id": null,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 0,
+        "u": 980,
+        "v": 556,
         "road_point": [
           944,
           528
-        ],
-        "client_stop_id": null,
-        "shortest_tile_steps": 7,
-        "estimated_pixels": 56,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 48,
-      "u": 128,
-      "v": 556,
+      "u": 280,
+      "v": 201,
       "name": "QUEEN SAULTER",
       "transit": 4,
-      "district": 3,
+      "district": 14,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -689,25 +724,32 @@
           "intersection": "Queen / Boulton"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Saulter eastbound and Boulton westbound are consolidated; De Grassi is not claimed to be a TTC stop or drawn street here.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations. Saulter eastbound and Boulton westbound are consolidated; De Grassi is not claimed to be a TTC stop or drawn street here.",
       "walking_approach": {
+        "road_point": [
+          280,
+          168
+        ],
+        "client_stop_id": 37,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 3,
+        "u": 128,
+        "v": 556,
         "road_point": [
           128,
           528
-        ],
-        "client_stop_id": 37,
-        "shortest_tile_steps": 3,
-        "estimated_pixels": 24,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 49,
-      "u": 780,
-      "v": 524,
+      "u": 606,
+      "v": 145,
       "name": "QUEEN LESLIE",
       "transit": 4,
-      "district": 3,
+      "district": 15,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -723,25 +765,32 @@
           "intersection": "Queen / Leslie"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations.",
       "walking_approach": {
+        "road_point": [
+          656,
+          112
+        ],
+        "client_stop_id": 40,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 3,
+        "u": 780,
+        "v": 524,
         "road_point": [
           816,
           496
-        ],
-        "client_stop_id": 40,
-        "shortest_tile_steps": 8,
-        "estimated_pixels": 64,
-        "planning_only": true
+        ]
       }
     },
     {
       "id": 50,
-      "u": 880,
-      "v": 524,
+      "u": 769,
+      "v": 145,
       "name": "QUEEN ALTON",
       "transit": 4,
-      "district": 3,
+      "district": 15,
       "reserved": 0,
       "source_refs": [
         "ttc-501-east-stops-20261002",
@@ -757,16 +806,23 @@
           "intersection": "Queen / Alton"
         }
       },
-      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native pixels, not surveyed TTC boarding locations. Alton is west of Greenwood and fits the existing Ashbridge service point. Real Woodfield stops lie east of Greenwood and are not moved here.",
+      "platform_notice": "One original south-curb game platform serves both directions; coordinates are compressed native scene pixels (the plan position, 1x, maps through world2x.py), not surveyed TTC boarding locations. Alton is west of Greenwood and fits the existing Ashbridge service point. Real Woodfield stops lie east of Greenwood and are not moved here.",
       "walking_approach": {
+        "road_point": [
+          769,
+          112
+        ],
+        "client_stop_id": 42,
+        "planning_only": true
+      },
+      "plan": {
+        "district": 3,
+        "u": 880,
+        "v": 524,
         "road_point": [
           880,
           496
-        ],
-        "client_stop_id": 42,
-        "shortest_tile_steps": 3,
-        "estimated_pixels": 24,
-        "planning_only": true
+        ]
       }
     }
   ],
@@ -788,13 +844,13 @@
         1
       ],
       "time_limit_seconds": 120,
-      "reward": 84,
+      "reward": 83,
       "timing_design": {
-        "vehicle_route_pixels": 136,
+        "vehicle_route_pixels": 240,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 2.0,
+        "modeled_road_and_foot_seconds": 4.3,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -817,13 +873,13 @@
         5
       ],
       "time_limit_seconds": 120,
-      "reward": 117,
+      "reward": 115,
       "timing_design": {
-        "vehicle_route_pixels": 456,
+        "vehicle_route_pixels": 776,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 6.8,
+        "modeled_road_and_foot_seconds": 13.8,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -848,11 +904,11 @@
       "time_limit_seconds": 120,
       "reward": 101,
       "timing_design": {
-        "vehicle_route_pixels": 240,
+        "vehicle_route_pixels": 408,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 3.6,
+        "modeled_road_and_foot_seconds": 7.3,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -875,14 +931,14 @@
         2,
         11
       ],
-      "time_limit_seconds": 120,
-      "reward": 123,
+      "time_limit_seconds": 125,
+      "reward": 121,
       "timing_design": {
-        "vehicle_route_pixels": 288,
+        "vehicle_route_pixels": 464,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 3.8,
+        "modeled_road_and_foot_seconds": 7.3,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -906,14 +962,14 @@
         16,
         18
       ],
-      "time_limit_seconds": 150,
+      "time_limit_seconds": 195,
       "reward": 132,
       "timing_design": {
-        "vehicle_route_pixels": 1256,
+        "vehicle_route_pixels": 2520,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 18.6,
+        "modeled_road_and_foot_seconds": 44.8,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -935,14 +991,14 @@
         6,
         3
       ],
-      "time_limit_seconds": 120,
+      "time_limit_seconds": 150,
       "reward": 122,
       "timing_design": {
-        "vehicle_route_pixels": 648,
+        "vehicle_route_pixels": 1344,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.6,
+        "modeled_road_and_foot_seconds": 23.9,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -965,14 +1021,14 @@
         3,
         0
       ],
-      "time_limit_seconds": 130,
-      "reward": 106,
+      "time_limit_seconds": 150,
+      "reward": 104,
       "timing_design": {
-        "vehicle_route_pixels": 640,
+        "vehicle_route_pixels": 1072,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.5,
+        "modeled_road_and_foot_seconds": 19.1,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -997,14 +1053,14 @@
         21,
         10
       ],
-      "time_limit_seconds": 195,
+      "time_limit_seconds": 200,
       "reward": 118,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 128,
+        "island_walking_pixels": 240,
         "required_ferry_legs": 2,
         "fictional_ferry_fares": 8,
-        "modeled_road_and_foot_seconds": 4.3,
+        "modeled_road_and_foot_seconds": 8.0,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1028,14 +1084,14 @@
         4,
         8
       ],
-      "time_limit_seconds": 155,
+      "time_limit_seconds": 200,
       "reward": 140,
       "timing_design": {
-        "vehicle_route_pixels": 1104,
+        "vehicle_route_pixels": 2216,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 16.4,
+        "modeled_road_and_foot_seconds": 39.4,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1057,14 +1113,14 @@
         2,
         9
       ],
-      "time_limit_seconds": 115,
-      "reward": 127,
+      "time_limit_seconds": 125,
+      "reward": 126,
       "timing_design": {
-        "vehicle_route_pixels": 400,
+        "vehicle_route_pixels": 680,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 5.9,
+        "modeled_road_and_foot_seconds": 12.1,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1086,14 +1142,14 @@
         3,
         8
       ],
-      "time_limit_seconds": 80,
-      "reward": 121,
+      "time_limit_seconds": 95,
+      "reward": 122,
       "timing_design": {
-        "vehicle_route_pixels": 544,
+        "vehicle_route_pixels": 1152,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 8.1,
+        "modeled_road_and_foot_seconds": 20.5,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1116,14 +1172,14 @@
         7,
         8
       ],
-      "time_limit_seconds": 145,
+      "time_limit_seconds": 190,
       "reward": 159,
       "timing_design": {
-        "vehicle_route_pixels": 1256,
+        "vehicle_route_pixels": 2488,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 16.7,
+        "modeled_road_and_foot_seconds": 39.0,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1148,14 +1204,14 @@
         16,
         19
       ],
-      "time_limit_seconds": 150,
-      "reward": 145,
+      "time_limit_seconds": 180,
+      "reward": 144,
       "timing_design": {
-        "vehicle_route_pixels": 912,
+        "vehicle_route_pixels": 1760,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 13.5,
+        "modeled_road_and_foot_seconds": 31.3,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1178,14 +1234,14 @@
         1,
         2
       ],
-      "time_limit_seconds": 130,
-      "reward": 141,
+      "time_limit_seconds": 145,
+      "reward": 139,
       "timing_design": {
-        "vehicle_route_pixels": 560,
+        "vehicle_route_pixels": 936,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 8.3,
+        "modeled_road_and_foot_seconds": 16.6,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1209,14 +1265,14 @@
         7,
         0
       ],
-      "time_limit_seconds": 170,
-      "reward": 151,
+      "time_limit_seconds": 225,
+      "reward": 149,
       "timing_design": {
-        "vehicle_route_pixels": 1536,
+        "vehicle_route_pixels": 2944,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 22.8,
+        "modeled_road_and_foot_seconds": 52.3,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1241,14 +1297,14 @@
         20,
         10
       ],
-      "time_limit_seconds": 205,
+      "time_limit_seconds": 210,
       "reward": 130,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 272,
+        "island_walking_pixels": 400,
         "required_ferry_legs": 2,
         "fictional_ferry_fares": 8,
-        "modeled_road_and_foot_seconds": 9.1,
+        "modeled_road_and_foot_seconds": 13.3,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1274,14 +1330,14 @@
         4,
         8
       ],
-      "time_limit_seconds": 205,
-      "reward": 197,
+      "time_limit_seconds": 280,
+      "reward": 193,
       "timing_design": {
-        "vehicle_route_pixels": 2112,
+        "vehicle_route_pixels": 3904,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 31.3,
+        "modeled_road_and_foot_seconds": 69.4,
         "modeled_control_allowance_seconds": 25,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1304,14 +1360,14 @@
         23,
         3
       ],
-      "time_limit_seconds": 135,
-      "reward": 157,
+      "time_limit_seconds": 155,
+      "reward": 154,
       "timing_design": {
-        "vehicle_route_pixels": 688,
+        "vehicle_route_pixels": 1136,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 10.2,
+        "modeled_road_and_foot_seconds": 20.2,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1334,14 +1390,14 @@
         1,
         3
       ],
-      "time_limit_seconds": 85,
-      "reward": 142,
+      "time_limit_seconds": 95,
+      "reward": 140,
       "timing_design": {
-        "vehicle_route_pixels": 496,
+        "vehicle_route_pixels": 856,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 7.3,
+        "modeled_road_and_foot_seconds": 15.2,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1364,14 +1420,14 @@
         23,
         3
       ],
-      "time_limit_seconds": 130,
-      "reward": 156,
+      "time_limit_seconds": 150,
+      "reward": 154,
       "timing_design": {
-        "vehicle_route_pixels": 680,
+        "vehicle_route_pixels": 1144,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.1,
+        "modeled_road_and_foot_seconds": 17.9,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1396,14 +1452,14 @@
         15,
         17
       ],
-      "time_limit_seconds": 140,
+      "time_limit_seconds": 165,
       "reward": 150,
       "timing_design": {
-        "vehicle_route_pixels": 608,
+        "vehicle_route_pixels": 1216,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.0,
+        "modeled_road_and_foot_seconds": 21.6,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1426,14 +1482,14 @@
         5,
         3
       ],
-      "time_limit_seconds": 135,
+      "time_limit_seconds": 165,
       "reward": 157,
       "timing_design": {
-        "vehicle_route_pixels": 696,
+        "vehicle_route_pixels": 1424,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 10.3,
+        "modeled_road_and_foot_seconds": 25.3,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1457,14 +1513,14 @@
         23,
         3
       ],
-      "time_limit_seconds": 155,
-      "reward": 153,
+      "time_limit_seconds": 190,
+      "reward": 148,
       "timing_design": {
-        "vehicle_route_pixels": 1152,
+        "vehicle_route_pixels": 1920,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 17.1,
+        "modeled_road_and_foot_seconds": 34.1,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1489,14 +1545,14 @@
         22,
         10
       ],
-      "time_limit_seconds": 200,
+      "time_limit_seconds": 205,
       "reward": 142,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 160,
+        "island_walking_pixels": 336,
         "required_ferry_legs": 2,
         "fictional_ferry_fares": 8,
-        "modeled_road_and_foot_seconds": 5.3,
+        "modeled_road_and_foot_seconds": 11.2,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1521,14 +1577,14 @@
         4,
         8
       ],
-      "time_limit_seconds": 175,
-      "reward": 180,
+      "time_limit_seconds": 225,
+      "reward": 178,
       "timing_design": {
-        "vehicle_route_pixels": 1360,
+        "vehicle_route_pixels": 2536,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 20.1,
+        "modeled_road_and_foot_seconds": 45.1,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1550,14 +1606,14 @@
         6,
         2
       ],
-      "time_limit_seconds": 135,
-      "reward": 167,
+      "time_limit_seconds": 170,
+      "reward": 165,
       "timing_design": {
-        "vehicle_route_pixels": 1016,
+        "vehicle_route_pixels": 1920,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 15.1,
+        "modeled_road_and_foot_seconds": 34.1,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1579,14 +1635,14 @@
         8,
         19
       ],
-      "time_limit_seconds": 90,
-      "reward": 160,
+      "time_limit_seconds": 125,
+      "reward": 161,
       "timing_design": {
-        "vehicle_route_pixels": 1152,
+        "vehicle_route_pixels": 2392,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 17.1,
+        "modeled_road_and_foot_seconds": 42.5,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1609,14 +1665,14 @@
         3,
         1
       ],
-      "time_limit_seconds": 130,
-      "reward": 170,
+      "time_limit_seconds": 155,
+      "reward": 168,
       "timing_design": {
-        "vehicle_route_pixels": 736,
+        "vehicle_route_pixels": 1304,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.8,
+        "modeled_road_and_foot_seconds": 20.5,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1641,14 +1697,14 @@
         19,
         9
       ],
-      "time_limit_seconds": 170,
+      "time_limit_seconds": 230,
       "reward": 190,
       "timing_design": {
-        "vehicle_route_pixels": 1728,
+        "vehicle_route_pixels": 3456,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 25.6,
+        "modeled_road_and_foot_seconds": 61.4,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1671,14 +1727,14 @@
         12,
         0
       ],
-      "time_limit_seconds": 120,
+      "time_limit_seconds": 130,
       "reward": 157,
       "timing_design": {
-        "vehicle_route_pixels": 240,
+        "vehicle_route_pixels": 448,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 3.6,
+        "modeled_road_and_foot_seconds": 8.0,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1703,14 +1759,14 @@
         9,
         0
       ],
-      "time_limit_seconds": 170,
-      "reward": 177,
+      "time_limit_seconds": 205,
+      "reward": 173,
       "timing_design": {
-        "vehicle_route_pixels": 1232,
+        "vehicle_route_pixels": 2096,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 18.3,
+        "modeled_road_and_foot_seconds": 37.3,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1739,14 +1795,14 @@
         21,
         10
       ],
-      "time_limit_seconds": 310,
+      "time_limit_seconds": 320,
       "reward": 202,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 400,
+        "island_walking_pixels": 640,
         "required_ferry_legs": 4,
         "fictional_ferry_fares": 16,
-        "modeled_road_and_foot_seconds": 13.3,
+        "modeled_road_and_foot_seconds": 21.3,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1770,14 +1826,14 @@
         1,
         23
       ],
-      "time_limit_seconds": 140,
-      "reward": 162,
+      "time_limit_seconds": 155,
+      "reward": 159,
       "timing_design": {
-        "vehicle_route_pixels": 536,
+        "vehicle_route_pixels": 880,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 7.9,
+        "modeled_road_and_foot_seconds": 15.6,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1800,14 +1856,14 @@
         11,
         10
       ],
-      "time_limit_seconds": 120,
-      "reward": 171,
+      "time_limit_seconds": 130,
+      "reward": 170,
       "timing_design": {
-        "vehicle_route_pixels": 320,
+        "vehicle_route_pixels": 544,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 4.7,
+        "modeled_road_and_foot_seconds": 9.7,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1830,14 +1886,14 @@
         11,
         23
       ],
-      "time_limit_seconds": 85,
-      "reward": 165,
+      "time_limit_seconds": 95,
+      "reward": 164,
       "timing_design": {
-        "vehicle_route_pixels": 480,
+        "vehicle_route_pixels": 840,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 7.1,
+        "modeled_road_and_foot_seconds": 14.9,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1860,14 +1916,14 @@
         23,
         10
       ],
-      "time_limit_seconds": 140,
+      "time_limit_seconds": 170,
       "reward": 187,
       "timing_design": {
-        "vehicle_route_pixels": 944,
+        "vehicle_route_pixels": 1872,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 12.6,
+        "modeled_road_and_foot_seconds": 29.4,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1892,14 +1948,14 @@
         12,
         10
       ],
-      "time_limit_seconds": 145,
+      "time_limit_seconds": 175,
       "reward": 178,
       "timing_design": {
-        "vehicle_route_pixels": 784,
+        "vehicle_route_pixels": 1536,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 11.6,
+        "modeled_road_and_foot_seconds": 27.3,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1922,14 +1978,14 @@
         1,
         2
       ],
-      "time_limit_seconds": 120,
-      "reward": 171,
+      "time_limit_seconds": 130,
+      "reward": 170,
       "timing_design": {
-        "vehicle_route_pixels": 320,
+        "vehicle_route_pixels": 544,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 4.7,
+        "modeled_road_and_foot_seconds": 9.7,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1953,14 +2009,14 @@
         23,
         11
       ],
-      "time_limit_seconds": 145,
-      "reward": 168,
+      "time_limit_seconds": 170,
+      "reward": 165,
       "timing_design": {
-        "vehicle_route_pixels": 768,
+        "vehicle_route_pixels": 1360,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 11.4,
+        "modeled_road_and_foot_seconds": 24.2,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -1989,14 +2045,14 @@
         22,
         10
       ],
-      "time_limit_seconds": 305,
+      "time_limit_seconds": 315,
       "reward": 214,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 288,
+        "island_walking_pixels": 576,
         "required_ferry_legs": 4,
         "fictional_ferry_fares": 16,
-        "modeled_road_and_foot_seconds": 9.6,
+        "modeled_road_and_foot_seconds": 19.2,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2021,14 +2077,14 @@
         7,
         6
       ],
-      "time_limit_seconds": 170,
-      "reward": 203,
+      "time_limit_seconds": 230,
+      "reward": 204,
       "timing_design": {
-        "vehicle_route_pixels": 1312,
+        "vehicle_route_pixels": 2688,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 19.4,
+        "modeled_road_and_foot_seconds": 47.8,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2050,14 +2106,14 @@
         5,
         23
       ],
-      "time_limit_seconds": 115,
-      "reward": 176,
+      "time_limit_seconds": 130,
+      "reward": 175,
       "timing_design": {
-        "vehicle_route_pixels": 408,
+        "vehicle_route_pixels": 744,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 6.0,
+        "modeled_road_and_foot_seconds": 13.2,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2079,14 +2135,14 @@
         8,
         5
       ],
-      "time_limit_seconds": 80,
-      "reward": 166,
+      "time_limit_seconds": 95,
+      "reward": 168,
       "timing_design": {
-        "vehicle_route_pixels": 440,
+        "vehicle_route_pixels": 1024,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 6.5,
+        "modeled_road_and_foot_seconds": 18.2,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2108,14 +2164,14 @@
         2,
         6
       ],
-      "time_limit_seconds": 130,
-      "reward": 191,
+      "time_limit_seconds": 165,
+      "reward": 189,
       "timing_design": {
-        "vehicle_route_pixels": 1016,
+        "vehicle_route_pixels": 1920,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 13.5,
+        "modeled_road_and_foot_seconds": 30.1,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2140,14 +2196,14 @@
         16,
         17
       ],
-      "time_limit_seconds": 140,
-      "reward": 185,
+      "time_limit_seconds": 160,
+      "reward": 184,
       "timing_design": {
-        "vehicle_route_pixels": 568,
+        "vehicle_route_pixels": 1120,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 8.4,
+        "modeled_road_and_foot_seconds": 19.9,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2170,14 +2226,14 @@
         7,
         5
       ],
-      "time_limit_seconds": 125,
-      "reward": 187,
+      "time_limit_seconds": 150,
+      "reward": 188,
       "timing_design": {
-        "vehicle_route_pixels": 480,
+        "vehicle_route_pixels": 1040,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 7.1,
+        "modeled_road_and_foot_seconds": 18.5,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2201,14 +2257,14 @@
         6,
         5
       ],
-      "time_limit_seconds": 185,
-      "reward": 215,
+      "time_limit_seconds": 270,
+      "reward": 212,
       "timing_design": {
-        "vehicle_route_pixels": 2176,
+        "vehicle_route_pixels": 4128,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 32.2,
+        "modeled_road_and_foot_seconds": 73.4,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2237,14 +2293,14 @@
         20,
         10
       ],
-      "time_limit_seconds": 310,
+      "time_limit_seconds": 325,
       "reward": 226,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 432,
+        "island_walking_pixels": 736,
         "required_ferry_legs": 4,
         "fictional_ferry_fares": 16,
-        "modeled_road_and_foot_seconds": 14.4,
+        "modeled_road_and_foot_seconds": 24.5,
         "modeled_control_allowance_seconds": 40,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2269,14 +2325,14 @@
         9,
         17
       ],
-      "time_limit_seconds": 175,
-      "reward": 217,
+      "time_limit_seconds": 225,
+      "reward": 214,
       "timing_design": {
-        "vehicle_route_pixels": 1392,
+        "vehicle_route_pixels": 2536,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 20.6,
+        "modeled_road_and_foot_seconds": 45.1,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2298,14 +2354,14 @@
         2,
         4
       ],
-      "time_limit_seconds": 125,
-      "reward": 198,
+      "time_limit_seconds": 155,
+      "reward": 197,
       "timing_design": {
-        "vehicle_route_pixels": 840,
+        "vehicle_route_pixels": 1536,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 12.4,
+        "modeled_road_and_foot_seconds": 27.3,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2327,14 +2383,14 @@
         0,
         12
       ],
-      "time_limit_seconds": 70,
+      "time_limit_seconds": 75,
       "reward": 170,
       "timing_design": {
-        "vehicle_route_pixels": 120,
+        "vehicle_route_pixels": 224,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 1.8,
+        "modeled_road_and_foot_seconds": 4.0,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2357,14 +2413,14 @@
         3,
         23
       ],
-      "time_limit_seconds": 135,
+      "time_limit_seconds": 165,
       "reward": 209,
       "timing_design": {
-        "vehicle_route_pixels": 880,
+        "vehicle_route_pixels": 1704,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 11.7,
+        "modeled_road_and_foot_seconds": 26.7,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2389,14 +2445,14 @@
         13,
         0
       ],
-      "time_limit_seconds": 150,
-      "reward": 205,
+      "time_limit_seconds": 180,
+      "reward": 204,
       "timing_design": {
-        "vehicle_route_pixels": 912,
+        "vehicle_route_pixels": 1760,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 13.5,
+        "modeled_road_and_foot_seconds": 31.3,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2420,14 +2476,14 @@
         4,
         8
       ],
-      "time_limit_seconds": 150,
-      "reward": 222,
+      "time_limit_seconds": 195,
+      "reward": 223,
       "timing_design": {
-        "vehicle_route_pixels": 992,
+        "vehicle_route_pixels": 2040,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 14.7,
+        "modeled_road_and_foot_seconds": 36.3,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2453,14 +2509,14 @@
         9,
         0
       ],
-      "time_limit_seconds": 220,
-      "reward": 257,
+      "time_limit_seconds": 315,
+      "reward": 254,
       "timing_design": {
-        "vehicle_route_pixels": 2576,
+        "vehicle_route_pixels": 4912,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 38.2,
+        "modeled_road_and_foot_seconds": 87.3,
         "modeled_control_allowance_seconds": 25,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2491,14 +2547,14 @@
         22,
         26
       ],
-      "time_limit_seconds": 360,
+      "time_limit_seconds": 375,
       "reward": 262,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 480,
+        "island_walking_pixels": 808,
         "required_ferry_legs": 5,
         "fictional_ferry_fares": 20,
-        "modeled_road_and_foot_seconds": 16.0,
+        "modeled_road_and_foot_seconds": 26.9,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2525,14 +2581,14 @@
         7,
         8
       ],
-      "time_limit_seconds": 230,
-      "reward": 280,
+      "time_limit_seconds": 335,
+      "reward": 278,
       "timing_design": {
-        "vehicle_route_pixels": 2624,
+        "vehicle_route_pixels": 5072,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 38.9,
+        "modeled_road_and_foot_seconds": 90.2,
         "modeled_control_allowance_seconds": 30,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2555,14 +2611,14 @@
         5,
         6
       ],
-      "time_limit_seconds": 145,
-      "reward": 228,
+      "time_limit_seconds": 190,
+      "reward": 227,
       "timing_design": {
-        "vehicle_route_pixels": 1160,
+        "vehicle_route_pixels": 2208,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 17.2,
+        "modeled_road_and_foot_seconds": 39.3,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2585,14 +2641,14 @@
         17,
         19
       ],
-      "time_limit_seconds": 95,
+      "time_limit_seconds": 125,
       "reward": 216,
       "timing_design": {
-        "vehicle_route_pixels": 1064,
+        "vehicle_route_pixels": 2136,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 15.8,
+        "modeled_road_and_foot_seconds": 38.0,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2616,14 +2672,14 @@
         3,
         6
       ],
-      "time_limit_seconds": 160,
-      "reward": 243,
+      "time_limit_seconds": 200,
+      "reward": 241,
       "timing_design": {
-        "vehicle_route_pixels": 1328,
+        "vehicle_route_pixels": 2488,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 17.7,
+        "modeled_road_and_foot_seconds": 39.0,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2650,14 +2706,14 @@
         16,
         18
       ],
-      "time_limit_seconds": 175,
+      "time_limit_seconds": 220,
       "reward": 246,
       "timing_design": {
-        "vehicle_route_pixels": 1256,
+        "vehicle_route_pixels": 2520,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 18.6,
+        "modeled_road_and_foot_seconds": 44.8,
         "modeled_control_allowance_seconds": 30,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2681,14 +2737,14 @@
         3,
         6
       ],
-      "time_limit_seconds": 160,
-      "reward": 240,
+      "time_limit_seconds": 205,
+      "reward": 239,
       "timing_design": {
-        "vehicle_route_pixels": 1224,
+        "vehicle_route_pixels": 2336,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 18.1,
+        "modeled_road_and_foot_seconds": 41.5,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2713,14 +2769,14 @@
         23,
         3
       ],
-      "time_limit_seconds": 170,
-      "reward": 228,
+      "time_limit_seconds": 210,
+      "reward": 222,
       "timing_design": {
-        "vehicle_route_pixels": 1328,
+        "vehicle_route_pixels": 2224,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 19.7,
+        "modeled_road_and_foot_seconds": 39.5,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2751,14 +2807,14 @@
         20,
         24
       ],
-      "time_limit_seconds": 360,
+      "time_limit_seconds": 375,
       "reward": 274,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 424,
+        "island_walking_pixels": 776,
         "required_ferry_legs": 5,
         "fictional_ferry_fares": 20,
-        "modeled_road_and_foot_seconds": 14.1,
+        "modeled_road_and_foot_seconds": 25.9,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2785,14 +2841,14 @@
         4,
         8
       ],
-      "time_limit_seconds": 195,
-      "reward": 262,
+      "time_limit_seconds": 245,
+      "reward": 260,
       "timing_design": {
-        "vehicle_route_pixels": 1424,
+        "vehicle_route_pixels": 2648,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 21.1,
+        "modeled_road_and_foot_seconds": 47.1,
         "modeled_control_allowance_seconds": 30,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2814,14 +2870,14 @@
         2,
         23
       ],
-      "time_limit_seconds": 115,
-      "reward": 210,
+      "time_limit_seconds": 125,
+      "reward": 209,
       "timing_design": {
-        "vehicle_route_pixels": 352,
+        "vehicle_route_pixels": 584,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 5.2,
+        "modeled_road_and_foot_seconds": 10.4,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2843,14 +2899,14 @@
         3,
         23
       ],
-      "time_limit_seconds": 75,
-      "reward": 200,
+      "time_limit_seconds": 80,
+      "reward": 198,
       "timing_design": {
-        "vehicle_route_pixels": 336,
+        "vehicle_route_pixels": 552,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 5.0,
+        "modeled_road_and_foot_seconds": 9.8,
         "modeled_control_allowance_seconds": 5,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2874,14 +2930,14 @@
         10,
         11
       ],
-      "time_limit_seconds": 145,
-      "reward": 244,
+      "time_limit_seconds": 175,
+      "reward": 243,
       "timing_design": {
-        "vehicle_route_pixels": 912,
+        "vehicle_route_pixels": 1720,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 12.2,
+        "modeled_road_and_foot_seconds": 27.0,
         "modeled_control_allowance_seconds": 15,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2906,14 +2962,14 @@
         13,
         3
       ],
-      "time_limit_seconds": 140,
+      "time_limit_seconds": 165,
       "reward": 222,
       "timing_design": {
-        "vehicle_route_pixels": 608,
+        "vehicle_route_pixels": 1216,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.0,
+        "modeled_road_and_foot_seconds": 21.6,
         "modeled_control_allowance_seconds": 20,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2936,14 +2992,14 @@
         3,
         23
       ],
-      "time_limit_seconds": 130,
-      "reward": 228,
+      "time_limit_seconds": 150,
+      "reward": 225,
       "timing_design": {
-        "vehicle_route_pixels": 656,
+        "vehicle_route_pixels": 1088,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.7,
+        "modeled_road_and_foot_seconds": 19.3,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -2966,14 +3022,14 @@
         0,
         3
       ],
-      "time_limit_seconds": 130,
-      "reward": 202,
+      "time_limit_seconds": 150,
+      "reward": 200,
       "timing_design": {
-        "vehicle_route_pixels": 640,
+        "vehicle_route_pixels": 1072,
         "island_walking_pixels": 0,
         "required_ferry_legs": 0,
         "fictional_ferry_fares": 0,
-        "modeled_road_and_foot_seconds": 9.5,
+        "modeled_road_and_foot_seconds": 19.1,
         "modeled_control_allowance_seconds": 10,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -3004,14 +3060,14 @@
         21,
         25
       ],
-      "time_limit_seconds": 360,
+      "time_limit_seconds": 380,
       "reward": 286,
       "timing_design": {
         "vehicle_route_pixels": 0,
-        "island_walking_pixels": 496,
+        "island_walking_pixels": 856,
         "required_ferry_legs": 5,
         "fictional_ferry_fares": 20,
-        "modeled_road_and_foot_seconds": 16.5,
+        "modeled_road_and_foot_seconds": 28.5,
         "modeled_control_allowance_seconds": 50,
         "basis": "Collision-grid shortest paths and native maximum speeds; not measured playtime"
       },
@@ -3036,32 +3092,32 @@
         31,
         0
       ],
-      "time_limit_seconds": 230,
-      "reward": 217,
+      "time_limit_seconds": 345,
+      "reward": 215,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect shop parcels"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin handoff"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale shop handoff"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return empty satchel"
         }
       ],
@@ -3069,50 +3125,58 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3328,
+        "vehicle_route_pixels": 6520,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 32.9,
-        "normalized_moving_seconds_slow": 52.2,
+        "normalized_moving_seconds_fast": 75.6,
+        "normalized_moving_seconds_slow": 115.9,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 27,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1072,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2200,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "College east"
             ]
           },
           {
             "from_stop": 27,
             "to_stop": 29,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 352,
+            "from_district": 5,
+            "to_district": 7,
+            "vehicle_pixels": 640,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 29,
             "to_stop": 31,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 480,
+            "from_district": 7,
+            "to_district": 5,
+            "vehicle_pixels": 904,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 31,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1424,
+            "from_district": 5,
+            "to_district": 3,
+            "vehicle_pixels": 2776,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "west inner seam",
+              "Queen east",
+              "core inner seam"
             ]
           }
         ],
@@ -3137,27 +3201,27 @@
         31,
         5
       ],
-      "time_limit_seconds": 195,
-      "reward": 204,
+      "time_limit_seconds": 280,
+      "reward": 206,
       "stages": [
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Collect framed art"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale exhibit handoff"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren frame exchange"
         },
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Return borrowed case"
         }
       ],
@@ -3165,41 +3229,46 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2320,
+        "vehicle_route_pixels": 4736,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 36.4,
-        "normalized_moving_seconds_slow": 36.4,
+        "normalized_moving_seconds_fast": 84.2,
+        "normalized_moving_seconds_slow": 84.2,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
           {
             "from_stop": 5,
             "to_stop": 29,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 728,
+            "from_district": 1,
+            "to_district": 7,
+            "vehicle_pixels": 1568,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "Queen east"
             ]
           },
           {
             "from_stop": 29,
             "to_stop": 31,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 480,
+            "from_district": 7,
+            "to_district": 5,
+            "vehicle_pixels": 904,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 31,
             "to_stop": 5,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1112,
+            "from_district": 5,
+            "to_district": 1,
+            "vehicle_pixels": 2264,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "Dundas east",
+              "core inner seam"
             ]
           }
         ],
@@ -3225,32 +3294,32 @@
         30,
         0
       ],
-      "time_limit_seconds": 170,
+      "time_limit_seconds": 270,
       "reward": 267,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect urgent files"
         },
         {
           "stop_id": 28,
-          "district": 1,
+          "district": 5,
           "objective": "Lansdowne office handoff"
         },
         {
           "stop_id": 32,
-          "district": 2,
+          "district": 9,
           "objective": "Bloor gate handoff"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park office handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return dispatch copy"
         }
       ],
@@ -3258,40 +3327,43 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5328,
+        "vehicle_route_pixels": 10656,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 52.6,
-        "normalized_moving_seconds_slow": 52.6,
+        "normalized_moving_seconds_fast": 123.5,
+        "normalized_moving_seconds_slow": 123.5,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 28,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1472,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2888,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "core inner seam",
+              "core inner seam",
+              "Dundas east"
             ]
           },
           {
             "from_stop": 28,
             "to_stop": 32,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 1376,
+            "from_district": 5,
+            "to_district": 9,
+            "vehicle_pixels": 2728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "west inner seam",
               "Bloor west"
             ]
           },
           {
             "from_stop": 32,
             "to_stop": 30,
-            "from_district": 2,
-            "to_district": 1,
-            "vehicle_pixels": 864,
+            "from_district": 9,
+            "to_district": 4,
+            "vehicle_pixels": 1904,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Howard Park"
@@ -3300,12 +3372,15 @@
           {
             "from_stop": 30,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1616,
+            "from_district": 4,
+            "to_district": 3,
+            "vehicle_pixels": 3136,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "west inner seam",
+              "Dundas east",
+              "core inner seam",
+              "core inner seam"
             ]
           }
         ],
@@ -3332,37 +3407,37 @@
         29,
         0
       ],
-      "time_limit_seconds": 265,
-      "reward": 290,
+      "time_limit_seconds": 425,
+      "reward": 293,
       "stages": [
         {
           "stop_id": 11,
-          "district": 0,
+          "district": 3,
           "objective": "Collect boxed supplies"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin supply drop"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren loading drop"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside roadside drop"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale stock drop"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return empty crates"
         }
       ],
@@ -3370,63 +3445,69 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4776,
+        "vehicle_route_pixels": 9808,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 67.0,
-        "normalized_moving_seconds_slow": 67.0,
+        "normalized_moving_seconds_fast": 153.9,
+        "normalized_moving_seconds_slow": 153.9,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 11,
             "to_stop": 27,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1304,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2616,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "College east"
             ]
           },
           {
             "from_stop": 27,
             "to_stop": 31,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 576,
+            "from_district": 5,
+            "to_district": 5,
+            "vehicle_pixels": 1032,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 31,
             "to_stop": 33,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 864,
+            "from_district": 5,
+            "to_district": 11,
+            "vehicle_pixels": 2112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "The Queensway"
+              "west inner seam",
+              "Howard Park",
+              "high_park inner seam"
             ]
           },
           {
             "from_stop": 33,
             "to_stop": 29,
-            "from_district": 2,
-            "to_district": 1,
-            "vehicle_pixels": 1088,
+            "from_district": 11,
+            "to_district": 7,
+            "vehicle_pixels": 2176,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "The Queensway"
+              "The Queensway",
+              "west inner seam"
             ]
           },
           {
             "from_stop": 29,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 944,
+            "from_district": 7,
+            "to_district": 3,
+            "vehicle_pixels": 1872,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "Queen east",
+              "core inner seam"
             ]
           }
         ],
@@ -3453,17 +3534,17 @@
         30,
         0
       ],
-      "time_limit_seconds": 260,
-      "reward": 245,
+      "time_limit_seconds": 395,
+      "reward": 243,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect small repair kit"
         },
         {
           "stop_id": 17,
-          "district": 0,
+          "district": 1,
           "objective": "Bloor Yonge handoff"
         },
         {
@@ -3473,17 +3554,17 @@
         },
         {
           "stop_id": 28,
-          "district": 1,
+          "district": 5,
           "objective": "Lansdowne handoff"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return reusable pouch"
         }
       ],
@@ -3491,36 +3572,40 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3968,
+        "vehicle_route_pixels": 7768,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 39.2,
-        "normalized_moving_seconds_slow": 62.2,
+        "normalized_moving_seconds_fast": 90.1,
+        "normalized_moving_seconds_slow": 138.1,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 17,
-            "from_district": 0,
-            "to_district": 0,
-            "vehicle_pixels": 704,
+            "from_district": 3,
+            "to_district": 1,
+            "vehicle_pixels": 1408,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "core inner seam"
+            ]
           },
           {
             "from_stop": 17,
             "to_stop": 18,
-            "from_district": 0,
+            "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 552,
+            "vehicle_pixels": 1144,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "core inner seam"
+            ]
           },
           {
             "from_stop": 18,
             "to_stop": 28,
             "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 424,
+            "to_district": 5,
+            "vehicle_pixels": 840,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor east"
@@ -3529,21 +3614,26 @@
           {
             "from_stop": 28,
             "to_stop": 30,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 672,
+            "from_district": 5,
+            "to_district": 4,
+            "vehicle_pixels": 1240,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 30,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1616,
+            "from_district": 4,
+            "to_district": 3,
+            "vehicle_pixels": 3136,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "west inner seam",
+              "Dundas east",
+              "core inner seam",
+              "core inner seam"
             ]
           }
         ],
@@ -3569,32 +3659,32 @@
         33,
         0
       ],
-      "time_limit_seconds": 270,
+      "time_limit_seconds": 435,
       "reward": 243,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect museum parcel"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale package exchange"
         },
         {
           "stop_id": 34,
-          "district": 2,
+          "district": 11,
           "objective": "Walk to Lodge service"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside return handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return collection box"
         }
       ],
@@ -3602,53 +3692,57 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4368,
-        "required_walking_pixels": 160,
-        "normalized_moving_seconds_fast": 48.5,
-        "normalized_moving_seconds_slow": 73.9,
+        "vehicle_route_pixels": 8752,
+        "required_walking_pixels": 304,
+        "normalized_moving_seconds_fast": 111.6,
+        "normalized_moving_seconds_slow": 165.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 29,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 944,
+            "from_district": 3,
+            "to_district": 7,
+            "vehicle_pixels": 1872,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
               "Queen east"
             ]
           },
           {
             "from_stop": 29,
             "to_stop": 34,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 1264,
-            "required_walking_pixels": 80,
+            "from_district": 7,
+            "to_district": 11,
+            "vehicle_pixels": 2520,
+            "required_walking_pixels": 152,
             "shortest_modeled_seams": [
+              "west inner seam",
               "The Queensway"
             ]
           },
           {
             "from_stop": 34,
             "to_stop": 33,
-            "from_district": 2,
-            "to_district": 2,
-            "vehicle_pixels": 240,
-            "required_walking_pixels": 80,
+            "from_district": 11,
+            "to_district": 11,
+            "vehicle_pixels": 456,
+            "required_walking_pixels": 152,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 33,
             "to_stop": 0,
-            "from_district": 2,
-            "to_district": 0,
-            "vehicle_pixels": 1920,
+            "from_district": 11,
+            "to_district": 3,
+            "vehicle_pixels": 3904,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",
-              "King east"
+              "west inner seam",
+              "King east",
+              "core inner seam"
             ]
           }
         ],
@@ -3674,32 +3768,32 @@
         27,
         0
       ],
-      "time_limit_seconds": 210,
-      "reward": 217,
+      "time_limit_seconds": 295,
+      "reward": 216,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect return documents"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren document exchange"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park exchange"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin return handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return original to Union"
         }
       ],
@@ -3707,50 +3801,58 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3360,
+        "vehicle_route_pixels": 6616,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 39.0,
-        "normalized_moving_seconds_slow": 39.0,
+        "normalized_moving_seconds_fast": 88.2,
+        "normalized_moving_seconds_slow": 88.2,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 31,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1424,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2776,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "King east"
+              "core inner seam",
+              "Queen east",
+              "west inner seam"
             ]
           },
           {
             "from_stop": 31,
             "to_stop": 30,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 240,
+            "from_district": 5,
+            "to_district": 4,
+            "vehicle_pixels": 536,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 30,
             "to_stop": 27,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 624,
+            "from_district": 4,
+            "to_district": 5,
+            "vehicle_pixels": 1104,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 27,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1072,
+            "from_district": 5,
+            "to_district": 3,
+            "vehicle_pixels": 2200,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "College east"
+              "College east",
+              "core inner seam",
+              "core inner seam"
             ]
           }
         ],
@@ -3779,47 +3881,47 @@
         29,
         0
       ],
-      "time_limit_seconds": 330,
+      "time_limit_seconds": 535,
       "reward": 315,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect closing parcels"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin handoff"
         },
         {
           "stop_id": 28,
-          "district": 1,
+          "district": 5,
           "objective": "Lansdowne shop handoff"
         },
         {
           "stop_id": 32,
-          "district": 2,
+          "district": 9,
           "objective": "Bloor gate handoff"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside shop handoff"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park handoff"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale final handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return shift satchel"
         }
       ],
@@ -3827,81 +3929,91 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5840,
+        "vehicle_route_pixels": 11608,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 91.6,
-        "normalized_moving_seconds_slow": 91.6,
+        "normalized_moving_seconds_fast": 206.4,
+        "normalized_moving_seconds_slow": 206.4,
         "assumed_interaction_allowance_seconds": 40,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 27,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1072,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2200,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "College east"
             ]
           },
           {
             "from_stop": 27,
             "to_stop": 28,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 400,
+            "from_district": 5,
+            "to_district": 5,
+            "vehicle_pixels": 728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 28,
             "to_stop": 32,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 1376,
+            "from_district": 5,
+            "to_district": 9,
+            "vehicle_pixels": 2728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "west inner seam",
               "Bloor west"
             ]
           },
           {
             "from_stop": 32,
             "to_stop": 33,
-            "from_district": 2,
-            "to_district": 2,
-            "vehicle_pixels": 624,
+            "from_district": 9,
+            "to_district": 11,
+            "vehicle_pixels": 1224,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "high_park inner seam"
+            ]
           },
           {
             "from_stop": 33,
             "to_stop": 30,
-            "from_district": 2,
-            "to_district": 1,
-            "vehicle_pixels": 752,
+            "from_district": 11,
+            "to_district": 4,
+            "vehicle_pixels": 1576,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "high_park inner seam",
               "Howard Park"
             ]
           },
           {
             "from_stop": 30,
             "to_stop": 29,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 672,
+            "from_district": 4,
+            "to_district": 7,
+            "vehicle_pixels": 1280,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam",
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 29,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 944,
+            "from_district": 7,
+            "to_district": 3,
+            "vehicle_pixels": 1872,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "Queen east",
+              "core inner seam"
             ]
           }
         ],
@@ -3926,27 +4038,27 @@
         35,
         0
       ],
-      "time_limit_seconds": 205,
-      "reward": 188,
+      "time_limit_seconds": 295,
+      "reward": 186,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect east shop parcels"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside shop handoff"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth hall handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return reusable satchel"
         }
       ],
@@ -3954,18 +4066,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2656,
+        "vehicle_route_pixels": 5160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 26.2,
-        "normalized_moving_seconds_slow": 41.7,
+        "normalized_moving_seconds_fast": 59.8,
+        "normalized_moving_seconds_slow": 91.7,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 37,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 784,
+            "from_district": 3,
+            "to_district": 14,
+            "vehicle_pixels": 1400,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -3974,21 +4086,24 @@
           {
             "from_stop": 37,
             "to_stop": 35,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 14,
+            "to_district": 12,
+            "vehicle_pixels": 1336,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 35,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1264,
+            "from_district": 12,
+            "to_district": 3,
+            "vehicle_pixels": 2424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Bloor/Danforth east"
+              "Bloor/Danforth east",
+              "core inner seam"
             ]
           }
         ],
@@ -4014,32 +4129,32 @@
         37,
         5
       ],
-      "time_limit_seconds": 205,
-      "reward": 238,
+      "time_limit_seconds": 285,
+      "reward": 236,
       "stages": [
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Collect gallery print kits"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth event handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard print handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside gallery handoff"
         },
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Return protective cases"
         }
       ],
@@ -4047,18 +4162,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3168,
+        "vehicle_route_pixels": 6168,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 36.7,
-        "normalized_moving_seconds_slow": 36.7,
+        "normalized_moving_seconds_fast": 82.2,
+        "normalized_moving_seconds_slow": 82.2,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 5,
             "to_stop": 35,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1064,
+            "from_district": 1,
+            "to_district": 12,
+            "vehicle_pixels": 2024,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -4067,30 +4182,36 @@
           {
             "from_stop": 35,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 624,
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 1320,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 656,
+            "from_district": 13,
+            "to_district": 14,
+            "vehicle_pixels": 1360,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam",
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 37,
             "to_stop": 5,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 824,
+            "from_district": 14,
+            "to_district": 1,
+            "vehicle_pixels": 1464,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east crossing"
+              "Queen east crossing",
+              "core inner seam"
             ]
           }
         ],
@@ -4116,32 +4237,32 @@
         38,
         0
       ],
-      "time_limit_seconds": 145,
-      "reward": 222,
+      "time_limit_seconds": 210,
+      "reward": 218,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect timed print files"
         },
         {
           "stop_id": 40,
-          "district": 3,
+          "district": 15,
           "objective": "Leslie shop handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge service handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard copy-shop handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return dispatch copies"
         }
       ],
@@ -4149,50 +4270,55 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3552,
+        "vehicle_route_pixels": 6784,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 35.1,
-        "normalized_moving_seconds_slow": 35.1,
+        "normalized_moving_seconds_fast": 78.7,
+        "normalized_moving_seconds_slow": 78.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 40,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1504,
+            "from_district": 3,
+            "to_district": 15,
+            "vehicle_pixels": 2816,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east crossing"
+              "Queen east crossing",
+              "east inner seam"
             ]
           },
           {
             "from_stop": 40,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 64,
+            "from_district": 15,
+            "to_district": 15,
+            "vehicle_pixels": 112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 42,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 544,
+            "from_district": 15,
+            "to_district": 13,
+            "vehicle_pixels": 1112,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1440,
+            "from_district": 13,
+            "to_district": 3,
+            "vehicle_pixels": 2744,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east crossing"
+              "east inner seam",
+              "Dundas east crossing",
+              "core inner seam"
             ]
           }
         ],
@@ -4218,32 +4344,32 @@
         37,
         11
       ],
-      "time_limit_seconds": 220,
-      "reward": 238,
+      "time_limit_seconds": 305,
+      "reward": 233,
       "stages": [
         {
           "stop_id": 11,
-          "district": 0,
+          "district": 3,
           "objective": "Collect bayfront stock crates"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw workshop handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge shop handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside stock handoff"
         },
         {
           "stop_id": 11,
-          "district": 0,
+          "district": 3,
           "objective": "Return reusable crates"
         }
       ],
@@ -4251,18 +4377,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3184,
+        "vehicle_route_pixels": 5936,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 44.7,
-        "normalized_moving_seconds_slow": 44.7,
+        "normalized_moving_seconds_fast": 93.1,
+        "normalized_moving_seconds_slow": 93.1,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 11,
             "to_stop": 39,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1064,
+            "from_district": 3,
+            "to_district": 14,
+            "vehicle_pixels": 1984,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4271,27 +4397,31 @@
           {
             "from_stop": 39,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 14,
+            "to_district": 15,
+            "vehicle_pixels": 1136,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 42,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 784,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1528,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 37,
             "to_stop": 11,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 728,
+            "from_district": 14,
+            "to_district": 3,
+            "vehicle_pixels": 1288,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4322,42 +4452,42 @@
         12,
         0
       ],
-      "time_limit_seconds": 260,
-      "reward": 241,
+      "time_limit_seconds": 390,
+      "reward": 239,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect small relay parcels"
         },
         {
           "stop_id": 17,
-          "district": 0,
+          "district": 1,
           "objective": "Bloor dispatch handoff"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth hall handoff"
         },
         {
           "stop_id": 36,
-          "district": 3,
+          "district": 12,
           "objective": "Withrow on-foot park handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard rail-side handoff"
         },
         {
           "stop_id": 12,
-          "district": 0,
+          "district": 3,
           "objective": "King dispatch handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return relay pouch"
         }
       ],
@@ -4365,27 +4495,29 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3328,
-        "required_walking_pixels": 192,
-        "normalized_moving_seconds_fast": 39.3,
-        "normalized_moving_seconds_slow": 58.6,
+        "vehicle_route_pixels": 6488,
+        "required_walking_pixels": 432,
+        "normalized_moving_seconds_fast": 89.6,
+        "normalized_moving_seconds_slow": 129.7,
         "assumed_interaction_allowance_seconds": 35,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 17,
-            "from_district": 0,
-            "to_district": 0,
-            "vehicle_pixels": 704,
+            "from_district": 3,
+            "to_district": 1,
+            "vehicle_pixels": 1408,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "core inner seam"
+            ]
           },
           {
             "from_stop": 17,
             "to_stop": 35,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 560,
+            "from_district": 1,
+            "to_district": 12,
+            "vehicle_pixels": 1016,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor/Danforth east"
@@ -4394,38 +4526,42 @@
           {
             "from_stop": 35,
             "to_stop": 36,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 160,
-            "required_walking_pixels": 96,
+            "from_district": 12,
+            "to_district": 12,
+            "vehicle_pixels": 336,
+            "required_walking_pixels": 216,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 36,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 464,
-            "required_walking_pixels": 96,
-            "shortest_modeled_seams": []
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 984,
+            "required_walking_pixels": 216,
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 12,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1320,
+            "from_district": 13,
+            "to_district": 3,
+            "vehicle_pixels": 2520,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east crossing"
+              "east inner seam",
+              "Dundas east crossing",
+              "core inner seam"
             ]
           },
           {
             "from_stop": 12,
             "to_stop": 0,
-            "from_district": 0,
-            "to_district": 0,
-            "vehicle_pixels": 120,
+            "from_district": 3,
+            "to_district": 3,
+            "vehicle_pixels": 224,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           }
@@ -4453,37 +4589,37 @@
         39,
         0
       ],
-      "time_limit_seconds": 280,
-      "reward": 246,
+      "time_limit_seconds": 435,
+      "reward": 242,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect park supply parcels"
         },
         {
           "stop_id": 36,
-          "district": 3,
+          "district": 12,
           "objective": "Withrow on-foot handoff"
         },
         {
           "stop_id": 41,
-          "district": 3,
+          "district": 13,
           "objective": "Greenwood on-foot handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge supply handoff"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw workshop handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return park delivery satchel"
         }
       ],
@@ -4491,56 +4627,63 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4016,
-        "required_walking_pixels": 320,
-        "normalized_moving_seconds_fast": 50.3,
-        "normalized_moving_seconds_slow": 73.7,
+        "vehicle_route_pixels": 7760,
+        "required_walking_pixels": 656,
+        "normalized_moving_seconds_fast": 111.8,
+        "normalized_moving_seconds_slow": 159.8,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 36,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1264,
-            "required_walking_pixels": 96,
+            "from_district": 3,
+            "to_district": 12,
+            "vehicle_pixels": 2384,
+            "required_walking_pixels": 216,
             "shortest_modeled_seams": [
-              "Queen east crossing"
+              "core inner seam",
+              "Dundas east crossing"
             ]
           },
           {
             "from_stop": 36,
             "to_stop": 41,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 776,
-            "required_walking_pixels": 160,
-            "shortest_modeled_seams": []
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 1648,
+            "required_walking_pixels": 328,
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 41,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 248,
-            "required_walking_pixels": 64,
-            "shortest_modeled_seams": []
+            "from_district": 13,
+            "to_district": 15,
+            "vehicle_pixels": 496,
+            "required_walking_pixels": 112,
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 42,
             "to_stop": 39,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1136,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 39,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 1120,
+            "from_district": 14,
+            "to_district": 3,
+            "vehicle_pixels": 2096,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4570,37 +4713,37 @@
         37,
         0
       ],
-      "time_limit_seconds": 215,
-      "reward": 228,
+      "time_limit_seconds": 295,
+      "reward": 222,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect return envelopes"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw paperwork handoff"
         },
         {
           "stop_id": 40,
-          "district": 3,
+          "district": 15,
           "objective": "Leslie returns handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge returns handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside paperwork handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return original packet to Union"
         }
       ],
@@ -4608,18 +4751,18 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3296,
+        "vehicle_route_pixels": 6160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 38.2,
-        "normalized_moving_seconds_slow": 38.2,
+        "normalized_moving_seconds_fast": 82.1,
+        "normalized_moving_seconds_slow": 82.1,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 39,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1120,
+            "from_district": 3,
+            "to_district": 14,
+            "vehicle_pixels": 2096,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4628,36 +4771,40 @@
           {
             "from_stop": 39,
             "to_stop": 40,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 544,
+            "from_district": 14,
+            "to_district": 15,
+            "vehicle_pixels": 1024,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 40,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 64,
+            "from_district": 15,
+            "to_district": 15,
+            "vehicle_pixels": 112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 42,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 784,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1528,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 37,
             "to_stop": 0,
-            "from_district": 3,
-            "to_district": 0,
-            "vehicle_pixels": 784,
+            "from_district": 14,
+            "to_district": 3,
+            "vehicle_pixels": 1400,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing"
@@ -4691,57 +4838,57 @@
         33,
         0
       ],
-      "time_limit_seconds": 405,
-      "reward": 392,
+      "time_limit_seconds": 700,
+      "reward": 395,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect cross-city bundles"
         },
         {
           "stop_id": 35,
-          "district": 3,
+          "district": 12,
           "objective": "Danforth print handoff"
         },
         {
           "stop_id": 38,
-          "district": 3,
+          "district": 13,
           "objective": "Gerrard print handoff"
         },
         {
           "stop_id": 40,
-          "district": 3,
+          "district": 15,
           "objective": "Leslie shop handoff"
         },
         {
           "stop_id": 42,
-          "district": 3,
+          "district": 15,
           "objective": "Ashbridge service handoff"
         },
         {
           "stop_id": 39,
-          "district": 3,
+          "district": 14,
           "objective": "Carlaw workshop handoff"
         },
         {
           "stop_id": 37,
-          "district": 3,
+          "district": 14,
           "objective": "Riverside shop handoff"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren west handoff"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside depot handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return empty bundle carrier"
         }
       ],
@@ -4749,101 +4896,114 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 7952,
+        "vehicle_route_pixels": 16160,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 124.7,
-        "normalized_moving_seconds_slow": 124.7,
+        "normalized_moving_seconds_fast": 287.3,
+        "normalized_moving_seconds_slow": 287.3,
         "assumed_interaction_allowance_seconds": 50,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 35,
-            "from_district": 0,
-            "to_district": 3,
-            "vehicle_pixels": 1264,
+            "from_district": 3,
+            "to_district": 12,
+            "vehicle_pixels": 2424,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
               "Bloor/Danforth east"
             ]
           },
           {
             "from_stop": 35,
             "to_stop": 38,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 624,
+            "from_district": 12,
+            "to_district": 13,
+            "vehicle_pixels": 1320,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 38,
             "to_stop": 40,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 480,
+            "from_district": 13,
+            "to_district": 15,
+            "vehicle_pixels": 1000,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 40,
             "to_stop": 42,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 64,
+            "from_district": 15,
+            "to_district": 15,
+            "vehicle_pixels": 112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 42,
             "to_stop": 39,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 608,
+            "from_district": 15,
+            "to_district": 14,
+            "vehicle_pixels": 1136,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "east inner seam"
+            ]
           },
           {
             "from_stop": 39,
             "to_stop": 37,
-            "from_district": 3,
-            "to_district": 3,
-            "vehicle_pixels": 336,
+            "from_district": 14,
+            "to_district": 14,
+            "vehicle_pixels": 696,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 37,
             "to_stop": 31,
-            "from_district": 3,
-            "to_district": 1,
-            "vehicle_pixels": 1792,
+            "from_district": 14,
+            "to_district": 5,
+            "vehicle_pixels": 3456,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Queen east crossing",
-              "Queen east"
+              "core inner seam",
+              "Queen east",
+              "west inner seam"
             ]
           },
           {
             "from_stop": 31,
             "to_stop": 33,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 864,
+            "from_district": 5,
+            "to_district": 11,
+            "vehicle_pixels": 2112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "The Queensway"
+              "west inner seam",
+              "Howard Park",
+              "high_park inner seam"
             ]
           },
           {
             "from_stop": 33,
             "to_stop": 0,
-            "from_district": 2,
-            "to_district": 0,
-            "vehicle_pixels": 1920,
+            "from_district": 11,
+            "to_district": 3,
+            "vehicle_pixels": 3904,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",
-              "King east"
+              "west inner seam",
+              "King east",
+              "core inner seam"
             ]
           }
         ],

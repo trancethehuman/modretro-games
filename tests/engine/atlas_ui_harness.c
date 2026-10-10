@@ -57,10 +57,11 @@ void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles) {
     expect(VBK_REG<2&&tiles&&count&&(unsigned)first+count<=256,
            "all UI and atlas pattern uploads use bounded CGB tile indices");
     int marker=VBK_REG==1&&first>=8&&(unsigned)first+count<=15;
-    int ground=VBK_REG==1&&first>=16&&(unsigned)first+count<=188;
+    /* Map ground cache: bank-1 tiles 16..191, then 0..4. */
+    int ground=VBK_REG==1&&((first>=16&&(unsigned)first+count<=192)||(unsigned)first+count<=5);
     int font=VBK_REG==1&&first>=TD_FONT_FIRST&&(unsigned)first+count<=TD_FONT_FIRST+TD_FONT_GLYPHS;
     int art=VBK_REG==0&&first>=TD_UI_ART_FIRST&&(unsigned)first+count<=256;
-    expect(marker||ground||font||art,"uploads stay within marker8..14, ground16..187, font or bank-0 art192..255 reservations");
+    expect(marker||ground||font||art,"uploads stay within marker8..14, ground16..191 and 0..4, font or bank-0 art192..255 reservations");
     if(VBK_REG>=2||!tiles||!count||(unsigned)first+count>256)return;
     if(ground)ground_uploads+=count;
     memcpy(vram[VBK_REG][first],tiles,(size_t)count*16);
@@ -169,11 +170,14 @@ static void verify_viewport(void) {
         expect(td_atlas_row(td_map_x,td_map_y+y,20,patterns),"actual atlas API supplies the rendered viewport row");
         for(unsigned x=0;x<20;x++) {
             UBYTE marker=expected_marker(td_map_x+x,td_map_y+y),tile=window_tiles[0][2+y][x];
-            expect(window_tiles[1][2+y][x]==15,"rendered ground retains UI palette7 and CGB tile bank1 attributes");
+            UBYTE flips=marker?0:(patterns[x]&TD_ATLAS_FLIP_X?0x20:0)|(patterns[x]&TD_ATLAS_FLIP_Y?0x40:0);
+            expect(window_tiles[1][2+y][x]==(15|flips),"rendered ground retains UI palette7 and CGB tile bank1 attributes with its flips");
             if(marker){expect(tile==7+marker,"marker tile bitset preserves current player, parked car and remote objective overlap");continue;}
-            expect(tile>=16&&tile<188&&td_ui_cache.patterns[tile-16]!=65535,"completed ground cells refer to bounded occupied atlas cache slots");
-            if(tile<16||tile>=188||td_ui_cache.patterns[tile-16]==65535)continue;
-            expect(td_ui_cache.patterns[tile-16]==patterns[x],"ground cache slot preserves the actual atlas dictionary ID");
+            unsigned slot=tile>=16?tile-16u:tile+176u;
+            int bounded=((tile>=16&&tile<192)||tile<5)&&slot<TD_ATLAS_VISIBLE_LIMIT;
+            expect(bounded&&td_ui_cache.patterns[slot]!=65535,"completed ground cells refer to bounded occupied atlas cache slots");
+            if(!bounded||td_ui_cache.patterns[slot]==65535)continue;
+            expect(td_ui_cache.patterns[slot]==(patterns[x]&TD_ATLAS_ID_MASK),"ground cache slot preserves the actual atlas dictionary ID");
             expect(td_atlas_pattern(patterns[x],expected),"actual atlas dictionary supplies ground wire bytes");
             expect(!memcmp(vram[1][tile],expected,16),"ground VRAM tile matches its actual native atlas pattern bytes");
             for(unsigned py=0;py<8;py++)for(unsigned px=0;px<8;px++)
@@ -220,9 +224,9 @@ static void test_every_viewport(void) {
         td_map_x=x;td_map_y=y;td_map_begin();td_map_headers();
         unsigned uploads_before=ground_uploads;
         for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)
-            expect(td_ui_cache.patterns[i]==65535,"every viewport begins with all172sparse table slots empty");
+            expect(td_ui_cache.patterns[i]==65535,"every viewport begins with all181sparse table slots empty");
         for(unsigned row=0;row<12;row++) {
-            UBYTE cache_before[360];memcpy(cache_before,&td_ui_cache,sizeof(cache_before));
+            UBYTE cache_before[sizeof(td_ui_cache)];memcpy(cache_before,&td_ui_cache,sizeof(cache_before));
             td_ui_draw();
             expect(!memcmp(cache_before,&td_ui_cache,sizeof(cache_before)),
                    "map header redraws never overwrite the shared active pattern dictionary cache");
@@ -232,12 +236,12 @@ static void test_every_viewport(void) {
         expect(ground_uploads-uploads_before==td_map_count,"each viewport uploads each distinct ground pattern exactly once");
         verify_viewport();viewports++;
     }
-    expect(viewports==225,"fixture renders every actual legal twenty-by-twelve atlas viewport");
+    expect(viewports==(TD_ATLAS_TILE_HEIGHT-11)*(TD_ATLAS_TILE_WIDTH-19),"fixture renders every actual legal twenty-by-twelve atlas viewport");
     expect(!memcmp(palette7,td_map_palette,sizeof(palette7)),"the open map shows its original colours in UI palette 7");
     expect_game_unchanged(&before);td_map_close();
     expect(!memcmp(palette7,td_ui_palette,sizeof(palette7)),"closing the map restores the menu colours");
     for(unsigned i=0;i<sizeof(td_ui_cache);i++)
-        expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the360-byte text/pattern union cache");
+        expect(((UBYTE*)&td_ui_cache)[i]==255,"close invalidates every byte of the text/pattern union cache");
     td.mode=TD_PAUSE;unsigned writes=window_writes;td_ui_draw();
     expect(window_writes>writes,"return from atlas repaints actual text despite reuse of the pattern cache union");
 }
@@ -298,12 +302,12 @@ static void test_panning_and_bounds(void) {
     expect(td_map_x==0&&td_map_y==0,"repeated diagonal panning clamps exactly at the northwest atlas bounds");
     verify_viewport();
     for(unsigned i=0;i<50;i++){td_map_update(J_RIGHT|J_DOWN,0);finish_paint();}
-    expect(td_map_x==44&&td_map_y==4,"repeated diagonal panning clamps exactly at the southeast padded atlas bounds");
+    expect(td_map_x==TD_ATLAS_TILE_WIDTH-20&&td_map_y==TD_ATLAS_TILE_HEIGHT-12,"repeated diagonal panning clamps exactly at the southeast padded atlas bounds");
     verify_viewport();
     for(unsigned i=0;i<50;i++){td_map_update(J_LEFT|J_DOWN,0);finish_paint();}
-    expect(td_map_x==0&&td_map_y==4,"horizontal motion never underflows the atlas while bottom edge remains clamped");
+    expect(td_map_x==0&&td_map_y==TD_ATLAS_TILE_HEIGHT-12,"horizontal motion never underflows the atlas while bottom edge remains clamped");
     for(unsigned i=0;i<50;i++){td_map_update(J_RIGHT|J_UP,0);finish_paint();}
-    expect(td_map_x==44&&td_map_y==0,"horizontal motion never overflows the atlas while top edge remains clamped");
+    expect(td_map_x==TD_ATLAS_TILE_WIDTH-20&&td_map_y==0,"horizontal motion never overflows the atlas while top edge remains clamped");
     td_map_update(J_A,J_A);x=td_map_x;y=td_map_y;
     expect(td_map_row==1,"focus begins a genuine partial paint for held-input gating");
     td_map_update(J_LEFT|J_UP,0);
@@ -424,13 +428,13 @@ static void test_overlap_marker_geometry(void) {
 
 static void test_sparse_table_full_and_single_holes(void) {
     const UBYTE cases[][3]={{0,0,0},{5,0,0},{14,0,0},{21,0,0},
-                            {31,0,0},{32,1,5},{13,3,5},{44,4,11}};
+                            {31,0,0},{32,1,5},{13,3,5},{44,3,11}};
     for(unsigned fixture=0;fixture<sizeof(cases)/sizeof(cases[0]);fixture++) {
         UWORD row[20];UBYTE pattern[16];
         expect(td_atlas_row(cases[fixture][0],cases[fixture][1]+cases[fixture][2],20,row),
                "adversarial lookup fixture uses a real registered atlas row");
         expect(td_atlas_pattern(row[0],pattern),"adversarial lookup fixture uses real native pattern bytes");
-        int distinct=0;for(unsigned i=1;i<20;i++)if(row[i]!=row[0])distinct=1;
+        int distinct=0;for(unsigned i=1;i<20;i++)if((row[i]&TD_ATLAS_ID_MASK)!=(row[0]&TD_ATLAS_ID_MASK))distinct=1;
         for(unsigned hole=0;hole<TD_ATLAS_VISIBLE_LIMIT;hole++) {
             reset_case();open_case();td_map_x=cases[fixture][0];td_map_y=cases[fixture][1];
             td_map_row=cases[fixture][2];td_map_count=TD_ATLAS_VISIBLE_LIMIT-1;
@@ -441,9 +445,9 @@ static void test_sparse_table_full_and_single_holes(void) {
             td_ui_cache.patterns[hole]=65535;
             game_snapshot_t before=snapshot_game();unsigned uploads=ground_uploads;
             td_map_paint_row();
-            expect(td_ui_cache.patterns[hole]==row[0]&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
+            expect(td_ui_cache.patterns[hole]==(row[0]&TD_ATLAS_ID_MASK)&&td_map_count==TD_ATLAS_VISIBLE_LIMIT,
                    "actual lookup reaches every possible sole empty slot even after adversarial collisions and wraparound");
-            expect(ground_uploads==uploads+1&&!memcmp(vram[1][16+hole],pattern,16),
+            expect(ground_uploads==uploads+1&&!memcmp(vram[1][hole<176?16+hole:hole-176],pattern,16),
                    "single-hole insertion uploads the correct real pattern exactly once to its stable bounded slot");
             for(unsigned i=0;i<TD_ATLAS_VISIBLE_LIMIT;i++)if(i!=hole)
                 expect(td_ui_cache.patterns[i]==1000+i,"collision probing never overwrites an occupied cache slot");

@@ -8,8 +8,10 @@ from functools import cache
 from pathlib import Path
 import json
 import math
-from city_layout import CORE_STOPS, MAINLAND, street_spans
-L_MAINLAND_BOTTOM = MAINLAND[3]
+from core2x import CORE_STOPS, MAINLAND, street_spans
+import world2x
+# The Islands lie south of the mainland shore, in the core's southern scenes.
+L_MAINLAND_BOTTOM = MAINLAND[3] - world2x.scene_origin(2)[1]
 
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
@@ -105,10 +107,10 @@ def decode_grid(text):
 
 
 def shortest_routes(stops):
-    """Conservative tile-centre distances using the actual scene collision grid."""
-    scene = json.loads((ROOT / 'project/project/scenes/toronto_city/scene.gbsres').read_text())
-    width, height = scene['width'], scene['height']
-    grid = decode_grid(scene['collisions'])
+    """Conservative tile-centre distances on the core's collision grid (its
+    four scenes stitched, district-world pixels)."""
+    width, height = world2x.WORLD_TW, world2x.WORLD_TH
+    grid = world2x.world_grid(0)
     assert len(grid) == width * height
     points = [(s[0] // 8, s[1] // 8) for s in stops]
 
@@ -153,10 +155,11 @@ def route_estimate(route, kind, distances):
             foot_pixels += walk
         else:
             road_pixels += road
-    # Conservative slow road vehicle is 18/16 pixels per video frame (scooter).
-    # Truck-only jobs use20/16. Handling allows braking, turns and interaction;
-    # it is a tuning hypothesis, not idle time the game imposes on the player.
-    road_speed = 75 if kind == 3 else 67.5
+    # Conservative slow road vehicle is 15/16 pixels per video frame (the
+    # scooter's top speed). Truck-only jobs use 17/16. Handling allows braking,
+    # turns and interaction; it is a tuning hypothesis, not idle time the game
+    # imposes on the player.
+    road_speed = 63.75 if kind == 3 else 56.25
     moving = road_pixels / road_speed + foot_pixels / 30
     handling = 5 * max(0, len(route) - 1)
     if kind == 7:
@@ -224,11 +227,13 @@ def story_order(quests):
 
 
 def main():
+    # Core stops in district-world pixels (core2x maps the 1x plan).
     stops = [(u, v, name, transit) for u, v, name, transit, _ in CORE_STOPS]
     #Fictional service entrances on existing Island walkable land, not claims
     #about surveyed public access or exact real-world building entrances.
-    stops += [(560, 928, 'HANLAN SERVICE', 0), (760, 944, 'CENTRE PARK POST', 0),
-              (912, 912, 'WARD COTTAGE POST', 0)]
+    m = world2x.district_map(0)
+    stops += [(*m.point(u, v), name, 0) for u, v, name in
+              ((560, 928, 'HANLAN SERVICE'), (760, 944, 'CENTRE PARK POST'), (912, 912, 'WARD COTTAGE POST'))]
     distances = shortest_routes(stops)
     for i in range(len(stops)):
         assert distances.get((False, i, i)) == 0, f'Blocked stop: {stops[i][2]}'
@@ -246,7 +251,7 @@ def main():
         if index < 3:
             seconds = 120  #Tutorials preserve time to learn the controls.
         base_unlock = 3 if kind in (3, 4) else 8 if kind == 5 else 12 if kind == 7 else 0
-        reward = (70 + math.ceil(estimate['vehicle_route_pixels'] / 40)
+        reward = (70 + math.ceil(estimate['vehicle_route_pixels'] / 80)
                   + (len(route) - 1) * 10 + estimate['fictional_ferry_fares']
                   + (25 if kind in (1, 3, 5) else 15 if kind == 2 else 0)
                   + chapter * 12)
@@ -266,7 +271,7 @@ def main():
         'duration_target_minutes': 120, 'duration_verified': False,
         'duration_notice': 'Authored contract counts, shortest-path models and deadlines do not verify duration or enjoyment. Measure representative jobs and a complete campaign.',
         'quest_types': KINDS, 'chapters': CHAPTERS,
-        'stops': [{'id': i, 'u': s[0], 'v': s[1], 'name': s[2], 'transit': s[3],
+        'stops': [{'id': i, **dict(zip(('district', 'u', 'v'), world2x.scene_of(0, s[0], s[1]))), 'name': s[2], 'transit': s[3],
                    **({'location_notice': 'Original fictional delivery entrance on compressed Island terrain'} if i >= 24 else {})}
                   for i, s in enumerate(stops)],
         'quests': quests,
@@ -285,7 +290,7 @@ def main():
     assert [s['id'] for s in extra['stops']] == list(range(27, 35))
     assert [q['id'] for q in extra['quests']] == [f'contract-{i:02d}' for i in range(73, 81)]
     for stop in content['stops']:
-        stop.update(district=0, reserved=0)
+        stop.update(reserved=0)
     content['stops'].extend(extra['stops'])
     quests.extend(extra['quests'])
     assert len(quests) == 80 and len(content['stops']) == 35
@@ -294,7 +299,7 @@ def main():
     assert [q['id'] for q in eastern['quests']] == [f'contract-{i:02d}' for i in range(81, 89)]
     content['stops'].extend(eastern['stops'])
     quests.extend(eastern['quests'])
-    content['scope'] = 'Four linked original compressed scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.'
+    content['scope'] = 'Four linked original compressed districts, each drawn at double scale in four native scenes: central Toronto, western neighbourhoods, High Park/Junction and eastern Riverdale/Leslieville. Full Old Toronto and measured duration remain release checks.'
     assert len(quests) == 88 and len(content['stops']) == 43
     streetcar = json.loads((ROOT / 'content/streetcar.json').read_text())
     assert [s['id'] for s in streetcar['stops']] == list(range(43, 51))
@@ -342,72 +347,80 @@ def main():
                'Chester station approach':'CHESTER STATION',
                'Sunnyside pavilion approach':'SUNNYSIDE PAVILION'}
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
-    # Core streets (district 0) come from the Centreline-derived layout.
-    for x1, y1, x2, y2, label in street_spans():
-        if label not in street_names:
-            street_names.append(label)
-        street_segments.append((x1, y1, x2, y2, 0, street_names.index(label)))
-    for entry in world['districts'][1:]:
-        district = entry['id']
-        slug = entry['scene'].removeprefix('toronto_')
-        metadata = json.loads((ROOT / f'content/districts/{slug}_art.json').read_text())
-        for road in metadata['roads'] + metadata['footpaths']:
+    # Street centrelines in district-world pixels: the core's from the
+    # Centreline-derived layout, the outer districts' from their art plans.
+    spans = {0: list(street_spans())}
+    for old in (1, 2, 3):
+        metadata = json.loads((ROOT / f'content/districts/{world2x.OLD_NAMES[old]}_art.json').read_text())
+        spans[old] = []
+        for road in metadata['world']['roads'] + metadata['world']['footpaths']:
             name = aliases.get(road['name'], road['name'].upper().replace(' STREET WEST',' ST W').replace(' STREET EAST',' ST E').replace(' STREET',' ST').replace(' AVENUE',' AVE').replace(' BOULEVARD WEST',' BLVD W').replace(' BOULEVARD',' BLVD').replace(' ROAD',' RD').replace(' DRIVE',' DR'))[:18]
             assert len(name) <= 18, ('HUD street name', name)
-            if name not in street_names:
-                street_names.append(name)
-            index = street_names.index(name)
             for a, b in zip(road['points'], road['points'][1:]):
-                street_segments.append((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]), district, index))
+                spans[old].append((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]), name))
+    # Each scene lists the parts of its district's streets that cross it.
+    for district in range(len(world['districts'])):
+        ox, oy = world2x.scene_origin(district)
+        for x1, y1, x2, y2, label in spans[district >> 2]:
+            if x2 < ox or x1 >= ox + world2x.SCENE_W or y2 < oy or y1 >= oy + world2x.SCENE_H:
+                continue
+            if label not in street_names:
+                street_names.append(label)
+            street_segments.append((max(x1, ox) - ox, max(y1, oy) - oy, min(x2, ox + world2x.SCENE_W - 1) - ox,
+                                    min(y2, oy + world2x.SCENE_H - 1) - oy, district, street_names.index(label)))
     street_names.append('TORONTO ISLANDS')
+    assert len(street_names) < 256
     streets += [f'static const char td_west_street_names[{len(street_names)}][19]={{']
     streets += [f'  "{name}",' for name in street_names]
     streets += ['};','typedef struct { UWORD x1,y1,x2,y2; UBYTE district,name; } td_street_t;',
              f'static const td_street_t td_west_streets[{len(street_segments)}]={{']
     streets += ['  {' + ','.join(map(str, segment)) + '},' for segment in street_segments]
-    # Segments are appended district by district; index each district's run so
-    # the HUD lookup visits only its own streets in the same order.
+    # Segments are appended scene by scene; index each scene's run so the
+    # HUD lookup visits only its own streets in the same order.
     districts = len(world['districts'])
     assert [segment[4] for segment in street_segments] == sorted(segment[4] for segment in street_segments)
     starts = [next((i for i, segment in enumerate(street_segments) if segment[4] >= district), len(street_segments))
               for district in range(districts + 1)]
-    assert len(street_segments) < 256
+    assert all(b - a < 256 for a, b in zip(starts, starts[1:]))
     streets += ['};',
-             f'static const UBYTE td_west_street_start[{districts + 1}]={{' + ','.join(map(str, starts)) + '};']
-    # Exact candidate lists per 64-pixel region: a segment is kept only if
+             f'static const UWORD td_west_street_start[{districts + 1}]={{' + ','.join(map(str, starts)) + '};']
+    # Exact candidate lists per 128-pixel region: a segment is kept only if
     # its least distance to the region does not exceed the best worst-case
     # distance of any segment there, so every possible first minimum stays
-    # in the list, in its original order.
+    # in the list, in its original order. Entries count from the scene's
+    # first segment.
     def box_score(seg, u, v):
         x1, y1, x2, y2 = seg[:4]
         return (x1 - u if u < x1 else u - x2 if u > x2 else 0) + (y1 - v if v < y1 else v - y2 if v > y2 else 0)
     region_start, region_list = [], []
     for district in range(districts):
         segs = list(enumerate(street_segments))[starts[district]:starts[district + 1]]
-        for ry in range(16):
-            for rx in range(16):
-                X1, X2, Y1, Y2 = rx * 64, min(rx * 64 + 63, 1023), ry * 64, min(ry * 64 + 63, 975)
+        for ry in range(8):
+            for rx in range(8):
+                X1, X2, Y1, Y2 = rx * 128, min(rx * 128 + 127, 1023), ry * 128, min(ry * 128 + 127, 975)
                 region_start.append(len(region_list))
                 if X1 > X2 or Y1 > Y2 or not segs:
                     continue
                 lows = [max(0, seg[0] - X2, X1 - seg[2]) + max(0, seg[1] - Y2, Y1 - seg[3]) for _, seg in segs]
                 worst = min(max(box_score(seg, u, v) for u in (X1, X2) for v in (Y1, Y2)) for _, seg in segs)
-                region_list += [index for (index, _), low in zip(segs, lows) if low <= worst]
+                region_list += [index - starts[district] for (index, _), low in zip(segs, lows) if low <= worst]
     region_start.append(len(region_list))
-    assert len(region_start) == districts * 256 + 1 and len(region_list) < 65536
+    assert len(region_start) == districts * 64 + 1 and len(region_list) < 65536
     streets += [f'static const UWORD td_west_region_start[{len(region_start)}]={{' + ','.join(map(str, region_start)) + '};',
              f'static const UBYTE td_west_region_list[{len(region_list)}]={{' + ','.join(map(str, region_list)) + '};',
              '/* First segment with the least Manhattan distance from (u,v) to its box.',
-             '   On the map, only the 64-pixel region\'s exact candidate list is scanned;',
+             '   On the map, only the 128-pixel region\'s exact candidate list is scanned;',
              '   a segment whose x distance alone reaches the best cannot win, and nothing',
-             '   beats zero. Positions off the map scan the whole district. */',
+             '   beats zero. Positions off the map scan the whole scene. */',
              'static UBYTE td_get_west_street(UBYTE district,UWORD u,UWORD v) {',
-             ' UBYTE name=0;UWORD k=0,stop=0,dx,dy,lo,hi,best=65535;const td_street_t *s;const UBYTE *list=0;',
-             f' if(district<{districts}&&u<1024&&v<976){{',
-             '  k=(UWORD)district*256+((v>>6)<<4)+(u>>6);stop=td_west_region_start[k+1];k=td_west_region_start[k];list=td_west_region_list;',
-             f' }}else if(district<{districts}){{k=td_west_street_start[district];stop=td_west_street_start[district+1];}}',
+             ' UBYTE name=0;UWORD k=0,stop=0,base=0,dx,dy,lo,hi,best=65535;const td_street_t *s;const UBYTE *list=0;',
+             f' if(district>={districts})return 0;',
+             ' base=td_west_street_start[district];',
+             ' if(u<1024&&v<976){',
+             '  k=(UWORD)district*64+((v>>7)<<3)+(u>>7);stop=td_west_region_start[k+1];k=td_west_region_start[k];list=td_west_region_list;',
+             ' }else{k=0;stop=td_west_street_start[district+1]-base;}',
              ' for(;k<stop;k++){',
-             '  s=list?&td_west_streets[list[k]]:&td_west_streets[k];',
+             '  s=&td_west_streets[base+(list?list[k]:k)];',
              '  lo=s->x1;hi=s->x2;dx=u<lo?lo-u:u>hi?u-hi:0;if(dx>=best)continue;',
              '  lo=s->y1;hi=s->y2;dy=v<lo?lo-v:v>hi?v-hi:0;dx+=dy;',
              '  if(dx<best){best=dx;name=s->name;if(!best)break;}',
@@ -422,7 +435,7 @@ def main():
              '/* Name id of the street nearest (u,v) in the current district (the',
              '   Islands below the core\'s shore); td_get_street_name spells it. */',
              'UBYTE td_get_street(UWORD u,UWORD v) BANKED {',
-             '  if(!td.district&&v>=%d)return %d;' % (L_MAINLAND_BOTTOM, len(street_names) - 1),
+             '  if((td.district==2||td.district==3)&&v>=%d)return %d;' % (L_MAINLAND_BOTTOM, len(street_names) - 1),
              '  return td_get_west_street(td.district,u,v);',
              '}',
              'void td_get_street_name(UBYTE id,char *d) BANKED {memcpy(d,td_west_street_names[id],19);}']

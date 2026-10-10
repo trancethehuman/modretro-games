@@ -160,7 +160,10 @@ def main():
     assert not unused, f'story calls never played: {unused}'
     # Shortest drop order for automatic routes.
     import create_campaign as C
-    distances = C.shortest_routes([(s['u'], s['v'], s['name'], s['transit']) for s in campaign['stops'][:27]])
+    import world2x
+    # Core stops in district-world pixels (the core's four scenes stitched).
+    distances = C.shortest_routes([(s['u'] + world2x.scene_origin(s['district'])[0], s['v'] + world2x.scene_origin(s['district'])[1],
+                                    s['name'], s['transit']) for s in campaign['stops'][:27]])
     for index, contract in enumerate(story['contracts']):
         if contract.get('order') == 'fixed' or len(contract['drops']) < 2:
             continue

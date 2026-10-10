@@ -7,6 +7,7 @@ calls, ROM builds, Game Boy timing or hardware claims are involved.
 """
 from pathlib import Path
 import json
+import sys
 import host_cflags
 import os
 import re
@@ -63,20 +64,33 @@ def inside_polygon(point, vertices):
     return winding != 0
 
 
-def authored_water(scene, point, metadata):
+def authored_water(old, point, metadata):
+    """Water of a plan district at a district-world point: the core's Don,
+    harbour and lake around its Islands; elsewhere the authored lake
+    rectangles and Grenadier Pond (metadata in district-world pixels)."""
     x, y = point
-    if scene == "toronto_city":
+    if old == 0:
         river, mainland = metadata["river"], metadata["mainland"]
         don = inside_box(point, (river[0], mainland[1], river[1], mainland[3]))
         lake = y >= mainland[3] and not any(inside_box(point, island) for island in metadata["islands"])
         return don or lake
-    rectangles = [(left, top, left + width, top + height)
-                  for left, top, width, height in metadata["water"]]
-    return (any(inside_box((x, y), box) for box in rectangles) or
+    return (any(inside_box((x, y), box) for box in metadata["water"]) or
             bool(metadata.get("pond") and inside_polygon(point, metadata["pond"])))
 
 
+def outer_water(old):
+    """Plan water and pond of an outer district, in district-world pixels."""
+    sys.path.insert(0, str(GAME / "scripts"))
+    import outer_art
+    plan = json.loads((GAME / f"content/districts/{('core', 'west', 'high_park', 'east')[old]}_art.json").read_text())["plan"]
+    X, Y, rect = outer_art.mapper(old)
+    return {"water": [(x, y, x + w, y + h) for x, y, w, h in (rect(r) for r in plan.get("water", []))],
+            "pond": [[X(x), Y(y)] for x, y in plan.get("pond", [])]}
+
+
 def fixture_header():
+    sys.path.insert(0, str(GAME / "scripts"))
+    import world2x
     world = json.loads((GAME / "content/districts/world.json").read_text())
     districts = world["districts"]
     count = re.findall(r"^#define TD_DISTRICT_COUNT (\d+)$",
@@ -84,68 +98,70 @@ def fixture_header():
     require(len(count) == 1 and len(districts) == int(count[0]) and
             [district["id"] for district in districts] == list(range(len(districts))),
             "Atlas oracle requires the actual registered district order/count.")
-    require(len(districts) == 4, "Review the independent four-scene water oracle before changing world coverage.")
-    expected_sources = {"toronto_city": "content/city_art.json",
-                        "toronto_west": "content/districts/west_art.json",
-                        "toronto_high_park": "content/districts/high_park_art.json",
-                        "toronto_east": "content/districts/east_art.json"}
-    actual_width = max(district["atlas_x"] + district["width_pixels"] for district in districts) // 8
-    actual_height = max(district["atlas_y"] + district["height_pixels"] for district in districts) // 8
-    require((actual_width, actual_height) == (512, 122), "Review native row addressing when atlas dimensions change.")
-    require([district["id"] for district in sorted(districts, key=lambda d: d["atlas_x"])] == [2, 1, 0, 3],
-            "The tested west-to-east district placement must match the registered world.")
-    padded_height = (actual_height + 7) // 8 * 8
-    pixels = [0] * (actual_width * padded_height)
-    occupied = set()
-    metas = []
-    classes = [0] * 4
-    for district in districts:
-        scene_name = district["scene"]
-        require(scene_name in expected_sources, "An unreviewed scene has no independent water oracle.")
-        scene = json.loads((GAME / "project/project/scenes" / scene_name / "scene.gbsres").read_text())
-        require((scene["width"], scene["height"]) == (128, 122) and scene["symbol"] == district["symbol"],
-                "Atlas oracle scene dimensions/identity disagree with registered native resources.")
-        require((district["width_pixels"], district["height_pixels"]) == (1024, 976) and
-                all(type(district[field]) is int and district[field] >= 0 and district[field] % 8 == 0
-                    for field in ("atlas_x", "atlas_y")), "Atlas placement must be nonnegative and tile aligned.")
-        collisions = collision_bytes(scene["collisions"], 128 * 122)
-        require(set(collisions) <= {0, 15, 16}, "Review newly introduced collision classes before assigning atlas colours.")
-        metadata = json.loads((GAME / expected_sources[scene_name]).read_text())
-        offset_x, offset_y = district["atlas_x"] // 8, district["atlas_y"] // 8
-        name = district["name"]
-        require(name.isascii() and len(name) <= 18, "District name must fit the native 19-byte output.")
-        metas.append("{%d,%d,%d,%d,%d,%s}" %
-                     (district["id"], offset_x, offset_y, 1024, 976, json.dumps(name)))
-        for position, collision in enumerate(collisions):
-            tile_x, tile_y = position % 128, position // 128
-            atlas_x, atlas_y = offset_x + tile_x, offset_y + tile_y
-            require((atlas_x, atlas_y) not in occupied, "Registered atlas districts overlap.")
-            occupied.add((atlas_x, atlas_y))
-            # Road and walking permissions take precedence over rivers/ponds:
-            # a bridge remains visible land even when its centre is wet.
-            colour = 1 if collision == 0 else 2 if collision == 16 else (
-                3 if authored_water(scene_name, (tile_x * 8 + 4, tile_y * 8 + 4), metadata) else 0)
-            pixels[atlas_y * actual_width + atlas_x] = colour
-            classes[colour] += 1
-    require(len(occupied) == actual_width * actual_height and all(classes),
-            "The oracle must cover the actual world and exercise all four pixel classes.")
-    # Check the independent water oracle at real geographic boundary examples.
+    require(len(districts) == 16, "Review the independent sixteen-scene water oracle before changing world coverage.")
+    # Districts west to east: High Park, west, core, east, each 2000 x 1904.
+    column = {2: 0, 1: 1, 0: 2, 3: 3}
+    tw, th = world2x.WORLD_TW, world2x.WORLD_TH
+    ground = [[0] * (4 * tw) for _ in range(th)]
     core = json.loads((GAME / "content/city_art.json").read_text())
-    require(authored_water("toronto_city", (868, 120), core) and
-            not authored_water("toronto_city", (400, 924), core) and
-            authored_water("toronto_city", (620, 924), core),
+    for old in range(4):
+        metadata = core if old == 0 else outer_water(old)
+        # The district's own scenes, stitched at their registered origins.
+        for district in districts[old * 4:old * 4 + 4]:
+            scene = json.loads((GAME / "project/project/scenes" / district["scene"] / "scene.gbsres").read_text())
+            require((scene["width"], scene["height"]) == (128, 122) and scene["symbol"] == district["symbol"],
+                    "Atlas oracle scene dimensions/identity disagree with registered native resources.")
+            collisions = collision_bytes(scene["collisions"], 128 * 122)
+            require(set(collisions) <= {0, 15, 16}, "Review newly introduced collision classes before assigning atlas colours.")
+            ox, oy = district["origin"]
+            require(district["atlas_x"] == column[old] * world2x.WORLD_W + ox and district["atlas_y"] == oy,
+                    "The tested west-to-east district placement must match the registered world.")
+            for position, collision in enumerate(collisions):
+                x, y = ox // 8 + position % 128, oy // 8 + position // 128
+                colour = 1 if collision == 0 else 2 if collision == 16 else (
+                    3 if authored_water(old, (x * 8 + 4, y * 8 + 4), metadata) else 0)
+                ground[y][column[old] * tw + x] = colour
+    # Independent downsampling: the commonest class of each 2 x 2 tiles,
+    # road, walk, water, solid on a tie; then a lone non-road pixel takes
+    # what three of its four neighbours share (twice).
+    width, height = 4 * tw // 2, th // 2
+    padded_width, padded_height = 512, (height + 7) // 8 * 8
+    pixels = [[0] * padded_width for _ in range(padded_height)]
+    for y in range(height):
+        for x in range(width):
+            votes = [ground[2 * y + dy][2 * x + dx] for dy in (0, 1) for dx in (0, 1)]
+            pixels[y][x] = max((1, 2, 3, 0), key=lambda c: (votes.count(c), -(1, 2, 3, 0).index(c)))
+    for _ in range(2):
+        before = [row[:] for row in pixels]
+        for y in range(1, height - 1):
+            for x in range(1, width - 1):
+                if before[y][x] == 1:
+                    continue
+                near = [before[y - 1][x], before[y + 1][x], before[y][x - 1], before[y][x + 1]]
+                best = max(set(near), key=near.count)
+                if near.count(best) >= 3 and best not in (before[y][x], 1):
+                    pixels[y][x] = best
+    classes = {v for row in pixels for v in row}
+    require(classes == {0, 1, 2, 3}, "The oracle must exercise all four pixel classes.")
+    # Check the independent water oracle at real geographic boundary examples.
+    m = world2x.district_map(0)
+    require(authored_water(0, m.point(868, 120), core) and
+            not authored_water(0, m.point(400, 924), core) and
+            authored_water(0, m.point(620, 924), core),
             "Core water oracle lost the Don River, Island land or intervening lake.")
-    hp = json.loads((GAME / "content/districts/high_park_art.json").read_text())
-    require(inside_polygon((650, 550), hp["pond"]) and not inside_polygon((750, 550), hp["pond"]),
+    hp = outer_water(2)
+    mh = world2x.district_map(2)
+    require(inside_polygon(mh.point(650, 550), hp["pond"]) and not inside_polygon(mh.point(750, 550), hp["pond"]),
             "Independent pond oracle does not distinguish land and water.")
+    metas = ["{%d,%d,%d,%d,%d,%s}" % (d["id"], d["atlas_x"] // 16, d["atlas_y"] // 16, 1024, 976, json.dumps(d["name"]))
+             for d in districts]
     rows = ["typedef struct { UBYTE id; UWORD x,y,width,height; const char *name; } oracle_district_t;",
             f"#define ORACLE_DISTRICT_COUNT {len(districts)}",
-            f"#define ORACLE_WIDTH {actual_width}", f"#define ORACLE_HEIGHT {actual_height}",
-            f"#define ORACLE_PADDED_HEIGHT {padded_height}",
+            f"#define ORACLE_WIDTH {width}", f"#define ORACLE_HEIGHT {height}",
+            f"#define ORACLE_ROW {padded_width}", f"#define ORACLE_PADDED_HEIGHT {padded_height}",
             "static const oracle_district_t oracle_districts[]={" + ",".join(metas) + "};",
-            "static const UBYTE oracle_pixels[ORACLE_WIDTH*ORACLE_PADDED_HEIGHT]={"]
-    rows += [",".join(map(str, pixels[offset:offset + actual_width])) + ","
-             for offset in range(0, len(pixels), actual_width)]
+            "static const UBYTE oracle_pixels[ORACLE_ROW*ORACLE_PADDED_HEIGHT]={"]
+    rows += [",".join(map(str, row)) + "," for row in pixels]
     rows += ["};", ""]
     return "\n".join(rows)
 

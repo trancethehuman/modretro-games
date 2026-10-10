@@ -222,7 +222,6 @@ static UBYTE lf_random(void){
 }
 void td_lf_new_look(UBYTE i,UBYTE seed) BANKED {
     UBYTE base;
-    if(!td.district&&i==5){td_traffic_bases[i]=TD_FRAME_PLAYER_VAN;TD_PALETTE(&actors[2+i])=TD_PAL_YELLOW;return;}
     base=lf_design[seed&7];
     td_traffic_bases[i]=base;
     TD_PALETTE(&actors[2+i])=base==TD_FRAME_TRAFFIC_TAXI?TD_PAL_YELLOW:lf_colour[(seed>>3)&7];
@@ -371,7 +370,6 @@ static void lf_cars_tick(void){
  * bus loop, which keeps its route. */
 #define LF_VIEW_U 112
 #define LF_VIEW_V 96
-static const UWORD lf_core_lane[4]={288,400,528,640};
 static UBYTE lf_spot_clear(UBYTE i,UWORD u,UWORD v){
     UBYTE k;
     if(lf_on_screen(u>>4,v>>4))return FALSE;
@@ -380,36 +378,13 @@ static UBYTE lf_spot_clear(UBYTE i,UWORD u,UWORD v){
     return TRUE;
 }
 static void lf_ambient(void){
-    UBYTE i=lf_amb,leg,west=(td_tick>>3)&1;UWORD pu=td.u>>4,pv=td.v>>4,u,v,lane;td_traffic_sample_t sample;
+    UBYTE i=lf_amb,leg;UWORD pu=td.u>>4,pv=td.v>>4,u,v;td_traffic_sample_t sample;
     lf_amb=i==5?0:i+1;
     if(td_tr_ctrl&(1<<i))return;
     u=td_traffic_u[i]>>4;v=td_traffic_v[i]>>4;
     if(lf_on_screen(u,v)||(lf_dist(u,pu)<176&&lf_dist(v,pv)<152))return;
-    if(td.district){
-        if(!td_world_traffic_recycle(td.district,i,pu,pv,LF_VIEW_U,LF_VIEW_V,&u,&v,&leg,&sample)||!lf_spot_clear(i,u,v))return;
-        td_traffic_u[i]=u;td_traffic_v[i]=v;td_traffic_leg[i]=leg;td_traffic_samples[i]=sample;
-        td_lf_new_look(i,lf_random());
-        return;
-    }
-    if(i<4){
-        /* Eastbound on the north lane (leg 0) or westbound on the south (2). */
-        lane=lf_core_lane[i];
-        if(lf_dist(lane,pv)>280)return;
-        if(lf_dist(lane,pv)>=LF_VIEW_V)u=pu<48?48:pu>840?840:pu;
-        else if(west){if(pu+LF_VIEW_U>840)return;u=pu+LF_VIEW_U;}
-        else{if(pu<48+LF_VIEW_U)return;u=pu-LF_VIEW_U;}
-        leg=west?2:0;v=west?lane+8:lane-8;
-    }else if(i==4){
-        /* Parliament: southbound at x 792 (leg 0) or northbound at x 776 (leg 2). */
-        if(lf_patrol||lf_dist(784,pu)>280)return;
-        if(lf_dist(784,pu)>=LF_VIEW_U)v=pv<48?48:pv>792?792:pv;
-        else if(west){if(pv+LF_VIEW_V>792)return;v=pv+LF_VIEW_V;}
-        else{if(pv<48+LF_VIEW_V)return;v=pv-LF_VIEW_V;}
-        leg=west?2:0;u=west?776:792;
-    }else return;
-    u<<=4;v<<=4;
-    if(!lf_spot_clear(i,u,v))return;
-    td_traffic_u[i]=u;td_traffic_v[i]=v;td_traffic_leg[i]=leg;
+    if(!td_world_traffic_recycle(td.district,i,pu,pv,LF_VIEW_U,LF_VIEW_V,&u,&v,&leg,&sample)||!lf_spot_clear(i,u,v))return;
+    td_traffic_u[i]=u;td_traffic_v[i]=v;td_traffic_leg[i]=leg;td_traffic_samples[i]=sample;
     td_lf_new_look(i,lf_random());
 }
 

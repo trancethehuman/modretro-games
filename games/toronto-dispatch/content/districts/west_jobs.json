@@ -9,8 +9,8 @@
   "base_quest_count": 72,
   "result_stop_count": 35,
   "result_quest_count": 80,
-  "preserved_base_stops_sha256": "26c2e8bee34a7a0bd54ffa520e770b03dc41a26f91943c081d3fed517ebba69b",
-  "preserved_base_quests_sha256": "d75f7f54f19c27d7c6fd7b89e693edb7b7e121e226ba78c11c6c57336ce483b1",
+  "preserved_base_stops_sha256": "20ad899171e66d3670925d30325ca4b6f4ae6fb3ed3c9f2203235227e984a9f3",
+  "preserved_base_quests_sha256": "a40d8c5f50cf52a9b6a52946e7f614bd0e475effd45deab9958cedbc6c513c14",
   "preserved_base_quest_fields": [
     "id",
     "title",
@@ -22,46 +22,106 @@
     "time_limit_seconds",
     "reward"
   ],
-  "world_sha256": "626de8b9a745e87bbedfd6722488f51d82c62777ef8ff44de130fec1ea93866a",
+  "world_sha256": "727db27a64c87ac1ce9f3222bff339aad351c8a9e0fd17b2a48ad98dca55ed93",
   "collision_resources": [
     {
       "district": 0,
-      "scene": "project/project/scenes/toronto_city/scene.gbsres",
-      "collision_sha256": "296a880d116cbc19a2428a40cc9624f3f267c010228608ac768327dc72ba6f93"
+      "scene": "project/project/scenes/toronto_core_nw/scene.gbsres",
+      "collision_sha256": "ab8037c26bc2297bb5766bb6fe99263ad63b71656bd5fb432c0dd42ca67ddaa4"
     },
     {
       "district": 1,
-      "scene": "project/project/scenes/toronto_west/scene.gbsres",
-      "collision_sha256": "e92e53b44b87a00789ac9ef86c72afe721589bc625d3af47f68c235dc5ec813a"
+      "scene": "project/project/scenes/toronto_core_ne/scene.gbsres",
+      "collision_sha256": "dda30bdd90caf8b4f08fa82bfd3ce6c84086736bc4cdf1ff008d31095bd38e42"
     },
     {
       "district": 2,
-      "scene": "project/project/scenes/toronto_high_park/scene.gbsres",
-      "collision_sha256": "69162311f0187ae8fb3244e32c7b51b103be3a8df186a0164fbe32dc97eca364"
+      "scene": "project/project/scenes/toronto_core_sw/scene.gbsres",
+      "collision_sha256": "70f13ad6c6db293ed4b42af14255c63257c70056d42c4eb8c7ef24f63202c846"
     },
     {
       "district": 3,
-      "scene": "project/project/scenes/toronto_east/scene.gbsres",
-      "collision_sha256": "bf44fb1510d194d2756c50c9d0bb5bd7fa79ab205cd2c27bf9d9dcdd08898185"
+      "scene": "project/project/scenes/toronto_core_se/scene.gbsres",
+      "collision_sha256": "5decbeb6f6bc9711a20d30429b65e4e22d8416a5aad88d430aba860d45f264ce"
+    },
+    {
+      "district": 4,
+      "scene": "project/project/scenes/toronto_west_nw/scene.gbsres",
+      "collision_sha256": "d29b8c7b030b0aeab707a1e7ec0d4cc8e6018ce297c9e4f330b42c8d5bef5ed6"
+    },
+    {
+      "district": 5,
+      "scene": "project/project/scenes/toronto_west_ne/scene.gbsres",
+      "collision_sha256": "f871cc32a0016d1ce3a8f5a722cffafc5968f2eee30badb19c08ce747b4661a1"
+    },
+    {
+      "district": 6,
+      "scene": "project/project/scenes/toronto_west_sw/scene.gbsres",
+      "collision_sha256": "af49514fcd6e20c0e67e2be05166f496c0bd3a34ffcef63c63cfefa0b1bf53a5"
+    },
+    {
+      "district": 7,
+      "scene": "project/project/scenes/toronto_west_se/scene.gbsres",
+      "collision_sha256": "de15a20bdcd5d657580f02ba63905ce99246096ec3fe0dcdec6a723740ba9dc3"
+    },
+    {
+      "district": 8,
+      "scene": "project/project/scenes/toronto_high_park_nw/scene.gbsres",
+      "collision_sha256": "8e81eb8908219a74948ed5e165fac9ea142ebbd79cc418d1b5583f52805e045f"
+    },
+    {
+      "district": 9,
+      "scene": "project/project/scenes/toronto_high_park_ne/scene.gbsres",
+      "collision_sha256": "445676130ccf00e4e9b46e63e819738a652d56d27ef95c54dfd99bf957da18ad"
+    },
+    {
+      "district": 10,
+      "scene": "project/project/scenes/toronto_high_park_sw/scene.gbsres",
+      "collision_sha256": "5caf19056403550c916cbdaa996abb9cd577234364fd9ce48267bfd683efe10d"
+    },
+    {
+      "district": 11,
+      "scene": "project/project/scenes/toronto_high_park_se/scene.gbsres",
+      "collision_sha256": "2296326267c492e3452aacbde09947e72e14d85e99f4945bf2ed2147ed1e67c3"
+    },
+    {
+      "district": 12,
+      "scene": "project/project/scenes/toronto_east_nw/scene.gbsres",
+      "collision_sha256": "d279880913a6a8a7948a823bfc1748168f407350e879c6956dc30033b8f0bf83"
+    },
+    {
+      "district": 13,
+      "scene": "project/project/scenes/toronto_east_ne/scene.gbsres",
+      "collision_sha256": "697f8d18db876cd48771461639c84d4c151b15b422f446376a47ecce34d80bad"
+    },
+    {
+      "district": 14,
+      "scene": "project/project/scenes/toronto_east_sw/scene.gbsres",
+      "collision_sha256": "3f0d8c5c9b685c304953154f1bf7da488fd7728081899f5a31b7a91f9ffa8405"
+    },
+    {
+      "district": 15,
+      "scene": "project/project/scenes/toronto_east_se/scene.gbsres",
+      "collision_sha256": "79cbf77e66ab07aea7db32318f075d64a09c2880e94ebd86c37e6d6aa1e9dc22"
     }
   ],
   "geography_metadata": [
     {
       "path": "content/districts/west_art.json",
-      "sha256": "bab943516512027447a4c4ba2c75bb7b3b496ef2dfdd8e460661c6ffe02116dc",
+      "sha256": "c32c55624cd5ef23920ac1822edf20105130c867157cf4ceaac68ee763a236eb",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     },
     {
       "path": "content/districts/high_park_art.json",
-      "sha256": "ecb7eee521fd5406c42104e9f5c6f2af27f2bc17bf1eaac8dfdadb4d902377d9",
+      "sha256": "ecea4c2763ec193a3dd3d09355b37ee16d5fe3a37c891457eaefffbc495e26be",
       "notice": "Source-derived geography; original compressed art and fictional delivery entrances"
     }
   ],
   "normalized_cardinal_speeds_pixels_per_second": {
-    "car": 86.25,
-    "truck": 71.25,
-    "motorcycle": 101.25,
-    "scooter": 63.75,
+    "car": 75.0,
+    "truck": 63.75,
+    "motorcycle": 86.25,
+    "scooter": 56.25,
     "walking": 30.0
   },
   "transit_notice": "No western transit service is added. The relay optionally uses existing core Line 1 and fictional 94 schedules; all eight new stops have transit=0.",
@@ -71,11 +131,11 @@
   "stops": [
     {
       "id": 27,
-      "u": 976,
-      "v": 288,
+      "u": 933,
+      "v": 552,
       "name": "DUFFERIN COLLEGE",
       "transit": 0,
-      "district": 1,
+      "district": 5,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Dufferin-side College",
@@ -85,11 +145,11 @@
     },
     {
       "id": 28,
-      "u": 800,
-      "v": 64,
+      "u": 632,
+      "v": 120,
       "name": "LANSDOWNE BLOOR",
       "transit": 0,
-      "district": 1,
+      "district": 5,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Lansdowne / Bloor",
@@ -98,11 +158,11 @@
     },
     {
       "id": 29,
-      "u": 864,
-      "v": 528,
+      "u": 760,
+      "v": 88,
       "name": "PARKDALE QUEEN",
       "transit": 0,
-      "district": 1,
+      "district": 7,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Parkdale / Queen",
@@ -111,11 +171,11 @@
     },
     {
       "id": 30,
-      "u": 416,
-      "v": 352,
+      "u": 928,
+      "v": 672,
       "name": "RONCY HOWARD PARK",
       "transit": 0,
-      "district": 1,
+      "district": 4,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Roncesvalles / Howard",
@@ -124,11 +184,11 @@
     },
     {
       "id": 31,
-      "u": 544,
-      "v": 432,
+      "u": 192,
+      "v": 848,
       "name": "SORAUREN SERVICE",
       "transit": 0,
-      "district": 1,
+      "district": 5,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Sorauren Works",
@@ -137,11 +197,11 @@
     },
     {
       "id": 32,
-      "u": 656,
-      "v": 272,
+      "u": 320,
+      "v": 576,
       "name": "BLOOR PARK GATE",
       "transit": 0,
-      "district": 2,
+      "district": 9,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "High Park Gate",
@@ -151,11 +211,11 @@
     },
     {
       "id": 33,
-      "u": 944,
-      "v": 608,
+      "u": 872,
+      "v": 312,
       "name": "PARKSIDE SOUTH",
       "transit": 0,
-      "district": 2,
+      "district": 11,
       "reserved": 0,
       "foot_only": false,
       "reference_label": "Parkside Depot",
@@ -164,11 +224,11 @@
     },
     {
       "id": 34,
-      "u": 784,
-      "v": 608,
+      "u": 571,
+      "v": 312,
       "name": "COLBORNE SERVICE",
       "transit": 0,
-      "district": 2,
+      "district": 11,
       "reserved": 1,
       "foot_only": true,
       "reference_label": "Colborne Service",
@@ -176,8 +236,8 @@
       "location_notice": "Original fictional client entrance on compressed terrain; not a surveyed venue loading door",
       "source_relation": "Fictional park walk from south Queensway approach; not a claim of real all-day access policy.",
       "parking_anchor": {
-        "u": 736,
-        "v": 640
+        "u": 472,
+        "v": 368
       },
       "access_notice": "Game requires parking and walking; this does not reproduce real seasonal vehicle-access rules"
     }
@@ -202,32 +262,32 @@
         31,
         0
       ],
-      "time_limit_seconds": 230,
-      "reward": 217,
+      "time_limit_seconds": 345,
+      "reward": 215,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect shop parcels"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin handoff"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale shop handoff"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return empty satchel"
         }
       ],
@@ -235,50 +295,58 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3328,
+        "vehicle_route_pixels": 6520,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 32.9,
-        "normalized_moving_seconds_slow": 52.2,
+        "normalized_moving_seconds_fast": 75.6,
+        "normalized_moving_seconds_slow": 115.9,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 27,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1072,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2200,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "College east"
             ]
           },
           {
             "from_stop": 27,
             "to_stop": 29,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 352,
+            "from_district": 5,
+            "to_district": 7,
+            "vehicle_pixels": 640,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 29,
             "to_stop": 31,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 480,
+            "from_district": 7,
+            "to_district": 5,
+            "vehicle_pixels": 904,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 31,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1424,
+            "from_district": 5,
+            "to_district": 3,
+            "vehicle_pixels": 2776,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "west inner seam",
+              "Queen east",
+              "core inner seam"
             ]
           }
         ],
@@ -303,27 +371,27 @@
         31,
         5
       ],
-      "time_limit_seconds": 195,
-      "reward": 204,
+      "time_limit_seconds": 280,
+      "reward": 206,
       "stages": [
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Collect framed art"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale exhibit handoff"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren frame exchange"
         },
         {
           "stop_id": 5,
-          "district": 0,
+          "district": 1,
           "objective": "Return borrowed case"
         }
       ],
@@ -331,41 +399,46 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 2320,
+        "vehicle_route_pixels": 4736,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 36.4,
-        "normalized_moving_seconds_slow": 36.4,
+        "normalized_moving_seconds_fast": 84.2,
+        "normalized_moving_seconds_slow": 84.2,
         "assumed_interaction_allowance_seconds": 20,
         "legs": [
           {
             "from_stop": 5,
             "to_stop": 29,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 728,
+            "from_district": 1,
+            "to_district": 7,
+            "vehicle_pixels": 1568,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "Queen east"
             ]
           },
           {
             "from_stop": 29,
             "to_stop": 31,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 480,
+            "from_district": 7,
+            "to_district": 5,
+            "vehicle_pixels": 904,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 31,
             "to_stop": 5,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1112,
+            "from_district": 5,
+            "to_district": 1,
+            "vehicle_pixels": 2264,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "Dundas east",
+              "core inner seam"
             ]
           }
         ],
@@ -391,32 +464,32 @@
         30,
         0
       ],
-      "time_limit_seconds": 170,
+      "time_limit_seconds": 270,
       "reward": 267,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect urgent files"
         },
         {
           "stop_id": 28,
-          "district": 1,
+          "district": 5,
           "objective": "Lansdowne office handoff"
         },
         {
           "stop_id": 32,
-          "district": 2,
+          "district": 9,
           "objective": "Bloor gate handoff"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park office handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return dispatch copy"
         }
       ],
@@ -424,40 +497,43 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5328,
+        "vehicle_route_pixels": 10656,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 52.6,
-        "normalized_moving_seconds_slow": 52.6,
+        "normalized_moving_seconds_fast": 123.5,
+        "normalized_moving_seconds_slow": 123.5,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 28,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1472,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2888,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "core inner seam",
+              "core inner seam",
+              "Dundas east"
             ]
           },
           {
             "from_stop": 28,
             "to_stop": 32,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 1376,
+            "from_district": 5,
+            "to_district": 9,
+            "vehicle_pixels": 2728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "west inner seam",
               "Bloor west"
             ]
           },
           {
             "from_stop": 32,
             "to_stop": 30,
-            "from_district": 2,
-            "to_district": 1,
-            "vehicle_pixels": 864,
+            "from_district": 9,
+            "to_district": 4,
+            "vehicle_pixels": 1904,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Howard Park"
@@ -466,12 +542,15 @@
           {
             "from_stop": 30,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1616,
+            "from_district": 4,
+            "to_district": 3,
+            "vehicle_pixels": 3136,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "west inner seam",
+              "Dundas east",
+              "core inner seam",
+              "core inner seam"
             ]
           }
         ],
@@ -498,37 +577,37 @@
         29,
         0
       ],
-      "time_limit_seconds": 265,
-      "reward": 290,
+      "time_limit_seconds": 425,
+      "reward": 293,
       "stages": [
         {
           "stop_id": 11,
-          "district": 0,
+          "district": 3,
           "objective": "Collect boxed supplies"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin supply drop"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren loading drop"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside roadside drop"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale stock drop"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return empty crates"
         }
       ],
@@ -536,63 +615,69 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4776,
+        "vehicle_route_pixels": 9808,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 67.0,
-        "normalized_moving_seconds_slow": 67.0,
+        "normalized_moving_seconds_fast": 153.9,
+        "normalized_moving_seconds_slow": 153.9,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 11,
             "to_stop": 27,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1304,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2616,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "College east"
             ]
           },
           {
             "from_stop": 27,
             "to_stop": 31,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 576,
+            "from_district": 5,
+            "to_district": 5,
+            "vehicle_pixels": 1032,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 31,
             "to_stop": 33,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 864,
+            "from_district": 5,
+            "to_district": 11,
+            "vehicle_pixels": 2112,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "The Queensway"
+              "west inner seam",
+              "Howard Park",
+              "high_park inner seam"
             ]
           },
           {
             "from_stop": 33,
             "to_stop": 29,
-            "from_district": 2,
-            "to_district": 1,
-            "vehicle_pixels": 1088,
+            "from_district": 11,
+            "to_district": 7,
+            "vehicle_pixels": 2176,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "The Queensway"
+              "The Queensway",
+              "west inner seam"
             ]
           },
           {
             "from_stop": 29,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 944,
+            "from_district": 7,
+            "to_district": 3,
+            "vehicle_pixels": 1872,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "Queen east",
+              "core inner seam"
             ]
           }
         ],
@@ -619,17 +704,17 @@
         30,
         0
       ],
-      "time_limit_seconds": 260,
-      "reward": 245,
+      "time_limit_seconds": 395,
+      "reward": 243,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect small repair kit"
         },
         {
           "stop_id": 17,
-          "district": 0,
+          "district": 1,
           "objective": "Bloor Yonge handoff"
         },
         {
@@ -639,17 +724,17 @@
         },
         {
           "stop_id": 28,
-          "district": 1,
+          "district": 5,
           "objective": "Lansdowne handoff"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return reusable pouch"
         }
       ],
@@ -657,36 +742,40 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3968,
+        "vehicle_route_pixels": 7768,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 39.2,
-        "normalized_moving_seconds_slow": 62.2,
+        "normalized_moving_seconds_fast": 90.1,
+        "normalized_moving_seconds_slow": 138.1,
         "assumed_interaction_allowance_seconds": 30,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 17,
-            "from_district": 0,
-            "to_district": 0,
-            "vehicle_pixels": 704,
+            "from_district": 3,
+            "to_district": 1,
+            "vehicle_pixels": 1408,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "core inner seam"
+            ]
           },
           {
             "from_stop": 17,
             "to_stop": 18,
-            "from_district": 0,
+            "from_district": 1,
             "to_district": 0,
-            "vehicle_pixels": 552,
+            "vehicle_pixels": 1144,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "core inner seam"
+            ]
           },
           {
             "from_stop": 18,
             "to_stop": 28,
             "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 424,
+            "to_district": 5,
+            "vehicle_pixels": 840,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "Bloor east"
@@ -695,21 +784,26 @@
           {
             "from_stop": 28,
             "to_stop": 30,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 672,
+            "from_district": 5,
+            "to_district": 4,
+            "vehicle_pixels": 1240,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 30,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1616,
+            "from_district": 4,
+            "to_district": 3,
+            "vehicle_pixels": 3136,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Dundas east"
+              "west inner seam",
+              "Dundas east",
+              "core inner seam",
+              "core inner seam"
             ]
           }
         ],
@@ -735,32 +829,32 @@
         33,
         0
       ],
-      "time_limit_seconds": 270,
+      "time_limit_seconds": 435,
       "reward": 243,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect museum parcel"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale package exchange"
         },
         {
           "stop_id": 34,
-          "district": 2,
+          "district": 11,
           "objective": "Walk to Lodge service"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside return handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return collection box"
         }
       ],
@@ -768,53 +862,57 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 4368,
-        "required_walking_pixels": 160,
-        "normalized_moving_seconds_fast": 48.5,
-        "normalized_moving_seconds_slow": 73.9,
+        "vehicle_route_pixels": 8752,
+        "required_walking_pixels": 304,
+        "normalized_moving_seconds_fast": 111.6,
+        "normalized_moving_seconds_slow": 165.7,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 29,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 944,
+            "from_district": 3,
+            "to_district": 7,
+            "vehicle_pixels": 1872,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
               "Queen east"
             ]
           },
           {
             "from_stop": 29,
             "to_stop": 34,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 1264,
-            "required_walking_pixels": 80,
+            "from_district": 7,
+            "to_district": 11,
+            "vehicle_pixels": 2520,
+            "required_walking_pixels": 152,
             "shortest_modeled_seams": [
+              "west inner seam",
               "The Queensway"
             ]
           },
           {
             "from_stop": 34,
             "to_stop": 33,
-            "from_district": 2,
-            "to_district": 2,
-            "vehicle_pixels": 240,
-            "required_walking_pixels": 80,
+            "from_district": 11,
+            "to_district": 11,
+            "vehicle_pixels": 456,
+            "required_walking_pixels": 152,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 33,
             "to_stop": 0,
-            "from_district": 2,
-            "to_district": 0,
-            "vehicle_pixels": 1920,
+            "from_district": 11,
+            "to_district": 3,
+            "vehicle_pixels": 3904,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
               "The Queensway",
-              "King east"
+              "west inner seam",
+              "King east",
+              "core inner seam"
             ]
           }
         ],
@@ -840,32 +938,32 @@
         27,
         0
       ],
-      "time_limit_seconds": 210,
-      "reward": 217,
+      "time_limit_seconds": 295,
+      "reward": 216,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect return documents"
         },
         {
           "stop_id": 31,
-          "district": 1,
+          "district": 5,
           "objective": "Sorauren document exchange"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park exchange"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin return handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return original to Union"
         }
       ],
@@ -873,50 +971,58 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 3360,
+        "vehicle_route_pixels": 6616,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 39.0,
-        "normalized_moving_seconds_slow": 39.0,
+        "normalized_moving_seconds_fast": 88.2,
+        "normalized_moving_seconds_slow": 88.2,
         "assumed_interaction_allowance_seconds": 25,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 31,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1424,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2776,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "King east"
+              "core inner seam",
+              "Queen east",
+              "west inner seam"
             ]
           },
           {
             "from_stop": 31,
             "to_stop": 30,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 240,
+            "from_district": 5,
+            "to_district": 4,
+            "vehicle_pixels": 536,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 30,
             "to_stop": 27,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 624,
+            "from_district": 4,
+            "to_district": 5,
+            "vehicle_pixels": 1104,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 27,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 1072,
+            "from_district": 5,
+            "to_district": 3,
+            "vehicle_pixels": 2200,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "College east"
+              "College east",
+              "core inner seam",
+              "core inner seam"
             ]
           }
         ],
@@ -945,47 +1051,47 @@
         29,
         0
       ],
-      "time_limit_seconds": 330,
+      "time_limit_seconds": 535,
       "reward": 315,
       "stages": [
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Collect closing parcels"
         },
         {
           "stop_id": 27,
-          "district": 1,
+          "district": 5,
           "objective": "Dufferin handoff"
         },
         {
           "stop_id": 28,
-          "district": 1,
+          "district": 5,
           "objective": "Lansdowne shop handoff"
         },
         {
           "stop_id": 32,
-          "district": 2,
+          "district": 9,
           "objective": "Bloor gate handoff"
         },
         {
           "stop_id": 33,
-          "district": 2,
+          "district": 11,
           "objective": "Parkside shop handoff"
         },
         {
           "stop_id": 30,
-          "district": 1,
+          "district": 4,
           "objective": "Howard Park handoff"
         },
         {
           "stop_id": 29,
-          "district": 1,
+          "district": 7,
           "objective": "Parkdale final handoff"
         },
         {
           "stop_id": 0,
-          "district": 0,
+          "district": 3,
           "objective": "Return shift satchel"
         }
       ],
@@ -993,81 +1099,91 @@
       "timing_design": {
         "planning_only": true,
         "measured_duration_seconds": null,
-        "vehicle_route_pixels": 5840,
+        "vehicle_route_pixels": 11608,
         "required_walking_pixels": 0,
-        "normalized_moving_seconds_fast": 91.6,
-        "normalized_moving_seconds_slow": 91.6,
+        "normalized_moving_seconds_fast": 206.4,
+        "normalized_moving_seconds_slow": 206.4,
         "assumed_interaction_allowance_seconds": 40,
         "legs": [
           {
             "from_stop": 0,
             "to_stop": 27,
-            "from_district": 0,
-            "to_district": 1,
-            "vehicle_pixels": 1072,
+            "from_district": 3,
+            "to_district": 5,
+            "vehicle_pixels": 2200,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "core inner seam",
+              "core inner seam",
               "College east"
             ]
           },
           {
             "from_stop": 27,
             "to_stop": 28,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 400,
+            "from_district": 5,
+            "to_district": 5,
+            "vehicle_pixels": 728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": []
           },
           {
             "from_stop": 28,
             "to_stop": 32,
-            "from_district": 1,
-            "to_district": 2,
-            "vehicle_pixels": 1376,
+            "from_district": 5,
+            "to_district": 9,
+            "vehicle_pixels": 2728,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "west inner seam",
               "Bloor west"
             ]
           },
           {
             "from_stop": 32,
             "to_stop": 33,
-            "from_district": 2,
-            "to_district": 2,
-            "vehicle_pixels": 624,
+            "from_district": 9,
+            "to_district": 11,
+            "vehicle_pixels": 1224,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "high_park inner seam"
+            ]
           },
           {
             "from_stop": 33,
             "to_stop": 30,
-            "from_district": 2,
-            "to_district": 1,
-            "vehicle_pixels": 752,
+            "from_district": 11,
+            "to_district": 4,
+            "vehicle_pixels": 1576,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
+              "high_park inner seam",
               "Howard Park"
             ]
           },
           {
             "from_stop": 30,
             "to_stop": 29,
-            "from_district": 1,
-            "to_district": 1,
-            "vehicle_pixels": 672,
+            "from_district": 4,
+            "to_district": 7,
+            "vehicle_pixels": 1280,
             "required_walking_pixels": 0,
-            "shortest_modeled_seams": []
+            "shortest_modeled_seams": [
+              "west inner seam",
+              "west inner seam"
+            ]
           },
           {
             "from_stop": 29,
             "to_stop": 0,
-            "from_district": 1,
-            "to_district": 0,
-            "vehicle_pixels": 944,
+            "from_district": 7,
+            "to_district": 3,
+            "vehicle_pixels": 1872,
             "required_walking_pixels": 0,
             "shortest_modeled_seams": [
-              "Queen east"
+              "Queen east",
+              "core inner seam"
             ]
           }
         ],
