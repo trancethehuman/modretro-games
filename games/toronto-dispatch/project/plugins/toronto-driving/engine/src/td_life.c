@@ -8,6 +8,8 @@
 #include "td_audio.h"
 #include "td_district.h"
 #include "td_radio_data.h"
+#include "td_shots.h"
+#include "td_anim.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -25,7 +27,7 @@ UBYTE fx_timer,fx_look;
 UWORD fx_u,fx_v;
 BYTE fx_du,fx_dv;
 UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
-UBYTE lf_patrol,lf_lost,lf_drop,lf_amb;
+UBYTE lf_patrol,lf_lost,lf_drop,lf_amb,lf_vest,lf_calm;
 
 /* ------------------------------------------------------------ effects */
 void td_lf_fx(UBYTE kind,UWORD u,UWORD v,UBYTE timer) BANKED {
@@ -78,7 +80,8 @@ static void lf_own_ped(UBYTE i,UBYTE look){
 }
 
 void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED {
-    UBYTE look,mode=pk_mode[i],bit=1<<i;
+    UBYTE look,mode=pk_mode[i],bit=1<<i,blame=!(lethal&2);
+    lethal&=1;
     if(td_ped_ovr&bit)look=pk_look[i];
     else look=td_ped_route[i]!=TD_NONE?td_ped_route[i]&7:0;
     if((td_ped_ovr&bit)&&(mode==PK_FLY||mode==PK_DEAD))return;
@@ -88,8 +91,19 @@ void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED {
     pk_mode[i]=PK_FLY;pk_drawn&=~bit;
     if(lethal)pk_lethal|=bit;else pk_lethal&=~bit;
     td_lf_panic(pk_u[i]>>4,pk_v[i]>>4);
+    if(!blame)return;
     if(look==LF_LOOK_OFFICER)td_lf_crime(lethal?CR_COP_KILL:CR_COP);
     else td_lf_crime(lethal?CR_KILL:CR_MINOR);
+}
+
+void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED {
+    UBYTE bit=1<<i;UWORD u,v;
+    lf_own_ped(i,LF_LOOK_OFFICER);lf_vest|=bit;
+    pk_mode[i]=PK_CHASE;pk_drawn&=~bit;TD_PALETTE(&actors[TD_ACTOR_PEDS+i])=LF_OFFICER_PAL;
+    /* Knocked back a step by the round. */
+    u=pk_u[i]+vu*3;v=pk_v[i]+vv*3;
+    if(lf_walk(u>>4,v>>4)){pk_u[i]=u;pk_v[i]=v;}
+    td_lf_crime(CR_COP);
 }
 
 /* Gunfire or a struck walker: everyone else close by and in view runs from
@@ -106,7 +120,7 @@ void td_lf_panic(UWORD u,UWORD v) BANKED {
 
 static void lf_release_ped(UBYTE i){
     UBYTE bit=1<<i;
-    td_ped_ovr&=~bit;pk_drawn&=~bit;pk_mode[i]=0;td_ped_route[i]=TD_NONE;actors[TD_ACTOR_PEDS+i].flags|=ACTOR_FLAG_HIDDEN;
+    td_ped_ovr&=~bit;lf_vest&=~bit;pk_drawn&=~bit;pk_mode[i]=0;td_ped_route[i]=TD_NONE;actors[TD_ACTOR_PEDS+i].flags|=ACTOR_FLAG_HIDDEN;
 }
 
 /* Axis-separated walk with wall sliding; returns the facing used. */
@@ -464,32 +478,40 @@ static UBYTE lf_line_clear(UWORD u,UWORD v,UWORD x,UWORD y){
 
 static void lf_hurt_player(UBYTE damage){
     if(!td.vitality||lf_down)return;
-    td.vitality=damage>=td.vitality?0:td.vitality-damage;lf_hurt=30;lf_flash=1;
+    td.vitality=damage>=td.vitality?0:td.vitality-damage;lf_hurt=30;lf_flash=1;lf_calm=0;
+    if(lf_shake<4)lf_shake=4;
     td_audio_play(TD_AUDIO_IMPACT);td_lf_fx(FX_SPARK,td.u>>4,td.v>>4,8);
     if(!td.vitality){lf_down=110;td.speed=0;td_vx=td_vy=0;lf_stand_down();}
     else td_message(TD_MSG_HIT);
 }
 
+void td_lf_hurt(UBYTE damage) BANKED {lf_hurt_player(damage);}
+
 /* From four stars officers within range shoot; at five the patrol car
- * does too. One shot about every one and a half seconds; damage halves
- * inside a vehicle, so a courier has time to break line of sight. */
+ * does too. Their rounds fly like the courier's (td_shots.c), aimed at
+ * where the courier is now with a spread that grows with distance, so
+ * moving and breaking line of sight both help. About one shot a second;
+ * the shooter takes turns among the officers in range. */
 static void lf_police_fire(void){
-    UBYTE i,dmg,in_range=0;UWORD pu=td.u>>4,pv=td.v>>4,su,sv;
+    UBYTE i,k,in_range=TD_NONE;UWORD pu=td.u>>4,pv=td.v>>4,su=0,sv=0,d;
     if(td.wanted<4||lf_down||lf_arrest||td.mode!=TD_ROAM)return;
     if(lf_cop_cool){lf_cop_cool--;return;}
-    for(i=0;i<TD_PEDS&&!in_range;i++){
+    for(k=0;k<TD_PEDS&&in_range==TD_NONE;k++){
+        i=(UBYTE)(k+td_tick)&7;
         if(pk_mode[i]!=PK_CHASE)continue;
         su=pk_u[i]>>4;sv=pk_v[i]>>4;
-        if(lf_dist(su,pu)<64&&lf_dist(sv,pv)<56&&lf_line_clear(su,sv,pu,pv))in_range=1;
+        if(lf_dist(su,pu)<80&&lf_dist(sv,pv)<72&&lf_line_clear(su,sv,pu,pv))in_range=i;
     }
-    if(!in_range&&td.wanted>=5&&lf_patrol&&tr_mode[TD_POLICE_SLOT]==TR_CHASE){
+    if(in_range==TD_NONE&&td.wanted>=5&&lf_patrol&&tr_mode[TD_POLICE_SLOT]==TR_CHASE){
         su=td_traffic_u[TD_POLICE_SLOT]>>4;sv=td_traffic_v[TD_POLICE_SLOT]>>4;
-        if(lf_dist(su,pu)<72&&lf_dist(sv,pv)<64&&lf_line_clear(su,sv,pu,pv))in_range=1;
+        if(lf_dist(su,pu)<88&&lf_dist(sv,pv)<80&&lf_line_clear(su,sv,pu,pv))in_range=8;
     }
-    if(!in_range){lf_cop_cool=8;return;}
-    lf_cop_cool=128-(td.wanted<<3);
-    dmg=td.wanted;if(!td.onfoot)dmg>>=1;
-    lf_hurt_player(dmg);
+    if(in_range==TD_NONE){lf_cop_cool=8;return;}
+    d=lf_dist(su,pu)+lf_dist(sv,pv);
+    if(!td_shot_fire(TD_SHOT_POLICE,su,sv-2,pu,pv,(UBYTE)(5+(d>>4))))return;
+    lf_cop_cool=100-(td.wanted*10);
+    td_anim_spawn(TD_PART_FLASH,0,su,sv-6);
+    td_audio_play(TD_AUDIO_IMPACT);
 }
 
 /* ------------------------------------------------------------ public API */
@@ -497,8 +519,8 @@ void td_life_reset(UBYTE cold) BANKED {
     memset(pk_mode,0,sizeof(pk_mode));memset(tr_mode,0,sizeof(tr_mode));memset(tr_timer,0,sizeof(tr_timer));
     td_ped_ovr=td_tr_ctrl=pk_fresh=pk_lethal=pk_drawn=tr_spin=0;td_fx_kind=0;td_life_event=0;
     lf_warm=1;lf_stun=lf_flash=lf_punch=lf_hurt=lf_down=lf_arrest=lf_bust=lf_cop_cool=lf_rev_wait=lf_shake=lf_stuck=0;lf_exit_req=lf_spd_acc=lf_spd_ctl=0;lf_a_age=lf_b_age=255;
-    lf_patrol=lf_lost=lf_drop=lf_amb=0;
-    lf_fx_end();
+    lf_patrol=lf_lost=lf_drop=lf_amb=lf_vest=lf_calm=0;
+    lf_fx_end();td_shot_reset();
     camera_offset_x=0;
     if(cold){
         lf_chaos=0;
@@ -512,39 +534,17 @@ void td_life_reset(UBYTE cold) BANKED {
 UBYTE td_life_locked(void) BANKED {return lf_down||lf_arrest||lf_hurt>22;}
 
 static void lf_fx_tick(void){
-    UBYTE i,bit,step;UWORD bu,bv;actor_t *a;
     if(!td_fx_kind)return;
     if(!fx_timer||!--fx_timer){lf_fx_end();return;}
     if(td_fx_kind==FX_RUNNER){
         if(lf_walk((fx_u+fx_du)>>4,fx_v>>4))fx_u+=fx_du;else fx_v+=12;
-        return;
-    }
-    if(td_fx_kind!=FX_BULLET)return;
-    /* Tracer rounds cover 8 px a tick in two 4-pixel checks, so nothing is
-     * skipped. */
-    for(step=0;step<2;step++){
-        fx_u+=fx_du;fx_v+=fx_dv;bu=fx_u>>4;bv=fx_v>>4;
-        if(!lf_walk(bu,bv)){td_lf_fx(FX_SPARK,bu,bv,6);return;}
-        for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
-            if(a->flags&ACTOR_FLAG_HIDDEN)continue;
-            if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD))continue;
-            if(lf_dist(a->pos.x>>5,bu)<6&&lf_dist(a->pos.y>>5,bv)<7){
-                td_lf_knock(i,fx_du>>2,fx_dv>>2,1);td_lf_fx(FX_SPARK,bu,bv,6);return;
-            }
-        }
-        for(i=0;i<6;i++){
-            if(tr_mode[i]==TR_GONE)continue;
-            if(lf_dist(td_traffic_u[i]>>4,bu)<8&&lf_dist(td_traffic_v[i]>>4,bv)<8){
-                if(LF_IS_PATROL(i))td_lf_crime(CR_COP);
-                td_lf_fx(FX_SPARK,bu,bv,6);return;
-            }
-        }
     }
 }
 
 void td_life_tick(void) BANKED {
     if(lf_punch)lf_punch--;
     if(lf_hurt)lf_hurt--;
+    td_shot_tick();
     if(lf_down){
         if(!--lf_down)td_life_event=TD_EVENT_WASTED;
         lf_peds_tick();lf_cars_tick();lf_fx_tick();return;
@@ -568,6 +568,9 @@ void td_life_tick(void) BANKED {
 }
 
 void td_life_second(void) BANKED {
+    /* Out of trouble for a while, the courier recovers to half vitality. */
+    if(lf_calm<255)lf_calm++;
+    if(!td.wanted&&lf_calm>=6&&td.vitality&&td.vitality<50&&!(td.seconds&1))td.vitality++;
     if(!td.wanted){if(lf_chaos)lf_chaos--;return;}
     if(td.mode!=TD_RIDE&&lf_police_near(128,104))td.heat=TD_HEAT_SECONDS;
     else if(td.heat)td.heat--;

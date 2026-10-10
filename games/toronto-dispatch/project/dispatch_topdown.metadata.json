@@ -1253,74 +1253,74 @@
     },
     {
       "index": 139,
-      "name": "tracer_0",
+      "name": "shot_0",
       "palette": "signal_yellow",
       "size": [
-        32,
+        16,
         16
       ]
     },
     {
       "index": 140,
-      "name": "tracer_1",
+      "name": "shot_1",
       "palette": "signal_yellow",
       "size": [
-        32,
-        32
+        16,
+        16
       ]
     },
     {
       "index": 141,
-      "name": "tracer_2",
+      "name": "shot_2",
       "palette": "signal_yellow",
       "size": [
         16,
-        32
+        16
       ]
     },
     {
       "index": 142,
-      "name": "tracer_3",
+      "name": "shot_3",
       "palette": "signal_yellow",
       "size": [
-        32,
-        32
+        16,
+        16
       ]
     },
     {
       "index": 143,
-      "name": "tracer_4",
+      "name": "shot_4",
       "palette": "signal_yellow",
       "size": [
-        32,
+        16,
         16
       ]
     },
     {
       "index": 144,
-      "name": "tracer_5",
+      "name": "shot_5",
       "palette": "signal_yellow",
       "size": [
-        32,
-        32
+        16,
+        16
       ]
     },
     {
       "index": 145,
-      "name": "tracer_6",
+      "name": "shot_6",
       "palette": "signal_yellow",
       "size": [
         16,
-        32
+        16
       ]
     },
     {
       "index": 146,
-      "name": "tracer_7",
+      "name": "shot_7",
       "palette": "signal_yellow",
       "size": [
-        32,
-        32
+        16,
+        16
       ]
     },
     {
@@ -2133,7 +2133,7 @@
   },
   "sheet": [
     256,
-    320
+    288
   ],
   "note": "Original pixel art from scripts/sprite_art.py; colour 0 transparent."
 }

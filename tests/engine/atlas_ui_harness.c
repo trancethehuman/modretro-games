@@ -285,7 +285,7 @@ static void test_focus_and_partial_restart(void) {
     char text[21];read_window_text(14,text);
     expect(strstr(text,"O DEPOT")!=NULL&&strstr(text,"JOB")==NULL,"free-roam atlas legend explicitly labels the depot objective");
     read_window_text(15,text);expect(strstr(text,"DEPOT:")!=NULL,"free-roam objective focus names the depot");
-    read_window_text(17,text);expect(strstr(text,"A DEPOT")!=NULL,"completed free-roam atlas controls explicitly offer depot focus");
+    read_window_text(17,text);expect(strstr(text,"DRAWING")==NULL&&strstr(text," B ")==NULL,"a finished atlas lists no button legend");
     verify_viewport();td_map_close();
 }
 
@@ -323,12 +323,12 @@ static void test_paid_transit_objective_context(void) {
             expect_focus(2,3,320,144,"paid ride with an active parcel keeps focus on the actual client objective");
             expect(strstr(text,"O JOB")!=NULL,"paid active contract retains the job legend");
             read_window_text(15,text);expect(strstr(text,"JOB: WITHROW PARK")!=NULL,"paid active contract still names its true client");
-            read_window_text(17,text);expect(strstr(text,"A JOB")!=NULL,"paid active contract still offers job focus");
+            read_window_text(17,text);expect(strstr(text,"MAP ERROR")==NULL,"paid active contract map draws without error");
         }else {
             expect_focus(2,0,336,288,"free WAIT/RIDE focuses the actually booked transit destination rather than the depot");
             expect(strstr(text,"O STOP")!=NULL&&strstr(text,"DEPOT")==NULL,"free paid trip explicitly labels its stop objective");
             read_window_text(15,text);expect(strstr(text,"TRIP: WELLESLEY")!=NULL,"free paid trip names the booked station");
-            read_window_text(17,text);expect(strstr(text,"A STOP")!=NULL,"free paid trip offers stop focus");
+            read_window_text(17,text);expect(strstr(text,"MAP ERROR")==NULL,"free paid trip map draws without error");
         }
         verify_viewport();expect_game_unchanged(&before);td_map_close();
     }
@@ -476,39 +476,39 @@ static UBYTE radio_after(UBYTE script) {
 static void hud_step(void) {td_hud_places();td_ui_hud_tick();}
 static void test_menus_and_radio(void) {
     char text[21],text2[21];
-    /* The pause menu is a twelve-row sheet over the city: status, the lost
-     * parcels found, four actions at a time, scroll marks and a hint for the
-     * highlighted action. */
+    /* The pause menu is an eight-row sheet over the city: status, the lost
+     * parcels found and three of its seven actions at a time with scroll
+     * marks; no hints or button legends. */
     reset_case();td.mode=TD_PAUSE;td.menu=0;td_ui_init();td_ui_draw();
-    expect(window_y==144-12*8,"the pause menu is a bottom sheet that leaves the city visible");
+    expect(window_y==144-8*8,"the pause menu is a short bottom sheet that leaves most of the city visible");
     read_window_text(2,text);expect(strstr(text,"LOST PARCELS 3/20")!=NULL,"the pause menu counts the lost parcels found");
     read_window_text(4,text);expect(strstr(text,"RESUME")!=NULL,"the first visible action is resume");
-    read_window_text(7,text);expect(strstr(text,"GET IN CAR")!=NULL,"four actions are listed; on foot the fourth gets back in the car");
-    expect(window_tiles[0][7][18]==glyph_tile(TD_UI_ARROW_S)&&window_tiles[0][4][18]!=glyph_tile(TD_UI_ARROW_N),
+    read_window_text(6,text);expect(strstr(text,"JOBS")!=NULL,"three actions are listed");
+    expect(window_tiles[0][6][18]==glyph_tile(TD_UI_ARROW_S)&&window_tiles[0][4][18]!=glyph_tile(TD_UI_ARROW_N),
            "a down mark shows more actions below, none above");
-    read_window_text(9,text);expect(strstr(text,"BACK TO THE CITY")!=NULL,"the hint describes the highlighted action");
-    read_window_text(10,text);expect(strstr(text,"1/9")!=NULL,"the footer counts the position in the list");
-    td.menu=8;td_ui_draw();
-    read_window_text(7,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving to the last action scrolls it into view");
-    read_window_text(4,text);expect(strstr(text,"TTC")!=NULL,"the window keeps four actions, ending on the cursor");
-    expect(window_tiles[0][4][18]==glyph_tile(TD_UI_ARROW_N)&&window_tiles[0][7][18]!=glyph_tile(TD_UI_ARROW_S),
+    read_window_text(7,text);expect(strstr(text,"CHOOSE")==NULL&&strstr(text,"BACK")==NULL,"no button legend is shown");
+    td.onfoot=0;td.vehicle=0;td.menu=TD_MENU_VEHICLE;td_ui_draw();read_window_text(6,text);expect(strstr(text,"VEHICLE CAR")!=NULL,"the vehicle action names the current vehicle");
+    td.menu=TD_MENU_SOUND;td_ui_draw();
+    read_window_text(6,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving to the last action scrolls it into view");
+    read_window_text(4,text);expect(strstr(text,"SUPPLIES")!=NULL,"the window keeps three actions, ending on the cursor");
+    expect(window_tiles[0][4][18]==glyph_tile(TD_UI_ARROW_N)&&window_tiles[0][6][18]!=glyph_tile(TD_UI_ARROW_S),
            "an up mark shows more actions above at the end of the list");
     td.menu=0;td_ui_draw();read_window_text(4,text);
     expect(strstr(text,"RESUME")!=NULL,"wrapping to the first action scrolls back to the top");
     td.menu=6;td.mode=TD_BOARD;td_ui_draw();
-    expect(window_y==144-13*8,"the dispatch board is a thirteen-row card");
+    expect(window_y==144-10*8,"the dispatch board is a ten-row card");
     read_window_text(1,text);expect(strstr(text,"FIRST SHIFT")!=NULL,"the board names the contract's chapter");
     td.menu=12;td_ui_draw();read_window_text(1,text);expect(strstr(text,"NEIGHBOURHOODS")!=NULL,"the next eight contracts are chapter two");
     td_offer.min_done=6;td_offer.after=6;td.done=6;memset(td.complete,0,sizeof(td.complete));td.complete[0]=0x3F;td.menu=8;td_ui_draw();
-    read_window_text(10,text);expect(strstr(text,"AFTER JOB 7")!=NULL,"a contract the story has not reached names the job it waits for");
+    read_window_text(8,text);expect(strstr(text,"AFTER JOB 7")!=NULL,"a contract the story has not reached names the job it waits for");
     td.complete[0]|=0x40;td.done=7;td_ui_draw();
-    read_window_text(10,text);expect(strstr(text,"READY TO TAKE")!=NULL,"and is ready once that job is done");
-    td.done=5;td_ui_draw();read_window_text(10,text);expect(strstr(text,"NEEDS 6 DONE")!=NULL,"too few deliveries still reads as such");
+    read_window_text(8,text);expect(strstr(text,"READY TO TAKE")!=NULL,"and is ready once that job is done");
+    td.done=5;td_ui_draw();read_window_text(8,text);expect(strstr(text,"NEEDS 6 DONE")!=NULL,"too few deliveries still reads as such");
     memset(td.complete,0,sizeof(td.complete));td.done=0;td.menu=12;
     td.mode=TD_RESULT;td.health=100;td.left=9;td_last_pay=86;td_ui_draw();
-    read_window_text(3,text);expect(strstr(text,"+$86 PAID")!=NULL,"the result card shows the fee paid");
+    read_window_text(3,text);expect(strstr(text,"+$86")!=NULL,"the result card shows the fee paid");
 
-    /* A radio call raises the HUD and types Rosa's lines, then closes. */
+    /* A radio call raises a two-row strip and types Rosa's lines, then closes. */
     reset_case();td.mode=TD_ROAM;td_ui_init();td_ui_draw();
     expect(window_y==144,"nothing covers the city before there is something to report");
     td_ui_hud_tick();
@@ -517,28 +517,28 @@ static void test_menus_and_radio(void) {
     read_window_text(1,text);expect(strstr(text,"199S")!=NULL&&strstr(text,"4/5")!=NULL,"the second shows the stop count and time left");
     unsigned plays=audio_plays;
     td_radio_say(TD_RADIO_INTRO);td_tick=1;td_radio_tick();
-    expect(window_y==144-48&&audio_plays==plays+1,"a call chirps and raises its card above the pop-up rows");
-    read_window_text(0,text);expect(!strncmp(text+3,"ROSA - DISPATCH",15),"the card names the speaker beside the portrait");
-    expect(window_tiles[0][0][0]==glyph_tile(TD_UI_PORTRAIT_0)&&window_tiles[0][2][2]==glyph_tile(TD_UI_PORTRAIT_8),
-           "the card shows the portrait's nine tiles");
-    read_window_text(5,text);expect(strstr(text,"199S")!=NULL,"the job row sits below the card");
-    read_window_text(1,text);expect(text[3]==' ',"text starts blank");
+    expect(window_y==144-32&&audio_plays==plays+1,"a call chirps and raises a two-row strip above the pop-up rows");
+    expect(window_tiles[0][0][0]==glyph_tile(TD_UI_ROSA_T)&&window_tiles[0][1][0]==glyph_tile(TD_UI_ROSA_B),
+           "Rosa's portrait marks her lines");
+    read_window_text(3,text);expect(strstr(text,"199S")!=NULL,"the job row sits below the strip");
+    read_window_text(0,text);expect(text[1]==' ',"text starts blank");
     for(unsigned i=0;i<40;i++){td_tick++;td_radio_tick();}
-    read_window_text(1,text);expect(!strncmp(text+3,"MORNING, ROOKIE.",16),"the first line types out");
-    read_window_text(2,text);expect(!strncmp(text+3,"ROSA ON DISPATCH.",17),"then the second");
+    read_window_text(0,text);expect(!strncmp(text+1,"MORNING, ROOKIE.",16),"the first line types out");
+    read_window_text(1,text);expect(!strncmp(text+1,"ROSA ON DISPATCH.",17),"then the second");
     /* A contract briefing queues behind the welcome and plays in turn. */
     td_radio_contract(0,0);
     for(unsigned i=0;i<40000&&!(td_radio_playing()==TD_RADIO_CONTRACT&&td_radio_pos>=TD_RADIO_PAGE);i++){td_tick++;td_radio_tick();}
-    read_window_text(1,text);expect(!strcmp(text+3,"FIRST JOB. SAL   "),"a queued contract briefing follows the welcome on a clean card");
-    read_window_text(2,text);expect(!strcmp(text+3,"AT ST LAWRENCE.  "),"with its own second line");
+    read_window_text(0,text);expect(!strncmp(text+1,"FIRST JOB. SAL",14),"a queued contract briefing follows the welcome on a clean strip");
+    read_window_text(1,text);expect(!strncmp(text+1,"AT ST LAWRENCE.",15),"with its own second line");
     for(unsigned i=0;i<40000&&td_radio_playing()!=TD_NONE;i++){td_tick++;td_radio_tick();}
-    expect(window_y==144-16&&td_radio_playing()==TD_NONE,"the card drops away once the calls end");
+    expect(window_y==144-16&&td_radio_playing()==TD_NONE,"the strip drops away once the calls end");
     read_window_text(1,text);expect(strstr(text,"199S")!=NULL,"the pop-up rows repaint in their own rows");
-    /* Clients speak through the caller portrait under their own name. */
+    /* Clients speak under the caller icon and are named as they start. */
     td_radio_contract(0,2);td_tick=1;td_radio_tick();
-    read_window_text(0,text);expect(!strncmp(text+3,"SAL - THE MARKET",16),"a client's line names the client");
-    expect(window_tiles[0][0][1]==glyph_tile(TD_UI_CALLER_T)&&window_tiles[0][1][0]==glyph_tile(TD_UI_CALLER_FL)&&
-           window_tiles[0][2][2]==glyph_tile(TD_UI_CALLER_BR),"and shows the caller portrait instead of Rosa's");
+    for(unsigned i=0;i<40;i++){td_tick++;td_radio_tick();}
+    read_window_text(0,text);expect(!strncmp(text+1,"SAL:",4),"a client's line starts with the client's name");
+    expect(window_tiles[0][0][0]==glyph_tile(TD_UI_CALLER_T)&&window_tiles[0][1][0]==glyph_tile(TD_UI_CALLER_B),
+           "and shows the caller icon instead of Rosa's");
     /* A pickup waits for its briefing; a delivery cuts both short. */
     td_radio_script=td_radio_next=TD_NONE;
     td_radio_contract(5,0);td_radio_contract(5,1);
@@ -608,7 +608,7 @@ static void test_menus_and_radio(void) {
     td_radio_say(TD_RADIO_INTRO);for(unsigned i=0;i<20;i++){td_tick++;td_radio_tick();}
     td_radio_script=TD_NONE;td_radio_say(TD_RADIO_NIGHT);
     for(unsigned i=0;i<60;i++){td_tick=(UBYTE)(td_tick+1)|1;td_radio_tick();}
-    read_window_text(1,text);expect(!strcmp(text+3,"NIGHT SHIFT.     "),"a new call never types over an old card");
+    read_window_text(0,text);expect(!strncmp(text+1,"NIGHT SHIFT.       ",19),"a new call never types over an old card");
     td_radio_script=td_radio_next=TD_NONE;td.mode=TD_PAUSE;td_ui_draw();td.mode=TD_ROAM;td_ui_draw();
     /* Stars bring a call; the arrest clears them without "lost them". */
     td.job=TD_NONE;td.wanted=1;td_tick=1;td_radio_tick();expect(td_radio_playing()==TD_RADIO_WANTED,"a first star brings a police call");

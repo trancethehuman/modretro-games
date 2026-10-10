@@ -22,7 +22,7 @@
 #undef td_get_west_street
 #include "native_collision_fixture.h"
 
-actor_t actors[24];
+actor_t actors[28];
 typedef char host_actor_pool_matches[(sizeof(actors)/sizeof(actors[0])==TD_ACTORS)?1:-1];
 actor_t *actors_inactive_head;
 UBYTE actors_len;
@@ -421,7 +421,7 @@ static void test_audio_event_integration(void) {
     expect(td.mode==TD_PAUSE&&!audio_active&&audio_updates==2,"entering pause stops world audio on the same update");
     joy=joy_pressed=0;sys_time+=240;toronto_update();
     expect(!audio_active&&audio_updates==3,"paused frames continue to service audio without advancing the world");
-    td.menu=8;td_resume_mode=TD_RIDE;
+    td.menu=TD_MENU_SOUND;td_resume_mode=TD_RIDE;
     for(unsigned mode=1;mode<=3;mode++) {
         joy=joy_pressed=J_A;sys_time+=2;toronto_update();
         expect(audio_mode==mode%3&&td.mode==TD_PAUSE,"audio mode can be cycled while a transit trip is paused");
@@ -535,7 +535,7 @@ static void test_street_life(void) {
     expect(pk_mode[0]==PK_DOWN,"a punched walker lands and stays down for a while");
     for(unsigned i=0;i<20;i++)td_life_tick();
     td_life_foot_b();
-    expect(td.ammo==2&&td_fx_kind==FX_BULLET,"B on foot fires one round");
+    expect(td.ammo==2&&(td_shot_live&1),"B on foot fires one round");
     td.ammo=0;for(unsigned i=0;i<20;i++)td_life_tick();td_life_foot_b();
     expect(td.msg==TD_MSG_NO_AMMO,"an empty pistol only reports no ammunition");
 
@@ -555,13 +555,15 @@ static void test_street_life(void) {
     td_aim_dir=4;td_life_aim();
     expect(td_aim_target==TD_NONE,"nothing to the west means no lock");
     td_aim_dir=0;td_life_foot_b();
-    expect(td_fx_kind==FX_BULLET&&td.ammo==4&&fx_du>0&&fx_dv>0&&td_walk_dir==0,
+    expect((td_shot_live&1)&&td.ammo==4&&sh_du[0]>0&&sh_dv[0]>0&&td_walk_dir==0,
            "a locked shot heads for the target and the courier turns to face it");
-    actors[TD_ACTOR_FX].flags|=ACTOR_FLAG_DISABLED;td_life_present();
-    expect(!(actors[TD_ACTOR_FX].flags&(ACTOR_FLAG_DISABLED|ACTOR_FLAG_HIDDEN))&&actors[TD_ACTOR_FX].frame_start>=TD_FRAME_TRACER&&
-           actors[TD_ACTOR_FX].frame_start<TD_FRAME_TRACER+8,"the tracer shows at once even if GBVM had flagged the actor off screen");
-    for(unsigned i=0;i<8&&td_fx_kind==FX_BULLET;i++)td_life_tick();
-    expect((td_ped_ovr&2)&&pk_mode[1]==PK_FLY,"the tracer reaches the locked walker within a few ticks");
+    actors[TD_ACTOR_SHOTS].flags|=ACTOR_FLAG_DISABLED;td_life_present();
+    expect((actors[TD_ACTOR_SHOTS].flags&ACTOR_FLAG_ACTIVE)&&!(actors[TD_ACTOR_SHOTS].flags&(ACTOR_FLAG_DISABLED|ACTOR_FLAG_HIDDEN))&&
+           actors[TD_ACTOR_SHOTS].frame_start>=TD_FRAME_SHOT&&actors[TD_ACTOR_SHOTS].frame_start<TD_FRAME_SHOT+8,
+           "a round shows at once even if GBVM had flagged the actor off screen");
+    for(unsigned i=0;i<10&&td_shot_live;i++)td_life_tick();
+    expect((td_ped_ovr&2)&&pk_mode[1]==PK_FLY,"the round reaches the locked walker within a few ticks");
+    expect(!td_shot_live,"a round that strikes someone stops there");
     /* Holding B keeps a lock while strafing; releasing it drops a lock
      * outside the aim cone. The cone reaches about 60 degrees. */
     td_aim_target=TD_NONE;td_aim_dir=6;td_life_aim();
@@ -658,10 +660,28 @@ static void test_street_life(void) {
     /* Shooting starts at four stars. */
     reset_case();td.onfoot=1;td.wanted=3;td.mode=TD_ROAM;td_ped_ovr=1;pk_mode[0]=PK_CHASE;pk_look[0]=LF_LOOK_OFFICER;
     pk_u[0]=td.u-40*16;pk_v[0]=td.v;geometry=CLEAR_GROUND;
-    for(unsigned i=0;i<300;i++)lf_police_fire();
-    expect(td.vitality==100,"three-star officers do not shoot");
-    td.wanted=4;for(unsigned i=0;i<300;i++)lf_police_fire();
-    expect(td.vitality<100&&td.vitality>=100-4*4,"four-star officers fire about every one and a half seconds for four damage");
+    for(unsigned i=0;i<300;i++){td_tick++;lf_police_fire();}
+    expect(td.vitality==100&&!td_shot_live,"three-star officers do not shoot");
+    /* From four stars their rounds fly: a courier who stands still is hit
+     * within a few shots; no round lands instantly. */
+    td.wanted=4;lf_police_fire();
+    expect(td_shot_live&&td.vitality==100,"a four-star officer's shot is a round in flight, not an instant hit");
+    {unsigned shots=1,hits=0;UBYTE last=100;
+     for(unsigned i=0;i<600;i++){td_tick++;td_life_tick();if(td.vitality<last){hits++;last=td.vitality;}
+         if(lf_cop_cool==100-40)shots++;}
+     expect(hits>=2&&td.vitality<100&&td.vitality>=100-hits*8,"standing still in the line of fire, the courier is hit by some rounds");
+     expect(shots>=hits,"no more hits than rounds fired");}
+    /* Officers wear vests: the courier's first round staggers, the second downs. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;td.u=300*16;td.v=300*16;geometry=CLEAR_GROUND;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    actors[9].pos.x=330*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=5;
+    td_shot_fire(TD_SHOT_COURIER,305,300,330,300,0);
+    for(unsigned i=0;i<10&&td_shot_live;i++){td_tick++;td_life_tick();}
+    expect((td_ped_ovr&1)&&(lf_vest&1)&&pk_mode[0]==PK_CHASE&&td.wanted,"an officer's vest stops the first round; the officer turns on the courier");
+    lf_peds_tick();actors[9].pos.x=pk_u[0]<<1;actors[9].pos.y=pk_v[0]<<1;
+    td_shot_fire(TD_SHOT_COURIER,305,300,(UWORD)(pk_u[0]>>4),(UWORD)(pk_v[0]>>4),0);
+    for(unsigned i=0;i<10&&td_shot_live;i++){td_tick++;td_shot_tick();}
+    expect(pk_mode[0]==PK_FLY,"the second round puts the officer down");
 
     /* Attention cools when no officer is near, one star per twelve seconds. */
     reset_case();td.wanted=1;td.heat=2;td_traffic_u[TD_POLICE_SLOT]=30000;

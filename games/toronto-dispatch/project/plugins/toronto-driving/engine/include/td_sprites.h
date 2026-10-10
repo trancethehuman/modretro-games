@@ -31,7 +31,7 @@
 #define TD_FRAME_FERRY_N 131
 #define TD_FRAME_KNOCK 132
 #define TD_FRAME_SPARK 138
-#define TD_FRAME_TRACER 139
+#define TD_FRAME_SHOT 139
 #define TD_FRAME_RETICLE 147
 #define TD_FRAME_ARROW 148
 #define TD_FRAME_COURIER_PUNCH 156
@@ -47,8 +47,8 @@
 #define TD_SMOKE_FRAMES 3
 #define TD_BEAM_DX {16,10,0,-10,-16,-10,0,10}
 #define TD_BEAM_DY {0,10,16,10,0,-10,-16,-10}
-#define TD_TRACER_HEAD_DX {15,15,-2,-16,-16,-16,-2,15}
-#define TD_TRACER_HEAD_DY {-10,-1,-1,-1,-10,-32,-32,-32}
+#define TD_SHOT_HEAD_DX {7,7,-1,-8,-8,-8,-1,7}
+#define TD_SHOT_HEAD_DY {-9,-1,-1,-1,-9,-16,-16,-16}
 #define TD_ANCHOR_FERRY_N_DY (16)
 #define TD_ANCHOR_FERRY_S_DY (16)
 #endif

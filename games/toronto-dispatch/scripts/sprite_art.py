@@ -741,47 +741,50 @@ def beam_frames():
     return [e, se, s, flip_h(se), flip_h(e), flip_v(flip_h(se)), flip_v(s), flip_v(se)]
 
 
-# Tracer rounds (beacon yellow: 1 white-hot, 2 gold): a long streak with a
-# fat white-hot head, like an arcade shooter's tracers, so every shot reads
-# at a glance. East is 32 px long, south its transpose and south-east a 32 px
-# diagonal; the other headings are flips. The bodies repeat one tile (the
-# diagonal's two halves are each other's 180-degree turn), so the long trails
-# cost six tiles in all. Each frame reports the pixel of its head.
-def _tracer_e():
-    g = [[0] * 32 for _ in range(16)]
-    for x in range(32):
-        g[5][x] = 1
-        g[6][x] = 2 if x < 24 else 1
-    for x in range(26, 31):
-        g[4][x] = g[7][x] = 2
-    g[5][31] = g[6][31] = 1
+# Rounds in flight (beacon yellow: 1 white-hot, 2 gold): a fat white-hot head
+# with a glow and a gold trail that thins behind it, 16 px long, so a shot
+# reads at a glance without covering the street. East is drawn, south is its
+# transpose (one 8-pixel column) and south-east a diagonal; the other
+# headings are flips, so all eight cost five tiles and at most two hardware
+# sprites. Each frame reports the pixel of its head.
+def _shot_e():
+    g = [[0] * 16 for _ in range(16)]
+    for x in (0, 2, 4):
+        g[7][x] = 2
+    for x in range(5, 13):
+        g[7][x] = 2
+    for x in range(8, 13):
+        g[8][x] = 2
+    for x in (13, 14, 15):
+        g[7][x] = g[8][x] = 1
+    for x in (13, 14):
+        g[6][x] = g[9][x] = 2
     return g
 
 
-def _tracer_se():
-    g = [[0] * 32 for _ in range(32)]
-    for x in range(32):
-        g[x][x] = 1
-        # Glow either side, kept inside the 8-pixel tile column.
-        if x % 8:
-            g[x][x - 1] = 2
-        if x % 8 != 7:
-            g[x][x + 1] = 2
-    for y, x in ((29, 30), (30, 29), (30, 31), (31, 30), (28, 30), (30, 28)):
-        g[y][x] = 1 if abs(y - x) <= 1 else 2
-    for y, x in ((27, 29), (29, 27), (28, 31), (31, 28)):
+def _shot_se():
+    g = [[0] * 16 for _ in range(16)]
+    for k in (0, 2, 4):
+        g[k][k] = 2
+    for k in range(5, 13):
+        g[k][k] = 2
+        if k >= 8:
+            g[k][k - 1] = 2
+    for y, x in ((13, 13), (14, 14), (15, 15), (14, 15), (15, 14), (13, 14), (14, 13)):
+        g[y][x] = 1
+    for y, x in ((12, 14), (14, 12), (15, 13), (13, 15)):
         g[y][x] = 2
     return g
 
 
-def tracer_frames():
+def shot_frames():
     """[(grid, size, head pixel)] in engine heading order E, SE, S, SW, W, NW, N, NE."""
-    e, se = _tracer_e(), _tracer_se()
+    e, se = _shot_e(), _shot_se()
     s = transpose(e)
-    wide, tall, square = (32, 16), (16, 32), (32, 32)
-    return [(e, wide, (31, 6)), (se, square, (31, 31)), (s, tall, (6, 31)), (flip_h(se), square, (0, 31)),
-            (flip_h(e), wide, (0, 6)), (flip_v(flip_h(se)), square, (0, 0)), (flip_v(s), tall, (6, 0)),
-            (flip_v(se), square, (31, 0))]
+    sq = (16, 16)
+    return [(e, sq, (15, 7)), (se, sq, (15, 15)), (s, sq, (7, 15)), (flip_h(se), sq, (0, 15)),
+            (flip_h(e), sq, (0, 7)), (flip_v(flip_h(se)), sq, (0, 0)), (flip_v(s), sq, (7, 0)),
+            (flip_v(se), sq, (15, 0))]
 
 
 # Lock-on marker (traffic red, dark tips): corner brackets framing the

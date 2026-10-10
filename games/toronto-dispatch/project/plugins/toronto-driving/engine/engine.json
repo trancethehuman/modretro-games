@@ -15,14 +15,14 @@
     },
     {
       "key": "MAX_ACTORS",
-      "label": "Actor pool (Toronto uses 24; keep 24)",
+      "label": "Actor pool (Toronto uses 28; keep 28)",
       "group": "Toronto memory",
       "type": "number",
       "cType": "define",
       "file": "include/actor.h",
-      "defaultValue": 24,
-      "min": 24,
-      "max": 24
+      "defaultValue": 28,
+      "min": 28,
+      "max": 28
     },
     {
       "key": "VM_MAX_CONTEXTS",
@@ -109,6 +109,8 @@
         "src/td_street.c",
         "include/td_life.h",
         "include/td_life_int.h",
+        "include/td_shots.h",
+        "src/td_shots.c",
         "src/td_life.c",
         "src/td_drive.c",
         "src/td_life_draw.c",

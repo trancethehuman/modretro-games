@@ -106,12 +106,27 @@ def build():
             title_attr.append(0x08 | slot)
     assert TITLE_FIRST + len(title_tiles) <= 188, 'title art must fit the atlas-owned bank-1 range'
     assert A.TITLE_PALETTES[7] == list(A.UI_COLORS), 'title slot 7 is the UI palette'
+    # The prompt row without the prompt, for its blink.
+    quiet = A.title_image(prompt=False)
+    ty = A.TITLE_PROMPT_ROW
+    shades = A.TITLE_PALETTES[A.TITLE_ROW_PALETTE[ty]]
+    prompt_off = []
+    for tx in range(20):
+        cells = [[quiet[ty * 8 + y][tx * 8 + x] for x in range(8)] for y in range(8)]
+        rows = [''.join('.as#'[shades.index(c)] for c in row) for row in cells]
+        data = tuple(tile_bytes(rows))
+        if data not in seen:
+            seen[data] = len(title_tiles)
+            title_tiles.append(data)
+        prompt_off.append(TITLE_FIRST + seen[data])
+    assert TITLE_FIRST + len(title_tiles) <= 188, 'title art must fit the atlas-owned bank-1 range'
     lines += [f'#define TD_TITLE_FIRST {TITLE_FIRST}', f'#define TD_TITLE_TILES {len(title_tiles)}',
-              f'#define TD_TITLE_ROWS {A.TITLE_ROWS}']
+              f'#define TD_TITLE_ROWS {A.TITLE_ROWS}', f'#define TD_TITLE_PROMPT_ROW {A.TITLE_PROMPT_ROW}']
     lines += ['#ifdef TD_UI_ART_DATA',
               f'static const UBYTE td_title_tiles[{16 * len(title_tiles)}]={{' + ','.join(str(b) for t in title_tiles for b in t) + '};',
               f'static const UBYTE td_title_map[{len(title_map)}]={{' + ','.join(map(str, title_map)) + '};',
               f'static const UBYTE td_title_attr[{len(title_attr)}]={{' + ','.join(map(str, title_attr)) + '};',
+              'static const UBYTE td_title_prompt_off[20]={' + ','.join(map(str, prompt_off)) + '};',
               f'static const UBYTE td_ui_art[{len(art)}]={{' + ','.join(map(str, art)) + '};',
               '/* Window tile and CGB attribute for each character code 32..255. */',
               'static const UBYTE td_glyph_tile[224]={' + ','.join(map(str, tiles)) + '};',

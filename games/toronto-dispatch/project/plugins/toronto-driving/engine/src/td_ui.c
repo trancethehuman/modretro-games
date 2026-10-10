@@ -39,7 +39,6 @@ static UBYTE td_hud_y;
 static UBYTE td_hud_rows;
 UWORD td_last_pay;
 static char td_line[40];
-static const char *td_vehicles[]={"CAR","TRUCK","MOTORCYCLE","SCOOTER"};
 static const char *td_kinds[]={"PARCEL ROUND","FRAGILE: NO CRASH","EXPRESS DEADLINE","TRUCK FREIGHT","TRANSIT FRIENDLY","PASSENGER: SMOOTH","RETURN DOCUMENTS","ISLAND FERRY POST"};
 /* sprintf subset for HUD text (%u, %0Nu, %s, %c). SDCC's sprintf divides by
  * ten through a slow runtime helper per digit; constant subtraction, with
@@ -200,8 +199,8 @@ static void td_map_headers(void){
     if(!td_map_focus)td_row(15,td.onfoot?"YOU ON FOOT":"YOU DRIVING");
     else if(td_map_focus==1)td_row(15,td.onfoot?"YOUR PARKED VEHICLE":"YOUR DRIVING VEHICLE");
     else{td_format(td_line,"%s%s",trip?"TRIP: ":td.job==TD_NONE?"DEPOT: ":"JOB: ",target->name);td_row(15,td_line);}
-    td_row(16,"DPAD PAN SELECT VIEW");
-    td_row(17,td_map_error?"MAP ERROR / B BACK":td_map_row<12?"DRAWING MAP / B BACK":trip?"A STOP / B BACK":td.job==TD_NONE?"A DEPOT / B BACK":"A JOB / B BACK");
+    td_row(16,"");
+    td_row(17,td_map_error?"MAP ERROR":td_map_row<12?"DRAWING MAP...":"");
 }
 static void td_map_begin(void){
     UBYTE i;
@@ -327,6 +326,10 @@ static void td_title_show(void){
         memset(td_cached_rows[y],255,20);
     }
 }
+/* The title's prompt blinks: its row with or without the words. */
+static void td_title_prompt(UBYTE on){
+    VBK_REG=0;set_win_tiles(0,TD_TITLE_PROMPT_ROW,20,1,on?td_title_map+(UWORD)TD_TITLE_PROMPT_ROW*20:td_title_prompt_off);
+}
 static void td_title_hide(void){
     if(!td_title_shown)return;
     td_title_shown=0;td_restore_scene_tiles();td_restore_scene_palettes();VBK_REG=0;
@@ -353,17 +356,12 @@ void td_ui_init(void) BANKED {
     text_drawn=TRUE;td_ui_draw();
 }
 static const char *const td_vehicle_short[]={"CAR","TRUCK","MOTO","SCOOTER"};
-/* Pause menu: nine actions, four on screen at a time with scroll marks, and
- * a one-line hint for the highlighted action. */
-#define TD_MENU_ITEMS 9
-#define TD_MENU_ROWS 4
+/* Pause menu: seven actions, three on screen at a time with scroll marks
+ * (getting out and the TTC have their own buttons in the city). */
+#define TD_MENU_ROWS 3
 static const char *const td_menu_items[TD_MENU_ITEMS]={
-    TD_UI_RESUME " RESUME",TD_UI_MAP " CITY MAP",TD_UI_JOBS " DISPATCH JOBS",TD_UI_PARK " PARK AND WALK",
-    TD_UI_CAR " CHANGE VEHICLE",TD_UI_TRANSIT " TTC TIMETABLE",TD_UI_MEDIC " SUPPLIES $20",TD_UI_CANCEL " CANCEL JOB",
-    TD_UI_AUDIO " SOUND"};
-static const char *const td_menu_hints[TD_MENU_ITEMS]={
-    "BACK TO THE CITY","SEE ROUTE AND CITY","PICK A DELIVERY","STEP OUT ON FOOT",
-    "PARKED, NO JOB","AT A STOP, ON FOOT","HEAL, AMMO, REPAIR","DROP THE JOB","A: CHANGE SOUND"};
+    TD_UI_RESUME " RESUME",TD_UI_MAP " CITY MAP",TD_UI_JOBS " JOBS",
+    TD_UI_CAR " VEHICLE",TD_UI_MEDIC " SUPPLIES $20",TD_UI_CANCEL " CANCEL JOB",TD_UI_AUDIO " SOUND"};
 static const char *const td_audio_names[]={"MUSIC+FX","FX ONLY","SILENT"};
 static UBYTE td_ui_blink,td_menu_top;
 static const char *td_service_icon(UBYTE service){
@@ -398,7 +396,7 @@ void td_ui_tick(void) BANKED {
     if(td.mode==TD_PAUSE||td.mode==TD_HELP||td.mode==TD_BOARD||td.mode==TD_TRANSIT||td.mode==TD_RESULT)td_ui_draw();
 }
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
-            "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","HOLD A+B: GET OUT","HOSPITAL",
+            "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","A+B: GET OUT","HOSPITAL",
             "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR",
             "LOST PARCEL +$50","RESPRAYED -$25","SPRAY BAY: PULL IN"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
@@ -495,8 +493,8 @@ static void td_hud(UBYTE changed){
 }
 /* td_hud.c decides when the pop-ups change; this repaints them. */
 void td_ui_hud_paint(void) BANKED {if(td_ui_mode==td.mode&&td.mode==TD_ROAM)td_hud(0);}
-/* The controls card below the title illustration starts at row 11. */
-typedef char td_title_leaves_card_rows[(TD_TITLE_ROWS==11)?1:-1];
+/* The title illustration fills the screen (rows 0..17). */
+typedef char td_title_fills_screen[(TD_TITLE_ROWS==18&&TD_TITLE_PROMPT_ROW<18)?1:-1];
 /* Menus are bottom sheets over the paused city: a frame of `rows` window
  * rows anchored to the bottom of the screen (rows below it are off screen). */
 static void td_sheet(UBYTE rows){
@@ -511,8 +509,8 @@ static void td_pad(UBYTE n){
     td_line[n]=0;
 }
 static void td_pause_sheet(UBYTE changed){
-    UBYTE i,n;UWORD minutes;const char *hint;
-    td_sheet(12);
+    UBYTE i,n;UWORD minutes;
+    td_sheet(8);
     /* Status: cash, unique deliveries and the clock with a sun or moon,
      * then the lost parcels found. */
     minutes=td_daynight_minutes();
@@ -521,82 +519,65 @@ static void td_pause_sheet(UBYTE changed){
     td_framed(1,td_line);
     td_format(td_line,"LOST PARCELS %u/%u",td_parcels_found(),TD_PARCELS);td_framed(2,td_line);
     td_row(3,td_frame_join);
-    /* Four actions at a time; the window follows the cursor. */
+    /* Three actions at a time; the window follows the cursor. */
     if(changed)td_menu_top=td.menu>=TD_MENU_ROWS?td.menu-(TD_MENU_ROWS-1):0;
     if(td.menu<td_menu_top)td_menu_top=td.menu;
     else if(td.menu>=td_menu_top+TD_MENU_ROWS)td_menu_top=td.menu-(TD_MENU_ROWS-1);
     for(i=0;i<TD_MENU_ROWS;i++){
         n=td_menu_top+i;
         td_line[0]=td.menu==n?(td_ui_blink?TD_UI_CURSOR_ALT[0]:TD_UI_CURSOR[0]):' ';
-        strcpy(td_line+1,n==3&&td.onfoot?TD_UI_PARK " GET IN CAR":td_menu_items[n]);
-        if(n==8){strcat(td_line," ");strcat(td_line,td_audio_names[td_audio_get_mode()]);}
+        strcpy(td_line+1,td_menu_items[n]);
+        if(n==TD_MENU_VEHICLE){strcat(td_line," ");strcat(td_line,td.onfoot?"-":td_vehicle_short[td.vehicle]);}
+        else if(n==TD_MENU_SOUND){strcat(td_line," ");strcat(td_line,td_audio_names[td_audio_get_mode()]);}
         td_pad(17);
         td_line[17]=i==0&&td_menu_top?TD_UI_ARROW_N[0]:i==TD_MENU_ROWS-1&&td_menu_top+TD_MENU_ROWS<TD_MENU_ITEMS?TD_UI_ARROW_S[0]:' ';
         td_line[18]=0;td_framed(4+i,td_line);
     }
-    td_row(8,td_frame_join);
-    hint=td_menu_hints[td.menu];
-    if(td.menu==2&&td.job!=TD_NONE)hint="VIEW YOUR JOB";
-    else if(td.menu==3&&td.onfoot)hint="STAND BESIDE IT";
-    else if(td.menu==7&&td.job==TD_NONE)hint="NO JOB ACTIVE";
-    if(td.menu==4){td_format(td_line,"NOW: %s",td.onfoot?"ON FOOT":td_vehicles[td.vehicle]);td_framed(9,td_line);}
-    else td_framed(9,hint);
-    td_format(td_line,TD_UI_BTN_A "CHOOSE " TD_UI_BTN_B "BACK  %u/%u",td.menu+1,TD_MENU_ITEMS);td_framed(10,td_line);
 }
+/* The dispatch board: one contract at a time; left and right browse. */
 static void td_board_sheet(void){
-    td_sheet(13);
+    td_sheet(10);
     td_line[0]=TD_UI_JOBS[0];td_chapter_name(td.menu>>3,td_line+1);td_framed(1,td_line);
     td_row(2,td_frame_join);
     td_framed(3,td_offer.title);
     td_get_brief(td.menu,td_line);td_framed(5,td_line+18);td_line[18]=0;td_framed(4,td_line);
     td_format(td_line,TD_UI_BOX "%s",td_kinds[td_offer.kind]);td_framed(6,td_line);
-    td_format(td_line,TD_UI_STAR "%u STOPS " TD_UI_CLOCK "%uS",td_offer.count,td_offer.seconds);td_framed(7,td_line);
-    td_format(td_line,TD_UI_COIN "PAYS $%u " TD_UI_CAR "%s",td_offer.reward,td_offer.vehicle==TD_NONE?"ANY":td_vehicle_short[td_offer.vehicle]);td_framed(8,td_line);
-    td_row(9,td_frame_join);
+    td_format(td_line,TD_UI_COIN "$%u " TD_UI_CLOCK "%uS " TD_UI_CAR "%s",td_offer.reward,td_offer.seconds,
+              td_offer.vehicle==TD_NONE?"ANY":td_vehicle_short[td_offer.vehicle]);td_framed(7,td_line);
     if(td.complete[td.menu>>3]&(1<<(td.menu&7)))strcpy(td_line,TD_UI_CHECK "DONE: REPLAY PAYS");
     else if(td.done<td_offer.min_done)td_format(td_line,TD_UI_CANCEL "NEEDS %u DONE",td_offer.min_done);
     else if(td_offer.after!=TD_NONE&&!TD_DONE(td_offer.after))td_format(td_line,TD_UI_CANCEL "AFTER JOB %u",td_offer.after+1);
     else strcpy(td_line,TD_UI_STAR "READY TO TAKE");
-    td_framed(10,td_line);
-    td_format(td_line,TD_UI_BTN_A "TAKE " TD_UI_BTN_B "BACK " TD_UI_DPAD "%u/%u",td.menu+1,TD_QUESTS);td_framed(11,td_line);
+    td_framed(8,td_line);
 }
+/* The TTC: left and right choose the stop, A waits for the next departure. */
 static void td_transit_sheet(void){
     UBYTE service=td_transit_service(td.transit_origin),wait;
-    td_sheet(10);
+    td_sheet(7);
     strcpy(td_line,td_service_icon(service));td_transit_label(td.transit_origin,td_line+1);td_framed(1,td_line);
     td_row(2,td_frame_join);
     td_format(td_line,TD_UI_PIN "%s",td_cursor.name);td_framed(3,td_line);
     wait=td_transit_departure(td.transit_origin,td.transit_target,td.seconds);
-    td_format(td_line,TD_UI_CLOCK "DEPARTS IN %uS",wait);td_framed(4,td_line);
-    td_format(td_line,"RIDE %uS " TD_UI_COIN "$%u%s",td_transit_duration(td.transit_origin,td.transit_target),td_transit_fare(td.transit_origin),
-              service==4?(td.transit_target>=td.transit_origin?" EAST":" WEST"):"");td_framed(5,td_line);
-    td_row(6,td_frame_join);
-    td_framed(7,TD_UI_DPAD "STOP " TD_UI_BTN_A "WAIT " TD_UI_BTN_B "BACK");
-    td_framed(8,(td.transit_origin&63)==16?"UP/DOWN: BUS/TRAIN":"SCHEDULES: FICTION");
+    td_format(td_line,TD_UI_CLOCK "%uS RIDE %uS " TD_UI_COIN "$%u",wait,td_transit_duration(td.transit_origin,td.transit_target),
+              td_transit_fare(td.transit_origin));td_framed(4,td_line);
+    td_framed(5,service==4?(td.transit_target>=td.transit_origin?"EASTBOUND":"WESTBOUND"):(td.transit_origin&63)==16?"UP/DOWN: BUS/TRAIN":"");
 }
 static void td_outcome_sheet(void){
     UBYTE busted=td.mode==TD_BUSTED;
-    td_sheet(10);
+    td_sheet(6);
     td_framed(1,busted?"     " TD_UI_STAR " BUSTED " TD_UI_STAR:"     " TD_UI_MEDIC " WASTED " TD_UI_MEDIC);
     td_row(2,td_frame_join);
-    td_format(td_line,busted?TD_UI_COIN "FINE PAID $%u":TD_UI_COIN "HOSPITAL $%u",td_life_fine);td_framed(3,td_line);
-    td_framed(4,busted?"POLICE TOOK HALF":"YOU WOKE UP AT");
-    td_framed(5,busted?"OF YOUR AMMO":"TORONTO HOSPITAL");
-    td_framed(6,TD_UI_STAR "STARS CLEARED");
-    td_framed(7,TD_UI_CANCEL "ANY JOB IS LOST");
-    td_framed(8,TD_UI_BTN_A "CONTINUE");
+    td_format(td_line,busted?TD_UI_COIN "FINE $%u, HALF AMMO":TD_UI_COIN "HOSPITAL BILL $%u",td_life_fine);td_framed(3,td_line);
+    td_framed(4,TD_UI_STAR "STARS CLEARED");
 }
 static void td_result_sheet(void){
     UBYTE ok=td.health&&td.left;
-    td_sheet(9);
+    td_sheet(6);
     td_framed(1,ok?"   " TD_UI_STAR " DELIVERED " TD_UI_STAR:" " TD_UI_CANCEL " CONTRACT FAILED");
     td_row(2,td_frame_join);
-    if(ok)td_format(td_line,TD_UI_COIN "+$%u PAID",td_last_pay);else strcpy(td_line,TD_UI_COIN "NO PAY THIS TIME");
+    if(ok)td_format(td_line,TD_UI_COIN "+$%u",td_last_pay);else strcpy(td_line,TD_UI_COIN "NO PAY");
     td_framed(3,td_line);
-    td_format(td_line,TD_UI_COIN "%u " TD_UI_BOX "%u/%u DONE",td.cash,td.done,TD_QUESTS);td_framed(4,td_line);
-    td_framed(5,td.done==TD_QUESTS?TD_UI_STAR "COURIER MASTER":TD_UI_SAVE "AUTO-SAVED");
-    td_row(6,td_frame_join);
-    td_framed(7,TD_UI_BTN_A "JOBS " TD_UI_BTN_B "FREE ROAM");
+    td_format(td_line,TD_UI_COIN "%u " TD_UI_BOX "%u/%u%s",td.cash,td.done,TD_QUESTS,td.done==TD_QUESTS?" " TD_UI_STAR:"");td_framed(4,td_line);
 }
 void td_ui_draw(void) BANKED {
     UBYTE i,changed=td_ui_mode!=td.mode;
@@ -611,16 +592,11 @@ void td_ui_draw(void) BANKED {
     /* The HUD's rows are reused by the sheets; it repaints in full later. */
     if(changed)td_hud_y=0;
     if(td.mode==TD_HELP){
-        ui_set_pos(0,0);if(changed)for(i=0;i<18;i++)td_row(i,"");
-        /* Title: illustration rows 0..10, then a compact controls card. */
+        /* Title: the full-screen illustration and a blinking prompt; no
+         * controls are listed. */
+        ui_set_pos(0,0);
         if(changed)td_title_show();
-        td_row(11,td_frame_top);
-        td_framed(12,TD_UI_BTN_A "GAS " TD_UI_BTN_B "BRAKE " TD_UI_DPAD "STEER");
-        td_framed(13,TD_UI_BTN_SEL_0 TD_UI_BTN_SEL_1 "DELIVER " TD_UI_BTN_START_0 TD_UI_BTN_START_1 TD_UI_BTN_START_2 "MENU");
-        td_framed(14,TD_UI_BTN_A TD_UI_BTN_B "HOLD: LEAVE CAR");
-        td_framed(15,TD_UI_WALK TD_UI_BTN_A "PUNCH " TD_UI_BTN_B "SHOOT/TTC");
-        td_framed(16,td_ui_blink?" PRESS " TD_UI_BTN_A " TO START":"");
-        td_row(17,td_frame_bottom);return;
+        td_title_prompt(td_ui_blink);return;
     }
     if(td.mode==TD_PAUSE)td_pause_sheet(changed);
     else if(td.mode==TD_BOARD)td_board_sheet();
@@ -630,18 +606,13 @@ void td_ui_draw(void) BANKED {
 }
 
 /* ------------------------------------------------------------ radio calls */
-/* The card above the HUD for td_radio.c: Rosa's portrait and name, then
- * the typed part of the current page. */
-/* Callers' portrait: blank top corners, the right column mirrors the left. */
-static const char td_caller_art[]=" " TD_UI_CALLER_T " " TD_UI_CALLER_FL TD_UI_CALLER_FM TD_UI_CALLER_FR
-    TD_UI_CALLER_BL TD_UI_CALLER_BM TD_UI_CALLER_BR;
+/* The radio strip above the HUD for td_radio.c: a one-tile speaker icon
+ * (Rosa, or a caller whose name leads the line) and two typed lines. */
 static void td_radio_paint(void){
-    UBYTE r,rosa=td_radio_speaker(td_line+3);
+    UBYTE r,rosa=td_radio_speaker(td_line);
     for(r=0;r<TD_RADIO_ROWS;r++){
-        if(r>2)td_line[0]=td_line[1]=td_line[2]=' ';
-        else if(rosa){td_line[0]=(char)(TD_UI_PORTRAIT_0[0]+r*3);td_line[1]=td_line[0]+1;td_line[2]=td_line[0]+2;}
-        else{td_line[0]=td_caller_art[r*3];td_line[1]=td_caller_art[r*3+1];td_line[2]=td_caller_art[r*3+2];}
-        if(r)td_radio_line(r-1,td_line+3);
+        td_line[0]=rosa?(r?TD_UI_ROSA_B[0]:TD_UI_ROSA_T[0]):(r?TD_UI_CALLER_B[0]:TD_UI_CALLER_T[0]);
+        td_radio_line(r,td_line+1);
         td_row(r,td_line);
     }
 }
@@ -650,5 +621,5 @@ UBYTE td_ui_radio_ready(void) BANKED {
     if(!td_hud_y){td_ui_draw();return FALSE;}
     return TRUE;
 }
-void td_ui_radio_put(UBYTE column,UBYTE line,char c) BANKED {td_put(3+column,1+line,&c,1);}
+void td_ui_radio_put(UBYTE column,UBYTE line,char c) BANKED {td_put(1+column,line,&c,1);}
 void td_ui_draw_radio(void) BANKED {if(td_hud_y)td_radio_paint();}

@@ -31,13 +31,11 @@ extern UBYTE tr_mode[6],tr_timer[6],tr_head[6],tr_spin;
 extern BYTE tr_pu[6],tr_pv[6];
 extern UWORD tr_au[6],tr_av[6];
 
-/* Effects actor 20: spark, bullet or a driver running from a stolen car. */
+/* Effects actor 20: a spark or a driver running from a stolen car (rounds
+ * in flight are td_shots.c). */
 #define FX_SPARK 1
-#define FX_BULLET 2
 #define FX_RUNNER 3
 extern UBYTE fx_timer,fx_look;
-/* A pistol round flies for this many updates (8 px each). */
-#define LF_BULLET_TICKS 20
 extern UWORD fx_u,fx_v;
 extern BYTE fx_du,fx_dv;
 
@@ -124,7 +122,14 @@ static UBYTE lf_walk(UWORD u,UWORD v){
 /* Cross-bank helpers. */
 void td_lf_fx(UBYTE kind,UWORD u,UWORD v,UBYTE timer) BANKED;
 void td_lf_crime(UBYTE kind) BANKED;
+/* lethal: 1 fatal; add 2 when the courier is not to blame (police fire). */
 void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED;
+/* An officer's vest stops the courier's first round: the officer staggers
+ * and turns on the courier (lf_vest marks the slot); the next one counts. */
+extern UBYTE lf_vest;
+void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED;
+/* A police round or a blow hurts the courier. */
+void td_lf_hurt(UBYTE damage) BANKED;
 /* Walkers in view near (u,v) (pixels) run from trouble. */
 void td_lf_panic(UWORD u,UWORD v) BANKED;
 void td_lf_own_car(UBYTE i,UBYTE mode) BANKED;

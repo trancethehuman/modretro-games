@@ -6,6 +6,7 @@
 #include "td_audio.h"
 #include "td_district.h"
 #include "td_anim.h"
+#include "td_shots.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -398,28 +399,23 @@ void td_life_aim(void) BANKED {
     if(td_aim_target==TD_NONE||!lf_keep_target(td_aim_target))td_aim_target=lf_find_target();
 }
 
-/* The pistol: a long tracer round towards the locked-on target, or along
- * the aim; holding B keeps firing about six times a second. */
+/* The pistol: a round towards the locked-on target, or along the aim;
+ * holding B keeps firing about six times a second. Rounds fly
+ * (td_shots.c) with a spread that grows when the courier walks or runs, so
+ * a moving shooter or a moving target can miss. */
 void td_life_foot_b(void) BANKED {
-    UBYTE h,d;UWORD tu,tv,pu=td.u>>4,pv=td.v>>4,ax,ay;WORD du=0,dv=0,len=0;
+    UBYTE h,d,spread;UWORD tu,tv,pu=td.u>>4,pv=td.v>>4;
     if(td_life_locked()||td_entry_timer||lf_punch)return;
     if(!td.ammo){td_message(TD_MSG_NO_AMMO);return;}
     td_life_aim();
-    if(td_aim_target!=TD_NONE){
-        lf_target_at(td_aim_target,&tu,&tv);du=(WORD)tu-(WORD)pu;dv=(WORD)tv-(WORD)pv;h=lf_heading16(du,dv);
-        /* Octagonal length, so a locked round flies straight at the target
-         * rather than along the nearest of 16 headings. */
-        ax=lf_abs(du);ay=lf_abs(dv);len=(WORD)(ax>ay?ax+((ay*3)>>3):ay+((ax*3)>>3));
-    }
-    else h=td_aim_dir<<1;
+    if(td_aim_target!=TD_NONE){lf_target_at(td_aim_target,&tu,&tv);h=lf_heading16((WORD)tu-(WORD)pu,(WORD)tv-(WORD)pv);}
+    else{h=td_aim_dir<<1;tu=(UWORD)((WORD)pu+lf_dx[h]*8);tv=(UWORD)((WORD)pv+lf_dy[h]*8);}
+    spread=td_running?12:(INPUT_LEFT||INPUT_RIGHT||INPUT_UP||INPUT_DOWN)?7:3;
+    if(!td_shot_fire(TD_SHOT_COURIER,pu+((lf_dx[h]*8)>>4),pv+((lf_dy[h]*8)>>4),tu,tv,spread))return;
     /* Face the shot: the nearest of the four walking directions. */
     d=((h+2)&15)>>2;td_walk_dir=d==0?0:d==1?2:d==2?1:3;
     td.ammo--;lf_punch=10;td_anim_pose(TD_FRAME_COURIER_SHOOT,10);
-    td_anim_spawn(TD_PART_FLASH,0,pu+((lf_dx[h]*9)>>4),pv+((lf_dy[h]*9)>>4));
-    td_lf_fx(FX_BULLET,pu+((lf_dx[h]*8)>>4),pv+((lf_dy[h]*8)>>4),LF_BULLET_TICKS);
-    if(len){fx_du=(BYTE)((du*64)/len);fx_dv=(BYTE)((dv*64)/len);}
-    else{fx_du=lf_dx[h]<<2;fx_dv=lf_dy[h]<<2;}
-    fx_look=((h+1)&15)>>1;
+    td_anim_spawn(TD_PART_FLASH,0,pu+((lf_dx[h]*9)>>4),pv+((lf_dy[h]*9)>>4)-6);
     if(lf_shake<2)lf_shake=2;
     td_audio_play(TD_AUDIO_IMPACT);
     td_lf_crime(CR_GUN);td_lf_panic(pu,pv);

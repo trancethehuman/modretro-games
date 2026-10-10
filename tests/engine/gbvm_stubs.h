@@ -23,7 +23,7 @@ struct actor {
     UBYTE flags,collision_group,anim_tick,frame,frame_start,frame_end,move_speed;
     struct { UBYTE bank; const void *ptr; } script,script_update;
 };
-extern actor_t actors[24];
+extern actor_t actors[28];
 extern actor_t *actors_inactive_head;
 extern UBYTE actors_len;
 #define PLAYER actors[0]

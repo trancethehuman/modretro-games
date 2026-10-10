@@ -27,23 +27,25 @@ START_HOUR = 8              # a new game starts at 08:00
 LIGHTS = (19.0, 6.5)        # vehicle headlamps from 19:00 until 06:30
 MAX_SETS = 40
 
-# Night background colour for each daytime colour.
+# Night background colour for each daytime colour. Lifted on 2026-10-10 so
+# streets, people and buildings stay readable on the handheld at night: navy
+# roads, warm sodium-lit sidewalks, facades at about two thirds.
 NIGHT_BG = {
-    'E7DECC': '9C8C7C',  # paper: sidewalks and markings under sodium lamps
-    '526879': '27324E',  # slate roads: navy
-    '172B38': '0C1222',  # ink
-    '79AFAC': '22506A',  # lake and stone
-    'D69E72': '9A5E4A', '8BBAD4': '4A6E9C', 'C5A9A1': '7A5E7C',
-    'D2C895': '8E8058', '9FC9D0': '558099',  # facades
-    '8FB56A': '3A5A42', '4D7A52': '1F3A33',  # parks
+    'E7DECC': 'B4A490',  # paper: sidewalks and markings under sodium lamps
+    '526879': '36445F',  # slate roads: navy
+    '172B38': '101828',  # ink
+    '79AFAC': '2F6680',  # lake and stone
+    'D69E72': 'B07258', '8BBAD4': '5C82AE', 'C5A9A1': '8E7090',
+    'D2C895': 'A49468', '9FC9D0': '6894AC',  # facades
+    '8FB56A': '4A6E50', '4D7A52': '2A4A3E',  # parks
 }
 # Sprites dim less than the city so traffic and people stay readable; the
 # beacon/pickup/taxi yellow never dims. Player palettes dim least.
 SPRITE_STRENGTH = {'courier_vehicle': 0.3, 'courier_person': 0.35, 'signal_yellow': 0.0,
                    'police': 0.8}
 # (hour, keyframe) along the day; 29 = 05:00 the next morning.
-TIMELINE = ((5.0, 'night'), (6.0, 'dawn'), (7.5, 'day'), (17.0, 'day'), (18.5, 'golden'),
-            (19.75, 'dusk'), (21.0, 'night'), (29.0, 'night'))
+TIMELINE = ((4.5, 'night'), (5.75, 'dawn'), (7.25, 'day'), (17.5, 'day'), (19.0, 'golden'),
+            (20.25, 'dusk'), (21.5, 'night'), (28.5, 'night'))
 
 
 def rgb(h):

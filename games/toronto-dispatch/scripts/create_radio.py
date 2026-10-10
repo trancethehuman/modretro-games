@@ -1,10 +1,13 @@
 """Generate the radio calls from content/radio.json and content/story.json.
 
-Every call is a run of pages; every page is one authored line that fills at
-most three 17-column lines on the card (word-wrapped here, '|' forces a break)
-and is said by one speaker. A page may start with
-"NAME: " to change speaker; otherwise the previous page's speaker carries on
-(scripts start with the default speaker).
+Every call is a run of pages on a two-row radio strip at the bottom of the
+screen: each page is two 19-column lines. An authored line is word-wrapped
+here ('|' marks a preferred break) over as many pages as it needs and is
+said by one speaker. A line may start with "NAME: " to change speaker;
+otherwise the previous line's speaker carries on (scripts start with the
+default speaker). When the voice changes, the speaker's short name leads the
+line ("SAL: ...") so the strip needs no separate name card; Rosa's portrait
+names her.
 
 Writes:
   engine/include/td_radio_data.h      script ids, speaker cards, call tables
@@ -23,8 +26,8 @@ import ui_art as A
 
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT / 'project/plugins/toronto-driving/engine'
-COLS, LINES = 17, 3
-PAGES_PER_BANK = 290          # 290 x 52 bytes = 15.1 KB of each 16 KB bank
+COLS, LINES = 19, 2
+PAGES_PER_BANK = 400          # 400 x 39 bytes = 15.2 KB of each 16 KB bank
 # Scripts the engine indexes as a group, in engine order.
 GROUPS = {'FAIL': 3, 'CHATTER': 16, 'PARCELS': 4, 'MID': 8, 'LATE': 8, 'DENTED': 3, 'EARLY': 3}
 # Chatter pools that unlock with the story: (group, chapter that opens it).
@@ -53,13 +56,22 @@ def _greedy(parts):
 
 
 def wrap(text):
-    """One card: three 17-column lines. The authored '|' breaks are kept when
-    they fit; otherwise the words are packed greedily."""
-    lines = _greedy(text.split('|'))
-    if len(lines) > LINES:
-        lines = _greedy([text.replace('|', ' ')])
-    assert len(lines) <= LINES, (text, 'does not fit one card')
-    return ''.join(l.ljust(COLS) for l in lines).ljust(COLS * LINES)
+    """Pages of two 19-column lines for one authored line. The authored '|'
+    breaks are kept when that takes no more pages; otherwise the words are
+    packed greedily."""
+    plain = _greedy([text.replace('|', ' ')])
+    hinted = _greedy(text.split('|'))
+    lines = hinted if (len(hinted) + LINES - 1) // LINES <= (len(plain) + LINES - 1) // LINES else plain
+    pages = []
+    for k in range(0, len(lines), LINES):
+        chunk = lines[k:k + LINES]
+        pages.append(''.join(l.ljust(COLS) for l in chunk).ljust(COLS * LINES))
+    return pages
+
+
+def short_name(card):
+    """A speaker's name for the strip: the card up to its ' - ' role."""
+    return card.split(' - ')[0]
 
 
 def c_string(s):
@@ -81,14 +93,20 @@ def build():
 
     def add_script(name, texts):
         assert texts, name
-        speaker = default
+        speaker, said = default, None
         for text in texts:
             head, sep, rest = text.partition(': ')
             if sep and head in story['speakers']:
                 speaker, text = head, rest
             assert set(text) - {'|'} <= allowed, (name, set(text) - allowed)
-            pages.append(wrap(text))
-            page_speaker.append(speakers.index(speaker))
+            # Rosa's portrait identifies her; anyone else is named as they
+            # start to speak.
+            if speaker != said and story['speakers'][speaker]['portrait'] != 'rosa':
+                text = short_name(story['speakers'][speaker]['card']) + ': ' + text
+            said = speaker
+            for page in wrap(text):
+                pages.append(page)
+                page_speaker.append(speakers.index(speaker))
 
     # Chapter short names follow the campaign's chapters of eight contracts.
     chapters = []
@@ -162,7 +180,7 @@ def build():
              ' * content/story.json. Original dialogue. */',
              '#ifndef TD_RADIO_DATA_H', '#define TD_RADIO_DATA_H',
              f'#define TD_RADIO_COLS {COLS}', f'#define TD_RADIO_PAGE {COLS * LINES}',
-             f'#define TD_RADIO_ROWS {LINES + 1}  /* the card: speaker row and text rows */',
+             f'#define TD_RADIO_ROWS {LINES}  /* the strip: text rows */',
              f'#define TD_RADIO_SCRIPTS {len(order)}', f'#define TD_RADIO_PAGES {len(pages)}',
              f'#define TD_CHAPTERS {len(short)}', f'#define TD_RADIO_SPEAKERS {len(speakers)}',
              f'#define TD_RADIO_CONTRACT {contract_id}', f'#define TD_RADIO_BEATS {len(counted)}',

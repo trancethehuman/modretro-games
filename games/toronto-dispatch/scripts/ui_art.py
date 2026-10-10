@@ -427,16 +427,6 @@ TILES = {
         ".#s..s#.",
         "..####..",
     ]),
-    'dpad': ('ui', [
-        "..###...",
-        "..#a#...",
-        "###a###.",
-        "#aaaaa#.",
-        "###a###.",
-        "..#a#...",
-        "..###...",
-        "........",
-    ]),
 }
 
 
@@ -496,62 +486,20 @@ def emblem():
             [r[0:8] for r in rows[8:16]], [r[8:16] for r in rows[8:16]]]
 
 
-for _name, _rows in zip(('btn_sel_0', 'btn_sel_1'), pill('SEL', 2)):
-    TILES[_name] = ('ui', _rows)
-for _name, _rows in zip(('btn_start_0', 'btn_start_1', 'btn_start_2'), pill('START', 3)):
-    TILES[_name] = ('ui', _rows)
-for _name, _rows in zip(('emblem_tl', 'emblem_tr', 'emblem_bl', 'emblem_br'), emblem()):
-    TILES[_name] = ('ui', _rows)
 
-# Rosa, the dispatcher, for radio calls: a 24x24 portrait in nine tiles
-# (row-major), with her headset, mic and depot jacket badge.
-PORTRAIT = [
-    ".........##.............",
-    "........#ss#####........",
-    ".......#s########.......",
-    "......#s##########......",
-    ".....#s###########......",
-    "....#s#############.....",
-    "....#s##aa#aaa#####.....",
-    "....s##a##aaaa##a##.....",
-    "...#ss#aaaaaaaaaa##.....",
-    "...#ss#aa#aaaa#aa##.....",
-    "...#ss#aa#aaaa#aa#......",
-    "...#ss#aaaaaaaaaa#......",
-    "....##ssaaaaaaaa#.......",
-    ".......#saasssaa#.......",
-    "........##saaaa#........",
-    ".........#aaaa#.........",
-    "..........#aa#..........",
-    "........##aaaa##........",
-    "......##s#aaaa#s##......",
-    "....##ssss#aa#ssss##....",
-    "..##sssssss##sssaass##..",
-    ".#ssssssssssssssaassss#.",
-    ".#ssssssssssssssssssss#.",
-    ".#ssssssssssssssssssss#.",
+# The radio strip's speaker icon, one tile wide and two high: Rosa, the
+# dispatcher, with her headset and depot jacket; anyone else patched through
+# is a caller silhouette (their name leads their line).
+ROSA = [
+    "..####..", ".######.", "##aaaa##", "#a#aa#a#", "#aaaaaas", "#aa##aas", ".#aaaa.s", "..#aa#s.",
+    "...aa...", ".ssaass.", "ssssssss", "ssassass", "ssssssss", "ssssssss", "ssssssss", "ssssssss",
 ]
-for _ty in range(3):
-    for _tx in range(3):
-        TILES[f'portrait_{_ty * 3 + _tx}'] = ('ui', [row[_tx * 8:_tx * 8 + 8] for row in PORTRAIT[_ty * 8:_ty * 8 + 8]])
-
-
-# Callers patched through the radio (Margo and the clients): a dark-haired
-# silhouette in a jacket, left half drawn and mirrored. The top corners are
-# blank, so the 3x3 card needs five tiles (the right column flips the left).
-_CALLER_LEFT = [
-    "............", "..........##", "........####", "........####",
-    "........##aa", "........#aaa", "........#a#a", "........#aaa",
-    ".......##aaa", "........#aaa", "........#a##", ".........#aa",
-    "..........#a", "......###.aa", "....####..#a", "...#####...#",
-    "..######....", ".#######....", ".#######..#.", ".#####s#....",
-    ".#######....", ".########...", ".#########..", ".##########.",
+CALLER = [
+    "..####..", ".######.", ".######.", ".######.", ".######.", "..####..", "...##...", "..####..",
+    ".######.", "########", "########", "###ss###", "########", "########", "########", "########",
 ]
-CALLER = [row + row[::-1] for row in _CALLER_LEFT]
-assert all(c == '.' for row in CALLER[:8] for c in row[:8] + row[16:]), 'caller corners must be blank'
-for _name, (_ty, _tx) in (('caller_top', (0, 1)), ('caller_face_l', (1, 0)), ('caller_face_m', (1, 1)),
-                          ('caller_body_l', (2, 0)), ('caller_body_m', (2, 1))):
-    TILES[_name] = ('ui', [row[_tx * 8:_tx * 8 + 8] for row in CALLER[_ty * 8:_ty * 8 + 8]])
+TILES['rosa_t'], TILES['rosa_b'] = ('ui', ROSA[:8]), ('ui', ROSA[8:])
+TILES['caller_t'], TILES['caller_b'] = ('ui', CALLER[:8]), ('ui', CALLER[8:])
 
 # Glyph codes 0x80.. in this order; (tile, xflip, yflip).
 CODES = [
@@ -575,17 +523,10 @@ CODES = [
     ('ARROW_NE', 'arrow_ne', 0, 0), ('ARROW_NW', 'arrow_ne', 1, 0),
     ('ARROW_SE', 'arrow_ne', 0, 1), ('ARROW_SW', 'arrow_ne', 1, 1),
     ('BTN_A', 'btn_a', 0, 0), ('BTN_B', 'btn_b', 0, 0),
-    ('BTN_SEL_0', 'btn_sel_0', 0, 0), ('BTN_SEL_1', 'btn_sel_1', 0, 0),
-    ('BTN_START_0', 'btn_start_0', 0, 0), ('BTN_START_1', 'btn_start_1', 0, 0), ('BTN_START_2', 'btn_start_2', 0, 0),
-    ('DPAD', 'dpad', 0, 0),
-    ('EMBLEM_TL', 'emblem_tl', 0, 0), ('EMBLEM_TR', 'emblem_tr', 0, 0),
-    ('EMBLEM_BL', 'emblem_bl', 0, 0), ('EMBLEM_BR', 'emblem_br', 0, 0),
     ('MEDIC', 'icon_medic', 0, 0), ('AMMO', 'icon_ammo', 0, 0),
     ('SUN', 'icon_sun', 0, 0), ('MOON', 'icon_moon', 0, 0),
-] + [(f'PORTRAIT_{_k}', f'portrait_{_k}', 0, 0) for _k in range(9)] + [
-    ('CALLER_T', 'caller_top', 0, 0), ('CALLER_FL', 'caller_face_l', 0, 0), ('CALLER_FM', 'caller_face_m', 0, 0),
-    ('CALLER_FR', 'caller_face_l', 1, 0), ('CALLER_BL', 'caller_body_l', 0, 0), ('CALLER_BM', 'caller_body_m', 0, 0),
-    ('CALLER_BR', 'caller_body_l', 1, 0)]
+    ('ROSA_T', 'rosa_t', 0, 0), ('ROSA_B', 'rosa_b', 0, 0),
+    ('CALLER_T', 'caller_t', 0, 0), ('CALLER_B', 'caller_b', 0, 0)]
 
 
 # Original bold UI font: 2-pixel stems, 6 pixels wide (M and W use 7), seven
@@ -682,11 +623,16 @@ LOGO = {
     'H': ["XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXXXXXXXXXXX",
           "XXXXXXXXXXXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX", "XXX......XXX"],
 }
-TITLE_ROWS = 11
+TITLE_ROWS = 18
+# The prompt blinks on this row (create_ui_art.py also writes the row
+# without it).
+TITLE_PROMPT_ROW = 14
+TITLE_PROMPT = 'PRESS START'
 # Title palettes: slots 0..6 are swapped in while the title is shown (the
 # scene's own palettes come back afterwards); slot 7 is the UI palette, also
 # used by the lake, the shoreline and the controls card. Index 0 of each
-# palette is the sky colour of its band.
+# palette is the sky colour of its band. Below the shore road the screen is
+# a dark band with only the blinking prompt: no controls are listed.
 INK, CREAM, GOLD, SUN = '172B38', 'FFF1D0', 'F9B544', 'FFE69A'
 SKY = ['1E2453', '2B2B67', '453279', '6C3A84', '9B4683', 'C95876', 'EB7A5F']
 TITLE_PALETTES = [
@@ -699,14 +645,15 @@ TITLE_PALETTES = [
     [SKY[6], SUN, GOLD, INK],     # row 7
     list(UI_COLORS),              # rows 8-10: lake and shoreline (paper, amber, red, ink)
 ]
-TITLE_ROW_PALETTE = [0, 0, 1, 2, 3, 4, 5, 6, 7, 7, 7]
+TITLE_ROW_PALETTE = [0, 0, 1, 2, 3, 4, 5, 6] + [7] * 10
 TITLE_SKY_ROW = [0, 0, 1, 2, 3, 4, 5, 6]
 
 
-def title_image():
-    """160x88 grid of RGB hex colours: Toronto skyline at dusk from the lake,
-    the CN Tower, a setting sun and the courier car on the shore road."""
-    W, H = 160, 88
+def title_image(prompt=True):
+    """160x144 grid of RGB hex colours: Toronto skyline at dusk from the lake,
+    the CN Tower, a setting sun and the courier car on the shore road; below
+    it a dark band with the prompt (left out with prompt=False)."""
+    W, H = 160, 144
     PAPER, AMBER, RED = UI_COLORS[0], UI_COLORS[1], UI_COLORS[2]
     g = [[SKY[TITLE_SKY_ROW[y // 8]] if y < 64 else INK for _ in range(W)] for y in range(H)]
 
@@ -830,4 +777,16 @@ def title_image():
         put(x, y, PAPER)                                       # windows
     for x, y in ((59, 84), (60, 84), (61, 84), (62, 85), (63, 85), (60, 85), (61, 85)):
         put(x, y, PAPER)                                       # headlamp beam
+    # The boardwalk's lamps along the bottom of the scene.
+    for x in range(W):
+        put(x, 88, AMBER if x % 8 < 6 else INK)
+    for x in range(3, W, 16):
+        put(x, 89, PAPER)
+    if prompt:
+        x0 = (W - 8 * len(TITLE_PROMPT)) // 2
+        for k, ch in enumerate(TITLE_PROMPT):
+            for y, row in enumerate(font_rows(ch)):
+                for x, c in enumerate(row):
+                    if c == '#':
+                        put(x0 + 8 * k + x, TITLE_PROMPT_ROW * 8 + y, PAPER)
     return g

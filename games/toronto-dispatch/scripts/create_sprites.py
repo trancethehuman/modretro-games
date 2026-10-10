@@ -98,8 +98,8 @@ def frames():
     for i, g in enumerate(A.knockdown_frames()):
         add(f'knock_{i}', g, 'courier_person')
     add('spark', A.grid(A.SPARK), 'signal_yellow')
-    for i, (g, size, _) in enumerate(A.tracer_frames()):
-        add(f'tracer_{i}', g, 'signal_yellow', size)
+    for i, (g, size, _) in enumerate(A.shot_frames()):
+        add(f'shot_{i}', g, 'signal_yellow', size)
     add('reticle', A.RETICLE, 'traffic_red')
     for i, g in enumerate(A.arrow_frames()):
         add(f'arrow_{i}', g, 'signal_yellow')
@@ -211,8 +211,8 @@ def build():
     frame_defs, anchors = [], {}
     for i, (name, g, pal, size) in enumerate(fr):
         ox, oy = places[i]
-        cells, anchor = tile_boxes(size, g, centred=not name.startswith('tracer_'))
-        if size != (16, 16) and not name.startswith('tracer_'):
+        cells, anchor = tile_boxes(size, g, centred=True)
+        if size != (16, 16):
             anchors[name] = anchor
         tiles = []
         for n, (px, py, cx, cy) in enumerate(cells):
@@ -307,7 +307,7 @@ def outputs():
                  'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0',
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
                  'bus_e', 'bus_w', 'streetcar_e', 'streetcar_w', 'ferry_s', 'ferry_n',
-                 'knock_0', 'spark', 'tracer_0', 'reticle', 'arrow_0',
+                 'knock_0', 'spark', 'shot_0', 'reticle', 'arrow_0',
                  'courier_punch_0', 'courier_shoot_0', 'smoke_0', 'parcel', 'sparkle_0', 'beam_0',
                  'player_car_lit_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
@@ -316,16 +316,16 @@ def outputs():
     lines.append(f'#define TD_KNOCK_FRAMES {len(A.knockdown_frames())}')
     lines.append(f'#define TD_PEOPLE_DESIGNS {len(A.PEOPLE_DESIGNS)}')
     lines.append(f'#define TD_SMOKE_FRAMES {len(A.SMOKE)}')
-    # Tracer heads relative to the actor point (whole pixels, screen axes):
+    # Round heads relative to the actor point (whole pixels, screen axes):
     # the engine draws a round with its head on the bullet's position.
     heads = []
-    for g, (w, h), (hx, hy) in A.tracer_frames():
+    for g, (w, h), (hx, hy) in A.shot_frames():
         heads.append((hx - w // 2, hy - h))
     # Headlamp beam offsets per heading, for a beam drawn as its own actor.
     lines.append('#define TD_BEAM_DX {' + ','.join(str(dx) for dx, _ in BEAM_OFFSETS) + '}')
     lines.append('#define TD_BEAM_DY {' + ','.join(str(dy) for _, dy in BEAM_OFFSETS) + '}')
-    lines.append('#define TD_TRACER_HEAD_DX {' + ','.join(str(x) for x, _ in heads) + '}')
-    lines.append('#define TD_TRACER_HEAD_DY {' + ','.join(str(y) for _, y in heads) + '}')
+    lines.append('#define TD_SHOT_HEAD_DX {' + ','.join(str(x) for x, _ in heads) + '}')
+    lines.append('#define TD_SHOT_HEAD_DY {' + ','.join(str(y) for _, y in heads) + '}')
     for name, (dx, dy) in sorted(anchors.items()):
         if dy:
             lines.append(f'#define TD_ANCHOR_{name.upper()}_DY ({dy})')

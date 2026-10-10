@@ -6,13 +6,11 @@
 #include "td_audio.h"
 #include "td_district.h"
 #include "td_daynight.h"
+#include "td_shots.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
 
-/* Tracer head offsets from the actor point, per heading (create_sprites.py). */
-static const BYTE lf_tracer_dx[8]=TD_TRACER_HEAD_DX;
-static const BYTE lf_tracer_dy[8]=TD_TRACER_HEAD_DY;
 
 void td_life_peds(UBYTE near) BANKED {
     UBYTE i,bit,a,mode,f,hop;actor_t *p;
@@ -127,21 +125,13 @@ void td_life_present(void) BANKED {
     }
     if(td_fx_kind){
         a=&actors[TD_ACTOR_FX];
-        if(td_fx_kind==FX_BULLET){
-            /* The tracer's head sits on the round at chest height with its
-             * long trail behind; the courier, drawn first, hides the part of
-             * the trail still behind the gun. */
-            lf_place(a,(UWORD)((fx_u>>4)-lf_tracer_dx[fx_look]),(UWORD)((fx_v>>4)-7-lf_tracer_dy[fx_look]));
-            lf_frame(a,TD_FRAME_TRACER+fx_look);
-            /* GBVM re-checks an off-screen actor only every fourth frame;
-             * a round placed in view shows at once. */
-            a->flags&=~(ACTOR_FLAG_HIDDEN|ACTOR_FLAG_DISABLED);
-        }else{
-            lf_place_q4(a,fx_u,fx_v);
-            lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:lf_look_walk[fx_look]+(fx_du>0?0:2)+((fx_timer>>2)&1));
-            a->flags&=~(ACTOR_FLAG_HIDDEN|ACTOR_FLAG_DISABLED);
-        }
+        lf_place_q4(a,fx_u,fx_v);
+        lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:lf_look_walk[fx_look]+(fx_du>0?0:2)+((fx_timer>>2)&1));
+        /* GBVM re-checks an off-screen actor only every fourth frame; an
+         * effect placed in view shows at once. */
+        a->flags&=~(ACTOR_FLAG_HIDDEN|ACTOR_FLAG_DISABLED);
     }
+    td_shot_present();
     /* The courier lies down when knocked out, flashes when hit. */
     if(lf_down&&td.onfoot)lf_frame(&PLAYER,TD_FRAME_KNOCK+4);
     if(lf_hurt&&!lf_down){if(lf_hurt&4)PLAYER.flags|=ACTOR_FLAG_HIDDEN;else PLAYER.flags&=~ACTOR_FLAG_HIDDEN;}
