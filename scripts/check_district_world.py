@@ -21,6 +21,25 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def overhead_tiles(district_id):
+    """Scene tile indices under the core's overhead structures (the dragon
+    gates over Spadina, content/city_art.json "overheads"): a lintel painted
+    edge to edge across its tile row, the one place BG priority may sit over
+    asphalt, so traffic passes beneath with no asphalt covering a sprite."""
+    if district_id >> 2:
+        return set()
+    ox, oy = world2x.scene_origin(district_id)
+    out = set()
+    for o in read(ROOT / 'content/city_art.json').get('overheads', []):
+        x, y, w, h = o['rect']
+        assert x % 8 == 0 and y % 8 == 0 and w % 8 == 0 and h == 8, ('overhead must be one whole tile row', o)
+        for tx in range(x // 8, (x + w) // 8):
+            lx, ly = tx - ox // 8, y // 8 - oy // 8
+            if 0 <= lx < world2x.SCENE_TW and 0 <= ly < world2x.SCENE_TH:
+                out.add(ly * world2x.SCENE_TW + lx)
+    return out
+
+
 def check():
     world = read(ROOT / 'content/districts/world.json')
     campaign = read(ROOT / 'content/campaign.json')
@@ -50,7 +69,9 @@ def check():
         assert grid == world2x.scene_grid(district['id']), f'{slug}: registered collisions differ from the art'
         assert set(grid) <= {0, 16, 15, city_kit.WATER_TILE}, f'{slug}: unexpected native collision flags'
         assert all((a & 7) <= 6 and not (a & 0x78) for a in attrs), f'{slug}: palette/attribute flags out of authored range'
-        assert all(not (a & 128) for a, c in zip(attrs, grid) if c == 0), f'{slug}: raised roof/canopy priority covers asphalt'
+        over = overhead_tiles(district['id'])
+        assert all(not (a & 128) or i in over for i, (a, c) in enumerate(zip(attrs, grid)) if c == 0), \
+            f'{slug}: raised roof/canopy priority covers asphalt'
         assert any(a & 128 for a in attrs), f'{slug}: missing actual native roof/canopy priority'
         with Image.open(background_path) as opened:
             img = opened.convert('RGB')

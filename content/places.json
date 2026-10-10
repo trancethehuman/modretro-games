@@ -141,12 +141,30 @@
      ]
     },
     {
+     "name": "DUFFERIN MALL",
+     "rect": [
+      0,
+      208,
+      136,
+      432
+     ]
+    },
+    {
      "name": "HOSPITAL ROW",
      "rect": [
       1008,
       656,
       1024,
       880
+     ]
+    },
+    {
+     "name": "DRAGON CITY MALL",
+     "rect": [
+      728,
+      912,
+      896,
+      976
      ]
     },
     {
@@ -976,6 +994,24 @@
      ]
     },
     {
+     "name": "DRAGON CITY MALL",
+     "rect": [
+      728,
+      0,
+      896,
+      96
+     ]
+    },
+    {
+     "name": "CHINATOWN CENTRE",
+     "rect": [
+      728,
+      56,
+      896,
+      184
+     ]
+    },
+    {
      "name": "PRINCESS OF WALES",
      "rect": [
       928,
@@ -991,6 +1027,15 @@
       216,
       1024,
       376
+     ]
+    },
+    {
+     "name": "BYTE BARN",
+     "rect": [
+      168,
+      480,
+      416,
+      608
      ]
     },
     {

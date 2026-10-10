@@ -15,6 +15,8 @@ import world2x
 from streetcar_art import paint_streetcar_stops
 import city_kit
 import greenery
+import chinatown_art as CT
+import retail_art as RT
 
 ROOT = Path(__file__).resolve().parents[1]; PROJECT = ROOT / 'project'
 WIDTH, HEIGHT = L.WIDTH, L.HEIGHT
@@ -87,6 +89,19 @@ GREEN_KINDS = {'houses': 'houses', 'cabbagetown': 'houses', 'brick': 'houses',
                'financial': 'towers', 'discovery': 'towers', 'city_hall': 'towers', 'union': 'towers',
                'cn_rogers': 'towers', 'campus': 'towers', 'warehouse': 'works', 'liberty': 'works'}
 SHOP_SLOTS = {'LITTLE ITALY': [6, 1], 'WEST QUEEN WEST': [0, 3, 4, 1, 2]}
+# Chinatown (user direction 2026-10-10): Spadina's shops on both sides of the
+# street north of Dundas, the Spadina frontage of the Kensington block (the
+# market lies behind it) and the west side of the Chinatown block. Shop
+# widths, per row of the block, are odd tile counts so each door sits in one
+# tile (chinatown_art.py).
+CHINATOWN_FRONT = 96
+CHINATOWN_WIDTHS = ([56, 40], [24, 24, 24, 24])
+CHINATOWN_EAST = ([24, 56], [24, 56])
+# Dragon City and Chinatown Centre fill Spadina's side of the Alexandra Park
+# block (Dundas to Queen); the towers of Alexandra Park keep the rest.
+CHINATOWN_MALLS_W, DRAGON_CITY_H = 120, 64
+# Dufferin Mall's parking lots (north and south of the mall), px deep.
+DUFFERIN_LOT = 48
 
 
 def inverse(anchors, px):
@@ -247,6 +262,20 @@ def main(check=False):
                         box(left + 1, y, v['walk'] - 2, 4, 3)
         if h['half'] == 24 and v['half'] == 24:
             box(cx - 30, cy - 30, 3, 3, 0); box(cx + 27, cy + 27, 3, 3, 0)
+
+    # Chinatown's dragon gates over Spadina either side of Dundas, after
+    # "Gateway" (Millie Chen, 1997): the TTC's red dragons high over the 510
+    # Spadina platforms at Dundas. Each lintel is one tile row painted edge
+    # to edge, so its BG priority lets cars and walkers pass beneath without
+    # any asphalt covering a sprite (the overhead exception to the asphalt
+    # priority rule, check_district_world.py).
+    overheads = []
+    sp = next(st for st in L.STREETS if st['name'] == 'SPADINA AVE')
+    du = next(st for st in L.STREETS if st['name'] == 'DUNDAS ST')
+    for gy in (du['at'] - du['half'] - du['walk'] - 24, du['at'] + du['half'] + du['walk']):
+        gx, gy0, gw, gh = CT.gateway(img, attrs, TW, sp['at'], gy, sp['half'] + sp['walk'] - 8)
+        overheads.append({'name': 'Gateway', 'rect': [gx, gy0, gw, gh]})
+    overhead_tiles = {i for o in overheads for _, _, i in cells(*o['rect'])}
 
     # Queen's Park Crescent's 45-degree parts, drawn to the pixel so the ring
     # reads as a curve; tiles keep one palette each (sidewalk separates
@@ -852,6 +881,81 @@ def main(check=False):
                 city_kit.paint_awnings(d, box, x, y, w, depth, COLORS, signs)
             x += w; k += 1
 
+    def chinatown_row(x0, widths, y, depth, k0, lip=True, roofs=(CT.MAUVE, CT.STONE)):
+        """Spadina's Chinatown: narrow shops wall to wall, each front a stack
+        of signboards over a lantern-hung window (chinatown_art.py)."""
+        x = x0
+        for k, w in enumerate(widths):
+            assert free(x, y, w, depth), ('Chinatown shop lot taken', x, y, w, depth)
+            # The north-east scene is at its tile budget: shops reaching
+            # into it use fewer designs (and no rooftop units).
+            lean = x + w > world2x.scene_origin(1)[0] and y < world2x.SCENE_H
+            building(x, y, w, depth, 0, 'chinatown_shop' if lean else None, lip=lip)
+            b = blocks[-1]
+            attr(x, y - b['overhang'], w, depth + b['overhang'], roofs[(k0 + k) % len(roofs)], True)
+            # Tar inside the parapet, which keeps the roof's colour.
+            CT.tar_roof(img, x + 5, y + 5, x + w - 5, y + depth - 24)
+            if not lean:
+                CT.stamp(img, attrs, TW, 'roof_unit', x + 8, y + 8, roofs[(k0 + k) % len(roofs)])
+            CT.shop(img, attrs, TW, x, y, w, depth, k0 + k, lean)
+            if not lean:
+                CT.stalls(img, attrs, TW, x, y + depth, w, k0 + k, plain_sidewalk)
+            if spadina_side(x + w) or x == sp['at'] + sp['half'] + sp['walk']:
+                # On Spadina: signboards up the wall and stalls beside it.
+                east = spadina_side(x + w)
+                CT.wall_signs(img, attrs, TW, x + w - 8 if east else x, y + 8, y + depth - 32, k0 + k, east)
+                CT.side_stalls(img, attrs, TW, x + w if east else x - 8, y + depth - 48, 2, k0 + k, plain_sidewalk, east)
+            b['kind'] = 'chinatown_shop'
+            x += w
+        return x
+
+    cream_tile = bytes.fromhex(COLORS[3][1:]) * 64
+
+    def plain_sidewalk(tx, ty):
+        i = ty * TW + tx
+        return collisions[i] == 16 and attrs[i] == 0 and L.road(tx * 8 + 4, ty * 8 + 4, L.WALK_HALF) and \
+            img.crop((tx * 8, ty * 8, tx * 8 + 8, ty * 8 + 8)).tobytes() == cream_tile
+
+    def chinatown_malls(x0, y0, x1, y1):
+        """Dragon City at the south-west corner of Spadina and Dundas and
+        Chinatown Centre south of it, a paved court between them open to
+        Spadina (Dragon City's south door opens onto it; Chinatown Centre's
+        onto Queen St)."""
+        w, top = x1 - x0, DRAGON_CITY_H
+        lm(x0, y0, w, top, 1, 'dragon_city', 'Dragon City Mall')
+        CT.dragon_city(img, attrs, TW, x0, y0, w, top, blocks[-1]['overhang'])
+        cy = y0 + top
+        lm(x0, cy + 8, w, y1 - cy - 8, 1, 'chinatown_centre', 'Chinatown Centre', lip=False)
+        CT.chinatown_centre(img, attrs, TW, x0, cy + 8, w, y1 - cy - 8)
+        reserved.append((x0, cy, w, 8))
+        CT.court(img, attrs, TW, x0, cy, w, 8)
+
+    def surface_lot(x, y, w, h, rows_at, poles=()):
+        """Open parking (walkable and drivable ground, as every lot is)."""
+        reserved.append((x, y, w, h))
+        RT.parking(img, x, y, w, h, rows_at, poles)
+        for _, _, i in cells(x, y, w, h):
+            attrs[i] = 0
+
+    def dufferin_mall(x0, y0, x1, y1):
+        """Dufferin Mall on the west side of Dufferin St opposite Dufferin
+        Grove Park: the low mall between its north and south parking lots
+        (its south door opens onto the south lot)."""
+        w, lot = x1 - x0, DUFFERIN_LOT
+        surface_lot(x0, y0, w, lot, (y0 + 8, y0 + 32), ((x0 + w // 2, y0 + 24),))
+        lm(x0, y0 + lot, w, y1 - y0 - 2 * lot, 1, 'mall', 'Dufferin Mall', lip=False)
+        RT.dufferin_mall(img, attrs, TW, x0, y0 + lot, w, y1 - y0 - 2 * lot, 0)
+        surface_lot(x0, y1 - lot, w, lot, (y1 - lot + 8, y1 - 16), ((x0 + 12, y1 - 24), (x1 - 12, y1 - 24)))
+
+    def byte_barn(x0, y0, x1, y1, lot_h):
+        """BYTE BARN (fictional) in Liberty Village: the big box and its
+        parking lot south of it, between Dufferin St and Fort York."""
+        w = x1 - x0
+        lm(x0, y0, w, y1 - y0, 1, 'big_box', 'BYTE BARN', lip=False)
+        RT.byte_barn(img, attrs, TW, x0, y0, w, y1 - y0)
+        surface_lot(x0, y1, w, lot_h, (y1 + 8, y1 + 32, y1 + 40, y1 + lot_h - 16),
+                    tuple((px, y1 + 36) for px in range(x0 + 24, x1, 48)))
+
     def st_james(x0, y0, x1, y1):
         """St James Cathedral at King and Church: a cross-shaped slate roof,
         the spire over the King St doors, and St James Park beside it."""
@@ -946,6 +1050,16 @@ def main(check=False):
         for y, depth in rows[1:]:
             row(x0, x1, y, depth, [64, 48, 80], [1, 0], lip=False)
 
+    def spadina_side(x):
+        """The x where a block west of Spadina meets its sidewalk."""
+        return x == sp['at'] - sp['half'] - sp['walk']
+
+    dufferin = next(st for st in L.STREETS if st['name'] == 'DUFFERIN ST')
+
+    def dufferin_side(x):
+        """The x where a block west of Dufferin meets its sidewalk."""
+        return x == dufferin['at'] - dufferin['half'] - dufferin['walk']
+
     def fill(b, kind, seed):
         x0, y0, x1, y1 = b; W, H = x1 - x0, y1 - y0
         s = seed % 3
@@ -973,6 +1087,24 @@ def main(check=False):
             else:
                 terraces(x0, x1, y0, H)
             return
+        if kind == 'shops' and dufferin_side(x1) and region_of(x1 + 80, y0 + 8)[1] == 'dufferin_grove':
+            # Opposite Dufferin Grove Park: Dufferin Mall and its lots, then
+            # the shops the rest of the block had.
+            rows = rows_of(y0, H)
+            dufferin_mall(x0, y0, x1, rows[2][0])
+            widths = [48, 64, 56][s:] + [72]
+            for k, (y, depth) in enumerate(rows[2:], 2):
+                row(x0, x1, y, depth, widths[k % 2:] + widths[:k % 2], [0, 1], lip=False)
+            return
+        if kind == 'liberty':
+            # King St's warehouses as before; BYTE BARN and its lot on the
+            # rest of the block west of Fort York.
+            fort = next(dd['rect'] for dd in districts if dd['name'] == 'Fort York')
+            rows = rows_of(y0, H)
+            assert len(rows) == 3 and dufferin_side(x0 - 2 * dufferin['walk'] - 2 * dufferin['half']), (b, rows)
+            row(x0, x1, rows[0][0], rows[0][1], [56, 72], [0, 1])
+            byte_barn(x0, rows[1][0], fort[0], rows[2][0], rows[2][1])
+            return
         if kind == 'shops':
             name = region_of(x0 + W // 2, y0 + H // 2)[0]
             if name in SHOP_SLOTS:    # main streets of small shops under awnings
@@ -982,12 +1114,16 @@ def main(check=False):
                 return
             stacked(x0, x1, y0, H, [48, 64, 56][s:] + [72], [0, 1]); return
         if kind == 'market':      # Kensington: narrow houses painted every colour, awnings
+            # Spadina's frontage of the block is Chinatown (CHINATOWN_FRONT).
+            front = x1 - CHINATOWN_FRONT if spadina_side(x1) else x1
             for k, (y, depth) in enumerate(rows_of(y0, H)):
-                shopfronts(x0, x1, y, depth, [1, 4, 0, 3, 2] if k % 2 == 0 else [3, 2, 1, 0, 4], lip=k == 0)
+                shopfronts(x0, front, y, depth, [1, 4, 0, 3, 2] if k % 2 == 0 else [3, 2, 1, 0, 4], lip=k == 0)
+                if front < x1:
+                    chinatown_row(front, CHINATOWN_WIDTHS[k % 2], y, depth, 3 * k, lip=k == 0)
             return
-        if kind == 'chinatown':   # Spadina's shops, red and gold, signboards; a hospital on University
+        if kind == 'chinatown':   # Spadina's shops under their signboards; a hospital on University
             for k, (y, depth) in enumerate(rows_of(y0, H)):
-                shopfronts(x0, x0 + half_w, y, depth, [1, 4] if k % 2 == 0 else [4, 1], True, lip=k == 0)
+                chinatown_row(x0, CHINATOWN_EAST[k % 2], y, depth, 2 + 3 * k, lip=k == 0)
             hospital(x0 + half_w, y0, W - half_w, H, 'Mount Sinai Hospital', (x0 + half_w + 32, y0 + 32)); return
         if kind == 'financial':
             if H >= 96:           # Queen to King: red granite tower beside a glass one
@@ -1023,6 +1159,10 @@ def main(check=False):
             row(x0, x1, y0, 32, [48, 32], [1, 0])
             st_james(x0 + 32, y0 + 32, x1, y1)
             row(x0, x0 + 32, y0 + 32, H - 32, [32], [1], lip=False); return
+        if kind == 'apartments' and region_of(x0 + W // 2, y0 + H // 2)[0] == 'ALEXANDRA PARK' and spadina_side(x1):
+            # Spadina's frontage between Dundas and Queen: the Chinatown malls.
+            chinatown_malls(x1 - CHINATOWN_MALLS_W, y0, x1, y1)
+            tower_rows(x0, x1 - CHINATOWN_MALLS_W, y0, H, ['condo', 'glass'] if s else ['glass', 'condo']); return
         if kind in ('apartments', 'regent'):
             if kind == 'regent' and H >= 128:
                 park(x0, y1 - 48, W, 48, 'REGENT PARK', paths=False)
@@ -1213,6 +1353,10 @@ def main(check=False):
     quiet = ('houses', 'cabbagetown', 'apartments', 'regent', 'dufferin_grove', 'park', 'brick', 'liberty', 'warehouse')
     city_kit.place_furniture(img, d, box, slabs, slab_tile, attrs, TW, canopies,
                              lambda x, y: region_of(x, y)[1] not in quiet, COLORS)
+    # Chinatown's bilingual street signs (since the 1970s) at the north
+    # corners of Spadina and Dundas.
+    for sx in (sp['at'] - sp['half'] - sp['walk'], sp['at'] + sp['half'] + sp['walk'] - 8):
+        CT.street_sign(img, sx, du['at'] - du['half'] - 8)
 
     # Everything flat stays open (user direction, 2026-10-07): lawns, lots,
     # plazas and yards take cars and walkers alike, and both pass under tree
@@ -1251,7 +1395,8 @@ def main(check=False):
     def kind_at(x, y):
         return 'park' if park_at(x, y) else GREEN_KINDS.get(region_of(x, y)[1])
     greens = greenery.dress(img, attrs, collisions, TW, canopies, COLORS, 'core', 0, kind_at, park_at, is_water)
-    bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
+    bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions))
+                if c == 0 and ((a & 7) > 6 or (a & 128 and i not in overhead_tiles))]
     assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])
     city_kit.mark_water(collisions, wet_tiles)
     scenes = city_kit.split_scenes(img, attrs, collisions, TW, 0)
@@ -1270,7 +1415,7 @@ def main(check=False):
                'rows': L.ROWS, 'columns': L.COLS,
                'streets': L.STREETS, 'river': L.RIVER, 'bridges': L.BRIDGES, 'rail': L.RAIL,
                'mainland': L.MAINLAND, 'islands': L.ISLANDS, 'blocks': blocks, 'canopies': canopies,
-               'solids': solids, 'districts': districts, 'spray_bay': [bx + 16, by + 8],
+               'solids': solids, 'districts': districts, 'overheads': overheads, 'spray_bay': [bx + 16, by + 8],
                'collision_rules': {'road': 0, 'foot_only': 16, 'solid': 15},
                'greenery': greens,
                'validation': {'animated_water_tiles': water_tiles},

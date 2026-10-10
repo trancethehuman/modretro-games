@@ -27,7 +27,7 @@
     {
       "district": 0,
       "scene": "project/project/scenes/toronto_core_nw/scene.gbsres",
-      "collision_sha256": "ab8037c26bc2297bb5766bb6fe99263ad63b71656bd5fb432c0dd42ca67ddaa4"
+      "collision_sha256": "dbaa62e58702ec207e301bea3c153b0ec82c72274ebd94aec59592ace13d5aae"
     },
     {
       "district": 1,
@@ -37,7 +37,7 @@
     {
       "district": 2,
       "scene": "project/project/scenes/toronto_core_sw/scene.gbsres",
-      "collision_sha256": "0d2de42daf9e0784fecd805591f1cb5554b0925ee609fa5372b5697da43b1990"
+      "collision_sha256": "899edc29b8a95c5f4d9bb8ae07a68ad8a2d36ccc0ee9f2d46d2a9857f731c88d"
     },
     {
       "district": 3,
