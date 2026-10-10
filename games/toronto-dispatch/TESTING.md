@@ -1,5 +1,16 @@
 # Testing record
 
+## Overhaul: double-scale world, handling, combat, weather and swimming — candidate, 2026-10-10
+
+GB Studio CLI build (plugin `rom_build`) and PyBoy 2.7.0 evidence on `codex/toronto-overhaul`. "Previous" is the main build flashed earlier today (`b105ba2a…`).
+
+- ROM: 2,097,152 bytes (the sixteen scenes need a 2 MiB ROM; the development cartridge is 4 MiB), SHA-256 `2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac`. Memory guard passes: heap `D682`, stack `DF00`, 2,174 bytes of reserve (guard 1,024). The engine patch to `actor.c` applies (palette offsets and the overlay hook).
+- Scene tiles (flip-canonical, budget 352 so 144 sprite tiles fit): core 131/335/216/318, west 173/174/163/186, High Park 199/223/149/239, east 197/169/168/149. Actor sheet 140 of 144 tiles. City map: every 20x12 view within 175 of 181 tiles.
+- `make check` passes: 8,059 host engine checks (ported to the sixteen scenes; new: swimming into and out of the lake, a shark spawning, biting and leaving, no sharks on land, the helicopter at four stars and leaving below three, the weather spells, signal holds and the right-hand loops in every scene), 23,516 navigation checks (the next-hop table steps along a shortest route between every pair of scenes, inner and outer seams), 504,463 atlas and 6,617,495 atlas UI checks (1:16 map with tile flips), plus the art, resource, campaign, streetcar, district, routes, places, street life, overlay and audio generators' checks.
+- Emulator (PyBoy): boot to the title and into the city; 20 sampled vehicle crossings of inner and district seams, both ways, all arrive in the right scene; a crossing hands control back after 22 frames; walking off Queens Quay into the harbour swims, a shark rises and bites (vitality 100 to 75); four stars bring the helicopter, which keeps within about 60 px of a car at full speed; a pursuing car and a red-light fine at a signal junction; rain, cloud and shadow, sun rays and gulls by the clock; the pause menu and the 1:16 city map. Pop-in: 3,600 frames walking and 3,600 driving show no traffic or walker pop-in in view except walkers beside a car stuck against a curb; no line over 10 sprites (peak 10).
+- Screenshots in [README.md](README.md) with [provenance](docs/screenshots/provenance.json).
+- Not verified: the plugin build of the merged `main` and the cartridge write (recorded separately below when done), hardware display, timing and audio, overlay flicker on the Chromatic screen, contract deadlines at the new scale in ordinary play, and human judgement of handling, seam crossings and weather.
+
 ## Soundtrack — candidate, 2026-10-10
 
 GB Studio CLI build and PyBoy evidence only, on `codex/toronto-overhaul` after `8729fb3`. "Previous" is a CLI build of `8729fb3` (SHA-256 `98cf64ef…`). Details and reproduction in [docs/AUDIO.md](docs/AUDIO.md).

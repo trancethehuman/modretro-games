@@ -126,6 +126,16 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [ ] Handheld review: animation on the Chromatic's screen, parcel visibility, spray bay price, the three-second status line in a vehicle, and VRAM timing on hardware.
 - Next: ferry-lane ripples and more rooftop signs.
 
+## Overhaul — implemented 2026-10-10, human review pending
+
+- [x] Double-scale world: sixteen 1,024 × 976 scenes (four districts at 2,000 × 1,904), 16 px sidewalks, bigger blocks, parks and buildings; open inner seams, generated next-hop routing, in-lane traffic loops with signals in every scene; content, map (1:16), routes, places and pickups remapped; save v8.
+- [x] Heavier, slower driving with tail slides and clipping contacts; A+B gets out; full-size 45-degree cars; running stride.
+- [x] Projectile combat with misses on both sides; police cruiser, SUV, unmarked car and helicopter.
+- [x] Swimming and sharks; weather (rain, cloud and shadow, sun rays) with gulls; a minimal radio strip, title and menus; four songs.
+- [ ] Handheld review: driving feel and contract deadlines at the new scale, seam crossings, overlay flicker, weather readability, helicopter and shark difficulty.
+- [ ] More walkers on screen at once (eight slots are tied to the actor pool and bitmask code).
+- [ ] Draw more vehicle designs and local streets in the outer districts (their plans carry only main roads, so some blocks are very large).
+
 ## Next playable polish
 
 - [x] Apply condition/comfort damage only after pickup; recover valid older damaged approach saves and preserve occupied penalties/deadlines. Actual-C regressions and a matched native defect/replay, condition-scaled delivery and controlled held turn pass on candidate `64be19fa…`. Published Prototype 6 remains the earlier ROM; [TESTING.md](TESTING.md) scopes evidence.
@@ -145,7 +155,7 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 
 ## Full game release
 
-- [ ] Extend the working four-scene stage across the full historical Old Toronto footprint, waterfront and fuller Islands. The larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
+- [ ] Extend the working sixteen-scene stage across the full historical Old Toronto footprint, waterfront and fuller Islands. The larger [17-district layout](docs/OLD_TORONTO_EXPANSION.md) remains a proposal; its proposed 2026 era still needs adoption.
 - [ ] Extend researched western/eastern TTC coverage beyond the representative Queen game service, including King504 and Line2; preserve original fictional timing and distinguish the adopted map baseline from live detours.
 - [ ] Playtest and refine the authored objectives across all eight job types, including the unlock sequence, vehicle rules and condition/comfort rewards.
 - [ ] Record representative timings and a complete campaign; validate **at least two hours of varied, enjoyable gameplay**. Quest count does not verify duration.
@@ -156,8 +166,8 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 
 ## Device milestone
 
-- [ ] Identify the connected Chromatic and supported writable cartridge; establish Developer Mode readiness.
-- [ ] Stream if supported, then load the user's identified writable development cartridge through the official workflow.
+- [x] Identify the connected Chromatic and supported writable cartridge (Player 1, writable 4 MiB cartridge; see TESTING.md).
+- [x] Load the user's identified writable development cartridge through the official workflow (main builds, 2026-10-10).
 - [ ] Verify write/read-back where available, manual cold boot, driving/braking, a full delivery, transit, save recovery and audio.
 
-No physical streaming or cartridge write has been attempted. Record device observations separately from emulator results without private activation or device details.
+Cartridge writes are recorded in [TESTING.md](TESTING.md). Record device observations separately from emulator results without private activation or device details.

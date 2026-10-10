@@ -845,3 +845,18 @@ SWIM = [
     _centre8(["........", "..1221..", ".122221.", "1322223.", "13333331", "13311331",
               ".322223.", "..3333..", ".1....1.", "..1111.."], top=3),
 ]
+
+
+# Running: the courier's long stride, leaning into the run with the arms
+# pumping (short hair, the courier's uniform). One frame per view; the
+# engine alternates it with the walking steps. [right, left, down, up].
+_RUN = {
+    'right': (_HEAD['short']['right'], ["...3223.", "..322131", ".1.3223.", "...333.."], ["..3...3.", ".3.....3", "3......."]),
+    'down': (_HEAD['short']['down'], ["1322223.", ".122221.", ".3222231", "..3223.."], [".3....3.", ".3...3..", ".....3.."]),
+    'up': (_HEAD['short']['up'], [".3222231", ".122221.", "1322223.", "..3223.."], [".3....3.", "..3...3.", "..3....."]),
+}
+
+
+def run_frames():
+    view = {d: _figure(*_RUN[d]) for d in _RUN}
+    return [view['right'], flip_h(view['right']), view['down'], view['up']]

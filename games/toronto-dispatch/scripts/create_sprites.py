@@ -117,6 +117,8 @@ def frames():
         add(f'beam_{i}', g, 'signal_yellow')
     for i, g in enumerate(A.SWIM):
         add(f'swim_{i}', g, 'courier_person')
+    for i, g in enumerate(A.run_frames()):
+        add(f'courier_run_{i}', g, 'courier_person')
     return out
 
 
@@ -320,7 +322,7 @@ def outputs():
                  'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0',
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
                  'bus_e', 'bus_w', 'streetcar_e', 'streetcar_w', 'ferry_s', 'ferry_n',
-                 'knock_0', 'spark', 'shot_0', 'reticle', 'arrow_0', 'swim_0',
+                 'knock_0', 'spark', 'shot_0', 'reticle', 'arrow_0', 'swim_0', 'courier_run_0',
                  'courier_punch_0', 'courier_shoot_0', 'smoke_0', 'parcel', 'sparkle_0', 'beam_0',
                  'player_car_lit_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')

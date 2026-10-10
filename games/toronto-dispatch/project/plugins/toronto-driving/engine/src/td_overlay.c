@@ -31,12 +31,11 @@ extern UBYTE td_swimming;
 UBYTE td_weather;
 static UBYTE ov_on,ov_rng=0x5A;
 /* Police helicopter: whole pixels in the current scene; 0 no helicopter,
- * 1 coming in or circling, 2 leaving. */
-static UBYTE heli_state,heli_turn,heli_fire;
-static WORD heli_u,heli_v;
-/* Shark: 0 none, 1 hunting, 2 leaving. */
-static UBYTE shark_state,shark_wait,shark_left;
-static WORD shark_u,shark_v;
+ * 1 coming in or circling, 2 leaving. Shark: 0 none, 1 hunting, 2
+ * leaving. Globals so emulator checks can read them. */
+UBYTE heli_state,shark_state;
+WORD heli_u,heli_v,shark_u,shark_v;
+static UBYTE heli_turn,heli_fire,shark_wait,shark_left;
 static BYTE shark_du;
 /* Rain drops on the screen; the cloud, its shadow and the gulls in the
  * scene (whole pixels). */
@@ -76,9 +75,9 @@ UBYTE td_overlay_heli_near(UBYTE ru,UBYTE rv) BANKED {
 }
 
 /* Weather by the play clock: a new spell every 128 play seconds (three
- * game hours), from a fixed sixteen-spell pattern: rain about a quarter
- * of the time, cloud about a third. */
-static const UBYTE td_weather_plan[16]={0,0,1,0,2,2,1,0,0,1,1,2,0,1,0,2};
+ * game hours), from a fixed two-day pattern starting at 08:00: rain on
+ * the first evening and the second day's late morning, cloud between. */
+static const UBYTE td_weather_plan[16]={0,0,1,0,2,2,1,0,1,2,2,1,0,1,2,0};
 UBYTE td_overlay_second(void) BANKED {
     UBYTE w=td_weather_plan[(td.seconds>>7)&15];
     if(w==td_weather)return FALSE;
@@ -102,8 +101,10 @@ static void heli_tick(void){
         if(!(td_tick&127))heli_turn=(heli_turn+1)&7;
         tu=pu+heli_du[heli_turn];tv=pv+heli_dv[heli_turn];
     }
-    if(heli_u<tu)heli_u+=heli_u+1<tu&&(td_tick&1)?2:1;else if(heli_u>tu)heli_u-=heli_u-1>tu&&(td_tick&1)?2:1;
-    if(heli_v<tv)heli_v+=heli_v+1<tv&&(td_tick&1)?2:1;else if(heli_v>tv)heli_v-=heli_v-1>tv&&(td_tick&1)?2:1;
+    /* Two pixels a frame when it is well away (faster than any car), one
+     * on station, so it hovers rather than darts. */
+    if(heli_u<tu)heli_u+=tu-heli_u>24?2:1;else if(heli_u>tu)heli_u-=heli_u-tu>24?2:1;
+    if(heli_v<tv)heli_v+=tv-heli_v>24?2:1;else if(heli_v>tv)heli_v-=heli_v-tv>24?2:1;
     if(heli_state==2&&(ov_abs(heli_u-pu)>200||ov_abs(heli_v-pv)>180)){heli_state=0;return;}
     /* At five stars the crew fires down at the courier now and then: a
      * wide spread from the air, so moving keeps most rounds off. */

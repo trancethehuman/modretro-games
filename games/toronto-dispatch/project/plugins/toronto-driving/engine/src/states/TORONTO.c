@@ -1580,7 +1580,9 @@ static void td_drive(void){
             return;
         }
         if(td_anim_pose_time){td_anim_pose_time--;td_frame(&PLAYER,td_anim_pose_base+td_walk_dir);}
-        else td_frame(&PLAYER,TD_FRAME_COURIER_WALK+td_walk_dir*2+(moving?((td_tick>>(td_running?2:3))&1):0));
+        /* Running alternates the long stride with the walking steps. */
+        else if(td_running&&(td_tick&4))td_frame(&PLAYER,TD_FRAME_COURIER_RUN+td_walk_dir);
+        else td_frame(&PLAYER,TD_FRAME_COURIER_WALK+td_walk_dir*2+(moving?((td_tick>>3)&1):0));
         /* A: own car, then a nearby road vehicle, else a punch or a run.
          * B: TTC at a station, otherwise the pistol. */
         if(td_input_edge&&INPUT_A_PRESSED){

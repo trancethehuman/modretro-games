@@ -1,912 +1,1024 @@
 [
-  {
-    "file": "centre-island.png",
-    "frame": 4717,
-    "rom_sha256": "47e9de4d986e19229d977364499f8d27be4ec5b513e14c86037673237ed1551b",
-    "png_sha256": "3eb0a8b538435ff1d89486819b1d34b189e8272fdfe21af7a6b47977a3f83784",
-    "session_id": "d52d501c497d4612b27be0898ee97954",
-    "journal_event_digest": "d694d15868edeff053a3f8a593fd8fb44ddadabdac74235362798816f6e1eb1b",
-    "journal_events": 519,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "wards-island.png",
-    "frame": 3506,
-    "rom_sha256": "f9c03d2369b282b7970c82d650ccaadbce2135ba809df852045992ae84c28f7a",
-    "png_sha256": "b8f81957aa4030211aaec94969ecb2d476bd4e0f18bbd07ad096650df789ced9",
-    "session_id": "90fd2b17c8c14745a322548620e32763",
-    "journal_event_digest": "776805dbad6f071094d53ccf46934f93c17174d9ea5cf9b951565d6d8093c306",
-    "journal_events": 589,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "front-street.png",
-    "frame": 676,
-    "rom_sha256": "a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59",
-    "png_sha256": "ea60b817af0bfe6e03edcf2d943959851724b4b83f79e5cd276540820ec9f5a7",
-    "session_id": "b1030b42b8b04a3f8efa77d0f98aaaf7",
-    "journal_event_digest": "27129d445158c58f1ed96e443bb18aa71d17e078275c99a80e9a9a19c961c83a",
-    "journal_events": 215,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "roof-occlusion.png",
-    "frame": 1374,
-    "rom_sha256": "9eaec68843e2888b0aac4accb6e651270c438592719597c02f9157fc6660e793",
-    "png_sha256": "c81b94f993d091d7fbd91c3fd260bb6c9ff53614f130aef85f125f972c165104",
-    "session_id": "9b8519078ddf49c29c6720a04f93568c",
-    "journal_event_digest": "dad5476df470a5febb1bcb1329a6f79885b362c2c339efc98f98f2cab54da3a2",
-    "journal_events": 333,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "roncesvalles.png",
-    "frame": 2452,
-    "rom_sha256": "99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f",
-    "png_sha256": "d75a481e0c2bf8be141bcb7b62228e08980a6f3d61a9d9b5bcfc413d517df19a",
-    "session_id": "edb458fe24d741318e9bd640e79ef1b3",
-    "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
-    "journal_events": 386,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "high-park-map.png",
-    "frame": 4316,
-    "rom_sha256": "99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f",
-    "png_sha256": "1853035b0d483bc8bf38c534dfa7dd5cac136379b840d108bcab67f1a739226e",
-    "session_id": "edb458fe24d741318e9bd640e79ef1b3",
-    "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
-    "journal_events": 386,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "city-atlas.png",
-    "frame": 1048,
-    "rom_sha256": "2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311",
-    "png_sha256": "205e9d14c25684d7bd0af80d4e105d6354e1820ccfc5edb0568a0e1df2b3a00c",
-    "session_id": "b508eb3d2ad84f5ca8a07b979515be96",
-    "journal_event_digest": "bce3fd09faaa0df59e6321ac491b4cd1b14bbfe6387b3e034a5dc644491e918d",
-    "journal_events": 690,
-    "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
-  },
-  {
-    "file": "title-screen.png",
-    "frame": 280,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "9baeb6030430316c4f0b2efd8bda133cc43d3e116790bf110acd0d3a587c01af",
-    "inputs": "cold boot, no input",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "driving-hud.png",
-    "frame": 642,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "f6eb48e2b85d1f63f732bab219117d44d919cb294f39fe3978aa1344b9fa673b",
-    "inputs": "A for two frames, 300 frames, then A held for 60 frames (08:00)",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "golden-hour.png",
-    "frame": 648,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "7244396ea58bfe5d87d568f9ecb7c3cb822f7e866eb9981afec633970deea8be",
-    "inputs": "boot, play clock written to 446 s (18.5h) in emulator memory, 130 frames, A held 36 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "dusk-headlamps.png",
-    "frame": 648,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "afd4bcb37695f7f9795e2c8afe5dcc6ec3305651b1626686cdb1bbc6230d7a1b",
-    "inputs": "boot, play clock written to 500 s (19.75h) in emulator memory, 130 frames, A held 36 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "night-headlamps.png",
-    "frame": 648,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "66fab36df9815603c8aadb89ebed07c04b11ba2c1da5c7d30535aaaefb216929",
-    "inputs": "boot, play clock written to 596 s (22h) in emulator memory, 130 frames, A held 36 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "dawn.png",
-    "frame": 648,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "2688fdec3429a5408a75edb570f8f4c742c90df0216dd12b8bc2935b70faae63",
-    "inputs": "boot, play clock written to 937 s (6h) in emulator memory, 130 frames, A held 36 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "brake-smoke.png",
-    "frame": 586,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "ad871ffdfbd9a8c7d5d3eb8da0570d68c378d463b547c4b5d487e836a82e344b",
-    "inputs": "boot, A held 90 frames, B held 14 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "pickup-pop.png",
-    "frame": 779,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "a85caeab9edeb0fa725d5fb6cadad5103132479f6eae58dddd6e7099d4bc119b",
-    "inputs": "boot, A+B held 70 frames (leave car), courier moved to (508,212) with vitality 50 by emulator memory writes, 40 frames, Up held 150 frames until the pickup is collected, 7 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "parcel-pop.png",
-    "frame": 584,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "bfbe9766273aac4f99431f04489d4e15b290f22cd1fa44ea5a58722a42ed0f6a",
-    "inputs": "boot, Select, A (first job), car moved to the pickup by emulator memory write, Select, 6 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "police-lightbar.png",
-    "frame": 1189,
-    "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
-    "png_sha256": "9ee34ed6ce3b55600ce337768b5041915705acf58cb9424ddd6f66229433d920",
-    "inputs": "boot (180 frames, A for two frames, 300 frames); then wanted level 3 and heat 20 written to emulator memory every frame while A is held two seconds in every three; a flashing frame of the pursuing patrol car",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "radio-welcome.png",
-    "frame": 352,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "f1027cf492417e2f4dfb6a91eaf1ae084e684c3b7deac0b8def33c46a038ceb0",
-    "inputs": "cold boot to the title (frame 280), A for 2 frames, 70 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "pause-menu.png",
-    "frame": 1066,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "986c19f2de825cb04279b5421c93b132224775897e669c46b46b9c50c5a1cd18",
-    "inputs": "as radio-welcome.png, then 700 frames, Start 2 frames, 12 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "pause-menu-scrolled.png",
-    "frame": 1102,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "60d822e62dc60d4e2050b44d8fd9e05ffc946e6b0904bff6db168048e62c85c0",
-    "inputs": "as pause-menu.png, then Down six times (2 frames each, 4 apart)",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "dispatch-board.png",
-    "frame": 1146,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "2fffe3a9d88f1788886d1c197733867c8c656225066e1452d9c96c2078b8275a",
-    "inputs": "as pause-menu-scrolled.png, then B, Select, Right twice",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "job-briefing.png",
-    "frame": 1220,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "8175c41e821f11f30db83eb91d5949a4142b237665ebd7d922130c69b9af7760",
-    "inputs": "as dispatch-board.png, then Left twice, A (contract 1), 60 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "tracer-flight.png",
-    "frame": 1108,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "40368af3a1816a44e20a39d629bd5b156018be32e73964ddbc7292d26db846e8",
-    "inputs": "boot, welcome call left to finish (480 frames), A+B held 70 frames (leave car), 30 frames, turned down (no lock-on), B 2 frames, 4 frames, then 4 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "engine-smoke.png",
-    "frame": 1092,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "24a3fe68436e10cb93e828515fa2a01721b6d3357b8dd5d214b6956a80cf133c",
-    "inputs": "boot, welcome call left to finish (480 frames), car damage written to 80 in emulator memory, A held 60 frames, 40 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "night-stolen-car.png",
-    "frame": 1128,
-    "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
-    "png_sha256": "44b35769e3a4771f9f145a6eeb8ff4f63211f61dfd535d6ceb6daeecd143e9ce",
-    "inputs": "boot, welcome call left to finish (480 frames), play clock written for 22:00 and car colour set to blue in emulator memory, 130 frames, A held 36 frames",
-    "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
-  },
-  {
-    "file": "union-station-front-st.png",
-    "frame": 962,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "0b44b8792f10eb8cc1e3e650e7f215c4d2df1b052361714ce067e83715a91863",
-    "inputs": "boot, A on title, 480 frames for the welcome call to finish (car parked on Front St at Union Station)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "downtown-map.png",
-    "frame": 1076,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "3a656d721e156934fa954e61f8c7b25093e88a8e33a94f301e0257ed339839aa",
-    "inputs": "boot, 480 frames, Start, Down, A (City map), 90 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "cn-tower-rogers-centre.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "bd8bfb1363e977486d53d037c2583ec002df9a4a498c6dd33790dd1749ca4939",
-    "inputs": "boot, 480 frames, courier car written to (440,740) heading 0 in emulator memory, 90 frames: Front St W at John: CN Tower and Rogers Centre south of Front",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "city-hall-eaton-centre.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "076b48fb1258b814ad49b40b06490e232f04428f4e1d80f9903b70b04ddf5717",
-    "inputs": "boot, 480 frames, courier car written to (576,516) heading 0 in emulator memory, 90 frames: Queen St W at Bay: City Hall, Nathan Phillips Square, Old City Hall and the Eaton Centre",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "st-lawrence-flatiron.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "e35b6f7ab0957fb7488b930a070fd3dfabb9cf1df10cae160a1130f7a91fa141",
-    "inputs": "boot, 480 frames, courier car written to (700,740) heading 0 in emulator memory, 90 frames: Front St E: Gooderham Flatiron and St Lawrence Market",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "kensington-chinatown.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "6124176310fc224abdd6fc102acf077803ec9ac78d016c7ef1625b0a2f91cec2",
-    "inputs": "boot, 480 frames, courier car written to (384,344) heading 4 in emulator memory, 90 frames: Spadina Ave between College and Dundas: Kensington Market (west) and Chinatown (east)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "queens-park-legislature.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "ad077164fdadd0ca896ddc60932b68d82a7443eb93866c4ab07d79509a7e8f2f",
-    "inputs": "boot, 480 frames, courier car written to (512,220) heading 4 in emulator memory, 90 frames: Queen's Park: the Legislature and U of T",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "distillery-don-river.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "9e8af81c892e8080965a441496631729af2f6805cb950ac0ed6e00c3412113ed",
-    "inputs": "boot, 480 frames, courier car written to (820,760) heading 0 in emulator memory, 90 frames: Mill St: Distillery District and the Don River",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "liberty-village-fort-york.png",
-    "frame": 1052,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "35de26e6ca37281dab3593c64d8d57f53cb4c11c070aa763bbf9e72bbdb7d63a",
-    "inputs": "boot, 480 frames, courier car written to (200,700) heading 0 in emulator memory, 90 frames: King St W area: Liberty Village warehouses and Fort York",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "bigger-cars-traffic.png",
-    "frame": 1342,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "670a034de03d3d811041f38b1ea9fce5c3e300e9a4f930d5ef72f29cabbda11e",
-    "inputs": "boot, 480 frames, driving with A and Left/Right in 2-second turns for 380 frames (wanted held at 0), first frame with two road vehicles in view",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "station-prompt.png",
-    "frame": 1072,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "b8839ac31d3a3795a35fdda26b3dc0a71a4bd17f68c506cee67e669559fa1a5b",
-    "inputs": "boot, 480 frames, A+B held 70 frames (leave the car at Union), 40 frames: the HUD offers B for Line 1",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "ttc-menu.png",
-    "frame": 1094,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "8a6f2a4e4a25ac467a8b9ed925cd76dc87097fbdd58310d1329e32143021fea4",
-    "inputs": "then B: the Line 1 menu opens on the next station, not Union itself",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "queen-streetcar.png",
-    "frame": 2805,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "282c3d7e450d14a463cea56e2372d51e3a7ff1decac522ac90ab4e60db8b78be",
-    "inputs": "boot, 480 frames, left the car, courier written to the Queen and Yonge platform (676,556), B, A (wait); the frame 30 frames before boarding at frame 2834: the 501 streetcar pulling in",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "ferry-arriving.png",
-    "frame": 1904,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "1c171b7f3a227d1a1436720889afc6970d7115b13459cdc075af5b97bf036a8f",
-    "inputs": "boot, 480 frames, left the car, courier written to the ferry terminal (584,832), B, A, 794 frames: the ferry comes in over the harbour",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "lock-on.png",
-    "frame": 1124,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "ae3612d75ff0e09d1083732aaa853ddb6a864147aed1ec69461131403f953f3f",
-    "inputs": "boot, 480 frames, left the car, walking a square for 62 frames until the pistol locks on",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "sticky-lock-firing.png",
-    "frame": 1133,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "6d64cee4776ea2ca0865da5487330a1eec256eb38f0cc0ee8e1820eae79c5557",
-    "inputs": "then B held 3 frames and B+Down 6 frames: the lock stays on its target while the courier strafes",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "free-aim-sight.png",
-    "frame": 1116,
-    "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
-    "png_sha256": "5b676657d12c0bfadf8a05a387dcb8c6478f4fb802334fad26145e0fd5ee90b4",
-    "inputs": "boot, 480 frames, left the car, courier written to the Queen St W sidewalk (452,488), faced right with nothing to lock, B held 12 frames: the blinking sight shows where the pistol fires",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-none-driving.png",
-    "frame": 992,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "92cd709cb342179c69879734a6d6540e7e4a349dd748159b4d641a3a0f0e2e0d",
-    "inputs": "boot, 480 frames, A held 27 frames until driving at speed with no pop-up",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-notice.png",
-    "frame": 1026,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "fdbacae96ebe027dac9b810478d3e80d03a0a9e0acfb414e0ec46a644e7f510d",
-    "inputs": "then A+Right held 31 frames until the first pop-up (a kerb strike notice)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-street-name.png",
-    "frame": 986,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "419953376d4a14b651da9f74c923b95aa6b4d3e31baf81b2b6b7efa49e5a8082",
-    "inputs": "boot, 480 frames, car written to Spadina Ave (380,620) heading north, 20 frames, A held 1 frames: the new street name pops up",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-job-accepted.png",
-    "frame": 1051,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "05325c477f710f01937ca5e5600099e007906ab48f862744a7538c319d54b47b",
-    "inputs": "boot, 480 frames, Select, A (contract 1), 70 frames: the briefing card above the next stop and the job row",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-job-driving.png",
-    "frame": 1199,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "42916d80e5f00e4278b54b4b6bdc5d99093deb5e0ec1987d0a40c3dc0a710584",
-    "inputs": "then A held 145 frames: once the call ends and the stop has been shown, driving clears the screen",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-idle-status.png",
-    "frame": 1295,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "068c626ba32b5f0b7e9a98f8ee444d6d92d61cbc913cb45a1ae639b7cbe814ac",
-    "inputs": "boot, 480 frames, A+B 70 frames (leave the car), courier written to (452,488), Right 20 frames, then 240 frames standing still",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "hud-shot-ammo.png",
-    "frame": 1319,
-    "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
-    "png_sha256": "ac251b78ff686fd0dae94ea37aa2a2c73fe7b223b91eef58fc42e41d0936d0b4",
-    "inputs": "then walking right until clear (1 frames), B 4 frames, 6 frames: the shot pops up the ammunition count",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-briefing.png",
-    "frame": 1319,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "1f124e8b08cd95416f62de03241289b8e24545357e98e51a67c16e78f63b311e",
-    "inputs": "then A (accept contract 1), 28 frames: Rosa briefs the first job",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-client.png",
-    "frame": 1883,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "dc81f777d71bc3b480815315f5589f30f1fb464c642a78d2a571b96795523adf",
-    "inputs": "then the car written to St Lawrence (712,740), Select (deliver), B, 29 frames: Sal answers through the caller card",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-locked.png",
-    "frame": 1284,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "3caa4235ea0440f8a2d7dc462b72d3bed6e92dbdc2d64db36d1d36a9d8b1b3c5",
-    "inputs": "boot, deliveries 6 and contracts 1-6 written as done, Select, right twice: contract 9 waits for job 7",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-chapter.png",
-    "frame": 1684,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "1ac024ac778fefe70bf31f2f73dc6084a197604b79c2703ba21e5ab185ac96a9",
-    "inputs": "then left twice, A (contract 7), Select at the depot, car written to City Hall, Select, car written to the depot, Select, B, 180 frames: contract 7 opens the second chapter",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-rival.png",
-    "frame": 1723,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "6f66a2560579b4458988a0ff727a00696af2c9cfa5e3b9b3ac393f5c931312a8",
-    "inputs": "boot, deliveries 8 and contracts 1-8 written as done, Select, A (contract 9), Select at the depot, car written to Kensington, Queen West and Dufferin with Select at each, B, 187 frames: Dev of Rushly",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-torn.png",
-    "frame": 2027,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "7562bd0168f437a63febcdebf8b20ef9910592ddb9e32d9704b8b5165527a9b4",
-    "inputs": "boot, deliveries 54 and contracts 1-54 written as done, Select, A (contract 55), Select at the depot, car written to Kensington, Dufferin, Queen West, Queen East and the depot with Select at each, B, 327 frames: what Margo did with the offer",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-dev-quits.png",
-    "frame": 2483,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "c0a8469c899c8dc72f344cd1d070ecfa373b848a554f89d3dd359548f4459630",
-    "inputs": "then 454 frames: the festival-week chapter opens; Dev quits Rushly",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "story-dev-joins.png",
-    "frame": 2769,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "0b0351ee9c26f32936138dcecee44d3f58be5fdcecd87018a5c76d0659d8c4fa",
-    "inputs": "then 284 frames: Dev, now at the depot",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "water-islands.png",
-    "frame": 1471,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "cbe033a1140999a0de010e1d030bc9128a36c8ce040ebf121c2b0641039cd099",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written beside Centre Island (700,900), 240 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "water-islands-next.png",
-    "frame": 1489,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "9d572bacf6d5808933c8509cdff2a721136f42d0312c6431966152e90486d035",
-    "inputs": "then 16 frames after water-islands.png: the next ripple frame",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "water-don.png",
-    "frame": 1731,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "d5b754559c3c07c20662d3cd526af54b339353bd5c4b037ea29fe578bc14b653",
-    "inputs": "then (after water-islands-next.png) the car written beside the Don (868,500), 240 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "screen-yonge-dundas.png",
-    "frame": 1531,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "62e10000c50580670ac0c0b5871ae35ff99d03c4956b1b4b03fae4070a48a3d0",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Yonge St south of Dundas (640,470), 300 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "screen-yonge-dundas-2.png",
-    "frame": 1567,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "fe3b746b4ab9242f12328dedddafe3a931e858f6bcf1764e96f73d3ffc5c59ea",
-    "inputs": "then 32 frames after screen-yonge-dundas.png: two screen frames later",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "roofs-front-st.png",
-    "frame": 1531,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "0626eb9dbf84fecd581f266b2ca0f15b1470f137b59e83a8f8a9fc3b0ccb4b8f",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Front St West (320,790), 300 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-near.png",
-    "frame": 1274,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "03ba06ea3af67f409083cdc828a4270661bc80604191d8817b21cc5c6ec1b12d",
-    "inputs": "boot, A on the title, the welcome call left to finish, cash 120 and two stars written, car written on King St West (300,626): the bay announces itself",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-done.png",
-    "frame": 1309,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "070bf9a7ef5dffe711b2ee1145d3e707506482684fbf22b581a46ce63f72ccbe",
-    "inputs": "then the car written into the bay (208,626), stopped: stars cleared, repaired, $25 paid",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-radio.png",
-    "frame": 1717,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "512c2f76808178dd4d6a3bdaa6deb263c924bba413aca12636a5600497dbee51",
-    "inputs": "then Rosa on the radio",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "parcel-seen.png",
-    "frame": 1876,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "681a388accf20fc87db6a7158c6588b3a98978b39b4f8c902bbb1136077e7b7e",
-    "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (540,280), walked north beside Queens Park and a step east: a lost parcel on the lawn",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "parcel-found.png",
-    "frame": 1924,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "33bba0ceadffac804894a7d91eb4dad237acc22013fa7cc7c2487e13b5024761",
-    "inputs": "then walking east onto it",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "panic-before.png",
-    "frame": 3901,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "bc470f5d3fa2cad25d1aa7bd267c3494f1264da68a6ac14bf3fe35dfd072d1c7",
-    "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (380,560) among walkers",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "panic-after.png",
-    "frame": 3924,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "b5d4b441351a644c4df253135dda5375213bbcfdb97bbb258e3bd97ce0dcf6cd",
-    "inputs": "then B (a shot): the walkers nearby run",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "water-west.png",
-    "frame": 1861,
-    "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
-    "png_sha256": "935d1f753fc48248957c74b6eb50d8129c0e1a6a83e30f5ebbea344e172e6910",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then written by the lake (500,904), 300 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "before-water-islands.png",
-    "frame": 1473,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "6cbfa4d4d2b8cfce97381c134bf06d5087d8411e5ca3f0c697d9b68a119e6f6a",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written beside Centre Island (700,900), 240 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "before-roofs-front-st.png",
-    "frame": 1533,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "ab237253078338def1068780b9f8896ba066e2461853f97a56bdb561c36f600c",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Front St West (320,790), 300 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "before-water-west.png",
-    "frame": 1863,
-    "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
-    "png_sha256": "38f2f527b378d99db51ffdad10e8095af9cfddbc15fe77265de13779c6590324",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then written by the lake (500,904), 300 frames",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-done-queensway.png",
-    "frame": 1639,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "f91f03d1520332666d42a9419a8a969485cde8897bc73afa02c62bbb216d2c62",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then cash 120 and two stars written, car written at (354, 626): the West (The Queensway) bay announces itself; then the car written into the bay (264, 626), stopped",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-near-bloor-west.png",
-    "frame": 2014,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "98221abbc41da01b53291405fe19ea8a1516483c4feab09d1df4c32995eaaa96",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then cash 120 and two stars written, car written at (354, 626): the West (The Queensway) bay announces itself; then the car written into the bay (264, 626), stopped; then the car written at the West scene's west edge (60,640) heading west, A held 120 frames into High Park, then cash 120 and two stars written, car written at (300, 338): the High Park (Bloor St West) bay announces itself",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-done-bloor-west.png",
-    "frame": 2049,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "a4e38028e84b501b6033f6403e7294d18362bf47d9a16c9dec6d9b20ad4c8e9a",
-    "inputs": "then (after spray-near-bloor-west.png) the car written into the bay (360, 338), stopped",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "spray-done-queen-east.png",
-    "frame": 1639,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "cc0194fa53be67b7a27351a7724c170a0cdb8b10ff6db9fdcd8e07715c85c1e6",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at the east edge of the core (970,528) heading east, A held 120 frames into the East scene, then cash 120 and two stars written, car written at (540, 514): the East (Queen St East) bay announces itself; then the car written into the bay (456, 514), stopped",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "pause-parcels.png",
-    "frame": 2058,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "5c382923a0478fa365a27ce39b6d2abb80e4a9a608ea7eef565e33edc986ed3b",
-    "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (540,280), walked north beside Queens Park and east onto the lost parcel, then Start",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "qp-legislature.png",
-    "frame": 1471,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "799ba98f2521aac3f89046f2c690a65fcfb7ce71ca14d7e0b9c9214117a4cab2",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "qp-park.png",
-    "frame": 1713,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "4a3d5bc7437ffe078a694337243e67074975979b678952563b8e694ff7456f7f",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "qp-north.png",
-    "frame": 1955,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "23bf9a5cb5b6a76af41e1a3faa41bb280c383dce9491004c7f8ff0d20060368f",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "qp-drive-onto-lawn.png",
-    "frame": 1335,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "f9a8e8b5a8b6e04dea632008b46eb2a7a4b712d4558d1f10575238c7c2fd946a",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "trinity-bellwoods.png",
-    "frame": 2197,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "e4c696465f1b1dd7e66d6986dec10d998dba9b62c14a8afeab57bd1588aafdc7",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "allan-gardens.png",
-    "frame": 2439,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "f10361fd6d5b3d063ed2f75acc3b4355af100e02a533f85b4677baa0280a22a3",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "grange-park.png",
-    "frame": 2681,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "9175a0ba018d852b0f1e08cbfb794f374c7bcab13860bf3fa8bcf5d145c69eae",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "sorauren-park.png",
-    "frame": 1801,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "4b75a66e992c784714e57cbe95fc63de94718cbd4b4d6790abae0014f95f9fa8",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "high-park-pond.png",
-    "frame": 2373,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "4f266f7ecb3630759e1ef9fa23c703526fbf739de0b305b8be03da822eef578b",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "high-park-zoo.png",
-    "frame": 2615,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "e5a295cd65e8a862c19319bee800b75aee59209380b7bb136eb036375a8f318e",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "withrow-park.png",
-    "frame": 1801,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "de2f3b8797d1fb3b79e4376b9cef5035253d7aa68085b155ab3be1810b250012",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow; then car written at (304,144) facing north, 240 frames: Withrow Park (East scene, entered from the core's east edge at (970,528), A held 120 frames)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "greenwood-park.png",
-    "frame": 2043,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "f6144153f60de1a1fe044c5dec66a2608085c72b55b47f79ed1bc393b619f07c",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow; then car written at (304,144) facing north, 240 frames: Withrow Park (East scene, entered from the core's east edge at (970,528), A held 120 frames); then car written at (880,312) facing north, 240 frames: Greenwood Park",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
-  },
-  {
-    "file": "before-qp-legislature.png",
-    "frame": 1471,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "b6767f840282b00c842ffa03bc336353b290d819aa44fc3e0c78ab08bb20f1a3",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-qp-park.png",
-    "frame": 1713,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "c562455b6c6ba4711eda90fc7af39069c51bea6a2f59bb952a42772f4814c47c",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-trinity-bellwoods.png",
-    "frame": 2197,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "9d27e11639dea65c0207c5e123587bc439e7db5f73172f0911afcb812e78e780",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-allan-gardens.png",
-    "frame": 2439,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "50bfd0d571d480f8f458eb4a41347aa1e9cca34195e07e55cd69c42f6444a98b",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-high-park-pond.png",
-    "frame": 2373,
-    "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
-    "png_sha256": "9a1310cea6e5ca237a44bffa5a5c882ec5804a74b26d0201aeda52dcc7f4dce4",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
-  },
-  {
-    "file": "district-financial.png",
-    "frame": 1493,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "7224f446b6f163ac2c4044cafba10aefa2eea2d04b1dceb779b3c11f52654e79",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-discovery.png",
-    "frame": 1755,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "4f97b52ea825b019216df85b61422ede3e6de989ced4f4ab58a696a01a4731ea",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-museums.png",
-    "frame": 2017,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "30ec04dcd16f3829bb1a1fd28518f2a9696801f888acbc1ab47794089b5a3106",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-convocation-hall.png",
-    "frame": 2279,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "022c78110bd72b7928151acde9f8d486fe465a41f697c617bd8065f53b033c27",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-entertainment.png",
-    "frame": 2541,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "678fd1adc9494a355132089e4b11b1d0afd2cc2feb848630a12231d00d9f6b8e",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-kensington-chinatown.png",
-    "frame": 2803,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "6009d9a31bbb83ce6cb5b4402c86888f0553f4287fbd10f1da5b813b0482f055",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-st-james.png",
-    "frame": 3065,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "2fde32ece6b7ed4d1a719360d57d3285daf0c2a56cc3d7aa1c9744c7a6f22406",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-little-italy-portugal.png",
-    "frame": 3327,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "eaf57f3d7698eae95e5a2be2c51b37c381e7e4c70758013c7964bec913ed8b0e",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East; then car written at (160,356) facing north, 260 frames: Little Portugal (blue houses) and Little Italy (green and red awnings) on Ossington",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-cityplace-waterfront.png",
-    "frame": 3589,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "df863bd1d0f36b3d535cd0c1511b363f177a3d678e36329dc250d5bfd5e264db",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East; then car written at (160,356) facing north, 260 frames: Little Portugal (blue houses) and Little Italy (green and red awnings) on Ossington; then car written at (336,816) facing north, 260 frames: CityPlace towers and the Queens Quay boardwalk",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "district-greektown.png",
-    "frame": 1823,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "98a5bb597ba1ae54beaad83213fa1a02f9a28769c7be65844956aa705e04d080",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 70 frames: crossing Spadina; then A held 66 more frames: past the AGO; then car written at (136,76) facing north, 260 frames: Greektown on the Danforth (East scene, entered from the core's east edge at (970,528), A held 120 frames)",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "nav-junction.png",
-    "frame": 1317,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "c4a74e23380646de278e459e46956a72e2dbd3c9a7f4a3c1b660f637905381b0",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 80 frames: crossing Spadina",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "nav-landmark.png",
-    "frame": 1383,
-    "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
-    "png_sha256": "91a5c7a1080a7e802c92f81863243636c72b5d91f4a6bca6bbde028b771ce761",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 80 frames: crossing Spadina; then A held 64 more frames: past the AGO",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
-  },
-  {
-    "file": "before-district-financial.png",
-    "frame": 1491,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "3af12fd33e9117171a6f1e1c4b428c3d9802977ee7572d393f93335d732f2381",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-district-discovery.png",
-    "frame": 1753,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "af7438adf5c7a503722b8dd9f4e895d53206716587a8f99a24bae3cb2494dbde",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-district-museums.png",
-    "frame": 2015,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "649db79098ca3704094bdefd3baf14439d61c5dcc9b39949fce2d9bbfc6d43dc",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
-  },
-  {
-    "file": "before-district-entertainment.png",
-    "frame": 2539,
-    "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
-    "png_sha256": "553b272b3dcd52fce83d4c2d2183914963923ad991ad2339feb4b5085e83d93e",
-    "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
-    "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
-  }
+ {
+  "file": "overhaul-before-scale.png",
+  "frame": 541,
+  "rom_sha256": "b105ba2a7b0c5f73c7c8b409da380800bdc90cdaa86c15c663986173bcc7ef2f",
+  "png_sha256": "1c7ddca22e4826b8d846c6cf544f1b149de56ea033a165f7cf223d1b457ad83f",
+  "inputs": "main build: boot, A, radio skipped; car written at Queen and Spadina (384,540) facing north, 120 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-before-turning.png",
+  "frame": 602,
+  "rom_sha256": "b105ba2a7b0c5f73c7c8b409da380800bdc90cdaa86c15c663986173bcc7ef2f",
+  "png_sha256": "11504471b90350c4e46f82f1fdeaa84cebd0ce0e619df4af081650c3129db819",
+  "inputs": "main build: car written on King St (450,640) at heading 2 (south-east), 60 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-title.png",
+  "frame": 201,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "5e73949298b0a393ded262b210e3ec923d59142990ef85c49f1b9e488372e04b",
+  "inputs": "boot, 200 frames: the title screen",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-union.png",
+  "frame": 492,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "5a5c4f96f139de0f38b188694207843d178a3ac2def079a474f6f2da5d00fb84",
+  "inputs": "A on the title, radio skipped: the start at Union, Front St",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-scale.png",
+  "frame": 704,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "36d9bf4e45c2bc21d7a1e21d3b8764fcbafc1f14e68a73918355bab8b3d13a05",
+  "inputs": "car written at Queen and Spadina (scene core SW 912,212) facing north, 120 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-turning.png",
+  "frame": 856,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "e00c35cf66627ec11a17e2df45e168c6fbfec929d839ba1d0a33979574b69ed6",
+  "inputs": "car written on King St (scene core SE 78,392) at heading 2 (south-east), 60 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-pause.png",
+  "frame": 892,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "656a5b5aebff28f72893b8d2304e3e4ce02354ca4728fab3bad1392149aaa85f",
+  "inputs": "Start: the pause menu",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-map.png",
+  "frame": 1233,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "68996cda80dd666548f42560bccbc1eb4473f7039d344c4747e085b54c7e2fa0",
+  "inputs": "City map from the pause menu, 200 frames to draw",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-running.png",
+  "frame": 1456,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "ceaa10562885240b132feb5b370b7f0c55895f98fae6e0a227510c91449c5033",
+  "inputs": "on foot at (scene core SE 600,400), Right then A held: running stride",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-shark.png",
+  "frame": 1840,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "b0c1806cd6bcf2bac5b2580d8e434ad45a515d9bd4bc050f563463cba41a76ae",
+  "inputs": "on foot at Queens Quay (scene core SE 740,740), Down 150 frames into the harbour, then treading water until a shark closes in",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-heli.png",
+  "frame": 2194,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "b88cc89c6d41b2109abe6d979e5685d4be04693b2e600141e5345019a313d5a4",
+  "inputs": "car on King St, four stars written, A held 150 frames then 90 coasting: helicopter overhead",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-rain.png",
+  "frame": 2487,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "f5e14c1083cab4b826556739a22f889849b9a951059ae2f02934465958a92a90",
+  "inputs": "play clock written to 11:30 on the second day (rain spell), 200 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-cloud.png",
+  "frame": 2748,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "dbb38e6cfb337e15a6e1de25dd52e204739caa1b9a110410a57650360cb95dac",
+  "inputs": "play clock written to 08:40 on the second day (overcast), 260 frames: a cloud and its shadow",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "overhaul-sun.png",
+  "frame": 2877,
+  "rom_sha256": "2189d60d95067b4d058b2dafca6641915d6c75f39ccbfef62c5ed05c92d522ac",
+  "png_sha256": "522d4e75aa41c9fb8595e1ccdfe78a46e175cf8777103ed24af1730a5090e967",
+  "inputs": "play clock written to 08:56 (clear): sun rays",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "centre-island.png",
+  "frame": 4717,
+  "rom_sha256": "47e9de4d986e19229d977364499f8d27be4ec5b513e14c86037673237ed1551b",
+  "png_sha256": "3eb0a8b538435ff1d89486819b1d34b189e8272fdfe21af7a6b47977a3f83784",
+  "session_id": "d52d501c497d4612b27be0898ee97954",
+  "journal_event_digest": "d694d15868edeff053a3f8a593fd8fb44ddadabdac74235362798816f6e1eb1b",
+  "journal_events": 519,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "wards-island.png",
+  "frame": 3506,
+  "rom_sha256": "f9c03d2369b282b7970c82d650ccaadbce2135ba809df852045992ae84c28f7a",
+  "png_sha256": "b8f81957aa4030211aaec94969ecb2d476bd4e0f18bbd07ad096650df789ced9",
+  "session_id": "90fd2b17c8c14745a322548620e32763",
+  "journal_event_digest": "776805dbad6f071094d53ccf46934f93c17174d9ea5cf9b951565d6d8093c306",
+  "journal_events": 589,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "front-street.png",
+  "frame": 676,
+  "rom_sha256": "a2f00db4ef834112a3491e50cec832653023a0456f0d9cbca6d2386be7322a59",
+  "png_sha256": "ea60b817af0bfe6e03edcf2d943959851724b4b83f79e5cd276540820ec9f5a7",
+  "session_id": "b1030b42b8b04a3f8efa77d0f98aaaf7",
+  "journal_event_digest": "27129d445158c58f1ed96e443bb18aa71d17e078275c99a80e9a9a19c961c83a",
+  "journal_events": 215,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "roof-occlusion.png",
+  "frame": 1374,
+  "rom_sha256": "9eaec68843e2888b0aac4accb6e651270c438592719597c02f9157fc6660e793",
+  "png_sha256": "c81b94f993d091d7fbd91c3fd260bb6c9ff53614f130aef85f125f972c165104",
+  "session_id": "9b8519078ddf49c29c6720a04f93568c",
+  "journal_event_digest": "dad5476df470a5febb1bcb1329a6f79885b362c2c339efc98f98f2cab54da3a2",
+  "journal_events": 333,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "roncesvalles.png",
+  "frame": 2452,
+  "rom_sha256": "99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f",
+  "png_sha256": "d75a481e0c2bf8be141bcb7b62228e08980a6f3d61a9d9b5bcfc413d517df19a",
+  "session_id": "edb458fe24d741318e9bd640e79ef1b3",
+  "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
+  "journal_events": 386,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "high-park-map.png",
+  "frame": 4316,
+  "rom_sha256": "99eb430cc59cbb51631d343a4b626d07db03ff10ad36dd567128b438d36c528f",
+  "png_sha256": "1853035b0d483bc8bf38c534dfa7dd5cac136379b840d108bcab67f1a739226e",
+  "session_id": "edb458fe24d741318e9bd640e79ef1b3",
+  "journal_event_digest": "e45e7b73ca4dd3da2c88075df7253db875e1de3a5f7d265d223d55f8e24db848",
+  "journal_events": 386,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "city-atlas.png",
+  "frame": 1048,
+  "rom_sha256": "2d1f6e4e7ae48a434757e63454d216b02b81957ecf5f8582d879149d447d7311",
+  "png_sha256": "205e9d14c25684d7bd0af80d4e105d6354e1820ccfc5edb0568a0e1df2b3a00c",
+  "session_id": "b508eb3d2ad84f5ca8a07b979515be96",
+  "journal_event_digest": "bce3fd09faaa0df59e6321ac491b4cd1b14bbfe6387b3e034a5dc644491e918d",
+  "journal_events": 690,
+  "source": "Unmodified genuine PyBoy native emulator frame; input journal retained locally"
+ },
+ {
+  "file": "title-screen.png",
+  "frame": 280,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "9baeb6030430316c4f0b2efd8bda133cc43d3e116790bf110acd0d3a587c01af",
+  "inputs": "cold boot, no input",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "driving-hud.png",
+  "frame": 642,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "f6eb48e2b85d1f63f732bab219117d44d919cb294f39fe3978aa1344b9fa673b",
+  "inputs": "A for two frames, 300 frames, then A held for 60 frames (08:00)",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "golden-hour.png",
+  "frame": 648,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "7244396ea58bfe5d87d568f9ecb7c3cb822f7e866eb9981afec633970deea8be",
+  "inputs": "boot, play clock written to 446 s (18.5h) in emulator memory, 130 frames, A held 36 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "dusk-headlamps.png",
+  "frame": 648,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "afd4bcb37695f7f9795e2c8afe5dcc6ec3305651b1626686cdb1bbc6230d7a1b",
+  "inputs": "boot, play clock written to 500 s (19.75h) in emulator memory, 130 frames, A held 36 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "night-headlamps.png",
+  "frame": 648,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "66fab36df9815603c8aadb89ebed07c04b11ba2c1da5c7d30535aaaefb216929",
+  "inputs": "boot, play clock written to 596 s (22h) in emulator memory, 130 frames, A held 36 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "dawn.png",
+  "frame": 648,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "2688fdec3429a5408a75edb570f8f4c742c90df0216dd12b8bc2935b70faae63",
+  "inputs": "boot, play clock written to 937 s (6h) in emulator memory, 130 frames, A held 36 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "brake-smoke.png",
+  "frame": 586,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "ad871ffdfbd9a8c7d5d3eb8da0570d68c378d463b547c4b5d487e836a82e344b",
+  "inputs": "boot, A held 90 frames, B held 14 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "pickup-pop.png",
+  "frame": 779,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "a85caeab9edeb0fa725d5fb6cadad5103132479f6eae58dddd6e7099d4bc119b",
+  "inputs": "boot, A+B held 70 frames (leave car), courier moved to (508,212) with vitality 50 by emulator memory writes, 40 frames, Up held 150 frames until the pickup is collected, 7 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "parcel-pop.png",
+  "frame": 584,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "bfbe9766273aac4f99431f04489d4e15b290f22cd1fa44ea5a58722a42ed0f6a",
+  "inputs": "boot, Select, A (first job), car moved to the pickup by emulator memory write, Select, 6 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "police-lightbar.png",
+  "frame": 1189,
+  "rom_sha256": "fd5b866a687f8fe5aed7383dcee886313a0455c88328c3295719d780ba5d0ccb",
+  "png_sha256": "9ee34ed6ce3b55600ce337768b5041915705acf58cb9424ddd6f66229433d920",
+  "inputs": "boot (180 frames, A for two frames, 300 frames); then wanted level 3 and heat 20 written to emulator memory every frame while A is held two seconds in every three; a flashing frame of the pursuing patrol car",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "radio-welcome.png",
+  "frame": 352,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "f1027cf492417e2f4dfb6a91eaf1ae084e684c3b7deac0b8def33c46a038ceb0",
+  "inputs": "cold boot to the title (frame 280), A for 2 frames, 70 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "pause-menu.png",
+  "frame": 1066,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "986c19f2de825cb04279b5421c93b132224775897e669c46b46b9c50c5a1cd18",
+  "inputs": "as radio-welcome.png, then 700 frames, Start 2 frames, 12 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "pause-menu-scrolled.png",
+  "frame": 1102,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "60d822e62dc60d4e2050b44d8fd9e05ffc946e6b0904bff6db168048e62c85c0",
+  "inputs": "as pause-menu.png, then Down six times (2 frames each, 4 apart)",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "dispatch-board.png",
+  "frame": 1146,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "2fffe3a9d88f1788886d1c197733867c8c656225066e1452d9c96c2078b8275a",
+  "inputs": "as pause-menu-scrolled.png, then B, Select, Right twice",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "job-briefing.png",
+  "frame": 1220,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "8175c41e821f11f30db83eb91d5949a4142b237665ebd7d922130c69b9af7760",
+  "inputs": "as dispatch-board.png, then Left twice, A (contract 1), 60 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "tracer-flight.png",
+  "frame": 1108,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "40368af3a1816a44e20a39d629bd5b156018be32e73964ddbc7292d26db846e8",
+  "inputs": "boot, welcome call left to finish (480 frames), A+B held 70 frames (leave car), 30 frames, turned down (no lock-on), B 2 frames, 4 frames, then 4 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "engine-smoke.png",
+  "frame": 1092,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "24a3fe68436e10cb93e828515fa2a01721b6d3357b8dd5d214b6956a80cf133c",
+  "inputs": "boot, welcome call left to finish (480 frames), car damage written to 80 in emulator memory, A held 60 frames, 40 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "night-stolen-car.png",
+  "frame": 1128,
+  "rom_sha256": "3f5574b5800e68ab08eaeb1737b9a15e2880d8b1b6071badcc4e115cdaa4bdf9",
+  "png_sha256": "44b35769e3a4771f9f145a6eeb8ff4f63211f61dfd535d6ceb6daeecd143e9ce",
+  "inputs": "boot, welcome call left to finish (480 frames), play clock written for 22:00 and car colour set to blue in emulator memory, 130 frames, A held 36 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame of a GB Studio CLI 4.3.2 build in a Linux session; scripted inputs and any emulator memory writes listed here"
+ },
+ {
+  "file": "union-station-front-st.png",
+  "frame": 962,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "0b44b8792f10eb8cc1e3e650e7f215c4d2df1b052361714ce067e83715a91863",
+  "inputs": "boot, A on title, 480 frames for the welcome call to finish (car parked on Front St at Union Station)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "downtown-map.png",
+  "frame": 1076,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "3a656d721e156934fa954e61f8c7b25093e88a8e33a94f301e0257ed339839aa",
+  "inputs": "boot, 480 frames, Start, Down, A (City map), 90 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "cn-tower-rogers-centre.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "bd8bfb1363e977486d53d037c2583ec002df9a4a498c6dd33790dd1749ca4939",
+  "inputs": "boot, 480 frames, courier car written to (440,740) heading 0 in emulator memory, 90 frames: Front St W at John: CN Tower and Rogers Centre south of Front",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "city-hall-eaton-centre.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "076b48fb1258b814ad49b40b06490e232f04428f4e1d80f9903b70b04ddf5717",
+  "inputs": "boot, 480 frames, courier car written to (576,516) heading 0 in emulator memory, 90 frames: Queen St W at Bay: City Hall, Nathan Phillips Square, Old City Hall and the Eaton Centre",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "st-lawrence-flatiron.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "e35b6f7ab0957fb7488b930a070fd3dfabb9cf1df10cae160a1130f7a91fa141",
+  "inputs": "boot, 480 frames, courier car written to (700,740) heading 0 in emulator memory, 90 frames: Front St E: Gooderham Flatiron and St Lawrence Market",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "kensington-chinatown.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "6124176310fc224abdd6fc102acf077803ec9ac78d016c7ef1625b0a2f91cec2",
+  "inputs": "boot, 480 frames, courier car written to (384,344) heading 4 in emulator memory, 90 frames: Spadina Ave between College and Dundas: Kensington Market (west) and Chinatown (east)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "queens-park-legislature.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "ad077164fdadd0ca896ddc60932b68d82a7443eb93866c4ab07d79509a7e8f2f",
+  "inputs": "boot, 480 frames, courier car written to (512,220) heading 4 in emulator memory, 90 frames: Queen's Park: the Legislature and U of T",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "distillery-don-river.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "9e8af81c892e8080965a441496631729af2f6805cb950ac0ed6e00c3412113ed",
+  "inputs": "boot, 480 frames, courier car written to (820,760) heading 0 in emulator memory, 90 frames: Mill St: Distillery District and the Don River",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "liberty-village-fort-york.png",
+  "frame": 1052,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "35de26e6ca37281dab3593c64d8d57f53cb4c11c070aa763bbf9e72bbdb7d63a",
+  "inputs": "boot, 480 frames, courier car written to (200,700) heading 0 in emulator memory, 90 frames: King St W area: Liberty Village warehouses and Fort York",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "bigger-cars-traffic.png",
+  "frame": 1342,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "670a034de03d3d811041f38b1ea9fce5c3e300e9a4f930d5ef72f29cabbda11e",
+  "inputs": "boot, 480 frames, driving with A and Left/Right in 2-second turns for 380 frames (wanted held at 0), first frame with two road vehicles in view",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "station-prompt.png",
+  "frame": 1072,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "b8839ac31d3a3795a35fdda26b3dc0a71a4bd17f68c506cee67e669559fa1a5b",
+  "inputs": "boot, 480 frames, A+B held 70 frames (leave the car at Union), 40 frames: the HUD offers B for Line 1",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "ttc-menu.png",
+  "frame": 1094,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "8a6f2a4e4a25ac467a8b9ed925cd76dc87097fbdd58310d1329e32143021fea4",
+  "inputs": "then B: the Line 1 menu opens on the next station, not Union itself",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "queen-streetcar.png",
+  "frame": 2805,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "282c3d7e450d14a463cea56e2372d51e3a7ff1decac522ac90ab4e60db8b78be",
+  "inputs": "boot, 480 frames, left the car, courier written to the Queen and Yonge platform (676,556), B, A (wait); the frame 30 frames before boarding at frame 2834: the 501 streetcar pulling in",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "ferry-arriving.png",
+  "frame": 1904,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "1c171b7f3a227d1a1436720889afc6970d7115b13459cdc075af5b97bf036a8f",
+  "inputs": "boot, 480 frames, left the car, courier written to the ferry terminal (584,832), B, A, 794 frames: the ferry comes in over the harbour",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "lock-on.png",
+  "frame": 1124,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "ae3612d75ff0e09d1083732aaa853ddb6a864147aed1ec69461131403f953f3f",
+  "inputs": "boot, 480 frames, left the car, walking a square for 62 frames until the pistol locks on",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "sticky-lock-firing.png",
+  "frame": 1133,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "6d64cee4776ea2ca0865da5487330a1eec256eb38f0cc0ee8e1820eae79c5557",
+  "inputs": "then B held 3 frames and B+Down 6 frames: the lock stays on its target while the courier strafes",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "free-aim-sight.png",
+  "frame": 1116,
+  "rom_sha256": "b72a8adcce094d6904bccd171305c073a119a5b2063a13be3f3dc8210f6c2a7a",
+  "png_sha256": "5b676657d12c0bfadf8a05a387dcb8c6478f4fb802334fad26145e0fd5ee90b4",
+  "inputs": "boot, 480 frames, left the car, courier written to the Queen St W sidewalk (452,488), faced right with nothing to lock, B held 12 frames: the blinking sight shows where the pistol fires",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 development build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-none-driving.png",
+  "frame": 992,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "92cd709cb342179c69879734a6d6540e7e4a349dd748159b4d641a3a0f0e2e0d",
+  "inputs": "boot, 480 frames, A held 27 frames until driving at speed with no pop-up",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-notice.png",
+  "frame": 1026,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "fdbacae96ebe027dac9b810478d3e80d03a0a9e0acfb414e0ec46a644e7f510d",
+  "inputs": "then A+Right held 31 frames until the first pop-up (a kerb strike notice)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-street-name.png",
+  "frame": 986,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "419953376d4a14b651da9f74c923b95aa6b4d3e31baf81b2b6b7efa49e5a8082",
+  "inputs": "boot, 480 frames, car written to Spadina Ave (380,620) heading north, 20 frames, A held 1 frames: the new street name pops up",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-job-accepted.png",
+  "frame": 1051,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "05325c477f710f01937ca5e5600099e007906ab48f862744a7538c319d54b47b",
+  "inputs": "boot, 480 frames, Select, A (contract 1), 70 frames: the briefing card above the next stop and the job row",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-job-driving.png",
+  "frame": 1199,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "42916d80e5f00e4278b54b4b6bdc5d99093deb5e0ec1987d0a40c3dc0a710584",
+  "inputs": "then A held 145 frames: once the call ends and the stop has been shown, driving clears the screen",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-idle-status.png",
+  "frame": 1295,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "068c626ba32b5f0b7e9a98f8ee444d6d92d61cbc913cb45a1ae639b7cbe814ac",
+  "inputs": "boot, 480 frames, A+B 70 frames (leave the car), courier written to (452,488), Right 20 frames, then 240 frames standing still",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "hud-shot-ammo.png",
+  "frame": 1319,
+  "rom_sha256": "6af837c18c6afedf7b68abc9131e048eeaabdf57e214a1feac5879923ed96265",
+  "png_sha256": "ac251b78ff686fd0dae94ea37aa2a2c73fe7b223b91eef58fc42e41d0936d0b4",
+  "inputs": "then walking right until clear (1 frames), B 4 frames, 6 frames: the shot pops up the ammunition count",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 pop-up HUD build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-briefing.png",
+  "frame": 1319,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "1f124e8b08cd95416f62de03241289b8e24545357e98e51a67c16e78f63b311e",
+  "inputs": "then A (accept contract 1), 28 frames: Rosa briefs the first job",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-client.png",
+  "frame": 1883,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "dc81f777d71bc3b480815315f5589f30f1fb464c642a78d2a571b96795523adf",
+  "inputs": "then the car written to St Lawrence (712,740), Select (deliver), B, 29 frames: Sal answers through the caller card",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-locked.png",
+  "frame": 1284,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "3caa4235ea0440f8a2d7dc462b72d3bed6e92dbdc2d64db36d1d36a9d8b1b3c5",
+  "inputs": "boot, deliveries 6 and contracts 1-6 written as done, Select, right twice: contract 9 waits for job 7",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-chapter.png",
+  "frame": 1684,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "1ac024ac778fefe70bf31f2f73dc6084a197604b79c2703ba21e5ab185ac96a9",
+  "inputs": "then left twice, A (contract 7), Select at the depot, car written to City Hall, Select, car written to the depot, Select, B, 180 frames: contract 7 opens the second chapter",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-rival.png",
+  "frame": 1723,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "6f66a2560579b4458988a0ff727a00696af2c9cfa5e3b9b3ac393f5c931312a8",
+  "inputs": "boot, deliveries 8 and contracts 1-8 written as done, Select, A (contract 9), Select at the depot, car written to Kensington, Queen West and Dufferin with Select at each, B, 187 frames: Dev of Rushly",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-torn.png",
+  "frame": 2027,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "7562bd0168f437a63febcdebf8b20ef9910592ddb9e32d9704b8b5165527a9b4",
+  "inputs": "boot, deliveries 54 and contracts 1-54 written as done, Select, A (contract 55), Select at the depot, car written to Kensington, Dufferin, Queen West, Queen East and the depot with Select at each, B, 327 frames: what Margo did with the offer",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-dev-quits.png",
+  "frame": 2483,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "c0a8469c899c8dc72f344cd1d070ecfa373b848a554f89d3dd359548f4459630",
+  "inputs": "then 454 frames: the festival-week chapter opens; Dev quits Rushly",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "story-dev-joins.png",
+  "frame": 2769,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "0b0351ee9c26f32936138dcecee44d3f58be5fdcecd87018a5c76d0659d8c4fa",
+  "inputs": "then 284 frames: Dev, now at the depot",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 story build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "water-islands.png",
+  "frame": 1471,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "cbe033a1140999a0de010e1d030bc9128a36c8ce040ebf121c2b0641039cd099",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written beside Centre Island (700,900), 240 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "water-islands-next.png",
+  "frame": 1489,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "9d572bacf6d5808933c8509cdff2a721136f42d0312c6431966152e90486d035",
+  "inputs": "then 16 frames after water-islands.png: the next ripple frame",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "water-don.png",
+  "frame": 1731,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "d5b754559c3c07c20662d3cd526af54b339353bd5c4b037ea29fe578bc14b653",
+  "inputs": "then (after water-islands-next.png) the car written beside the Don (868,500), 240 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "screen-yonge-dundas.png",
+  "frame": 1531,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "62e10000c50580670ac0c0b5871ae35ff99d03c4956b1b4b03fae4070a48a3d0",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Yonge St south of Dundas (640,470), 300 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "screen-yonge-dundas-2.png",
+  "frame": 1567,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "fe3b746b4ab9242f12328dedddafe3a931e858f6bcf1764e96f73d3ffc5c59ea",
+  "inputs": "then 32 frames after screen-yonge-dundas.png: two screen frames later",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "roofs-front-st.png",
+  "frame": 1531,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "0626eb9dbf84fecd581f266b2ca0f15b1470f137b59e83a8f8a9fc3b0ccb4b8f",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Front St West (320,790), 300 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-near.png",
+  "frame": 1274,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "03ba06ea3af67f409083cdc828a4270661bc80604191d8817b21cc5c6ec1b12d",
+  "inputs": "boot, A on the title, the welcome call left to finish, cash 120 and two stars written, car written on King St West (300,626): the bay announces itself",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-done.png",
+  "frame": 1309,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "070bf9a7ef5dffe711b2ee1145d3e707506482684fbf22b581a46ce63f72ccbe",
+  "inputs": "then the car written into the bay (208,626), stopped: stars cleared, repaired, $25 paid",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-radio.png",
+  "frame": 1717,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "512c2f76808178dd4d6a3bdaa6deb263c924bba413aca12636a5600497dbee51",
+  "inputs": "then Rosa on the radio",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "parcel-seen.png",
+  "frame": 1876,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "681a388accf20fc87db6a7158c6588b3a98978b39b4f8c902bbb1136077e7b7e",
+  "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (540,280), walked north beside Queens Park and a step east: a lost parcel on the lawn",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "parcel-found.png",
+  "frame": 1924,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "33bba0ceadffac804894a7d91eb4dad237acc22013fa7cc7c2487e13b5024761",
+  "inputs": "then walking east onto it",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "panic-before.png",
+  "frame": 3901,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "bc470f5d3fa2cad25d1aa7bd267c3494f1264da68a6ac14bf3fe35dfd072d1c7",
+  "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (380,560) among walkers",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "panic-after.png",
+  "frame": 3924,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "b5d4b441351a644c4df253135dda5375213bbcfdb97bbb258e3bd97ce0dcf6cd",
+  "inputs": "then B (a shot): the walkers nearby run",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "water-west.png",
+  "frame": 1861,
+  "rom_sha256": "2d2246d29e0ab8b747f97453a7b13963785a2bebc107790ebf13917b77729b56",
+  "png_sha256": "935d1f753fc48248957c74b6eb50d8129c0e1a6a83e30f5ebbea344e172e6910",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then written by the lake (500,904), 300 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 gameplay and scenery build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "before-water-islands.png",
+  "frame": 1473,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "6cbfa4d4d2b8cfce97381c134bf06d5087d8411e5ca3f0c697d9b68a119e6f6a",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written beside Centre Island (700,900), 240 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "before-roofs-front-st.png",
+  "frame": 1533,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "ab237253078338def1068780b9f8896ba066e2461853f97a56bdb561c36f600c",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Front St West (320,790), 300 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "before-water-west.png",
+  "frame": 1863,
+  "rom_sha256": "bef819490bf15b3088ba8dac0dda719b03d830914ae22eaeaa4004e6d48432eb",
+  "png_sha256": "38f2f527b378d99db51ffdad10e8095af9cfddbc15fe77265de13779c6590324",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then written by the lake (500,904), 300 frames",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (story) build, for comparison; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-done-queensway.png",
+  "frame": 1639,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "f91f03d1520332666d42a9419a8a969485cde8897bc73afa02c62bbb216d2c62",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then cash 120 and two stars written, car written at (354, 626): the West (The Queensway) bay announces itself; then the car written into the bay (264, 626), stopped",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-near-bloor-west.png",
+  "frame": 2014,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "98221abbc41da01b53291405fe19ea8a1516483c4feab09d1df4c32995eaaa96",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at the west edge of the core (60,640) heading west, A held 120 frames into the West scene, then cash 120 and two stars written, car written at (354, 626): the West (The Queensway) bay announces itself; then the car written into the bay (264, 626), stopped; then the car written at the West scene's west edge (60,640) heading west, A held 120 frames into High Park, then cash 120 and two stars written, car written at (300, 338): the High Park (Bloor St West) bay announces itself",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-done-bloor-west.png",
+  "frame": 2049,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "a4e38028e84b501b6033f6403e7294d18362bf47d9a16c9dec6d9b20ad4c8e9a",
+  "inputs": "then (after spray-near-bloor-west.png) the car written into the bay (360, 338), stopped",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "spray-done-queen-east.png",
+  "frame": 1639,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "cc0194fa53be67b7a27351a7724c170a0cdb8b10ff6db9fdcd8e07715c85c1e6",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at the east edge of the core (970,528) heading east, A held 120 frames into the East scene, then cash 120 and two stars written, car written at (540, 514): the East (Queen St East) bay announces itself; then the car written into the bay (456, 514), stopped",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "pause-parcels.png",
+  "frame": 2058,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "5c382923a0478fa365a27ce39b6d2abb80e4a9a608ea7eef565e33edc986ed3b",
+  "inputs": "boot, A on the title, the welcome call left to finish, A+B held to step out, courier written on foot at (540,280), walked north beside Queens Park and east onto the lost parcel, then Start",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 spray-bay build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "qp-legislature.png",
+  "frame": 1471,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "799ba98f2521aac3f89046f2c690a65fcfb7ce71ca14d7e0b9c9214117a4cab2",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "qp-park.png",
+  "frame": 1713,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "4a3d5bc7437ffe078a694337243e67074975979b678952563b8e694ff7456f7f",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "qp-north.png",
+  "frame": 1955,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "23bf9a5cb5b6a76af41e1a3faa41bb280c383dce9491004c7f8ff0d20060368f",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "qp-drive-onto-lawn.png",
+  "frame": 1335,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "f9a8e8b5a8b6e04dea632008b46eb2a7a4b712d4558d1f10575238c7c2fd946a",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "trinity-bellwoods.png",
+  "frame": 2197,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "e4c696465f1b1dd7e66d6986dec10d998dba9b62c14a8afeab57bd1588aafdc7",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "allan-gardens.png",
+  "frame": 2439,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "f10361fd6d5b3d063ed2f75acc3b4355af100e02a533f85b4677baa0280a22a3",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "grange-park.png",
+  "frame": 2681,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "9175a0ba018d852b0f1e08cbfb794f374c7bcab13860bf3fa8bcf5d145c69eae",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "sorauren-park.png",
+  "frame": 1801,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "4b75a66e992c784714e57cbe95fc63de94718cbd4b4d6790abae0014f95f9fa8",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "high-park-pond.png",
+  "frame": 2373,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "4f266f7ecb3630759e1ef9fa23c703526fbf739de0b305b8be03da822eef578b",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "high-park-zoo.png",
+  "frame": 2615,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "e5a295cd65e8a862c19319bee800b75aee59209380b7bb136eb036375a8f318e",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "withrow-park.png",
+  "frame": 1801,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "de2f3b8797d1fb3b79e4376b9cef5035253d7aa68085b155ab3be1810b250012",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow; then car written at (304,144) facing north, 240 frames: Withrow Park (East scene, entered from the core's east edge at (970,528), A held 120 frames)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "greenwood-park.png",
+  "frame": 2043,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "f6144153f60de1a1fe044c5dec66a2608085c72b55b47f79ed1bc393b619f07c",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Hoskin Ave (436,176) facing east, A held 44 frames: over the crescent onto the park; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge); then car written at (800,470) facing north, 240 frames: the High Park zoo paddocks and the meadow; then car written at (304,144) facing north, 240 frames: Withrow Park (East scene, entered from the core's east edge at (970,528), A held 120 frames); then car written at (880,312) facing north, 240 frames: Greenwood Park",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the 2026-10-07 parks build; staging writes to emulator memory are listed in inputs"
+ },
+ {
+  "file": "before-qp-legislature.png",
+  "frame": 1471,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "b6767f840282b00c842ffa03bc336353b290d819aa44fc3e0c78ab08bb20f1a3",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-qp-park.png",
+  "frame": 1713,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "c562455b6c6ba4711eda90fc7af39069c51bea6a2f59bb952a42772f4814c47c",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-trinity-bellwoods.png",
+  "frame": 2197,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "9d27e11639dea65c0207c5e123587bc439e7db5f73172f0911afcb812e78e780",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-allan-gardens.png",
+  "frame": 2439,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "50bfd0d571d480f8f458eb4a41347aa1e9cca34195e07e55cd69c42f6444a98b",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-high-park-pond.png",
+  "frame": 2373,
+  "rom_sha256": "536026505bfe732f0c5778d5f1c035c5cc1fae308123da4b972dec2e9155acde",
+  "png_sha256": "9a1310cea6e5ca237a44bffa5a5c882ec5804a74b26d0201aeda52dcc7f4dce4",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (512,268) facing north, 240 frames: the Legislature from College St at University Ave; then car written at (476,186) facing north, 240 frames: inside Queen's Park between the statue and the Legislature; then car written at (512,112) facing north, 240 frames: the crescent's north end, Queen's Park and the ROM; then car written at (176,464) facing north, 240 frames: Trinity Bellwoods Park; then car written at (668,344) facing north, 240 frames: Allan Gardens; then car written at (412,470) facing north, 240 frames: Grange Park and the AGO; then car written at (640,456) facing north, 240 frames: Sorauren Park (West scene, entered from the core's west edge at (60,640), A held 120 frames); then car written at (690,470) facing north, 240 frames: Grenadier Pond (High Park scene, entered from the West's west edge)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (spray bay) build, same inputs, for comparison"
+ },
+ {
+  "file": "district-financial.png",
+  "frame": 1493,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "7224f446b6f163ac2c4044cafba10aefa2eea2d04b1dceb779b3c11f52654e79",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-discovery.png",
+  "frame": 1755,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "4f97b52ea825b019216df85b61422ede3e6de989ced4f4ab58a696a01a4731ea",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-museums.png",
+  "frame": 2017,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "30ec04dcd16f3829bb1a1fd28518f2a9696801f888acbc1ab47794089b5a3106",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-convocation-hall.png",
+  "frame": 2279,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "022c78110bd72b7928151acde9f8d486fe465a41f697c617bd8065f53b033c27",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-entertainment.png",
+  "frame": 2541,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "678fd1adc9494a355132089e4b11b1d0afd2cc2feb848630a12231d00d9f6b8e",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-kensington-chinatown.png",
+  "frame": 2803,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "6009d9a31bbb83ce6cb5b4402c86888f0553f4287fbd10f1da5b813b0482f055",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-st-james.png",
+  "frame": 3065,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "2fde32ece6b7ed4d1a719360d57d3285daf0c2a56cc3d7aa1c9744c7a6f22406",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-little-italy-portugal.png",
+  "frame": 3327,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "eaf57f3d7698eae95e5a2be2c51b37c381e7e4c70758013c7964bec913ed8b0e",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East; then car written at (160,356) facing north, 260 frames: Little Portugal (blue houses) and Little Italy (green and red awnings) on Ossington",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-cityplace-waterfront.png",
+  "frame": 3589,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "df863bd1d0f36b3d535cd0c1511b363f177a3d678e36329dc250d5bfd5e264db",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall; then car written at (396,356) facing north, 260 frames: Kensington Market and Chinatown either side of Spadina Ave; then car written at (704,652) facing north, 260 frames: St James Cathedral and St James Park on King St East; then car written at (160,356) facing north, 260 frames: Little Portugal (blue houses) and Little Italy (green and red awnings) on Ossington; then car written at (336,816) facing north, 260 frames: CityPlace towers and the Queens Quay boardwalk",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "district-greektown.png",
+  "frame": 1823,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "98a5bb597ba1ae54beaad83213fa1a02f9a28769c7be65844956aa705e04d080",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 70 frames: crossing Spadina; then A held 66 more frames: past the AGO; then car written at (136,76) facing north, 260 frames: Greektown on the Danforth (East scene, entered from the core's east edge at (970,528), A held 120 frames)",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "nav-junction.png",
+  "frame": 1317,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "c4a74e23380646de278e459e46956a72e2dbd3c9a7f4a3c1b660f637905381b0",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 80 frames: crossing Spadina",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "nav-landmark.png",
+  "frame": 1383,
+  "rom_sha256": "2ed1bb1a71760812589a3ed754de2703b6b5019167222c2dc950b4ad5694fb94",
+  "png_sha256": "91a5c7a1080a7e802c92f81863243636c72b5d91f4a6bca6bbde028b771ce761",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written on Dundas St W at (300,412) facing east, A held 80 frames: crossing Spadina; then A held 64 more frames: past the AGO",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the distinct-districts candidate"
+ },
+ {
+  "file": "before-district-financial.png",
+  "frame": 1491,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "3af12fd33e9117171a6f1e1c4b428c3d9802977ee7572d393f93335d732f2381",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-district-discovery.png",
+  "frame": 1753,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "af7438adf5c7a503722b8dd9f4e895d53206716587a8f99a24bae3cb2494dbde",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-district-museums.png",
+  "frame": 2015,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "649db79098ca3704094bdefd3baf14439d61c5dcc9b39949fce2d9bbfc6d43dc",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+ },
+ {
+  "file": "before-district-entertainment.png",
+  "frame": 2539,
+  "rom_sha256": "787de9dde19cbb97bc5b42a6d83496bf6c2cf560ab7e956afb22c241e6ea0bc6",
+  "png_sha256": "553b272b3dcd52fce83d4c2d2183914963923ad991ad2339feb4b5085e83d93e",
+  "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
+  "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+ }
 ]

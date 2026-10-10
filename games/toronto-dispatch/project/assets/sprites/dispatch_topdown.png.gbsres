@@ -5672,6 +5672,78 @@
               ]
             },
             {
+              "id": "1a1f4b08-e83c-545d-8ff1-dc70ba290c2a",
+              "tiles": [
+                {
+                  "id": "3c4224cc-642a-524d-9d61-62fce62b4055",
+                  "x": 4,
+                  "y": 16,
+                  "sliceX": 84,
+                  "sliceY": 128,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 1,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "3c856c7b-3a88-55d6-95a2-ba86f8a88b60",
+              "tiles": [
+                {
+                  "id": "0ebe8db9-9f0a-59f5-814f-e52ecd245a72",
+                  "x": 4,
+                  "y": 16,
+                  "sliceX": 100,
+                  "sliceY": 128,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 1,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "e9b3b00e-827c-566f-8ce6-df98e0750667",
+              "tiles": [
+                {
+                  "id": "1fc5e2b4-4b25-5d81-888b-bbf11cb87726",
+                  "x": 4,
+                  "y": 16,
+                  "sliceX": 116,
+                  "sliceY": 128,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 1,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
+              "id": "22defdb1-89d2-5db3-9b66-9c675a673f1e",
+              "tiles": [
+                {
+                  "id": "1184a30d-fa71-509c-b6a1-24c54becb7d0",
+                  "x": 4,
+                  "y": 16,
+                  "sliceX": 132,
+                  "sliceY": 128,
+                  "flipX": false,
+                  "flipY": false,
+                  "palette": 0,
+                  "paletteIndex": 1,
+                  "objPalette": "OBP0",
+                  "priority": false
+                }
+              ]
+            },
+            {
               "id": "c171c184-b114-5bc5-a05a-cc1e235fc260",
               "tiles": [
                 {
@@ -7982,7 +8054,7 @@
   "filename": "dispatch_topdown.png",
   "width": 256,
   "height": 320,
-  "checksum": "6c838d5e2b7ad5364c586c2d2ca7249db5223135",
+  "checksum": "cdebbf626932a9506e3e2422351c92e423f2c9fa",
   "numTiles": 0,
   "canvasOriginX": 8,
   "canvasOriginY": -8,

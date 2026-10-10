@@ -1622,6 +1622,42 @@
     },
     {
       "index": 180,
+      "name": "courier_run_0",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 181,
+      "name": "courier_run_1",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 182,
+      "name": "courier_run_2",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 183,
+      "name": "courier_run_3",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 184,
       "name": "player_car_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1630,7 +1666,7 @@
       ]
     },
     {
-      "index": 181,
+      "index": 185,
       "name": "player_car_lit_1",
       "palette": "courier_vehicle",
       "size": [
@@ -1639,7 +1675,7 @@
       ]
     },
     {
-      "index": 182,
+      "index": 186,
       "name": "player_car_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1648,7 +1684,7 @@
       ]
     },
     {
-      "index": 183,
+      "index": 187,
       "name": "player_car_lit_3",
       "palette": "courier_vehicle",
       "size": [
@@ -1657,7 +1693,7 @@
       ]
     },
     {
-      "index": 184,
+      "index": 188,
       "name": "player_car_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1666,7 +1702,7 @@
       ]
     },
     {
-      "index": 185,
+      "index": 189,
       "name": "player_car_lit_5",
       "palette": "courier_vehicle",
       "size": [
@@ -1675,7 +1711,7 @@
       ]
     },
     {
-      "index": 186,
+      "index": 190,
       "name": "player_car_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1684,7 +1720,7 @@
       ]
     },
     {
-      "index": 187,
+      "index": 191,
       "name": "player_car_lit_7",
       "palette": "courier_vehicle",
       "size": [
@@ -1693,7 +1729,7 @@
       ]
     },
     {
-      "index": 188,
+      "index": 192,
       "name": "player_van_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1702,7 +1738,7 @@
       ]
     },
     {
-      "index": 189,
+      "index": 193,
       "name": "player_van_lit_1",
       "palette": "courier_vehicle",
       "size": [
@@ -1711,7 +1747,7 @@
       ]
     },
     {
-      "index": 190,
+      "index": 194,
       "name": "player_van_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1720,7 +1756,7 @@
       ]
     },
     {
-      "index": 191,
+      "index": 195,
       "name": "player_van_lit_3",
       "palette": "courier_vehicle",
       "size": [
@@ -1729,7 +1765,7 @@
       ]
     },
     {
-      "index": 192,
+      "index": 196,
       "name": "player_van_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1738,7 +1774,7 @@
       ]
     },
     {
-      "index": 193,
+      "index": 197,
       "name": "player_van_lit_5",
       "palette": "courier_vehicle",
       "size": [
@@ -1747,7 +1783,7 @@
       ]
     },
     {
-      "index": 194,
+      "index": 198,
       "name": "player_van_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1756,7 +1792,7 @@
       ]
     },
     {
-      "index": 195,
+      "index": 199,
       "name": "player_van_lit_7",
       "palette": "courier_vehicle",
       "size": [
@@ -1765,7 +1801,7 @@
       ]
     },
     {
-      "index": 196,
+      "index": 200,
       "name": "player_motorcycle_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1774,7 +1810,7 @@
       ]
     },
     {
-      "index": 197,
+      "index": 201,
       "name": "player_motorcycle_lit_1",
       "palette": "courier_vehicle",
       "size": [
@@ -1783,7 +1819,7 @@
       ]
     },
     {
-      "index": 198,
+      "index": 202,
       "name": "player_motorcycle_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1792,7 +1828,7 @@
       ]
     },
     {
-      "index": 199,
+      "index": 203,
       "name": "player_motorcycle_lit_3",
       "palette": "courier_vehicle",
       "size": [
@@ -1801,7 +1837,7 @@
       ]
     },
     {
-      "index": 200,
+      "index": 204,
       "name": "player_motorcycle_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1810,7 +1846,7 @@
       ]
     },
     {
-      "index": 201,
+      "index": 205,
       "name": "player_motorcycle_lit_5",
       "palette": "courier_vehicle",
       "size": [
@@ -1819,7 +1855,7 @@
       ]
     },
     {
-      "index": 202,
+      "index": 206,
       "name": "player_motorcycle_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1828,7 +1864,7 @@
       ]
     },
     {
-      "index": 203,
+      "index": 207,
       "name": "player_motorcycle_lit_7",
       "palette": "courier_vehicle",
       "size": [
@@ -1837,7 +1873,7 @@
       ]
     },
     {
-      "index": 204,
+      "index": 208,
       "name": "player_scooter_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1846,7 +1882,7 @@
       ]
     },
     {
-      "index": 205,
+      "index": 209,
       "name": "player_scooter_lit_1",
       "palette": "courier_vehicle",
       "size": [
@@ -1855,7 +1891,7 @@
       ]
     },
     {
-      "index": 206,
+      "index": 210,
       "name": "player_scooter_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1864,7 +1900,7 @@
       ]
     },
     {
-      "index": 207,
+      "index": 211,
       "name": "player_scooter_lit_3",
       "palette": "courier_vehicle",
       "size": [
@@ -1873,7 +1909,7 @@
       ]
     },
     {
-      "index": 208,
+      "index": 212,
       "name": "player_scooter_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1882,7 +1918,7 @@
       ]
     },
     {
-      "index": 209,
+      "index": 213,
       "name": "player_scooter_lit_5",
       "palette": "courier_vehicle",
       "size": [
@@ -1891,7 +1927,7 @@
       ]
     },
     {
-      "index": 210,
+      "index": 214,
       "name": "player_scooter_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1900,7 +1936,7 @@
       ]
     },
     {
-      "index": 211,
+      "index": 215,
       "name": "player_scooter_lit_7",
       "palette": "courier_vehicle",
       "size": [
