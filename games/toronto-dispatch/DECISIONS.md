@@ -327,6 +327,19 @@ Accepted (implemented; the details are working choices made without asking, per 
 - Proposals (not adopted): University College and King's College Circle (no room between Spadina and the crescent at this compression), the rainbow crosswalks at Church and Wellesley (Church St is not on the map), Bay St, a street-name sign at each junction in the art, park benches and lamps along park paths, area names under the city map's cursor, and a denser building grid in the outer scenes (would change routes).
 - Pending human checks: whether the districts read as themselves on the Chromatic, whether the pop-ups are too frequent while driving, and the sidewalk detail's legibility at 1x.
 
+## Soundtrack, 2026-10-10
+
+The user asked for better music. Chosen and implemented (see [docs/AUDIO.md](docs/AUDIO.md)):
+
+- Four original songs replace the single 16-bar City Shift loop: **Skyline Call** on the title screen (D major indie-rock anthem, about 120 BPM, 32 bars), **King Street Iron** in free roam by day (F major soca groove with a steelpan-style lead and the iron, a nod to Caribana, about 137 BPM, 40 bars), **Six After Dark** from 19:00 to 06:30 (C minor late-night R&B, about 87 BPM, 32 bars) and **Gardiner Heat** at two or more police stars (tense E minor, about 160 BPM, 32 bars). Each has sections (verse, chorus or bridge, breakdown or tag) and loops past its intro. All are original; the Toronto flavour comes from genre idioms only, with no borrowed melody, jingle or TTC chime.
+- Menus stay quiet rather than getting their own loop: pause, map, board, transit, result and busted/wasted screens pause the song in place, which leaves the menu, completion and failure cues clear.
+- Music uses all four channels: lead on CH2 (no effect uses it), chords and counter-lines on CH1, bass on CH3 with new wave shapes, drums on CH4. Effects still mute only their own channels while they play.
+- Engine: in music + effects mode the continuous drone, which used to hold CH1 for the whole drive, is replaced by a short, quiet rev when pulling away and at each faster speed stage (at most one per half second). Effects-only mode keeps the steady drone because no music shares CH1 there. Braking hiss and the six event cues are unchanged.
+- Switching: a new world song must be wanted for one second (three when the chase ends with one star left) and starts only when no effect is playing or queued; leaving the title switches at once. The wanted song keeps being tracked behind menus, so after an arrest the day or night theme returns as play resumes. Songs restart from their top instead of crossfading.
+- Night follows the headlamp rule (`td_daynight_lights`) so the music and the lit car change together.
+- Data: each song is a generated, autobanked C file (3.9-6.1 KB) from a JSON score in `project/original-audio/songs/`; the shared instrument palette, drum kit and effects are in `soundtrack.json`. The old `city_shift.json` is retired (its cues, braking and engine pitches moved unchanged).
+- Pending human checks: the four-channel mix on the Chromatic speaker and headphones, whether revs are noticeable enough, cue clarity over busier music, and how the chase and dusk/dawn changes feel in play.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

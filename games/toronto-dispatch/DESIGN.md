@@ -94,7 +94,7 @@ Use original low-resolution pixel art: readable vehicles, warm brick blocks, gla
 
 The target Game Boy Color display is 160 × 144 pixels. Palette, tile, sprite, VRAM, scene, and ROM limits must be checked against the installed toolchain; do not design a desktop-resolution asset pack and scale it down later. Reserve screen space for a small HUD without hiding approaching traffic.
 
-The native prototype now includes the original City Shift score, vehicle engine pitches, braking noise and impact, pickup, completion, transit, failure and menu cues. The pause menu offers music + effects, effects only and silent modes. Captured native PCM verifies output and mode behaviour; human listening, mix quality, and physical speaker/headphone checks remain pending. See [audio source and integration](docs/AUDIO.md). Moving-streetcar audio remains part of the planned streetcar milestone.
+The native prototype now includes four original songs that follow play (a title theme, a soca-flavoured day theme, a late-night R&B theme from dusk to dawn and a police-chase theme at two or more stars) on all four sound channels, short engine revs on launches and upshifts (a steady engine drone in effects-only mode), braking noise and impact, pickup, completion, transit, failure and menu cues. The pause menu offers music + effects, effects only and silent modes. Captured native PCM verifies output and mode behaviour; human listening, mix quality, and physical speaker/headphone checks remain pending. See [audio source and integration](docs/AUDIO.md). Moving-streetcar audio remains part of the planned streetcar milestone.
 
 ## Engine feasibility before production
 

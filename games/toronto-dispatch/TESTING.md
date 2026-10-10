@@ -1,5 +1,16 @@
 # Testing record
 
+## Soundtrack — candidate, 2026-10-10
+
+GB Studio CLI build and PyBoy evidence only, on `codex/toronto-overhaul` after `8729fb3`. "Previous" is a CLI build of `8729fb3` (SHA-256 `98cf64ef…`). Details and reproduction in [docs/AUDIO.md](docs/AUDIO.md).
+
+- ROM: `make:rom` of this source, 524,288 bytes, SHA-256 `086d36d266e08b6367ff5ac4c0219030251d6c6f7eaa7471b3b70e57ab67a541`. Memory guard passes: heap `D54B`, stack `DF00`, 2,485 bytes of reserve (guard 1,024; previous 2,492). ROM use 433,513 -> 453,613 bytes; the four songs sit in their own autobanked files (banks 19 day, 21 title, 23 chase, 24 night; `td_audio` 22). `music_pause` and `music_init_driver` share bank 12 and the pause wrapper is in `_HOME`.
+- `make check` passes, including `create_audio.py --check` (title 32 bars/6,108 B, day 40/5,746, night 32/3,990, chase 32/5,148).
+- PCM (PyBoy 2.7.0, `scripts/capture_soundtrack.py`; memory writes for stars/heat, the clock and NR51 channel routing are listed in its manifest): the title theme on the title screen, the day theme after A, the chase at three stars, the day theme again after the stars clear and the night theme after moving the clock; every song sounds on all four channels when each is routed alone; tempos from onsets 120, 136 (day CH1/CH4), 80 (half of 160) and 87 BPM; the brake hiss (CH4) and revs (CH1) sound over the music; menu cue with the song paused; effects-only and silent give zero samples where expected and the drone while driving in effects-only.
+- Song changes (frames after the state change): title to day 9 after A; day to chase 61 after two stars; chase to day 181 after dropping to one star; day to night 112 after setting 19:00 and back to day 119 after 06:29; chase to day 1 frame after resuming from an arrest that cleared the stars. The title theme's loop returns to order 1, past its intro (envelope match r = 0.93 at 8.25 s).
+- Pacing, PyBoy, scene updates per second counted at `toronto_update` with attention held at zero, previous -> this build: title 60.00 -> 60.00, parked 59.67 -> 59.60, driving 57.80 -> 57.63, driving and turning 58.17 -> 58.23.
+- Not verified: hardware or cartridge audio, mix balance and listening quality, plugin build, and human judgement of the rev level, cue clarity and the chase/dusk changes in play.
+
 ## Main build flashed to Chromatic — 2026-10-10
 
 - Source: `main` at `afa4d85` (`Distinct districts, navigation names and detailed sidewalks`); checkout was clean and already up to date.
