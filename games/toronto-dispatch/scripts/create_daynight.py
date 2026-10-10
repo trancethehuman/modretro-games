@@ -36,8 +36,9 @@ NIGHT_BG = {
     '172B38': '101828',  # ink
     '79AFAC': '2F6680',  # lake and stone
     'D69E72': 'B07258', '8BBAD4': '5C82AE', 'C5A9A1': '8E7090',
-    'D2C895': 'A49468', '9FC9D0': '6894AC',  # facades
+    'D2C895': 'A49468',  # facades
     '8FB56A': '4A6E50', '4D7A52': '2A4A3E',  # parks
+    'D2E89A': '7E9670', '5F9A3E': '345E3C',  # gardens
 }
 # Sprites dim less than the city so traffic and people stay readable; the
 # beacon/pickup/taxi yellow never dims. Player palettes dim least.

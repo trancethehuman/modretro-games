@@ -14,6 +14,7 @@ import core2x as L
 import world2x
 from streetcar_art import paint_streetcar_stops
 import city_kit
+import greenery
 
 ROOT = Path(__file__).resolve().parents[1]; PROJECT = ROOT / 'project'
 WIDTH, HEIGHT = L.WIDTH, L.HEIGHT
@@ -76,7 +77,16 @@ ZEBRAS = False
 # Colour identities by neighbourhood (palette slots; no tiles of their own):
 # houses, and shop rows whose awnings carry the colours.
 HOUSE_SLOT = {'LITTLE PORTUGAL': 2, 'PALMERSTON': 1, 'RIVERDALE': 1}
-SHOP_SLOTS = {'LITTLE ITALY': [6, 1], 'WEST QUEEN WEST': [5, 3, 4, 1, 2]}
+# Greenery by neighbourhood kind (greenery.py): front hedges and pickets on
+# house streets, beds by shops, hedges by towers and works, railings round parks.
+GREEN_PARKS = ('park', 'queens_park', 'allan_gardens', 'moss_park', 'dufferin_grove')
+GREEN_KINDS = {'houses': 'houses', 'cabbagetown': 'houses', 'brick': 'houses',
+               'shops': 'shops', 'market': 'shops', 'chinatown': 'shops', 'entertainment': 'shops',
+               'old_town': 'shops', 'st_lawrence': 'shops', 'distillery': 'shops',
+               'apartments': 'towers', 'regent': 'towers', 'towers': 'towers', 'cityplace': 'towers',
+               'financial': 'towers', 'discovery': 'towers', 'city_hall': 'towers', 'union': 'towers',
+               'cn_rogers': 'towers', 'campus': 'towers', 'warehouse': 'works', 'liberty': 'works'}
+SHOP_SLOTS = {'LITTLE ITALY': [6, 1], 'WEST QUEEN WEST': [0, 3, 4, 1, 2]}
 
 
 def inverse(anchors, px):
@@ -337,7 +347,7 @@ def main(check=False):
         else:
             city_kit.roof_details(d, box, x, y, w, h, roof, city_kit.seed_of('core', x, y), COLORS, aligned=True)
         solid(x, y, w, h)
-        slot = 1 if style == 5 else style + 1
+        slot = city_kit.STYLE_SLOT[style]
         attr(x, y, w, h, slot, True)
         overhang = 0
         if lip and y - 8 >= my0:
@@ -706,7 +716,7 @@ def main(check=False):
             attrs[i] = 0
 
     # ------------------------------------------------- district building kits
-    TOWER_SLOT = {'black': 2, 'gold': 4, 'granite': 1, 'glass': 5, 'condo': 2}
+    TOWER_SLOT = {'black': 2, 'gold': 4, 'granite': 1, 'glass': 0, 'condo': 2}
 
     def tower(x, y, w, h, look, name=None):
         """High-rises with a recognisable top: 'black' steel and bronze glass
@@ -973,7 +983,7 @@ def main(check=False):
             stacked(x0, x1, y0, H, [48, 64, 56][s:] + [72], [0, 1]); return
         if kind == 'market':      # Kensington: narrow houses painted every colour, awnings
             for k, (y, depth) in enumerate(rows_of(y0, H)):
-                shopfronts(x0, x1, y, depth, [1, 4, 5, 3, 2] if k % 2 == 0 else [3, 2, 1, 5, 4], lip=k == 0)
+                shopfronts(x0, x1, y, depth, [1, 4, 0, 3, 2] if k % 2 == 0 else [3, 2, 1, 0, 4], lip=k == 0)
             return
         if kind == 'chinatown':   # Spadina's shops, red and gold, signboards; a hospital on University
             for k, (y, depth) in enumerate(rows_of(y0, H)):
@@ -1222,7 +1232,7 @@ def main(check=False):
     sx = yonge['at'] + yonge['half'] + yonge['walk'] + 16
     sy = dundas['at'] + dundas['half'] + dundas['walk'] + 16
     sx -= sx % 8; sy -= sy % 8
-    assert all(attrs[ty * TW + tx] & 7 in (1, 2, 3, 4, 5) for ty in range(sy // 8, sy // 8 + 2) for tx in range(sx // 8, sx // 8 + 4)), \
+    assert all(attrs[ty * TW + tx] & 7 in (0, 1, 2, 3, 4) for ty in range(sy // 8, sy // 8 + 2) for tx in range(sx // 8, sx // 8 + 4)), \
         'the screen sits on a roof'
     city_kit.paint_screen(img, sx, sy, COLORS)
     districts.append({'name': 'YONGE-DUNDAS SCREEN', 'rect': [sx, sy, city_kit.SCREEN_W, city_kit.SCREEN_H], 'kind': 'scenery'})
@@ -1231,6 +1241,16 @@ def main(check=False):
         return (L.RIVER[0] <= x < L.RIVER[1] and 24 <= y < my1) or y >= my1
     wet_tiles = set()
     water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS, wet_tiles)
+    # Tree species, hedges, fences, bushes and lawn patches (greenery.py).
+    def park_at(x, y):
+        named = next((dd['name'] for dd in districts if dd.get('kind') == 'park'
+                      and dd['rect'][0] <= x < dd['rect'][0] + dd['rect'][2] and dd['rect'][1] <= y < dd['rect'][1] + dd['rect'][3]), None)
+        name, kind = region_of(x, y)
+        return named or (name if kind in GREEN_PARKS else None)
+
+    def kind_at(x, y):
+        return 'park' if park_at(x, y) else GREEN_KINDS.get(region_of(x, y)[1])
+    greens = greenery.dress(img, attrs, collisions, TW, canopies, COLORS, 'core', 0, kind_at, park_at, is_water)
     bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
     assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])
     city_kit.mark_water(collisions, wet_tiles)
@@ -1252,6 +1272,7 @@ def main(check=False):
                'mainland': L.MAINLAND, 'islands': L.ISLANDS, 'blocks': blocks, 'canopies': canopies,
                'solids': solids, 'districts': districts, 'spray_bay': [bx + 16, by + 8],
                'collision_rules': {'road': 0, 'foot_only': 16, 'solid': 15},
+               'greenery': greens,
                'validation': {'animated_water_tiles': water_tiles},
                'scope': 'Compressed central Toronto (Dufferin to Broadview, Bloor to the harbour) and the Islands'}
     texts = {ROOT / 'content/city_art.json': json.dumps(content, indent=1) + '\n'}

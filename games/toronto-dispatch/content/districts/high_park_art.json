@@ -1615,7 +1615,7 @@
     0,
     0
    ],
-   "tiles": 199
+   "tiles": 212
   },
   {
    "slug": "toronto_high_park_ne",
@@ -1624,7 +1624,7 @@
     976,
     0
    ],
-   "tiles": 223
+   "tiles": 240
   },
   {
    "slug": "toronto_high_park_sw",
@@ -1633,7 +1633,7 @@
     0,
     928
    ],
-   "tiles": 149
+   "tiles": 167
   },
   {
    "slug": "toronto_high_park_se",
@@ -1642,7 +1642,7 @@
     976,
     928
    ],
-   "tiles": 239
+   "tiles": 258
   }
  ],
  "blocks": [
@@ -15781,6 +15781,20 @@
   "road": 0,
   "foot_only": 16,
   "solid": 15
+ },
+ "greenery": {
+  "tiles": {
+   "species": 5280,
+   "planter": 77,
+   "hedge": 739,
+   "iron": 231,
+   "picket": 161,
+   "bush": 918,
+   "clover": 2281,
+   "meadow": 657,
+   "flowers": 28
+  },
+  "dropped": []
  },
  "validation": {
   "animated_water_tiles": 1907,

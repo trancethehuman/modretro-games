@@ -1020,5 +1020,93 @@
   "png_sha256": "553b272b3dcd52fce83d4c2d2183914963923ad991ad2339feb4b5085e83d93e",
   "inputs": "boot, A on the title, the welcome call left to finish, car written at (528,652) facing north, 260 frames: the Financial District from King St at University Ave; then car written at (528,356) facing north, 260 frames: MaRS and the hospitals on University Ave between College and Dundas; then car written at (484,112) facing north, 260 frames: the ROM and the Gardiner Museum at Bloor and Queen's Park; then car written at (452,226) facing north, 260 frames: Convocation Hall on the U of T side of Queen's Park Crescent; then car written at (452,622) facing north, 260 frames: the King St theatres and Roy Thomson Hall",
   "source": "Unmodified PyBoy 2.7.0 native emulator frame of the previous (parks) build, same inputs, for comparison"
+ },
+ {
+  "file": "greenery-high-park-before.png",
+  "frame": 1595,
+  "rom_sha256": "0a925319438b91bf97bc8f6e00f8fbc59c306b176a4b8ef329bb3e351366196f",
+  "png_sha256": "87da8e4af4cd5ee4412da8623000d4d41a76f15e40bae132ab16680397ba5fa5",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_high_park_ne (476,844), play clock written to 12:41 (clear), 90 frames: High Park beside Grenadier Pond",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-swansea-street-before.png",
+  "frame": 1747,
+  "rom_sha256": "0a925319438b91bf97bc8f6e00f8fbc59c306b176a4b8ef329bb3e351366196f",
+  "png_sha256": "fd30558351f624a1b3172ddb64fc283cb0019524efe076fab5ca5cb0a3aa2ef6",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_high_park_sw (468,196), play clock written to 12:41 (clear), 90 frames: a Swansea house street",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-allan-gardens-before.png",
+  "frame": 1899,
+  "rom_sha256": "0a925319438b91bf97bc8f6e00f8fbc59c306b176a4b8ef329bb3e351366196f",
+  "png_sha256": "a8e504b1d9dacfa19597b7aca91f0bc4623ee3d0e607b4838226b17596b2e004",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_core_ne (556,780), play clock written to 12:41 (clear), 90 frames: Allan Gardens and the Palm House",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-dufferin-grove-before.png",
+  "frame": 2051,
+  "rom_sha256": "0a925319438b91bf97bc8f6e00f8fbc59c306b176a4b8ef329bb3e351366196f",
+  "png_sha256": "08f4bbf63106281b7770e34cc601771e20cce0c1a6cae159ef97c76be62a2a23",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_core_nw (340,292), play clock written to 12:41 (clear), 90 frames: Dufferin Grove Park",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-roncesvalles-street-before.png",
+  "frame": 2203,
+  "rom_sha256": "0a925319438b91bf97bc8f6e00f8fbc59c306b176a4b8ef329bb3e351366196f",
+  "png_sha256": "087c0cb7f22848943d69fe458e8f3f54cb6032292b1e7bb47ad5c89d5ba6473f",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_west_sw (364,236), play clock written to 12:41 (clear), 90 frames: a Roncesvalles street",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-high-park-after.png",
+  "frame": 1595,
+  "rom_sha256": "06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f",
+  "png_sha256": "258262a053270298f66c3fbc2ba217944465978086ea2d12c4e6bc039f5502f5",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_high_park_ne (476,844), play clock written to 12:41 (clear), 90 frames: High Park beside Grenadier Pond",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-swansea-street-after.png",
+  "frame": 1747,
+  "rom_sha256": "06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f",
+  "png_sha256": "bba54b9175c44830d53179d991bc383ecf684ba9b1ead8b3c8181b0b6e5ae95a",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_high_park_sw (468,196), play clock written to 12:41 (clear), 90 frames: a Swansea house street",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-allan-gardens-after.png",
+  "frame": 1899,
+  "rom_sha256": "06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f",
+  "png_sha256": "9ebb592f7a77d6edea2a1e1bfe140d29cbb22a4f1bf929971cb6a2bed1c28795",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_core_ne (556,780), play clock written to 12:41 (clear), 90 frames: Allan Gardens and the Palm House",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-dufferin-grove-after.png",
+  "frame": 2051,
+  "rom_sha256": "06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f",
+  "png_sha256": "0918ebd6346ba5caea56079b1e95ca1d36c5c2d2d42666433c962219377b999a",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_core_nw (340,292), play clock written to 12:41 (clear), 90 frames: Dufferin Grove Park",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-roncesvalles-street-after.png",
+  "frame": 2203,
+  "rom_sha256": "06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f",
+  "png_sha256": "65be1e89b586c7fdf4e362fa8fd0989a8fa331d973a2f4146aeec92752d2ba9b",
+  "inputs": "boot, A, radio skipped; courier on foot written at scene toronto_west_sw (364,236), play clock written to 12:41 (clear), 90 frames: a Roncesvalles street",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "greenery-allan-gardens-after-map.png",
+  "frame": 2785,
+  "rom_sha256": "06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f",
+  "png_sha256": "3f4c320a5e147af5b1febd8cbbefba0a43bfcc6ae404a53d1891d25be0a25a2a",
+  "inputs": "Allan Gardens as above, then Start, Down, A (city map), 200 frames, B, B, 60 frames",
+  "source": "Unmodified PyBoy 2.7.0 frame"
  }
 ]

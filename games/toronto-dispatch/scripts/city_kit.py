@@ -10,6 +10,13 @@ import re
 
 ROAD_HALF, WALK_HALF = 24, 32
 
+# Background palette slots: 0 stone and water, 1..4 architecture, 5 gardens
+# (pale lime, the park lawn, yellow-green, ink; drawn by greenery.py), 6 parks
+# and trees, 7 the interface. STYLE_SLOT colours each building style; the
+# glass style takes the stone palette's teal.
+STYLE_SLOT = {0: 1, 1: 2, 2: 3, 3: 4, 4: 0, 5: 1}
+GARDEN_SLOT, PARK_SLOT = 5, 6
+
 
 def intersections_from_routes(routes):
     """Centres where a horizontal and a vertical road segment meet (any
@@ -451,22 +458,22 @@ AREA_LOOKS = {
     # West: Parkdale's Victorian brick and its apartment towers; Roncesvalles
     # and Bloordale main streets; Brockton's painted houses; Junction
     # Triangle rail-side factories and lofts; High Park North's apartments.
-    'PARKDALE': {'styles': [2, 4, 2], 'slots': [1, 5, 3]},
+    'PARKDALE': {'styles': [2, 4, 2], 'slots': [1, 0, 3]},
     'RONCESVALLES': {'styles': [0, 2, 0, 2], 'slots': [4, 3, 1, 3], 'awnings': True},
     'BROCKTON VILLAGE': {'styles': [2], 'slots': [2, 3]},
     'BLOORDALE': {'styles': [0, 1], 'slots': [1, 4], 'awnings': True},
     'JUNCTION TRIANGLE': {'styles': [5, 5, 1], 'slots': [1, 1, 2]},
-    'HIGH PARK NORTH': {'styles': [4, 3], 'slots': [5, 4]},
-    'SUNNYSIDE': {'styles': [0], 'slots': [5]},
+    'HIGH PARK NORTH': {'styles': [4, 3], 'slots': [0, 4]},
+    'SUNNYSIDE': {'styles': [0], 'slots': [2]},
     # High Park scene: the Junction's brick main street, Bloor West Village
     # shops, Swansea houses.
     'THE JUNCTION': {'styles': [1, 0, 5], 'slots': [1, 1, 4], 'awnings': True},
-    'BLOOR WEST VILLAGE': {'styles': [0, 1], 'slots': [4, 1, 5], 'awnings': True},
+    'BLOOR WEST VILLAGE': {'styles': [0, 1], 'slots': [4, 1, 2], 'awnings': True},
     'SWANSEA': {'styles': [2], 'slots': [3, 1]},
     # East: Greektown's blue-and-white shopfronts on the Danforth, Chinatown
     # East at Gerrard, Riverdale's brick houses, Riverside and Leslieville
     # on Queen East with their converted factories.
-    'GREEKTOWN': {'styles': [0, 1], 'slots': [2, 5], 'awnings': True},
+    'GREEKTOWN': {'styles': [0, 1], 'slots': [2, 0], 'awnings': True},
     'THE DANFORTH': {'styles': [0, 1], 'slots': [4, 1], 'awnings': True},
     'CHINATOWN EAST': {'styles': [0, 1], 'slots': [1, 4], 'awnings': True, 'signs': True},
     'RIVERDALE': {'styles': [2], 'slots': [1, 3]},

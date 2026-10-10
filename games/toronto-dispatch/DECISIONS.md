@@ -360,6 +360,18 @@ User direction (2026-10-10): better music and menus, more Toronto, more minimal 
 - **Lost parcels** are now two in each core scene and one in every other scene (twenty in all, as before); pickups are 6 to 16 per scene.
 - Not done in this pass: more walkers on screen at once (eight walker slots are tied to the actor pool and bitmask code), and art for vehicles beyond the existing designs. Pending human checks: driving feel and deadlines at the new scale, seam crossings in play, weather readability and the overlay's flicker on the Chromatic screen.
 
+## Greenery: greens, trees, bushes and fences, 2026-10-10
+
+User direction (2026-10-10): add a variety of greens, trees, bushes, fences and the like, and keep performance solid. Chosen and implemented (`scripts/greenery.py`, run by every district painter after the water):
+
+- **Greens.** Background palette slot 5 becomes the gardens palette: pale lime `D2E89A`, the park lawn `8FB56A` (the same colour as slot 6, so the two sit side by side), yellow-green `5F9A3E` and ink. Slot 6 keeps cream, lawn, dark green and ink. The light-blue buildings that used slot 5 moved: the glass style and glass towers take the stone palette's teal (slot 0), Sunnyside, Bloor West Village and Greektown's second colour the blue of slot 2, and Kensington's painted shopfronts swap their light blue for teal. Night colours for the new greens are in `create_daynight.py`.
+- **Trees.** Every standard round tree on lawn takes a species for where it grows: maples (dark green, or yellow-green as a honey locust), lindens, tiered spruces, white-blossom trees, and weeping willows near water. High Park favours maples and spruces. Positions, trunks, canopy priority and collision stay as they were.
+- **Edges.** Lawn along a sidewalk or plaza gets, by neighbourhood: clipped hedges or white picket fences in front of houses, iron railings round parks, raised flower beds (marigold, petunia and daisy colours) by shops, and hedges by towers and works. Runs break for a gate every four to nine tiles.
+- **Bushes and lawns.** Bushes (dark, yellow-green or flowering) cluster beside buildings and along park paths. Clover-and-sun patches in the gardens palette dapple parks and yards, long grass grows in High Park, and parks have a few wildflowers.
+- **Decoration only.** Hedges, fences, bushes and beds never change collision: flat ground stays open to cars and walkers (user direction, 2026-10-07), and the city map, pickups, lost parcels, walker routes and traffic are unchanged. They are drawn without background priority, so the courier passes over them; trees still pass overhead.
+- **Tile budget.** Designs are mirror-symmetric, and one design drawn in either green palette is still one tile pattern. A scene that would exceed its 352 background tiles drops greenery kinds in order (wildflowers, long grass, clover, beds, railings, pickets, bushes, hedges, species). Only Yonge & Church (core NE) needed it: it keeps species, hedges and bushes at exactly 352 tiles. Other scenes grew 10 to 19 tiles.
+- **Performance.** Backgrounds are static tiles: greenery adds no per-frame work and no sprites.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

@@ -12,7 +12,7 @@
     0,
     0
    ],
-   "tiles": 131
+   "tiles": 145
   },
   {
    "slug": "toronto_core_ne",
@@ -21,7 +21,7 @@
     976,
     0
    ],
-   "tiles": 335
+   "tiles": 352
   },
   {
    "slug": "toronto_core_sw",
@@ -30,7 +30,7 @@
     0,
     928
    ],
-   "tiles": 216
+   "tiles": 229
   },
   {
    "slug": "toronto_core_se",
@@ -39,7 +39,7 @@
     976,
     928
    ],
-   "tiles": 318
+   "tiles": 334
   }
  ],
  "rows": [
@@ -9647,6 +9647,25 @@
   "road": 0,
   "foot_only": 16,
   "solid": 15
+ },
+ "greenery": {
+  "tiles": {
+   "species": 1828,
+   "iron": 169,
+   "hedge": 199,
+   "planter": 9,
+   "bush": 114,
+   "clover": 536,
+   "flowers": 8
+  },
+  "dropped": [
+   "toronto_core_ne:flowers",
+   "toronto_core_ne:meadow",
+   "toronto_core_ne:clover",
+   "toronto_core_ne:planter",
+   "toronto_core_ne:iron",
+   "toronto_core_ne:picket"
+  ]
  },
  "validation": {
   "animated_water_tiles": 7191

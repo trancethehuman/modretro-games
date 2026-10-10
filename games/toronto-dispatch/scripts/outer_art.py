@@ -14,6 +14,7 @@ from collections import deque
 from pathlib import Path
 from PIL import Image, ImageDraw
 import city_kit
+import greenery
 import world2x
 from streetcar_art import paint_streetcar_stops
 
@@ -315,7 +316,7 @@ def render(plan, areas, kinds=None):
             return 8
         city_kit.tower_crown(d, box, x, y, w, 24, style, COLORS)
         for _, _, i in cells(x, y - 24, w, 16):
-            attrs[i] = (1 if style == 5 else style + 1) | 128
+            attrs[i] = city_kit.STYLE_SLOT[style] | 128
         return 24
 
     def building(x, y, w, h, style, kind=None, name=None):
@@ -387,8 +388,8 @@ def render(plan, areas, kinds=None):
                 box(wx, y + 24, 8, 8, 1)
             box(x + w - 16, y - 8, 8, 16, 0)
         solid(x, y, w, h)
-        # Slot 6 is the vegetation palette; wide work sheds use brick terracotta.
-        attr(x, y - 8, w + 8, h + 16, 1 if style == 5 else style + 1, True)
+        # Slots 5 and 6 are the gardens and parks palettes (city_kit.STYLE_SLOT).
+        attr(x, y - 8, w + 8, h + 16, city_kit.STYLE_SLOT[style], True)
         lip = crown(x, y, w, h, style)
         blocks.append({"x": x, "y": y, "width": w, "depth": h, "height": roof, "style": style,
                        "landmark": name, "kind": kind, "overhang": lip})
@@ -566,6 +567,22 @@ def render(plan, areas, kinds=None):
             bool(pond_mask and pond_mask.getpixel((x, y)))
     wet_tiles = set()
     water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS, wet_tiles)
+
+    # Tree species, hedges, fences, bushes and lawn patches (greenery.py).
+    def park_at(x, y):
+        return next((p["name"] for p in spec["parks"]
+                     if p["rect"][0] <= x < p["rect"][0] + p["rect"][2] and p["rect"][1] <= y < p["rect"][1] + p["rect"][3]), None)
+
+    def kind_at(x, y):
+        if park_at(x, y):
+            return "park"
+        look = city_kit.AREA_LOOKS.get(city_kit.area_at(areas, x, y))
+        if not look:
+            return None
+        styles = set(look["styles"])
+        return "shops" if look.get("awnings") else "houses" if 2 in styles else \
+            "towers" if styles & {3, 4} else "works" if 5 in styles else None
+    greens = greenery.dress(img, attrs, collisions, TW, canopies, COLORS, slug, spec["id"], kind_at, park_at, is_water)
     assert set(img.get_flattened_data()) <= set(tuple(bytes.fromhex(c[1:])) for c in COLORS)
     for block in blocks:
         assert all(collisions[i] == 15 for _, _, i in cells(block["x"], block["y"], block["width"], block["depth"])), block
@@ -584,6 +601,7 @@ def render(plan, areas, kinds=None):
         "scenes": [{k: sc[k] for k in ("slug", "district", "origin", "tiles")} for sc in scenes],
         "blocks": blocks, "canopies": canopies,
         "collision_rules": {"road": 0, "foot_only": 16, "solid": 15},
+        "greenery": greens,
         "validation": {"animated_water_tiles": water_tiles, "traffic_loops": len(spec["traffic_loops"]),
                        "all_foot_clients_and_ports_connected": True},
     }

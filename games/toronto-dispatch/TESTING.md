@@ -1,5 +1,23 @@
 # Testing record
 
+## Greenery — candidate, 2026-10-10
+
+Plugin `rom_build` and PyBoy 2.7.0 evidence on `codex/toronto-greenery`. "Previous" is the main build `0a925319…` (above).
+
+- ROM: `project/build/greenery1.gbc`, 2,097,152 bytes, SHA-256 `06909a78d951010a1b57b3a1fd72bc481591a3f5d25106c1e64291e6ab32f69f`. ROM inspection passed (CGB-only, MBC5+RUMBLE+RAM+BATTERY, valid logo and header checksum). The build exited 0 with the usual compiler warnings and a Node `DEP0190` warning.
+- Scene tiles (flip-canonical, budget 352), previous -> this build: core 131/335/216/318 -> 145/352/229/334, west 173/174/163/186 -> 184/189/180/205, High Park 199/223/149/239 -> 212/240/167/258, east 197/169/168/149 -> 212/183/181/159. Core NE (Yonge & Church) reached the budget and dropped wildflowers, long grass, clover, beds, railings and pickets; it keeps tree species, hedges and bushes.
+- `make check` passes: 8,059 host engine checks, 23,516 navigation checks, 504,463 atlas and 6,617,495 atlas UI checks, 609,452 transit checks, the art, resource, campaign, streetcar, district, jobs, street life, day/night and overlay generators' checks. Collision grids, the city map, pickups, lost parcels, walker routes and traffic loops are unchanged (their checks match without regeneration); only the art metadata hashes recorded by the western and eastern jobs changed.
+- Pacing, PyBoy, frames with a scene update per second (the engine's step counter `td_tick` changes), radio skipped and police attention held at zero, previous -> this build: parked 60.00 -> 60.00, driving 59.90 -> 59.95, driving and turning 60.00 -> 59.95, walking 59.27 -> 59.20, running 60.00 -> 60.00. Scene loads (frames from a queued transition to the scene running) at High Park NE, core NE, High Park SW, core NW and core SE: 13, 20, 22, 13, 15 -> 13, 22, 23, 15, 16.
+- Emulator (PyBoy): High Park beside Grenadier Pond, a Swansea street, Allan Gardens, Dufferin Grove and a Roncesvalles street at 12:41 on a clear day, before and after (README, [provenance](docs/screenshots/provenance.json)). In Yonge & Church, at the full 352 tiles, the city map opens and closes and the courier, walkers, traffic and pickups still draw correctly.
+- Not verified: hardware display of the new greens (and their night and weather tints) on the Chromatic screen, the cartridge write, and human judgement of the greenery's density and readability.
+
+## Overhaul main build and cartridge — 2026-10-10
+
+- Source: `main` at `4e46a4b` (`Running stride, faster helicopter, daytime rain and overhaul docs`), fast-forwarded from `afa4d85` and pushed; checkout clean apart from the untracked local `.claude/`.
+- Official ModRetro Chromatic plugin build (`rom_build`): `project/build/main-4e46a4b.gbc`, 2,097,152 bytes, SHA-256 `0a925319438b91bf97bc8f6e00f8fbc59c306b176a4b8ef329bb3e351366196f`. It differs from the candidate below (`2189d60d…`) in six bytes only: the header checksum (`0x14E`–`0x14F`) and a four-byte build stamp (`0x4B7`–`0x4BA`). ROM inspection passed: CGB-only, MBC5+RUMBLE+RAM+BATTERY, 2 MiB ROM, 32 KiB RAM, valid Nintendo logo and header checksum. PyBoy 2.7.0 booted this exact hash to the title (frame 400) and into the city with the opening call (900 frames after A).
+- Device discovery found Chromatic Player 1 with no unmatched functions or diagnostics. Cartridge detection reported the same writable 4 MiB ISSI `IS29GL032-70TLET-TR` cartridge, holding the earlier 512 KiB Toronto Dispatch build (header title `TORONTODISP`, valid header checksum).
+- Not written. After detection reconfigured the cartridge FPGA, only the GWU2X programmer function came back on USB (port chain `[1, 3]`); the "Chromatic - Player 01" function stayed missing for more than 20 minutes, so discovery returned no device token (`CHROMATIC_DEVICE_ASSOCIATION_INCOMPLETE`, reason `missing_counterpart`). The plugin's recovery is to unplug and replug the Chromatic; the user was asked to. No write was dispatched, and the cartridge still holds the earlier build.
+
 ## Overhaul: double-scale world, handling, combat, weather and swimming — candidate, 2026-10-10
 
 GB Studio CLI build (plugin `rom_build`) and PyBoy 2.7.0 evidence on `codex/toronto-overhaul`. "Previous" is the main build flashed earlier today (`b105ba2a…`).
@@ -9,7 +27,7 @@ GB Studio CLI build (plugin `rom_build`) and PyBoy 2.7.0 evidence on `codex/toro
 - `make check` passes: 8,059 host engine checks (ported to the sixteen scenes; new: swimming into and out of the lake, a shark spawning, biting and leaving, no sharks on land, the helicopter at four stars and leaving below three, the weather spells, signal holds and the right-hand loops in every scene), 23,516 navigation checks (the next-hop table steps along a shortest route between every pair of scenes, inner and outer seams), 504,463 atlas and 6,617,495 atlas UI checks (1:16 map with tile flips), plus the art, resource, campaign, streetcar, district, routes, places, street life, overlay and audio generators' checks.
 - Emulator (PyBoy): boot to the title and into the city; 20 sampled vehicle crossings of inner and district seams, both ways, all arrive in the right scene; a crossing hands control back after 22 frames; walking off Queens Quay into the harbour swims, a shark rises and bites (vitality 100 to 75); four stars bring the helicopter, which keeps within about 60 px of a car at full speed; a pursuing car and a red-light fine at a signal junction; rain, cloud and shadow, sun rays and gulls by the clock; the pause menu and the 1:16 city map. Pop-in: 3,600 frames walking and 3,600 driving show no traffic or walker pop-in in view except walkers beside a car stuck against a curb; no line over 10 sprites (peak 10).
 - Screenshots in [README.md](README.md) with [provenance](docs/screenshots/provenance.json).
-- Not verified: the plugin build of the merged `main` and the cartridge write (recorded separately below when done), hardware display, timing and audio, overlay flicker on the Chromatic screen, contract deadlines at the new scale in ordinary play, and human judgement of handling, seam crossings and weather.
+- Not verified: the plugin build of the merged `main` and the cartridge write (recorded separately above), hardware display, timing and audio, overlay flicker on the Chromatic screen, contract deadlines at the new scale in ordinary play, and human judgement of handling, seam crossings and weather.
 
 ## Soundtrack — candidate, 2026-10-10
 

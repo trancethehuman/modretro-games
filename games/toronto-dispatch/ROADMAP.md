@@ -132,7 +132,8 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Heavier, slower driving with tail slides and clipping contacts; A+B gets out; full-size 45-degree cars; running stride.
 - [x] Projectile combat with misses on both sides; police cruiser, SUV, unmarked car and helicopter.
 - [x] Swimming and sharks; weather (rain, cloud and shadow, sun rays) with gulls; a minimal radio strip, title and menus; four songs.
-- [ ] Handheld review: driving feel and contract deadlines at the new scale, seam crossings, overlay flicker, weather readability, helicopter and shark difficulty.
+- [x] Greenery: a second green palette, tree species by place, hedges, pickets, park railings, flower beds, bushes and lawn patches, within every scene's tile budget and at an unchanged frame rate.
+- [ ] Handheld review: driving feel and contract deadlines at the new scale, seam crossings, overlay flicker, weather readability, helicopter and shark difficulty, and the greens on the Chromatic screen.
 - [ ] More walkers on screen at once (eight slots are tied to the actor pool and bitmask code).
 - [ ] Draw more vehicle designs and local streets in the outer districts (their plans carry only main roads, so some blocks are very large).
 

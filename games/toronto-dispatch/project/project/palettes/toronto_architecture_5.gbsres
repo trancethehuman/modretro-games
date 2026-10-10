@@ -1,18 +1,18 @@
 {
   "_resourceType": "palette",
   "id": "cb66440b-a024-5c73-89c9-3eb74648aab2",
-  "name": "Toronto architecture 5",
+  "name": "Toronto gardens",
   "colors": [
-    "E7DECC",
-    "9FC9D0",
-    "526879",
+    "D2E89A",
+    "8FB56A",
+    "5F9A3E",
     "172B38"
   ],
-  "defaultName": "Toronto architecture 5",
+  "defaultName": "Toronto gardens",
   "defaultColors": [
-    "E7DECC",
-    "9FC9D0",
-    "526879",
+    "D2E89A",
+    "8FB56A",
+    "5F9A3E",
     "172B38"
   ]
 }
