@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "98005dad-85bf-5f99-b837-10ac1f8fbfa8",
+  "_index": 28,
+  "type": "TORONTO",
+  "name": "Interior Diner",
+  "symbol": "scene_interior_diner",
+  "x": 1800,
+  "y": 1300,
+  "width": 24,
+  "height": 18,
+  "backgroundId": "67df2707-e537-5868-8c24-10539012c06a",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372",
+    "226c66db-1518-5620-b1c9-f5cd49f3e78c",
+    "62842552-d359-5556-a301-fd4208697341",
+    "54e967e7-1a0b-52bd-a268-4c414fc21cc5",
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0f61+0016+0f2+00!0fd+008+0f2+00!0fd+005+0f5+0016+0f2+0016+0f2+0016+0f2+0013+0f5+0016+0f2+0016+0f2+002+0f3+002+0f3+00c+0f2+0010+0f2+00!0f5+0010+0f2+004+0f2+0016+0f19+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

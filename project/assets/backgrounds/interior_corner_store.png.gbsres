@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "31f6e952-32e1-5416-94a8-254b24b46e68",
+  "name": "Interior Corner Store",
+  "symbol": "bg_interior_corner_store",
+  "tileColors": "0015+023+044+003+01!00!01!00!01!00!01!003+023+044+00!01a+002+023+044+00!01a+0041+022+003+052+00d+022+003+052+00d+022+003+052+00d+022+003+052+00d+022+003+052+00d+022+003+052+0017+035+003+012+00a+035+003+012+0019+022+001d+",
+  "filename": "interior_corner_store.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144,
+  "autoColor": false
+}

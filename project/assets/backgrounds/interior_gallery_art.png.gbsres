@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "6e3fe558-2701-5797-ac9c-f595d376ef7b",
+  "name": "Interior Art Direction",
+  "symbol": "bg_interior_gallery_art",
+  "tileColors": "0023+013+03!04!02!002+015+007+052+06!053+062+008+04!02!00e+052+06!053+062+0022+031e+002+031e+002+031e+002+031e+00!0346+023+00!034+004+034+004+03c+022+002+034+004+034+004+0326+00!031e+002+031e+002+031e+002+031e+002+031e+002+022+031a+022+002+022+031a+022+002+03e+002+03e+0021+",
+  "filename": "interior_gallery_art.png",
+  "width": 32,
+  "height": 22,
+  "imageWidth": 256,
+  "imageHeight": 176,
+  "autoColor": false
+}

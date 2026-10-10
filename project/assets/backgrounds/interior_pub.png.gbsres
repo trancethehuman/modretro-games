@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "96508460-18b5-5423-ab87-4e70b16b923a",
+  "name": "Interior Pub",
+  "symbol": "bg_interior_pub",
+  "tileColors": "0019+01!03c+012+053+01!042+01!002+01!03c+012+053+01!042+01!003+03c+0024+06c+006+013+003+06c+001e+013+002d+013+002d+013+005+017+0011+017+009+013+005+017+0011+017+009+013+00c+042+0023+",
+  "filename": "interior_pub.png",
+  "width": 24,
+  "height": 18,
+  "imageWidth": 192,
+  "imageHeight": 144,
+  "autoColor": false
+}

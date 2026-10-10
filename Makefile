@@ -16,6 +16,7 @@ check:
 	python3 scripts/create_west_art.py --check
 	python3 scripts/create_east_art.py --check
 	python3 scripts/sync_city_resources.py --check
+	python3 scripts/create_interiors.py --check
 	python3 scripts/create_sprites.py --check
 	python3 scripts/create_street_life.py --check
 	python3 scripts/create_people.py --check

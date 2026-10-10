@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "8be6b3e6-f5c1-58d3-9606-156ff92cbd6e",
+  "_index": 17,
+  "type": "TORONTO",
+  "name": "Interior Cn Tower",
+  "symbol": "scene_interior_cn_base",
+  "x": 300,
+  "y": 1000,
+  "width": 24,
+  "height": 18,
+  "backgroundId": "03163abb-1412-50ff-9c0d-be805a4cc5b7",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "62842552-d359-5556-a301-fd4208697341",
+    "e96242a3-f74e-55c2-961e-1c4e708e7e53",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372",
+    "47e8763a-f218-51ce-8e08-b77138cb3be8",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "3af1267f-1b82-5b07-a4a3-0926665b239e",
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0f61+0016+0f2+0016+0fc+002+0fc+008+0f!005+0f!007+0f2+00!0f6+00!0f!005+0f!005+0f4+00!0f6+008+0f3+002+0f4+00f+0f3+002+0f4+0014+0f4+00a+0f2+008+0f4+00!0f4+005+0f2+003+0f4+00!0f4+00f+0f4+003+0f2+007+0f2+004+0f2+007+0f2+007+0f2+004+0f2+007+0f19+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

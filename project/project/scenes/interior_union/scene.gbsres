@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "47f1c8f4-a2c0-5de2-b526-716a9dcf6ee8",
+  "_index": 23,
+  "type": "TORONTO",
+  "name": "Interior Union Station",
+  "symbol": "scene_interior_union",
+  "x": 300,
+  "y": 1300,
+  "width": 40,
+  "height": 22,
+  "backgroundId": "5ecfc7c6-d5a1-52b0-91c3-3c7d6c4eab6a",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "39e46657-2e34-5b68-af5e-2de1b9b99604",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "54e967e7-1a0b-52bd-a268-4c414fc21cc5",
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372",
+    "3af1267f-1b82-5b07-a4a3-0926665b239e",
+    "39e46657-2e34-5b68-af5e-2de1b9b99604"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0fa1+0026+0f2+00!0f8+001d+0f2+00!0f8+004+0f2+008+0f2+00d+0f2+00d+0f2+008+0f2+00d+0f2+0026+0f2+0026+0f2+0026+0f2+0026+0f2+0026+0f2+0026+0f2+0026+0f2+00d+0f2+008+0f2+00d+0f2+00d+0f2+008+0f2+00d+0f2+0026+0f2+00!0f2+0020+0f2+00!0f2+00!0f2+0020+0f2+00!0f2+0026+0f29+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

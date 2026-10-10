@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "32a245b5-3acd-5ef9-8e3a-036c8f07cb6e",
+  "name": "Interior Cafe",
+  "symbol": "bg_interior_cafe",
+  "tileColors": "0016+024+00!022+043+00a+024+00!022+043+00a+013+0010+01a+006+032+002+01a+006+032+0016+015+044+01!00f+044+0031+052+0012+052+0012+052+0012+052+0012+05!00!032+0012+032+0025+",
+  "filename": "interior_cafe.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144,
+  "autoColor": false
+}

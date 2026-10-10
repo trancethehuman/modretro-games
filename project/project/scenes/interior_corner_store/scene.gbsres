@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "4c07f617-1a9f-5c31-970d-881abe2b1678",
+  "_index": 27,
+  "type": "TORONTO",
+  "name": "Interior Corner Store",
+  "symbol": "scene_interior_corner_store",
+  "x": 1500,
+  "y": 1300,
+  "width": 20,
+  "height": 18,
+  "backgroundId": "31f6e952-32e1-5416-94a8-254b24b46e68",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "62842552-d359-5556-a301-fd4208697341",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372",
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f",
+    "54e967e7-1a0b-52bd-a268-4c414fc21cc5",
+    "077ab302-8300-529d-aedf-55de931ea11f",
+    "62842552-d359-5556-a301-fd4208697341"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0f51+0012+0f2+0012+0f2+0012+0f2+003+0f2+003+0f2+008+0f2+003+0f2+003+0f2+008+0f2+003+0f2+003+0f2+008+0f2+003+0f2+003+0f2+008+0f2+003+0f2+003+0f2+008+0f2+003+0f2+003+0f2+008+0f2+00d+0f7+00!0f2+00a+0f7+00!0f2+002+0f2+00b+0f2+0012+0f15+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

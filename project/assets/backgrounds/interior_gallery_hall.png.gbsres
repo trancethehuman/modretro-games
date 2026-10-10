@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "56b46431-a332-5c46-a27e-66784d861af9",
+  "name": "Interior Gallery",
+  "symbol": "bg_interior_gallery_hall",
+  "tileColors": "012a+02c+0114+02!00a+02!0114+02c+01b+042+00c+032+00c+042+012+042+00c+032+00c+042+012+00e+032+00e+012+00e+032+00e+01!00f+032+001e+032+001e+032+001e+032+001e+032+00f+01!00e+032+00e+012+00e+032+00e+012+00e+032+00e+012+00e+032+00e+012+00e+032+00e+012+042+00c+032+00c+042+012+042+00c+032+00c+042+012+00e+032+00e+0121+",
+  "filename": "interior_gallery_hall.png",
+  "width": 32,
+  "height": 22,
+  "imageWidth": 256,
+  "imageHeight": 176,
+  "autoColor": false
+}

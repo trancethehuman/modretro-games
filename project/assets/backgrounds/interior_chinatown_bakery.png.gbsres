@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "97797a02-ce6c-56aa-a302-86747c3f9b9d",
+  "name": "Interior Golden Bun Bbq",
+  "symbol": "bg_interior_chinatown_bakery",
+  "tileColors": "0119+00!017+00!015+00!016+00!012+00!017+00!015+00!016+00!012+00!017+00!015+00!016+00!012+0016+012+00!037+00e+012+00!037+002+02a+002+012+00a+02a+002+012+0016+012+0016+012+0014+042+012+0014+042+012+0014+042+012+0014+042+012+0016+012+052+0014+012+052+008+012+00a+01c+002+01b+",
+  "filename": "interior_chinatown_bakery.png",
+  "width": 24,
+  "height": 18,
+  "imageWidth": 192,
+  "imageHeight": 144,
+  "autoColor": false
+}

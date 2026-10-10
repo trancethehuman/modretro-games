@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "8ff94a79-1403-5df2-acbf-af810f195529",
+  "_index": 26,
+  "type": "TORONTO",
+  "name": "Interior Byte Barn",
+  "symbol": "scene_interior_electronics",
+  "x": 1200,
+  "y": 1300,
+  "width": 40,
+  "height": 26,
+  "backgroundId": "f3e3d53e-fe65-5a17-9289-24199d974a37",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "62842552-d359-5556-a301-fd4208697341",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372",
+    "5f789973-2385-5f21-9c5b-eebf15fd8922",
+    "47e8763a-f218-51ce-8e08-b77138cb3be8",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f",
+    "077ab302-8300-529d-aedf-55de931ea11f"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0fa1+0026+0f2+0026+0f2+0026+0f2+001c+0f6+004+0f2+003+0f2+003+0f2+003+0f2+003+0f2+008+0f6+004+0f2+003+0f2+003+0f2+003+0f2+003+0f2+008+0f6+004+0f2+003+0f2+003+0f2+003+0f2+003+0f2+0012+0f2+003+0f2+003+0f2+003+0f2+003+0f2+00!0f4+00d+0f2+003+0f2+003+0f2+003+0f2+003+0f2+00!0f4+00d+0f2+003+0f2+003+0f2+003+0f2+003+0f2+0012+0f2+003+0f2+003+0f2+003+0f2+003+0f2+008+0f8+002+0f2+003+0f2+003+0f2+003+0f2+003+0f2+008+0f8+002+0f2+003+0f2+003+0f2+003+0f2+003+0f2+002+0f4+00c+0f2+003+0f2+003+0f2+003+0f2+003+0f2+002+0f4+00c+0f2+003+0f2+00d+0f2+0012+0f2+0026+0f2+007+0f6+00d+0f6+006+0f2+007+0f6+00d+0f6+006+0f2+0026+0f2+0026+0f2+0026+0f29+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

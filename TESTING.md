@@ -1,5 +1,11 @@
 # Testing record
 
+## Building interiors (art and data) — candidate, 2026-10-10
+
+- `scripts/create_interiors.py` writes 17 interior scenes; `--check` is part of `make check`, which passes. The generator itself checks each room: at most 344 flip-canonical tiles (most: the LookOut, 290) and seven palettes, a solid border, every tile's colours held by one palette, overhead (priority) tiles showing the player through shade 0, and every point, NPC spot and patrol waypoint reachable on open floor from the entrance.
+- GB Studio CLI `make:rom` (the plugin's vendored toolchain) built `project/build/interiors-test.gbc` with exit 0: 2,097,152 bytes, SHA-256 `a2d1df5b6c42d743680fb46420a1f8659f372d09fbb6ba9b90c544a7d1f7facd`. Every distinct tile of all 17 interior backgrounds was found as 2bpp data in that ROM, so the scenes are compiled in.
+- Not verified: anything in play. No engine enters these scenes yet, so they are not reachable in the emulator or on the cartridge; review so far is from colour renders of the generated art.
+
 ## Police, combat, vehicles, boats and pop-in — candidate, 2026-10-10
 
 GB Studio CLI `make:rom` (the plugin's vendored toolchain) and PyBoy 2.7.0 evidence on `codex/police-combat-vehicles`. "Previous" is the greenery main build `b7aca4ad…` (above).

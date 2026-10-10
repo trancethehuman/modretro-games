@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "e4568e16-f351-5256-87f8-e1a737f978c9",
+  "_index": 30,
+  "type": "TORONTO",
+  "name": "Interior Office Lobby",
+  "symbol": "scene_interior_office_lobby",
+  "x": 600,
+  "y": 1600,
+  "width": 24,
+  "height": 18,
+  "backgroundId": "432ddf9e-43c2-5318-a51e-bad1e73e7dd8",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "62842552-d359-5556-a301-fd4208697341",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "3af1267f-1b82-5b07-a4a3-0926665b239e",
+    "47e8763a-f218-51ce-8e08-b77138cb3be8",
+    "328ac270-ac8d-5d31-9c35-d2e5ba62741b",
+    "54e967e7-1a0b-52bd-a268-4c414fc21cc5",
+    "62842552-d359-5556-a301-fd4208697341"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0f63+0012+0f6+0012+0f4+0016+0f2+008+0f5+009+0f7+002+0f7+002+0f8+008+0f5+009+0f2+0016+0f2+0016+0f2+0016+0f2+0016+0f2+003+0f3+0010+0f4+0014+0f4+0012+0f1b+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

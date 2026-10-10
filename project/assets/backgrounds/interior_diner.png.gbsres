@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "67df2707-e537-5868-8c24-10539012c06a",
+  "name": "Interior Diner",
+  "symbol": "bg_interior_diner",
+  "tileColors": "011b+028+012+006+018+028+012+006+011e+0016+012+00!01d+008+012+00!01d+005+023+012+0016+012+0016+012+0016+012+0013+023+012+0016+012+0016+012+002+023+002+023+00c+012+0013+023+012+0016+012+0016+01c+002+01b+",
+  "filename": "interior_diner.png",
+  "width": 24,
+  "height": 18,
+  "imageWidth": 192,
+  "imageHeight": 144,
+  "autoColor": false
+}

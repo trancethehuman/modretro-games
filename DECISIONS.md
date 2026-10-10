@@ -422,6 +422,18 @@ Compressed map design (not survey):
 - **Collision.** The court (15 tiles), Dufferin Mall's lots (132) and BYTE BARN's lot (230) changed from building to open ground; everything else is pixel and palette only. The street life, places, atlas and western/eastern job fingerprints were regenerated. Core scene tiles (NW, NE, SW, SE): 145, 343, 229, 334 before; 209, 344, 320, 334 after.
 - Not done: interiors; Chinatown on the AGO block south-east of Spadina and Dundas (it lies in the north-east and south-east scenes, which are near their tile budgets).
 
+## Building interiors (art and data), 2026-10-10
+
+User direction (2026-10-10): building interiors for landmarks, generic shop templates and a pause-menu gallery; no children anywhere in the game.
+
+- Accepted (art): `scripts/create_interiors.py` (with `scripts/interior_kit.py`) draws 17 interiors as their own TORONTO scenes: nine landmarks (CN Tower base and LookOut, art gallery, museum dinosaur hall, mall concourse, Union Station great hall, a Chinatown mall, a Spadina bakery and barbecue shop, the fictional BYTE BARN electronics store), six generic templates (cafe, corner store, diner, book and record shop, office lobby, pub) and two gallery rooms. Landmark rooms are original interpretations; paintings, sculptures, the skeleton and all shop names and icons are original or fictional.
+- Accepted (view): north-up like the city. Floors are seen from straight above; the north wall shows a face 3 tiles tall for windows, paintings, shelves, boards and signs; furniture has a short front face. Every room keeps a solid one-tile border and a two-tile door mat in the middle of the south wall (the exit zone); the player arrives just north of it, facing north.
+- Accepted (rules): tables, counters, cases, shelves, plinths and planters are solid; seats (chairs, stools, benches, booth seats) stay open so seated people can use them. Overhead things carry background priority and the floor under them is plain shade 0 so the player shows through: the security arch beam and tower model at the CN Tower base, the flag in Union Station, the lantern strings in the Chinatown mall and the galleria's wooden ribs in the art gallery.
+- Accepted (palettes): interiors use their own library (`project/palettes/interior_*.gbsres`), shared between rooms; nearly every palette keeps the city's paper at shade 0 and ink at shade 3, so the interiors match the city's colours. Each room uses at most seven background palettes (palette 7 stays the UI) and at most 344 flip-canonical tiles (the LookOut, with the city drawn below its windows, uses the most: 290).
+- Accepted (data): `content/interiors.json` lists each room's entrance, exit, points of interest (with short plaque text) and up to eight NPC spots in scene pixels. The gallery hall's eight exhibit points also give the plinth top where a live sprite stands, and its title banner rectangle.
+- Accepted (user direction, no children): no child roles, no school group and no following behaviour in interiors; the museum hall has adult visitors, a docent and a guard, and the drawn food-court diners are adults.
+- Not done: the engine that enters, runs and leaves these scenes (doors in the city, NPCs, points), so none of them is reachable in play yet; the ROM builds with them.
+
 ## Working defaults and pending proposals
 
 - Working title: **Toronto Dispatch**.

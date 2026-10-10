@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "1d75b15a-e90f-5915-9415-10126aa76b59",
+  "name": "Interior Books & Records",
+  "symbol": "bg_interior_shop",
+  "tileColors": "0015+016+034+024+044+002+016+034+024+044+002+016+034+024+044+0012+062+0012+062+0018+016+00e+016+004a+022+00!032+00f+022+00!032+005+055+00f+055+005+012+00!022+005+055+005+012+00!022+0020+",
+  "filename": "interior_shop.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144,
+  "autoColor": false
+}

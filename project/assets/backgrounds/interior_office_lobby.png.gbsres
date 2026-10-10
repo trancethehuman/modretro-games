@@ -1,0 +1,13 @@
+{
+  "_resourceType": "background",
+  "id": "432ddf9e-43c2-5318-a51e-bad1e73e7dd8",
+  "name": "Interior Office Lobby",
+  "symbol": "bg_interior_office_lobby",
+  "tileColors": "0061+022+0012+022+002+022+0012+022+0022+035+00b+015+002+01!035+01!002+016+00a+035+0055+045+00a+042+00!042+005+01!00d+042+00!042+002+022+0016+022+008+032+008+022+009+013+002+013+005+022+00!",
+  "filename": "interior_office_lobby.png",
+  "width": 24,
+  "height": 18,
+  "imageWidth": 192,
+  "imageHeight": 144,
+  "autoColor": false
+}

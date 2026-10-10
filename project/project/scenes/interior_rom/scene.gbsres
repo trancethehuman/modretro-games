@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "5fd04bbe-e7d2-5ca7-91db-208105c97a03",
+  "_index": 21,
+  "type": "TORONTO",
+  "name": "Interior Royal Ont Museum",
+  "symbol": "scene_interior_rom",
+  "x": 1500,
+  "y": 1000,
+  "width": 40,
+  "height": 28,
+  "backgroundId": "b1a27869-599c-5249-ba92-5f96bc71d654",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "47e8763a-f218-51ce-8e08-b77138cb3be8",
+    "39e46657-2e34-5b68-af5e-2de1b9b99604",
+    "2659dcf3-8b95-55f8-a00e-7a001111d594",
+    "5d7c0ccc-33c8-505c-b861-20c6be73f536",
+    "077ab302-8300-529d-aedf-55de931ea11f",
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0fa1+0026+0f2+0026+0f2+0026+0f2+0026+0f2+00!0f4+005+0f12+00a+0f2+00!0f4+005+0f12+00a+0f2+00a+0f12+00a+0f2+00a+0f12+005+0f4+00!0f2+00a+0f12+005+0f4+00!0f2+00a+0f12+00a+0f2+00a+0f12+00a+0f2+00!0f4+005+0f12+00a+0f2+00!0f4+005+0f12+00a+0f2+00a+0f12+005+0f4+00!0f2+0021+0f4+00!0f2+0026+0f2+0026+0f2+0026+0f2+0020+0f4+002+0f2+0020+0f4+002+0f2+0020+0f4+002+0f2+0026+0f2+0026+0f29+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}

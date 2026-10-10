@@ -1,0 +1,41 @@
+{
+  "_resourceType": "scene",
+  "id": "33b4648c-3abb-5a0d-b2fd-33862a9b455a",
+  "_index": 29,
+  "type": "TORONTO",
+  "name": "Interior Books & Records",
+  "symbol": "scene_interior_shop",
+  "x": 300,
+  "y": 1600,
+  "width": 20,
+  "height": 18,
+  "backgroundId": "1d75b15a-e90f-5915-9415-10126aa76b59",
+  "tilesetId": "",
+  "colorModeOverride": "none",
+  "paletteIds": [
+    "85b2361e-455d-5007-ab74-31ec3ff8a95f",
+    "29b4ad3a-8bd8-56d1-90c0-ad2526805372",
+    "5d7c0ccc-33c8-505c-b861-20c6be73f536",
+    "077ab302-8300-529d-aedf-55de931ea11f",
+    "54e967e7-1a0b-52bd-a268-4c414fc21cc5",
+    "328ac270-ac8d-5d31-9c35-d2e5ba62741b",
+    "3af1267f-1b82-5b07-a4a3-0926665b239e"
+  ],
+  "spritePaletteIds": [
+    "2d43eb7e-6bc6-59b3-a2b7-166e6b112e95",
+    "722d0edf-ba2c-5b32-979d-310512c665ee",
+    "ee19683d-51f4-5085-ab0b-e7eb967128f4",
+    "2ab6568b-5600-5ee7-9f72-7cd3f2ec6d5d",
+    "a2df065a-3c1b-5afd-b106-3aa118fdd054",
+    "f395b031-0a22-5e35-a180-aec480bf896f",
+    "976eed3f-2c75-5133-8b4c-37a7da00ae86",
+    "d7480b60-2fed-5e8d-93dd-15eb38177bac"
+  ],
+  "autoFadeSpeed": 1,
+  "script": [],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "collisions": "0f51+0010+0f4+0010+0f4+0012+0f2+002+0f6+00a+0f2+002+0f6+004+0f5+00!0f2+00c+0f5+00!0f2+0012+0f2+0012+0f2+002+0f2+00!0f2+00b+0f2+002+0f2+00!0f2+00b+0f2+0012+0f2+002+0f2+00!0f2+00b+0f2+002+0f2+00!0f2+00b+0f15+",
+  "playerSpriteSheetId": "95080aab-0201-545e-be5a-f5e79b9a693e"
+}
