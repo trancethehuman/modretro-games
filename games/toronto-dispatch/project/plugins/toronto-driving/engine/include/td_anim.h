@@ -16,7 +16,7 @@ void td_anim_spawn(UBYTE kind,UBYTE frame,UWORD u,UWORD v) BANKED;
 void td_anim_pose(UBYTE base,UBYTE ticks) BANKED;
 void td_anim_reset(void) BANKED;
 /* Once per rendered update (after the other presenters): particle ages and
- * actors, the driving triggers (launch, braking, handbrake, a sliding
+ * actors, the driving triggers (launch, braking, a braking slide, a sliding
  * tail) and the camera (look-ahead plus impact shake). */
 void td_anim_update(void) BANKED;
 /* A particle: kind, icon frame (pops), remaining ticks and its GBVM actor

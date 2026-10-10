@@ -5,6 +5,7 @@ not ROM bank placement, scene transitions, physical boarding or cartridge play.
 """
 from pathlib import Path
 import os
+import host_cflags
 import shutil
 import subprocess
 import tempfile
@@ -34,7 +35,7 @@ typedef int16_t WORD;
 #endif
 ''')
         binary = work / 'transit-regressions'
-        subprocess.run([compiler, '-std=c11', '-O1', '-g', '-Wall', '-Wextra', '-Werror',
+        subprocess.run([compiler, '-std=c11', '-O1', '-g', '-Wall', '-Wextra', '-Werror', *host_cflags.extra_flags(compiler),
                         '-Wno-unknown-pragmas', '-fsanitize=address,undefined',
                         '-I', str(work), '-I', str(ENGINE / 'include'),
                         str(ROOT / 'tests/engine/transit_harness.c'), '-o', str(binary)], check=True)

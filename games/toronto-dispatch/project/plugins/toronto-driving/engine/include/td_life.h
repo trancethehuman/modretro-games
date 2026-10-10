@@ -95,8 +95,16 @@ void td_lf_new_look(UBYTE i,UBYTE seed) BANKED;
 void td_life_reset(UBYTE cold) BANKED;
 /* One driving step for the courier's vehicle; returns TD_DRIVE_* bits. */
 UBYTE td_life_drive(void) BANKED;
-/* On-foot A (no own car in reach): steal a nearby road vehicle or punch. */
-void td_life_foot_a(void) BANKED;
+/* On-foot A (no own car in reach): steal a nearby road vehicle (TRUE when
+ * one was taken), or throw a punch. */
+UBYTE td_life_carjack(void) BANKED;
+void td_life_punch(void) BANKED;
+/* Pressed-button edges are valid on the first motion step of an update
+ * (TORONTO.c); td_running is set while the courier runs on foot. */
+extern UBYTE td_input_edge,td_running;
+/* Set by the A+B chord in a vehicle until the car stops and the courier
+ * gets out. */
+extern UBYTE lf_exit_req;
 /* On-foot B away from TTC: fire the pistol in the walking direction. */
 void td_life_foot_b(void) BANKED;
 /* On foot: aim direction (eight headings, E=0 clockwise) from the D-pad,

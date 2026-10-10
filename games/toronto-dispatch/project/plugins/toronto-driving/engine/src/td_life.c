@@ -24,7 +24,7 @@ UWORD tr_au[6],tr_av[6];
 UBYTE fx_timer,fx_look;
 UWORD fx_u,fx_v;
 BYTE fx_du,fx_dv;
-UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_exit_hold,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
+UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
 UBYTE lf_patrol,lf_lost,lf_drop,lf_amb;
 
 /* ------------------------------------------------------------ effects */
@@ -496,7 +496,7 @@ static void lf_police_fire(void){
 void td_life_reset(UBYTE cold) BANKED {
     memset(pk_mode,0,sizeof(pk_mode));memset(tr_mode,0,sizeof(tr_mode));memset(tr_timer,0,sizeof(tr_timer));
     td_ped_ovr=td_tr_ctrl=pk_fresh=pk_lethal=pk_drawn=tr_spin=0;td_fx_kind=0;td_life_event=0;
-    lf_warm=1;lf_stun=lf_flash=lf_punch=lf_hurt=lf_down=lf_arrest=lf_bust=lf_cop_cool=lf_exit_hold=lf_rev_wait=lf_shake=lf_stuck=0;
+    lf_warm=1;lf_stun=lf_flash=lf_punch=lf_hurt=lf_down=lf_arrest=lf_bust=lf_cop_cool=lf_rev_wait=lf_shake=lf_stuck=0;lf_exit_req=lf_spd_acc=lf_spd_ctl=0;lf_a_age=lf_b_age=255;
     lf_patrol=lf_lost=lf_drop=lf_amb=0;
     lf_fx_end();
     camera_offset_x=0;

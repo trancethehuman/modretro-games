@@ -36,6 +36,17 @@
       "max": 8
     },
     {
+      "key": "VM_HEAP_SIZE",
+      "label": "Script variable heap in words (the project has no variables; keep 32)",
+      "group": "Toronto memory",
+      "type": "number",
+      "cType": "define",
+      "file": "include/vm.h",
+      "defaultValue": 32,
+      "min": 32,
+      "max": 32
+    },
+    {
       "key": "MAX_TRIGGERS",
       "label": "Trigger pool (no scene uses triggers; keep 1)",
       "group": "Toronto memory",

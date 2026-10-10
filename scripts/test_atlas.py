@@ -7,6 +7,7 @@ calls, ROM builds, Game Boy timing or hardware claims are involved.
 """
 from pathlib import Path
 import json
+import host_cflags
 import os
 import re
 import shutil
@@ -181,7 +182,7 @@ typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
 #endif
 """)
         binary = work / "atlas-regressions"
-        subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
+        subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror", *host_cflags.extra_flags(compiler),
                         "-Wno-unknown-pragmas", "-fsanitize=address,undefined",
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(HARNESS), "-o", str(binary)], check=True)

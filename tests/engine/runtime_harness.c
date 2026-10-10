@@ -188,7 +188,7 @@ static void reset_case(void) {
 
 static void native_case(void);
 static void driving_tick(UBYTE held) {
-    joy_pressed=held & ~joy;joy=held;td_tick++;sys_time++;td_corner_used=0;td_drive();
+    joy_pressed=held & ~joy;joy=held;td_tick++;sys_time++;td_corner_used=0;td_input_edge=1;td_drive();
 }
 static void world_tick(UBYTE held,UWORD elapsed) {
     joy_pressed=held & ~joy;joy=held;sys_time+=elapsed;toronto_update();
@@ -242,18 +242,28 @@ static void test_wall_and_brake(void) {
 
     reset_case();WORD baseline=prime_car();
     for(unsigned i=0;i<20;i++)driving_tick(J_A|J_B);
-    expect(td.speed<baseline,"A+B acts as a handbrake while moving");
-    for(unsigned i=0;i<60&&td.speed;i++)driving_tick(J_A|J_B);
-    expect(td.speed==0&&!td.onfoot,"the handbrake stops the car without engaging reverse");
-    for(unsigned i=0;i<24;i++)driving_tick(J_A|J_B);
-    expect(td.onfoot&&td_entry_timer,"holding A+B at rest leaves the vehicle");
+    expect(td.speed<baseline&&!td.onfoot,"pressing B while holding the throttle brakes rather than leaving");
+    for(unsigned i=0;i<60&&td.speed>0;i++)driving_tick(J_A|J_B);
+    expect(td.speed<=0&&!td.onfoot,"braking with the throttle still held stops the car");
+
+    reset_case();baseline=prime_car();driving_tick(0);
+    for(unsigned i=0;i<4;i++)driving_tick(J_A|J_B);
+    expect(!td.onfoot&&td.speed<baseline,"an A+B chord at speed brakes hard first");
+    for(unsigned i=0;i<30&&!td.onfoot;i++)driving_tick(0);
+    expect(td.onfoot&&td_entry_timer,"an A+B chord at speed leaves the car once it stops");
+
+    reset_case();driving_tick(J_A|J_B);driving_tick(J_A|J_B);
+    expect(td.onfoot&&td_entry_timer,"an A+B chord at rest leaves the car at once");
+
+    reset_case();driving_tick(J_A);for(unsigned i=0;i<10;i++)driving_tick(J_A);driving_tick(J_A|J_B);
+    expect(!td.onfoot,"B pressed long after A is not an exit chord");
 
     reset_case();UBYTE heading=td.heading;
     for(unsigned i=0;i<90;i++)driving_tick(J_RIGHT);
     expect(td.heading==heading&&td.speed==0,"steering never rotates a stationary car");
-    for(unsigned i=0;i<12;i++)driving_tick(J_LEFT|J_A|J_B);
-    expect(td.heading==heading&&!td.onfoot,"steering with the handbrake held at rest does not rotate the car");
-    for(unsigned i=0;i<9;i++)driving_tick(J_B);
+    for(unsigned i=0;i<12;i++)driving_tick(J_LEFT|J_B);
+    expect(td.heading==heading&&!td.onfoot,"steering while braking at rest does not rotate the car");
+    driving_tick(0);for(unsigned i=0;i<9;i++)driving_tick(J_B);
     expect(td.speed==0,"a short brake hold at rest does not lurch into reverse");
     for(unsigned i=0;i<40;i++)driving_tick(J_B|J_RIGHT);
     UBYTE swing=(UBYTE)(heading-td.heading)&15;
@@ -340,9 +350,9 @@ static void test_city_routes_and_walking(void) {
     reset_case();geometry=NATIVE_GRID;
     expect(!lf_drive(120,796),"car footprint rejects a narrow solid rail under its centre");
     reset_case();geometry=NATIVE_GRID;td.u=793*16+2;td.v=730*16+12;
-    td.heading=4;td.speed=21;td_vx=0;td_vy=336;
+    td.heading=4;td.speed=19;td_vx=0;td_vy=304;
     for(unsigned i=0;i<16;i++)driving_tick(J_A);
-    expect(td.speed>=21&&td.v>738*16,"held throttle clears a small quantised corner overlap without losing forward speed");
+    expect(td.speed>=19&&td.v>738*16,"held throttle clears a small quantised corner overlap without losing forward speed");
     expect(lf_drive(td.u>>4,td.v>>4),"corner slide retains a collision-valid car footprint");
 
     reset_case();geometry=EAST_WALL;td.u=393*16;td.v=450*16;td.heading=0;td.speed=24;td_vx=384;
@@ -476,6 +486,35 @@ static void test_bounded_corner_assist(void) {
     expect(!lf_corner_slide(td.u,td.v+16),"corner assistance cannot push the car beyond the southern map bound");
 }
 
+/* On foot, holding A while moving runs and a short tap punches; a glancing
+ * blow between cars clips past instead of stopping dead. */
+static void test_running_and_clips(void) {
+    reset_case();td.onfoot=1;geometry=CLEAR_GROUND;td.u=400*16;td.v=450*16;
+    UWORD start=td.u;
+    for(unsigned i=0;i<20;i++)driving_tick(J_RIGHT);
+    UWORD walked=td.u-start;start=td.u;
+    for(unsigned i=0;i<20;i++)driving_tick(J_RIGHT|J_A);
+    UWORD ran=td.u-start;
+    expect(ran>walked+walked/3&&td_running,"holding A while walking runs faster");
+    driving_tick(J_RIGHT);
+    expect(!td_running&&!td_ped_ovr,"letting go after a run neither keeps running nor punches");
+
+    reset_case();td.onfoot=1;geometry=CLEAR_GROUND;td.u=300*16;td.v=300*16;td_walk_dir=0;
+    for(UBYTE k=0;k<TD_PEDS;k++)actors[TD_ACTOR_PEDS+k].flags=ACTOR_FLAG_HIDDEN;
+    actors[9].pos.x=308*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=0;
+    for(unsigned i=0;i<3;i++)driving_tick(J_RIGHT|J_A);
+    expect(!td_ped_ovr,"a tap while walking waits for release before punching");
+    driving_tick(J_RIGHT);
+    expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLY,"releasing a short tap while walking throws the punch");
+
+    reset_case();geometry=CLEAR_GROUND;td.u=400*16;td.v=450*16;td.heading=0;td.speed=16;td_vx=256;td_vy=0;
+    td_traffic_u[0]=td.u+176;td_traffic_v[0]=td.v+144;td_traffic_bases[0]=TD_FRAME_PLAYER_CAR;actors[2].frame=td_traffic_bases[0];
+    UWORD before_u=td.u,before_v=td.v;driving_tick(J_A);
+    expect(td.u>before_u&&td.v<before_v,"a glancing blow lets the courier scrape past, pushed clear sideways");
+    expect(td.speed>=13&&(td_tr_ctrl&1)&&tr_mode[0]==TR_PUSH&&tr_pv[0]>0,"a clip costs little speed and shoves the other car aside");
+    expect(td_distance(td_traffic_v[0],td.v)>=192||td_distance(td_traffic_u[0],td.u)>=192,"after a clip the bodies no longer overlap");
+}
+
 static void test_street_life(void) {
     UBYTE found_bad=0;
     /* Car theft: A beside a road vehicle drags its driver out and takes it. */
@@ -490,7 +529,7 @@ static void test_street_life(void) {
     /* A punch knocks a walker down; a pistol shot uses a round. */
     reset_case();td.onfoot=1;td.u=300*16;td.v=300*16;td_walk_dir=0;td.ammo=3;
     actors[9].pos.x=307*32;actors[9].pos.y=300*32;actors[9].flags=0;td_ped_route[0]=0;
-    td_life_foot_a();
+    td_life_punch();
     expect((td_ped_ovr&1)&&pk_mode[0]==PK_FLY,"a punch throws the walker in front of the courier");
     for(unsigned i=0;i<40;i++)td_life_tick();
     expect(pk_mode[0]==PK_DOWN,"a punched walker lands and stays down for a while");
@@ -2052,7 +2091,7 @@ static void test_animation(void) {
     td.u=400*16;td.v=450*16;
     for(unsigned i=0;i<150;i++){driving_tick(J_A);td_anim_update();}
     expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR,"no headlamps by day");
-    expect(camera_offset_x<=-20&&camera_offset_y==0,"the camera looks ahead of an eastbound car");
+    expect(camera_offset_x<=-16&&camera_offset_y==0,"the camera looks ahead of an eastbound car");
     td.seconds=(UWORD)hour_seconds(22*60);td_daynight_apply(0);driving_tick(J_A);
     expect(PLAYER.frame_start==TD_FRAME_PLAYER_CAR_LIT,"night headlamps light the road ahead of the car");
     expect(actors[8].frame_start<TD_FRAME_PLAYER_CAR_LIT,"a parked car keeps its lamps off");
@@ -2078,16 +2117,16 @@ static void test_car_damage(void) {
     expect(td_car_damage>=TD_DAMAGE_FAIL&&td.msg==TD_MSG_SMOKING,"crossing the failing threshold warns of a smoking engine");
     geometry=CLEAR_GROUND;td.cooldown=0;td.speed=0;td_vx=td_vy=0;
     for(unsigned i=0;i<400;i++)driving_tick(J_A);
-    expect(td.speed==18,"a failing car tops out at three quarters of its speed");
+    expect(td.speed==15,"a failing car tops out at three quarters of its speed");
     native_case();td_session_live=1;td.seconds=0;toronto_init();td.mode=TD_ROAM;td.onfoot=0;geometry=CLEAR_GROUND;
     td_car_damage=TD_DAMAGE_FAIL;memset(td_anim_parts,0,sizeof(td_anim_parts));
     for(unsigned i=0;i<40;i++){td_tick++;td_anim_update();}
     expect(td_anim_parts[0].time&&td_anim_parts[0].kind==TD_PART_SMOKE,"a failing engine smokes from the bonnet");
     /* At a hundred the car is wrecked and only crawls until repaired. */
-    reset_case();td_car_damage=95;prime_car();td.u=393*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
+    reset_case();td_car_damage=95;prime_car();td.u=394*16;td.v=450*16;geometry=EAST_WALL;driving_tick(J_A);
     expect(td_car_damage==TD_DAMAGE_WRECK&&td.msg==TD_MSG_WRECKED,"a wrecked car says so");
     geometry=CLEAR_GROUND;td.speed=0;td_vx=td_vy=0;for(unsigned i=0;i<200;i++)driving_tick(J_A);
-    expect(td.speed==6,"a wreck crawls");
+    expect(td.speed==5,"a wreck crawls");
     td.cash=40;expect(td_life_buy()&&td_car_damage==0,"supplies repair the car");
     /* A stolen car starts fresh in its own paint. */
     reset_case();td_car_damage=80;td.onfoot=1;td.u=300*16;td.v=292*16;td.park_u=100*16;td.park_v=100*16;
@@ -2124,7 +2163,7 @@ static void test_places(void) {
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
-    test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_street_life();
+    test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_street_life();test_running_and_clips();
     test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();
     test_signal_and_autonomous_traffic();
     test_city_routes_and_walking();

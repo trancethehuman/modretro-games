@@ -5,6 +5,7 @@ fake banked reads intentionally cannot establish GBDK ABI or native GBVM timing.
 """
 from pathlib import Path
 import json
+import host_cflags
 import os
 import re
 import shutil
@@ -100,7 +101,7 @@ def main():
             (work / "data" / f"{symbol}.h").write_text(f"extern const scene_t {symbol};\n")
         binary = work / "district-bridge-regressions"
         subprocess.run(
-            [compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
+            [compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror", *host_cflags.extra_flags(compiler),
              "-Wno-unknown-pragmas", "-fsanitize=address,undefined",
              "-I", str(work), "-I", str(ENGINE / "include"),
              str(HARNESS), "-o", str(binary)], check=True,

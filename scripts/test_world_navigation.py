@@ -5,6 +5,7 @@ bank-switch timing or establish expanded geography/performance/hardware.
 """
 from pathlib import Path
 import os
+import host_cflags
 import shutil
 import subprocess
 import tempfile
@@ -40,7 +41,7 @@ typedef struct { UBYTE bank; const void *ptr; } far_ptr_t;
 #endif
 ''')
         binary = work / 'world-navigation-regressions'
-        subprocess.run([compiler, '-std=c11', '-O1', '-g', '-Wall', '-Wextra', '-Werror',
+        subprocess.run([compiler, '-std=c11', '-O1', '-g', '-Wall', '-Wextra', '-Werror', *host_cflags.extra_flags(compiler),
                         '-Wno-unknown-pragmas', '-fsanitize=address,undefined',
                         '-I', str(work), '-I', str(ENGINE / 'include'),
                         str(ROOT / 'tests/engine/world_navigation_harness.c'), '-o', str(binary)], check=True)

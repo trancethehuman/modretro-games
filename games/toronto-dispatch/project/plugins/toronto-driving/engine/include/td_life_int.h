@@ -41,7 +41,10 @@ extern UBYTE fx_timer,fx_look;
 extern UWORD fx_u,fx_v;
 extern BYTE fx_du,fx_dv;
 
-extern UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_exit_hold,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
+/* Driving: speed accumulator and its control state, ticks since A and B
+ * were pressed (the exit chord). */
+extern UBYTE lf_spd_acc,lf_spd_ctl,lf_a_age,lf_b_age;
+extern UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
 /* Slot 4 is an ordinary blue car until a pursuit needs it: it becomes the
  * patrol car only while out of view and changes back the same way. */
 extern UBYTE lf_patrol,lf_lost;

@@ -6,6 +6,7 @@ GBVM actor rendering or hardware. Separate native playtests remain necessary.
 """
 from pathlib import Path
 import os
+import host_cflags
 import shutil
 import subprocess
 import tempfile
@@ -45,7 +46,7 @@ void ui_set_pos(UBYTE x,UBYTE y);
         (work / "gbdk").mkdir()
         (work / "gbdk/platform.h").write_text('#include "ui_host.h"\n')
         binary = work / "atlas-ui-regressions"
-        subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror",
+        subprocess.run([compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", "-Werror", *host_cflags.extra_flags(compiler),
                         "-Wno-unknown-pragmas", "-Wno-deprecated-declarations", "-fsanitize=address,undefined",
                         "-I", str(work), "-I", str(ENGINE / "include"),
                         str(FIXTURES / "atlas_ui_harness.c"), str(work / "transit_under_test.c"),

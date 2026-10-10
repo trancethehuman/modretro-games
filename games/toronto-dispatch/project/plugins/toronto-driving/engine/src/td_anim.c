@@ -73,8 +73,8 @@ static void an_rear(UBYTE kind,UBYTE wheels){
     td_anim_spawn(kind,0,u,v);
 }
 
-/* Driving triggers: a launch from rest, hard braking, the handbrake and a
- * sliding tail. Smoke is spaced out so a particle is rarely alive for long. */
+/* Driving triggers: a launch from rest, hard braking, a braking slide
+ * into a turn and a sliding tail. Smoke is spaced out so a particle is rarely alive for long. */
 static void an_triggers(void){
     UBYTE a,h;
     if(td.onfoot||td.mode!=TD_ROAM||td_entry_timer||lf_down||lf_arrest||lf_hurt>22)return;
@@ -86,8 +86,8 @@ static void an_triggers(void){
     }
     if(!td.speed){an_launch=1;return;}
     a=td.speed<0?(UBYTE)-td.speed:(UBYTE)td.speed;
-    if(INPUT_A&&INPUT_B){if(a>8){an_rear(TD_PART_SMOKE,1);an_cool=8;}}
-    else if(INPUT_B){if(td.speed>14){an_rear(TD_PART_SMOKE,1);an_cool=10;}}
+    if(INPUT_B&&!!INPUT_LEFT!=!!INPUT_RIGHT){if(a>10){an_rear(TD_PART_SMOKE,1);an_cool=8;}}
+    else if(INPUT_B||lf_exit_req){if(td.speed>12){an_rear(TD_PART_SMOKE,1);an_cool=10;}}
     else if(a>12&&lf_abs(td_vx-lf_scale_x)+lf_abs(td_vy-lf_scale_y)>240){an_rear(TD_PART_SMOKE,1);an_cool=10;}
     else if(an_launch&&INPUT_A&&td.speed>0){an_launch=0;an_rear(TD_PART_PUFF,0);an_cool=12;}
 }

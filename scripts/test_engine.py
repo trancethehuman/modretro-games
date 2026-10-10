@@ -12,6 +12,7 @@ not GBDK ABI, Game Boy CPU timing, rendering, cartridge persistence or hardware.
 """
 from pathlib import Path
 import importlib.util
+import host_cflags
 import json
 import os
 import re
@@ -195,7 +196,7 @@ def main():
         (work / "gbdk").mkdir()
         (work / "gbdk/platform.h").write_text('#include "gbvm_stubs.h"\n')
         binary = work / "engine-regressions"
-        command = [compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra",
+        command = [compiler, "-std=c11", "-O1", "-g", "-Wall", "-Wextra", *host_cflags.extra_flags(compiler),
                    "-Wno-unknown-pragmas", "-Wno-parentheses", "-fsanitize=address,undefined",
                    "-I", str(work), "-I", str(ENGINE / "include"),
                    str(FIXTURES / "runtime_harness.c"), "-o", str(binary)]

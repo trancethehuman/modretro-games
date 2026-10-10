@@ -56,7 +56,8 @@ UBYTE td_resume_mode;
 WORD td_vx,td_vy;
 static UWORD td_last_frame;
 UBYTE td_corner_used;
-static UBYTE td_input_edge;
+/* Pressed-button edges belong to the first motion step of an update. */
+UBYTE td_input_edge;
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v);
 
 static UWORD td_distance(UWORD a,UWORD b){return a>b?a-b:b-a;}
@@ -1729,20 +1730,31 @@ static void td_pedestrians(void){
 /* D-pad (x,y) to aim heading: index (y+1)*3+(x+1), E=0 clockwise. */
 static const UBYTE td_aim_of[9]={5,6,7,4,0,0,3,2,1};
 static UBYTE td_fire_hold;
+/* On foot, A is both an action and the run button: a press beside the
+ * courier's car gets in, beside a road vehicle steals it; otherwise a tap
+ * throws a punch (at once when standing, on release when moving) and
+ * holding A while moving runs. td_a_held counts ticks A has been down
+ * (TD_NONE while that press has already been used). */
+#define TD_RUN_AFTER 8
+static UBYTE td_a_held=TD_NONE;
+UBYTE td_running;
 static void td_drive(void){
-    WORD nu,nv;BYTE walk_x,walk_y;UBYTE moving=0;
+    WORD nu,nv;BYTE walk_x,walk_y;UBYTE moving=0,step;
     if(td_entry_timer){
         if(!td_entry_target){td.u=(td.u*3+td.park_u)/4;td.v=(td.v*3+td.park_v)/4;}
         if(!--td_entry_timer){if(!td_entry_target){td.u=td.park_u;td.v=td.park_v;td.onfoot=0;}td_set_target();td_save();}
         td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());return;
     }
     if(td.onfoot){
-        if(td_life_locked()){td.speed=0;return;}
+        if(td_life_locked()){td.speed=0;td_running=0;return;}
         nu=td.u;nv=td.v;
         walk_x=!!INPUT_RIGHT-!!INPUT_LEFT;walk_y=!!INPUT_DOWN-!!INPUT_UP;
-        /* Alternate5/6 per axis: diagonal pace stays below cardinal8 Q4. */
-        if(walk_x){nu+=walk_x*(walk_y?5+(td_tick&1):8);td_walk_dir=walk_x>0?0:1;moving=1;}
-        if(walk_y){nv+=walk_y*(walk_x?6-(td_tick&1):8);td_walk_dir=walk_y>0?2:3;moving=1;}
+        td_running=(walk_x||walk_y)&&INPUT_A&&td_a_held!=TD_NONE&&td_a_held>=TD_RUN_AFTER;
+        /* Walking covers 8 Q4 a tick, running 13; diagonals alternate so
+         * they are no faster than the cardinal pace. */
+        step=td_running?13:8;
+        if(walk_x){nu+=walk_x*(walk_y?(td_running?9:5+(td_tick&1)):step);td_walk_dir=walk_x>0?0:1;moving=1;}
+        if(walk_y){nv+=walk_y*(walk_x?(td_running?9:6-(td_tick&1)):step);td_walk_dir=walk_y>0?2:3;moving=1;}
         /* Aim follows the D-pad in eight directions; the lock-on refreshes
          * every eighth tick. */
         if(moving)td_aim_dir=td_aim_of[(UBYTE)((walk_y+1)*3+walk_x+1)];
@@ -1751,10 +1763,16 @@ static void td_drive(void){
         else{if(nu!=(WORD)td.u&&td_foot_free(nu,td.v))td.u=nu;if(nv!=(WORD)td.v&&td_foot_free(td.u,nv))td.v=nv;}
         td.speed=0;
         if(td_anim_pose_time){td_anim_pose_time--;td_frame(&PLAYER,td_anim_pose_base+td_walk_dir);}
-        else td_frame(&PLAYER,TD_FRAME_COURIER_WALK+td_walk_dir*2+(moving?((td_tick>>3)&1):0));
-        /* A: own car, then a nearby road vehicle, else a punch.
+        else td_frame(&PLAYER,TD_FRAME_COURIER_WALK+td_walk_dir*2+(moving?((td_tick>>(td_running?2:3))&1):0));
+        /* A: own car, then a nearby road vehicle, else a punch or a run.
          * B: TTC at a station, otherwise the pistol. */
-        if(td_input_edge&&INPUT_A_PRESSED){if(td_near_car())td_enter_exit();else td_life_foot_a();}
+        if(td_input_edge&&INPUT_A_PRESSED){
+            td_a_held=0;
+            if(td_near_car()){td_a_held=TD_NONE;td_enter_exit();}
+            else if(td_life_carjack())td_a_held=TD_NONE;
+            else if(!moving){td_a_held=TD_NONE;td_life_punch();}
+        }else if(INPUT_A){if(td_a_held<TD_RUN_AFTER)td_a_held++;}
+        else{if(td_a_held<TD_RUN_AFTER&&!td_entry_timer)td_life_punch();td_a_held=TD_NONE;}
         /* B at a station opens the TTC; elsewhere it fires, and holding it
          * keeps firing at the pistol's rate. */
         if(td_input_edge&&INPUT_B_PRESSED&&!td_entry_timer){if(td_origin()!=TD_NONE)td_transit_open();else{td_fire_hold=1;td_life_foot_b();}}

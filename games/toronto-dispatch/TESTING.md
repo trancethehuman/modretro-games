@@ -1,5 +1,12 @@
 # Testing record
 
+## Main build flashed to Chromatic — 2026-10-10
+
+- Source: `main` at `afa4d85` (`Distinct districts, navigation names and detailed sidewalks`); checkout was clean and already up to date.
+- Official ModRetro Chromatic plugin build: `project/build/project.gbc`, 524,288 bytes, SHA-256 `b105ba2a7b0c5f73c7c8b409da380800bdc90cdaa86c15c663986173bcc7ef2f`. The build exited 0 with compiler warnings and a Node `DEP0190` warning. ROM inspection passed: CGB-only, MBC5+RUMBLE+RAM+BATTERY, 32 KiB RAM, valid Nintendo logo and header checksum. PyBoy 2.7.0 booted this exact hash through frame 300.
+- Device discovery on the Mac found Chromatic Player 1 with no unmatched USB devices or diagnostics. Cartridge detection reported a writable 4 MiB ISSI `IS29GL032-70TLET-TR` cartridge and matched MBC5+CGB ROM header.
+- The user acknowledged the erase/save-loss/no-backup warning and authorized the write. The vendor `write-homebrew` operation succeeded for Player 1 and reported the same ROM SHA-256 after 46.656 seconds. No read-back verification was returned. Physical cold boot, gameplay, save persistence, display and audio remain unverified pending human checks.
+
 ## Distinct districts, navigation names and street detail — candidate, 2026-10-07
 
 Same toolchain as below; CLI build and PyBoy evidence only. "Previous" is the parks candidate `787de9dd…`.
