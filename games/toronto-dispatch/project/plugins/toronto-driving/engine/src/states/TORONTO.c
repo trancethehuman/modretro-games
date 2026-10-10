@@ -15,6 +15,7 @@
 #include "td_life.h"
 #include "td_anim.h"
 #include "td_daynight.h"
+#include "td_overlay.h"
 #include "td_district_world.h"
 #include "actor.h"
 #include "camera.h"
@@ -166,6 +167,13 @@ static UBYTE td_walkable(UWORD u,UWORD v){
     if(u>=1024||v>=976)return FALSE;
     return !(tile_at(u>>3,v>>3)&15);
 }
+/* Open water (whole pixels): the courier swims in it. */
+static UBYTE td_swimmable(UWORD u,UWORD v){
+    if(u>=1024||v>=976)return FALSE;
+    return tile_at(u>>3,v>>3)==TD_COLLISION_WATER;
+}
+/* Global: the overlay's sharks and the HUD read it. */
+UBYTE td_swimming;
 static UBYTE td_traffic_free(UWORD u,UWORD v){
     UBYTE i;
     for(i=0;i<6;i++)if(td_distance(u,td_traffic_u[i])<168&&td_distance(v,td_traffic_v[i])<168)return FALSE;
@@ -173,6 +181,10 @@ static UBYTE td_traffic_free(UWORD u,UWORD v){
 }
 static UBYTE td_foot_free(UWORD u,UWORD v){
     return td_walkable(u>>4,v>>4)&&!(td.park_district==td.district&&td_distance(u,td.park_u)<168&&td_distance(v,td.park_v)<168)&&td_traffic_free(u,v);
+}
+/* Walking or swimming: the next step may also go into open water. */
+static UBYTE td_step_free(UWORD u,UWORD v){
+    return td_swimmable(u>>4,v>>4)?td_traffic_free(u,v):td_foot_free(u,v);
 }
 static UBYTE td_near_car(void){return td.park_district==td.district&&td_distance(td.u,td.park_u)<384&&td_distance(td.v,td.park_v)<384;}
 static UBYTE td_door_path(UWORD u,UWORD v,UWORD car_u,UWORD car_v){
@@ -218,8 +230,10 @@ void td_set_target(void) BANKED {
     else actors[1].flags&=~ACTOR_FLAG_HIDDEN;
 }
 static UBYTE td_change_district(UBYTE district,UWORD u,UWORD v){
-    if(td.onfoot?!td_district_walkable(district,u>>4,v>>4):!td_district_drivable(district,u>>4,v>>4))return FALSE;
+    if(td.onfoot?!(td_district_walkable(district,u>>4,v>>4)||td_district_swimmable(district,u>>4,v>>4)):
+                 !td_district_drivable(district,u>>4,v>>4))return FALSE;
     if(!td_district_queue(district))return FALSE;
+    td_overlay_show(0);
     td.district=district;td.u=u;td.v=v;td.safe_u=u;td.safe_v=v;
     if(!td.onfoot){td.park_district=district;td.park_u=u;td.park_v=v;}
     td_transition_pending=1;td_save();return TRUE;
@@ -546,8 +560,9 @@ static UBYTE td_ui_pending,td_dn_pending;
 static void td_second(void){
     UWORD arrival_u,arrival_v;
     td.seconds++;
-    /* The next update starts in VBlank: change the palettes there. */
-    td_dn_pending=1;
+    /* The next update starts in VBlank: change the palettes there (the
+     * weather's tint too, when a new spell starts). */
+    td_overlay_second();td_dn_pending=1;
     if(td.job!=TD_NONE){if(td.left)td.left--;if(!td.left){td.health=0;
         /* A failed parcel still finishes its already-paid trip; never strand it in transit. */
         if(td.mode==TD_RIDE){td.job=TD_NONE;td_set_target();td_save();}else{td_finish(FALSE);return;}
@@ -1543,19 +1558,27 @@ static void td_drive(void){
         if(td_life_locked()){td.speed=0;td_running=0;return;}
         nu=td.u;nv=td.v;
         walk_x=!!INPUT_RIGHT-!!INPUT_LEFT;walk_y=!!INPUT_DOWN-!!INPUT_UP;
-        td_running=(walk_x||walk_y)&&INPUT_A&&td_a_held!=TD_NONE&&td_a_held>=TD_RUN_AFTER;
-        /* Walking covers 8 Q4 a tick, running 13; diagonals alternate so
-         * they are no faster than the cardinal pace. */
-        step=td_running?13:8;
-        if(walk_x){nu+=walk_x*(walk_y?(td_running?9:5+(td_tick&1)):step);td_walk_dir=walk_x>0?0:1;moving=1;}
-        if(walk_y){nv+=walk_y*(walk_x?(td_running?9:6-(td_tick&1)):step);td_walk_dir=walk_y>0?2:3;moving=1;}
+        td_swimming=td_swimmable(td.u>>4,td.v>>4);
+        td_running=!td_swimming&&(walk_x||walk_y)&&INPUT_A&&td_a_held!=TD_NONE&&td_a_held>=TD_RUN_AFTER;
+        /* Walking covers 8 Q4 a tick, running 13 and swimming 5; diagonals
+         * alternate so they are no faster than the cardinal pace. */
+        step=td_swimming?5:td_running?13:8;
+        if(walk_x){nu+=walk_x*(walk_y?(td_swimming?3+(td_tick&1):td_running?9:5+(td_tick&1)):step);td_walk_dir=walk_x>0?0:1;moving=1;}
+        if(walk_y){nv+=walk_y*(walk_x?(td_swimming?4-(td_tick&1):td_running?9:6-(td_tick&1)):step);td_walk_dir=walk_y>0?2:3;moving=1;}
         /* Aim follows the D-pad in eight directions; the lock-on refreshes
          * every eighth tick. */
         if(moving)td_aim_dir=td_aim_of[(UBYTE)((walk_y+1)*3+walk_x+1)];
         if(!(td_tick&7))td_life_aim();
-        if(td_foot_free(nu,nv)){td.u=nu;td.v=nv;}
-        else{if(nu!=(WORD)td.u&&td_foot_free(nu,td.v))td.u=nu;if(nv!=(WORD)td.v&&td_foot_free(td.u,nv))td.v=nv;}
+        if(td_step_free(nu,nv)){td.u=nu;td.v=nv;}
+        else{if(nu!=(WORD)td.u&&td_step_free(nu,td.v))td.u=nu;if(nv!=(WORD)td.v&&td_step_free(td.u,nv))td.v=nv;}
         td.speed=0;
+        if(td_swimming){
+            /* Head and shoulders above the water; the stroke beats slower
+             * when treading water. No punches, shots or cars from here. */
+            td_frame(&PLAYER,TD_FRAME_SWIM+((td_tick>>(moving?3:4))&1));
+            td_a_held=TD_NONE;td_fire_hold=0;td_aim_hold=0;
+            return;
+        }
         if(td_anim_pose_time){td_anim_pose_time--;td_frame(&PLAYER,td_anim_pose_base+td_walk_dir);}
         else td_frame(&PLAYER,TD_FRAME_COURIER_WALK+td_walk_dir*2+(moving?((td_tick>>(td_running?2:3))&1):0));
         /* A: own car, then a nearby road vehicle, else a punch or a run.
@@ -1649,13 +1672,14 @@ void toronto_init(void) BANKED {
     td_street_reset(cold);td_transit_present(0);td_pickups_present();
     camera_settings=CAMERA_LOCK_FLAG;camera_offset_x=0;camera_offset_y=0;camera_deadzone_x=8;camera_deadzone_y=8;
     if(cold)td_audio_init();td_ui_init();td_scenery_find();
+    td_overlay_init();td_overlay_show(1);
 }
 void toronto_update(void) BANKED {
     UWORD now,elapsed,seconds,old_u,old_v;UBYTE motion,step,was_entering,consumed=0;
     if(td_transition_pending){if(td_transition_pending==2&&td_district_queue(td.district))td_transition_pending=1;return;}
     /* Water and the Yonge and Dundas screen: arm the next chunk for the
      * vertical-blank handler (menus and the map own the tiles). */
-    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)td_scenery_tick();
+    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_scenery_tick();td_overlay_tick();}
     if(td_dn_pending){td_dn_pending=0;td_daynight_apply(TD_DN_HW);}
     /* A station within reach replaces the street name with its B prompt. */
     if(++td_station_tick>=12){UBYTE near;td_station_tick=0;near=td.onfoot&&td.mode==TD_ROAM&&!td.wanted?td_origin():TD_NONE;if(near!=td_station_near){td_station_near=near;td_ui_pending=1;}}

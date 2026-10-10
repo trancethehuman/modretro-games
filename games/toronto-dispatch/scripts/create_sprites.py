@@ -115,6 +115,8 @@ def frames():
         add(f'sparkle_{i}', g, 'signal_yellow')
     for i, g in enumerate(A.beam_frames()):
         add(f'beam_{i}', g, 'signal_yellow')
+    for i, g in enumerate(A.SWIM):
+        add(f'swim_{i}', g, 'courier_person')
     return out
 
 
@@ -127,7 +129,7 @@ def cardinal(frames):
 # The courier's vehicles in engine order, and the headlamp beam frame centre
 # relative to the vehicle in the eight headings (E, SE, S, SW, W, NW, N, NE).
 PLAYER_VEHICLES = ('car', 'van', 'motorcycle', 'scooter')
-BEAM_OFFSETS = ((16, 0), (10, 10), (0, 16), (-10, 10), (-16, 0), (-10, -10), (0, -16), (10, -10))
+BEAM_OFFSETS = ((16, 0), (12, 12), (0, 16), (-12, 12), (-16, 0), (-12, -12), (0, -16), (12, -12))
 
 
 def slice_count(fr, sheet, places, frame_defs):
@@ -164,6 +166,10 @@ def tile_boxes(size, g=None, centred=False):
         # Full-size vehicles facing north or south: centred on the 16x16 point,
         # rows -8..24, so the north view is the vertical flip of the south.
         return [(px, 16 * r, px, 8 - 16 * r) for r in range(2) for px in (0, 8)], (0, 0)
+    if centred and size == (24, 32):
+        # Full-size vehicles at 45 degrees: 24 wide, centred like the
+        # cardinal views (columns -4..20, rows -8..24).
+        return [(px, 16 * r, px - 4, 8 - 16 * r) for r in range(2) for px in (0, 8, 16)], (0, 0)
     if size == (32, 32):
         # Diagonal tracers: centred like wide frames, growing upward like tall ones.
         return [(px, 16 - 16 * r, px - 8, 16 * r) for r in range(2) for px in range(0, 32, 8)], (0, 8)
@@ -248,10 +254,16 @@ def build():
             frame_defs.append({'id': ident(f'{name}-frame'), 'tiles': tiles})
             fr.append((name, None, P['courier_vehicle'], fr[index[f'player_{vehicle}_{d}']][3]))
     assert len(fr) <= 256, 'actor frame indices are one byte'
-    # Colour-only scenes split OBJ tiles evenly over both VRAM banks below the
-    # UI art at tile 128: at most 64 8x16 tiles (128 8x8 tiles) per bank.
+    # Colour-only scenes split OBJ tiles evenly over both VRAM banks, from
+    # tile 0. A scene's background puts 128 tiles a bank below the sprites'
+    # area and the rest (half of at most city_kit.SCENE_TILE_BUDGET = 352,
+    # so 48 a bank) at tiles 144..191, which leaves sprites 144 8x8 tiles a
+    # bank: 144 8x16 tiles in all. (The city map borrows bank-1 tiles
+    # 128..191 and reloads the sheet when it closes, td_ui.c.)
+    import city_kit
+    budget = 2 * (192 - (city_kit.SCENE_TILE_BUDGET - 256) // 2) // 2
     unique = slice_count(fr, sheet, places, frame_defs)
-    assert unique <= 128, f'Actor sprites need {unique} 8x16 tiles; the VRAM budget is 128'
+    assert budget == 144 and unique <= budget, f'Actor sprites need {unique} 8x16 tiles; the VRAM budget is {budget}'
     return fr, sheet, frame_defs, anchors
 
 
@@ -308,7 +320,7 @@ def outputs():
                  'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0',
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
                  'bus_e', 'bus_w', 'streetcar_e', 'streetcar_w', 'ferry_s', 'ferry_n',
-                 'knock_0', 'spark', 'shot_0', 'reticle', 'arrow_0',
+                 'knock_0', 'spark', 'shot_0', 'reticle', 'arrow_0', 'swim_0',
                  'courier_punch_0', 'courier_shoot_0', 'smoke_0', 'parcel', 'sparkle_0', 'beam_0',
                  'player_car_lit_0'):
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')

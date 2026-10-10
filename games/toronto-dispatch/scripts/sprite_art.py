@@ -249,9 +249,50 @@ def _vehicle(spec, lamps):
     return eight_headings(east, transpose(east), _diagonal(spec, lamps))
 
 
+def _rotate45_long(g, ss=5, size=24):
+    """Rotate a 24x16 east-facing drawing 45 degrees clockwise (to
+    south-east) about its centre, into a size x size square."""
+    a = math.radians(45)
+    ca, sa = math.cos(a), math.sin(a)
+    gh, gw = len(g), len(g[0])
+    out = [[0] * size for _ in range(size)]
+    for y in range(size):
+        for x in range(size):
+            votes = {}
+            for sy in range(ss):
+                for sx in range(ss):
+                    px, py = x + (sx + 0.5) / ss - size / 2, y + (sy + 0.5) / ss - size / 2
+                    fx, fy = px * ca + py * sa + gw / 2, -px * sa + py * ca + gh / 2
+                    ix, iy = int(math.floor(fx)), int(math.floor(fy))
+                    c = g[iy][ix] if 0 <= ix < gw and 0 <= iy < gh else 0
+                    votes[c] = votes.get(c, 0) + 1
+            if ss * ss - votes.get(0, 0) < ss * ss * 0.5:
+                continue
+            body = {c: v for c, v in votes.items() if c}
+            out[y][x] = 3 if body.get(3, 0) >= ss * ss * 0.4 else max(body, key=lambda c: (body[c], c))
+    return out
+
+
+def _diagonal_long(long_spec, long_lamps):
+    """The 45-degree view of a full-length vehicle: the same 20 x 14 body as
+    the east view, so a car keeps its size through a turn. It is 24 x 24,
+    centred in a 24 x 32 frame (4 blank rows above and below), so the other
+    three diagonals are tile flips of it."""
+    bare = _outline(_layers(long_spec, tyres=False, w=LONG), long_lamps)
+    inner = [[c if c != 3 or _inside_long(bare, x, y) else 0 for x, c in enumerate(row)] for y, row in enumerate(bare)]
+    square = _outline(_rotate45_long(inner))
+    blank = [[0] * 24 for _ in range(4)]
+    return blank + square + [row[:] for row in blank]
+
+
+def _inside_long(g, x, y):
+    h, w = len(g), len(g[0])
+    return ((0 < x < w - 1 and g[y][x - 1] and g[y][x + 1]) or (0 < y < h - 1 and g[y - 1][x] and g[y + 1][x]))
+
+
 def _long_vehicle(long_spec, long_lamps, spec, lamps):
     east = _long_east(long_spec, long_lamps)
-    return eight_headings(east, _south32(east), _diagonal(spec, lamps))
+    return eight_headings(east, _south32(east), _diagonal_long(long_spec, long_lamps))
 
 
 def _inside(g, x, y):
@@ -793,3 +834,14 @@ RETICLE = grid(["................", "....22....22....", "....3......3....", "...
                 "................", "................", "................", "................",
                 "................", "................", "................", "................",
                 "................", "....3......3....", "....22....22....", "................"])
+
+
+# Swimming: head and shoulders above the water with the arms in a crawl
+# stroke (the courier's cap, so the uniform colour shows), and a light ring
+# of foam. One 8x16 tile each, centred like the walking figure.
+SWIM = [
+    _centre8(["...11...", "1.1221.1", ".122221.", "13222231", ".133331.", "..3113..",
+              ".312213.", "1.3333.1", ".1....1.", "..1111.."], top=3),
+    _centre8(["........", "..1221..", ".122221.", "1322223.", "13333331", "13311331",
+              ".322223.", "..3333..", ".1....1.", "..1111.."], top=3),
+]

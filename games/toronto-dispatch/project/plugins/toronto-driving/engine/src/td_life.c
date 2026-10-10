@@ -7,6 +7,7 @@
 #include "td_life_int.h"
 #include "td_audio.h"
 #include "td_district.h"
+#include "td_overlay.h"
 #include "td_radio_data.h"
 #include "td_shots.h"
 #include "td_anim.h"
@@ -27,7 +28,7 @@ UBYTE fx_timer,fx_look;
 UWORD fx_u,fx_v;
 BYTE fx_du,fx_dv;
 UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_cool,lf_rev_wait,lf_shake,lf_chaos,lf_stuck,lf_axis,lf_stun;
-UBYTE lf_patrol,lf_lost,lf_drop,lf_amb,lf_vest,lf_calm;
+UBYTE lf_patrol,lf_lost,lf_drop,lf_amb,lf_vest,lf_calm,lf_unit;
 
 /* ------------------------------------------------------------ effects */
 void td_lf_fx(UBYTE kind,UWORD u,UWORD v,UBYTE timer) BANKED {
@@ -436,6 +437,9 @@ static void lf_recruit(void){
         /* The slot-4 car leaves its lane out of view; a patrol car arrives
          * from just beyond the screen edge after a short delay. */
         td_lf_own_car(TD_POLICE_SLOT,TR_CHASE);lf_patrol=1;lf_stuck=0;lf_lost=0;TD_PALETTE(&actors[2+TD_POLICE_SLOT])=TD_PAL_BLUE;
+        /* Serious trouble brings an SUV; otherwise a cruiser, or now and
+         * then an unmarked car. */
+        lf_unit=td.wanted>=3?LF_UNIT_SUV:(lf_random()&3)==0?LF_UNIT_UNMARKED:LF_UNIT_CRUISER;
         td_traffic_u[TD_POLICE_SLOT]=u<<4;td_traffic_v[TD_POLICE_SLOT]=v<<4;tr_timer[TD_POLICE_SLOT]=60;
     }
 }
@@ -547,7 +551,8 @@ void td_life_second(void) BANKED {
     if(lf_calm<255)lf_calm++;
     if(!td.wanted&&lf_calm>=6&&td.vitality&&td.vitality<50&&!(td.seconds&1))td.vitality++;
     if(!td.wanted){if(lf_chaos)lf_chaos--;return;}
-    if(td.mode!=TD_RIDE&&lf_police_near(128,104))td.heat=TD_HEAT_SECONDS;
+    /* Officers or the helicopter in sight keep the heat on. */
+    if(td.mode!=TD_RIDE&&(lf_police_near(128,104)||td_overlay_heli_near(144,120)))td.heat=TD_HEAT_SECONDS;
     else if(td.heat)td.heat--;
     if(!td.heat){
         td.wanted--;td.heat=TD_HEAT_SECONDS;

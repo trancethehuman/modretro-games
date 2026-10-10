@@ -1,6 +1,15 @@
 --- a/src/core/actor.c
 +++ b/src/core/actor.c
-@@ -213,9 +213,10 @@
+@@ -17,6 +17,8 @@
+ #include "ui.h"
+ #include "vm.h"
+ #include "macro.h"
++/* Toronto Dispatch overlay sprites (td_overlay.c), drawn after the actors. */
++void td_overlay_render(void) BANKED;
+ 
+ #ifdef STRICT
+     #include <gb/bgb_emu.h>
+@@ -213,9 +215,10 @@
              SWITCH_ROM(PLAYER.sprite.bank);
              spritesheet_t *sprite = PLAYER.sprite.ptr;
  
@@ -12,7 +21,7 @@
                  allocated_hardware_sprites,
                  screen_x,
                  screen_y
-@@ -243,9 +244,10 @@
+@@ -243,15 +246,17 @@
          SWITCH_ROM(actor->sprite.bank);
          spritesheet_t *sprite = actor->sprite.ptr;
  
@@ -24,3 +33,10 @@
              allocated_hardware_sprites,
              screen_x,
              screen_y
+         );
+     }
+ 
++    td_overlay_render();
+     SWITCH_ROM(_save);
+ }
+ 

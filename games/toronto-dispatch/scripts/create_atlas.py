@@ -56,7 +56,7 @@ def decode_grid(text, size):
         require(match is not None, "Malformed native collision RLE")
         value = int(match[1], 16)
         count = 1 if match[2] == "!" else int(match[2][:-1], 16)
-        require(value in (0, 16, 15) and 0 < count <= size - len(result),
+        require(value in (0, 16, 15, 0x2F) and 0 < count <= size - len(result),
                 "Invalid native collision flag or run length")
         result.extend([value] * count)
         cursor += match.end()
@@ -182,7 +182,7 @@ def model():
             for x in range(tw):
                 native = grid[y * tw + x]
                 ground[y][column + x] = ROAD if native == 0 else WALK if native == 16 else \
-                    WATER if wet(x * 8 + 4, y * 8 + 4) else SOLID
+                    WATER if native == 0x2F or wet(x * 8 + 4, y * 8 + 4) else SOLID
         compiled_districts.append({"plan_district": old, "x": column * 8 // SCALE, "water_shapes": shapes})
     for district in districts:
         scene_path = ROOT / "project/project/scenes" / district["scene"] / "scene.gbsres"

@@ -120,7 +120,14 @@ void td_life_present(void) BANKED {
         if(tr_mode[i]==TR_GONE){a->flags|=ACTOR_FLAG_HIDDEN;continue;}
         lf_place_q4(a,td_traffic_u[i],td_traffic_v[i]);
         /* A pursuing patrol car flashes its light bar red and blue. */
-        if(LF_IS_PATROL(i)){lf_frame(a,TD_FRAME_POLICE+tr_head[i]);TD_PALETTE(a)=td.wanted&&(td_tick&8)?TD_PAL_RED:TD_PAL_BLUE;}
+        if(LF_IS_PATROL(i)){
+            /* A cruiser flashes its light bar red and blue; the SUV shows
+             * red and navy; the unmarked car stays navy with a red dash
+             * light now and then. */
+            lf_frame(a,(lf_unit==LF_UNIT_SUV?TD_FRAME_PLAYER_VAN:lf_unit==LF_UNIT_UNMARKED?TD_FRAME_PLAYER_CAR:TD_FRAME_POLICE)+tr_head[i]);
+            TD_PALETTE(a)=!td.wanted?TD_PAL_BLUE:lf_unit==LF_UNIT_CRUISER?((td_tick&8)?TD_PAL_RED:TD_PAL_BLUE):
+                          lf_unit==LF_UNIT_SUV?((td_tick&8)?TD_PAL_RED:TD_PAL_NAVY):((td_tick&24)==24?TD_PAL_RED:TD_PAL_NAVY);
+        }
         else lf_frame(a,td_traffic_bases[i]+tr_head[i]);
     }
     if(td_fx_kind){

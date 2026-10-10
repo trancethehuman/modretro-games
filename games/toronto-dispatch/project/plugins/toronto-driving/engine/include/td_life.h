@@ -49,7 +49,10 @@
 #define TD_MSG_PARCEL 32
 #define TD_MSG_SPRAY 33
 #define TD_MSG_SPRAY_NEAR 34
-#define TD_MSG_COUNT 35
+#define TD_MSG_SHARK 35
+#define TD_MSG_HELI 36
+#define TD_MSG_SHARK_BITE 37
+#define TD_MSG_COUNT 38
 
 /* Sidewalk pickups (td_street.c tables, collected in TORONTO.c). */
 #define TD_PICKUP_CASH 15

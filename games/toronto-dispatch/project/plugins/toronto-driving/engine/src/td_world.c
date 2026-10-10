@@ -38,7 +38,9 @@ static UBYTE td_world_valid_portal(const td_portal_t *p,UBYTE districts){
            p->u>=32&&p->u<992&&p->arrival_u>=32&&p->arrival_u<992;
 }
 
-/* Reverse BFS handles directed, cyclic and disconnected graphs. Bounded local
+#ifndef __SDCC
+/* Host checks only: the game uses the generated next-hop table instead.
+ * Reverse BFS handles directed, cyclic and disconnected graphs. Bounded local
  * scratch costs64 bytes, with no persistent WRAM or per-edge banked calls. */
 static UBYTE td_world_route_from(const td_portal_t *portals,UWORD count,UBYTE districts,
                                 UBYTE from,UBYTE to,UBYTE onfoot,UWORD u,UWORD v,
@@ -69,6 +71,7 @@ static UBYTE td_world_route_from(const td_portal_t *portals,UWORD count,UBYTE di
     *out=*selected;return TRUE;
 }
 
+#endif
 static UBYTE td_world_crossing_from(const td_portal_t *portals,UWORD count,UBYTE districts,
                                    UBYTE district,UBYTE onfoot,UWORD old_u,UWORD old_v,
                                    UWORD u,UWORD v,td_crossing_t *out){

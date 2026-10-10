@@ -48,7 +48,7 @@ def check():
         assert len(scene['paletteIds']) == 7
         assert attrs == read(ROOT / 'project/original-art' / f'{slug}_attributes.json'), f'{slug}: registered palette/priority bytes differ from source'
         assert grid == world2x.scene_grid(district['id']), f'{slug}: registered collisions differ from the art'
-        assert set(grid) <= {0, 16, 15}, f'{slug}: unexpected native collision flags'
+        assert set(grid) <= {0, 16, 15, city_kit.WATER_TILE}, f'{slug}: unexpected native collision flags'
         assert all((a & 7) <= 6 and not (a & 0x78) for a in attrs), f'{slug}: palette/attribute flags out of authored range'
         assert all(not (a & 128) for a, c in zip(attrs, grid) if c == 0), f'{slug}: raised roof/canopy priority covers asphalt'
         assert any(a & 128 for a in attrs), f'{slug}: missing actual native roof/canopy priority'

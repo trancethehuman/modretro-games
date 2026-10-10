@@ -28,6 +28,9 @@ void td_district_reset(void) BANKED;
  * Unknown districts, out-of-bounds tiles and invalid metadata are blocked. */
 UBYTE td_district_tile(UBYTE district,UBYTE x,UBYTE y) BANKED;
 UBYTE td_district_walkable(UBYTE district,UWORD u,UWORD v) BANKED;
+/* Open water: solid to vehicles and walkers, but the courier swims in it. */
+#define TD_COLLISION_WATER 0x2F
+UBYTE td_district_swimmable(UBYTE district,UWORD u,UWORD v) BANKED;
 UBYTE td_district_drivable(UBYTE district,UWORD u,UWORD v) BANKED;
 
 #endif

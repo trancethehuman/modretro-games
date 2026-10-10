@@ -107,6 +107,12 @@ UBYTE td_district_walkable(UBYTE district,UWORD u,UWORD v) BANKED {
     return !(td_district_read_tile(&scene,u>>3,v>>3)&COLLISION_ALL);
 }
 
+UBYTE td_district_swimmable(UBYTE district,UWORD u,UWORD v) BANKED {
+    scene_t scene;
+    if(u>=TD_DISTRICT_PIXEL_WIDTH||v>=TD_DISTRICT_PIXEL_HEIGHT||!td_district_metadata(district,&scene))return FALSE;
+    return td_district_read_tile(&scene,u>>3,v>>3)==TD_COLLISION_WATER;
+}
+
 UBYTE td_district_drivable(UBYTE district,UWORD u,UWORD v) BANKED {
     scene_t scene;UBYTE x,y,left,right,top,bottom;
     if(u<8||v<8||u>TD_DISTRICT_PIXEL_WIDTH-8||v>TD_DISTRICT_PIXEL_HEIGHT-8||!td_district_metadata(district,&scene))return FALSE;

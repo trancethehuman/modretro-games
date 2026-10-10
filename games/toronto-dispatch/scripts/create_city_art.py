@@ -1229,9 +1229,11 @@ def main(check=False):
     # Open water takes the shared animated texture, with foam along the shore.
     def is_water(x, y):
         return (L.RIVER[0] <= x < L.RIVER[1] and 24 <= y < my1) or y >= my1
-    water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS)
+    wet_tiles = set()
+    water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS, wet_tiles)
     bad_road = [(i % TW * 8, i // TW * 8) for i, (a, c) in enumerate(zip(attrs, collisions)) if c == 0 and ((a & 7) > 6 or a & 128)]
     assert not bad_road, ('road tiles with priority or a bad palette', bad_road[:8])
+    city_kit.mark_water(collisions, wet_tiles)
     scenes = city_kit.split_scenes(img, attrs, collisions, TW, 0)
     if os.environ.get('TD_ART_PREVIEW'):
         img.save(os.environ['TD_ART_PREVIEW'])

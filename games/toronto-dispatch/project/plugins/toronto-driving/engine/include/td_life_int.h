@@ -46,6 +46,11 @@ extern UBYTE lf_warm,lf_flash,lf_punch,lf_hurt,lf_down,lf_arrest,lf_bust,lf_cop_
 /* Slot 4 is an ordinary blue car until a pursuit needs it: it becomes the
  * patrol car only while out of view and changes back the same way. */
 extern UBYTE lf_patrol,lf_lost;
+/* The patrol's vehicle: 0 cruiser, 1 SUV (from three stars), 2 unmarked. */
+#define LF_UNIT_CRUISER 0
+#define LF_UNIT_SUV 1
+#define LF_UNIT_UNMARKED 2
+extern UBYTE lf_unit;
 extern WORD lf_scale_x,lf_scale_y;
 /* Ticks of firm contact before officers make an arrest. */
 #define LF_BUST_TICKS 90

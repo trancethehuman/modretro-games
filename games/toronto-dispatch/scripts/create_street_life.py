@@ -188,7 +188,7 @@ def ferry_berth(at, w, h, u, v):
         for sign in (1, -1):
             ty = v // 8 + sign * dist
             run = [v // 8 + sign * (dist + k) for k in range(6)]
-            if all(0 <= r < h and at(tx, r) == SOLID for r in run):
+            if all(0 <= r < h and at(tx, r) & SOLID == SOLID for r in run):
                 edge = ty * 8 if sign > 0 else (ty + 1) * 8
                 return edge + sign * 22, sign
     raise AssertionError(('no water beside ferry dock', u, v))

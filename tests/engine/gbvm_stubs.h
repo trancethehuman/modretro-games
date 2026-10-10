@@ -36,7 +36,7 @@ extern UWORD camera_x,camera_y,image_width,image_height,sys_time;
 extern UBYTE camera_settings;
 extern BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 /* Camera view top-left in pixels and the loaded scene size in tiles. */
-extern WORD scroll_x,scroll_y;
+extern WORD scroll_x,scroll_y,draw_scroll_x,draw_scroll_y;
 extern UBYTE image_tile_width,image_tile_height;
 extern UBYTE joy,joy_pressed;
 

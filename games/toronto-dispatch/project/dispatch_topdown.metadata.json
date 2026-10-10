@@ -14,8 +14,8 @@
       "name": "player_car_1",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -32,8 +32,8 @@
       "name": "player_car_3",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -50,8 +50,8 @@
       "name": "player_car_5",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -68,8 +68,8 @@
       "name": "player_car_7",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -86,8 +86,8 @@
       "name": "player_van_1",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -104,8 +104,8 @@
       "name": "player_van_3",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -122,8 +122,8 @@
       "name": "player_van_5",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -140,8 +140,8 @@
       "name": "player_van_7",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
@@ -1604,6 +1604,24 @@
     },
     {
       "index": 178,
+      "name": "swim_0",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 179,
+      "name": "swim_1",
+      "palette": "courier_person",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "index": 180,
       "name": "player_car_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1612,16 +1630,16 @@
       ]
     },
     {
-      "index": 179,
+      "index": 181,
       "name": "player_car_lit_1",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 180,
+      "index": 182,
       "name": "player_car_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1630,16 +1648,16 @@
       ]
     },
     {
-      "index": 181,
+      "index": 183,
       "name": "player_car_lit_3",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 182,
+      "index": 184,
       "name": "player_car_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1648,16 +1666,16 @@
       ]
     },
     {
-      "index": 183,
+      "index": 185,
       "name": "player_car_lit_5",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 184,
+      "index": 186,
       "name": "player_car_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1666,16 +1684,16 @@
       ]
     },
     {
-      "index": 185,
+      "index": 187,
       "name": "player_car_lit_7",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 186,
+      "index": 188,
       "name": "player_van_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1684,16 +1702,16 @@
       ]
     },
     {
-      "index": 187,
+      "index": 189,
       "name": "player_van_lit_1",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 188,
+      "index": 190,
       "name": "player_van_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1702,16 +1720,16 @@
       ]
     },
     {
-      "index": 189,
+      "index": 191,
       "name": "player_van_lit_3",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 190,
+      "index": 192,
       "name": "player_van_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1720,16 +1738,16 @@
       ]
     },
     {
-      "index": 191,
+      "index": 193,
       "name": "player_van_lit_5",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 192,
+      "index": 194,
       "name": "player_van_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1738,16 +1756,16 @@
       ]
     },
     {
-      "index": 193,
+      "index": 195,
       "name": "player_van_lit_7",
       "palette": "courier_vehicle",
       "size": [
-        16,
-        16
+        24,
+        32
       ]
     },
     {
-      "index": 194,
+      "index": 196,
       "name": "player_motorcycle_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1756,7 +1774,7 @@
       ]
     },
     {
-      "index": 195,
+      "index": 197,
       "name": "player_motorcycle_lit_1",
       "palette": "courier_vehicle",
       "size": [
@@ -1765,7 +1783,7 @@
       ]
     },
     {
-      "index": 196,
+      "index": 198,
       "name": "player_motorcycle_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1774,7 +1792,7 @@
       ]
     },
     {
-      "index": 197,
+      "index": 199,
       "name": "player_motorcycle_lit_3",
       "palette": "courier_vehicle",
       "size": [
@@ -1783,7 +1801,7 @@
       ]
     },
     {
-      "index": 198,
+      "index": 200,
       "name": "player_motorcycle_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1792,7 +1810,7 @@
       ]
     },
     {
-      "index": 199,
+      "index": 201,
       "name": "player_motorcycle_lit_5",
       "palette": "courier_vehicle",
       "size": [
@@ -1801,7 +1819,7 @@
       ]
     },
     {
-      "index": 200,
+      "index": 202,
       "name": "player_motorcycle_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1810,7 +1828,7 @@
       ]
     },
     {
-      "index": 201,
+      "index": 203,
       "name": "player_motorcycle_lit_7",
       "palette": "courier_vehicle",
       "size": [
@@ -1819,7 +1837,7 @@
       ]
     },
     {
-      "index": 202,
+      "index": 204,
       "name": "player_scooter_lit_0",
       "palette": "courier_vehicle",
       "size": [
@@ -1828,7 +1846,7 @@
       ]
     },
     {
-      "index": 203,
+      "index": 205,
       "name": "player_scooter_lit_1",
       "palette": "courier_vehicle",
       "size": [
@@ -1837,7 +1855,7 @@
       ]
     },
     {
-      "index": 204,
+      "index": 206,
       "name": "player_scooter_lit_2",
       "palette": "courier_vehicle",
       "size": [
@@ -1846,7 +1864,7 @@
       ]
     },
     {
-      "index": 205,
+      "index": 207,
       "name": "player_scooter_lit_3",
       "palette": "courier_vehicle",
       "size": [
@@ -1855,7 +1873,7 @@
       ]
     },
     {
-      "index": 206,
+      "index": 208,
       "name": "player_scooter_lit_4",
       "palette": "courier_vehicle",
       "size": [
@@ -1864,7 +1882,7 @@
       ]
     },
     {
-      "index": 207,
+      "index": 209,
       "name": "player_scooter_lit_5",
       "palette": "courier_vehicle",
       "size": [
@@ -1873,7 +1891,7 @@
       ]
     },
     {
-      "index": 208,
+      "index": 210,
       "name": "player_scooter_lit_6",
       "palette": "courier_vehicle",
       "size": [
@@ -1882,7 +1900,7 @@
       ]
     },
     {
-      "index": 209,
+      "index": 211,
       "name": "player_scooter_lit_7",
       "palette": "courier_vehicle",
       "size": [
@@ -1978,7 +1996,15 @@
       0,
       0
     ],
+    "player_car_1": [
+      0,
+      0
+    ],
     "player_car_2": [
+      0,
+      0
+    ],
+    "player_car_3": [
       0,
       0
     ],
@@ -1986,7 +2012,15 @@
       0,
       0
     ],
+    "player_car_5": [
+      0,
+      0
+    ],
     "player_car_6": [
+      0,
+      0
+    ],
+    "player_car_7": [
       0,
       0
     ],
@@ -1994,7 +2028,15 @@
       0,
       0
     ],
+    "player_van_1": [
+      0,
+      0
+    ],
     "player_van_2": [
+      0,
+      0
+    ],
+    "player_van_3": [
       0,
       0
     ],
@@ -2002,7 +2044,15 @@
       0,
       0
     ],
+    "player_van_5": [
+      0,
+      0
+    ],
     "player_van_6": [
+      0,
+      0
+    ],
+    "player_van_7": [
       0,
       0
     ],
@@ -2133,7 +2183,7 @@
   },
   "sheet": [
     256,
-    288
+    320
   ],
   "note": "Original pixel art from scripts/sprite_art.py; colour 0 transparent."
 }

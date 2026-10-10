@@ -535,7 +535,7 @@ def water_tiles():
     return out
 
 
-def texture_water(img, attrs, tw, is_water, colors):
+def texture_water(img, attrs, tw, is_water, colors, wet_tiles=None):
     """Repaint open water with the shared texture and a foam edge.
 
     A pixel is water when is_water(x, y) holds, its tile uses palette slot 0
@@ -544,7 +544,8 @@ def texture_water(img, attrs, tw, is_water, colors):
     engine animates those); tiles on a shore are calm shallows (plain water)
     with a cream foam line along the land and a broken second line, so a
     shoreline adds few tile patterns; grass or ground beside the water gets a
-    sand line. Returns the number of whole-water tiles."""
+    sand line. Returns the number of whole-water tiles; wet_tiles, a set,
+    collects the tiles whose centre pixel is water."""
     px = img.load(); w, h = img.size
     base = tuple(int(colors[2][i:i + 2], 16) for i in (1, 3, 5))
     rgb = [tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in colors]
@@ -554,6 +555,11 @@ def texture_water(img, attrs, tw, is_water, colors):
         for x in range(w):
             if attrs[row + x // 8] & 7 == 0 and px[x, y] == base and is_water(x, y):
                 wet[y * w + x] = 1
+    if wet_tiles is not None:
+        for ty in range(h // 8):
+            for tx in range(w // 8):
+                if wet[(ty * 8 + 4) * w + tx * 8 + 4]:
+                    wet_tiles.add(ty * tw + tx)
     pattern = water_pattern(0)
     whole = 0
     # Grass and ground meeting the water get a sand line (land side), so a
@@ -733,6 +739,21 @@ def paint_park_feature(d, box, colors, kind, x, y, w, h):
 # 191 of each bank, and the sprite sheet uses tiles from 0, so a scene of at
 # most SCENE_TILE_BUDGET flip-canonical tiles leaves 144 per bank for sprites.
 SCENE_TILE_BUDGET = 352
+
+# Open water is solid to vehicles and walkers (collision bits 15) and marked
+# swimmable with bit 0x20: the courier can swim in it (td_drive).
+WATER_TILE = 0x2F
+
+
+def mark_water(collisions, wet_tiles):
+    """Solid tiles whose centre pixel is drawn open water (texture_water's
+    wet_tiles) become WATER_TILE."""
+    n = 0
+    for i in wet_tiles:
+        if collisions[i] == 15:
+            collisions[i] = WATER_TILE
+            n += 1
+    return n
 
 
 def flip_canonical_count(img):

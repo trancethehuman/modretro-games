@@ -295,15 +295,20 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
 }
 #ifdef __SDCC
 #include "palette.h"
+#include "data/sprite_top_down_vehicles_and_courier.h"
 void load_bkg_tileset(const tileset_t *tiles,UBYTE bank) BANKED;
-/* The atlas borrows CGB bank-1 background tiles 8..187. Scenes whose own
- * background spills into bank 1 (the core uses IDs 0..9) must get those
- * patterns back before the city is visible again. */
+UBYTE load_sprite(UBYTE sprite_offset,const spritesheet_t *sprite,UBYTE bank) BANKED;
+/* The atlas borrows CGB bank-1 background tiles 0..4 and 16..191. Scenes
+ * whose own background spills into bank 1 must get those patterns back
+ * before the city is visible again; tiles 128..191 are also the actor
+ * sheet's upper sprite tiles (it holds up to 144 per bank), so the sheet
+ * is reloaded too (all actors share it from tile 0). */
 static void td_restore_scene_tiles(void){
     scene_t scene;background_t bkg;
     MemcpyBanked(&scene,current_scene.ptr,sizeof(scene),current_scene.bank);
     MemcpyBanked(&bkg,scene.background.ptr,sizeof(bkg),scene.background.bank);
     if(bkg.cgb_tileset.ptr){VBK_REG=1;load_bkg_tileset(bkg.cgb_tileset.ptr,bkg.cgb_tileset.bank);VBK_REG=0;}
+    load_sprite(0,&sprite_top_down_vehicles_and_courier,BANK(sprite_top_down_vehicles_and_courier));
 }
 /* The title swaps in its own BG palettes 0..6; the scene's come back as
  * the current time of day's set. The title only appears while a scene
@@ -407,7 +412,7 @@ void td_ui_tick(void) BANKED {
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
             "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","A+B: GET OUT","HOSPITAL",
             "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR",
-            "LOST PARCEL +$50","RESPRAYED -$25","SPRAY BAY: PULL IN"};
+            "LOST PARCEL +$50","RESPRAYED -$25","SPRAY BAY: PULL IN","SHARK: SWIM AWAY","POLICE HELICOPTER","BITTEN BY A SHARK"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
 /* ------------------------------------------------------------ pop-up HUD
  * Nothing covers the city by default. Up to two rows rise from the bottom

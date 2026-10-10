@@ -17,7 +17,7 @@
   },
   "water_rule": "Road0/walk16 override water. Only solid15 uses authored wet tile-centre masks. Rectangles are half-open; pond boundaries inclusive. Core harbour excludes Island land. East has no water. Each map pixel takes the commonest of its four tiles (road, walk, water, solid on a tie).",
   "world_sha256": "727db27a64c87ac1ce9f3222bff339aad351c8a9e0fd17b2a48ad98dca55ed93",
-  "canonical_district_header_sha256": "60d78ad4f922cbd8c0665b07e94cbd60f8cd0f1eb96fcf68575af01d0a074c0b",
+  "canonical_district_header_sha256": "e8ab417e8057a00d9833a8661b1b09d61ab85943c8fec9b58c02ed1a7e024eef",
   "sources": [
     {
       "district": 0,
@@ -27,17 +27,17 @@
     {
       "district": 1,
       "scene": "project/project/scenes/toronto_core_ne/scene.gbsres",
-      "collision_encoding_sha256": "dda30bdd90caf8b4f08fa82bfd3ce6c84086736bc4cdf1ff008d31095bd38e42"
+      "collision_encoding_sha256": "60507435cd7b3739db5ee5f4a293201518b0fd701baa4f6b840c2991ad6d5a05"
     },
     {
       "district": 2,
       "scene": "project/project/scenes/toronto_core_sw/scene.gbsres",
-      "collision_encoding_sha256": "70f13ad6c6db293ed4b42af14255c63257c70056d42c4eb8c7ef24f63202c846"
+      "collision_encoding_sha256": "0d2de42daf9e0784fecd805591f1cb5554b0925ee609fa5372b5697da43b1990"
     },
     {
       "district": 3,
       "scene": "project/project/scenes/toronto_core_se/scene.gbsres",
-      "collision_encoding_sha256": "5decbeb6f6bc9711a20d30429b65e4e22d8416a5aad88d430aba860d45f264ce"
+      "collision_encoding_sha256": "f856433ecac10dcb8ad4db71e59b76f02d7ec6bb65c5f0de7f63df01b327d91f"
     },
     {
       "district": 4,
@@ -52,12 +52,12 @@
     {
       "district": 6,
       "scene": "project/project/scenes/toronto_west_sw/scene.gbsres",
-      "collision_encoding_sha256": "af49514fcd6e20c0e67e2be05166f496c0bd3a34ffcef63c63cfefa0b1bf53a5"
+      "collision_encoding_sha256": "f8046f350ea287be53531c37c3bbf968bd828c70d0b39b806fbd0e086f439721"
     },
     {
       "district": 7,
       "scene": "project/project/scenes/toronto_west_se/scene.gbsres",
-      "collision_encoding_sha256": "de15a20bdcd5d657580f02ba63905ce99246096ec3fe0dcdec6a723740ba9dc3"
+      "collision_encoding_sha256": "42f14aba5f52985191356e5e6aa8d67cb17941b3e0e3d163ca7d2b3ecfffe090"
     },
     {
       "district": 8,
@@ -67,17 +67,17 @@
     {
       "district": 9,
       "scene": "project/project/scenes/toronto_high_park_ne/scene.gbsres",
-      "collision_encoding_sha256": "445676130ccf00e4e9b46e63e819738a652d56d27ef95c54dfd99bf957da18ad"
+      "collision_encoding_sha256": "e4cd8f00b56d02391c75b525f4c42497d39218d893e4963c34c42a6bf282d091"
     },
     {
       "district": 10,
       "scene": "project/project/scenes/toronto_high_park_sw/scene.gbsres",
-      "collision_encoding_sha256": "5caf19056403550c916cbdaa996abb9cd577234364fd9ce48267bfd683efe10d"
+      "collision_encoding_sha256": "51774452c2454f0209ed69aa34ea8b8b552417753836e276f36710ce5e84fb43"
     },
     {
       "district": 11,
       "scene": "project/project/scenes/toronto_high_park_se/scene.gbsres",
-      "collision_encoding_sha256": "2296326267c492e3452aacbde09947e72e14d85e99f4945bf2ed2147ed1e67c3"
+      "collision_encoding_sha256": "bddf8f84b72463378415c0a62daa0b89c3d16826d31cb366bdc30cb7adeba1cf"
     },
     {
       "district": 12,

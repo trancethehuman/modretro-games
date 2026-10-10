@@ -564,11 +564,13 @@ def render(plan, areas, kinds=None):
     def is_water(x, y):
         return any(wx <= x < wx + ww and wy <= y < wy + wh for wx, wy, ww, wh in spec["water"]) or \
             bool(pond_mask and pond_mask.getpixel((x, y)))
-    water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS)
+    wet_tiles = set()
+    water_tiles = city_kit.texture_water(img, attrs, TW, is_water, COLORS, wet_tiles)
     assert set(img.get_flattened_data()) <= set(tuple(bytes.fromhex(c[1:])) for c in COLORS)
-    assert len(collisions) == TW * TH and set(collisions) <= {0, 16, 15}
     for block in blocks:
         assert all(collisions[i] == 15 for _, _, i in cells(block["x"], block["y"], block["width"], block["depth"])), block
+    city_kit.mark_water(collisions, wet_tiles)
+    assert len(collisions) == TW * TH and set(collisions) <= {0, 16, 15, city_kit.WATER_TILE}
     assert all((a & 7) <= 6 for a in attrs)
     assert all((a & 7) <= 6 and not (a & 128) for a, c in zip(attrs, collisions) if c == 0)
     scenes = city_kit.split_scenes(img, attrs, collisions, TW, spec["id"])

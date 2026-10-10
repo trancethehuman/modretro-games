@@ -112,14 +112,14 @@ def fixture_header():
             require((scene["width"], scene["height"]) == (128, 122) and scene["symbol"] == district["symbol"],
                     "Atlas oracle scene dimensions/identity disagree with registered native resources.")
             collisions = collision_bytes(scene["collisions"], 128 * 122)
-            require(set(collisions) <= {0, 15, 16}, "Review newly introduced collision classes before assigning atlas colours.")
+            require(set(collisions) <= {0, 15, 16, 0x2F}, "Review newly introduced collision classes before assigning atlas colours.")
             ox, oy = district["origin"]
             require(district["atlas_x"] == column[old] * world2x.WORLD_W + ox and district["atlas_y"] == oy,
                     "The tested west-to-east district placement must match the registered world.")
             for position, collision in enumerate(collisions):
                 x, y = ox // 8 + position % 128, oy // 8 + position // 128
                 colour = 1 if collision == 0 else 2 if collision == 16 else (
-                    3 if authored_water(old, (x * 8 + 4, y * 8 + 4), metadata) else 0)
+                    3 if collision == 0x2F or authored_water(old, (x * 8 + 4, y * 8 + 4), metadata) else 0)
                 ground[y][column[old] * tw + x] = colour
     # Independent downsampling: the commonest class of each 2 x 2 tiles,
     # road, walk, water, solid on a tie; then a lone non-road pixel takes

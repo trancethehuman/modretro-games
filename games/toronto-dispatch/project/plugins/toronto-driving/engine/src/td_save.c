@@ -100,7 +100,8 @@ static UBYTE td_valid_state(td_state_t *s){
     if(s->u>=1024*16||s->v>=976*16||s->park_u>=1024*16||s->park_v>=976*16)return FALSE;
     if(s->district>=TD_DISTRICT_COUNT||s->park_district>=TD_DISTRICT_COUNT||s->reserved)return FALSE;
     if(s->vitality>100||s->ammo>TD_AMMO_MAX||s->wanted>TD_WANTED_MAX||s->heat>TD_HEAT_SECONDS)return FALSE;
-    if(!td_district_drivable(s->park_district,s->park_u>>4,s->park_v>>4)||!(s->onfoot?td_district_walkable(s->district,s->u>>4,s->v>>4):td_district_drivable(s->district,s->u>>4,s->v>>4)))return FALSE;
+    if(!td_district_drivable(s->park_district,s->park_u>>4,s->park_v>>4)||!(s->onfoot?(td_district_walkable(s->district,s->u>>4,s->v>>4)||td_district_swimmable(s->district,s->u>>4,s->v>>4)):
+                                      td_district_drivable(s->district,s->u>>4,s->v>>4)))return FALSE;
     for(i=0;i<TD_COMPLETE_BYTES;i++){
         value=s->complete[i];
         /* Above the contracts only found lost parcels may be set. */

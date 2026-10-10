@@ -28,7 +28,7 @@ actor_t *actors_inactive_head;
 UBYTE actors_len;
 UWORD camera_x,camera_y,image_width=1024,image_height=976,sys_time;
 UBYTE camera_settings,joy,joy_pressed;
-WORD scroll_x,scroll_y;
+WORD scroll_x,scroll_y,draw_scroll_x,draw_scroll_y;
 UBYTE image_tile_width=128,image_tile_height=122;
 BYTE camera_offset_x,camera_offset_y,camera_deadzone_x,camera_deadzone_y;
 UBYTE td_test_sram[8192];
@@ -45,7 +45,7 @@ static unsigned test_queue_calls,test_reset_calls;
 static unsigned test_map_opens,test_map_updates,test_map_closes;
 static UBYTE test_map_active,test_map_buttons,test_map_pressed,test_map_camera_settings;
 static UWORD test_map_camera_x,test_map_camera_y;
-static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER,RAIL_BAND } geometry;
+static enum { CLEAR_GROUND,EAST_WALL,SOUTH_CURB,NATIVE_GRID,HIDDEN_NPC_TILE,SOUTHWEST_CORNER,ALIGHT_BARRIER,RAIL_BAND,LAKE_SOUTH } geometry;
 static jmp_buf interrupted_save;
 static unsigned sram_writes,sram_interrupt_after;
 static int sram_interrupt_enabled;
@@ -76,6 +76,8 @@ static UBYTE district_tile(UBYTE district,UBYTE x,UBYTE y) {
     if (geometry==ALIGHT_BARRIER&&x==barrier_tx&&y==barrier_ty) return 15;
     /* One solid tile row across open road: a rail line (v 800..807). */
     if (geometry==RAIL_BAND) return y==100?15:0;
+    /* Open water from tile row 60 (v 480) south; a sidewalk above it. */
+    if (geometry==LAKE_SOUTH) return y>=60?TD_COLLISION_WATER:16;
     if (geometry==NATIVE_GRID||geometry==ALIGHT_BARRIER) return x<native_widths[district]&&y<native_heights[district]?native_collision[district][y*native_widths[district]+x]:15;
     if (geometry==HIDDEN_NPC_TILE && x==48 && y==53) return 15;
     return 0;
@@ -158,6 +160,9 @@ UBYTE td_district_drivable(UBYTE district,UWORD u,UWORD v) {
 }
 UBYTE td_district_walkable(UBYTE district,UWORD u,UWORD v) {
     return district<TD_DISTRICT_COUNT&&u<1024&&v<976&&!(district_tile(district,u>>3,v>>3)&15);
+}
+UBYTE td_district_swimmable(UBYTE district,UWORD u,UWORD v) {
+    return district<TD_DISTRICT_COUNT&&u<1024&&v<976&&district_tile(district,u>>3,v>>3)==TD_COLLISION_WATER;
 }
 
 static void reset_case(void) {
@@ -2242,6 +2247,46 @@ static void test_car_damage(void) {
     expect(td_car_damage==0&&td_car_colour==TD_PAL_TEAL,"a stolen car is undamaged and keeps its colour");
 }
 
+/* Swimming, sharks, the police helicopter and the weather (td_overlay.c). */
+static int td_walk_frame_is_swim(void) {return PLAYER.frame_start==TD_FRAME_SWIM||PLAYER.frame_start==TD_FRAME_SWIM+1;}
+static void test_swimming_and_overlay(void) {
+    /* The courier walks off the sidewalk into the lake and swims. */
+    reset_case();geometry=LAKE_SOUTH;td.onfoot=1;td.u=400*16;td.v=470*16;td.park_u=100*16;td.park_v=100*16;
+    for(unsigned i=0;i<40;i++)driving_tick(J_DOWN);
+    expect(td_swimming&&td.v>480*16&&td_walk_frame_is_swim(),"the courier walks into open water and swims");
+    UWORD before=td.v;driving_tick(J_DOWN);
+    expect(td.v-before==5,"swimming is slower than walking");
+    td.ammo=10;driving_tick(J_B);driving_tick(0);expect(td.ammo==10,"no shooting while swimming");
+    for(unsigned i=0;i<60;i++)driving_tick(J_UP);
+    expect(!td_swimming&&td.v<480*16,"the courier climbs out onto the sidewalk");
+    expect(td_district_swimmable(0,400,500)&&!td_district_walkable(0,400,500),"open water is swimmable, not walkable");
+    /* A shark rises in open water, closes in and bites; out of the water
+       the courier is safe. */
+    reset_case();geometry=LAKE_SOUTH;td.onfoot=1;td.u=400*16;td.v=600*16;td.vitality=100;td.mode=TD_ROAM;
+    td_swimming=1;shark_state=0;shark_wait=0;
+    unsigned spawned=0,bitten=0;
+    for(unsigned t=0;t<2000&&!bitten;t++){td_tick++;shark_tick();if(shark_state==1)spawned=1;if(td.vitality<100)bitten=1;}
+    expect(spawned&&bitten&&td.vitality==75,"a shark finds a swimmer in open water and bites");
+    expect(shark_state==2,"after a bite the shark swims off");
+    for(unsigned t=0;t<200;t++){td_tick++;shark_tick();}
+    expect(!shark_state,"the shark leaves");
+    td_swimming=0;shark_wait=0;for(unsigned t=0;t<600;t++){td_tick++;shark_tick();}
+    expect(!shark_state,"no sharks for a courier on land");
+    /* From four stars the police helicopter circles the courier and keeps
+       the heat on; below three it leaves. */
+    reset_case();td.mode=TD_ROAM;td.u=500*16;td.v=500*16;td.wanted=3;heli_state=0;heli_tick();
+    expect(!heli_state,"no helicopter below four stars");
+    td.wanted=4;heli_tick();expect(heli_state==1&&td.msg==TD_MSG_HELI,"four stars call the helicopter");
+    for(unsigned t=0;t<400;t++){td_tick++;heli_tick();}
+    expect(td_overlay_heli_near(64,64),"the helicopter circles over the courier");
+    td.wanted=2;for(unsigned t=0;t<600&&heli_state;t++){td_tick++;heli_tick();}
+    expect(!heli_state,"with the heat down the helicopter flies off");
+    /* Weather follows the clock: a spell every 128 play seconds. */
+    reset_case();td.seconds=4*128;td_overlay_second();expect(td_weather==TD_WEATHER_RAIN,"the fifth spell is rain");
+    td.seconds=2*128;expect(td_overlay_second()&&td_weather==TD_WEATHER_CLOUDY,"the third is overcast");
+    expect(!td_overlay_second(),"an unchanged spell reports no change");
+}
+
 /* Navigation names from the generated tables (scripts/create_places.py). */
 static void place_names(UBYTE district,UWORD u,UWORD v,UBYTE area,char *a,char *m,char *j) {
     UBYTE ids[3]={area,255,255};td.district=district;td_get_places(u,v,ids);
@@ -2272,7 +2317,7 @@ int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
     test_momentum_and_coasting();test_pressed_edge_once();test_clock();test_street_life();test_running_and_clips();
-    test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();
+    test_passenger_comfort();test_entry_collision();test_hidden_pedestrian();test_swimming_and_overlay();
     test_signal_and_autonomous_traffic();
     test_city_routes_and_walking();
     test_audio_event_integration();

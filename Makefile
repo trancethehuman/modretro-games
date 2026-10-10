@@ -21,6 +21,7 @@ check:
 	python3 games/toronto-dispatch/scripts/create_ui_art.py --check
 	python3 games/toronto-dispatch/scripts/create_daynight.py --check
 	python3 games/toronto-dispatch/scripts/create_scenery.py --check
+	python3 games/toronto-dispatch/scripts/create_overlay.py --check
 	python3 games/toronto-dispatch/scripts/create_radio.py --check
 	python3 games/toronto-dispatch/scripts/check_story.py
 	python3 games/toronto-dispatch/scripts/create_world_routes.py --check
