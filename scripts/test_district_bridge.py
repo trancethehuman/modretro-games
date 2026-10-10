@@ -13,7 +13,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ENGINE = ROOT / "games/toronto-dispatch/project/plugins/toronto-driving/engine"
+ENGINE = ROOT / "project/plugins/toronto-driving/engine"
 HARNESS = ROOT / "tests/engine/district_bridge_harness.c"
 
 
@@ -29,7 +29,7 @@ def validate_far_initializer(source, symbols):
 
 
 def registered_districts(source):
-    game = ROOT / "games/toronto-dispatch"
+    game = ROOT
     world = json.loads((game / "content/districts/world.json").read_text())
     districts = world["districts"]
     count = int(re.search(r"#define TD_DISTRICT_COUNT (\d+)", (ENGINE / "include/td_district.h").read_text()).group(1))

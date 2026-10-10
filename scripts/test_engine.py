@@ -21,7 +21,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ENGINE = ROOT / "games/toronto-dispatch/project/plugins/toronto-driving/engine"
+ENGINE = ROOT / "project/plugins/toronto-driving/engine"
 FIXTURES = ROOT / "tests/engine"
 
 
@@ -194,7 +194,7 @@ def main():
         shutil.copyfile(ENGINE / "src/td_content.c", work / "content_under_test.c")
         shutil.copyfile(ENGINE / "src/td_street_names.c", work / "street_names_under_test.c")
         shutil.copyfile(ENGINE / "src/td_places.c", work / "places_under_test.c")
-        game = ROOT / "games/toronto-dispatch"
+        game = ROOT
         (work / "native_collision_fixture.h").write_text(native_fixture(game, ENGINE / "include"))
         shutil.copyfile(FIXTURES / "gbvm_stubs.h", work / "gbvm_stubs.h")
         for name in ("actor", "camera", "scroll", "collision", "input", "data_manager", "ui", "compat", "system", "bankdata"):

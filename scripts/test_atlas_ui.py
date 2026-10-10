@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ENGINE = ROOT / "games/toronto-dispatch/project/plugins/toronto-driving/engine"
+ENGINE = ROOT / "project/plugins/toronto-driving/engine"
 FIXTURES = ROOT / "tests/engine"
 
 

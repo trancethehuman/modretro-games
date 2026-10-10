@@ -1,6 +1,6 @@
 # Native build and preview
 
-Updated 2026-10-02. The published Queen streetcar milestone (`23b2a7a2…`, Prototype 6) has compiled and passes scoped native driving, scheduled streetcar, subway, bus, ferry, map, reset and safe-alighting checks. It retains four compressed scenes and 88 contracts, and adds eight service points. Prototype 5 (`2d1f6e4e…`) is the preceding published city-atlas milestone. Earlier builds retain their separate identities and evidence below. Select `games/toronto-dispatch/project/project.gbsproj` through the ModRetro Chromatic plugin before issuing project operations. The format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay and physical cartridge acceptance remain open.
+Updated 2026-10-02. The published Queen streetcar milestone (`23b2a7a2…`, Prototype 6) has compiled and passes scoped native driving, scheduled streetcar, subway, bus, ferry, map, reset and safe-alighting checks. It retains four compressed scenes and 88 contracts, and adds eight service points. Prototype 5 (`2d1f6e4e…`) is the preceding published city-atlas milestone. Earlier builds retain their separate identities and evidence below. Select `project/project.gbsproj` through the ModRetro Chromatic plugin before issuing project operations. The format is native GB Studio distributed resources (`.gbsproj` / `.gbsres`). Full former Toronto, two measured hours of varied gameplay and physical cartridge acceptance remain open.
 
 ## Tested toolchain
 
@@ -36,16 +36,16 @@ Sixteen linked 1,024 × 976 scenes use the original project-local `TORONTO` scen
 From the repository root, with Python and Pillow available:
 
 ```sh
-python3 games/toronto-dispatch/scripts/create_city_art.py
-python3 games/toronto-dispatch/scripts/sync_city_resources.py
-python3 games/toronto-dispatch/scripts/create_west_art.py
-python3 games/toronto-dispatch/scripts/create_east_art.py
-python3 games/toronto-dispatch/scripts/sync_city_resources.py
-python3 games/toronto-dispatch/scripts/create_sprites.py
-python3 games/toronto-dispatch/scripts/create_street_life.py
-python3 games/toronto-dispatch/scripts/create_ui_art.py
-python3 games/toronto-dispatch/scripts/create_daynight.py
-python3 games/toronto-dispatch/scripts/create_radio.py
+python3 scripts/create_city_art.py
+python3 scripts/sync_city_resources.py
+python3 scripts/create_west_art.py
+python3 scripts/create_east_art.py
+python3 scripts/sync_city_resources.py
+python3 scripts/create_sprites.py
+python3 scripts/create_street_life.py
+python3 scripts/create_ui_art.py
+python3 scripts/create_daynight.py
+python3 scripts/create_radio.py
 ```
 
 These commands generate original artwork/metadata and synchronize existing core resources. They do not register new scenes or apply changed west/east collision and attribute resources. Use the plugin's revision-aware native workflow to register/update those assets and scenes, preserve bindings, and apply the intended reciprocal core seams before continuing. Regenerating content against stale native geometry is not a valid build procedure. The current candidate already has all four native scenes registered.
@@ -53,13 +53,13 @@ These commands generate original artwork/metadata and synchronize existing core 
 After the registered resources match the authored geometry:
 
 ```sh
-python3 games/toronto-dispatch/scripts/create_district_world.py
-python3 games/toronto-dispatch/scripts/create_district_jobs.py
-python3 games/toronto-dispatch/scripts/create_east_jobs.py
-python3 games/toronto-dispatch/scripts/create_campaign.py
-python3 games/toronto-dispatch/scripts/create_world_routes.py
-python3 games/toronto-dispatch/scripts/create_audio.py
-python3 games/toronto-dispatch/scripts/create_atlas.py
+python3 scripts/create_district_world.py
+python3 scripts/create_district_jobs.py
+python3 scripts/create_east_jobs.py
+python3 scripts/create_campaign.py
+python3 scripts/create_world_routes.py
+python3 scripts/create_audio.py
+python3 scripts/create_atlas.py
 make check
 ```
 
@@ -78,7 +78,7 @@ Car physics stores local Q4 coordinates and smoothed velocity; GBVM actors/camer
 For bounded source/API/renderer checks without a ROM build:
 
 ```sh
-python3 -B games/toronto-dispatch/scripts/create_atlas.py --check
+python3 -B scripts/create_atlas.py --check
 python3 -B scripts/test_atlas.py
 python3 -B scripts/test_atlas_ui.py
 ```
@@ -109,7 +109,7 @@ After each plugin build, run from the repository root:
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-pickup-condition.gbc.debug/symbols.noi
+  project/build/toronto-pickup-condition.gbc.debug/symbols.noi
 ```
 
 Stock GBVM reserves the `DF00–DFFF` page for its second OAM buffer, palettes and text tiles, and starts the downward CPU stack at `.STACK=DF00`. The checker rejects linker-area overlap with those absolute buffers, inconsistent/missing symbols and heap ends at or above the stack. The command additionally requires 1,024 bytes of stack reserve; this project threshold does not measure the actual deepest native call path.
@@ -147,7 +147,7 @@ Arrival chooses the stop centre when clear, then nearby cardinal positions at 12
 
 Two fresh ordinary-button recordings test this exact ROM. The first repeats the Market job and held-turn regression, three Queen trips loading Core/East/West, WAIT/RIDE map freezing, paid-trip soft reset and parked-car recovery. The second repeats subway/map/reset controls, rides the 94 Wellesley bus, returns to Union at `(572,720)` beside the car at `(560,720)`, walks away, rides the Centre Island ferry out and back, walks on the Island and re-enters the Union car. Native samples report 59 updates over 120 video frames and no over-limit OAM scanlines in their sampled views. Full timings, immutable journal identifiers and predecessor failure are in [TESTING.md](../TESTING.md). These samples establish neither every route nor hardware persistence or the complete campaign's duration.
 
-Milestone identifier: `v0.2.0-prototype.6`. Its [published bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is 85,940 bytes, ZIP SHA-256 `ecfee71c28227ee8d48d3d841af76111139af97ce5e52be73cab92d867137c87`, declaring source commit `e85006f07d07ff628a1aad0a45dd9dc6271e4695`. Anonymous download and all member checksums pass. Use the matching [loading instructions](LOADING.md); publication evidence is in [TESTING.md](../TESTING.md). A fresh source build needs its own inspection and test identity. The older browser preview remains unresolved and does not display this ROM.
+Milestone identifier: `v0.2.0-prototype.6`. Its [published bundle](https://github.com/trancethehuman/toronto-dispatch/releases/tag/v0.2.0-prototype.6) is 85,940 bytes, ZIP SHA-256 `ecfee71c28227ee8d48d3d841af76111139af97ce5e52be73cab92d867137c87`, declaring source commit `e85006f07d07ff628a1aad0a45dd9dc6271e4695`. Anonymous download and all member checksums pass. Use the matching [loading instructions](LOADING.md); publication evidence is in [TESTING.md](../TESTING.md). A fresh source build needs its own inspection and test identity. The older browser preview remains unresolved and does not display this ROM.
 
 ## Final Prototype 5 rebuild
 
@@ -159,7 +159,7 @@ The milestone identifier is `v0.2.0-prototype.5`. Use the matching bundle and [l
 
 ## Preceding optimized native city atlas
 
-Milestone identity: `v0.2.0-prototype.5`. Publication and its downloadable bundle are tracked on the [releases page](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.5). This candidate retains four native scenes, 88 contracts and 43 stops, and replaces the earlier local camera map with a browsable schematic of the four registered areas.
+Milestone identity: `v0.2.0-prototype.5`. Publication and its downloadable bundle are tracked on the [releases page](https://github.com/trancethehuman/toronto-dispatch/releases/tag/v0.2.0-prototype.5). This candidate retains four native scenes, 88 contracts and 43 stops, and replaces the earlier local camera map with a browsable schematic of the four registered areas.
 
 | Identity | Value |
 | --- | --- |
@@ -216,7 +216,7 @@ A separate final-ROM transit session `3b64dc833a774380a4c6814c3b85db0f` records 
 
 From frames 442→562, the UBYTE update counter changes `248→51`: modulo 256, that is **59 updates over 120 video frames**, about 29.5 updates per second. The OAM snapshot has 12 visible sprites, peak four per scanline and zero over-limit scanlines. The immutable journal's stop reason incorrectly states `88→148`, 60 updates and peak six; the actual inspected values above and [TESTING.md](../TESTING.md) correct that text. This bounded core sample does not establish crowded-scene or whole-city performance.
 
-The progression sample represents about eight minutes of purposeful native game-clock gameplay. It does not establish all 88 contracts, every seam lane, two hours of varied gameplay, human enjoyment, expanded-world frame pacing, full former Toronto coverage or physical cartridge behavior. These Prototype 4 samples did not complete the remaining handoffs/seams or paid-ride reset; the newer atlas candidate's paid-reset evidence belongs to its own identity above. The milestone identifier is `v0.2.0-prototype.4`; use the matching bundle from the [releases page](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.4). Exact build-specific scenarios and later acceptance results belong in [TESTING.md](../TESTING.md). No human listening or current browser/device proof is claimed.
+The progression sample represents about eight minutes of purposeful native game-clock gameplay. It does not establish all 88 contracts, every seam lane, two hours of varied gameplay, human enjoyment, expanded-world frame pacing, full former Toronto coverage or physical cartridge behavior. These Prototype 4 samples did not complete the remaining handoffs/seams or paid-ride reset; the newer atlas candidate's paid-reset evidence belongs to its own identity above. The milestone identifier is `v0.2.0-prototype.4`; use the matching bundle from the [releases page](https://github.com/trancethehuman/toronto-dispatch/releases/tag/v0.2.0-prototype.4). Exact build-specific scenarios and later acceptance results belong in [TESTING.md](../TESTING.md). No human listening or current browser/device proof is claimed.
 
 ## Historical intermediate four-scene build
 
@@ -257,13 +257,13 @@ Native plugin samples on this earlier ROM passed immediate transit boarding over
 | Save schema | Version 6; 58-byte state |
 | Memory guard | `D90F` heap / `DF00` stack / 1,521-byte reserve |
 
-Published Prototype 3 is CGB-only and 262,144 bytes (256 KiB), available through the [releases page](https://github.com/trancethehuman/modretro-games/releases). Its official build resolves three scene and collision resources. The ModRetro plugin confirmed clean boot, first-delivery/held-acceleration turning, a driving transition from core 0 to west 1 and walking from west 1 to High Park 2. A soft reset restored the courier on foot in the actual High Park scene while retaining the parked vehicle in district 1, cash and world clock. Western active-job and paid core-trip reset samples also passed. These samples do not establish all portals, complete campaign progression, two hours of gameplay, full Old Toronto coverage, physical cartridge behavior or the newer four-scene binary. Build-specific details belong in [TESTING.md](../TESTING.md).
+Published Prototype 3 is CGB-only and 262,144 bytes (256 KiB), available through the [releases page](https://github.com/trancethehuman/toronto-dispatch/releases). Its official build resolves three scene and collision resources. The ModRetro plugin confirmed clean boot, first-delivery/held-acceleration turning, a driving transition from core 0 to west 1 and walking from west 1 to High Park 2. A soft reset restored the courier on foot in the actual High Park scene while retaining the parked vehicle in district 1, cash and world clock. Western active-job and paid core-trip reset samples also passed. These samples do not establish all portals, complete campaign progression, two hours of gameplay, full Old Toronto coverage, physical cartridge behavior or the newer four-scene binary. Build-specific details belong in [TESTING.md](../TESTING.md).
 
 At that milestone, `make check` passed with **1,212 host engine checks, 710 independent district bridge checks and nine memory-guard regressions**, alongside repository/content/generated-source validation. Those checks use host hardware stubs and do not replace the native scenarios above. Source fingerprints and symbol digests identify build inputs/artifacts; they are not Git commits.
 
 ## Published single-scene milestone
 
-Milestone identifier: `v0.2.0-prototype.2`. This earlier ROM includes the car-entry/transit transition fixes and uses save schema 5. It is CGB-only, 262,144 bytes (256 KiB), MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. Its official build/header checks passed; physical cartridge compatibility remains unverified. Download available bundles from the [releases page](https://github.com/trancethehuman/modretro-games/releases). Its results below do not establish the linked-district candidate's behavior.
+Milestone identifier: `v0.2.0-prototype.2`. This earlier ROM includes the car-entry/transit transition fixes and uses save schema 5. It is CGB-only, 262,144 bytes (256 KiB), MBC5+RUMBLE+RAM+BATTERY with 32 KiB declared RAM. Its official build/header checks passed; physical cartridge compatibility remains unverified. Download available bundles from the [releases page](https://github.com/trancethehuman/toronto-dispatch/releases). Its results below do not establish the linked-district candidate's behavior.
 
 | Identity | Value |
 | --- | --- |

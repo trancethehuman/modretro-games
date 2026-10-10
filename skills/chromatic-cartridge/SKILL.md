@@ -3,7 +3,7 @@ name: chromatic-cartridge
 description: Prepare and verify supported homebrew ROM streaming and loading onto the user's identified Chromatic development cartridge.
 ---
 
-Read `docs/HARDWARE.md`, the selected game's `TESTING.md`, and the installed ModRetro plugin's actual hardware skill. The user has authorised loading this project's game when the supported device is connected; preserve that scope.
+Read `docs/HARDWARE.md`, `TESTING.md`, and the installed ModRetro plugin's actual hardware skill. The user has authorised loading Toronto Dispatch when the supported device is connected; preserve that scope.
 
 Identify the console and writable cartridge through supported tools, check Developer Mode readiness, and select a successfully built/tested ROM. Never ask for an activation code in chat or commit device state. User interaction may be needed for activation or physical controls; explain the actual requirement.
 

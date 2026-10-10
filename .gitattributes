@@ -1,2 +1,2 @@
 # Preserve the pinned upstream licence byte-for-byte, including its whitespace.
-games/toronto-dispatch/docs/licenses/GBDK-GPLV2-LE.txt -whitespace
+docs/licenses/GBDK-GPLV2-LE.txt -whitespace

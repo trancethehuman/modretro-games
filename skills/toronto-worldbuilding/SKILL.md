@@ -3,7 +3,7 @@ name: toronto-worldbuilding
 description: Research and design geographically coherent Toronto districts, streets, landmarks, and transit for Toronto Dispatch.
 ---
 
-Read `games/toronto-dispatch/DESIGN.md` and `docs/GEOGRAPHY.md` within that game. Consult its source registry before adding geographic content.
+Read `DESIGN.md` and `docs/GEOGRAPHY.md`. Consult the source registry (`content/sources.json`) before adding geographic content.
 
 Use official City of Toronto data for street topology and neighbourhood references, TTC maps/route pages for transit, and official landmark sources for locations. Record URL, review date, licence/attribution status, and the fact supported. An opened portal page alone does not verify downloaded geometry or every proposed location.
 

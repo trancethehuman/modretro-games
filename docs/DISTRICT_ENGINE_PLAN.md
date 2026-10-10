@@ -58,7 +58,7 @@ Run this explicit symbol check after every plugin ROM build and before emulator 
 
 ```sh
 python3 -B scripts/check_rom_memory.py --min-stack-reserve 1024 \
-  games/toronto-dispatch/project/build/toronto-districts.gbc.debug/symbols.noi
+  project/build/toronto-districts.gbc.debug/symbols.noi
 ```
 
 The checker rejects allocated-area/OAM collisions, allocations beyond the heap marker, missing/conflicting symbols and heap ends at or above the native stack. The command additionally requires a 1,024-byte stack reserve. That threshold is a project guard, not a measured worst-case stack requirement; the earlier 345-byte gap passed the former256-byte guard before its reset failed, motivating this higher margin. The current 1,521-byte reserve and successful reset replay provide stronger separate evidence. `make check` runs nine regression cases for the checker but does not inspect a newly built ROM automatically.

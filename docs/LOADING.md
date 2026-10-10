@@ -2,7 +2,7 @@
 
 Use your Chromatic and the **writable ModRetro DevDay cartridge**. The cartridge can be empty. The game is a CGB-only homebrew ROM, so select the `.gbc` build. No game has been written to physical hardware yet; the first physical boot is an important check.
 
-The latest locally tested source candidate is **524,288 bytes**, SHA-256 `64be19fa3da7ba4231ba8c8decec4720c409116c034f586974fd4ddce789945a`, named `toronto-pickup-condition.gbc`. It corrects cargo damage before pickup and preserves damage after collection. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) is the earlier `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include this later correction. Use each file's own checksum and testing record.
+The latest locally tested source candidate is **524,288 bytes**, SHA-256 `64be19fa3da7ba4231ba8c8decec4720c409116c034f586974fd4ddce789945a`, named `toronto-pickup-condition.gbc`. It corrects cargo damage before pickup and preserves damage after collection. The downloadable [Prototype 6 bundle](https://github.com/trancethehuman/toronto-dispatch/releases/tag/v0.2.0-prototype.6) is the earlier `toronto-queen-streetcar-safe.gbc`, SHA-256 `23b2a7a25c9c593a51967e16a275cfb162bbb3e59f709eecd37dd77e2bb408f0`; it does not include this later correction. Use each file's own checksum and testing record.
 
 The current source retains four linked compressed districts, 88 contracts, 51 service points, the city map and scheduled subway/bus/ferry/Queen travel. Queen's $3 timetable is fictional; moving streetcar artwork is pending. The new candidate passes a matched native pre-pickup collision replay, actual pickup/carried damage, a condition-scaled delivery and the controlled held-acceleration turn. Official build/header/memory, host sanitizer and generated-source checks pass. Prototype 6's broader transit/reset journeys and Prototype 4's nine-job/four-scene tests remain separate historical evidence; [TESTING.md](../TESTING.md) scopes each build. A different build needs its own inspection and native checks.
 
@@ -21,10 +21,10 @@ The updater activates the computer and handles console firmware. The game itself
 
 ## 2. Select the actual game build
 
-The editable project is `games/toronto-dispatch/project/project.gbsproj`. The normal native output is:
+The editable project is `project/project.gbsproj`. The normal native output is:
 
 ```text
-games/toronto-dispatch/project/build/toronto-pickup-condition.gbc
+project/build/toronto-pickup-condition.gbc
 ```
 
 Generated ROMs are excluded from Git. A source checkout needs the official plugin build described in [BUILD.md](BUILD.md); an official downloadable ROM bundle should include `SHA256SUMS`, loading instructions and licence notices. Do not rename a browser export or a `.gbsproj` file to `.gbc`.
@@ -38,8 +38,8 @@ Use `rom_inspect` on the final file. Match its digest to the tested build in [TE
 Optional read-only checks from the repository root on macOS:
 
 ```sh
-shasum -a 256 games/toronto-dispatch/project/build/toronto-pickup-condition.gbc
-wc -c < games/toronto-dispatch/project/build/toronto-pickup-condition.gbc
+shasum -a 256 project/build/toronto-pickup-condition.gbc
+wc -c < project/build/toronto-pickup-condition.gbc
 ```
 
 For a downloaded bundle, from its extracted directory:

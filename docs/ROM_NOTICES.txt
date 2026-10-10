@@ -5,7 +5,7 @@ This ROM includes GB Studio/GBVM engine and starter asset components.
 The root MIT licence does not replace the upstream licences below.
 
 Build and pinned component details: docs/DISTRIBUTION.md in the source repo.
-Source: https://github.com/trancethehuman/modretro-games
+Source: https://github.com/trancethehuman/toronto-dispatch
 
 hUGEDriver, by SuperDisk and contributors, is dedicated to the public domain.
 The project's GBVM-pinned driver is used. Upstream dedication:

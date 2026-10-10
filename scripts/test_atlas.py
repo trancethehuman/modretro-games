@@ -16,7 +16,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-GAME = ROOT / "games/toronto-dispatch"
+GAME = ROOT
 ENGINE = GAME / "project/plugins/toronto-driving/engine"
 HARNESS = ROOT / "tests/engine/atlas_harness.c"
 

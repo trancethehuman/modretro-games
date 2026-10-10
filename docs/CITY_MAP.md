@@ -49,8 +49,8 @@ The arrays and getter code are autobanked together. Optimized candidate `e812f7e
 From the repository root:
 
 ```sh
-python3 -B games/toronto-dispatch/scripts/create_atlas.py
-python3 -B games/toronto-dispatch/scripts/create_atlas.py --check
+python3 -B scripts/create_atlas.py
+python3 -B scripts/create_atlas.py --check
 python3 -B scripts/test_atlas.py
 python3 -B scripts/test_atlas_ui.py
 ```

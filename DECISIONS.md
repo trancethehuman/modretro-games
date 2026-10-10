@@ -3,7 +3,7 @@
 ## Accepted, 2026-10-01
 
 - Original game for the user's ModRetro device and writable cartridge.
-- A collection repository with one folder per game, GitHub publication, MIT licence, README, agent instructions, and reusable skills.
+- A collection repository with one folder per game, GitHub publication, MIT licence, README, agent instructions, and reusable skills. The collection layout is superseded by the single-game repository (2026-10-10, below).
 - Toronto courier driving with timed missions, objectives, obstacles, traffic, and open roaming.
 - Initially angled/isometric; superseded by the user's explicit top-down revision on 2026-10-02.
 - More realistic driving: momentum, braking, and tighter traffic rules.
@@ -371,6 +371,15 @@ User direction (2026-10-10): add a variety of greens, trees, bushes, fences and 
 - **Decoration only.** Hedges, fences, bushes and beds never change collision: flat ground stays open to cars and walkers (user direction, 2026-10-07), and the city map, pickups, lost parcels, walker routes and traffic are unchanged. They are drawn without background priority, so the courier passes over them; trees still pass overhead.
 - **Tile budget.** Designs are mirror-symmetric, and one design drawn in either green palette is still one tile pattern. A scene that would exceed its 352 background tiles drops greenery kinds in order (wildflowers, long grass, clover, beds, railings, pickets, bushes, hedges, species). Only Yonge & Church (core NE) needed it: it keeps species, hedges and bushes at exactly 352 tiles. Other scenes grew 10 to 19 tiles.
 - **Performance.** Backgrounds are static tiles: greenery adds no per-frame work and no sprites.
+
+## One game, one name, 2026-10-10
+
+User direction (2026-10-10): the codebase is just this game, named Toronto Dispatch, with no nested folders for more games; rename the README, everything and the GitHub repository. Implemented:
+
+- The game moved from `games/toronto-dispatch/` to the repository root (history kept through `git mv`): `README.md`, `DESIGN.md`, `ROADMAP.md`, `DECISIONS.md` and `TESTING.md` at the root, with `project/`, `content/`, `scripts/` (the game's generators beside the host test runners), `docs/` and `tests/`. The `games/` folder is gone; `scripts/check_repository.py` fails if it returns.
+- The collection README was replaced by the game's README, which gains the development, checks, cartridge and licence sections. `AGENTS.md`, `CONTRIBUTING.md` and the skills describe one game. `scripts/package_rom.py` no longer takes `--game`.
+- The GitHub repository is `trancethehuman/toronto-dispatch` (renamed from `modretro-games`; GitHub redirects the old URLs, and releases moved with it). Paths and links in the documents (including the testing record), ROM notices and packaging use the root layout and the new name; ROM bundles already published keep the old link, which redirects.
+- The local checkout folder keeps its old name until it is moved outside this working session.
 
 ## Working defaults and pending proposals
 

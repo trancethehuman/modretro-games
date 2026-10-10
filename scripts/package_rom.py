@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Package one inspected native ROM with committed loading and licence notices.
 
-Run after committing the matching game source. This verifies identities and
+Run after committing the matching source. This verifies identities and
 packages files; it does not build, playtest, write a cartridge or prove that the
 supplied ROM was built from the declared commit.
 """
@@ -20,7 +20,7 @@ from urllib.parse import quote, unquote, urlsplit
 import zipfile
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-SOURCE_URL = "https://github.com/trancethehuman/modretro-games"
+SOURCE_URL = "https://github.com/trancethehuman/toronto-dispatch"
 TORONTO_DATA_ATTRIBUTION = "Contains information licensed under the Open Government Licence – Toronto."
 TORONTO_DATA_LICENCE_URL = "https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/"
 SAFE_FILENAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
@@ -100,11 +100,9 @@ def pinned_toolchain(build_document: str) -> dict[str, str]:
     return {name: rows[name] for name in required}
 
 
-def validate_game_notices(game: str, notices: str) -> None:
+def validate_notices(notices: str) -> None:
     """The ZIP must carry the City's credit, not rely on a source-only notice."""
-    if game == "toronto-dispatch" and (
-        TORONTO_DATA_ATTRIBUTION not in notices or TORONTO_DATA_LICENCE_URL not in notices
-    ):
+    if TORONTO_DATA_ATTRIBUTION not in notices or TORONTO_DATA_LICENCE_URL not in notices:
         raise ValueError(
             "Committed Toronto ROM_NOTICES.txt must include the City OGL attribution "
             "and official licence link; nothing was packaged"
@@ -131,8 +129,6 @@ def output_path(value: Path) -> Path:
 
 
 def bundle(args: argparse.Namespace) -> dict[str, object]:
-    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.game):
-        raise ValueError("--game must be a lowercase game slug")
     if not re.fullmatch(r"[0-9a-fA-F]{64}", args.expected_sha256):
         raise ValueError("--expected-sha256 must be the full inspected SHA-256")
     expected = args.expected_sha256.lower()
@@ -144,11 +140,10 @@ def bundle(args: argparse.Namespace) -> dict[str, object]:
     if not SAFE_FILENAME.fullmatch(rom.name) or rom.suffix.lower() not in (".gb", ".gbc"):
         raise ValueError("--rom must have a safe native .gb or .gbc filename")
     rom = rom.resolve()
-    game_path = f"games/{args.game}"
     try:
-        rom.relative_to(REPOSITORY / game_path / "project" / "build")
+        rom.relative_to(REPOSITORY / "project" / "build")
     except ValueError:
-        raise ValueError("--rom must be the selected game's native project/build ROM") from None
+        raise ValueError("--rom must be a native project/build ROM") from None
     data = rom.read_bytes()
     digest = hashlib.sha256(data).hexdigest()
     if digest != expected:
@@ -161,16 +156,16 @@ def bundle(args: argparse.Namespace) -> dict[str, object]:
     if header_checksum != data[0x14D] or not data[0x143] & 0x80:
         raise ValueError("ROM must have a valid Game Boy Color header")
 
-    loading_path = f"{game_path}/docs/LOADING.md"
+    loading_path = "docs/LOADING.md"
     loading = public_loading_links(committed_text(commit, loading_path), commit, loading_path)
-    notices = committed_text(commit, f"{game_path}/docs/ROM_NOTICES.txt")
-    validate_game_notices(args.game, notices)
+    notices = committed_text(commit, "docs/ROM_NOTICES.txt")
+    validate_notices(notices)
     licence = committed_text(commit, "LICENSE")
-    build_document = committed_text(commit, f"{game_path}/docs/BUILD.md")
+    build_document = committed_text(commit, "docs/BUILD.md")
     build_info = {
-        "game": args.game,
+        "game": "toronto-dispatch",
         "sourceCommit": commit,
-        "sourceUrl": f"{SOURCE_URL}/tree/{commit}/{game_path}",
+        "sourceUrl": f"{SOURCE_URL}/tree/{commit}",
         "rom": {"filename": rom.name, "sizeBytes": len(data), "sha256": digest},
         "toolchain": pinned_toolchain(build_document),
         "verification": {
@@ -182,7 +177,7 @@ def bundle(args: argparse.Namespace) -> dict[str, object]:
             "physicalSavePersistence": "not-verified",
             "twoHourGameplay": "not-verified",
         },
-        "testingUrl": f"{SOURCE_URL}/blob/{commit}/{game_path}/TESTING.md",
+        "testingUrl": f"{SOURCE_URL}/blob/{commit}/TESTING.md",
     }
     files = {
         rom.name: data,
@@ -235,7 +230,6 @@ def main() -> None:
     parser.add_argument("--expected-sha256", required=True)
     parser.add_argument("--source-commit", required=True)
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--game", default="toronto-dispatch")
     args = parser.parse_args()
     try:
         result = bundle(args)

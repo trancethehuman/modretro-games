@@ -52,7 +52,7 @@ Score notation, in short: each bar is 16 rows of space-separated tokens. A token
 From the repository root:
 
 ```sh
-python3 games/toronto-dispatch/scripts/create_audio.py
+python3 scripts/create_audio.py
 ```
 
 ## Banks and memory
@@ -100,10 +100,10 @@ Earlier evidence (the City Shift score with CH1/CH4 reserved for effects, ROM `a
 Use the plugin's PyBoy 2.7.0 interpreter (it includes numpy) and the `.noi` symbol file from the same build (`build/rom/toronto-dispatch.noi` in the GB Studio build folder). Choose a new output directory inside `project/build`:
 
 ```sh
-python games/toronto-dispatch/scripts/capture_soundtrack.py \
-  --rom games/toronto-dispatch/project/build/<rom>.gbc \
+python scripts/capture_soundtrack.py \
+  --rom project/build/<rom>.gbc \
   --symbols <build folder>/build/rom/toronto-dispatch.noi \
-  --output games/toronto-dispatch/project/build/audio-evidence/<new-name>
+  --output project/build/audio-evidence/<new-name>
 ```
 
 The script fails if a song is not the one loaded in its state, a channel is silent in any song, a sound check is silent, a silent check has samples, the brake hiss or a rev is missing, or effects hold CH1 for most of a drive. Its button sequence belongs to the 2026-10 boot and pause-menu flow; review it after gameplay changes.

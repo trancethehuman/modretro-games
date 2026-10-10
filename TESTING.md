@@ -1,5 +1,10 @@
 # Testing record
 
+## Single-game layout — 2026-10-10
+
+- The game moved from `games/toronto-dispatch/` to the repository root (no content, art, engine or project change). `make check` passes in the new layout, including the rewritten `scripts/check_repository.py`.
+- The plugin selected `project/project.gbsproj` at its new path and built `project/build/single-game.gbc`, SHA-256 `bbe4991377f9ff8db648abe247dc8d242abae16096049cf2d20a86688a08addd`, valid header. It differs from the main build `b7aca4ad…` only in the header checksum (`0x14F`) and the four-byte build stamp (`0x200`–`0x203`), so the cartridge's game is unchanged by the move.
+
 ## Greenery — candidate, 2026-10-10
 
 Plugin `rom_build` and PyBoy 2.7.0 evidence on `codex/toronto-greenery`. "Previous" is the main build `0a925319…` (above).
@@ -293,7 +298,7 @@ Bounded stationary samples advanced the update counter by 59 over 120 video fram
 
 ### Published bundle verification
 
-[Prototype 6](https://github.com/trancethehuman/modretro-games/releases/tag/v0.2.0-prototype.6) was published at 2026-10-02 15:40:50 UTC after PR 8 passed real push and pull-request `make check` jobs plus the security check. PR 8 merged source commit `e85006f07d07ff628a1aad0a45dd9dc6271e4695` into main at merge `114d787f0d62be38d47b047e18822353435f24b6`; main's actual `make check` job also passed. The release tag and bundle declare that exact source commit. This later documentation update changes no ROM source or native asset.
+[Prototype 6](https://github.com/trancethehuman/toronto-dispatch/releases/tag/v0.2.0-prototype.6) was published at 2026-10-02 15:40:50 UTC after PR 8 passed real push and pull-request `make check` jobs plus the security check. PR 8 merged source commit `e85006f07d07ff628a1aad0a45dd9dc6271e4695` into main at merge `114d787f0d62be38d47b047e18822353435f24b6`; main's actual `make check` job also passed. The release tag and bundle declare that exact source commit. This later documentation update changes no ROM source or native asset.
 
 The published ZIP `toronto-dispatch-v0.2.0-prototype.6.zip` is 85,940 bytes, SHA-256 `ecfee71c28227ee8d48d3d841af76111139af97ce5e52be73cab92d867137c87`. GitHub release ID `401945463` and asset ID `605921047` report a published prerelease and uploaded asset with that size/digest. An anonymous public download at 15:42:22 UTC independently matches the ZIP, all member checksums, the 524,288-byte native ROM `23b2a7a2…`, declared source commit, MIT licence and City attribution notices. Packaging, server metadata, anonymous download, native execution and physical cartridge acceptance remain separate evidence. No hardware write, read-back or cold boot is claimed.
 
