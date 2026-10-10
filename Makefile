@@ -18,6 +18,7 @@ check:
 	python3 scripts/sync_city_resources.py --check
 	python3 scripts/create_sprites.py --check
 	python3 scripts/create_street_life.py --check
+	python3 scripts/create_people.py --check
 	python3 scripts/create_ui_art.py --check
 	python3 scripts/create_daynight.py --check
 	python3 scripts/create_scenery.py --check
