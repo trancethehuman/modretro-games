@@ -1,0 +1,139 @@
+{
+  "slug": "night",
+  "title": "Six After Dark",
+  "mood": "night free roam (19:00-06:30); mellow C minor late-night R&B with broken electric-piano chords, a breathy vibrato lead, sliding bass and a half-time beat",
+  "ticks_per_row": 11,
+  "loop": 1,
+  "defaults": {"lead": "soft", "counter": "keys", "bass": "bass"},
+  "order": ["intro", "a1", "a2", "b1", "b2", "a3", "a4", "tag"],
+  "sections": {
+    "intro": {
+      "lead": ["./16", "./16", "./16", "./16"],
+      "counter": "@a1",
+      "bass": ["./16", "./16", "F4/12 C4:330/4", "G3/8 G4/2 !/2 G3/2 B3/2"],
+      "drums": [
+        "h/2 h/2 h/2 h/2 r/2 h/2 h/2 h/2",
+        "h/2 h/2 h/2 h/2 r/2 h/2 h/2 h/2",
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 c c c c c/2"
+      ]
+    },
+    "a1": {
+      "lead": [
+        "!/4 G5/2 As5/2 C6/6 As5/2",
+        "C6/4 .:432+/8 G5/2 Ds5/2",
+        "F5/2 Gs5/2 C6/2 Ds6/6 D6/2 C6/2",
+        "D6/8 .:432+/4 B5/2 G5/2"
+      ],
+      "counter": [
+        "C5/2 G5/2 As5/2 D6/2 Ds6/2 D6/2 As5/2 G5/2",
+        "Gs4/2 Ds5/2 G5/2 C6/2 Ds6/2 C6/2 G5/2 Ds5/2",
+        "F4/2 C5/2 Ds5/2 G5/2 Gs5/2 G5/2 Ds5/2 C5/2",
+        "G4/2 D5/2 F5/2 B5/2 Gs5/2 F5/2 D5/2 B4/2"
+      ],
+      "bass": [
+        "C4/12 C5:330/4",
+        "Gs3/12 Gs4:330/4",
+        "F4/12 C4:330/4",
+        "G3/8 G4/2 !/2 G3/2 B3/2"
+      ],
+      "drums": [
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 h k r/2 h h"
+      ]
+    },
+    "a2": {
+      "lead": [
+        "!/4 G5/2 As5/2 C6/2 Ds6/2 F6/2 G6/2",
+        "G6/6 F6/2 Ds6/4 C6/4",
+        "Gs5/4 C6/4 Ds6/2 D6/2 C6/2 As5/2",
+        "B5/8 .:432+/6 !/2"
+      ],
+      "counter": "@a1",
+      "bass": "@a1",
+      "drums": "@a1"
+    },
+    "b1": {
+      "lead": [
+        "As5/2 D6/2 G6/4 F6/2 D6/2 As5/4",
+        "C6/2 D6/2 F6/8 .:432+/4",
+        "Ds6/2 F6/2 G6/4 As6/2 G6/2 F6/4",
+        "Ds6/4 C6/4 Gs5/8"
+      ],
+      "counter": [
+        "Ds5/2 As5/2 D6/2 G6/2 As6/2 G6/2 D6/2 As5/2",
+        "As4/2 F5/2 As5/2 D6/2 F6/2 D6/2 As5/2 F5/2",
+        "C5/2 G5/2 C6/2 Ds6/2 G6/2 Ds6/2 C6/2 G5/2",
+        "Gs4/2 Ds5/2 Gs5/2 C6/2 Ds6/2 C6/2 Gs5/2 Ds5/2"
+      ],
+      "bass": [
+        "Ds4/12 As4:330/4",
+        "As3/12 As4:330/4",
+        "C4/12 G4:330/4",
+        "Gs3/12 Ds4:330/4"
+      ],
+      "drums": "@a1"
+    },
+    "b2": {
+      "lead": [
+        "G6/2 As6/2 D7/4 C7/2 As6/2 G6/4",
+        "F6/8 .:432+/4 D6/2 F6/2",
+        "Ds6/4 F6/2 Ds6/2 C6/8",
+        "D6/8 B5/4 G5/4"
+      ],
+      "counter": [
+        "Ds5/2 As5/2 D6/2 G6/2 As6/2 G6/2 D6/2 As5/2",
+        "As4/2 F5/2 As5/2 D6/2 F6/2 D6/2 As5/2 F5/2",
+        "Gs4/2 Ds5/2 Gs5/2 C6/2 Ds6/2 C6/2 Gs5/2 Ds5/2",
+        "G4/2 D5/2 F5/2 B5/2 Gs5/2 F5/2 D5/2 B4/2"
+      ],
+      "bass": [
+        "Ds4/12 As4:330/4",
+        "As3/12 As4:330/4",
+        "Gs3/12 Gs4:330/4",
+        "G3/8 G4/2 !/2 G3/2 B3/2"
+      ],
+      "drums": [
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 h k h/2 h h",
+        "k/2 h/2 h h k/2 c/2 c c c c c/2"
+      ]
+    },
+    "a3": {
+      "lead": "@a1",
+      "counter": [
+        "<pad> C5:03A+/16",
+        "<pad> Gs4:04B+/16",
+        "<pad> F4:03A+/16",
+        "<pad> G4:04A+/16"
+      ],
+      "bass": "@a1",
+      "drums": "@a1"
+    },
+    "a4": {
+      "lead": "@a2",
+      "counter": "@a3",
+      "bass": "@a1",
+      "drums": "@a1"
+    },
+    "tag": {
+      "lead": [
+        "G6/4 .:432+/12",
+        "Ds6/4 .:432+/12",
+        "C6/4 .:432+/12",
+        "B5/8 .:432+/4 !/4"
+      ],
+      "counter": "@a1",
+      "bass": "@a1",
+      "drums": [
+        "h/2 h/2 h/2 h/2 r/2 h/2 h/2 h/2",
+        "h/2 h/2 h/2 h/2 r/2 h/2 h/2 h/2",
+        "h/2 h/2 h/2 h/2 r/2 h/2 h/2 h/2",
+        "h/2 h/2 h/2 h/2 r/2 h/2 r r r/2"
+      ]
+    }
+  }
+}
