@@ -5,6 +5,7 @@
  * is transient; saved fields live in td (td_game.h). */
 #include <string.h>
 #include "td_life_int.h"
+#include "td_npc.h"
 #include "td_audio.h"
 #include "td_district.h"
 #include "td_overlay.h"
@@ -107,7 +108,8 @@ void td_lf_knock(UBYTE i,WORD vu,WORD vv,UBYTE lethal) BANKED {
         /* A downed officer's spare magazine lies where they fell. */
         if(!td_fx_kind)td_lf_fx(FX_DROP,pk_u[i]>>4,(pk_v[i]>>4)+4,255);
     }
-    else td_lf_crime(lethal?CR_KILL:CR_MINOR);
+    /* Fighting back against someone who started it is no crime. */
+    else if(!(td_npc_hostile&bit))td_lf_crime(lethal?CR_KILL:CR_MINOR);
 }
 
 /* A jab staggers a walker back a step; they stand dazed for half a second,
@@ -123,7 +125,7 @@ void td_lf_stun(UBYTE i,BYTE vu,BYTE vv) BANKED {
     if(lf_walk(u>>4,v>>4)){pk_u[i]=u;pk_v[i]=v;}
     lf_panic_r(pk_u[i]>>4,pk_v[i]>>4,64,56);
     if(look==LF_LOOK_OFFICER){if(!td.wanted)td_lf_crime(CR_COP);}
-    else td_lf_crime(CR_MINOR);
+    else if(!(td_npc_hostile&bit))td_lf_crime(CR_MINOR);
 }
 
 void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED {
@@ -140,6 +142,7 @@ void td_lf_stagger(UBYTE i,BYTE vu,BYTE vv) BANKED {
  * for a few seconds (officers excepted). */
 static void lf_panic_r(UWORD u,UWORD v,UBYTE ru,UBYTE rv){
     UBYTE i,bit,route;actor_t *a=&actors[TD_ACTOR_PEDS];
+    td_npc_alarm=1;td_npc_alarm_u=u;td_npc_alarm_v=v;
     for(i=0,bit=1;i<TD_PEDS;i++,bit<<=1,a++){
         route=td_ped_route[i];
         if((td_ped_ovr&bit)||route==TD_NONE||(a->flags&ACTOR_FLAG_HIDDEN)||(route&7)==LF_LOOK_OFFICER)continue;

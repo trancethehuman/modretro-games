@@ -55,7 +55,23 @@
 #define TD_MSG_SHARK 35
 #define TD_MSG_HELI 36
 #define TD_MSG_SHARK_BITE 37
-#define TD_MSG_COUNT 38
+/* A charged punch (hold A while standing after a jab, td_npc.c). */
+void td_life_haymaker(void) BANKED;
+#define TD_MSG_PICKPOCKET 38
+#define TD_MSG_RECOVERED 39
+#define TD_MSG_SHOVED 40
+#define TD_MSG_GOOSE 41
+#define TD_MSG_BRAWL 42
+#define TD_MSG_COUNTER 43
+#define TD_MSG_DISARM 44
+#define TD_MSG_REWARD 45
+#define TD_MSG_HAYMAKER 46
+#define TD_MSG_COVER 47
+#define TD_MSG_DOOR_LOCKED 48
+#define TD_MSG_DESK 49
+#define TD_MSG_INSIDE 50
+#define TD_MSG_LIFT 51
+#define TD_MSG_COUNT 52
 
 /* Sidewalk pickups (td_street.c tables, collected in TORONTO.c). */
 #define TD_PICKUP_CASH 15

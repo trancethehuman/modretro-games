@@ -199,10 +199,20 @@ def check():
         else:
             assert footprint(district, u, v, 8)
             model.shortest(origin, point(district, u, v), True)
-    for quest in campaign['quests'][72:]:
+    for quest in campaign['quests'][72:88]:
         for a, b in zip(quest['route'], quest['route'][1:]):
             model.stop_leg(campaign['stops'][a], campaign['stops'][b])
         assert quest['timing_design']['planning_only'] and quest['timing_design']['measured_duration_seconds'] is None
+    # Indoor desks (create_interior_jobs.py): each door's parking anchor is
+    # reachable by car from the depot and the door a short walk from it.
+    for stop in campaign['stops'][51:]:
+        district, u, v = stop['district'], stop['u'], stop['v']
+        anchor = stop['parking_anchor']
+        assert stop.get('foot_only') and walkable(district, u, v), stop['name']
+        assert footprint(district, anchor['u'], anchor['v'], 8), stop['name']
+        model.shortest(origin, point(district, anchor['u'], anchor['v']), True)
+        distance, _ = model.shortest(point(district, anchor['u'], anchor['v']), point(district, u, v), False)
+        assert 0 < distance <= 900, 'Indoor desk door needs a short walk from its parking'
 
     header, generated_world = create_district_world.build()
     assert create_district_world.HEADER.read_text() == header, 'Compiled seams/traffic differ'

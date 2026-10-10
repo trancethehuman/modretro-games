@@ -71,6 +71,12 @@ def frames():
     for design in A.PEOPLE_DESIGNS:
         for i, g in enumerate(A.person_frames(design)):
             add(f'person_{design}_{i}', g, 'courier_person')
+    # Walker slots: placeholders the engine overwrites with streamed looks.
+    for k, frames in enumerate(A.walker_placeholders()):
+        for i, g in enumerate(frames):
+            add(f'walker_{k}_{i}', g, 'courier_person')
+    for name, g in A.EMOTES.items():
+        add(f'emote_{name}', g, A.EMOTE_PALETTES.get(name, 'signal_yellow'))
     add('beacon', A.grid(A.BEACON), 'signal_yellow')
     add('beacon_pulse', A.grid(A.BEACON_PULSE), 'signal_yellow')
     add('car_door_open', A.door_frame(), 'courier_vehicle')
@@ -322,7 +328,8 @@ def outputs():
              '#ifndef TD_SPRITES_H', '#define TD_SPRITES_H',
              f'#define TD_SPRITE_FRAMES {len(fr)}']
     for name in ('player_car_0', 'player_van_0', 'player_motorcycle_0', 'player_scooter_0',
-                 *(f'person_{d}_0' for d in A.PEOPLE_DESIGNS),
+                 *(f'person_{d}_0' for d in A.PEOPLE_DESIGNS), 'walker_0_0',
+                 *(f'emote_{n}' for n in A.EMOTES),
                  'beacon', 'beacon_pulse', 'car_door_open',
                  'traffic_taxi_0', 'traffic_compact_0', 'traffic_pickup_0', 'traffic_sports_0', 'police_0', 'special_0',
                  'pickup_cash', 'pickup_first_aid', 'pickup_ammo',
@@ -333,8 +340,9 @@ def outputs():
         macro = 'TD_FRAME_' + name.upper().removesuffix('_0')
         lines.append(f'#define {macro} {index[name]}')
     lines.append('#define TD_FRAME_COURIER_WALK TD_FRAME_PERSON_SHORT')
+    lines.append('#define TD_FRAME_WALKERS TD_FRAME_WALKER_0')
     lines.append(f'#define TD_KNOCK_FRAMES {len(A.knockdown_frames())}')
-    lines.append(f'#define TD_PEOPLE_DESIGNS {len(A.PEOPLE_DESIGNS)}')
+    lines.append(f'#define TD_WALKER_SLOTS {A.WALKER_SLOTS}')
     lines.append(f'#define TD_SMOKE_FRAMES {len(A.SMOKE)}')
     # Round heads relative to the actor point (whole pixels, screen axes):
     # the engine draws a round with its head on the bullet's position.

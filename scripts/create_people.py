@@ -97,14 +97,13 @@ def art(rows, top=None):
 
 
 class Size:
-    """Rows of an adult or a child figure."""
+    """Rows of a figure."""
     def __init__(self, chin, hand, legs, torso_rows, leg_rows):
         self.chin, self.torso, self.hand, self.legs = chin, chin + 1, hand, legs
         self.torso_rows, self.leg_rows = torso_rows, leg_rows
 
 
 ADULT = Size(6, 8, 11, (0, 1, 2, 3), (0, 1, 2))
-KID = Size(8, 10, 12, (0, 1, 3), (0, 2))
 
 # Heads: view -> rows ending on the chin row. 'right' faces east; an
 # optional 'nape' adds rows below the chin, over the torso.
@@ -508,18 +507,6 @@ def p_book(v, f, s):
     return [(h - 1, 5, ["33"])]
 
 
-def p_balloon(v, f, s):
-    """A balloon on a string, bobbing as they walk."""
-    h = s.hand
-    b = f
-    top = h - 8 + b
-    if v == 'down':
-        return [(top, 5, [".33", "322", "322", ".33"]), (top + 4, 6, ["3"] * (h - top - 4)), (h, 6, ["1"])]
-    if v == 'up':
-        return [(top, 0, ["33.", "223", "223", "33."]), (top + 4, 1, ["3"] * (h - top - 4)), (h, 1, ["1"])]
-    return [(top, 5, [".33", "322", "322", ".33"]), (top + 4, 5, ["3"] * (h - top - 4))]
-
-
 def p_newspaper(v, f, s):
     h = s.hand
     if v == 'down':
@@ -527,18 +514,6 @@ def p_newspaper(v, f, s):
     if v == 'up':
         return [(h - 1, 0, ["13", "31", "13"])]
     return [(h - 1, 4, ["113", "131"])]
-
-
-def p_toddler(v, f, s):
-    """A toddler riding on the parent's shoulders, arms out; the parent
-    holds their ankles."""
-    if v == 'down':
-        return [(0, 0, ["...33...", "...11...", ".1.22.1." if f == 0 else "1..22..1", "..2222.."]),
-                (4, 1, ["2", "2", "1"]), (4, 6, ["2", "2", "1"]), (s.hand, 1, ["3"]), (s.hand, 6, ["3"])]
-    if v == 'up':
-        return [(0, 0, ["...33...", "...33...", ".1.22.1." if f == 0 else "1..22..1", "..2222.."]),
-                (6, 1, ["1"]), (6, 6, ["1"]), (s.hand, 1, ["3"]), (s.hand, 6, ["3"])]
-    return [(0, 1, ["33..", "311.", "221.", "222."]), (4, 5, ["2", "2"]), (6, 5, ["1"])]
 
 
 def p_redbox(v, f, s):
@@ -725,13 +700,6 @@ def a_signup(v, f, s):
     arm = ["1"] + ["3"] * (3 - f)
     return [(h, 1, ["3"]), (h, 6, ["3"]), (f, 0, ["33333333", "31221213", "33333333"]),
             (3 + f, 1, arm), (3 + f, 6, arm)]
-
-
-def a_toddler(v, f, s):
-    """The toddler on the shoulders waves both arms."""
-    if f == 0:
-        return [(2, 0, [".0....0."]), (1, 0, [".1....1."])]
-    return [(2, 0, [".0....0."]), (0, 0, ["1......1"]), (1, 0, [".2....2."])]
 
 
 def a_behind(v, f, s):
@@ -1043,7 +1011,7 @@ LOOKS = [
       head='short', torso='jersey', act=act(arms=a_cheer)),
     L('baseball', "BASEBALL FAN", "NEAR THE DOME",
       ["BRINGS A GLOVE TO", "EVERY GAME. HAS", "NEVER CAUGHT ONE."],
-      ["BOTTOM OF THE", "NINTH, KID."],
+      ["BOTTOM OF THE", "NINTH, PAL."],
       5, 'WALK', dict(entertainment=8, waterfront=5, transit=4, downtown=3),
       dict(pub=6, tower=2),
       head='cap', torso='tee', legs='shorts', props=('glove',), act=act(arms=a_glove)),
@@ -1059,21 +1027,14 @@ LOOKS = [
       3, 'SIT', dict(danforth=9, little_italy=6, leslieville=4, queen_west=3, junction=4),
       dict(cafe=8, bakery=3, restaurant=2),
       head='grey', torso='shirt', props=('newspaper',), act=READING),
-    L('parent', "PARENT", "RIVERDALE PARK",
-      ["TODDLER ON", "SHOULDERS, SNACKS", "IN EVERY POCKET."],
-      ["SAY HI TO THE", "COURIER, BUDDY."],
-      3, 'SLOW', dict(park=8, high_park=7, residential=7, leslieville=6, danforth=5, waterfront=4),
-      dict(museum=4, mall=3),
-      head='short', torso='shirt', legs='mid', props=('toddler',),
-      act=act(arms=a_toddler)),
-    L('kid', "KID WITH BALLOON", "CENTRE ISLAND",
-      ["ONE BALLOON,", "HELD VERY, VERY", "TIGHTLY."],
-      ["MY BALLOON CAN", "SEE THE LAKE."],
-      1, 'WALK', dict(waterfront=7, park=7, high_park=5, residential=4, entertainment=3),
-      dict(museum=3, mall=3),
-      head='tail', torso='shirt', legs='shorts', size=KID, props=('balloon',),
-      act=act(arms=lambda v, f, s: a_wave(v, f, s) + [(s.hand, 1, ["1"])], props=('balloon',))),
-    L('teen', "TEEN", "YONGE STREET",
+    L('birder', "BIRDWATCHER", "HIGH PARK",
+      ["BINOCULARS UP,", "COUNTING SPARROWS", "SINCE SUNRISE."],
+      ["SHH. A HAWK,", "TWO O'CLOCK."],
+      3, 'SLOW', dict(high_park=8, park=7, waterfront=4, leslieville=3, residential=2),
+      dict(museum=3),
+      head='short', torso='shirt', legs='mid', props=('camera',),
+      act=act(arms=a_camera, props=())),
+    L('listener', "MUSIC LOVER", "YONGE STREET",
       ["HEADPHONES ON,", "WORLD OFF. KNOWS", "EVERY SHORTCUT."],
       ["WHAT?", "CAN'T HEAR YOU."],
       6, 'WALK', dict(yonge_dundas=8, downtown=5, queen_west=5, transit=5, kensington=4, night=3),
@@ -1187,15 +1148,9 @@ LOOKS = [
       5, 'SLOW', dict(waterfront=4, entertainment=4, downtown=3, yonge_dundas=3),
       dict(museum=8, gallery=5, tower=7),
       head='short', torso='lanyard', props=('flag',), act=act(arms=a_flagup, props=())),
-    L('schoolkid', "SCHOOL KID", "FIELD TRIP",
-      ["PERMISSION SLIP", "SIGNED. LUNCH", "EATEN BY TEN."],
-      ["ARE WE THERE", "YET?"],
-      3, 'WALK', dict(campus=3, park=4, waterfront=3, residential=3),
-      dict(museum=8, gallery=5, tower=5),
-      head='cap', torso='pack', legs='mid', size=KID, props=('backpack',), act=act(arms=a_wave)),
-    L('teacher', "TEACHER", "FIELD TRIP",
-      ["COUNTS HEADS", "EVERY MINUTE.", "STILL SMILING."],
-      ["HAVE YOU SEEN A", "KID IN A CAP?"],
+    L('teacher', "TEACHER", "HARBORD VILLAGE",
+      ["MARKS ESSAYS ON", "THE STREETCAR,", "RED PEN IN HAND."],
+      ["FIRST BELL IN", "TEN MINUTES."],
       5, 'WALK', dict(campus=3, park=3, waterfront=2, residential=3),
       dict(museum=7, gallery=4, tower=4),
       head='curly', torso='shirt', legs='skirt', props=('clipboard',), act=act(arms=a_raise)),

@@ -7,6 +7,8 @@
 #include "td_district.h"
 #include "td_daynight.h"
 #include "td_shots.h"
+#include "td_people.h"
+#include "td_npc.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -16,6 +18,8 @@
 static const BYTE lf_tk_u[4]={1,-1,0,0},lf_tk_v[4]={0,0,1,-1};
 void td_life_peds(UBYTE near) BANKED {
     UBYTE i,bit,a,mode,f,hop;actor_t *p;WORD du,dv;
+    /* People with something to do move and draw themselves (td_npc.c). */
+    td_npc_tick();
     near&=~pk_fresh;
     a=td.speed<0?(UBYTE)-td.speed:(UBYTE)td.speed;
     /* Walkers in the path of a fast car (where it will be in 16 ticks)
@@ -56,6 +60,7 @@ void td_life_peds(UBYTE near) BANKED {
     for(i=0,bit=1,p=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,p++){
         if(!(td_ped_ovr&bit))continue;
         mode=pk_mode[i];hop=0;
+        if(mode>=PK_NPC)continue;
         /* A body on the ground does not move: draw it once. */
         if(pk_drawn&bit)continue;
         if(mode==PK_FLY){
@@ -71,10 +76,16 @@ void td_life_peds(UBYTE near) BANKED {
             f=TD_FRAME_COURIER_SHOOT+(lf_abs(du)>=lf_abs(dv)?(du>=0?0:1):(dv>=0?2:3));
             TD_PALETTE(p)=(td_tick&4)?TD_PEOPLE_PAL(TD_PAL_RED):LF_OFFICER_PAL;
         }else{
-            static const UBYTE dir_frame[4]={0,2,4,6};
+            /* The slot's look walks east (west mirrored), south or north;
+             * a change of axis streams that pose into the slot. */
+            static const UBYTE dir_frame[4]={0,2,0,0},dir_pose[4]={TD_POSE_SIDE,TD_POSE_SIDE,TD_POSE_FRONT,TD_POSE_BACK};
+            UBYTE d=pk_dir[i]&3;
+            if(pk_look[i]==LF_LOOK_OFFICER&&td_slot_look[i]!=TD_LOOK_OFFICER)td_people_show(i,TD_LOOK_OFFICER,dir_pose[d]);
+            else td_people_pose(i,dir_pose[d]);
             /* Dazed by a jab: standing, blinking. */
-            if(mode==PK_STUN){f=lf_look_walk[pk_look[i]]+dir_frame[pk_dir[i]&3];if(pk_timer[i]&4)hop=255;}
-            else f=lf_look_walk[pk_look[i]]+dir_frame[pk_dir[i]&3]+((td_tick>>3)&1);
+            f=TD_PEOPLE_FRAME(i)+dir_frame[d];
+            if(mode==PK_STUN){if(pk_timer[i]&4)hop=255;}
+            else f+=(td_tick>>3)&1;
             if(pk_look[i]==LF_LOOK_OFFICER)TD_PALETTE(p)=LF_OFFICER_PAL;
         }
         if(hop==255){p->flags|=ACTOR_FLAG_HIDDEN;continue;}
@@ -166,7 +177,7 @@ void td_life_present(void) BANKED {
             if(fx_timer<60&&(fx_timer&4)){a->flags|=ACTOR_FLAG_HIDDEN;goto drawn;}
         }else{
             lf_place_q4(a,fx_u,fx_v);
-            lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:lf_look_walk[fx_look]+(fx_du>0?0:2)+((fx_timer>>2)&1));
+            lf_frame(a,td_fx_kind==FX_SPARK?TD_FRAME_SPARK:TD_FRAME_PERSON_SHORT+(fx_du>0?0:2)+((fx_timer>>2)&1));
         }
         /* GBVM re-checks an off-screen actor only every fourth frame; an
          * effect placed in view shows at once. */

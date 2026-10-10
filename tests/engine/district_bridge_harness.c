@@ -29,6 +29,9 @@ void MemcpyBanked(void *to,const void *from,size_t size,UBYTE bank);
 UBYTE ReadBankedUBYTE(const unsigned char *ptr,UBYTE bank);
 SCRIPT_CTX *script_execute(UBYTE bank,UBYTE *pc,UWORD *handle,UBYTE nargs,...);
 #include "district_under_test.c"
+/* Interiors (td_interior.c) are not part of this fixture; a reset clears them. */
+unsigned interior_resets;
+void td_interior_reset(void) {interior_resets++;}
 typedef char td_host_district_count_matches[(TD_HOST_DISTRICT_COUNT==TD_DISTRICT_COUNT)?1:-1];
 
 static unsigned checks,failures,metadata_reads,tile_reads,script_calls;

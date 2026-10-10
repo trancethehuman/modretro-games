@@ -30,18 +30,31 @@ static UBYTE td_radio_story[TD_RADIO_STORY_SLOTS],td_radio_stories;
 UBYTE td_radio_wanted;
 static UBYTE td_radio_night=255,td_radio_quiet,td_radio_fresh;
 
+/* A person's answer (td_radio_speech): one page of two lines kept here,
+ * played like a call under a script id the tables do not use. */
+#define TD_SPEECH 254
+#define TD_SPEECH_PAGE 0xFFFF
+static char td_speech_text[TD_RADIO_PAGE];
 /* Page text from whichever bank holds it. */
 static void td_radio_text(UWORD page,UBYTE from,UBYTE n,char *dest){
-#if TD_RADIO_TEXT_BANKS>2
+    if(page==TD_SPEECH_PAGE){UBYTE i;for(i=0;i<n;i++)dest[i]=td_speech_text[from+i];return;}
+#if TD_RADIO_TEXT_BANKS>3
 #error "add a text bank to td_radio_text"
 #endif
     if(page<TD_RADIO_BANK_PAGES)td_radio_text0(page,from,n,dest);
+#if TD_RADIO_TEXT_BANKS>2
+    else if(page>=2*TD_RADIO_BANK_PAGES)td_radio_text2(page,from,n,dest);
+#endif
 #if TD_RADIO_TEXT_BANKS>1
     else td_radio_text1(page,from,n,dest);
 #endif
 }
 static UBYTE td_radio_page_speaker(UWORD page){
+    if(page==TD_SPEECH_PAGE)return TD_RADIO_SPEAKERS;
     if(page<TD_RADIO_BANK_PAGES)return td_radio_speaker0(page);
+#if TD_RADIO_TEXT_BANKS>2
+    if(page>=2*TD_RADIO_BANK_PAGES)return td_radio_speaker2(page);
+#endif
 #if TD_RADIO_TEXT_BANKS>1
     return td_radio_speaker1(page);
 #else
@@ -125,9 +138,22 @@ void td_radio_line(UBYTE line,char *dest) BANKED {
 /* The current page's speaker card: TRUE when it is Rosa (her portrait). */
 UBYTE td_radio_speaker(char *dest) BANKED {
     UBYTE s=td_radio_page_speaker(td_radio_page);const char *c=td_radio_cards[s<TD_RADIO_SPEAKERS?s:0];
+    if(s>=TD_RADIO_SPEAKERS){*dest=0;return FALSE;}
     while(*c)*dest++=*c++;
     *dest=0;
     return td_radio_rosa[s<TD_RADIO_SPEAKERS?s:0];
+}
+/* Someone on the street answers the courier: two lines on the radio strip,
+ * typed like a call. Ambient talk gives way; a call in progress finishes
+ * first. */
+void td_radio_speech(const char *line1,const char *line2) BANKED {
+    UBYTE i,k;const char *src;
+    for(k=0;k<2;k++){
+        src=k?line2:line1;
+        for(i=0;i<TD_RADIO_COLS;i++){td_speech_text[k*TD_RADIO_COLS+i]=*src?*src:' ';if(*src)src++;}
+    }
+    if(td_radio_script==TD_NONE||td_radio_script==TD_SPEECH||TD_RADIO_INTERRUPTIBLE(td_radio_script))td_radio_begin(TD_SPEECH,TD_SPEECH_PAGE,0);
+    else{td_radio_next=TD_SPEECH;td_radio_next_first=TD_SPEECH_PAGE;td_radio_next_end=0;}
 }
 void td_chapter_name(UBYTE chapter,char *dest) BANKED {
     const char *s=td_chapter_names[chapter<TD_CHAPTERS?chapter:TD_CHAPTERS-1];

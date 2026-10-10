@@ -1,6 +1,7 @@
 #pragma bank 255
 #include <stdint.h>
 #include "td_district.h"
+#include "td_interior.h"
 #include "gbs_types.h"
 #include "collision.h"
 #include "data_manager.h"
@@ -68,7 +69,7 @@ UBYTE td_district_current(void) BANKED {
     return TD_DISTRICT_NONE;
 }
 
-void td_district_reset(void) BANKED {td_district_queued=TD_DISTRICT_NONE;}
+void td_district_reset(void) BANKED {td_district_queued=TD_DISTRICT_NONE;td_interior_reset();}
 
 UBYTE td_district_queue(UBYTE district) BANKED {
     UWORD address;

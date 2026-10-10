@@ -1,6 +1,7 @@
 #pragma bank 255
 #include <string.h>
 #include <stdarg.h>
+#include "td_interior.h"
 #include "td_game.h"
 #include "td_transit.h"
 #include "td_font.h"
@@ -296,6 +297,7 @@ void td_map_update(UBYTE buttons,UBYTE pressed) BANKED {
 #ifdef __SDCC
 #include "palette.h"
 #include "td_special.h"
+#include "td_people.h"
 #include "data/sprite_top_down_vehicles_and_courier.h"
 void load_bkg_tileset(const tileset_t *tiles,UBYTE bank) BANKED;
 UBYTE load_sprite(UBYTE sprite_offset,const spritesheet_t *sprite,UBYTE bank) BANKED;
@@ -311,7 +313,7 @@ static void td_restore_scene_tiles(void){
     if(bkg.cgb_tileset.ptr){VBK_REG=1;load_bkg_tileset(bkg.cgb_tileset.ptr,bkg.cgb_tileset.bank);VBK_REG=0;}
     load_sprite(0,&sprite_top_down_vehicles_and_courier,BANK(sprite_top_down_vehicles_and_courier));
     /* The special vehicles' block comes back as placeholders: refill it. */
-    td_special_restore();
+    td_special_restore();td_people_restore();
 }
 /* The title swaps in its own BG palettes 0..6; the scene's come back as
  * the current time of day's set. The title only appears while a scene
@@ -321,7 +323,7 @@ static void td_restore_scene_tiles(void){
 static void td_title_palettes_on(void){
     memcpy(BkgPalette,td_title_palettes,sizeof(td_title_palettes));
 }
-static void td_restore_scene_palettes(void){td_daynight_apply(TD_DN_FORCE|TD_DN_HW);}
+static void td_restore_scene_palettes(void){if(td_interior!=TD_NONE)td_interior_palettes();else td_daynight_apply(TD_DN_FORCE|TD_DN_HW);}
 typedef char td_title_palettes_fill_seven_slots[(sizeof(td_title_palettes)==7*sizeof(palette_entry_t))?1:-1];
 #else
 static void td_restore_scene_tiles(void){}
@@ -378,7 +380,7 @@ static const char *const td_vehicle_short[]={"CAR","TRUCK","MOTO","SCOOTER"};
 #define TD_MENU_ROWS 3
 static const char *const td_menu_items[TD_MENU_ITEMS]={
     TD_UI_RESUME " RESUME",TD_UI_MAP " CITY MAP",TD_UI_JOBS " JOBS",
-    TD_UI_CAR " VEHICLE",TD_UI_MEDIC " SUPPLIES $20",TD_UI_CANCEL " CANCEL JOB",TD_UI_AUDIO " SOUND"};
+    TD_UI_CAR " VEHICLE",TD_UI_MEDIC " SUPPLIES $20",TD_UI_CANCEL " CANCEL JOB",TD_UI_AUDIO " SOUND",TD_UI_STAR " GALLERY"};
 static const char *const td_audio_names[]={"MUSIC+FX","FX ONLY","SILENT"};
 static UBYTE td_ui_blink,td_menu_top;
 static const char *td_service_icon(UBYTE service){
@@ -415,7 +417,9 @@ void td_ui_tick(void) BANKED {
 static const char *const td_messages[]={"","STOP TO INTERACT","WRONG VEHICLE","JOB IS LOCKED","NO FARE MONEY","CRASH: CARGO HURT","STOP AT THE BEACON","RED SIGNAL: FINE","HEAVY CARGO: DRIVE","VEHICLE IS PARKED","NO WATER CROSSING","STOP TO PARK","SAVED TO CARTRIDGE","PEDESTRIAN: BRAKE","TURN GENTLY: RIDER","DOOR PATH BLOCKED","PARK THEN WALK",
             "OUT OF AMMO","CAR STOLEN","SHOT: FIND COVER","POLICE LOST YOU","POLICE ALERTED","SUPPLIES BOUGHT","NOT ENOUGH CASH","PEDESTRIAN HIT","A+B: GET OUT","HOSPITAL",
             "FOUND CASH +$15","FIRST AID +40","AMMO +6","ENGINE SMOKING","CAR WRECKED: REPAIR",
-            "LOST PARCEL +$50","RESPRAYED -$25","SPRAY BAY: PULL IN","SHARK: SWIM AWAY","POLICE HELICOPTER","BITTEN BY A SHARK"};
+            "LOST PARCEL +$50","RESPRAYED -$25","SPRAY BAY: PULL IN","SHARK: SWIM AWAY","POLICE HELICOPTER","BITTEN BY A SHARK",
+            "PICKPOCKET: CHASE","CASH RECOVERED","SHOVED: CARGO HIT","GOOSE ATTACK","STREET FIGHT","COUNTER","DISARMED","THEY DROPPED +$10","HAYMAKER","ROUND HIT A CAR",
+            "SECURITY: NOT NOW","DELIVER AT THE DESK","TAKE IT INSIDE","ELEVATOR TO THE TOP"};
 typedef char td_messages_match[(sizeof(td_messages)/sizeof(td_messages[0])==TD_MSG_COUNT)?1:-1];
 /* ------------------------------------------------------------ pop-up HUD
  * Nothing covers the city by default. Up to two rows rise from the bottom
@@ -439,6 +443,7 @@ static UBYTE td_hud_row_a(void){
     if(td.msg==TD_MSG_PARCEL){td_format(td_line,TD_UI_BOX "LOST PARCEL %u/%u",td_parcels_found(),TD_PARCELS);return TRUE;}
     if(td.msg){strcpy(td_line,td.msg==5&&(td.job==TD_NONE||!td.stage)?"CRASH: BRAKE EARLY":td_messages[td.msg]);return TRUE;}
     if(td_station_near!=TD_NONE){td_line[0]=TD_UI_BTN_B[0];td_transit_label(td_station_near,td_line+1);return TRUE;}
+    if(td_door_near!=TD_NONE){td_line[0]=TD_UI_BTN_A[0];td_door_name(td_door_near,td_line+1);return TRUE;}
     if(td_pop_target&&td.job!=TD_NONE){
         td_line[0]=TD_UI_PIN[0];
         if(td_target.district!=td.district){
@@ -596,6 +601,12 @@ static void td_result_sheet(void){
     td_framed(3,td_line);
     td_format(td_line,TD_UI_COIN "%u " TD_UI_BOX "%u/%u%s",td.cash,td.done,TD_QUESTS,td.done==TD_QUESTS?" " TD_UI_STAR:"");td_framed(4,td_line);
 }
+/* A plaque, a painting's label or a gallery exhibit (td_interior.c). */
+static void td_card_sheet(void){
+    UBYTE i;
+    td_sheet(7);
+    for(i=0;i<5;i++)td_framed(i+1,td_card[i]);
+}
 void td_ui_draw(void) BANKED {
     UBYTE i,changed=td_ui_mode!=td.mode;
     td_ui_mode=td.mode;
@@ -620,6 +631,7 @@ void td_ui_draw(void) BANKED {
     else if(td.mode==TD_TRANSIT)td_transit_sheet();
     else if(td.mode==TD_BUSTED||td.mode==TD_WASTED)td_outcome_sheet();
     else if(td.mode==TD_RESULT)td_result_sheet();
+    else if(td.mode==TD_CARD)td_card_sheet();
 }
 
 /* ------------------------------------------------------------ radio calls */

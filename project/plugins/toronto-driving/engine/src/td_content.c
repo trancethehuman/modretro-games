@@ -54,6 +54,13 @@ static const td_stop_t td_stops[TD_STOPS] = {
   {280,201,"QUEEN SAULTER",4,14,0},
   {606,145,"QUEEN LESLIE",4,15,0},
   {769,145,"QUEEN ALTON",4,15,0},
+  {128,636,"CN LOOKOUT DESK",0,3,5},
+  {56,932,"AGO FRONT DESK",0,1,7},
+  {88,180,"ROM RECEIVING",0,1,11},
+  {308,68,"EATON CENTRE KIOSK",0,3,13},
+  {812,76,"DRAGON CITY STALL",0,2,17},
+  {292,588,"BYTE BARN DESK",0,2,21},
+  {280,588,"UNION GREAT HALL",0,3,15},
 };
 static const td_job_t td_jobs[TD_QUESTS] = {
   {"SAL'S FIRST ORDER",0,2,255,0,255,120,83,{0,1,255,255,255,255,255,255,255,255,255,255}},
@@ -144,6 +151,12 @@ static const td_job_t td_jobs[TD_QUESTS] = {
   {"PARK PATH PARCELS",0,6,255,12,255,435,242,{0,36,41,42,39,0,255,255,255,255,255,255}},
   {"EAST RETURN PACK",6,6,0,12,255,310,222,{0,39,40,42,37,0,255,255,255,255,255,255}},
   {"CROSS CITY BUNDLES",0,10,3,18,255,700,395,{0,35,38,40,42,39,37,31,33,0,255,255}},
+  {"SKY HIGH LUNCH",0,2,255,3,255,130,137,{1,51,255,255,255,255,255,255,255,255,255,255}},
+  {"GALLERY LOAN",1,2,255,4,255,100,167,{4,52,255,255,255,255,255,255,255,255,255,255}},
+  {"FOSSIL CAST",1,2,255,6,255,100,167,{7,53,255,255,255,255,255,255,255,255,255,255}},
+  {"MALL RESTOCK",0,2,255,8,255,140,179,{57,54,255,255,255,255,255,255,255,255,255,255}},
+  {"DIM SUM ORDER",2,2,255,10,255,90,150,{7,55,255,255,255,255,255,255,255,255,255,255}},
+  {"CONSOLE RUSH",2,2,255,12,255,100,155,{56,8,255,255,255,255,255,255,255,255,255,255}},
 };
 static const char td_briefs[TD_QUESTS][37] = {
   "CHEESE PAPER ROLLSDEPOT TO MARKET   ",
@@ -234,17 +247,30 @@ static const char td_briefs[TD_QUESTS][37] = {
   "TWO PARK HANDOFFS PARK THEN WALK    ",
   "SHOP RETURN PAPERSORIGINAL TO UNION ",
   "EAST TO WEST MAIL FINAL PARK DEPOT  ",
+  "LUNCH FOR THE TOP TAKE THE ELEVATOR ",
+  "A FRAMED LOAN     CARRY IT INSIDE   ",
+  "PLASTER FOSSIL    TO THE DINO HALL  ",
+  "UNION TO EATON    TWO INDOOR DESKS  ",
+  "BAMBOO BASKETS    DRAGON CITY STALL ",
+  "LAUNCH-DAY BOX    BYTE BARN TO WEST ",
 };
 /* Auxiliary parking cues; client records remain unchanged. */
 typedef struct { UWORD u,v; UBYTE stop; } td_parking_t;
-static const td_parking_t td_parking[3]={
+static const td_parking_t td_parking[10]={
   {472,368,34},
   {480,304,36},
   {656,664,41},
+  {128,704,51},
+  {56,910,52},
+  {88,158,53},
+  {368,68,54},
+  {896,76,55},
+  {292,704,56},
+  {280,566,57},
 };
 UBYTE td_get_parking(UBYTE stop,UWORD *u,UWORD *v) BANKED {
  UBYTE i;if(!u||!v)return FALSE;
- for(i=0;i<3;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
+ for(i=0;i<10;i++)if(td_parking[i].stop==stop){*u=td_parking[i].u;*v=td_parking[i].v;return TRUE;}
  return FALSE;
 }
 void td_get_stop(UBYTE i,td_stop_t *d) BANKED { if(i<TD_STOPS) memcpy(d,&td_stops[i],sizeof(td_stop_t)); }

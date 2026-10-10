@@ -94,6 +94,9 @@ void td_ui_draw(void) { ui_draws++; }
 void td_ui_tick(void) {}
 void td_ui_hud_tick(void) {}
 void td_hud_places(void) {}
+/* The HUD place line the interiors write their names and the lift into. */
+UBYTE td_pop_street,td_pop_target;char td_street_name[21];
+void td_ui_hud_paint(void) {}
 /* Radio calls are drawn by td_ui.c (atlas_ui_harness); here the runtime
  * only records which script it queued last. */
 UBYTE radio_said=255,td_radio_script=255,td_radio_wanted;UWORD td_last_pay;
@@ -106,6 +109,9 @@ void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) {
 }
 UWORD td_radio_open(void) { return radio_open_now; }
 void td_radio_tick(void) {}
+/* A person's answer (td_radio_speech): the two lines last said. */
+static char speech_a[20],speech_b[20];static unsigned speeches;
+void td_radio_speech(const char *a,const char *b) {strncpy(speech_a,a,19);strncpy(speech_b,b,19);speeches++;}
 /* Tile uploads: animated scenery writes one tile at a time. */
 UBYTE VBK_REG;static unsigned bkg_uploads;static UBYTE bkg_last_first,bkg_last_bank;static const UBYTE *bkg_last_data;
 void set_bkg_data(UBYTE first,UBYTE count,const UBYTE *tiles){bkg_uploads+=count;bkg_last_first=first;bkg_last_bank=VBK_REG;bkg_last_data=tiles;}
@@ -417,13 +423,20 @@ static void test_city_routes_and_walking(void) {
     UBYTE identity=td_ped_route[0];UWORD npc_u=actors[9].pos.x,npc_v=actors[9].pos.y;
     expect(identity!=TD_NONE,"city selects a real nearby pedestrian identity");
     td.u=136*16;td_pedestrians();
-    expect(td_ped_route[0]==identity&&actors[9].pos.x==npc_u&&actors[9].pos.y==npc_v,
+    /* People with something to do move on their own (a jogger a fraction
+     * of a pixel an update); nobody jumps. */
+    expect(td_ped_route[0]==identity&&lf_abs((WORD)actors[9].pos.x-(WORD)npc_u)<=64&&lf_abs((WORD)actors[9].pos.y-(WORD)npc_v)<=64,
            "crossing the old camera segment boundary does not teleport a visible pedestrian");
-    {UBYTE first=td_ped_flip;td_pedestrians();expect(td_ped_flip!=first,"walkers alternate between laid-out and skipped updates");
+    {UBYTE first=td_ped_flip,k=0;td_pedestrians();expect(td_ped_flip!=first,"walkers alternate between laid-out and skipped updates");
      if(!td_ped_flip)td_pedestrians();
-     actors[9].pos.x^=32;npc_u=actors[9].pos.x;td_pedestrians();
-     expect(!td_ped_flip&&actors[9].pos.x==npc_u,"a skipped update leaves walkers where they were");
-     td_pedestrians();expect(actors[9].pos.x!=npc_u,"the next update lays them out again");}
+     /* A walker on the native layout (people with something to do move
+      * themselves, td_npc.c). */
+     while(k<TD_PEDS&&((td_ped_ovr&(1<<k))||td_ped_route[k]==TD_NONE))k++;
+     /* (In a park everyone may be someone with something to do.) */
+     if(k<TD_PEDS){
+     actors[9+k].pos.x^=32;npc_u=actors[9+k].pos.x;td_pedestrians();
+     expect(!td_ped_flip&&actors[9+k].pos.x==npc_u,"a skipped update leaves walkers where they were");
+     td_pedestrians();expect(actors[9+k].pos.x!=npc_u,"the next update lays them out again");}}
 
     reset_case();td.onfoot=1;td_traffic_u[0]=410*16;td_traffic_v[0]=450*16;
     UWORD player_u=td.u;for(unsigned i=0;i<40;i++)driving_tick(J_RIGHT);
@@ -1918,7 +1931,8 @@ static void test_park_delivery_guidance(void) {
     }
     for(unsigned stop=0;stop<=TD_STOPS;stop++) {
         UWORD u=1234,v=5678;UBYTE found=td_get_parking(stop,&u,&v);
-        int expected=stop==34||stop==36||stop==41;
+        /* Foot-only clients: three park posts and every indoor desk (51..57). */
+        int expected=stop==34||stop==36||stop==41||(stop>=51&&stop<TD_STOPS);
         expect(found==expected&&(expected||(u==1234&&v==5678)),
                "native parking getter leaves ordinary stops and invalid IDs unchanged");
     }
@@ -2483,6 +2497,140 @@ static void test_places(void) {
     td.district=3;td_get_street_name(td_authored_get_street(323,839),s);expect(!strcmp(s,"TORONTO ISLANDS"),"the Islands have no street");
     td.district=2;td_get_street_name(td_authored_get_street(912,334),s);expect(!strcmp(s,"SPADINA AVE"),"the nearest street is still named");
 }
+/* People of the city (td_people.c, td_npc.c), the new fights and buildings
+ * you can go into (td_interior.c). */
+static UBYTE look_with(UBYTE behave){for(UBYTE k=0;k<TD_LOOKS;k++)if(td_look_behave[k]==behave)return k;return 255;}
+static void npc_slot(UBYTE i,UBYTE behave,UWORD u,UWORD v,UBYTE mode){
+    UBYTE look=look_with(behave);
+    td_ped_route[i]=(UBYTE)(i*8+1);np_route[i]=td_ped_route[i];np_behave[i]=behave;np_cash[i]=0;np_windup[i]=0;np_cool[i]=0;
+    td_people_show(i,look,TD_POSE_SIDE);np_own(i,u<<4,v<<4,mode);np_seen|=1<<i;
+    actors[TD_ACTOR_PEDS+i].flags&=~ACTOR_FLAG_HIDDEN;actors[TD_ACTOR_PEDS+i].pos.x=u<<5;actors[TD_ACTOR_PEDS+i].pos.y=v<<5;
+}
+static void npc_ticks(unsigned n){for(unsigned t=0;t<n;t++){td_tick++;td_ped_flip=0;td_npc_tick();}}
+static void test_people_npcs_and_interiors(void) {
+    int ok=1;
+    for(UBYTE d=0;d<TD_DISTRICT_COUNT;d++)for(unsigned r=0;r<120;r++){
+        UBYTE l=td_people_pick(d,(UBYTE)r,(UWORD)(r*7),(UWORD)(r*5));
+        if((r&7)==5)ok&=l==TD_LOOK_OFFICER;
+        else ok&=l<TD_LOOKS&&td_look_behave[l]!=TD_BH_INDOOR&&td_look_behave[l]!=TD_BH_OFFICER;
+    }
+    expect(ok,"every walker route has a look: an officer one route in eight, a face of the neighbourhood otherwise");
+    td_people_init();{unsigned w=td_test_people_writes;
+     td_people_show(0,3,TD_POSE_SIDE);td_people_show(0,3,TD_POSE_SIDE);
+     expect(td_test_people_writes==w+1,"a slot's tiles are written once for a look, not every update");
+     td_people_pose(0,TD_POSE_FRONT);expect(td_test_people_writes==w+2&&td_slot_pose[0]==TD_POSE_FRONT,"turning to walk south streams the front view");}
+    { UBYTE kids=0;for(UBYTE k=0;k<TD_LOOKS;k++){char n[19];td_people_text(k,TD_PT_NAME,n);if(strstr(n,"KID")||strstr(n,"CHILD")||strstr(n,"TEEN"))kids++;}
+      expect(kids==0,"no children among the people of the city (user direction)"); }
+
+    /* Someone sitting by a wall: a couple of dollars, and a tip. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.mode=TD_ROAM;td.u=400*16;td.v=400*16;scroll_x=320;scroll_y=330;
+    td_npc_reset();td_ped_ovr=0;
+    npc_slot(0,TD_BH_SIT,408,400,PK_SIT);npc_ticks(4);
+    expect(pk_mode[0]==PK_SIT&&(td_ped_ovr&1)&&!(actors[9].flags&ACTOR_FLAG_HIDDEN),"a person sitting out stays in place and is drawn");
+    td.cash=10;speeches=0;
+    expect(td_npc_talk()&&td.cash==8&&speeches==1,"talking to them gives two dollars and they answer");
+    /* Out of the walkers' keep range the slot is let go. */
+    td.u=(400+200)*16;for(unsigned t=0;t<16&&(td_ped_ovr&1);t++)npc_ticks(1);
+    expect(!(td_ped_ovr&1)&&td_ped_route[0]==TD_NONE,"someone left far behind frees their slot");
+
+    /* A pickpocket: in, cash gone, and back with a jab. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.mode=TD_ROAM;td.u=400*16;td.v=400*16;scroll_x=320;scroll_y=330;
+    td_npc_reset();td_ped_ovr=0;np_theft_cool=0;td.cash=50;td_running=0;
+    npc_slot(1,TD_BH_THIEF,430,400,PK_STROLL);
+    for(unsigned t=0;t<400&&!np_cash[1];t++)npc_ticks(1);
+    UBYTE taken=np_cash[1];
+    expect(taken>0&&td.cash==50-taken&&pk_mode[1]==PK_RUN,"a pickpocket closes in, takes cash and runs");
+    td_lf_stun(1,0,0);npc_ticks(1);
+    expect(td.cash==50&&np_cash[1]==0,"a jab on the pickpocket gets the cash back");
+
+    /* A street tough: linger and they swing (telegraphed); a counter drops them, no crime. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.mode=TD_ROAM;td.u=400*16;td.v=400*16;td.vitality=100;scroll_x=320;scroll_y=330;
+    td_npc_reset();td_ped_ovr=0;lf_chaos=0;
+    npc_slot(2,TD_BH_TOUGH,412,400,PK_STROLL);
+    for(unsigned t=0;t<300&&pk_mode[2]!=PK_HOSTILE;t++){pk_u[2]=412*16;npc_ticks(1);}
+    expect(pk_mode[2]==PK_HOSTILE&&(td_npc_hostile&4),"lingering beside a street tough starts a fight");
+    for(unsigned t=0;t<120&&!np_windup[2];t++)npc_ticks(1);
+    expect(np_windup[2]>0,"the tough winds up a swing first (telegraphed)");
+    { UBYTE before=td.vitality;for(unsigned t=0;t<40&&td.vitality==before;t++)npc_ticks(1);
+      expect(td.vitality<before,"an unanswered swing lands"); }
+    for(unsigned t=0;t<200&&!np_windup[2];t++)npc_ticks(1);
+    td_lf_stun(2,4,0);npc_ticks(1);
+    expect(pk_mode[2]==PK_FLY&&!(td_npc_hostile&4)&&td.wanted==0&&td.msg==TD_MSG_COUNTER,
+           "a jab mid-swing is a counter: down they go, and fighting back is no crime");
+
+    /* Haymaker: hold A standing still after a jab, let go. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.mode=TD_ROAM;td.u=400*16;td.v=400*16;td_walk_dir=0;scroll_x=320;scroll_y=330;
+    td_npc_reset();td_ped_ovr=0;
+    npc_slot(3,TD_BH_WALK,409,400,PK_STROLL);np_behave[3]=TD_BH_WALK;pk_mode[3]=PK_STROLL;
+    joy=J_A;npc_ticks(32);joy=0;npc_ticks(1);
+    expect(pk_mode[3]==PK_FLY&&td.msg==TD_MSG_HAYMAKER,"a charged haymaker lays the person in front out");
+    /* An officer caught mid-aim is disarmed. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.mode=TD_ROAM;td.u=400*16;td.v=400*16;td_walk_dir=0;td.wanted=4;
+    td_ped_ovr=0;lf_punch=0;lf_combo=0;lf_combo_t=0;
+    td_ped_route[4]=5;actors[13].flags&=~ACTOR_FLAG_HIDDEN;actors[13].pos.x=408<<5;actors[13].pos.y=400<<5;
+    td_ped_ovr|=16;pk_mode[4]=PK_CHASE;pk_look[4]=LF_LOOK_OFFICER;pk_u[4]=408*16;pk_v[4]=400*16;lf_aim_who=4;lf_aim_time=10;
+    td_life_punch();
+    expect(lf_aim_who==TD_NONE&&pk_mode[4]==PK_FLY,"punching an officer mid-aim disarms them");
+
+    /* Cover: a police round stops in the courier's parked car. */
+    reset_case();geometry=CLEAR_GROUND;td.onfoot=1;td.mode=TD_ROAM;td.u=400*16;td.v=400*16;td.vitality=100;
+    td.park_district=td.district;td.park_u=380*16;td.park_v=400*16;td_car_damage=0;td_shot_reset();
+    td_shot_fire(TD_SHOT_POLICE,300,400,400,400,0);for(unsigned t=0;t<60;t++)td_shot_tick();
+    expect(td.vitality==100&&td_car_damage>0,"the parked car takes a police round for the courier");
+
+    /* Doors: in at a door, turned away with stars, out again. */
+    for(UBYTE d=0;d<TD_DISTRICT_COUNT;d++)expect(td_door_first[d+1]>td_door_first[d],"every scene has doors to go into");
+    { UBYTE door=255;for(UBYTE k=0;k<TD_DOORS&&door==255;k++)if(td_door_in[k]==TD_IN_CN_BASE)door=k;
+      UBYTE d=0;while(td_door_first[d+1]<=door)d++;
+      reset_case();authored_content=1;td.district=d;td.onfoot=1;td.mode=TD_ROAM;td.u=td_door_u[door]*16;td.v=td_door_v[door]*16;td_interior_reset();
+      td_door_scan();expect(td_door_near==door,"standing at the CN Tower's door shows it");
+      td.wanted=1;expect(td_interior_door()&&td_interior==TD_NONE&&td.msg==TD_MSG_DOOR_LOCKED,"security turns away a courier with stars");
+      td.wanted=0;expect(td_interior_door()&&td_interior==TD_IN_CN_BASE&&td_transition_pending==1&&td_test_in_queued==TD_IN_CN_BASE,
+                         "A at the door goes in");
+      td_test_in_here=TD_IN_CN_BASE;
+      expect(td_interior_init()&&in_u==td_in_entry[TD_IN_CN_BASE][0]&&td_transition_pending==0&&td.u==td_door_u[door]*16,
+             "inside, the courier stands at the entrance and the city keeps their place at the door");
+      /* Up the glass elevator. */
+      UBYTE p=td_in_pt_first[TD_IN_CN_BASE];while(td_in_pt_kind[p]!=TD_IP_ELEVATOR)p++;
+      in_u=td_in_pt_x[p];in_v=td_in_pt_y[p];joy=0;joy_pressed=J_A;td_interior_update(1);joy_pressed=0;
+      expect(in_ride==1,"A at the lift starts the ride up");
+      for(unsigned t=0;t<300&&td_test_in_queued!=TD_IN_CN_LOOKOUT;t++)td_interior_update(1);
+      expect(td_interior==TD_IN_CN_LOOKOUT&&td_test_in_queued==TD_IN_CN_LOOKOUT,"the ride ends at the LookOut");
+      /* The Sky Desk takes the lunch. */
+      UBYTE job=0;while(job<TD_QUESTS){td_get_job(job,&td_job);if(!strcmp(td_job.title,"SKY HIGH LUNCH"))break;job++;}
+      expect(job<TD_QUESTS,"the CN Tower lunch is a contract");
+      td.job=job;td.stage=1;td.health=100;td.left=200;td_set_target();
+      expect((td_target.reserved>>1)==TD_IN_CN_LOOKOUT+1&&td_target.u==td_door_u[door]&&td_target.v==td_door_v[door],
+             "its stop is the LookOut, entered by the tower's door");
+      td_test_in_here=TD_IN_CN_LOOKOUT;td_transition_pending=0;expect(td_interior_init(),"the LookOut is set up");
+      expect(!(actors[1].flags&ACTOR_FLAG_HIDDEN),"a beacon shows the desk");
+      p=td_in_pt_first[TD_IN_CN_LOOKOUT];while(td_in_pt_kind[p]!=TD_IP_DESK)p++;
+      in_u=td_in_pt_x[p];in_v=td_in_pt_y[p];UWORD cash=td.cash;joy_pressed=J_A;td_interior_update(1);joy_pressed=0;
+      expect(td.job==TD_NONE&&td.mode==TD_RESULT&&td.cash>cash,"handing the lunch over at the Sky Desk completes the contract");
+      /* Out the doors. */
+      td.mode=TD_ROAM;td_test_in_here=TD_IN_CN_BASE;td_interior=TD_IN_CN_BASE;td_transition_pending=0;td_interior_init();
+      in_u=(td_in_exit[TD_IN_CN_BASE][0]+td_in_exit[TD_IN_CN_BASE][2])/2;in_v=td_in_exit[TD_IN_CN_BASE][1];td_interior_update(1);
+      expect(td_interior==TD_NONE&&test_queued_district==td.district,"walking out of the doors goes back to the city at the door");
+      /* Outside, an indoor stop asks to be taken inside. */
+      td.job=job;td.stage=1;td.mode=TD_ROAM;td_get_job(job,&td_job);td_set_target();td.speed=0;td.msg=0;
+      td.u=td_target.u*16;td.v=td_target.v*16;td_interact();
+      expect(td.stage==1&&td.msg==TD_MSG_INSIDE,"at the door of an indoor stop the parcel goes inside, not to the sidewalk"); }
+
+    /* The gallery from the pause menu: rooms of people on plinths. */
+    reset_case();td.onfoot=1;td.mode=TD_ROAM;td_interior_reset();
+    expect(td_gallery_open()&&td_interior==TD_IN_GALLERY_HALL,"the pause menu's gallery opens the museum hall");
+    td_test_in_here=TD_IN_GALLERY_HALL;td_transition_pending=0;td_interior_init();
+    { unsigned shown=0;for(UBYTE k=0;k<TD_PEDS;k++)if(!(actors[TD_ACTOR_PEDS+k].flags&ACTOR_FLAG_HIDDEN))shown++;
+      expect(shown>=4,"the first room shows people on their plinths"); }
+    { UBYTE p=td_in_pt_first[TD_IN_GALLERY_HALL];while(td_in_pt_kind[p]!=TD_IP_EXHIBIT)p++;
+      in_u=td_in_pt_x[p];in_v=td_in_pt_y[p];joy_pressed=J_A;td_interior_update(1);joy_pressed=0;
+      expect(td.mode==TD_CARD&&td_card[0][0],"A at an exhibit shows its card (name, home, traits)");
+      td.mode=TD_ROAM;p=td_in_pt_first[TD_IN_GALLERY_HALL];while(td_in_pt_kind[p]!=TD_IP_ARCH_NEXT)p++;
+      in_u=td_in_pt_x[p];in_v=td_in_pt_y[p];joy_pressed=J_A;td_interior_update(1);joy_pressed=0;
+      expect(in_room==1,"the east arch leads to the next room"); }
+    td_interior_reset();scroll_x=scroll_y=0;
+}
+
 int main(void) {
     expect(sizeof(td_state_t)==58&&offsetof(td_state_t,district)==56,"host fixture retains the current serialized state layout");
     test_acceleration_and_turning();test_glancing_contact();test_wall_and_brake();
@@ -2495,7 +2643,7 @@ int main(void) {
     test_atomic_saves();test_valid_crc_invalid_states();test_legacy_and_transit_recovery();
     test_wait_cancellation();
     test_entry_transit_exclusion();test_fresh_transit_after_failure();
-    test_pickup_damage_lifecycle();
+    test_pickup_damage_lifecycle();test_people_npcs_and_interiors();
     test_finished_job_target();
     test_current_transit_window();test_transit_funds_pause_and_deadline();test_immediate_transit_interrupted_save();
     test_safe_transit_alighting();

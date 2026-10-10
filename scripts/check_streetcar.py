@@ -18,7 +18,8 @@ def check():
     world = json.loads((ROOT / 'content/districts/world.json').read_text())
     stops = authored['stops']
     assert [stop['id'] for stop in stops] == list(range(43, 51))
-    assert stops == campaign['stops'][43:51] and len(campaign['stops']) == 51
+    # The 501 platforms are stops 43..50; indoor desks follow (create_interior_jobs.py).
+    assert stops == campaign['stops'][43:51] and len(campaign['stops']) == 58
     service = authored['service']
     assert service['stops'] == list(range(43, 51))
     assert service['fare'] == 3 and service['period_seconds'] == 32

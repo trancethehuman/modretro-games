@@ -154,7 +154,10 @@ def main():
         raise SystemExit("Host C compiler unavailable; engine regressions did not run.")
     # First include the real world module's private generated arrays in this
     # shared translation unit so direct portal fixtures inspect production data.
-    original = ((ENGINE / "src/td_street.c").read_text() + '\n' +
+    # One translation unit: the generated people tables are emitted once,
+    # at their first inclusion, for every module that reads them.
+    original = ("#define TD_PEOPLE_DATA\n#define TD_PEOPLE_MIX_DATA\n#define TD_INTERIOR_DATA\n#define TD_DOORS_DATA\n" +
+                (ENGINE / "src/td_street.c").read_text() + '\n' +
                 (ENGINE / "src/td_transit.c").read_text() + '\n' +
                 (ENGINE / "src/td_world.c").read_text() + '\n' +
                 (ENGINE / "src/states/TORONTO.c").read_text() + '\n' +
@@ -169,7 +172,13 @@ def main():
                 (ENGINE / "src/td_scenery.c").read_text() + '\n' +
                 (ENGINE / "src/td_overlay.c").read_text() + '\n' +
                 (ENGINE / "src/td_special.c").read_text() + '\n' +
-                (ENGINE / "src/td_vehicles.c").read_text())
+                (ENGINE / "src/td_vehicles.c").read_text() + '\n' +
+                (ENGINE / "src/td_people.c").read_text() + '\n' +
+                (ENGINE / "src/td_npc.c").read_text() + '\n' +
+                (ENGINE / "src/td_people_text.c").read_text() + '\n' +
+                (ENGINE / "src/td_menu.c").read_text() + '\n' +
+                (ENGINE / "src/td_interior.c").read_text() + '\n' +
+                (ENGINE / "src/td_interior_text.c").read_text())
 
     # Adapt the hardware address only; leave every gameplay routine unmodified.
     def host_sram(match):

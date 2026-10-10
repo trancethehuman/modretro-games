@@ -16,6 +16,12 @@
 #define PK_FLEE 4   /* running away from the courier */
 #define PK_CHASE 5  /* officer pursuing the courier */
 #define PK_STUN 6   /* staggered by a jab: stands dazed, then runs or fights on */
+/* Modes from PK_NPC up belong to td_npc.c (td_life leaves them alone). */
+#define PK_NPC 8
+#define PK_SIT 8     /* in place: sitting, asleep, busking, a sign up, a photo */
+#define PK_STROLL 9  /* walking or running along the sidewalk at its own pace */
+#define PK_HOSTILE 10 /* closing on the courier to swing at them (or peck) */
+#define PK_RUN 11    /* off at speed: a pickpocket, startled animals */
 extern UBYTE pk_mode[TD_PEDS],pk_timer[TD_PEDS],pk_look[TD_PEDS],pk_dir[TD_PEDS],pk_span[TD_PEDS];
 extern UWORD pk_u[TD_PEDS],pk_v[TD_PEDS];
 extern BYTE pk_vu[TD_PEDS],pk_vv[TD_PEDS];
@@ -67,15 +73,14 @@ extern WORD lf_scale_x,lf_scale_y;
 #define LF_BUST_TICKS 90
 /* ROM tables are read from code in this file's own bank, so every module
  * keeps a private copy: a const table in another bank is not mapped.
- * A walker's look is its route identity&7 (TORONTO.c td_walker_bases):
- * look 5 is a police officer (navy cap), so one route in eight is an
- * officer; LF_LOOK_COURIER is the courier. Clothing colour is the actor's
- * palette offset. Road slot designs live in td_traffic_bases; slot 4 shows
- * the patrol car only while lf_patrol is set. */
+ * Walkers show looks streamed into their slot (td_people.h); route
+ * identity&7 == LF_LOOK_OFFICER (5) is a police officer, so one route in
+ * eight is an officer. pk_look keeps that identity for owned slots
+ * (LF_LOOK_OFFICER or another value); LF_LOOK_COURIER is the courier.
+ * Road slot designs live in td_traffic_bases; slot 4 shows the patrol car
+ * only while lf_patrol is set. */
 #define LF_LOOK_OFFICER 5
 #define LF_LOOK_COURIER 8
-static const UBYTE lf_look_walk[9]={TD_FRAME_PERSON_SHORT,TD_FRAME_PERSON_LONG,TD_FRAME_PERSON_BUN,TD_FRAME_PERSON_PACK,
-    TD_FRAME_PERSON_UMBRELLA,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_LONG,TD_FRAME_PERSON_SHORT};
 /* Civilian clothing colours by (route>>3)&3 (offsets for the people palette). */
 static const UBYTE lf_civilian_pal[4]={TD_PEOPLE_PAL(TD_PAL_RED),TD_PEOPLE_PAL(TD_PAL_YELLOW),TD_PEOPLE_PAL(TD_PAL_TEAL),TD_PEOPLE_PAL(TD_PAL_VIOLET)};
 #define LF_OFFICER_PAL TD_PEOPLE_PAL(TD_PAL_NAVY)

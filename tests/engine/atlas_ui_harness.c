@@ -21,6 +21,9 @@ UBYTE td_beacon_shown,td_life_fine;
 /* Car wear owned by td_drive.c. */
 UBYTE td_car_damage,td_car_colour;
 UBYTE td_station_near=TD_NONE;
+/* Doors and cards (td_interior.c): none in these fixtures. */
+UBYTE td_door_near=TD_NONE,td_interior=TD_NONE;char td_card[5][19];
+void td_door_name(UBYTE d,char *dest) {(void)d;*dest=0;}
 actor_t actors[TD_ACTORS];
 /* Day/night palettes (td_daynight.c) are not part of this fixture. */
 UBYTE td_daynight_apply(UBYTE flags) {(void)flags;return 0;}
@@ -481,7 +484,7 @@ static void hud_step(void) {td_hud_places();td_ui_hud_tick();}
 static void test_menus_and_radio(void) {
     char text[21],text2[21];
     /* The pause menu is an eight-row sheet over the city: status, the lost
-     * parcels found and three of its seven actions at a time with scroll
+     * parcels found and three of its eight actions at a time with scroll
      * marks; no hints or button legends. */
     reset_case();td.mode=TD_PAUSE;td.menu=0;td_ui_init();td_ui_draw();
     expect(window_y==144-8*8,"the pause menu is a short bottom sheet that leaves most of the city visible");
@@ -493,8 +496,10 @@ static void test_menus_and_radio(void) {
     read_window_text(7,text);expect(strstr(text,"CHOOSE")==NULL&&strstr(text,"BACK")==NULL,"no button legend is shown");
     td.onfoot=0;td.vehicle=0;td.menu=TD_MENU_VEHICLE;td_ui_draw();read_window_text(6,text);expect(strstr(text,"VEHICLE CAR")!=NULL,"the vehicle action names the current vehicle");
     td.menu=TD_MENU_SOUND;td_ui_draw();
-    read_window_text(6,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving to the last action scrolls it into view");
+    read_window_text(6,text);expect(strstr(text,"SOUND MUSIC+FX")!=NULL,"moving down scrolls the sound action into view");
     read_window_text(4,text);expect(strstr(text,"SUPPLIES")!=NULL,"the window keeps three actions, ending on the cursor");
+    td.menu=TD_MENU_GALLERY;td_ui_draw();
+    read_window_text(6,text);expect(strstr(text,"GALLERY")!=NULL,"the gallery is the last action");
     expect(window_tiles[0][4][18]==glyph_tile(TD_UI_ARROW_N)&&window_tiles[0][6][18]!=glyph_tile(TD_UI_ARROW_S),
            "an up mark shows more actions above at the end of the list");
     td.menu=0;td_ui_draw();read_window_text(4,text);

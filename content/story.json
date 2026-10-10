@@ -388,6 +388,24 @@
                     "done": ["MARGO: EAST END|SIGNED. WE'RE A|CITY DEPOT NOW."]},
     "contract-88": {"call": ["ROSA: THE BIG ONE.|EAST END TO WEST|END.", "ROSA: EVERY NEW|CLIENT WE'VE GOT.|IN ONE RUN.", "MARGO: SHOW THEM WHO|DELIVERS THIS|CITY."],
                     "pick": ["ROSA: I'LL MIND THE|RADIO. YOU DRIVE."],
-                    "done": ["ROSA: EAST TO WEST.|ONE DEPOT. ONE|COURIER."]}
+                    "done": ["ROSA: EAST TO WEST.|ONE DEPOT. ONE|COURIER."]},
+    "contract-89": {"call": ["SAL: LUNCH FOR THE|SKY DESK, AT THE|TOP OF THE TOWER.", "ROSA: PARK, WALK IN|AND TAKE THE GLASS|ELEVATOR UP."],
+                    "pick": ["SAL: KEEP IT LEVEL.|IT'S SOUP."],
+                    "done": ["ROSA: 346 METRES UP|AND THE SOUP IS|STILL HOT. NICE."]},
+    "contract-90": {"call": ["INES: A LOAN FOR THE|GALLERY. HAND IT|TO THE FRONT DESK.", "ROSA: INSIDE THIS|TIME. NO BUMPS."],
+                    "pick": ["JUNO: INES'S LOAN.|WORTH MORE THAN|THE VAN."],
+                    "done": ["INES: HANGING BY|SIX. YOU'RE A STAR."]},
+    "contract-91": {"call": ["HALE: A PLASTER CAST|FOR THE DINO HALL.|RECEIVING DESK.", "ROSA: IT'S A BONE.|BE GENTLE."],
+                    "pick": ["WEN: THE DOCTOR'S|CAST. BUBBLE WRAP,|THREE LAYERS."],
+                    "done": ["HALE: IT FITS. THE|HALL IS COMPLETE."]},
+    "contract-92": {"call": ["LEE: KIOSK STOCK AT|UNION'S GREAT HALL.|BRING IT TO EATON.", "ROSA: TWO DESKS,|BOTH INDOORS."],
+                    "pick": ["LEE: PHONE CASES.|HUNDREDS OF THEM."],
+                    "done": ["LEE: SHELVES FULL.|SALE AT NOON."]},
+    "contract-93": {"call": ["ROSA: STEAMER BASKETS|FROM KENSINGTON TO|DRAGON CITY.", "ROSA: HOT AND FAST.|DIM SUM WAITS FOR|NO ONE."],
+                    "pick": ["ROSA: STACKED SIX|HIGH. EASY NOW."],
+                    "done": ["ROSA: THE STALL SAYS|THANKS. THEY SAVED|YOU A BUN."]},
+    "contract-94": {"call": ["ROSA: LAUNCH DAY AT|BYTE BARN. ONE BOX|TO DUFFERIN.", "ROSA: THE LINE GOES|ROUND THE LOT. GO|IN BY THE DESK."],
+                    "pick": ["ROSA: SEALED. DON'T|SHAKE IT."],
+                    "done": ["ROSA: DELIVERED|BEFORE THE LINE|WAS DONE."]}
   }
 }

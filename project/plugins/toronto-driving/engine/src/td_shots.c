@@ -83,9 +83,19 @@ static UBYTE sh_hit(UBYTE k,UWORD bu,UWORD bv){
             return TRUE;
         }
     }
+    /* The courier's parked car is cover: a police round stops in it. */
+    if(td.onfoot&&td.park_district==td.district&&lf_dist(td.park_u>>4,bu)<9&&lf_dist(td.park_v>>4,bv)<9){
+        if(owner==TD_SHOT_POLICE){
+            if(td_car_damage<TD_DAMAGE_WRECK-1)td_car_damage++;
+            if(lf_dist(td.u>>4,bu)<40&&lf_dist(td.v>>4,bv)<40)td_message(TD_MSG_COVER);
+        }
+        td_lf_fx(FX_SPARK,bu,bv,6);
+        return TRUE;
+    }
     for(i=0;i<6;i++){
         if(tr_mode[i]==TR_GONE)continue;
         if(lf_dist(td_traffic_u[i]>>4,bu)>=9||lf_dist(td_traffic_v[i]>>4,bv)>=9)continue;
+        if(owner==TD_SHOT_POLICE&&lf_dist(td.u>>4,bu)<40&&lf_dist(td.v>>4,bv)<40)td_message(TD_MSG_COVER);
         if(owner==TD_SHOT_COURIER&&LF_IS_POLICE(i))td_lf_crime(CR_COP);
         /* A civilian driver under fire floors it. */
         else if(owner==TD_SHOT_COURIER&&!(td_tr_ctrl&(1<<i))){td_lf_own_car(i,TR_FLEE);tr_timer[i]=200;}

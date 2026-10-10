@@ -1180,5 +1180,253 @@
   "png_sha256": "020d456aaada93a9cf62e133a1d5a82b3951e54fe7bfdad9d001d738868fe136",
   "inputs": "two stars written while swimming: the police boat stands off, lights flashing",
   "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "chinatown-spadina-dundas.png",
+  "frame": 1028,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "c3a30035228bc29e050321855a07e37439865a2314ac286382c41c1c8ce719b4",
+  "inputs": "on foot at Spadina Ave and Dundas St W (core NW scene), midday, 4 s later",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "chinatown-dragon-city.png",
+  "frame": 1323,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "4913e149974eaa835eb83ea5cf689a1e8c34fa3f84bf37155c6ec323b794569e",
+  "inputs": "on foot on Spadina by Dragon City (core NW scene)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "door-dragon-city.png",
+  "frame": 1465,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "c865fc3cc6273f8a766bff04421b09813c72a927096c9d892539a7888fa3d465",
+  "inputs": "on foot at the door of DRAGON CITY MALL: the HUD names it (A goes in)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-dragon-city.png",
+  "frame": 1636,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "ead6707c8609ca117a87eb3dadc84d4cbdabc43d869ee171cb6f5db117f18edd",
+  "inputs": "A at the door: inside Dragon City Mall",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "door-byte-barn.png",
+  "frame": 1853,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "c540faa5a97a63aef4e6b07144afb555be237b62efa21e7cd2298b3c786978d0",
+  "inputs": "on foot at the door of BYTE BARN: the HUD names it (A goes in)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-byte-barn.png",
+  "frame": 2087,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "bf0305849c09bc6468f6083b379f14258453351b6346291c79e6f9a307e1d3e8",
+  "inputs": "inside BYTE BARN, a few steps north",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-ago.png",
+  "frame": 2563,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "58a67cc8b431bcff0c0f42fadea42e82605028c884620f42b0d66c851f2905d2",
+  "inputs": "inside the art gallery: visitors at the paintings",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-ago-painting.png",
+  "frame": 2600,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "c8ed1ce20ccc8162a4343a1d5c69ff32c63cb02749174406885bc1adb0bc183b",
+  "inputs": "A at a painting: its card",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-rom.png",
+  "frame": 3111,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "d8992c520b3ddf3622110205ce87857f190c064e9cef8bf42bf86829f122b13f",
+  "inputs": "inside the museum: the dinosaur hall",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-eaton.png",
+  "frame": 3626,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "aa40ac910e43df56595fa7e14ed366b20c6e27a654e38b89931788a501838188",
+  "inputs": "inside the Eaton Centre: the galleria and food court",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-chinatown-bakery.png",
+  "frame": 4056,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "0aa43d6ec84d125f5e338984fad390c3b2a35c5780f47727139276c9890c6014",
+  "inputs": "inside a Chinatown bakery and BBQ shop on Spadina",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-cn-base.png",
+  "frame": 4571,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "bd1d7e17a069229d3d040c25f47618b0846387983c2e3588ef0a3217a8ac4335",
+  "inputs": "contract 89 SKY HIGH LUNCH, parcel aboard: inside the CN Tower, the beacon over the elevator",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "cn-elevator-ride.png",
+  "frame": 4743,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "d2947d401f7aa689fe9d2bae4fe4b459bfc8dec66685fd62e4e96c741ee886b0",
+  "inputs": "A at the elevator: the ride up, altitude on the HUD",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "interior-cn-lookout.png",
+  "frame": 4996,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "9cb4bdcce6dbe1651f5e6a198cb73060a6f0a4420d8f5ff875b96044f6b29153",
+  "inputs": "the LookOut, 346 m up: the beacon over the Sky Desk",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "cn-sky-desk-delivered.png",
+  "frame": 5043,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "c40aa173d5dc9b29eae7508485c5aa6096aa2bde6915c30e4fbdafd55a8ebbd6",
+  "inputs": "A at the Sky Desk: the lunch is delivered",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "pause-gallery.png",
+  "frame": 5684,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "3e42c85031c3d9bb96f4f6fbed0c52ea6679afbe9eaf8ffc539c1d62f87a1c9f",
+  "inputs": "Start, down to GALLERY on the pause menu",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "gallery-hall.png",
+  "frame": 5896,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "7d3c5b6c2b8d267511b5ea19e198b533e0080374c7bca01566a6df8a315f2b0d",
+  "inputs": "A on GALLERY: the museum hall, people on plinths (room 1)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "gallery-card-3.png",
+  "frame": 5933,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "2faf63cdf162bd2b3299c739edccef24c822419632b471d219d29cbcc6d7d6e3",
+  "inputs": "A at an exhibit: name, where you meet them, traits",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "gallery-card-5.png",
+  "frame": 5986,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "d83eebca0dfbdf28001b2d6aa1da2943cbb36fb8d7cd103d5e932d3cc508baa9",
+  "inputs": "A at an exhibit: name, where you meet them, traits",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "gallery-room-4.png",
+  "frame": 6156,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "fdce8773043f194554f54c0ba7625df0e0da8d042a30c187e6fd9ef7c4776846",
+  "inputs": "through the east arch three times: room 4",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "gallery-art-direction.png",
+  "frame": 6594,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "9d425667ef70457d92f1a3f9e083454b4b56623073a7782373531ed97d10d502",
+  "inputs": "the last arch: the art direction room",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "gallery-art-plaque.png",
+  "frame": 6631,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "3c78a8741d03e90465f721351423f72f109afba7634d198e77bc5998a0ebd12b",
+  "inputs": "A at a plaque in the art direction room",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "chinatown-spadina-dundas-before.png",
+  "frame": 1026,
+  "rom_sha256": "164a9f650850277712c8d504f59920a3c330c46941864d5a16bbd81d3b37e52f",
+  "png_sha256": "9125611672a93d9c585735a03b6758d752a67ef5637d576af2e112a0c2241f6d",
+  "inputs": "on foot at Spadina Ave and Dundas St W (core NW scene), midday, 4 s later",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "chinatown-dragon-city-before.png",
+  "frame": 1324,
+  "rom_sha256": "164a9f650850277712c8d504f59920a3c330c46941864d5a16bbd81d3b37e52f",
+  "png_sha256": "979fc435608f23bbf8d3ec9dd5c50efc13f0834f9f85c36d34e71ef35fef676d",
+  "inputs": "on foot on Spadina by Dragon City (core NW scene)",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "haymaker.png",
+  "frame": 795,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "109b7e2fb7c5ce0bc838d42f417d3f5178e3ab37b8fb2e676daec6f3e497f550",
+  "inputs": "YONGE-DUNDAS: tap A beside someone, hold it standing still for half a second, let go: a haymaker",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "street-fight-starts.png",
+  "frame": 3315,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "0e35509fef06c229a2b5482140b12a7d3ca0f3255efe181766083cbef4e43a53",
+  "inputs": "CHINATOWN: linger beside a road rager and a street fight starts",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "street-fight-windup.png",
+  "frame": 3351,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "f914def6d78d8c2334b1082d4e45d261d681c396f027a4c284c6217fa0c12c9d",
+  "inputs": "they wind up a swing, fists up and flashing red: a moment to react",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "street-fight-counter.png",
+  "frame": 3367,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "3177e92606d163810d36bf60d6c15314d416f9a0c872d88963101204f24c013c",
+  "inputs": "A during the wind-up: a counter, and down they go",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "street-neighbour-tip.png",
+  "frame": 10090,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "ea6aba278048757c9aa5a734c486b8437d5b9adc596009af7d0d7cd8e3740b8c",
+  "inputs": "YONGE-DUNDAS: Select beside someone sitting out gives $2; their answer types on the radio strip",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "goose.png",
+  "frame": 11393,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "501f99682571b06d6ae4abc2a4b3b23aef5a137d6ed720bb150247c703992e8c",
+  "inputs": "LAKE SHORE WEST: walk up to a Canada goose and it stands its ground and pecks",
+  "source": "Unmodified PyBoy 2.7.0 frame"
+ },
+ {
+  "file": "busker-tip.png",
+  "frame": 12430,
+  "rom_sha256": "ff9e42eaee729bc2107b6b777bac939d4f42d4abaf77669b471f05700ee72bf0",
+  "png_sha256": "7e334bee0caf17c3b30842f36dd41b634248377401357a96aefc244afb386c3c",
+  "inputs": "CHINATOWN: Select beside a busker tips $1: a note, and thanks",
+  "source": "Unmodified PyBoy 2.7.0 frame"
  }
 ]

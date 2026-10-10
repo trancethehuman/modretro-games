@@ -146,7 +146,19 @@ Campaign duration remains unverified. Contract counts, time limits and shortest-
 - [x] Ambulances, fire trucks, TTC buses, box trucks and garbage trucks in traffic; six special vehicles (a tank among them) parked beside landmarks, each with its own handling.
 - [x] Pop-in: walkers drawn across the whole route-keeping area, pickups no longer appearing at the screen edge.
 - [ ] Handheld review: pursuit difficulty and leeway, combat timing, handling of each vehicle, overlay flicker.
-- [ ] Drivable boats, a weapon for the tank, more than one special vehicle design on screen at once, new walker designs.
+- [ ] Drivable boats, a weapon for the tank, more than one special vehicle design on screen at once.
+- [x] New walker designs (the people library, below).
+
+## People, interiors and the gallery — implemented 2026-10-10, human review pending
+
+- [x] 56 people and animals (no children) streamed into the eight walker slots, crowds by neighbourhood and by night, behaviours (sitting out, sleeping, busking, signs, photos, joggers, skaters, toughs, road ragers, pickpockets, Rushly riders, geese, raccoons, squirrels, pigeons, dogs) and talk on Select, with donations and parcel hints.
+- [x] Combat: wind-ups and counters, disarming an aiming officer, the held haymaker, impact stars, street fights that are no crime to answer, a reward for beating a fighter, cover behind the parked car.
+- [x] 144 doors into 17 interiors (landmarks, Chinatown, malls, BYTE BARN and shop templates) with people in roles; the CN Tower's elevator to the LookOut; six indoor contracts in a twelfth chapter.
+- [x] The Gallery on the pause menu: rooms of people with their cards and an art direction room.
+- [x] Chinatown on Spadina and Dundas with Dragon City Mall and the Gateway dragons.
+- [x] Performance: the signal check cached per road leg; fewer missed frames driving, turning and running.
+- [ ] Handheld review: crowds and personalities, fight timing and the haymaker's hold, door prompts, interiors' palettes and flicker, indoor contract time limits.
+- [ ] Fighting indoors, more than eight people in a room, the SkyPod, elevators in other buildings, the Chinatown block south-east of Spadina and Dundas.
 
 ## Next playable polish
 

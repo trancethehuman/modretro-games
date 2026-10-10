@@ -547,7 +547,27 @@ _LEGS = {
     'up': (["..3..3..", "..3..3..", "..3..3.."], ["..3..3..", "..3..3..", "..3....."]),
     'right': (["..3.3...", ".3...3..", ".3...3.."], ["..33....", "..33....", "..3....."]),
 }
-PEOPLE_DESIGNS = ('short', 'long', 'cap', 'bun', 'pack', 'umbrella')
+# Only the courier keeps a fixed design in the sheet; everyone else is one
+# of the looks of create_people.py, streamed into eight walker slots.
+PEOPLE_DESIGNS = ('short',)
+WALKER_SLOTS = 8
+
+
+def walker_placeholders():
+    """Each walker slot's own two tiles in the sheet (frames A, B, then
+    their mirror images for walking west): unique noise in one centred 8x16
+    OBJ, so GB Studio gives every slot tiles of its own; the engine writes
+    the slot's look over them (td_people.c)."""
+    import random
+    rng = random.Random('toronto-dispatch walker slots')
+    out = []
+    for _ in range(WALKER_SLOTS):
+        frames = []
+        for _ in range(2):
+            rows = [[0] * 4 + [rng.randint(1, 3) for _ in range(8)] + [0] * 4 for _ in range(16)]
+            frames.append(rows)
+        out.append([frames[0], frames[1], flip_h(frames[0]), flip_h(frames[1])])
+    return out
 
 
 def _figure(head, torso, legs):
@@ -827,6 +847,20 @@ SMOKE = [
 SMOKE.append(flip_h(SMOKE[1]))
 # A courier parcel that pops up when it is collected (courier palette).
 PARCEL = _centre8([".333333.", "32221223", "32221223", "31111113", "32221223", "32221223", ".333333."], 5)
+# Street-life marks over people (beacon yellow unless noted): a music
+# note for a busker, Z for a sleeper, an alarm mark, an anger mark (traffic
+# red), a camera flash, a dust puff and an impact star in two sizes.
+EMOTES = {
+    'note': _centre8(["....33..", "....3.3.", "....3..3", "....3...", "..333...", ".3113...", ".3113...", "..33...."], 0),
+    'zzz': _centre8(["3333....", "...3....", "..3.....", ".3......", "3333.333", ".....3..", "....3...", "....333."], 0),
+    'alert': _centre8(["..33....", ".3113...", ".3113...", ".3113...", "..33....", "........", "..33....", ".3113..."], 0),
+    'anger': _centre8(["3.3..3.3", ".3....3.", "3.3..3.3", "........", "3.3..3.3", ".3....3.", "3.3..3.3", "........"], 0),
+    'flash': _centre8(["1..1..1.", ".1.1.1..", "..111...", "1111111.", "..111...", ".1.1.1..", "1..1..1.", "........"], 0),
+    'dust': _centre8(["........", "........", "..1.1...", ".1.1.1..", "1.111.1.", ".11111..", "1.1.1.1.", "........"], 6),
+    'star': _centre8(["...3....", "..323...", "33212333", ".321123.", "..3123..", ".32..23.", ".3....3.", "........"], 4),
+    'star_big': _centre8(["3..3..3.", ".32123..", "..212...", "3212123.", "..212...", ".32123..", "3..3..3.", "........"], 4),
+}
+EMOTE_PALETTES = {'anger': 'traffic_red', 'dust': 'traffic_blue'}
 # Delivery sparkle (beacon yellow): a four-point star, then a burst.
 SPARKLE = [
     _centre8(["...1....", "...1....", "..212...", "1122211.", "..212...", "...1....", "...1....", "........"]),

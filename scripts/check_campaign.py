@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE_STOPS, CORE_QUESTS = 27, 72
-TOTAL_STOPS, TOTAL_QUESTS = 51, 88
+TOTAL_STOPS, TOTAL_QUESTS = 58, 94
 
 
 
@@ -169,9 +169,15 @@ def check():
     assert stops[CORE_STOPS:35] == west['stops'], 'Western stop fusion is stale'
     assert quests[CORE_QUESTS:80] == west['quests'], 'Western contract fusion is stale'
     east = json.loads((ROOT / 'content/districts/east_jobs.json').read_text())
-    assert stops[35:43] == east['stops'] and quests[80:] == east['quests'], 'Eastern content fusion is stale'
+    assert stops[35:43] == east['stops'] and quests[80:88] == east['quests'], 'Eastern content fusion is stale'
     streetcar = json.loads((ROOT / 'content/streetcar.json').read_text())
-    assert stops[43:] == streetcar['stops'], 'Queen streetcar platform fusion is stale'
+    assert stops[43:51] == streetcar['stops'], 'Queen streetcar platform fusion is stale'
+    indoor = json.loads((ROOT / 'content/districts/interior_jobs.json').read_text())
+    assert stops[51:] == indoor['stops'] and quests[88:] == indoor['quests'], 'Indoor contract fusion is stale'
+    interiors = [i['key'] for i in json.loads((ROOT / 'content/interiors.json').read_text())['interiors']]
+    for stop in indoor['stops']:
+        # Foot-only, with the interior whose desk takes the delivery.
+        assert stop['reserved'] == ((interiors.index(stop['interior']) + 1) << 1) | 1, stop['name']
     assert campaign['transit']['streetcar501'] == streetcar['service'], 'Queen streetcar schedule fusion is stale'
     from create_east_jobs import preserved_prefix
     preserved_prefix(campaign)

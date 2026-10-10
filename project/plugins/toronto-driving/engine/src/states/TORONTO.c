@@ -17,6 +17,10 @@
 #include "td_daynight.h"
 #include "td_overlay.h"
 #include "td_special.h"
+#include "td_people.h"
+#include "td_npc.h"
+#include "td_interior.h"
+#include "td_menu.h"
 #include "td_district_world.h"
 #include "actor.h"
 #include "camera.h"
@@ -271,22 +275,15 @@ void td_finish(UBYTE success) BANKED {
     else td_radio_done(td.job,done_before,open_before);
     td.job=TD_NONE;td.speed=0;td_vx=td_vy=0;td.mode=TD_RESULT;td_set_target();td_save();td_ui_draw();
 }
-/* Enough deliveries in, and the story has reached it. */
-static UBYTE td_offer_open(void){
-    return td.done>=td_offer.min_done&&(td_offer.after==TD_NONE||TD_DONE(td_offer.after));
-}
-static void td_ready_offer(void){
-    UBYTE i;
-    for(i=0;i<TD_QUESTS;i++){
-        td_get_job(i,&td_offer);
-        if(td_offer_open()&&!TD_DONE(i)&&(td_offer.vehicle==TD_NONE||(!td.onfoot&&td.vehicle==td_offer.vehicle))){td.menu=i;return;}
-    }
-    td.menu=0;td_get_job(0,&td_offer);
-}
+
+
 static void td_interact(void){
     if(td.speed>2||td.speed<-2){td_message(1);return;}
+    /* On foot beside someone (and not at the stop): talk to them. */
+    if(td.onfoot&&!(td.job!=TD_NONE&&td_near(&td_target))&&td_npc_talk())return;
     if(td.job==TD_NONE){td.mode=TD_BOARD;td_ready_offer();td_ui_draw();return;}
     if(!td_near(&td_target)){td_message(6);return;}
+    if(td_target.reserved>>1){td_message(TD_MSG_INSIDE);return;}
     if((td_target.reserved&TD_STOP_FOOT)&&!td.onfoot){td_message(16);return;}
     if(td_job.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_job.vehicle)){td_message(2);return;}
     td.stage++;
@@ -431,7 +428,7 @@ static void td_pickups_present(void){
     }
     td_pickup_dirty=0;
 }
-static UBYTE td_board_current_window(void){
+UBYTE td_board_current_window(void) BANKED {
     UBYTE fare;
     if(!td_transit_valid(td.transit_origin,td.transit_target)||td_transit_departure(td.transit_origin,td.transit_target,td.seconds))return FALSE;
     fare=td_transit_fare(td.transit_origin);
@@ -458,86 +455,9 @@ static void td_transit_open(void){
     if(td.transit_target==origin){td.menu=(td.menu+1)%td_transit_count(origin);td.transit_target=td_route_stop(origin,td.menu);}
     td_get_stop(td.transit_target,&td_cursor);td.mode=TD_TRANSIT;td_ui_draw();
 }
-static void td_transit_step(BYTE delta){
-    UBYTE count=td_transit_count(td.transit_origin),n;
-    for(n=0;n<count;n++){
-        td.menu=(td.menu+count+delta)%count;td.transit_target=td_route_stop(td.transit_origin,td.menu);
-        if(td.transit_target!=(td.transit_origin&63))break;
-    }
-    td_get_stop(td.transit_target,&td_cursor);
-}
-static void td_pause_choose(void){
-    if((td_resume_mode==TD_WAIT||td_resume_mode==TD_RIDE)&&td.menu>TD_MENU_MAP&&td.menu!=TD_MENU_SOUND){td_message(2);return;}
-    switch(td.menu){
-        case TD_MENU_RESUME:td.mode=td_resume_mode;break;
-        case TD_MENU_MAP:td.mode=TD_MAP;td_map_open();break;
-        case TD_MENU_JOBS:td.mode=TD_BOARD;if(td.job==TD_NONE)td_ready_offer();else{td.menu=td.job;td_get_job(td.menu,&td_offer);}break;
-        case TD_MENU_VEHICLE:
-            if(td.job!=TD_NONE||td.speed>2||td.speed<-2||td.onfoot){td_message(2);return;}
-            td.vehicle=(td.vehicle+1)&3;td_player_special=0;td_car_damage=0;td_car_colour=TD_PAL_COURIER;td_save();break;
-        case TD_MENU_SUPPLIES:if(td_life_buy())td_save();td.mode=TD_ROAM;break;
-        case TD_MENU_CANCEL:
-            if(td.job==TD_NONE){td_message(2);return;}
-            td.job=TD_NONE;td.speed=0;td.mode=TD_ROAM;td_set_target();td_save();break;
-        case TD_MENU_SOUND:td_audio_set_mode((td_audio_get_mode()+1)%TD_AUDIO_MODES);break;
-    }
-    td_audio_play(TD_AUDIO_MENU);
-    td_ui_draw();
-}
-static void td_menu_update(void){
-    td_ui_tick();
-    if(td.mode==TD_HELP){
-        if(INPUT_A_PRESSED||INPUT_B_PRESSED){
-            /* A fresh shift starts with Rosa's welcome. */
-            if(!td.done&&td.job==TD_NONE)td_radio_say(TD_RADIO_INTRO);
-            td.mode=td_resume_mode;td_ui_draw();
-        }
-        return;
-    }
-    if(td.mode==TD_BUSTED||td.mode==TD_WASTED){if(INPUT_A_PRESSED||INPUT_B_PRESSED){td.mode=TD_ROAM;td_resume_mode=TD_ROAM;td_ui_draw();}return;}
-    if(td.mode==TD_MAP){
-        if(INPUT_B_PRESSED||INPUT_START_PRESSED){td_map_close();td.mode=TD_PAUSE;td.menu=TD_MENU_MAP;td_ui_draw();}
-        else td_map_update(joy,joy_pressed);
-        return;
-    }
-    if(INPUT_B_PRESSED||INPUT_START_PRESSED){
-        /* Browsing offers used the active contract's copy: reload it. */
-        if(td.mode==TD_BOARD&&td.job!=TD_NONE)td_get_job(td.job,&td_job);
-        td.mode=td.mode==TD_PAUSE?td_resume_mode:TD_ROAM;td_ui_draw();return;
-    }
-    if(td.mode==TD_PAUSE){
-        if(INPUT_DOWN_PRESSED)td.menu=(td.menu+1)%TD_MENU_ITEMS;
-        if(INPUT_UP_PRESSED)td.menu=(td.menu+TD_MENU_ITEMS-1)%TD_MENU_ITEMS;
-        if(INPUT_A_PRESSED){td_pause_choose();return;}
-    }else if(td.mode==TD_BOARD){
-        if(INPUT_RIGHT_PRESSED){td.menu=(td.menu+1)%TD_QUESTS;td_get_job(td.menu,&td_offer);}
-        if(INPUT_LEFT_PRESSED){td.menu=(td.menu+TD_QUESTS-1)%TD_QUESTS;td_get_job(td.menu,&td_offer);}
-        if(INPUT_A_PRESSED){
-            if(td.job!=TD_NONE){td_message(2);return;}
-            if(!td_offer_open()){td_message(3);return;}
-            if(td_offer.vehicle!=TD_NONE&&(td.onfoot||td.vehicle!=td_offer.vehicle)){td_message(2);return;}
-            td.job=td.menu;td.stage=0;td.health=100;td.left=td_job.seconds;td.mode=TD_ROAM;td_audio_play(TD_AUDIO_MENU);
-            td_radio_contract(td.job,0);td_set_target();td_save();td_ui_draw();return;
-        }
-    }else if(td.mode==TD_TRANSIT){
-        if((INPUT_UP_PRESSED||INPUT_DOWN_PRESSED)&&(td.transit_origin&63)==16){
-            td.transit_origin^=64;td.menu=0;td.transit_target=td_route_stop(td.transit_origin,0);td_get_stop(td.transit_target,&td_cursor);
-        }
-        if(INPUT_RIGHT_PRESSED&&td_transit_count(td.transit_origin))td_transit_step(1);
-        if(INPUT_LEFT_PRESSED&&td_transit_count(td.transit_origin))td_transit_step(-1);
-        if(INPUT_A_PRESSED){
-            if(!td_transit_valid(td.transit_origin,td.transit_target))return;
-            /* Short of the fare: say so before waiting for a departure. */
-            if(td.cash<td_transit_fare(td.transit_origin)){td.mode=TD_ROAM;td_save();td_message(4);return;}
-            td.mode=TD_WAIT;td.speed=0;
-            /* The displayed two-second window includes the current second;
-               confirmation must not wait for another clock tick to board. */
-            if(!td_board_current_window())td_save();
-            td_ui_draw();return;
-        }
-    }else if(td.mode==TD_RESULT&&INPUT_A_PRESSED){td.mode=TD_BOARD;td_ready_offer();}
-    if(INPUT_A_PRESSED||INPUT_UP_PRESSED||INPUT_DOWN_PRESSED||INPUT_LEFT_PRESSED||INPUT_RIGHT_PRESSED)td_ui_draw();
-}
+
+
+
 static UBYTE td_alight_clear(UWORD u,UWORD v){
     if(u>=1024*16||v>=976*16||!td_district_walkable(td_cursor.district,u>>4,v>>4))return FALSE;
     if(td.park_district==td_cursor.district&&td_distance(u,td.park_u)<168&&td_distance(v,td.park_v)<168)return FALSE;
@@ -606,20 +526,29 @@ static void td_second(void){
  * vehicle whose next corner is a signal junction stops when it is 40 to 48
  * pixels short of that corner (its front at the crossing); one already past
  * the line clears the junction. */
+/* Whether each vehicle's next corner is a signal junction is found once per
+ * leg (the corner changes only there) and kept with the corner it was found
+ * for; the search over every signal for every vehicle each step was about a
+ * tenth of the frame's work. toronto_init forgets it with the scene. */
+static UBYTE td_tk_sig;
+static UWORD td_tk_sig_u[6],td_tk_sig_v[6];
 static void td_signal_holds(UBYTE phase){
-    UBYTE i,k,frame,horizontal;UWORD gap,su,sv;const td_traffic_sample_t *sample=td_traffic_samples;
+    UBYTE i,k,frame,bit;UWORD gap,su;const td_traffic_sample_t *sample=td_traffic_samples;
     td_tk_hold=0;
-    for(i=0;i<6;i++,sample++){
-        frame=sample->frame&7;horizontal=frame==0||frame==4;
-        if(horizontal?phase<7:phase>=7)continue;
-        for(k=0;k<TD_SIGNALS;k++){
-            su=td_signal_u[k];if(su==0xFFFF)continue;sv=td_signal_v[k];
-            /* The lane corner lies within 12 pixels of the junction centre. */
-            if(td_distance(sample->u>>4,su)>12||td_distance(sample->v>>4,sv)>12)continue;
-            gap=horizontal?td_distance(sample->u,td_traffic_u[i]):td_distance(sample->v,td_traffic_v[i]);
-            if(gap>=40*16&&gap<48*16)td_tk_hold|=1<<i;
-            break;
+    for(i=0,bit=1;i<6;i++,sample++,bit<<=1){
+        if(sample->u!=td_tk_sig_u[i]||sample->v!=td_tk_sig_v[i]){
+            td_tk_sig_u[i]=sample->u;td_tk_sig_v[i]=sample->v;td_tk_sig&=~bit;
+            for(k=0;k<TD_SIGNALS;k++){
+                su=td_signal_u[k];if(su==0xFFFF)continue;
+                /* The lane corner lies within 12 pixels of the junction centre. */
+                if(td_distance(sample->u>>4,su)<=12&&td_distance(sample->v>>4,td_signal_v[k])<=12){td_tk_sig|=bit;break;}
+            }
         }
+        if(!(td_tk_sig&bit))continue;
+        frame=sample->frame&7;
+        if(frame==0||frame==4){if(phase<7)continue;gap=td_distance(sample->u,td_traffic_u[i]);}
+        else{if(phase>=7)continue;gap=td_distance(sample->v,td_traffic_v[i]);}
+        if(gap>=40*16&&gap<48*16)td_tk_hold|=bit;
     }
 }
 /* A road vehicle never drives into the courier's car: a step that would end
@@ -1050,9 +979,10 @@ collide:
 /* Slot 4 is an ordinary car; td_life.c turns it into the patrol car out of
  * view when a pursuit starts and draws it while it is owned. */
 UBYTE td_traffic_bases[6];
-/* Walker design per route identity&7; look 5 (cap, navy) is an officer. */
-const UBYTE td_walker_bases[8]={TD_FRAME_PERSON_SHORT,TD_FRAME_PERSON_LONG,TD_FRAME_PERSON_BUN,TD_FRAME_PERSON_PACK,
-    TD_FRAME_PERSON_UMBRELLA,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_CAP,TD_FRAME_PERSON_LONG};
+/* Each walker slot draws its own frames, whose tiles hold the look
+ * streamed into it (td_people.c); route identity&7 == 5 is an officer. */
+const UBYTE td_walker_bases[8]={TD_PEOPLE_FRAME(0),TD_PEOPLE_FRAME(1),TD_PEOPLE_FRAME(2),TD_PEOPLE_FRAME(3),
+    TD_PEOPLE_FRAME(4),TD_PEOPLE_FRAME(5),TD_PEOPLE_FRAME(6),TD_PEOPLE_FRAME(7)};
 #ifdef __SDCC
 #include <stddef.h>
 /* The assembly below addresses actor_t fields directly. */
@@ -1180,11 +1110,8 @@ UBYTE td_ped_layout(void) NAKED {
         ld (hl+), a
         ld a, b
         ld (hl), a
-        ld hl, #_td_pl_rp
-        ld a, (hl+)
-        ld h, (hl)
-        ld l, a
-        ld a, (hl)
+        ld a, (_td_pl_rp)
+        sub a, #<(_td_ped_route)
         and a, #7
         add a, #<(_td_walker_bases)
         ld l, a
@@ -1348,7 +1275,7 @@ static UBYTE td_ped_layout_c(UBYTE base,UBYTE step,UWORD player_u,UWORD player_v
         phase=td_ped_phase(base,route);
         u=(*nearby)[0];v=(*nearby)[1];
         u+=phase<64?phase:127-phase;
-        a->pos.x=u<<5;a->pos.y=v<<5;TD_FRAME(a,td_walker_bases[route&7]+(phase<64?0:2)+step);
+        a->pos.x=u<<5;a->pos.y=v<<5;TD_FRAME(a,td_walker_bases[i]+(phase<64?0:2)+step);
         gap=player_u>u?player_u-u:u-player_u;
         /* Drawn wherever the route is kept (td_routes.c): the look-ahead
          * camera shows up to 112 x 96 px from the courier plus a sprite. */
@@ -1492,17 +1419,9 @@ static void td_traffic_present(void){
     td_position(&actors[8],td.park_u>>4,td.park_v>>4);td_frame(&actors[8],td_entry_timer&&!td_player_special?TD_FRAME_CAR_DOOR_OPEN:td_body_frame());
     if(td.onfoot&&td.park_district==td.district)actors[8].flags&=~ACTOR_FLAG_HIDDEN;else actors[8].flags|=ACTOR_FLAG_HIDDEN;
 }
-/* Clothing colours: civilians by route identity, navy for officers. */
-static const UBYTE td_civilian_pal[4]={TD_PEOPLE_PAL(TD_PAL_RED),TD_PEOPLE_PAL(TD_PAL_YELLOW),TD_PEOPLE_PAL(TD_PAL_TEAL),TD_PEOPLE_PAL(TD_PAL_VIOLET)};
-static void td_walker_colours(void){
-    UBYTE i,bit,route;actor_t *a=&actors[TD_ACTOR_PEDS];
-    for(i=0,bit=1;i<TD_PEDS;i++,bit<<=1,a++){
-        route=td_ped_route[i];
-        if((td_ped_ovr&bit)||route==TD_NONE)continue;
-        TD_PALETTE(a)=(route&7)==5?TD_PEOPLE_PAL(TD_PAL_NAVY):td_civilian_pal[(route>>3)&3];
-    }
-}
-static UBYTE td_ped_flip;
+/* Walkers are laid out on alternate updates; td_npc.c draws its people on
+ * the others, so the two never share an update. */
+UBYTE td_ped_flip;
 /* Spray bays, one in a road lane in each district (centre, pixels; the
  * table in td_district_world.h is per scene, 0xFFFF where a scene has
  * none): King St West (core), The Queensway (West), Bloor St West in
@@ -1531,7 +1450,7 @@ static void td_pedestrians(void){
         td_ped_refresh=16;td_ped_anchor_u=player_u;td_ped_anchor_v=player_v;
         /* Slots still waiting for a route are picked over the next frames. */
         if(td_life_routes(moved))td_ped_refresh=2;
-        td_walker_colours();
+        td_npc_refresh();
     }
     /* Walkers step a pixel every few updates, so they are laid out on
      * alternate updates (half the cost, unseen). The strike check uses the
@@ -1679,6 +1598,8 @@ void toronto_init(void) BANKED {
         td.speed=0;td_resume_mode=td.mode==TD_WAIT||td.mode==TD_RIDE?td.mode:TD_ROAM;td.mode=TD_HELP;td.msg=0;td.menu=0;
         td_session_live=1;td_tv_phase=0;td_ride_hidden=0;
     }
+    /* Inside a building (or the gallery): its own setup (td_interior.c). */
+    if(td_interior!=TD_NONE&&td_interior_init())return;
     /* Restoring another district redirects through the same genuine VM path.
        Regular crossings keep velocity, mission, parked car, clock and audio. */
     if(current!=td.district){
@@ -1703,9 +1624,10 @@ void toronto_init(void) BANKED {
     }
     td_world_traffic_init(td.district,td_traffic_u,td_traffic_v,td_traffic_leg,td_traffic_samples);
     td_world_signals(td.district,td_signal_u,td_signal_v);
+    for(i=0;i<6;i++)td_tk_sig_u[i]=0xFFFF;
     for(i=0;i<TD_PEDS;i++)td_ped_route[i]=TD_NONE;
     td_ped_refresh=1;td_ped_anchor_u=td.u>>4;td_ped_anchor_v=td.v>>4;td_ped_flip=0;
-    td_life_reset(cold);td_anim_reset();td_special_init();
+    td_life_reset(cold);td_anim_reset();td_special_init();td_npc_reset();
     for(i=0;i<6;i++)td_lf_new_look(i,(UBYTE)(i*37+td.seconds+(td.district<<3)));
     td_frame(&actors[1],TD_FRAME_BEACON);td_set_target();td_position(&PLAYER,td.u>>4,td.v>>4);
     td_frame(&PLAYER,td.onfoot?TD_FRAME_COURIER_WALK:td_vehicle_frame());td_traffic_present();td_pedestrians();
@@ -1719,8 +1641,10 @@ void toronto_update(void) BANKED {
     if(td_transition_pending){if(td_transition_pending==2&&td_district_queue(td.district))td_transition_pending=1;return;}
     /* Water and the Yonge and Dundas screen: arm the next chunk for the
      * vertical-blank handler (menus and the map own the tiles). */
-    if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_scenery_tick();td_overlay_tick();}
-    if(td_dn_pending){td_dn_pending=0;td_daynight_apply(TD_DN_HW);}
+    if(td_interior==TD_NONE){
+        if(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE){td_scenery_tick();td_overlay_tick();}
+        if(td_dn_pending){td_dn_pending=0;td_daynight_apply(TD_DN_HW);}
+    }else td_dn_pending=0;
     /* A station within reach replaces the street name with its B prompt. */
     if(++td_station_tick>=12){UBYTE near;td_station_tick=0;near=td.onfoot&&td.mode==TD_ROAM&&!td.wanted?td_origin():TD_NONE;if(near!=td_station_near){td_station_near=near;td_ui_pending=1;}}
     if(td_ui_pending){td_ui_pending=0;td_ui_draw();}
@@ -1741,6 +1665,7 @@ void toronto_update(void) BANKED {
     while(seconds--&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE)){
         td_second();if(td_transition_pending)return;
     }
+    if(td_interior!=TD_NONE){td_interior_update(motion);td_sound_update();return;}
     for(step=0;step<motion&&(td.mode==TD_ROAM||td.mode==TD_WAIT||td.mode==TD_RIDE);step++){
         td_tick++;td_input_edge=step==0&&!consumed;
         if(td.mode==TD_ROAM){

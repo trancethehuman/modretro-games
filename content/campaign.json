@@ -824,6 +824,125 @@
           496
         ]
       }
+    },
+    {
+      "id": 51,
+      "u": 128,
+      "v": 636,
+      "name": "CN LOOKOUT DESK",
+      "transit": 0,
+      "district": 3,
+      "reserved": 5,
+      "foot_only": true,
+      "interior": "cn_lookout",
+      "door": "CN TOWER",
+      "parking_anchor": {
+        "u": 128,
+        "v": 704
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
+    },
+    {
+      "id": 52,
+      "u": 56,
+      "v": 932,
+      "name": "AGO FRONT DESK",
+      "transit": 0,
+      "district": 1,
+      "reserved": 7,
+      "foot_only": true,
+      "interior": "ago",
+      "door": "ART GALLERY (AGO)",
+      "parking_anchor": {
+        "u": 56,
+        "v": 910
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
+    },
+    {
+      "id": 53,
+      "u": 88,
+      "v": 180,
+      "name": "ROM RECEIVING",
+      "transit": 0,
+      "district": 1,
+      "reserved": 11,
+      "foot_only": true,
+      "interior": "rom",
+      "door": "ROYAL ONT. MUSEUM",
+      "parking_anchor": {
+        "u": 88,
+        "v": 158
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
+    },
+    {
+      "id": 54,
+      "u": 308,
+      "v": 68,
+      "name": "EATON CENTRE KIOSK",
+      "transit": 0,
+      "district": 3,
+      "reserved": 13,
+      "foot_only": true,
+      "interior": "eaton",
+      "door": "EATON CENTRE",
+      "parking_anchor": {
+        "u": 368,
+        "v": 68
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
+    },
+    {
+      "id": 55,
+      "u": 812,
+      "v": 76,
+      "name": "DRAGON CITY STALL",
+      "transit": 0,
+      "district": 2,
+      "reserved": 17,
+      "foot_only": true,
+      "interior": "dragon_city",
+      "door": "DRAGON CITY MALL",
+      "parking_anchor": {
+        "u": 896,
+        "v": 76
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
+    },
+    {
+      "id": 56,
+      "u": 292,
+      "v": 588,
+      "name": "BYTE BARN DESK",
+      "transit": 0,
+      "district": 2,
+      "reserved": 21,
+      "foot_only": true,
+      "interior": "electronics",
+      "door": "BYTE BARN",
+      "parking_anchor": {
+        "u": 292,
+        "v": 704
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
+    },
+    {
+      "id": 57,
+      "u": 280,
+      "v": 588,
+      "name": "UNION GREAT HALL",
+      "transit": 0,
+      "district": 3,
+      "reserved": 15,
+      "foot_only": true,
+      "interior": "union",
+      "door": "UNION STATION",
+      "parking_anchor": {
+        "u": 280,
+        "v": 566
+      },
+      "location_notice": "Fictional delivery desk inside an original interpretation of the building"
     }
   ],
   "quests": [
@@ -5009,6 +5128,198 @@
         ],
         "basis": "Actual registered collision-grid tile-centre paths and authored reciprocal portals, using integer-settled cardinal speed estimates. Excludes transit, traffic, acceleration, entry animations, real handling and repositioning. Not observed duration."
       }
+    },
+    {
+      "id": "contract-89",
+      "title": "SKY HIGH LUNCH",
+      "brief": [
+        "LUNCH FOR THE TOP",
+        "TAKE THE ELEVATOR"
+      ],
+      "chapter": "Inside the city",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 3,
+      "route": [
+        1,
+        51
+      ],
+      "time_limit_seconds": 130,
+      "reward": 137,
+      "stages": [
+        {
+          "stop_id": 1,
+          "district": 3,
+          "objective": "Collect the market lunch order"
+        },
+        {
+          "stop_id": 51,
+          "district": 3,
+          "objective": "Sky Desk handoff, 346 m up"
+        }
+      ],
+      "objective_notice": "Park, walk in at the door and hand over at the desk inside; the LookOut is reached by the elevator"
+    },
+    {
+      "id": "contract-90",
+      "title": "GALLERY LOAN",
+      "brief": [
+        "A FRAMED LOAN",
+        "CARRY IT INSIDE"
+      ],
+      "chapter": "Inside the city",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 4,
+      "route": [
+        4,
+        52
+      ],
+      "time_limit_seconds": 100,
+      "reward": 167,
+      "stages": [
+        {
+          "stop_id": 4,
+          "district": 2,
+          "objective": "Collect the framed loan"
+        },
+        {
+          "stop_id": 52,
+          "district": 1,
+          "objective": "Gallery front desk handoff"
+        }
+      ],
+      "objective_notice": "Park, walk in at the door and hand over at the desk inside; the LookOut is reached by the elevator"
+    },
+    {
+      "id": "contract-91",
+      "title": "FOSSIL CAST",
+      "brief": [
+        "PLASTER FOSSIL",
+        "TO THE DINO HALL"
+      ],
+      "chapter": "Inside the city",
+      "kind": "FRAGILE ART",
+      "kind_id": 1,
+      "required_vehicle": 255,
+      "min_completed": 6,
+      "route": [
+        7,
+        53
+      ],
+      "time_limit_seconds": 100,
+      "reward": 167,
+      "stages": [
+        {
+          "stop_id": 7,
+          "district": 0,
+          "objective": "Collect the fossil cast"
+        },
+        {
+          "stop_id": 53,
+          "district": 1,
+          "objective": "Museum receiving handoff"
+        }
+      ],
+      "objective_notice": "Park, walk in at the door and hand over at the desk inside; the LookOut is reached by the elevator"
+    },
+    {
+      "id": "contract-92",
+      "title": "MALL RESTOCK",
+      "brief": [
+        "UNION TO EATON",
+        "TWO INDOOR DESKS"
+      ],
+      "chapter": "Inside the city",
+      "kind": "PARCEL ROUND",
+      "kind_id": 0,
+      "required_vehicle": 255,
+      "min_completed": 8,
+      "route": [
+        57,
+        54
+      ],
+      "time_limit_seconds": 140,
+      "reward": 179,
+      "stages": [
+        {
+          "stop_id": 57,
+          "district": 3,
+          "objective": "Collect kiosk stock in the great hall"
+        },
+        {
+          "stop_id": 54,
+          "district": 3,
+          "objective": "Mall kiosk handoff"
+        }
+      ],
+      "objective_notice": "Park, walk in at the door and hand over at the desk inside; the LookOut is reached by the elevator"
+    },
+    {
+      "id": "contract-93",
+      "title": "DIM SUM ORDER",
+      "brief": [
+        "BAMBOO BASKETS",
+        "DRAGON CITY STALL"
+      ],
+      "chapter": "Inside the city",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 10,
+      "route": [
+        7,
+        55
+      ],
+      "time_limit_seconds": 90,
+      "reward": 150,
+      "stages": [
+        {
+          "stop_id": 7,
+          "district": 0,
+          "objective": "Collect the steamer baskets"
+        },
+        {
+          "stop_id": 55,
+          "district": 2,
+          "objective": "Dragon City stall handoff"
+        }
+      ],
+      "objective_notice": "Park, walk in at the door and hand over at the desk inside; the LookOut is reached by the elevator"
+    },
+    {
+      "id": "contract-94",
+      "title": "CONSOLE RUSH",
+      "brief": [
+        "LAUNCH-DAY BOX",
+        "BYTE BARN TO WEST"
+      ],
+      "chapter": "Inside the city",
+      "kind": "EXPRESS FILES",
+      "kind_id": 2,
+      "required_vehicle": 255,
+      "min_completed": 12,
+      "route": [
+        56,
+        8
+      ],
+      "time_limit_seconds": 100,
+      "reward": 155,
+      "stages": [
+        {
+          "stop_id": 56,
+          "district": 2,
+          "objective": "Collect the launch-day console"
+        },
+        {
+          "stop_id": 8,
+          "district": 2,
+          "objective": "Dufferin handoff"
+        }
+      ],
+      "objective_notice": "Park, walk in at the door and hand over at the desk inside; the LookOut is reached by the elevator"
     }
   ],
   "transit": {

@@ -47,6 +47,21 @@ UBYTE td_street_parcel(UBYTE slot) BANKED {
     if(slot>=TD_PICKUP_SLOTS||td_pickup_slot[slot]==255)return 255;
     return td_parcel_of[td_pickup_base+td_pickup_slot[slot]];
 }
+/* The nearest lost parcel still to find in a district (whole pixels), for
+ * the people on the street who have seen where things lie. */
+UBYTE td_street_hint(UBYTE district,UWORD pu,UWORD pv,UWORD *u,UWORD *v) BANKED {
+    UBYTE i,start,found=FALSE;UWORD d,best=0xFFFF,du,dv;
+    if(district>=16)return FALSE;
+    start=td_pickup_start[district];
+    for(i=0;i<td_pickup_count[district];i++){
+        if(td_pickup_kind[start+i]!=TD_PICKUP_PARCEL||td_parcel_taken(start+i))continue;
+        du=td_pickup_u[start+i]>pu?td_pickup_u[start+i]-pu:pu-td_pickup_u[start+i];
+        dv=td_pickup_v[start+i]>pv?td_pickup_v[start+i]-pv:pv-td_pickup_v[start+i];
+        d=du+dv;
+        if(d<best){best=d;*u=td_pickup_u[start+i];*v=td_pickup_v[start+i];found=TRUE;}
+    }
+    return found;
+}
 UBYTE td_parcels_found(void) BANKED {
     UBYTE i,n=0;
     for(i=0;i<TD_PARCELS;i++)if(TD_DONE(TD_PARCEL_BIT+i))n++;

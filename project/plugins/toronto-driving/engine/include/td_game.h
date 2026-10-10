@@ -1,8 +1,8 @@
 #ifndef TD_GAME_H
 #define TD_GAME_H
 #include <gbdk/platform.h>
-#define TD_QUESTS 88
-#define TD_STOPS 51
+#define TD_QUESTS 94
+#define TD_STOPS 58
 #define TD_COMPLETE_BYTES 16
 /* 0 courier/car, 1 beacon, 2-7 traffic, 8 parked car, 9-16 pedestrians,
  * 17 transit vehicle, 18-19 sidewalk pickups, 20 street-life effects
@@ -53,8 +53,10 @@ extern UBYTE td_traffic_bases[6];
 #define TD_HELP 8
 #define TD_BUSTED 9
 #define TD_WASTED 10
+/* A text card (a plaque, a painting, a gallery exhibit; td_interior.c). */
+#define TD_CARD 11
 /* Pause menu actions (td_ui.c draws them in this order). */
-#define TD_MENU_ITEMS 7
+#define TD_MENU_ITEMS 8
 #define TD_MENU_RESUME 0
 #define TD_MENU_MAP 1
 #define TD_MENU_JOBS 2
@@ -62,6 +64,7 @@ extern UBYTE td_traffic_bases[6];
 #define TD_MENU_SUPPLIES 4
 #define TD_MENU_CANCEL 5
 #define TD_MENU_SOUND 6
+#define TD_MENU_GALLERY 7
 typedef struct { UWORD u,v; char name[19]; UBYTE transit,district,reserved; } td_stop_t;
 /* A contract: it opens after min_done deliveries and once the contract
  * before it in the story (after, TD_NONE for none) is done. */
@@ -123,6 +126,8 @@ void td_radio_done(UBYTE job,UBYTE done_before,UWORD open_before) BANKED;
 /* A chatter call for a quiet stretch (general, or the story's current
  * people once their chapter is open). */
 void td_radio_chatter(void) BANKED;
+/* Someone the courier talks to answers with two lines (19 columns each). */
+void td_radio_speech(const char *line1,const char *line2) BANKED;
 /* The story chapters open now, one bit each. */
 UWORD td_radio_open(void) BANKED;
 /* Lost parcels (td_street.c): the hidden collectibles, found once each.
@@ -134,6 +139,8 @@ UWORD td_radio_open(void) BANKED;
 #define TD_PARCEL_BONUS 500
 UBYTE td_parcels_found(void) BANKED;
 UBYTE td_street_parcel(UBYTE slot) BANKED;
+/* Nearest unfound lost parcel in a district (whole pixels); FALSE when none. */
+UBYTE td_street_hint(UBYTE district,UWORD pu,UWORD pv,UWORD *u,UWORD *v) BANKED;
 /* Animated scenery (td_scenery.c): find the scene's water and screen tiles
  * after it loads; draw their next frame. */
 void td_scenery_find(void) BANKED;

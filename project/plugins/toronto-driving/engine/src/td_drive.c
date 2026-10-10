@@ -9,6 +9,7 @@
 #include "td_anim.h"
 #include "td_shots.h"
 #include "td_special.h"
+#include "td_interior.h"
 #include "camera.h"
 #include "input.h"
 #include "system.h"
@@ -351,15 +352,45 @@ static void lf_punch_now(void){
     td_lf_fx(FX_SPARK,fu,fv,6);
     td_audio_play(TD_AUDIO_MENU);
     if(best==TD_NONE){lf_combo_t=0;return;}
-    if(heavy){td_lf_knock(best,lf_face_u[d]*28,lf_face_v[d]*28,0);lf_shake=4;}
+    a=&actors[TD_ACTOR_PEDS+best];
+    /* An officer caught mid-aim is disarmed: down they go, no shot. */
+    if(best==lf_aim_who){lf_aim_who=TD_NONE;lf_aim_time=0;heavy=2;td_message(TD_MSG_DISARM);}
+    if(heavy){td_lf_knock(best,lf_face_u[d]*(heavy==2?36:28),lf_face_v[d]*(heavy==2?36:28),0);lf_shake=4;}
     else{td_lf_stun(best,lf_face_u[d]*4,lf_face_v[d]*4);if(td_hitstop<2)td_hitstop=2;lf_shake=2;}
+    td_anim_spawn(TD_PART_POP,heavy?TD_FRAME_EMOTE_STAR_BIG:TD_FRAME_EMOTE_STAR,a->pos.x>>5,(a->pos.y>>5)-8);
     lf_bust=0;
     td_audio_play(TD_AUDIO_IMPACT);
 }
 
+/* A haymaker: hold A while standing after a jab, then let go. It reaches a
+ * little further and lays anyone out, police included (that is a crime). */
+void td_life_haymaker(void) BANKED {
+    UBYTE i,best=TD_NONE,d=td_walk_dir&3,bit;WORD fu,fv,du,dv;actor_t *a;
+    if(td_life_locked()||td_entry_timer||!td.onfoot)return;
+    lf_punch=20;td_anim_pose(TD_FRAME_COURIER_PUNCH,14);lf_combo=0;lf_combo_t=0;
+    fu=(WORD)(td.u>>4)+lf_face_u[d]*9;fv=(WORD)(td.v>>4)+lf_face_v[d]*9;
+    for(i=0,bit=1,a=&actors[TD_ACTOR_PEDS];i<TD_PEDS;i++,bit<<=1,a++){
+        if(a->flags&ACTOR_FLAG_HIDDEN)continue;
+        if((td_ped_ovr&bit)&&(pk_mode[i]==PK_FLY||pk_mode[i]==PK_DEAD||pk_mode[i]==PK_DOWN))continue;
+        du=(WORD)(a->pos.x>>5)-fu;dv=(WORD)(a->pos.y>>5)-fv;
+        if(lf_abs(du)<12&&lf_abs(dv)<12){best=i;break;}
+    }
+    td_audio_play(TD_AUDIO_MENU);
+    td_anim_spawn(TD_PART_POP,TD_FRAME_EMOTE_DUST,td.u>>4,(td.v>>4)+2);
+    if(best==TD_NONE)return;
+    a=&actors[TD_ACTOR_PEDS+best];
+    if(best==lf_aim_who){lf_aim_who=TD_NONE;lf_aim_time=0;}
+    td_lf_knock(best,lf_face_u[d]*44,lf_face_v[d]*44,0);
+    if(td_hitstop<6)td_hitstop=6;lf_shake=6;lf_bust=0;
+    td_anim_spawn(TD_PART_POP,TD_FRAME_EMOTE_STAR_BIG,a->pos.x>>5,(a->pos.y>>5)-8);
+    td_message(TD_MSG_HAYMAKER);td_audio_play(TD_AUDIO_IMPACT);
+}
+
+/* A on foot that is not a punch: take a road vehicle, or go in at a door. */
 UBYTE td_life_carjack(void) BANKED {
     if(td_life_locked()||td_entry_timer)return FALSE;
-    return lf_carjack();
+    if(lf_carjack())return TRUE;
+    return td_interior_door();
 }
 void td_life_punch(void) BANKED {
     if(td_life_locked()||td_entry_timer)return;
